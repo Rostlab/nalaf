@@ -28,12 +28,10 @@ Therefore a pipeline is developed, that aims to extract relevant protein mutatio
 
 Very deep tutorial. Contains lots of mathematics. But easy to understand, if to aim for full understanding of CRF.
 
-Tutorial by Charles Sutton and Andrew Cullom
-http://people.cs.umass.edu/~mccallum/papers/crf-tutorial.pdf
+[Tutorial by Charles Sutton and Andrew Cullom as PDF](http://people.cs.umass.edu/~mccallum/papers/crf-tutorial.pdf)
 
 ### 2
 
 My presentation about CRF, which is very superficial, but lets you get an idea of CRF.
 
-20 Min presentation about CRF
-https://docs.google.com/presentation/d/1Sq9a-y_2WW3I7gXBK-IUZx6eNG7vhJO1UfwX7MqWdgc/pub?start=false&loop=false&delayms=5000 (CRF docs.google.com)
+[CRF presenation at docs.google.com](https://docs.google.com/presentation/d/1Sq9a-y_2WW3I7gXBK-IUZx6eNG7vhJO1UfwX7MqWdgc/pub?start=false&loop=false&delayms=5000)

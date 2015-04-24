@@ -1,4 +1,5 @@
-# ba-nlp
+# Carsten's bthesis
+
 Bachelor thesis about named entity recognition for natural language mentions of mutation names in the biomedical domain.
 
 ## title
@@ -35,3 +36,24 @@ Very deep tutorial. Contains lots of mathematics. But easy to understand, if to 
 My presentation about CRF, which is very superficial, but lets you get an idea of CRF.
 
 [CRF presenation at docs.google.com](https://docs.google.com/presentation/d/1Sq9a-y_2WW3I7gXBK-IUZx6eNG7vhJO1UfwX7MqWdgc/pub?start=false&loop=false&delayms=5000)
+
+
+## Timeline
+
+* Actual start: March 26th
+* Official start: May 15th
+* Method finished: August 15th
+* Official end: September 15th
+
+* Understand current guidelines in IDP4
+* Try to annotate a few documents on tagtog (in `cuhlig` user)
+* (by April 30th) Specify for myself my own guidelines of mutation mentions (caring about distinction: standard vs NL mentions -- define exactly what a NL mention is (either follow Ankit's rule or your own))
+* Decide on final CRF framework (mallet vs CRF++ vs crfsuite vs ?)
+* Create basic pipeline:
+  * Accept input
+  * Data-structure the input
+  * Output: do predictions
+* Develop own method:
+  * Bootstrapping, semi-supervised learning
+  * Annotating (just sentences from abstracts)
+  * Work on the CRF features

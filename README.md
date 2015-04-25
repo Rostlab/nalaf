@@ -5,6 +5,9 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 ## title
 > multiple versions
 
+- [ ] Semi-supervised learning of natural language mentions in biomedical text domain
+- [ ] Semi-supervised learning of natural language mutation mentions
+- [ ] Semi-supervised natural language NER in biomedical text domain
 - [ ] Semi-supervised natural language NER of biomedical documents
 - [ ] Protein mutation causing disease search through NER of biomedical texts
 - [ ] Natural language NER of protein mutations in biomedical text domain

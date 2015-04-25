@@ -40,20 +40,29 @@ My presentation about CRF, which is very superficial, but lets you get an idea o
 
 ## Timeline
 
-* Actual start: March 26th
-* Official start: May 15th
-* Method finished: August 15th
-* Official end: September 15th
+### Main timeframe
 
-* Understand current guidelines in IDP4
-* Try to annotate a few documents on tagtog (in `cuhlig` user)
-* (by April 30th) Specify for myself my own guidelines of mutation mentions (caring about distinction: standard vs NL mentions -- define exactly what a NL mention is (either follow Ankit's rule or your own))
-* Decide on final CRF framework (mallet vs CRF++ vs crfsuite vs ?)
-* Create basic pipeline:
-  * Accept input
-  * Data-structure the input
-  * Output: do predictions
-* Develop own method:
-  * Bootstrapping, semi-supervised learning
-  * Annotating (just sentences from abstracts)
-  * Work on the CRF features
+* Actual start: **@March-26th**
+* Official start: **@May-15th**
+* Method finished: **@August-15th**
+* Official end: **@September-15th**
+
+
+### Tasks and Planning
+
+* [ ] Understand current guidelines in IDP4
+* [ ] Try to annotate a few documents on tagtog (in `cuhlig` user)
+* [ ] **@April-30th** Specify for myself my own guidelines of mutation mentions   
+  *caring about distinction: standard vs NL mentions -- define exactly what a NL mention is (either follow Ankit's rule or your own)*
+
+
+* [ ] Decide on final CRF framework (mallet vs CRF++ vs crfsuite vs ?)
+
+* [ ] Develop own method
+  * [ ] Create basic pipeline
+    * [ ] Accept input
+    * [ ] Data-structure the input
+    * [ ] Output: do predictions
+  * [ ] Bootstrapping, semi-supervised learning
+  * [ ] Annotating (just sentences from abstracts)
+  * [ ] Work on the CRF features

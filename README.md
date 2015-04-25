@@ -53,9 +53,9 @@ My presentation about CRF, which is very superficial, but lets you get an idea o
 
 ### Tasks and Planning
 
-* [ ] Understand current guidelines in IDP4
-* [ ] Try to annotate a few documents on tagtog (in `cuhlig` user)
-* [ ] **@April-30th** Specify for myself my own guidelines of mutation mentions   
+* [ ] Understand current guidelines in IDP4 #2
+* [ ] Try to annotate a few documents on tagtog (in `cuhlig` user) #3
+* [ ] **@April-30th** Specify for myself my own guidelines of mutation mentions #4  
   *caring about distinction: standard vs NL mentions -- define exactly what a NL mention is (either follow Ankit's rule or your own)*
 
 

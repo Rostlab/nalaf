@@ -6,8 +6,12 @@
 - MUST: **indicative** word e.g. duplication, insertion, ...
 - **helping indicative** words e.g. downstream, ... (but not e.g. nucleotide)
 
+--> no minimum number of letters and minimum of 3 spaces instead of 4
 ### graphical tree representation
 TODO
+logical way how to define it:
+- multiple possible patterns (root of tree) e.g. by motif or by position
+- check for spaces and connecting words
 
 ### notes
 - when having multiple variants possible using the *minimal set*

@@ -1,4 +1,6 @@
 ## Annotation guidelines for natural language mentions
+> seeing natural language mention as a **natural language**
+> connecting word, that connects position/motif, etc. with indicative word
 
 ### definition of natural language mutation mentions as subset of mutation mentions
 - MUST: minimum 3 spaces

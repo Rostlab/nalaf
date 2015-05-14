@@ -5,6 +5,7 @@
 .cache
 .history
 .lib/
+.DS_Store
 dist/*
 target/
 lib_managed/
@@ -15,3 +16,7 @@ project/plugins/project/
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
+
+# idp-4 resources
+IDP4_*/
+node_modules/

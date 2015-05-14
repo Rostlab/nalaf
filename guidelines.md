@@ -1,4 +1,5 @@
-## Annotation guidelines for natural language mentions
+## Notes for Annotation Guidelines
+> obsolete
 > seeing natural language mention as a **natural language**
 > connecting word, that connects position/motif, etc. with indicative word
 

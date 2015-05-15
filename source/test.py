@@ -8,9 +8,10 @@ minimum_spaces = 2
 maximum_spaces = 5
 minimum_lettres = 12
 maximum_lettres = 100
-indicatives = ["substitution", "deletion", "insertion", "mutation", "point mutation"]
+indicatives = ["substitution", "deletion",
+               "insertion", "mutation", "point mutation"]
 # TODO indicatives long list
-# TODO connecting long list
+connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 positions = ["position", "[0-9]+"]
 
 # pseudocode simple method
@@ -31,6 +32,12 @@ positions = ["position", "[0-9]+"]
 #   endloop
 # endloop
 
+
+def simple_inclusive(sentences):
+    for sentence in sentences:
+        for word in sentence.split(" "):
+            if word in indicatives:
+                print (sentence)
 
 # exclusive
 # minimum_spaces = 2
@@ -70,6 +77,7 @@ with open(filename, "r") as f:
     html_doc = f.read().replace("\n", "")
     soup = BeautifulSoup(html_doc)
     sentences = soup.p.string.split(". ")
+    simple_inclusive(sentences)
 
     # TODO sentences not via ". ", but take care of e.g. "E. coli"
-    print(sentences)
+    # print(sentences)

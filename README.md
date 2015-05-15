@@ -5,9 +5,9 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 ## title
 > multiple versions
 
-- [ ] Semi-supervised learning of natural language mentions in biomedical text domain
 - [X] Semi-supervised learning of natural language mutation mentions
-- [ ] Semi-supervised natural language NER in biomedical text domain
+- [ ] Semi-supervised learning of natural language mentions in biomedical text domain
+- [ ] Semi-supervised natural languagae NER in biomedical text domain
 - [ ] Semi-supervised natural language NER of biomedical documents
 - [ ] Protein mutation causing disease search through NER of biomedical texts
 - [ ] Natural language NER of protein mutations in biomedical text domain
@@ -16,14 +16,21 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 
 
 ## abstract
-Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed.
+Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed. But do people use the curated literature efficiently?
+Looking at just a few papers that describe a particular protein can limit the understanding of occuring protein mutations. Through automating the process of identifying relevant protein mutations, research can be increased significantly.
+> Nowadays, researchers do not just look at a few papers, but try to find a consent of hundreds or thousands of papers concerning the disabled function of one or multiple proteins. This can only be done if automated.
 
-The development of literature information extraction has already been done to a certain degree: protein, mutation, gene names and similar following naming conventions can be easily parsed. Though in many cases the ambiguity of . The difficulty lies within the naming or description of protein names that are consisting of multiple words, are based on the natural language and, thus are not easily being parsed.
+The development of literature information extraction has already progressed to a certain degree: protein, mutation, gene names and similar following naming conventions can be parsed at a sufficient rate, though there are still cases of ambiguity. The current problematic is, that TODO.......
+The difficulty lies within the description of entities that are consisting of multiple words and are defined through context and, thus can not be easily parsed.
 
-On top of that, there are (almost?) no semi-supervised machine learning methods, that improve over time with more data. In this thesis, I am aiming to create a NER CRF machine learning method, that is semi-supervised and targets natural language mentions of protein mutation names and descriptions to extract those entities. (best case: self-improving machine that feeds on pubmed abstracts/articles)
+On top of that, there are no semi-supervised machine learning methods, that recognize named entities of natural language mutation mentions. In this thesis, I am aiming to create a named entity recognition conditional random field machine learning method, that is semi-supervised and targets natural language mentions of mutation names and descriptions to extract those entities.
+> semi-supervised means:
+> - combination of annotated data-points und novel data-points
+> - confident (above a threshold) enough classified data-points are automatically defined as true (and used in further training?)
+> - not-confident enough data-points can be manually declared true or false and incorporated in the training
 
-Therefore a pipeline is developed, that aims to extract relevant protein mutations for genetic diseases, that can be used in drug-targeted pharma (is that the right way to say?) development.
 
+Therefore a pipeline is developed, that aims to extract relevant protein mutations for genetic diseases, that can be used in drug-targeted pharmadevelopment.
 
 
 ## documentation CRF
@@ -53,9 +60,9 @@ My presentation about CRF, which is very superficial, but lets you get an idea o
 
 ### Tasks and Planning
 
-* [ ] Understand current guidelines in IDP4 #2
-* [ ] Try to annotate a few documents on tagtog (in `cuhlig` user) #3
-* [ ] **@April-30th** Specify for myself my own guidelines of mutation mentions #4  
+* [X] Understand current guidelines in IDP4 #2
+* [X] Try to annotate a few documents on tagtog (in `cuhlig` user) #3
+* [X] **@April-30th** Specify for myself my own guidelines of mutation mentions #4  
   *caring about distinction: standard vs NL mentions -- define exactly what a NL mention is (either follow Ankit's rule or your own)*
 
 

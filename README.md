@@ -1,3 +1,26 @@
+## Goals:
+
+1. Study significance of NL mentions in mutation mention recognition
+  * ratio of standard vs NL in abstracts & full text
+  * % of novel mutations not present in SwissProt (would require manual annotation of protein relations)
+  * dataset of NLs (size depends on significance of NLs)
+2. Method for mutation mention extraction grounded to their genes/proteins
+  * Mutation mention recognizer better than tmVar for standard mentions
+  * If NLs are relevant, prove good F1 performance (> 70-80)
+  * Simple or optionally advanced normalization method
+  * Easy to use program:
+    * *Good documentation:*
+      * code
+      * end-user (biology researcher level, how to call from the command line, ...)
+    * Accept inputs: programmatical call (string), text file, corpora' formats**
+    * Accept outputs: ann.json (tagtog suitable)   
+3. Paper
+  * Full draft (1 or 2 papers?) by end of August submittable to Burkhard Rost
+  * Submit by September-October
+
+
+
+
 # Carsten's bthesis
 
 Bachelor thesis about named entity recognition for natural language mentions of mutation names in the biomedical domain.

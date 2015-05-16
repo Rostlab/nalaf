@@ -12,7 +12,7 @@ indicatives = ["substitution", "deletion",
                "insertion", "mutation", "point mutation"]
 # TODO indicatives long list
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
-positions = ["position", "[0-9]+"]
+positions = ["position", r'[0-9][0-9]']
 
 # pseudocode simple method
 # annotations[start, length]
@@ -48,10 +48,14 @@ def simple_inclusive(sentences):
             if word in indicatives:
                 # print (sentence, isen, iword, itotal)
                 for i in xrange(iword - 1, len(words) - 1):
+                    pos = i - iword - 1
+                    if pos > maximum_spaces:
+                        break
+                    if r'[0-9]+' in words[i]:
+                        print ("awesome")
                     if words[i] in positions:
                         # print (words[i], "found")
                         found.append([itotal, i - iword + 1])
-                        break
                     elif words[i] == words[len(words) - 1]:
                         print ("not found")
     return found

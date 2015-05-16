@@ -34,10 +34,34 @@ positions = ["position", "[0-9]+"]
 
 
 def simple_inclusive(sentences):
+    isen = 0
+    itotal = 0
+    iword = 0
+    found = []
     for sentence in sentences:
-        for word in sentence.split(" "):
+        isen += 1
+        iword = 0
+        words = sentence.split(" ")
+        for word in words:
+            iword += 1
+            itotal += 1
             if word in indicatives:
-                print (sentence)
+                # print (sentence, isen, iword, itotal)
+                for i in xrange(iword - 1, len(words) - 1):
+                    if words[i] in positions:
+                        # print (words[i], "found")
+                        found.append([itotal, i - iword + 1])
+                        break
+                    elif words[i] == words[len(words) - 1]:
+                        print ("not found")
+    return found
+# print (words[iword - 1])
+
+
+def print_annotated(raw_text, annotation_array):
+    words = raw_text.split(" ")
+    for x in annotation_array:
+        print (words[x[0] - 1:x[0] + x[1]])
 
 # exclusive
 # minimum_spaces = 2
@@ -76,8 +100,10 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 with open(filename, "r") as f:
     html_doc = f.read().replace("\n", "")
     soup = BeautifulSoup(html_doc)
-    sentences = soup.p.string.split(". ")
-    simple_inclusive(sentences)
+    raw_text = soup.p.string
+    sentences = raw_text.split(". ")
+    an_array = simple_inclusive(sentences)
+    print_annotated(raw_text, an_array)
 
     # TODO sentences not via ". ", but take care of e.g. "E. coli"
     # print(sentences)

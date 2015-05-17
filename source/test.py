@@ -1,7 +1,9 @@
 from bs4 import BeautifulSoup
 import re
+import glob
 
 filename = "test.html"
+filelist = glob.glob("../IDP4_plain_html/pool/*.plain.html")
 # TODO iterate through all files
 # TODO randomly select 5-10 documents
 
@@ -10,7 +12,7 @@ minimum_spaces = 2
 maximum_spaces = 5
 minimum_lettres = 12
 maximum_lettres = 100
-indicatives = ["substitution", "deletion",
+indicatives = ["point", "substitution", "deletion",
                "insertion", "mutation", "point mutation"]
 # TODO indicatives long list
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
@@ -33,6 +35,22 @@ positions = ["position", r'^\d+$']
 #       endif
 #   endloop
 # endloop
+
+
+def whole_filelist_test_inclusive(flist):
+    counter = 0
+    for f in flist:
+        with open(f, 'r') as f:
+            raw = f.read()
+            html_doc = raw.replace("\n", "")
+            soup = BeautifulSoup(html_doc)
+            raw_text = soup.p.string
+            sentences = phrasing(raw_text)
+            an_array = simple_inclusive(sentences)
+            if len(an_array) > 0:
+                counter += 1
+            print_annotated(raw_text, an_array)
+    print "total: ", counter
 
 
 def simple_inclusive(sentences):
@@ -58,12 +76,12 @@ def simple_inclusive(sentences):
                         # print (words[i], "found")
                         # higher border
                         if len(found) > 0:
-                            if found[len(found)-1][0] == itotal:
-                                found[len(found)-1] = [itotal, i - iword + 1]
+                            if found[len(found) - 1][0] == itotal:
+                                found[len(found) - 1] = (itotal, i - iword + 1)
                             else:
-                                found.append([itotal, i - iword + 1])
+                                found.append((itotal, i - iword + 1))
                         else:
-                            found.append([itotal, i - iword + 1])
+                            found.append((itotal, i - iword + 1))
                     elif words[i] == words[len(words) - 1]:
                         print ("not found")
     return found
@@ -73,6 +91,8 @@ def simple_inclusive(sentences):
 def print_annotated(raw_text, annotation_array):
     words = raw_text.split(" ")
     for x in annotation_array:
+        print "position:", x[0], "with length", x[1]
+        # TODO annotation options (map information to stuff)
         print (words[x[0] - 1:x[0] + x[1]])
 
 
@@ -83,6 +103,11 @@ def regex_array(string, regex_array):
         if re.search(x, string):
             return True
     return False
+
+
+def phrasing(text):
+    REG_PHRASE_SPLIT = r'\. '
+    return text.split(REG_PHRASE_SPLIT)
 
 # exclusive
 # minimum_spaces = 2
@@ -118,11 +143,14 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # operation on simple method currently
 # SIMPLE METHOD
 # TODO mode select inclusive/exclusive
+
+whole_filelist_test_inclusive(filelist)
+
 with open(filename, "r") as f:
     html_doc = f.read().replace("\n", "")
     soup = BeautifulSoup(html_doc)
     raw_text = soup.p.string
-    sentences = raw_text.split(". ")
+    sentences = phrasing(raw_text)
     an_array = simple_inclusive(sentences)
     print_annotated(raw_text, an_array)
 

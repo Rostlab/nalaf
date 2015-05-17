@@ -50,14 +50,20 @@ def simple_inclusive(sentences):
             if word in indicatives:
                 # print (sentence, isen, iword, itotal)
                 for i in xrange(iword - 1, len(words) - 1):
-                    pos = i - iword - 1
+                    pos = i - iword + 1
+                    # print iword, '"' + words[i] + '"', i, pos
                     if pos > maximum_spaces:
                         break
-                    if r'[0-9]+' in words[i]:
-                        print ("awesome")
                     if regex_array(words[i], positions):
                         # print (words[i], "found")
-                        found.append([itotal, i - iword + 1])
+                        # higher border
+                        if len(found) > 0:
+                            if found[len(found)-1][0] == itotal:
+                                found[len(found)-1] = [itotal, i - iword + 1]
+                            else:
+                                found.append([itotal, i - iword + 1])
+                        else:
+                            found.append([itotal, i - iword + 1])
                     elif words[i] == words[len(words) - 1]:
                         print ("not found")
     return found
@@ -71,6 +77,8 @@ def print_annotated(raw_text, annotation_array):
 
 
 def regex_array(string, regex_array):
+    # searches a string with multiple regex
+    # TODO regex tree? search to increase performance if needed (profiling)
     for x in regex_array:
         if re.search(x, string):
             return True

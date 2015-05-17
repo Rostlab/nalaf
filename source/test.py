@@ -1,11 +1,22 @@
+# imports
 from bs4 import BeautifulSoup
 import re
 import glob
+import json
 
+# constants
+# TODO import through parameters
 filename = "test.html"
 filelist = glob.glob("../IDP4_plain_html/pool/*.plain.html")
+tempfile = "test.json"
 # TODO iterate through all files
 # TODO randomly select 5-10 documents
+
+#     ____  ____ __________ _____ ___  ___  / /____  __________
+#    / __ \/ __ `/ ___/ __ `/ __ `__ \/ _ \/ __/ _ \/ ___/ ___/
+#   / /_/ / /_/ / /  / /_/ / / / / / /  __/ /_/  __/ /  (__  )
+#  / .___/\__,_/_/   \__,_/_/ /_/ /_/\___/\__/\___/_/  /____/
+# /_/
 
 # simple method - inclusive
 minimum_spaces = 2
@@ -14,10 +25,32 @@ minimum_lettres = 12
 maximum_lettres = 100
 indicatives = ["point", "substitution", "deletion",
                "insertion", "mutation", "point mutation"]
+strong_indicatives = []
+helping_indicatives = []
 # TODO indicatives long list
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 positions = ["position", r'^\d+$']
 
+
+#     _       __            ____
+#    (_)___  / /____  _____/ __/___ _________  _____
+#   / / __ \/ __/ _ \/ ___/ /_/ __ `/ ___/ _ \/ ___/
+#  / / / / / /_/  __/ /  / __/ /_/ / /__/  __(__  )
+# /_/_/ /_/\__/\___/_/  /_/  \__,_/\___/\___/____/
+
+# documents[(pubmedid,text,annotation_array)]
+documents = []
+# annotation_array[(position,length)]
+annotation_array = []
+
+
+#    _____(_)___ ___  ____  / /__     ____ ___  ___  / /_/ /_  ____  ____/ /
+#   / ___/ / __ `__ \/ __ \/ / _ \   / __ `__ \/ _ \/ __/ __ \/ __ \/ __  /
+#  (__  ) / / / / / / /_/ / /  __/  / / / / / /  __/ /_/ / / / /_/ / /_/ /
+# /____/_/_/ /_/ /_/ .___/_/\___/  /_/ /_/ /_/\___/\__/_/ /_/\____/\__,_/
+#                 /_/
+
+# pseudocode
 # pseudocode simple method
 # annotations[start, length]
 # for each sentence
@@ -47,10 +80,16 @@ def whole_filelist_test_inclusive(flist):
             raw_text = soup.p.string
             sentences = phrasing(raw_text)
             an_array = simple_inclusive(sentences)
-            if len(an_array) > 0:
-                counter += 1
-            print_annotated(raw_text, an_array)
+            documents.append(("somestring", raw_text, an_array))
+            # print_annotated(raw_text, an_array)
+            counter += 1
     print "total: ", counter
+    # log_to_file(documents)
+
+
+def log_to_file(obj):
+    with open(tempfile, 'w') as f:
+        f.write(json.dumps(obj))
 
 
 def simple_inclusive(sentences):

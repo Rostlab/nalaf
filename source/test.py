@@ -1,4 +1,6 @@
 from bs4 import BeautifulSoup
+import re
+
 filename = "test.html"
 # TODO iterate through all files
 # TODO randomly select 5-10 documents
@@ -12,7 +14,7 @@ indicatives = ["substitution", "deletion",
                "insertion", "mutation", "point mutation"]
 # TODO indicatives long list
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
-positions = ["position", r'[0-9][0-9]']
+positions = ["position", r'^\d+$']
 
 # pseudocode simple method
 # annotations[start, length]
@@ -53,7 +55,7 @@ def simple_inclusive(sentences):
                         break
                     if r'[0-9]+' in words[i]:
                         print ("awesome")
-                    if words[i] in positions:
+                    if regex_array(words[i], positions):
                         # print (words[i], "found")
                         found.append([itotal, i - iword + 1])
                     elif words[i] == words[len(words) - 1]:
@@ -66,6 +68,13 @@ def print_annotated(raw_text, annotation_array):
     words = raw_text.split(" ")
     for x in annotation_array:
         print (words[x[0] - 1:x[0] + x[1]])
+
+
+def regex_array(string, regex_array):
+    for x in regex_array:
+        if re.search(x, string):
+            return True
+    return False
 
 # exclusive
 # minimum_spaces = 2

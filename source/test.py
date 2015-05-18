@@ -9,7 +9,6 @@ import json
 filename = "test.html"
 filelist = glob.glob("../IDP4_plain_html/pool/*.plain.html")
 tempfile = "test.json"
-# TODO randomly select 5-10 documents
 
 ##############
 # interfaces #
@@ -20,12 +19,21 @@ documents = []
 # annotation_array[(position,length)]
 annotation_array = []
 
+
 #     d888888b d8b   db  .o88b. db      db    db .d8888. d888888b db    db d88888b
 #       `88'   888o  88 d8P  Y8 88      88    88 88'  YP   `88'   88    88 88'
 #        88    88V8o 88 8P      88      88    88 `8bo.      88    Y8    8P 88ooooo
 #        88    88 V8o88 8b      88      88    88   `Y8b.    88    `8b  d8' 88~~~~~
 #       .88.   88  V888 Y8b  d8 88booo. 88b  d88 db   8D   .88.    `8bd8'  88.
 #     Y888888P VP   V8P  `Y88P' Y88888P ~Y8888P' `8888Y' Y888888P    YP    Y88888P
+
+# abstract class with dictionaries
+# required dicts (dict start, end, limits, exclude)
+# dicts start (indicatives, strong indicatives)
+# dicts end (positions, helping indicatives)
+# dict limits (start, stop for spaces and lettres)
+# dicts inside (connecting)
+# dicts exclude (conventions, common hints for standard mentions)
 
 
 # simple method
@@ -46,7 +54,7 @@ positions = ["position", r'^\d+$', "entire gene"]
 #               if max_spaces < cur_spaces !! max_lettres < cur_lettres
 #                   break next word for-loop
 #               endif
-#               if in positions
+#               if in positions8
 #                   save as nl mention in annotations[start, length]
 #                   break next word for-loop and continue each word-loop at cur-word
 #               endif
@@ -99,8 +107,6 @@ def simple_inclusive(sentences):
                                 found.append((itotal, i - iword + 1))
                         else:
                             found.append((itotal, i - iword + 1))
-                    elif words[i] == words[len(words) - 1]:
-                        print ("not found")
     return found
 # print (words[iword - 1])
 
@@ -111,6 +117,7 @@ helping_indicatives = []
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 
 # TODO Sophisticated method
+
 
 #     d88888b db    db  .o88b. db      db    db .d8888. d888888b db    db d88888b
 #     88'     `8b  d8' d8P  Y8 88      88    88 88'  YP   `88'   88    88 88'
@@ -167,11 +174,23 @@ def print_annotated(raw_text, annotation_array):
 
 def regex_array(string, regex_array):
     # searches a string with multiple regex
-    # TODO regex tree? search to increase performance if needed (profiling)
+    # TODO regex tree? search to increase performance if needed @profiling
     for x in regex_array:
         if re.search(x, string):
             return True
     return False
+
+
+def print_info(pubmedid):
+    for x in filelist:
+        if pubmedid in x:
+            with open(x, "r") as f:
+                html_doc = f.read()
+                soup = BeautifulSoup(html_doc)
+                print "PubMed-ID:", soup.html.attrs['data-origid']
+                print "Title:", soup.find(attrs={"data-type": "title"}).h2.string
+                print "Abstract:", soup.find(attrs={"data-type": "abstract"}).p.string
+            break
 
 
 def phrasing(text):
@@ -190,8 +209,8 @@ def log_to_file(obj):
 
 
 def print_statistics_documents():
-    n = 0.0
-    t = 0.0
+    n = 0.0  # number of documents with found nl mentions
+    t = 0.0  # number of found nl mentions
     for x in documents:
         if len(x[2]) > 0:
             n += 1
@@ -222,6 +241,7 @@ def print_statistics_documents():
 
 whole_filelist_test_inclusive(filelist)
 print_statistics_documents()
+# print_info("127")
 # with open(filename, "r") as f:
 #     html_doc = f.read().replace("\n", "")
 #     soup = BeautifulSoup(html_doc)

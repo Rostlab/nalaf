@@ -55,6 +55,22 @@ On top of that, there are no semi-supervised machine learning methods, that reco
 
 Therefore a pipeline is developed, that aims to extract relevant protein mutations for genetic diseases, that can be used in drug-targeted pharmadevelopment.
 
+# Alex's thesis 
+
+## Title
+Preliminary titles:
+* NER of natural language mentions of mutations in bio-medical texts
+* Word representation features for NER of natural language mentions of mutations
+* Unsupervised features learning for NER in the bio-medical domain
+
+## Abstract
+As the volume of published research in the biomedical domain increases, the need for effective information extraction systems grows with it. In this context, the task of named entity recognition (NER), defined as classifying chunks of text in natural language to a set of predefined categories such as genes, proteins or other entities, is essential.
+
+The performance of named entity recognition (NER) models, in general, is intrinsically limited by the availability of quality annotated corpora. The construction of such corpora is usually costly and even more so when there is a need for expert annotators. In the biomedical domain, the difficulty of the task is even greater compared to other domains, due do the much higher number of possible named entities, which keeps increasing constantly.
+
+To combat the lack of large annotated corpora, we turn to exploitation of large volumes of unlabeled text. Using techniques for unsupervised feature learning we aim to increase the performance of traditional NER models. More specifically, this thesis focuses on augmenting typical conditional random field (CRF) approaches with word representation features learned from large bodies of biomedical text. The goal is to evaluate the usefulness and effect on performance of different approaches such as word embeddings based on deep architectures, distributional representations or clustering based methods. 
+
+[maybe a add a small paragraph about active learning and creating a larger corpus]
 
 ## documentation CRF
 

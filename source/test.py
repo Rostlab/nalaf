@@ -4,11 +4,15 @@ import re
 import glob
 import json
 
+
 # constants
 # TODO import through parameters
 filename = "test.html"
-filelist = glob.glob("../IDP4_plain_html/pool/*.plain.html")
+resources = "../resources/"
+filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
 tempfile = "test.json"
+
+jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
 
 ##############
 # interfaces #
@@ -70,7 +74,9 @@ def whole_filelist_test_inclusive(flist):
             raw = f.read()
             html_doc = raw.replace("\n", "")
             soup = BeautifulSoup(html_doc)
-            raw_text = soup.p.string
+            raw_text = soup.p.string  # FIXME check for whole document
+            # TODO just abstracts or whole documents?
+            # TODO opt. parameter for whole documents
             sentences = phrasing(raw_text)
             an_array = simple_inclusive(sentences)
             documents.append((soup.html.attrs['data-origid'], raw_text, an_array))
@@ -138,6 +144,8 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # del/del
 
 # TODO mapping annotation to text
+
+
 # documents[pubmedid,text,annotation_array]
 # annotation_array[position,length]
 
@@ -164,11 +172,42 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 #
 #
 
+#######################################
+# legend for ann.json files
+# e_1 = protein (entity)
+# e_2 = mutation (entity)
+# e_3 = organism (entity)
+# m_4 = figstabs_with_mutations (meta)
+# r_5 = e_1|e_2 (relation)
+# r_6 = e_1|e_3 (relation)
+#######################################
+# idp4_db = documents thing
+
+def test_json_import(fname):
+    for x in jsonlist:
+        if fname in x:
+            with open(x, 'r') as f:
+                raw_text = f.read()
+                json_object = json.loads(raw_text)
+                entities = json_object['entities']
+
+                for ent in entities:
+                    if is_mutation_entity(ent):
+                        print ent
+
+
+def is_mutation_entity(entity):
+    for key, value in entity.iteritems():
+                        if key == "classId" and value == "e_2":
+                            return True
+    return False
+
+
 def print_annotated(raw_text, annotation_array):
     words = raw_text.split(" ")
     for x in annotation_array:
         print "position:", x[0], "with length", x[1]
-        # TODO annotation options (map information to stuff)
+    # TODO annotation options (map information to stuff)
         print (words[x[0] - 1:x[0] + x[1]])
 
 
@@ -190,6 +229,7 @@ def print_info(pubmedid):
                 print "PubMed-ID:", soup.html.attrs['data-origid']
                 print "Title:", soup.find(attrs={"data-type": "title"}).h2.string
                 print "Abstract:", soup.find(attrs={"data-type": "abstract"}).p.string
+                # TODO find_all since there is more than just one paragraph
             break
 
 
@@ -235,12 +275,15 @@ def print_statistics_documents():
 #     88  88  88 88~~~88    88    88 V8o88
 #     88  88  88 88   88   .88.   88  V888
 #     YP  YP  YP YP   YP Y888888P VP   V8P
-#
-#
 
 
-whole_filelist_test_inclusive(filelist)
-print_statistics_documents()
+# whole_filelist_test_inclusive(filelist)
+# print_statistics_documents()
+
+test_json_import("17327381")
+# print_info("17327381")
+
+
 # print_info("127")
 # with open(filename, "r") as f:
 #     html_doc = f.read().replace("\n", "")

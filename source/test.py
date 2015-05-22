@@ -143,8 +143,6 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # D3.49(164)
 # del/del
 
-# TODO mapping annotation to text
-
 
 # documents[pubmedid,text,annotation_array]
 # annotation_array[position,length]
@@ -312,6 +310,8 @@ def import_json_to_db():
             for entity in entities:
                 if entity['classId'] == 'e_2':
                     an_array = doc[entity['part']]['annotations']
+                    if an_array is None:
+                        print("entity"['part'])
                     start_char_part = entity['offsets'][0]['start']
                     text = entity['offsets'][0]['text']
                     end_char_part = start_char_part + len(text)
@@ -347,21 +347,56 @@ def import_html_to_db():
 def check_db_integrity():
     """
     Check documents-object for offsets annotations.
+    Logs some information if Errors exist.
     """
-    for doc in documents:
+    for pubmedid, doc in documents.items():
         if has_annotations(doc):
-            print("has annotations")
-        #TODO (1) offset check
+            # print("----------------------")
+            # print("whole document")
+            # print(json.dumps(doc, indent=4, sort_keys=True))
+            # iterate through parts with annotation
+            for part_id in doc:
+                if len(doc[part_id]['annotations']) > 0:
+                    part = doc[part_id]
+                    # print("--------")
+                    # print("--------")
+                    # print(part_id)
+                    for annotation in sorted(part['annotations'], key=lambda ann: ann['start']):
+                        # print("-------")
+                        # print(annotation['text'])
+                        orig_string = annotation['text']
+                        start = annotation['start']
+                        end = annotation['end']
+                        cut_string = part['text'][start:end]
+                        # print(part['text'][annotation['start']:annotation['end']])
+                        if orig_string != cut_string:
+                            print("ID:", pubmedid, ", part_id:", part_id)
+                            print("org_string:", orig_string)
+                            print("cut_string:", cut_string)
+                            print("")
+                            print("cut_start:", start)
+                            print("cut_end:  ", end)
+                            print("TEXT\n", part['text'])
+                            print("------\n\n")
+                            print("WHOLE DOCUMENT:")
+                            print(json.dumps(doc, indent=4, sort_keys=True))
+
+            # return
+        # TODO (1) offset check
 
 
 def has_annotations(doc):
     for part in doc.values():
-        if len(part['annotations'].keys()) > 0:
+        if len(part['annotations']) > 0:
+            # print("----------------------")
+            # print("part with annotation")
+            # print(json.dumps(part, indent=4))
             return True
     return False
 # operation on simple method currently
 # SIMPLE METHOD
-# TODO: mode select inclusive/exclusive
+
+# OPTIONAL: mode select inclusive/exclusive
 
 
 def print_statistics_documents():
@@ -398,9 +433,14 @@ def print_statistics_documents():
 
 # test_json_import("17327381")
 import_html_to_db()
+# test_doc = list(documents.items())
+
+# print(type(test_doc))
+# print(json.dumps(test_doc, indent=4))
 # print_info("17327381")
 import_json_to_db()
 check_db_integrity()
+# print(json.dumps(list(documents.items())[0:5], indent=4))
 # print(documents)
 
 # print_info("127")

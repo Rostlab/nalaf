@@ -4,14 +4,13 @@ import re
 import glob
 import json
 
-
 # constants
 # TODO import through parameters
 filename = "test.html"
-resources = "../resources/"
-filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
 tempfile = "test.json"
 
+resources = "../resources/"
+filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
 jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
 
 ##############
@@ -19,8 +18,9 @@ jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
 ##############
 
 # documents[(pubmedid,text,annotation_array)]
-documents = []
-# annotation_array[(position,length)]
+# documents = { pubmedid : { part_id : { text: raw_text, annotations : annotation_array } } }
+documents = {}
+# annotation_array = { start : start_char_part, end : end_char_part, prob : pred_or_1}
 annotation_array = []
 
 
@@ -70,10 +70,10 @@ positions = ["position", r'^\d+$', "entire gene"]
 
 def whole_filelist_test_inclusive(flist):
     for f in flist:
-        with open(f, 'r') as f:
-            raw = f.read()
-            html_doc = raw.replace("\n", "")
-            soup = BeautifulSoup(html_doc)
+        with open(f, 'rb') as f:
+            # raw = f.read()
+            # html_doc = raw.replace("\n", "")
+            soup = BeautifulSoup(f)
             raw_text = soup.p.string  # FIXME check for whole document
             # TODO just abstracts or whole documents?
             # TODO opt. parameter for whole documents
@@ -181,7 +181,47 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # r_5 = e_1|e_2 (relation)
 # r_6 = e_1|e_3 (relation)
 #######################################
-# idp4_db = documents thing
+test_db = {
+    "PMC123322": {
+        "s2s1p1": {
+            "text": "raw text of paragraph",
+            "annotations": [
+                {
+                    "start": 113,
+                    "text": "blabal",
+                    "end": 119,
+                    "prob": 1
+                },
+                {
+                    "start": 113,
+                    "text": "blabal",
+                    "end": 119,
+                    "prob": 1
+                }
+            ],
+        },
+    },
+    "123323": {
+        "s2s1p1": {
+            "text": "raw text of paragraph",
+            "annotations": [
+                {
+                    "start": 113,
+                    "text": "blabal",
+                    "end": 119,
+                    "prob": 1
+                },
+                {
+                    "start": 113,
+                    "text": "blabal",
+                    "end": 119,
+                    "prob": 1
+                }
+            ],
+        },
+    },
+}
+
 
 def test_json_import(fname):
     for x in jsonlist:
@@ -193,22 +233,22 @@ def test_json_import(fname):
 
                 for ent in entities:
                     if is_mutation_entity(ent):
-                        print ent
+                        print(ent)
 
 
 def is_mutation_entity(entity):
-    for key, value in entity.iteritems():
-                        if key == "classId" and value == "e_2":
-                            return True
+    for key, value in entity.items():
+        if key == "classId" and value == "e_2":
+            return True
     return False
 
 
 def print_annotated(raw_text, annotation_array):
     words = raw_text.split(" ")
     for x in annotation_array:
-        print "position:", x[0], "with length", x[1]
+        print("position:", x[0], "with length", x[1])
     # TODO annotation options (map information to stuff)
-        print (words[x[0] - 1:x[0] + x[1]])
+        print(words[x[0] - 1:x[0] + x[1]])
 
 
 def regex_array(string, regex_array):
@@ -221,16 +261,34 @@ def regex_array(string, regex_array):
 
 
 def print_info(pubmedid):
-    for x in filelist:
-        if pubmedid in x:
-            with open(x, "r") as f:
-                html_doc = f.read()
-                soup = BeautifulSoup(html_doc)
-                print "PubMed-ID:", soup.html.attrs['data-origid']
-                print "Title:", soup.find(attrs={"data-type": "title"}).h2.string
-                print "Abstract:", soup.find(attrs={"data-type": "abstract"}).p.string
-                # TODO find_all since there is more than just one paragraph
-            break
+    if len(documents) > 0:
+        if pubmedid in documents:
+            doc = documents[pubmedid]
+            # print("Title:", '"' + doc['s1h1']['text'] + '"')
+            list_doc = sorted(doc.items(), key=lambda c: c[0])
+            for part in list_doc:
+                print(part[1]['text'])
+            # for key, part in doc.items():
+            # print(part)
+            #     print(part['text'])
+        else:
+            print("not found")
+    # else:
+    #     for x in filelist:
+    #         if pubmedid in x:
+    #             with open(x, "r") as f:
+    #                 html_doc = f.read()
+    #                 soup = BeautifulSoup(html_doc)
+    #                 print("PubMed-ID:", soup.html.attrs['data-origid'])
+    #                 print("Title:", soup.find(attrs={"data-type": "title"}).h2.string)
+    #                 abstract_full = ""
+
+    # abstract_part = soup.find(attrs={"data-type": "abstract"})
+    # print abstract_part.find_all("p")
+    #                 abstract_parts = soup.find_all("p", id=re.compile("^s2"))
+    #                 for tag in abstract_parts:
+    #                     print(tag['id'])
+    #                     abstract_full += "\n" + tag.string
 
 
 def phrasing(text):
@@ -243,9 +301,67 @@ def log_to_file(obj):
     with open(tempfile, 'w') as f:
         f.write(json.dumps(obj))
 
+
+def import_json_to_db():
+    for j in jsonlist:
+        with open(j, 'r') as f:
+            json_object = json.loads(f.read())
+            pubmedid = json_object['sources'][0]['id']
+            doc = documents[pubmedid]
+            entities = json_object['entities']
+            for entity in entities:
+                if entity['classId'] == 'e_2':
+                    an_array = doc[entity['part']]['annotations']
+                    start_char_part = entity['offsets'][0]['start']
+                    text = entity['offsets'][0]['text']
+                    end_char_part = start_char_part + len(text)
+                    an_array.append(
+                        {'start': start_char_part, 'end': end_char_part, 'prob': 1, 'text': text})
+                else:
+                    next
+
+
+def import_html_to_db():
+    for x in filelist:
+        with open(x, "rb") as f:
+            doc = {}
+            counter = 0
+            soup = BeautifulSoup(f)
+            pubmedid = soup.html.attrs['data-origid']
+            # print("PubMed-ID:", pubmedid)
+            # title = soup.find(attrs={"data-type": "title"}).h2.string
+            # print "Title:", title
+
+            # basic information input
+            # doc['title'] = title
+
+            # abstract_part = soup.find(attrs={"data-type": "abstract"})
+            # print abstract_part.find_all("p")
+            abstract_parts = soup.find_all(id=re.compile("^s"))
+            for tag in abstract_parts:
+                counter += 1
+                doc[tag['id']] = {'text': tag.string, 'annotations': [], 'counter': counter}
+            documents[str(pubmedid)] = doc
+
+
+def check_db_integrity():
+    """
+    Check documents-object for offsets annotations.
+    """
+    for doc in documents:
+        if has_annotations(doc):
+            print("has annotations")
+        #TODO (1) offset check
+
+
+def has_annotations(doc):
+    for part in doc.values():
+        if len(part['annotations'].keys()) > 0:
+            return True
+    return False
 # operation on simple method currently
 # SIMPLE METHOD
-# TODO mode select inclusive/exclusive
+# TODO: mode select inclusive/exclusive
 
 
 def print_statistics_documents():
@@ -255,18 +371,18 @@ def print_statistics_documents():
         if len(x[2]) > 0:
             n += 1
             t += len(x[2])
-    print "statistics\n"
-    print "ratios\n"
-    print "documents with found mentions"
-    print "vs"
-    print "total number of documents"
-    print "{:.4f}".format(n / len(documents))
-    print ""
-    print "found mentions"
-    print "vs"
-    print "total number of documents"
-    print "{:.4f}".format(t / len(documents))
-    print "\n"
+    print("statistics\n")
+    print("ratios\n")
+    print("documents with found mentions")
+    print("vs")
+    print("total number of documents")
+    print("{:.4f}".format(n / len(documents)))
+    print("")
+    print("found mentions")
+    print("vs")
+    print("total number of documents")
+    print("{:.4f}".format(t / len(documents)))
+    print("\n")
 
 
 #     .88b  d88.  .d8b.  d888888b d8b   db
@@ -280,9 +396,12 @@ def print_statistics_documents():
 # whole_filelist_test_inclusive(filelist)
 # print_statistics_documents()
 
-test_json_import("17327381")
+# test_json_import("17327381")
+import_html_to_db()
 # print_info("17327381")
-
+import_json_to_db()
+check_db_integrity()
+# print(documents)
 
 # print_info("127")
 # with open(filename, "r") as f:

@@ -22,7 +22,8 @@ jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
 documents = {}
 # annotation_array = { start : start_char_part, end : end_char_part, prob : pred_or_1}
 annotation_array = []
-
+# stats = { iteration_id : [(stat, value)]}
+stats = []
 
 #     d888888b d8b   db  .o88b. db      db    db .d8888. d888888b db    db d88888b
 #       `88'   888o  88 d8P  Y8 88      88    88 88'  YP   `88'   88    88 88'
@@ -98,7 +99,7 @@ def simple_inclusive(sentences):
             itotal += 1
             if word in indicatives:
                 # print (sentence, isen, iword, itotal)
-                for i in xrange(iword - 1, len(words) - 1):
+                for i in range(iword - 1, len(words) - 1):
                     pos = i - iword + 1
                     # print iword, '"' + words[i] + '"', i, pos
                     if pos > maximum_spaces:
@@ -142,6 +143,32 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # Arg-199-->Cys delta
 # D3.49(164)
 # del/del
+
+
+
+# Ankit's Algorithm
+def ankit_algorithm():
+    total_mentions = 0
+    nl_mentions = 0
+    docs_nlmentions = 0
+    for pubmedid, doc in documents.items():
+        if has_annotations(doc):
+            for part_id, part in doc.items():
+                if len(part['annotations']) > 0:
+                    for annotation in part['annotations']:
+                        # FILTER
+                        if len(annotation['text'].split(" ")) > 2 and len(annotation['text']) > 24:
+                            print(annotation['text'])
+                            nl_mentions += 1
+                        total_mentions += 1
+    print("nlmentions:", nl_mentions, "Total", total_mentions, "nl/total:", nl_mentions/total_mentions)
+
+
+# Finally come up with:
+# * [ ] #NL / #Total Number
+# * [ ] #NL
+# * [ ] Ratio of docs that have at least 1
+# * [ ] Abstract vs. Full-Text
 
 
 # documents[pubmedid,text,annotation_array]
@@ -382,7 +409,6 @@ def check_db_integrity():
                             print(json.dumps(doc, indent=4, sort_keys=True))
 
             # return
-        # TODO (1) offset check
 
 
 def has_annotations(doc):
@@ -439,8 +465,9 @@ import_html_to_db()
 # print(json.dumps(test_doc, indent=4))
 # print_info("17327381")
 import_json_to_db()
-check_db_integrity()
-# print(json.dumps(list(documents.items())[0:5], indent=4))
+# ankit_algorithm()
+# check_db_integrity()
+print(json.dumps(list(documents.items())[0:1], indent=4))
 # print(documents)
 
 # print_info("127")
@@ -452,5 +479,3 @@ check_db_integrity()
 #     sentences = phrasing(raw_text)
 #     an_array = simple_inclusive(sentences)
 # print_annotated(raw_text, an_array)
-
-    # print(sentences)

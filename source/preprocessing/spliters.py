@@ -10,6 +10,5 @@ class Splitter():
 
 class NTLKSplitter(Splitter):
     def split(self, dataset):
-        for document in dataset:
-            for part in document:
+        for part in dataset.parts():
                 part.sentences = sent_tokenize(part.text)

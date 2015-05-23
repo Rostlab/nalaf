@@ -11,6 +11,5 @@ class Tokenizer():
 
 class NLTKTokenizer(Tokenizer):
     def tokenize(self, dataset):
-        for document in dataset:
-            for part in document:
+        for part in dataset.parts():
                 part.sentences = [[Token(word) for word in word_tokenize(sentence)] for sentence in part.sentences]

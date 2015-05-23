@@ -55,6 +55,15 @@ On top of that, there are no semi-supervised machine learning methods, that reco
 
 Therefore a pipeline is developed, that aims to extract relevant protein mutations for genetic diseases, that can be used in drug-targeted pharmadevelopment.
 
+## Timeline
+
+### Main timeframe
+
+* Actual start: **@March-26th**
+* Official start: **@June-15th**
+* Method finished: **@August-15th**
+* Official end: **@September-15th**
+
 # Alex's thesis 
 
 ## Title
@@ -72,26 +81,4 @@ To combat the lack of large annotated corpora, we turn to exploitation of large 
 
 [maybe a add a small paragraph about active learning and creating a larger corpus]
 
-## documentation CRF
 
-### 1
-
-Very deep tutorial. Contains lots of mathematics. But easy to understand, if to aim for full understanding of CRF.
-
-[Tutorial by Charles Sutton and Andrew Cullom as PDF](http://people.cs.umass.edu/~mccallum/papers/crf-tutorial.pdf)
-
-### 2
-
-My presentation about CRF, which is very superficial, but lets you get an idea of CRF.
-
-[CRF presenation at docs.google.com](https://docs.google.com/presentation/d/1Sq9a-y_2WW3I7gXBK-IUZx6eNG7vhJO1UfwX7MqWdgc/pub?start=false&loop=false&delayms=5000)
-
-
-## Timeline
-
-### Main timeframe
-
-* Actual start: **@March-26th**
-* Official start: **@June-15th**
-* Method finished: **@August-15th**
-* Official end: **@September-15th**

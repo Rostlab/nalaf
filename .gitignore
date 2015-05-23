@@ -17,6 +17,9 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 
+# Sublime Text
+*.sublime-*
+
 # idp-4 resources
 IDP4_*/
 node_modules/

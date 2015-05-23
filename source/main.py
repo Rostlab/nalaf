@@ -2,6 +2,7 @@ from utils.readers import HTMLReader
 from preprocessing.spliters import NTLKSplitter
 from preprocessing.tokenizers import NLTKTokenizer
 from preprocessing.annotators import ReadFromAnnJsonAnnotator
+from preprocessing.labelers import SimpleLabeler
 from features.simple import SimpleFeatureGenerator
 
 
@@ -16,13 +17,13 @@ if __name__ == "__main__":
     NLTKTokenizer().tokenize(dataset)
 
     ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)
-
+    SimpleLabeler().label(dataset)
     SimpleFeatureGenerator().generate(dataset)
 
     for sentence in dataset.sentences():
         print(sentence)
         for token in sentence:
-            print(token, token.features)
+            print(token, token.original_labels, token.features)
         print('\n\n')
 
 

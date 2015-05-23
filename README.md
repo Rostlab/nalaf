@@ -25,7 +25,7 @@
 
 Bachelor thesis about named entity recognition for natural language mentions of mutation names in the biomedical domain.
 
-## title
+## Title
 > multiple versions
 
 - [X] Semi-supervised learning of natural language mutation mentions
@@ -38,7 +38,7 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 - [ ] Natural language NER within biomedical domain drug-targeting
 
 
-## abstract
+## Abstract
 Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed. But do people use the curated literature efficiently?
 Looking at just a few papers that describe a particular protein can limit the understanding of occuring protein mutations. Through automating the process of identifying relevant protein mutations, research can be increased significantly.
 > Nowadays, researchers do not just look at a few papers, but try to find a consent of hundreds or thousands of papers concerning the disabled function of one or multiple proteins. This can only be done if automated.
@@ -60,7 +60,7 @@ Therefore a pipeline is developed, that aims to extract relevant protein mutatio
 * Actual start: **@March-26th**
 * Official start: **@June-15th**
 * Method finished: **@August-15th**
-* Official end: **@September-15th**
+* Official end: **@Octobre-15th**
 
 # Alex's thesis 
 

@@ -408,8 +408,6 @@ def check_db_integrity():
                             print("WHOLE DOCUMENT:")
                             print(json.dumps(doc, indent=4, sort_keys=True))
 
-            # return
-
 
 def has_annotations(doc):
     for part in doc.values():

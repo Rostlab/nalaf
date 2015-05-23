@@ -1,1 +1,7 @@
-__author__ = 'Aleksandar'
+import abc
+
+
+class FeatureGenerator():
+    @abc.abstractmethod
+    def generate(self, dataset):
+        return

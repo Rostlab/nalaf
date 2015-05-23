@@ -1,4 +1,4 @@
-## Goals:
+# Goals:
 
 1. Study significance of NL mentions in mutation mention recognition
   * ratio of standard vs NL in abstracts & full text
@@ -21,7 +21,7 @@
 
 
 
-# Carsten's bthesis
+# Carsten's thesis
 
 Bachelor thesis about named entity recognition for natural language mentions of mutation names in the biomedical domain.
 
@@ -55,9 +55,7 @@ On top of that, there are no semi-supervised machine learning methods, that reco
 
 Therefore a pipeline is developed, that aims to extract relevant protein mutations for genetic diseases, that can be used in drug-targeted pharmadevelopment.
 
-## Timeline
-
-### Main timeframe
+## Timeframe
 
 * Actual start: **@March-26th**
 * Official start: **@June-15th**

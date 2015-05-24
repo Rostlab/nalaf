@@ -11,7 +11,7 @@ class CRFSuite():
 
             for sentence in dataset.sentences():
                 for token in sentence:
-                    features = '\t'.join(['%s=%s' % (key, value) if type(value) is str
+                    features = '\t'.join(['%s=%s' % (key, value.replace(':', '_COLON_')) if type(value) is str
                                           else '%s:%f' % (key, value)
                                           for key, value in token.features.items()])
 
@@ -21,10 +21,10 @@ class CRFSuite():
                         file.write('%s\n' % features)
                 file.write('\n')
 
-    def train(self):
+    def train(self, options=''):
         os.chdir(self.directory)
-        os.system('crfsuite learn -m %s train' % self.model_filename)
+        os.system('crfsuite learn %s -m %s train' % (options, self.model_filename))
 
-    def test(self):
+    def test(self, options=''):
         os.chdir(self.directory)
-        os.system('crfsuite tag -qt -m %s test' % self.model_filename)
+        os.system('crfsuite tag %s -qt -m %s test' % (options, self.model_filename))

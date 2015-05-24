@@ -190,6 +190,65 @@ def ankit_algorithm():
           "nl/total:", nl_mentions / total_mentions)
 
 
+def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=None,
+                      maximum_lettres=None, indicatives=None, connecting=None, positions=None):
+    # parameters
+    total_mentions = 0
+    nl_mentions = 0
+    docs_nlmentions = 0
+    # TODO docs with at least one nl mention vs total number (3)
+
+    # for each document
+    for pubmedid, doc in documents.items():
+
+        if has_annotations(doc):
+
+            # for each part
+            for part_id, part in doc.items():
+                if len(part['annotations']) > 0:
+                    for annotation in part['annotations']:
+
+                        # in case params are not defined
+                        cond_max_spaces = True
+                        cond_min_lettres = True
+                        cond_max_lettres = True
+
+                        # TODO convention filtering
+                        cond_conventions = True
+
+                        # filter attributes
+                        # spaces/wordcount
+                        current_spaces = len(annotation['text'].split(" ")) - 1
+                        cond_min_spaces = (current_spaces >= minimum_spaces)
+                        if maximum_spaces is not None:
+                            cond_max_spaces = (current_spaces <= maximum_spaces)
+
+                        # lettres
+                        current_lettres = len(annotation['text'])  # TODO current lettres (1)
+                        if minimum_lettres is not None:
+                            cond_max_lettres = (current_lettres <= maximum_lettres)
+                        if maximum_lettres is not None:
+                            cond_min_lettres = (current_lettres >= minimum_lettres)
+
+                        cond_spaces = cond_min_spaces and cond_max_spaces
+                        cond_lettres = cond_min_lettres and cond_max_lettres
+
+                        cond_all = cond_spaces and cond_lettres and cond_conventions
+
+                        # if all filters satisfy, then is nl mention
+                        if cond_all:
+                            print(annotation['text'])
+                            nl_mentions += 1
+                        total_mentions += 1
+
+                        # inclusive: all conditions that satisfy to be a nl mention
+                        # exclusive: everything is nl mention that is not standard mention
+                        #               means: all conditions for standard mention
+
+    print("nlmentions:", nl_mentions, "Total", total_mentions,
+          "nl/total:", nl_mentions / total_mentions)
+
+
 # Finally come up with:
 # * [ ] #NL / #Total Number
 # * [ ] #NL

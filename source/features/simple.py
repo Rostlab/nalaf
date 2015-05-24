@@ -9,4 +9,4 @@ class SimpleFeatureGenerator(FeatureGenerator):
             for index, token in enumerate(sentence):
                 for template_index in template:
                     if -1 < index + template_index < len(sentence):
-                        token.features['w[%d]' % template_index] = sentence[index+template_index]
+                        token.features['w[%d]' % template_index] = sentence[index+template_index].word

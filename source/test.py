@@ -72,41 +72,48 @@ positions = ["position", r'^\d+$', "entire gene"]
 def whole_filelist_test_inclusive(flist):
     for f in flist:
         with open(f, 'rb') as f:
-            # raw = f.read()
-            # html_doc = raw.replace("\n", "")
             soup = BeautifulSoup(f)
             raw_text = soup.p.string  # FIXME check for whole document
+
             # TODO just abstracts or whole documents?
             # TODO opt. parameter for whole documents
+
             sentences = phrasing(raw_text)
-            an_array = simple_inclusive(sentences)
-            documents.append((soup.html.attrs['data-origid'], raw_text, an_array))
-            # print_annotated(raw_text, an_array)
+            an_array = easy_predictor(sentences)
+            pubmedid = soup.html.attrs['data-origid']
+            documents.append((pubmedid, raw_text, an_array))
+
     log_to_file(documents)
 
 
-def simple_inclusive(sentences):
+def easy_predictor(sentences):
     isen = 0
     itotal = 0
     iword = 0
     found = []
+
+    # iterate over sentences
     for sentence in sentences:
         isen += 1
         iword = 0
         words = sentence.split(" ")
+
+        # iterate over words in sentence
         for word in words:
             iword += 1
             itotal += 1
+
+            # check for word in dict
             if word in indicatives:
-                # print (sentence, isen, iword, itotal)
                 for i in range(iword - 1, len(words) - 1):
                     pos = i - iword + 1
-                    # print iword, '"' + words[i] + '"', i, pos
                     if pos > maximum_spaces:
                         break
+
+                    # check for regexs
                     if regex_array(words[i], positions):
-                        # print (words[i], "found")
-                        # higher border
+
+                        # filter max_spaces
                         if len(found) > 0:
                             if found[len(found) - 1][0] == itotal:
                                 found[len(found) - 1] = (itotal, i - iword + 1)
@@ -114,13 +121,25 @@ def simple_inclusive(sentences):
                                 found.append((itotal, i - iword + 1))
                         else:
                             found.append((itotal, i - iword + 1))
+            # cleaner idea:
+            # status "object" (can be simple vars)
+            # that contains information about next, previous, current word like:
+            # - length
+            # - capital letter
+            # - current nr of spaces
+            # - current nr of lettres
+            # - ... [attributes that can be filtered for]
+            # iterator that gets next word
+            # filter that checks for attributes from current parameters (settings of filters)
+
     return found
 # print (words[iword - 1])
 
 # sophisticated
 strong_indicatives = []
 helping_indicatives = []
-# TODO indicatives long list
+# OPTIONAL use statistics from nl mentions of annotated dataset to find important words
+
 connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 
 # TODO Sophisticated method
@@ -145,23 +164,30 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # del/del
 
 
-
 # Ankit's Algorithm
 def ankit_algorithm():
     total_mentions = 0
     nl_mentions = 0
     docs_nlmentions = 0
+
+    # for each document
     for pubmedid, doc in documents.items():
+
         if has_annotations(doc):
+
+            # for each part
             for part_id, part in doc.items():
                 if len(part['annotations']) > 0:
                     for annotation in part['annotations']:
-                        # FILTER
+
+                        # filter attributes
                         if len(annotation['text'].split(" ")) > 2 and len(annotation['text']) > 24:
                             print(annotation['text'])
                             nl_mentions += 1
                         total_mentions += 1
-    print("nlmentions:", nl_mentions, "Total", total_mentions, "nl/total:", nl_mentions/total_mentions)
+
+    print("nlmentions:", nl_mentions, "Total", total_mentions,
+          "nl/total:", nl_mentions / total_mentions)
 
 
 # Finally come up with:
@@ -197,56 +223,6 @@ def ankit_algorithm():
 #
 #
 
-#######################################
-# legend for ann.json files
-# e_1 = protein (entity)
-# e_2 = mutation (entity)
-# e_3 = organism (entity)
-# m_4 = figstabs_with_mutations (meta)
-# r_5 = e_1|e_2 (relation)
-# r_6 = e_1|e_3 (relation)
-#######################################
-test_db = {
-    "PMC123322": {
-        "s2s1p1": {
-            "text": "raw text of paragraph",
-            "annotations": [
-                {
-                    "start": 113,
-                    "text": "blabal",
-                    "end": 119,
-                    "prob": 1
-                },
-                {
-                    "start": 113,
-                    "text": "blabal",
-                    "end": 119,
-                    "prob": 1
-                }
-            ],
-        },
-    },
-    "123323": {
-        "s2s1p1": {
-            "text": "raw text of paragraph",
-            "annotations": [
-                {
-                    "start": 113,
-                    "text": "blabal",
-                    "end": 119,
-                    "prob": 1
-                },
-                {
-                    "start": 113,
-                    "text": "blabal",
-                    "end": 119,
-                    "prob": 1
-                }
-            ],
-        },
-    },
-}
-
 
 def test_json_import(fname):
     for x in jsonlist:
@@ -272,13 +248,12 @@ def print_annotated(raw_text, annotation_array):
     words = raw_text.split(" ")
     for x in annotation_array:
         print("position:", x[0], "with length", x[1])
-    # TODO annotation options (map information to stuff)
         print(words[x[0] - 1:x[0] + x[1]])
 
 
 def regex_array(string, regex_array):
-    # searches a string with multiple regex
-    # TODO regex tree? search to increase performance if needed @profiling
+    """ Searches a string with multiple regexs' """
+    # OPTIONAL regex tree? search to increase performance if needed @profiling
     for x in regex_array:
         if re.search(x, string):
             return True
@@ -293,33 +268,13 @@ def print_info(pubmedid):
             list_doc = sorted(doc.items(), key=lambda c: c[0])
             for part in list_doc:
                 print(part[1]['text'])
-            # for key, part in doc.items():
-            # print(part)
-            #     print(part['text'])
         else:
             print("not found")
-    # else:
-    #     for x in filelist:
-    #         if pubmedid in x:
-    #             with open(x, "r") as f:
-    #                 html_doc = f.read()
-    #                 soup = BeautifulSoup(html_doc)
-    #                 print("PubMed-ID:", soup.html.attrs['data-origid'])
-    #                 print("Title:", soup.find(attrs={"data-type": "title"}).h2.string)
-    #                 abstract_full = ""
-
-    # abstract_part = soup.find(attrs={"data-type": "abstract"})
-    # print abstract_part.find_all("p")
-    #                 abstract_parts = soup.find_all("p", id=re.compile("^s2"))
-    #                 for tag in abstract_parts:
-    #                     print(tag['id'])
-    #                     abstract_full += "\n" + tag.string
 
 
 def phrasing(text):
     REG_PHRASE_SPLIT = r'\. '
     return text.split(REG_PHRASE_SPLIT)
-    # TODO sentences not via ". ", but take care of e.g. "E. coli"
 
 
 def log_to_file(obj):
@@ -467,13 +422,3 @@ import_json_to_db()
 # check_db_integrity()
 print(json.dumps(list(documents.items())[0:1], indent=4))
 # print(documents)
-
-# print_info("127")
-# with open(filename, "r") as f:
-#     html_doc = f.read().replace("\n", "")
-#     soup = BeautifulSoup(html_doc)
-# print soup.html.attrs['data-origid']
-#     raw_text = soup.p.string
-#     sentences = phrasing(raw_text)
-#     an_array = simple_inclusive(sentences)
-# print_annotated(raw_text, an_array)

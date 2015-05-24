@@ -45,6 +45,9 @@ class Dataset():
     def __init__(self):
         self.documents = {}
 
+    def __len__(self):
+        return len(self.documents)
+
     def __iter__(self):
         for doc_id, document in self.documents.items():
             yield document

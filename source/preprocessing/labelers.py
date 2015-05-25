@@ -1,4 +1,5 @@
 import abc
+from structures.data import Label
 
 class Labeler():
     """

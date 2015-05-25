@@ -3,6 +3,12 @@ import re
 from collections import Counter
 
 def count_matches(dataset):
+    """
+    count the number of matches for all annotations in the dataset with regards to the regex expressions
+    defined in RegEx.NL
+
+    :type dataset: structures.data.Dataset
+    """
     with open('RegEx.NL') as file:
         reader = csv.reader(file, delimiter='\t')
         regexes = list(reader)

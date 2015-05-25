@@ -1,5 +1,5 @@
 from utils.readers import HTMLReader
-from preprocessing.spliters import NTLKSplitter
+from preprocessing.spliters import NLTKSplitter
 from preprocessing.tokenizers import NLTKTokenizer
 from preprocessing.annotators import ReadFromAnnJsonAnnotator
 from preprocessing.labelers import SimpleLabeler
@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     dataset = HTMLReader(html_path).read()
 
-    NTLKSplitter().split(dataset)
+    NLTKSplitter().split(dataset)
     NLTKTokenizer().tokenize(dataset)
 
     ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)

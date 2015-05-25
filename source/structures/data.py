@@ -8,6 +8,8 @@ class Label():
         self.confidence = confidence
         """probability of being correct if the label is predicted"""
 
+    def __repr__(self):
+        return self.value
 
 class Token():
     """

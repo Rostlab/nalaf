@@ -73,15 +73,15 @@ def whole_filelist_test_inclusive(flist):
     for f in flist:
         with open(f, 'rb') as f:
             soup = BeautifulSoup(f)
-            raw_text = soup.p.string  # FIXME check for whole document
-
-            # TODO just abstracts or whole documents?
-            # TODO opt. parameter for whole documents
+            raw_parts = soup.find_all(id=re.compile('^s'))
+            raw_text = [part.string for part in raw_parts].join(' ')
 
             sentences = phrasing(raw_text)
             an_array = easy_predictor(sentences)
             pubmedid = soup.html.attrs['data-origid']
             documents.append((pubmedid, raw_text, an_array))
+
+            # OPTIONAL abstracts vs documents
 
     log_to_file(documents)
 
@@ -155,6 +155,7 @@ connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 #
 # minimum_spaces = 2
 # minimum_lettres = 12
+# TODO complete conventions according to HGVS and set of regexs by tmVar (3)
 conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 # list comprehension for "p.Lys76Asn" e.g. [(p.X[0-9]+Y) with X in aa, Y in aa]
 # V232fs --> frameshift
@@ -191,12 +192,14 @@ def ankit_algorithm():
 
 
 def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=None,
-                      maximum_lettres=None, indicatives=None, connecting=None, positions=None):
+                      maximum_lettres=None, indicatives=None,
+                      connecting=None, positions=None, conventions=None):
     # parameters
     total_mentions = 0
     nl_mentions = 0
     docs_nlmentions = 0
-    # TODO docs with at least one nl mention vs total number (3)
+    # TODO docs with at least one nl mention vs total number (1)
+    # TODO Abstract vs Full document ratio (2)
 
     # for each document
     for pubmedid, doc in documents.items():
@@ -205,46 +208,65 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
 
             # for each part
             for part_id, part in doc.items():
-                if len(part['annotations']) > 0:
-                    for annotation in part['annotations']:
 
-                        # in case params are not defined
-                        cond_max_spaces = True
-                        cond_min_lettres = True
-                        cond_max_lettres = True
+                # check for no annotations
+                if len(part['annotations']) == 0:
+                    next
 
-                        # TODO convention filtering
-                        cond_conventions = True
+                for annotation in part['annotations']:
+                    # extractable attributes
+                    text = annotation['text']
+                    current_lettres = len(text)
+                    text_array = text.split(" ")
+                    current_spaces = len(text_array) - 1
 
-                        # filter attributes
-                        # spaces/wordcount
-                        current_spaces = len(annotation['text'].split(" ")) - 1
-                        cond_min_spaces = (current_spaces >= minimum_spaces)
-                        if maximum_spaces is not None:
-                            cond_max_spaces = (current_spaces <= maximum_spaces)
+                    # in case params are not defined
+                    cond_max_spaces = True
+                    cond_min_lettres = True
+                    cond_max_lettres = True
 
-                        # lettres
-                        current_lettres = len(annotation['text'])  # TODO current lettres (1)
-                        if minimum_lettres is not None:
-                            cond_max_lettres = (current_lettres <= maximum_lettres)
-                        if maximum_lettres is not None:
-                            cond_min_lettres = (current_lettres >= minimum_lettres)
+                    # TODO convention filtering
+                    cond_conventions = True
 
-                        cond_spaces = cond_min_spaces and cond_max_spaces
-                        cond_lettres = cond_min_lettres and cond_max_lettres
+                    # filter attributes
+                    # spaces/wordcount
+                    cond_min_spaces = (current_spaces >= minimum_spaces)
+                    if maximum_spaces is not None:
+                        cond_max_spaces = (current_spaces <= maximum_spaces)
 
-                        cond_all = cond_spaces and cond_lettres and cond_conventions
+                    # lettres
+                    if minimum_lettres is not None:
+                        cond_max_lettres = (current_lettres <= maximum_lettres)
+                    if maximum_lettres is not None:
+                        cond_min_lettres = (current_lettres >= minimum_lettres)
 
-                        # if all filters satisfy, then is nl mention
-                        if cond_all:
-                            print(annotation['text'])
-                            nl_mentions += 1
-                        total_mentions += 1
+                    # convention filtering
+                    if conventions is not None:
+                        for word in text_array:
+                            if regex_array(word, conventions):
+                                cond_conventions = False
 
-                        # inclusive: all conditions that satisfy to be a nl mention
-                        # exclusive: everything is nl mention that is not standard mention
-                        #               means: all conditions for standard mention
+                    # combine filters
+                    cond_spaces = cond_min_spaces and cond_max_spaces
+                    cond_lettres = cond_min_lettres and cond_max_lettres
 
+                    cond_all = cond_spaces and cond_lettres and cond_conventions
+
+                    # if all filters satisfy, then is nl mention
+                    # FIXME so inclsuive and exclsuiev can be achieved here (5)
+                    if cond_all:
+                        # print(annotation['text'])
+                        nl_mentions += 1
+                    total_mentions += 1
+
+                    # inclusive: all conditions that satisfy to be a nl mention
+                    # exclusive: everything is nl mention that is not standard mention
+                    #               means: all conditions for standard mention
+    print("Run with params:")
+    print("minimum_spaces:", minimum_spaces, "minimum_lettres:", minimum_lettres)
+    print("maximum_lettres:", maximum_lettres, "maximum_spaces:", maximum_spaces)
+    if conventions is not None:
+        print("conventions:", " | ".join(conventions))
     print("nlmentions:", nl_mentions, "Total", total_mentions,
           "nl/total:", nl_mentions / total_mentions)
 
@@ -311,10 +333,14 @@ def print_annotated(raw_text, annotation_array):
 
 
 def regex_array(string, regex_array):
-    """ Searches a string with multiple regexs' """
+    """
+        Search through a string for a match with multiple regexs'
+        t = string
+        S = regexs in []
+    """
     # OPTIONAL regex tree? search to increase performance if needed @profiling
-    for x in regex_array:
-        if re.search(x, string):
+    for regex in regex_array:
+        if re.search(regex, string):
             return True
     return False
 
@@ -478,6 +504,8 @@ import_html_to_db()
 # print_info("17327381")
 import_json_to_db()
 # ankit_algorithm()
+for min_l in range(10, 20, 2):
+    general_algorithm(minimum_lettres=min_l)
 # check_db_integrity()
-print(json.dumps(list(documents.items())[0:1], indent=4))
+# print(json.dumps(list(documents.items())[0:1], indent=4))
 # print(documents)

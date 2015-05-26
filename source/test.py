@@ -70,6 +70,7 @@ positions = ["position", r'^\d+$', "entire gene"]
 
 
 def whole_filelist_test_inclusive(flist):
+    """ easy_predictor on the whole dataset. """
     for f in flist:
         with open(f, 'rb') as f:
             soup = BeautifulSoup(f)
@@ -87,6 +88,10 @@ def whole_filelist_test_inclusive(flist):
 
 
 def easy_predictor(sentences):
+    """ Very simple state machine algorithm that does de-novo prediction of nl mutation mentions
+    by using dictionaries in conjunction with patterns.
+    """
+    # TODO Export into other file. (20)
     isen = 0
     itotal = 0
     iword = 0
@@ -167,9 +172,10 @@ conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
 
 # Ankit's Algorithm
 def ankit_algorithm():
+    """ Ankit s version of the algorithm.
+    Obsolete, because of the general_algorithm which incorporates Ankit's algorithm. """
     total_mentions = 0
     nl_mentions = 0
-    docs_nlmentions = 0
 
     # for each document
     for pubmedid, doc in documents.items():
@@ -193,12 +199,14 @@ def ankit_algorithm():
 
 def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=None,
                       maximum_lettres=None, indicatives=None,
-                      connecting=None, positions=None, conventions=None):
+                      connecting=None, positions=None, conventions=None, is_export=False):
     # parameters
     total_mentions = 0
     nl_mentions = 0
     docs_nlmentions = 0
-    nl_mentions_string = [] # nl mentions saved in string for later examination
+    docs_total = len(documents.keys())
+    nl_mentions_string = []  # nl mentions saved in string array for later examination
+    st_mentions_string = []  # st mentions saved in string array for later examination
     docs_nlmentions_status = False
     full_document = 0
     abstract_document = 0
@@ -255,7 +263,6 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
                     cond_all = cond_spaces and cond_lettres and cond_conventions
 
                     # if all filters satisfy, then is nl mention
-                    # FIXME so inclsuive and exclsuiev can be achieved here (5)
                     if cond_all:
                         # print(annotation['text'])
                         nl_mentions += 1
@@ -266,23 +273,49 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
                             else:
                                 abstract_document += 1
                             docs_nlmentions_status = True
+                        # nl mention saved in array
+                        nl_mentions_string.append(text)
+                    else:
+                        # st mention saved in array
+                        st_mentions_string.append(text)
                     total_mentions += 1
 
                     # inclusive: all conditions that satisfy to be a nl mention
                     #   data
                     # exclusive: everything is nl mention that is not standard mention
                     #               means: all conditions for standard mention
+    # Params print
     print("Params:")
     print("minimum_spaces:", minimum_spaces, "| minimum_lettres:", minimum_lettres)
     print("maximum_lettres:", maximum_lettres, "| maximum_spaces:", maximum_spaces)
     if conventions is not None:
         print("conventions:", " | ".join(conventions))
+
+    # Stats calculation
+    nl_total_ratio = nl_mentions / total_mentions
+    docs_total_ratio = docs_nlmentions / docs_total
+    abstract_full_ratio = abstract_document / full_document
+    export_dict = {
+        'abs_nl_mention': nl_mentions,
+        'abs_total_mention': total_mentions,
+        'ratio_nl_to_total': nl_total_ratio,
+        'docs_with_nl_mentions': docs_nlmentions,
+        'ratio_docs_with_nl_mentions_to_total': docs_total_ratio,
+        'ratio_abstract_full': abstract_full_ratio,
+        'abs_abstract': abstract_document,
+        'abs_full': full_document,
+        'docs_total': docs_total
+    }
+    if is_export:
+        return export_dict
+
+    # Stats print
     print("Stats:")
     print("nlmentions:", nl_mentions, "| Total:", total_mentions,
-          "| nl/total:", nl_mentions / total_mentions,
+          "| nl/total:", nl_total_ratio,
           "\nDocs with min #1:", docs_nlmentions,
-          "| DocsNL vs DocsTotal:", docs_nlmentions/len(documents.keys()),
-          "\nAbstract vs Full:", abstract_document/full_document,
+          "| DocsNL vs DocsTotal:", docs_total_ratio,
+          "\nAbstract vs Full:", abstract_full_ratio,
           "| Abs abstract:", abstract_document, "| Abs full:", full_document)
     print("--------------------------------------------------------------")
 
@@ -320,8 +353,30 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
 #
 #
 
+def stats_run():
+    # inclusive
+    min_space_start = 2
+    min_lettres_start = 12
+    min_space_end = 6
+    min_lettres_end = 40
+
+    # TODO do inclusive run (1)
+    # TODO do inclusive run export (2)
+
+    # exclusive
+    max_space_start = 1
+    max_lettres_start = 6
+    max_space_end = 4
+    max_lettres_end = 28
+
+    # TODO do exclusive run (4)
+    # TODO do inclusive run export (5)
+
 
 def test_json_import(fname):
+    """ Test method.
+    ann.json print of entities
+    """
     for x in jsonlist:
         if fname in x:
             with open(x, 'r') as f:
@@ -335,6 +390,9 @@ def test_json_import(fname):
 
 
 def is_mutation_entity(entity):
+    """ Confirms whether provided object of
+    annotation array in ann.json is e_2 (mutation mention).
+    """
     for key, value in entity.items():
         if key == "classId" and value == "e_2":
             return True
@@ -342,6 +400,7 @@ def is_mutation_entity(entity):
 
 
 def print_annotated(raw_text, annotation_array):
+    """ Obsolete (only meant for easy_predictor.) """
     words = raw_text.split(" ")
     for x in annotation_array:
         print("position:", x[0], "with length", x[1])
@@ -362,6 +421,7 @@ def regex_array(string, regex_array):
 
 
 def print_info(pubmedid):
+    """ Print Information about provided pubmedid. """
     if len(documents) > 0:
         if pubmedid in documents:
             doc = documents[pubmedid]
@@ -371,14 +431,23 @@ def print_info(pubmedid):
                 print(part[1]['text'])
         else:
             print("not found")
+    # OPTIONAL options for extended report/info
 
 
 def phrasing(text):
+    """ Very easy sentence splitter.
+        Can be extended.
+    """
     REG_PHRASE_SPLIT = r'\. '
     return text.split(REG_PHRASE_SPLIT)
+    # OPTIONAL sophisticated sentence splitting defined through REG_PHRASE_SPLIT var
 
 
 def log_to_file(obj):
+    """
+    Write object to logfile in JSON format.
+    Logfile is defined through: tempfile.
+    """
     with open(tempfile, 'w') as f:
         f.write(json.dumps(obj))
 
@@ -391,6 +460,7 @@ def is_full_document(doc):
 
 
 def import_json_to_db():
+    """ Import ann.json files to documents object. """
     for j in jsonlist:
         with open(j, 'r') as f:
             json_object = json.loads(f.read())
@@ -412,6 +482,9 @@ def import_json_to_db():
 
 
 def import_html_to_db():
+    """ Import the raw html files imported from tagtog.net.
+    Format is with parts that have part-ids e.g. "s1s2" or "s1h3".
+    """
     for x in filelist:
         with open(x, "rb") as f:
             doc = {}
@@ -473,20 +546,17 @@ def check_db_integrity():
 
 
 def has_annotations(doc):
+    """ Check if document has any mutation mention saved. """
     for part in doc.values():
         if len(part['annotations']) > 0:
-            # print("----------------------")
-            # print("part with annotation")
-            # print(json.dumps(part, indent=4))
             return True
     return False
-# operation on simple method currently
-# SIMPLE METHOD
 
 # OPTIONAL: mode select inclusive/exclusive
 
 
 def print_statistics_documents():
+    """ Obsolete (only meant for documents easy_predictor) """
     n = 0.0  # number of documents with found nl mentions
     t = 0.0  # number of found nl mentions
     for x in documents:

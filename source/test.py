@@ -198,14 +198,16 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
     total_mentions = 0
     nl_mentions = 0
     docs_nlmentions = 0
-    # TODO docs with at least one nl mention vs total number (1)
-    # TODO Abstract vs Full document ratio (2)
+    nl_mentions_string = [] # nl mentions saved in string for later examination
+    docs_nlmentions_status = False
+    full_document = 0
+    abstract_document = 0
 
     # for each document
     for pubmedid, doc in documents.items():
 
         if has_annotations(doc):
-
+            docs_nlmentions_status = False
             # for each part
             for part_id, part in doc.items():
 
@@ -235,9 +237,9 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
                         cond_max_spaces = (current_spaces <= maximum_spaces)
 
                     # lettres
-                    if minimum_lettres is not None:
-                        cond_max_lettres = (current_lettres <= maximum_lettres)
                     if maximum_lettres is not None:
+                        cond_max_lettres = (current_lettres <= maximum_lettres)
+                    if minimum_lettres is not None:
                         cond_min_lettres = (current_lettres >= minimum_lettres)
 
                     # convention filtering
@@ -257,18 +259,32 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
                     if cond_all:
                         # print(annotation['text'])
                         nl_mentions += 1
+                        if not docs_nlmentions_status:
+                            docs_nlmentions += 1
+                            if is_full_document(doc):
+                                full_document += 1
+                            else:
+                                abstract_document += 1
+                            docs_nlmentions_status = True
                     total_mentions += 1
 
                     # inclusive: all conditions that satisfy to be a nl mention
+                    #   data
                     # exclusive: everything is nl mention that is not standard mention
                     #               means: all conditions for standard mention
-    print("Run with params:")
-    print("minimum_spaces:", minimum_spaces, "minimum_lettres:", minimum_lettres)
-    print("maximum_lettres:", maximum_lettres, "maximum_spaces:", maximum_spaces)
+    print("Params:")
+    print("minimum_spaces:", minimum_spaces, "| minimum_lettres:", minimum_lettres)
+    print("maximum_lettres:", maximum_lettres, "| maximum_spaces:", maximum_spaces)
     if conventions is not None:
         print("conventions:", " | ".join(conventions))
-    print("nlmentions:", nl_mentions, "Total", total_mentions,
-          "nl/total:", nl_mentions / total_mentions)
+    print("Stats:")
+    print("nlmentions:", nl_mentions, "| Total:", total_mentions,
+          "| nl/total:", nl_mentions / total_mentions,
+          "\nDocs with min #1:", docs_nlmentions,
+          "| DocsNL vs DocsTotal:", docs_nlmentions/len(documents.keys()),
+          "\nAbstract vs Full:", abstract_document/full_document,
+          "| Abs abstract:", abstract_document, "| Abs full:", full_document)
+    print("--------------------------------------------------------------")
 
 
 # Finally come up with:
@@ -365,6 +381,13 @@ def phrasing(text):
 def log_to_file(obj):
     with open(tempfile, 'w') as f:
         f.write(json.dumps(obj))
+
+
+def is_full_document(doc):
+    for part in doc:
+        if re.search("^s[3-9]", part):
+            return True
+    return False
 
 
 def import_json_to_db():
@@ -504,8 +527,10 @@ import_html_to_db()
 # print_info("17327381")
 import_json_to_db()
 # ankit_algorithm()
-for min_l in range(10, 20, 2):
-    general_algorithm(minimum_lettres=min_l)
+for min_l in range(12, 36):
+    general_algorithm(2, minimum_lettres=min_l)
+    general_algorithm(3, minimum_lettres=min_l)
+    general_algorithm(4, minimum_lettres=min_l)
 # check_db_integrity()
 # print(json.dumps(list(documents.items())[0:1], indent=4))
 # print(documents)

@@ -272,6 +272,9 @@ def general_algorithm(is_export=False, is_exclusive=False,
                     else:
                         cond_all = cond_spaces and cond_lettres and cond_conventions
 
+                    if text == 'Ser280D':
+                        print(cond_all, cond_lettres, cond_spaces, cond_conventions)
+
                     # if all filters satisfy, then is nl mention
                     if cond_all:
                         # print(annotation['text'])
@@ -646,13 +649,13 @@ def print_statistics_documents():
 import_html_to_db()
 import_json_to_db()
 
-# return_obj = general_algorithm(minimum_lettres=22, minimum_spaces=3,
-#                                is_export=True, is_export_mentions=True)
+return_obj = general_algorithm(minimum_lettres=28, minimum_spaces=4,
+                               is_export=True, is_export_mentions=True)
 
-# with open('mentions_list.json', 'w') as f:
-#     f.write(json.dumps(return_obj, indent=2, sort_keys=True))
+with open('mentions_list_ankit.json', 'w') as f:
+    f.write(json.dumps(return_obj, indent=2, sort_keys=True))
 
-stats_run()
+# stats_run()
 
 # whole_filelist_test_inclusive(filelist)
 # print_statistics_documents()

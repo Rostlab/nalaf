@@ -8,6 +8,7 @@ import json
 # TODO import through parameters
 filename = "test.html"
 tempfile = "test.json"
+statsfile = "stats.json"
 
 resources = "../resources/"
 filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
@@ -39,7 +40,6 @@ stats = []
 # dict limits (start, stop for spaces and lettres)
 # dicts inside (connecting)
 # dicts exclude (conventions, common hints for standard mentions)
-
 
 # simple method
 minimum_spaces = 2
@@ -145,10 +145,9 @@ strong_indicatives = []
 helping_indicatives = []
 # OPTIONAL use statistics from nl mentions of annotated dataset to find important words
 
-connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
+connecting = ["at", "off", "placed"]  # TODO incomplete connecting list (30)
 
-# TODO Sophisticated method
-
+# TODO Sophisticated method (30)
 
 #     d88888b db    db  .o88b. db      db    db .d8888. d888888b db    db d88888b
 #     88'     `8b  d8' d8P  Y8 88      88    88 88'  YP   `88'   88    88 88'
@@ -156,12 +155,12 @@ connecting = ["at", "off", "placed"]  # TODO incomplete connecting list
 #     88~~~~~  .dPYb.  8b      88      88    88   `Y8b.    88    `8b  d8' 88~~~~~
 #     88.     .8P  Y8. Y8b  d8 88booo. 88b  d88 db   8D   .88.    `8bd8'  88.
 #     Y88888P YP    YP  `Y88P' Y88888P ~Y8888P' `8888Y' Y888888P    YP    Y88888P
-#
-#
+
 # minimum_spaces = 2
 # minimum_lettres = 12
 # TODO complete conventions according to HGVS and set of regexs by tmVar (3)
-conventions = ["c.[0-9]+[ACTG]>[ACTG]"]
+conventions = [r'c.[0-9]+[ACTG]>[ACTG]', r'p.[A-Z][a-z]{2}\d+[A-Z][a-z]{2}',
+               r'[A-Z][a-z]{2}-->[A-Z][a-z]{2}']
 # list comprehension for "p.Lys76Asn" e.g. [(p.X[0-9]+Y) with X in aa, Y in aa]
 # V232fs --> frameshift
 # delta Phe581
@@ -197,9 +196,12 @@ def ankit_algorithm():
           "nl/total:", nl_mentions / total_mentions)
 
 
-def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=None,
-                      maximum_lettres=None, indicatives=None,
-                      connecting=None, positions=None, conventions=None, is_export=False):
+def general_algorithm(is_export=False, is_exclusive=False,
+                      minimum_spaces=None, minimum_lettres=None,
+                      maximum_spaces=None,
+                      maximum_lettres=None, indicatives_array=None,
+                      connecting_array=None, positions_array=None,
+                      conventions_array=None, is_export_mentions=False):
     # parameters
     total_mentions = 0
     nl_mentions = 0
@@ -232,15 +234,17 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
 
                     # in case params are not defined
                     cond_max_spaces = True
+                    cond_min_spaces = True
                     cond_min_lettres = True
                     cond_max_lettres = True
 
-                    # TODO convention filtering
+                    # TODO convention filtering (3)
                     cond_conventions = True
 
                     # filter attributes
                     # spaces/wordcount
-                    cond_min_spaces = (current_spaces >= minimum_spaces)
+                    if minimum_spaces is not None:
+                        cond_min_spaces = (current_spaces >= minimum_spaces)
                     if maximum_spaces is not None:
                         cond_max_spaces = (current_spaces <= maximum_spaces)
 
@@ -251,16 +255,22 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
                         cond_min_lettres = (current_lettres >= minimum_lettres)
 
                     # convention filtering
-                    if conventions is not None:
+                    if conventions_array is not None:
                         for word in text_array:
-                            if regex_array(word, conventions):
-                                cond_conventions = False
+                            if regex_array(word, conventions_array):
+                                if is_exclusive:
+                                    cond_conventions = True
+                                else:
+                                    cond_conventions = False
 
                     # combine filters
                     cond_spaces = cond_min_spaces and cond_max_spaces
                     cond_lettres = cond_min_lettres and cond_max_lettres
 
-                    cond_all = cond_spaces and cond_lettres and cond_conventions
+                    if is_exclusive:
+                        cond_all = not(cond_spaces and cond_lettres and cond_conventions)
+                    else:
+                        cond_all = cond_spaces and cond_lettres and cond_conventions
 
                     # if all filters satisfy, then is nl mention
                     if cond_all:
@@ -288,6 +298,7 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
     print("Params:")
     print("minimum_spaces:", minimum_spaces, "| minimum_lettres:", minimum_lettres)
     print("maximum_lettres:", maximum_lettres, "| maximum_spaces:", maximum_spaces)
+    print("export?:", is_export)
     if conventions is not None:
         print("conventions:", " | ".join(conventions))
 
@@ -304,10 +315,16 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
         'ratio_abstract_full': abstract_full_ratio,
         'abs_abstract': abstract_document,
         'abs_full': full_document,
-        'docs_total': docs_total
+        'docs_total': docs_total,
+        'min_space': minimum_spaces,
+        'max_space': maximum_spaces,
+        'min_lettres': minimum_lettres,
+        'max_lettres': maximum_lettres,
+        'exclusive': is_exclusive
     }
-    if is_export:
-        return export_dict
+
+    if is_export_mentions:
+        export_dict['mentions'] = nl_mentions_string
 
     # Stats print
     print("Stats:")
@@ -317,15 +334,20 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
           "| DocsNL vs DocsTotal:", docs_total_ratio,
           "\nAbstract vs Full:", abstract_full_ratio,
           "| Abs abstract:", abstract_document, "| Abs full:", full_document)
+
+    # Print most interesting
+    print(json.dumps(get_interesting_mentions(nl_mentions_string), indent=4, sort_keys=True))
+
     print("--------------------------------------------------------------")
 
+    if is_export:
+        return export_dict
 
 # Finally come up with:
 # * [ ] #NL / #Total Number
 # * [ ] #NL
 # * [ ] Ratio of docs that have at least 1
 # * [ ] Abstract vs. Full-Text
-
 
 # documents[pubmedid,text,annotation_array]
 # annotation_array[position,length]
@@ -337,12 +359,11 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
 #   endif
 # endloop
 #
-# is_annotation(words from start to start+length) { # TODO precise pseudocode
+# is_annotation(words from start to start+length) { # TODO precise pseudocode (15)
 #   count spaces and count lettres
 #   check for conventions patterns for each word
 # return true if conditions ok
 # }
-
 
 #     db    db d888888b d888888b db      d888888b d888888b db    db
 #     88    88 `~~88~~'   `88'   88        `88'   `~~88~~' `8b  d8'
@@ -350,18 +371,22 @@ def general_algorithm(minimum_spaces=2, minimum_lettres=None, maximum_spaces=Non
 #     88    88    88       88    88         88       88       88
 #     88b  d88    88      .88.   88booo.   .88.      88       88
 #     ~Y8888P'    YP    Y888888P Y88888P Y888888P    YP       YP
-#
-#
+
 
 def stats_run():
+    """ Does one whole run with various parameters.
+    Saves those values and exports them in a CVS-file.
+    """
     # inclusive
     min_space_start = 2
     min_lettres_start = 12
     min_space_end = 6
     min_lettres_end = 40
 
-    # TODO do inclusive run (1)
-    # TODO do inclusive run export (2)
+    for min_space in range(min_space_start, min_space_end):
+        for min_lettres in range(min_lettres_start, min_lettres_end):
+            stats.append(general_algorithm(minimum_spaces=min_space, minimum_lettres=min_lettres,
+                                           is_exclusive=False, is_export=True))
 
     # exclusive
     max_space_start = 1
@@ -369,8 +394,39 @@ def stats_run():
     max_space_end = 4
     max_lettres_end = 28
 
-    # TODO do exclusive run (4)
-    # TODO do inclusive run export (5)
+    for max_space in range(max_space_start, max_space_end):
+        for max_lettres in range(max_lettres_start, max_lettres_end):
+            stats.append(general_algorithm(maximum_spaces=max_space, maximum_lettres=max_lettres,
+                                           conventions_array=conventions, is_exclusive=True,
+                                           is_export=True))
+
+    with open(statsfile, 'w') as f:
+        f.write(json.dumps(stats, indent=4, sort_keys=True))
+
+
+def get_interesting_mentions(mention_array):
+    top_words = {}
+    min_word = "------------------------------------------------------------------------------------------------------------------------------------------------"
+    max_word = ""
+    for mention in mention_array:
+        if mention in top_words:
+            top_words[mention] += 1
+        else:
+            top_words[mention] = 1
+
+        if len(min_word) > len(mention):
+            min_word = mention
+        if len(max_word) < len(mention):
+            max_word = mention
+
+    # TODO (3) get top 5 words
+
+    return_dict = {
+        'min_word': min_word,
+        'max_word': max_word,
+    }
+
+    return return_dict
 
 
 def test_json_import(fname):
@@ -482,7 +538,8 @@ def import_json_to_db():
 
 
 def import_html_to_db():
-    """ Import the raw html files imported from tagtog.net.
+    """
+    Import the raw html files imported from tagtog.net.
     Format is with parts that have part-ids e.g. "s1s2" or "s1h3".
     """
     for x in filelist:
@@ -551,7 +608,6 @@ def has_annotations(doc):
         if len(part['annotations']) > 0:
             return True
     return False
-
 # OPTIONAL: mode select inclusive/exclusive
 
 
@@ -576,7 +632,6 @@ def print_statistics_documents():
     print("{:.4f}".format(t / len(documents)))
     print("\n")
 
-
 #     .88b  d88.  .d8b.  d888888b d8b   db
 #     88'YbdP`88 d8' `8b   `88'   888o  88
 #     88  88  88 88ooo88    88    88V8o 88
@@ -584,23 +639,36 @@ def print_statistics_documents():
 #     88  88  88 88   88   .88.   88  V888
 #     YP  YP  YP YP   YP Y888888P VP   V8P
 
+# FIXME Add __main__ function so this can be imported as module
+# FIXME rename
+# FIXME replace to other folder
+
+import_html_to_db()
+import_json_to_db()
+
+# return_obj = general_algorithm(minimum_lettres=22, minimum_spaces=3,
+#                                is_export=True, is_export_mentions=True)
+
+# with open('mentions_list.json', 'w') as f:
+#     f.write(json.dumps(return_obj, indent=2, sort_keys=True))
+
+stats_run()
 
 # whole_filelist_test_inclusive(filelist)
 # print_statistics_documents()
 
 # test_json_import("17327381")
-import_html_to_db()
 # test_doc = list(documents.items())
 
 # print(type(test_doc))
 # print(json.dumps(test_doc, indent=4))
 # print_info("17327381")
-import_json_to_db()
 # ankit_algorithm()
-for min_l in range(12, 36):
-    general_algorithm(2, minimum_lettres=min_l)
-    general_algorithm(3, minimum_lettres=min_l)
-    general_algorithm(4, minimum_lettres=min_l)
+# print("ä")
+# for min_l in range(12, 36):
+#     general_algorithm(2, minimum_lettres=min_l)
+#     general_algorithm(3, minimum_lettres=min_l)
+#     general_algorithm(4, minimum_lettres=min_l)
 # check_db_integrity()
 # print(json.dumps(list(documents.items())[0:1], indent=4))
 # print(documents)

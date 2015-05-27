@@ -8,6 +8,37 @@ Is defined by the definition of a natural language mutation mention itself:
 - Minimum Spaces 2-4 are applied
 - Minimum Lettres 12-36 are applied
 
+```python
+	nl_mentions_array = []
+	for mention in each annotated mention:
+		is_reported_mention = is_nl_mention(mention)
+		if (is_reported_mention and not is_exclusive) or (not is_reported_mention and is_exclusive):
+			nl_mentions_array.append(mention)
+
+
+	def is_nl_mention(mention):
+		# filter spaces
+		spaces = len(mention.split(" "))
+		if spaces < minimum_spaces:
+			return False
+		if spaces > maximum_spaces:
+			return False
+
+		# filter lettres
+		lettres = len(mention)
+		if lettres < minimum_lettres:
+			return False
+		if lettres > maximum_lettres:
+			return False
+
+		# filter conventions; just for exclusive
+		for word in mention.split(" "):
+			if word in conventions:  # regex check of conventions
+				return False
+
+	return nl_mentions_array  # contains all nl mentions according to parameters
+```
+
 ### Exclusive
 Is defined by the definition of standard mutation mention:
 - Maximum Spaces 2-4 are applied

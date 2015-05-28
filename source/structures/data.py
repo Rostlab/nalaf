@@ -49,6 +49,8 @@ class Annotation():
         """the offset marking the beginning of the annotation in regards to the Part this annotation is attached to."""
         self.text = text
         """the text span of the annotation"""
+        self.is_nl = False
+        """boolean indicator if the annotation is a natural language (NL) mention."""
 
 
 class Part():
@@ -128,6 +130,16 @@ class Dataset():
         for document in self:
             for part in document:
                 yield part
+
+    def annotations(self):
+        """
+        helper functions that iterates through all parts
+        that is each part of each document in the dataset
+        """
+        for part in self.parts():
+            for annotation in part.annotations:
+                yield annotation
+
 
     def sentences(self):
         """

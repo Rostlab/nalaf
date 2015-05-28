@@ -649,11 +649,27 @@ def print_statistics_documents():
 import_html_to_db()
 import_json_to_db()
 
-return_obj = general_algorithm(minimum_lettres=28, minimum_spaces=4,
+
+# for x in xrange(1,10):
+#     pass
+
+
+return_obj = general_algorithm(minimum_lettres=18, minimum_spaces=3,
                                is_export=True, is_export_mentions=True)
 
-with open('mentions_list_ankit.json', 'w') as f:
-    f.write(json.dumps(return_obj, indent=2, sort_keys=True))
+return_obj2 = general_algorithm(minimum_lettres=28, minimum_spaces=4,
+                                is_export=True, is_export_mentions=True)
+
+mentionslist1 = return_obj['mentions']
+mentionslist2 = return_obj2['mentions']
+
+A_minus_B_set = [ x for x in mentionslist1 if x not in mentionslist2]
+
+print(json.dumps(A_minus_B_set, indent=True, sort_keys=True))
+
+
+# with open('mentions_list_ankit.json', 'w') as f:
+#     f.write(json.dumps(return_obj, indent=2, sort_keys=True))
 
 # stats_run()
 

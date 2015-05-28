@@ -1,6 +1,8 @@
 import abc
 import json
+import csv
 import re
+
 
 class NLDefiner():
     """
@@ -54,6 +56,29 @@ class ExclusiveNLDefiner(NLDefiner):
                         pass
                 ann.is_nl = True
 
-#
-#
-# END OF FILE
+
+class TmVarRegexNLDefiner(NLDefiner):
+    """
+    Definier based on tmVar regexes
+    #TODO: Document it better
+    """
+    def define(self, dataset):
+        with open('RegEx.NL') as file:
+            regexps = list(csv.reader(file, delimiter='\t'))
+
+        compiled_regexps = []
+        for regex in regexps:
+            if regex[0].startswith('(?-xism:'):
+                try:
+                    compiled_regexps.append(re.compile(regex[0].replace('(?-xism:', ''),
+                                                       re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
+                except:
+                    pass
+            else:
+                compiled_regexps.append(re.compile(regex[0]))
+
+        for ann in dataset.annotations():
+            if ann.class_id == 'e_2':
+                matches = [regex.match(ann.text) for regex in compiled_regexps]
+                if not any(matches):
+                    ann.is_nl = True

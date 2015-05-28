@@ -34,4 +34,5 @@ node_modules/
 *.pyc
 
 # PyCharm related files
+.idea/
 __pycache__/

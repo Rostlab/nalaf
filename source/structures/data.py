@@ -158,3 +158,10 @@ class Dataset():
         for sentence in self.sentences():
             for token in sentence:
                 yield token
+
+
+    def stats(self):
+        """
+        Calculates stats on the dataset. Like amount of nl mentions, ....
+        """
+        # FIXME Add more information (30) --> detailed @bug

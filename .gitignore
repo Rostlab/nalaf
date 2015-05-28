@@ -23,3 +23,16 @@ project/plugins/project/
 # idp-4 resources
 IDP4_*/
 node_modules/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# Setuptools distribution folder.
+/dist/
+
+# Compiled python modules.
+*.pyc
+
+# PyCharm related files
+.idea/
+__pycache__/

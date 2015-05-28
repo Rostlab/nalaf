@@ -25,18 +25,7 @@
 
 Bachelor thesis about named entity recognition for natural language mentions of mutation names in the biomedical domain.
 
-## Title
-> multiple versions
-
-- [X] Semi-supervised learning of natural language mutation mentions
-- [ ] Semi-supervised learning of natural language mentions in biomedical text domain
-- [ ] Semi-supervised natural languagae NER in biomedical text domain
-- [ ] Semi-supervised natural language NER of biomedical documents
-- [ ] Protein mutation causing disease search through NER of biomedical texts
-- [ ] Natural language NER of protein mutations in biomedical text domain
-- [ ] Natural language NER within biomedical domain
-- [ ] Natural language NER within biomedical domain drug-targeting
-
+## Title: Semi-supervised learning of natural language mutation mentions
 
 ## Abstract
 Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed. But do people use the curated literature efficiently?
@@ -64,8 +53,9 @@ Therefore a pipeline is developed, that aims to extract relevant protein mutatio
 
 # Alex's thesis 
 
-## Title
-Preliminary titles:
+## Title: Repre learning of natural language mutation mentions
+
+> Old titles
 * NER of natural language mentions of mutations in bio-medical texts
 * Word representation features for NER of natural language mentions of mutations
 * Unsupervised features learning for NER in the bio-medical domain

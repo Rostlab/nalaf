@@ -50,7 +50,8 @@ class ExclusiveNLDefiner(NLDefiner):
         for ann in dataset.annotations():
             if ann.class_id == 'e_2' \
                     and len(ann.text.split(" ")) <= self.max_spaces:
-                for conv_re in conventions:
+                matches = [regex.match(ann.text) for regex in ]
+                for conv_re in self.conventions:
                     if re.search(conv_re):
                         # TODO continue here (1)
                         pass

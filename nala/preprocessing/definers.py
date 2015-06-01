@@ -64,7 +64,7 @@ class TmVarRegexNLDefiner(NLDefiner):
     #TODO: Document it better
     """
     def define(self, dataset):
-        with open('RegEx.NL') as file:
+        with open('../resources/RegEx.NL') as file:
             regexps = list(csv.reader(file, delimiter='\t'))
 
         compiled_regexps = []

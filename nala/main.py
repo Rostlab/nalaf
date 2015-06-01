@@ -1,7 +1,7 @@
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.preprocessing.annotators import ReadFromAnnJsonAnnotator#
+from nala.preprocessing.annotators import ReadFromAnnJsonAnnotator
 from nala.preprocessing.labelers import SimpleLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.features.simple import SimpleFeatureGenerator
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)
     TmVarRegexNLDefiner().define(dataset)
-    print('/n'.join([ann.text for ann in dataset.annotations() if ann.is_nl])) #print the NL ones
+    print('\n'.join([ann.text for ann in dataset.annotations() if ann.is_nl])) #print the NL ones
 
     SimpleLabeler().label(dataset)
     SimpleFeatureGenerator().generate(dataset)

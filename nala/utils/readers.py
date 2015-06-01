@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
-from structures.data import Dataset, Document, Part
+from nala.structures.data import Dataset, Document, Part
 import os
 import re
 
 
-class HTMLReader():
+class HTMLReader:
     def __init__(self, directory):
         self.directory = directory
         """the directory containing the .html files"""

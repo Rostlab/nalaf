@@ -1,4 +1,4 @@
-from features import FeatureGenerator
+from nala.features import FeatureGenerator
 
 
 class SimpleFeatureGenerator(FeatureGenerator):
@@ -14,6 +14,7 @@ class SimpleFeatureGenerator(FeatureGenerator):
     TODO: Instead of having a hard-coded template, allow the template to
     be optionally passed as a parameter.
     """
+
     def generate(self, dataset):
         """
         :type dataset: structures.data.Dataset
@@ -24,4 +25,4 @@ class SimpleFeatureGenerator(FeatureGenerator):
             for index, token in enumerate(sentence):
                 for template_index in template:
                     if -1 < index + template_index < len(sentence):
-                        token.features['w[%d]' % template_index] = sentence[index+template_index].word
+                        token.features['w[%d]' % template_index] = sentence[index + template_index].word

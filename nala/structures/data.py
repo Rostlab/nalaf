@@ -1,7 +1,8 @@
-class Label():
+class Label:
     """
     Represents the label associated with each Token.
     """
+
     def __init__(self, value, confidence=None):
         self.value = value
         """string value of the label"""
@@ -11,11 +12,13 @@ class Label():
     def __repr__(self):
         return self.value
 
-class Token():
+
+class Token:
     """
     Represent a token - the smallest unit on which we perform operations.
     Usually one token represent one word from the document.
     """
+
     def __init__(self, word):
         self.word = word
         """string value of the token, usually a single word"""
@@ -38,10 +41,11 @@ class Token():
         return self.word
 
 
-class Annotation():
+class Annotation:
     """
     Represent a single annotation, that is denotes a span of text which represents some entitity.
     """
+
     def __init__(self, class_id, offset, text):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
@@ -53,11 +57,12 @@ class Annotation():
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
 
-class Part():
+class Part:
     """
     Represent chunks of text grouped in the document that for some reason belong together.
     Each part hold a reference to the annotations for that chunk of text.
     """
+
     def __init__(self, text):
         self.text = text
         """the original raw text that the part is consisted of"""
@@ -76,10 +81,11 @@ class Part():
         return iter(self.sentences)
 
 
-class Document():
+class Document:
     """
     Class representing a single document, for example an article from PubMed.
     """
+
     def __init__(self):
         self.parts = {}
         """
@@ -96,11 +102,12 @@ class Document():
             yield part
 
 
-class Dataset():
+class Dataset:
     """
     Class representing a group of documents.
     Instances of this class are the main object that gets passed around and modified by different modules.
     """
+
     def __init__(self):
         self.documents = {}
         """
@@ -140,7 +147,6 @@ class Dataset():
             for annotation in part.annotations:
                 yield annotation
 
-
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -158,7 +164,6 @@ class Dataset():
         for sentence in self.sentences():
             for token in sentence:
                 yield token
-
 
     def stats(self):
         """

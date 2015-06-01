@@ -1,12 +1,13 @@
 import os
 
 
-class CRFSuite():
+class CRFSuite:
     """
     Basic class for interaction with CRFSuite
 
     TODO: Make the class a bit more generic or replace with an existing package such as python-crfsuite
     """
+
     def __init__(self, directory):
         self.directory = directory
         """the directory where the CRFSuite executable is located"""

@@ -1,10 +1,10 @@
 import abc
 import os
 import json
-from structures.data import Annotation
+from nala.structures.data import Annotation
 
 
-class Annotator():
+class Annotator:
     """
     Abstract class for annotating the dataset.
     Subclasses that inherit this class should:

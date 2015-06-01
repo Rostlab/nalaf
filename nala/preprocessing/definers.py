@@ -4,7 +4,7 @@ import csv
 import re
 
 
-class NLDefiner():
+class NLDefiner:
     """
     Abstract class for determining whether an annotation in the dataset is a natural language (NL) mention.
     Subclasses that inherit this class should:
@@ -50,7 +50,7 @@ class ExclusiveNLDefiner(NLDefiner):
         for ann in dataset.annotations():
             if ann.class_id == 'e_2' \
                     and len(ann.text.split(" ")) <= self.max_spaces:
-                #matches = [regex.match(ann.text) for regex in ]
+                # matches = [regex.match(ann.text) for regex in ]
                 for conv_re in self.conventions:
                     if re.search(conv_re):
                         # TODO continue here (1)

@@ -1,7 +1,8 @@
 import abc
-from structures.data import Label
+from nala.structures.data import Label
 
-class Labeler():
+
+class Labeler:
     """
     Abstract class for generating labels for each token in the dataset.
     Subclasses that inherit this class should:
@@ -9,6 +10,7 @@ class Labeler():
     * Implement the abstract method label
     * Append new items to the list field "original_labels" of each Token in the dataset
     """
+
     @abc.abstractmethod
     def label(self, dataset):
         """
@@ -29,6 +31,7 @@ class SimpleLabeler(Labeler):
     Requires the list field "annotations" to be previously set.
     Implements the abstract class Labeler.
     """
+
     def label(self, dataset):
         """
         :type dataset: structures.data.Dataset

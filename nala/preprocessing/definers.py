@@ -1,4 +1,5 @@
 import abc
+import json
 import csv
 import re
 
@@ -19,26 +20,6 @@ class NLDefiner():
         return
 
 
-class TestNLDefiner(NLDefiner):
-    """
-    TODO: Explain the general thing here
-
-
-    Requires the list field "annotations" to be previously set.
-    Implements the abstract class NLDefiner.
-    """
-    def __init__(self, min_spaces=3, max_length=22):
-        self.min_spaces = min_spaces
-        self.max_length = max_length
-
-    def define(self, dataset):
-        for ann in dataset.annotations():
-            if ann.class_id == 'e_2' \
-                    and len(ann.text) < self.max_length \
-                    and len(ann.text.split()) >= self.min_spaces:
-                ann.is_nl = True
-
-
 class InclusiveNLDefiner(NLDefiner):
 
     def __init__(self, min_length=18):
@@ -49,7 +30,31 @@ class InclusiveNLDefiner(NLDefiner):
         for ann in dataset.annotations():
             if ann.class_id == 'e_2' \
                     and len(ann.text) >= self.min_length \
-                    and len(ann.text.split()) >= self.min_spaces:
+                    and len(ann.text.split(" ")) > self.min_spaces:
+                ann.is_nl = True
+
+
+class ExclusiveNLDefiner(NLDefiner):
+
+    """docstring for ExclusiveNLDefiner"""
+
+    def __init__(self):
+        self.max_spaces = 2
+        self.conventions_file = 'regex_st.json'
+
+        # read in file regex_st.json into conventions array
+        with open(self.conventions_file, 'r') as f:
+            self.conventions = json.loads(f.read())
+
+    def define(self, dataset):
+        for ann in dataset.annotations():
+            if ann.class_id == 'e_2' \
+                    and len(ann.text.split(" ")) <= self.max_spaces:
+                #matches = [regex.match(ann.text) for regex in ]
+                for conv_re in self.conventions:
+                    if re.search(conv_re):
+                        # TODO continue here (1)
+                        pass
                 ann.is_nl = True
 
 

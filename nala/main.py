@@ -3,7 +3,7 @@ from preprocessing.spliters import NLTKSplitter
 from preprocessing.tokenizers import NLTKTokenizer
 from preprocessing.annotators import ReadFromAnnJsonAnnotator
 from preprocessing.labelers import SimpleLabeler
-from preprocessing.definers import TestNLDefiner
+from preprocessing.definers import TmVarRegexNLDefiner
 from features.simple import SimpleFeatureGenerator
 from utils.crfsuite import CRFSuite
 
@@ -19,8 +19,8 @@ if __name__ == "__main__":
     NLTKTokenizer().tokenize(dataset)
 
     ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)
-    TestNLDefiner().define(dataset)
-    print([ann.text for ann in dataset.annotations() if ann.is_nl]) #print the NL ones
+    TmVarRegexNLDefiner().define(dataset)
+    print('/n'.join([ann.text for ann in dataset.annotations() if ann.is_nl])) #print the NL ones
 
     SimpleLabeler().label(dataset)
     SimpleFeatureGenerator().generate(dataset)

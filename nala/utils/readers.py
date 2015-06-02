@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from nala.structures.data import Dataset, Document, Part
 import os
 import re
+import glob
 
 
 class HTMLReader:
@@ -17,8 +18,9 @@ class HTMLReader:
         :returns structures.data.Dataset
         """
         dataset = Dataset()
-        for filename in os.listdir(self.directory):
-            with open(os.path.join(self.directory, filename), 'rb') as file:
+        filelist = glob.glob(str(self.directory + "/*.html"))
+        for filename in filelist:
+            with open(filename, 'rb') as file:
                 soup = BeautifulSoup(file)
                 document = Document()
 

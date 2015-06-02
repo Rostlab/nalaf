@@ -29,15 +29,20 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 
 ## Abstract
 Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed. But do people use the curated literature efficiently?
-Looking at just a few papers that describe a particular protein can limit the understanding of occuring protein mutations. Through automating the process of identifying relevant protein mutations, research can be increased significantly.
-> Nowadays, researchers do not just look at a few papers, but try to find a consent of hundreds or thousands of papers concerning the disabled function of one or multiple proteins. This can only be done if automated.
+Looking at just a few papers that describe a particular protein can limit the understanding of occurring protein mutations. Through automating the process of identifying relevant protein mutations, research can be increased significantly.
 
-The development of literature information extraction has already progressed to a certain degree: protein, mutation, gene names and similar following naming conventions can be parsed at a sufficient rate, though there are still cases of ambiguity. The current problematic is, that TODO.......
-The difficulty lies within the description of entities that are consisting of multiple words and are defined through context and, thus can not be easily parsed.
+> OLD The development of literature information extraction has already progressed to a certain degree: protein, mutation, gene names and similar following naming conventions can be parsed at a sufficient rate, though there are still cases of ambiguity. The current problematic is, that TODO.......
+Text mining in the biomedical domain tends to be difficult, because the language used, including e.g. protein names, gene names, are very ambiguous and are thus difficult to parse. The natural language in combination with cryptic words is one big challenge for machine learning tasks. Finding those so called "named-entities" is the goal of my thesis.
+
+With Conditional Random Fields (CRF), we want to incorporate many features and build a machine learning model, that is able to be used in a semi-supervised environment and does increase its dataset for prediction continuously with the help of annotation.
+
+> OLD The difficulty lies within the description of entities that are consisting of multiple words and are defined through context and, thus can not be easily parsed.
+
+> TODO argument: dataset extension with semi-supervised learning explanation, BECAUSE: small dataset because of difficult manual annotation
 
 On top of that, there are no semi-supervised machine learning methods, that recognize named entities of natural language mutation mentions. In this thesis, I am aiming to create a named entity recognition conditional random field machine learning method, that is semi-supervised and targets natural language mentions of mutation names and descriptions to extract those entities.
-> semi-supervised means:
-> - combination of annotated data-points und novel data-points
+> NOTE semi-supervised means:
+> - combination of annotated data-points and novel data-points
 > - confident (above a threshold) enough classified data-points are automatically defined as true (and used in further training?)
 > - not-confident enough data-points can be manually declared true or false and incorporated in the training
 

@@ -18,8 +18,16 @@
   * Full draft (1 or 2 papers?) by end of August submittable to Burkhard Rost
   * Submit by September-October
 
+# Install
 
-
+    git clone https://github.com/carstenuhlig/thesis-alex-carsten.git
+    cd thesis-alex-carsten
+    pytnon setup.py install
+    python -m nala.download_corpora
+ 
+ Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
+ 
+    pip install nala
 
 # Carsten's thesis
 

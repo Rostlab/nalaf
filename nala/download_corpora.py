@@ -3,7 +3,7 @@ Downloads the necessary NLTK corpora for nala.
 
 Usage: ::
 
-    $ python -m textblob.download_corpora
+    $ python -m nala.download_corpora
 
 """
 if __name__ == '__main__':

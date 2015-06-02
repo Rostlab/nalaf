@@ -2,7 +2,8 @@ import abc
 import json
 import csv
 import re
-
+import os
+import requests
 
 class NLDefiner:
     """
@@ -86,10 +87,7 @@ class TmVarRegexNLDefiner(NLDefiner):
 
 class TmVarNLDefiner(NLDefiner):
     def define(self, dataset):
-        import os
-        import requests
         if os.path.isfile('cache.json'):
-            print('here')
             tm_var = json.load(open('cache.json'))
         else:
             url_tmvar = 'http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/Mutation/{0}/JSON/'

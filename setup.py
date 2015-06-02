@@ -25,7 +25,8 @@ setup(
     packages=find_packages(exclude=['tests']),
     install_requires=[
         'nltk',
-        'beautifulsoup4'
+        'beautifulsoup4',
+        'requests'
     ],
     include_package_data=True,
     zip_safe=False,

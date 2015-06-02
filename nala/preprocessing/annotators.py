@@ -1,6 +1,8 @@
 import abc
+import glob
 import os
 import json
+import requests
 from nala.structures.data import Annotation
 
 
@@ -12,6 +14,7 @@ class Annotator:
     * Implement the abstract method annotate
     * Append new items to the list field "annotations" of each Part in the dataset
     """
+
     @abc.abstractmethod
     def annotate(self, dataset):
         """
@@ -26,6 +29,7 @@ class ReadFromAnnJsonAnnotator(Annotator):
 
     Implements the abstract class Annotator.
     """
+
     def __init__(self, directory):
         self.directory = directory
         """the directory containing *.ann.json files"""
@@ -34,10 +38,10 @@ class ReadFromAnnJsonAnnotator(Annotator):
         """
         :type dataset: structures.data.Dataset
         """
-        for filename in os.listdir(self.directory):
-            with open(os.path.join(self.directory, filename)) as file:
+        for filename in glob.glob(str(self.directory + "/*.ann.json")):
+            with open(filename) as file:
                 try:
-                    document = dataset.documents[filename.replace('.ann.json', '')]
+                    document = dataset.documents[filename.split('-')[-1].replace('.ann.json', '')]
                     ann_json = json.load(file)
                     for entity in ann_json['entities']:
                         ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])

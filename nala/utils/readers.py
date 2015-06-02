@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from nala.structures.data import Dataset, Document, Part
-import os
 import re
 import glob
 
@@ -27,5 +26,5 @@ class HTMLReader:
                 for part in soup.find_all(id=re.compile('^s')):
                     document.parts[part['id']] = Part(str(part.string))
 
-                dataset.documents[filename.replace('.plain.html', '')] = document
+                dataset.documents[filename.split('-')[-1].replace('.plain.html', '')] = document
         return dataset

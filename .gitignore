@@ -40,3 +40,6 @@ __pycache__/
 
 # Config file with the paths
 config.ini
+
+# Cache files
+cache.json

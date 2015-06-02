@@ -42,20 +42,19 @@ class ExclusiveNLDefiner(NLDefiner):
         self.max_spaces = 2
         self.conventions_file = 'regex_st.json'
 
-        # read in file regex_st.json into conventions array
+# read in file regex_st.json into conventions array
         with open(self.conventions_file, 'r') as f:
             self.conventions = json.loads(f.read())
 
     def define(self, dataset):
         for ann in dataset.annotations():
+            # if ann.class_id == 'e_2':
+            #     print(ann.class_id, ann.text)
             if ann.class_id == 'e_2' \
-                    and len(ann.text.split(" ")) <= self.max_spaces:
-                # matches = [regex.match(ann.text) for regex in ]
-                for conv_re in self.conventions:
-                    if re.search(conv_re):
-                        # TODO continue here (1)
-                        pass
-                ann.is_nl = True
+                    and not(len(ann.text.split(" ")) <= self.max_spaces):
+                matches = [re.match(regex, ann.text) for regex in self.conventions]
+                if not any(matches):
+                    ann.is_nl = True
 
 
 class TmVarRegexNLDefiner(NLDefiner):

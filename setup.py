@@ -22,11 +22,13 @@ setup(
     author='Aleksandar Bojchevski, Carsten Uhlig',
     author_email='email@somedomain.com',
     license='MIT',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     install_requires=[
         'nltk',
         'beautifulsoup4'
     ],
     include_package_data=True,
-    zip_safe=False
+    zip_safe=False,
+    test_suite='nose.collector',
+    tests_require=['nose'],
 )

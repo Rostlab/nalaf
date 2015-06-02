@@ -32,7 +32,11 @@ node_modules/
 
 # Compiled python modules.
 *.pyc
+/build/
 
 # PyCharm related files
 .idea/
 __pycache__/
+
+# Config file with the paths
+config.ini

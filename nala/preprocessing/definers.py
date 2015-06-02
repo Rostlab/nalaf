@@ -60,8 +60,14 @@ class ExclusiveNLDefiner(NLDefiner):
 
 class TmVarRegexNLDefiner(NLDefiner):
     """
-    Definier based on tmVar regexes
-    #TODO: Document it better
+    Definer based just on tmVar regular expressions.
+
+    Algorithm:
+    if a mutation annotation matches *any* of the regular expressions
+        then it is considered a standard mention
+    otherwise we consider it a natural language mention.
+
+    Implements the abstract class NLDefiner.
     """
     def define(self, dataset):
         with open('../resources/RegEx.NL') as file:
@@ -86,6 +92,18 @@ class TmVarRegexNLDefiner(NLDefiner):
 
 
 class TmVarNLDefiner(NLDefiner):
+    """
+    Definer based on the complete tmVar NER pipeline.
+
+    Algorithm:
+    run tmVar on our dataset and obtain predictions for mutations
+
+    if a mutation annotation is predicted by tmVar
+        then it is considered a standard mention
+    otherwise we consider it a natural language mention.
+
+    Implements the abstract class NLDefiner.
+    """
     def define(self, dataset):
         if os.path.isfile('cache.json'):
             tm_var = json.load(open('cache.json'))

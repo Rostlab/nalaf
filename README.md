@@ -70,12 +70,11 @@ Therefore a pipeline is developed, that aims to extract relevant protein mutatio
 
 # Alex's thesis 
 
-## Title: Repre learning of natural language mutation mentions
-
-> Old titles
-* NER of natural language mentions of mutations in bio-medical texts
-* Word representation features for NER of natural language mentions of mutations
-* Unsupervised features learning for NER in the bio-medical domain
+## Titles:
+* Unsupervised feature learning for biomedical named entity recognition
+* Semi-supervised learning for biomedical named entity recognition
+* Self-taught learning for biomedical named entity recognition
+* Self-taught learning of natural language mutation mentions
 
 ## Abstract
 As the volume of published research in the biomedical domain increases, the need for effective information extraction systems grows with it. In this context, the task of named entity recognition (NER), defined as classifying chunks of text in natural language to a set of predefined categories such as genes, proteins or other entities, is essential.

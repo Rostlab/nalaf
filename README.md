@@ -25,6 +25,10 @@
     pytnon setup.py install
     python -m nala.download_corpora
  
+ If you want to run the unit tests do:
+ 
+    python setup.py test
+ 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
  
     pip install nala

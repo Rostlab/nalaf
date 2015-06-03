@@ -41,7 +41,7 @@ class ExclusiveNLDefiner(NLDefiner):
 
     def __init__(self):
         self.max_spaces = 2
-        self.conventions_file = '../resources/regex_st.json'
+        self.conventions_file = 'resources/regex_st.json'
 
 # read in file regex_st.json into conventions array
         with open(self.conventions_file, 'r') as f:
@@ -74,7 +74,7 @@ class TmVarRegexNLDefiner(NLDefiner):
     Implements the abstract class NLDefiner.
     """
     def define(self, dataset):
-        with open('../resources/RegEx.NL') as file:
+        with open('resources/RegEx.NL') as file:
             regexps = list(csv.reader(file, delimiter='\t'))
 
         compiled_regexps = []

@@ -15,7 +15,7 @@ class TestNLTKTokenizer(unittest.TestCase):
         cls.dataset = Dataset()
 
         doc_id1 = Document()
-        # 15 tokens in 2 senteces
+        # 15 tokens in 2 sentences
         doc_id1.parts['p1'] = Part('This is some sample text. This is another, sample sentence with coma.')
         cls.dataset.documents['doc_id1'] = doc_id1
 
@@ -30,7 +30,7 @@ class TestNLTKTokenizer(unittest.TestCase):
         for token in self.dataset.tokens():
             self.assertIsInstance(token, Token)
 
-    def test_number_of_toknes_as_expected(self):
+    def test_number_of_tokens_as_expected(self):
         self.assertEqual(len(list(self.dataset.tokens())), 15)
 
     def test_tokens_as_expected(self):

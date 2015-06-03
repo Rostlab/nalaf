@@ -5,7 +5,7 @@ Combination of „filters“ in useful sense
 
 ### Inclusive
 Is defined by the definition of a natural language mutation mention itself:
-- Minimum Spaces 2-4 are applied
+- Minimum Spaces 3 are applied
 - Minimum Lettres 12-36 are applied
 
 ```python
@@ -41,9 +41,15 @@ Is defined by the definition of a natural language mutation mention itself:
 
 ### Exclusive
 Is defined by the definition of standard mutation mention:
-- Maximum Spaces 2-4 are applied
+- Maximum Spaces 2 are applied
 - Maximum Lettres 12-36 are applied
-- No standard convention names defined by regex array
+- Standard convention names defined by regex array
+
+#### tmVar Regex
+- Regex of [RegEx.NL](https://github.com/carstenuhlig/thesis-alex-carsten/blob/master/resources/RegEx.NL)
+
+#### tmVar Full
+- Full method of tmVar based on Web-based prediction
 
 ### Ankit's Definition
 Natural language mentions are defined by following set of rule: Length of the mention > 28 or mention with a minimum of 4 spaces separated word. Ex. "deletion of a conserved SLQ(Y/F)LA", "13-bp deletion at the beginning of exon 8".

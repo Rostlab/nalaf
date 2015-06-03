@@ -39,7 +39,7 @@ class ReadFromAnnJsonAnnotator(Annotator):
         :type dataset: structures.data.Dataset
         """
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
-            with open(filename) as file:
+            with open(filename, 'r', encoding="utf-8") as file:
                 try:
                     document = dataset.documents[filename.split('-')[-1].replace('.ann.json', '')]
                     ann_json = json.load(file)

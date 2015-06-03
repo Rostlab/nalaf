@@ -101,6 +101,11 @@ class Document:
         for part_id, part in self.parts.items():
             yield part
 
+    def key_value_parts(self):
+        """yields iterator for partids"""
+        for part_id, part in self.parts.items():
+            yield part_id, part
+
 
 class Dataset:
     """
@@ -165,8 +170,132 @@ class Dataset:
             for token in sentence:
                 yield token
 
+    def partids_with_parts(self):
+        """ helper function that yields part id with part"""
+        for document in self:
+            for part_id, part in document.key_value_parts():
+                yield part_id, part
+
+    def annotations_with_partids(self):
+        """ helper function that return annotation object with part id
+        to be able to find out abstract or full document """
+        for part_id, part in self.partids_with_parts():
+            for annotation in part.annotations:
+                yield part_id, annotation
+
     def stats(self):
         """
         Calculates stats on the dataset. Like amount of nl mentions, ....
         """
-        # FIXME Add more information (30) --> detailed @bug
+        import re
+
+        # main values
+        nl_mentions = []  # array of nl mentions each of the the whole ann.text saved
+        nl_nr = 0  # total nr of nl mentions
+        nl_token_nr = 0  # total nr of nl tokens
+        mentions_nr = 0  # total nr of all mentions (including st mentions)
+        mentions_token_nr = 0  # total nr of all tokens of all mentions (inc st mentions)
+        total_token_abstract = 0
+        total_token_full = 0
+
+        # abstract nr
+        abstract_mentions_nr = 0
+        abstract_token_nr = 0
+        abstract_nl_mentions = []
+
+        # full document nr
+        full_document_mentions_nr = 0
+        full_document_token_nr = 0
+        full_nl_mentions = []
+
+        # is abstract var
+        is_abstract = True
+
+        # precompile abstract match
+        regex_abstract_id = re.compile(r'^s[12][shp]')
+
+        for part_id, ann in self.annotations_with_partids():
+            # abstract?
+            if re.match(regex_abstract_id, part_id):
+                is_abstract = True
+            else:
+                is_abstract = False
+
+            if ann.class_id == 'e_2':
+                # preprocessing
+                token_nr = len(ann.text.split(" "))
+                mentions_nr += 1
+                mentions_token_nr += token_nr
+
+                if ann.is_nl:
+                    # total nr increase
+                    nl_nr += 1
+                    nl_token_nr += token_nr
+
+                    # abstract nr of tokens increase
+                    if is_abstract:
+                        abstract_mentions_nr += 1
+                        abstract_token_nr += token_nr
+                        abstract_nl_mentions.append(ann.text)
+                    else:
+                        # full document nr of tokens increase
+                        full_document_mentions_nr += 1
+                        full_document_token_nr += token_nr
+                        full_nl_mentions.append(ann.text)
+
+                    # nl text mention add to []
+                    nl_mentions.append(ann.text)
+
+        # post-processing for abstract vs full document tokens
+        for part_id, part in self.partids_with_parts():
+            if re.match(regex_abstract_id, part_id):
+                # OPTIONAL use nltk or different tokenizer
+                total_token_abstract += len(part.text.split(" "))
+            else:
+                total_token_full += len(part.text.split(" "))
+
+
+        # report_array = []
+        #
+        # report_array.extend([nl_nr, mentions_nr, nl_token_nr, mentions_token_nr, abstract_mentions_nr, abstract_token_nr])
+        # report_array.extend([full_document_mentions_nr, full_document_token_nr, total_token_abstract, total_token_full])
+        # report_array.extend(nl_mentions)
+
+        report_dict = {
+            'nl_mention_nr': nl_nr,
+            'tot_mention_nr': mentions_nr,
+            'nl_token_nr': nl_token_nr,
+            'tot_token_nr': mentions_token_nr,
+            'abstract_nl_mention_nr': abstract_mentions_nr,
+            'abstract_nl_token_nr': abstract_token_nr,
+            'abstract_tot_token_nr': total_token_abstract,
+            'full_nl_mention_nr': full_document_mentions_nr,
+            'full_nl_token_nr': full_document_token_nr,
+            'full_tot_token_nr': total_token_full,
+            'nl_mention_array': sorted(nl_mentions),
+            'abstract_nl_mention_array': sorted(abstract_nl_mentions),
+            'full_nl_mention_array': sorted(full_nl_mentions)
+        }
+
+        # if total_token_abstract > 0 and total_token_full > 0:
+        #     # ratio calc (token nl)/(token total) from abstract
+        #     token_nl_vs_tot_abstract = abstract_token_nr / float(total_token_abstract)
+        #     # ratio calc (token nl)/(token total) from abstract
+        #     token_nl_vs_tot_full = full_document_token_nr / float(total_token_full)
+        #     # ratio-(token nl mentions/total tokens) in abstract ratio full documents
+        #     if token_nl_vs_tot_full > 0:
+        #         ratio_nl_men = token_nl_vs_tot_abstract / token_nl_vs_tot_full
+        #         report_array.append(ratio_nl_men)
+        #     else:
+        #         report_array.append("None")
+        # else:
+        #     report_array.append("None")
+        # print("nl mentions", nl_nr, "total mentions", mentions_nr, nl_nr/mentions_nr)
+
+        return report_dict
+        # FIXME return object as dictionary
+        # TODO (1) ratio-(token nl mentions/total tokens) in abstract ratio full documents @graph
+        # TODO (3) tmvar regex intersection mutations check --> export list of mentions @graph @export
+        # TODO (2) ratio-(nl/total) @graph
+        # TODO (4) nl mentions total vs min lettre parameter @graph @parameters
+        # TODO (5) parametrizable min length (12..36) @parameters

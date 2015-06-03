@@ -41,11 +41,15 @@ class ExclusiveNLDefiner(NLDefiner):
 
     def __init__(self):
         self.max_spaces = 2
-        self.conventions_file = 'regex_st.json'
+        self.conventions_file = '../resources/regex_st.json'
 
 # read in file regex_st.json into conventions array
         with open(self.conventions_file, 'r') as f:
             self.conventions = json.loads(f.read())
+
+    # TODO (5) add mutalyzer package
+    # TODO (6) add hgvs package
+    # OPTIONAL improve conventions
 
     def define(self, dataset):
         for ann in dataset.annotations():

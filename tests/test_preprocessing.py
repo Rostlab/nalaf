@@ -1,5 +1,4 @@
 import unittest
-from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import Tokenizer
 from nala.preprocessing.tokenizers import NLTKTokenizer
 from nala.structures.data import Dataset, Document, Part, Token
@@ -17,9 +16,10 @@ class TestNLTKTokenizer(unittest.TestCase):
         doc_id1 = Document()
         # 15 tokens in 2 sentences
         doc_id1.parts['p1'] = Part('This is some sample text. This is another, sample sentence with coma.')
+        doc_id1.parts['p1'].sentences = ['This is some sample text.', 'This is another, sample sentence with coma.']
+
         cls.dataset.documents['doc_id1'] = doc_id1
 
-        NLTKSplitter().split(cls.dataset)
         cls.tokenizer = NLTKTokenizer()
         cls.tokenizer.tokenize(cls.dataset)
 

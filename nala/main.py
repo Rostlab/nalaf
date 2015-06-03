@@ -1,3 +1,5 @@
+from configparser import ConfigParser
+
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
@@ -5,8 +7,7 @@ from nala.preprocessing.annotators import ReadFromAnnJsonAnnotator
 from nala.preprocessing.labelers import SimpleLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.features.simple import SimpleFeatureGenerator
-from nala.utils.crfsuite import CRFSuite
-from configparser import ConfigParser
+from nala.learning.crfsuite import CRFSuite
 
 if __name__ == "__main__":
     # Please define a config.ini file located at nala/config.ini,

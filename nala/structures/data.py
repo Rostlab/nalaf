@@ -183,6 +183,13 @@ class Dataset:
             for annotation in part.annotations:
                 yield part_id, annotation
 
+    def cleannldefinitions(self):
+        """
+        cleans all is_nl = True to = False
+        """
+        for ann in self.annotations():
+            ann.is_nl = False
+
     def stats(self):
         """
         Calculates stats on the dataset. Like amount of nl mentions, ....
@@ -293,7 +300,6 @@ class Dataset:
         # print("nl mentions", nl_nr, "total mentions", mentions_nr, nl_nr/mentions_nr)
 
         return report_dict
-        # FIXME return object as dictionary
         # TODO (1) ratio-(token nl mentions/total tokens) in abstract ratio full documents @graph
         # TODO (3) tmvar regex intersection mutations check --> export list of mentions @graph @export
         # TODO (2) ratio-(nl/total) @graph

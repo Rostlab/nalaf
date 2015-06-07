@@ -33,6 +33,8 @@ class InclusiveNLDefiner(NLDefiner):
                     and len(ann.text) >= self.min_length \
                     and len(ann.text.split(" ")) > self.min_spaces:
                 ann.is_nl = True
+            else:
+                ann.is_nl = False
 
 
 class ExclusiveNLDefiner(NLDefiner):

@@ -37,6 +37,22 @@ class InclusiveNLDefiner(NLDefiner):
                 ann.is_nl = False
 
 
+class AnkitNLDefiner(NLDefiner):
+
+    def __init__(self, min_length=28):
+        self.min_spaces = 4
+        self.min_length = min_length
+
+    def define(self, dataset):
+        for ann in dataset.annotations():
+            if ann.class_id == 'e_2' \
+                    and len(ann.text) >= self.min_length \
+                    and len(ann.text.split(" ")) > self.min_spaces:
+                ann.is_nl = True
+            else:
+                ann.is_nl = False
+
+
 class ExclusiveNLDefiner(NLDefiner):
 
     """docstring for ExclusiveNLDefiner"""

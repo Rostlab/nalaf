@@ -261,7 +261,6 @@ class Dataset:
             else:
                 total_token_full += len(part.text.split(" "))
 
-
         # report_array = []
         #
         # report_array.extend([nl_nr, mentions_nr, nl_token_nr, mentions_token_nr, abstract_mentions_nr, abstract_token_nr])

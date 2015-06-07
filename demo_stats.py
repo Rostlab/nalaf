@@ -53,7 +53,9 @@ if __name__ == "__main__":
 
         # tmvar regex
         TmVarRegexNLDefiner().define(dataset)
-        stats.addrow(dataset.stats(), 'tmvarregex')
+        tmvarstats = dataset.stats()
+        tmvarmentions = tmvarstats['nl_mention_array']
+        stats.addrow(tmvarstats, 'tmregex')
         dataset.cleannldefinitions()
 
         # exclusive
@@ -61,15 +63,19 @@ if __name__ == "__main__":
         stats.addrow(dataset.stats(), 'exclusive')
         dataset.cleannldefinitions()
 
-        #tmvar nl
+        # tmvar nl
         TmVarNLDefiner().define(dataset)
-        stats.addrow(dataset.stats(), 'tmvarnl')
+        stats.addrow(dataset.stats(), 'tmnl')
         dataset.cleannldefinitions()
 
         # inclusive
         for i in range(start_min_length, end_min_length + 1):
             print('run', i)
             InclusiveNLDefiner(min_length=i).define(dataset)
+            inclusivestats = dataset.stats()
+            inclusivementions = inclusivestats['nl_mention_array']
+            intersectionset = [ x for x in inclusivementions if x not in tmvarmentions]
+            print(intersectionset)
             stats.addrow(dataset.stats(), 'inclusive_' + str(i))
             dataset.cleannldefinitions()
 

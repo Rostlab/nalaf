@@ -7,6 +7,7 @@ Combination of „filters“ in useful sense
 Is defined by the definition of a natural language mutation mention itself:
 - Minimum Spaces 3 are applied
 - Minimum Lettres 12-36 are applied
+- Intersection with TmVar Regex until minimum lettres param of 35
 
 ```python
 	nl_mentions_array = []

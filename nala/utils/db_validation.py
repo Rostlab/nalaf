@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 # TODO params for html and json files
 # would be param1/*.plain.html and param2/*.ann.json
-resources = "../resources/"
+resources = "../../resources/"
 filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
 jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
 
@@ -77,6 +77,7 @@ def check_db_integrity():
     Check documents-object for offsets annotations.
     Logs some information if Errors exist.
     """
+    wrong_pmid_list = []
     for pubmedid, doc in documents.items():
         if has_annotations(doc):
             # print("----------------------")
@@ -98,6 +99,8 @@ def check_db_integrity():
                         cut_string = part['text'][start:end]
                         # print(part['text'][annotation['start']:annotation['end']])
                         if orig_string != cut_string:
+                            if pubmedid not in wrong_pmid_list:
+                                wrong_pmid_list.append(pubmedid)
                             print("ID:", pubmedid, ", part_id:", part_id)
                             print("org_string:", orig_string)
                             print("cut_string:", cut_string)
@@ -105,9 +108,14 @@ def check_db_integrity():
                             print("cut_start:", start)
                             print("cut_end:  ", end)
                             print("TEXT\n", part['text'])
-                            print("------\n\n")
-                            print("WHOLE DOCUMENT:")
-                            print(json.dumps(doc, indent=4, sort_keys=True))
+                            print("------\n")
+
+    print("\n\n")
+    print("WHOLE DOCUMENTS:")
+    for pubmedid in wrong_pmid_list:
+        print("PubMed-ID:", pubmedid + "\n")
+        print(json.dumps(documents[pubmedid], indent=4, sort_keys=True))
+        print("\n")
 
 
 def has_annotations(doc):

@@ -58,11 +58,8 @@ Therefore a pipeline is developed, that is easily extensible as easy to use and 
 
 # Alex's thesis 
 
-## Titles:
-* Unsupervised feature learning for biomedical named entity recognition
-* Semi-supervised learning for biomedical named entity recognition
-* Self-taught learning for biomedical named entity recognition
-* Self-taught learning of natural language mutation mentions
+## Title: Semi-supervised learning for biomedical named entity recognition
+
 
 ## Abstract
 As the volume of published research in the biomedical domain increases, the need for effective information extraction systems grows with it. In this context, the task of named entity recognition (NER), defined as classifying chunks of text in natural language to a set of predefined categories such as genes, proteins or other entities, is essential.

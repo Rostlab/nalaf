@@ -47,7 +47,7 @@ We plan to use state-of-the-art conditional random fields (CRFs), train with a m
 
 Furthermore, the major focus of this thesis will be on mutation mentions that are expressed in natural language, that is, not written in standard format. To this date, no other tool treated natural language mentions.
 
-Therefore a pipeline is developed, that is easily extensible as easy to use and can be used very easily to extract relevant information much faster than by manually reading through literature.
+By the end of the thesis, the main deliverable will be a pipeline for mutation mention recognition and protein normalization grounding for the purpose of faster research finding. We will specially care in creating an easy-to-use, well documented, and extendable tool.
 
 ## Timeframe
 

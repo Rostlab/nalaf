@@ -43,9 +43,9 @@ Bachelor thesis about named entity recognition for natural language mentions of 
 Research and development in the biomedical domain is constantly growing. Millions of documents have been already published on various platforms including PubMed. But do people use the curated literature efficiently?
 Looking at just a few papers that describe a particular protein can limit the understanding of occurring protein mutations. Through automating the process of identifying relevant protein mutations, research can be increased significantly.
 
-By using state-of-the-art: Conditional Random Fields (CRF), we want to incorporate many features and build a machine learning model. It is able to be used in a semi-supervised environment and does increase its dataset for prediction continuously with the help of manual annotation.
+We plan to use state-of-the-art conditional random fields (CRFs), train with a massive number of features, and use semi-supervised learning. We aim to vastly increase an existing corpus of mutation mentions by introducing semi-automatically annotations.
 
-On top of that, there are no semi-supervised machine learning methods, that recognize named entities of natural language mutation mentions. In this thesis, I am aiming to create a named entity recognition conditional random field machine learning method, that is semi-supervised and targets natural language mentions of mutation names and descriptions to extract those entities.
+Furthermore, the major focus of this thesis will be on mutation mentions that are expressed in natural language, that is, not written in standard format. To this date, no other tool treated natural language mentions.
 
 Therefore a pipeline is developed, that is easily extensible as easy to use and can be used very easily to extract relevant information much faster than by manually reading through literature.
 

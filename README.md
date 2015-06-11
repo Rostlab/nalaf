@@ -32,10 +32,10 @@
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
  
     pip install nala
-    
-    ## Requirements
-    
-    * Requires Python 3
+ 
+##  Requirements
+
+* Requires Python 3
 
 # Carsten's thesis
 

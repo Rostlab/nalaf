@@ -121,7 +121,7 @@ class StatsWriter:
 
             # abstract_nl_nr / abstract_tot_token_nr
             if row['abstract_tot_token_nr'] > 0:
-                simple_abstract_ratio = row['abstract_nl_nr'] / float(row['abstract_tot_token_nr'])
+                simple_abstract_ratio = row['abstract_nl_mention_nr'] / float(row['abstract_tot_token_nr'])
             else:
                 simple_abstract_ratio = 0
             # TODO include in graph "abstract nl nr / abstract tot token nr"

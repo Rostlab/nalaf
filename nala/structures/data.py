@@ -223,7 +223,7 @@ class Dataset:
 
         for part_id, ann in self.annotations_with_partids():
             # abstract?
-            if re.match(regex_abstract_id, part_id):
+            if regex_abstract_id.match(part_id):
                 is_abstract = True
             else:
                 is_abstract = False
@@ -255,7 +255,7 @@ class Dataset:
 
         # post-processing for abstract vs full document tokens
         for part_id, part in self.partids_with_parts():
-            if re.match(regex_abstract_id, part_id):
+            if regex_abstract_id.match(part_id):
                 # OPTIONAL use nltk or different tokenizer
                 total_token_abstract += len(part.text.split(" "))
             else:
@@ -299,8 +299,3 @@ class Dataset:
         # print("nl mentions", nl_nr, "total mentions", mentions_nr, nl_nr/mentions_nr)
 
         return report_dict
-        # TODO (1) ratio-(token nl mentions/total tokens) in abstract ratio full documents @graph
-        # TODO (3) tmvar regex intersection mutations check --> export list of mentions @graph @export
-        # TODO (2) ratio-(nl/total) @graph
-        # TODO (4) nl mentions total vs min lettre parameter @graph @parameters
-        # TODO (5) parametrizable min length (12..36) @parameters

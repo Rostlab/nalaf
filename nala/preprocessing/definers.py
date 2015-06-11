@@ -59,15 +59,20 @@ class ExclusiveNLDefiner(NLDefiner):
 
     def __init__(self):
         self.max_spaces = 2
+        # TODO save that in config file
         self.conventions_file = 'resources/regex_st.json'
+        self.tmvarregex_file = 'resources/RegEx.NL'
 
-# read in file regex_st.json into conventions array
+        # read in file regex_st.json into conventions array
         with open(self.conventions_file, 'r') as f:
-            self.conventions = json.loads(f.read())
+            conventions = json.loads(f.read())
+            self.compiled_regexps_custom = [re.compile(x) for x in conventions]
 
-    # TODO (5) add mutalyzer package
-    # TODO (6) add hgvs package
-    # OPTIONAL improve conventions
+        # read RegEx.NL (only codes)
+        with open(self.tmvarregex_file) as file:
+            raw_regexps = list(csv.reader(file, delimiter='\t'))
+        regexps = [ x[0] for x in raw_regexps if len(x[0]) < 265 ]
+        self.compiled_regexps = [ re.compile(x) for x in regexps]
 
     def define(self, dataset):
         for ann in dataset.annotations():
@@ -75,8 +80,9 @@ class ExclusiveNLDefiner(NLDefiner):
             #     print(ann.class_id, ann.text)
             if ann.class_id == 'e_2' \
                     and not(len(ann.text.split(" ")) <= self.max_spaces):
-                matches = [re.match(regex, ann.text) for regex in self.conventions]
-                if not any(matches):
+                matches_tmvar = [regex.match(ann.text) for regex in self.compiled_regexps]
+                matches_custom = [regex.match(ann.text) for regex in self.compiled_regexps_custom]
+                if not any(matches_custom) and not any(matches_tmvar):
                     ann.is_nl = True
 
 

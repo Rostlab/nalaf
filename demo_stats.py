@@ -13,6 +13,7 @@ from nala.features.simple import SimpleFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
 from nala.utils.writers import StatsWriter
 
+
 if __name__ == "__main__":
     # Please define a config.ini file located at nala/config.ini,
     # where you specify the path to the training data and crfsuite on your system.
@@ -78,8 +79,6 @@ if __name__ == "__main__":
             print(intersectionset)
             stats.addrow(dataset.stats(), 'inclusive_' + str(i))
             dataset.cleannldefinitions()
-
-
 
 
         stats.makegraph()

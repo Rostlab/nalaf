@@ -46,7 +46,7 @@ Looking at just a few papers that describe a particular protein can limit the un
 > OLD The development of literature information extraction has already progressed to a certain degree: protein, mutation, gene names and similar following naming conventions can be parsed at a sufficient rate, though there are still cases of ambiguity. The current problematic is, that TODO.......
 Text mining in the biomedical domain tends to be difficult, because the language used, including e.g. protein names, gene names, are very ambiguous and are thus difficult to parse. The natural language in combination with cryptic words is one big challenge for machine learning tasks. Finding those so called "named-entities" is the goal of my thesis.
 
-With Conditional Random Fields (CRF), we want to incorporate many features and build a machine learning model, that is able to be used in a semi-supervised environment and does increase its dataset for prediction continuously with the help of annotation.
+Using state-of-the-art: Conditional Random Fields (CRF), we want to incorporate many features and build a machine learning model, which is able to be used in a semi-supervised environment and does increase its dataset for prediction continuously with the help of annotation.
 
 > OLD The difficulty lies within the description of entities that are consisting of multiple words and are defined through context and, thus can not be easily parsed.
 

@@ -58,14 +58,14 @@ By the end of the thesis, the main deliverable will be a pipeline for mutation m
 
 # Alex's thesis 
 
-## Title: Semi-supervised learning for biomedical named entity recognition
+## Title: Semi-supervised learning for biomedical named-entity recognition
 
 
 ## Abstract
-As the volume of published research in the biomedical domain increases, the need for effective information extraction systems grows with it. In this context, the task of named entity recognition (NER), defined as classifying chunks of text in natural language to a set of predefined categories such as genes, proteins or other entities, is essential.
+As the volume of published research in the biomedical domain increases, the need for effective information extraction systems grows with it. In this context, the task of named-entity recognition (NER), defined as classifying chunks of text in natural language to a set of predefined categories such as genes, proteins or other entities, is essential.
 
-The performance of NER models, in general, is intrinsically limited by the availability of quality annotated corpora. The construction of such corpora is usually costly and even more so when there is a need for expert annotators. In the biomedical domain, the difficulty of the task is even greater compared to other domains, due do the much higher number of possible named entities, which keeps increasing constantly as new proteins, genes and mutations get discovered.
+The performance of NER models, in general, is intrinsically limited by the availability of high-quality-annotated corpora. The construction of such corpora is usually costly and even more so when there is a need for expert annotators. In the biomedical domain, the difficulty of the task is even greater compared to other domains, due do the much higher number of possible named entities, which keeps increasing constantly as new proteins, genes and mutations get discovered.
 
-To combat the lack of large annotated corpora, we turn to exploitation of large volumes of unlabeled text, applying a semi-supervised learning approach. Using techniques for unsupervised feature learning we aim to increase the performance of traditional NER models. More specifically, this thesis focuses on augmenting typical conditional random field (CRF) approaches with word representation features learned from large bodies of biomedical text. The goal is to evaluate the usefulness and effect on performance of different approaches such as word embeddings based on deep architectures, distributional representations or clustering based methods.
+To combat the lack of large annotated corpora, we turn to the exploitation of large volumes of unlabeled text, applying a semi-supervised learning approach. Using techniques for unsupervised feature learning we aim to increase the performance of traditional NER models. More specifically, this thesis focuses on augmenting common conditional random field (CRF) approaches combined with novel word representation features learned from large bodies of biomedical text. The goal is to evaluate the usefulness and effect on performance of different approaches such as word embeddings based on deep architectures, distributional representations or clustering based methods.
 
-In support of the thesis, to evaluate the semi-supervised learning approach, we aim to develop a complete pipeline for biomedical named entity recognition including preprocessing steps, feature generation, model learning and normalized prediction.
+In support of the thesis, to evaluate the semi-supervised learning approach, we aim to develop a complete pipeline for biomedical named-entity recognition including preprocessing steps, feature generation, model learning and normalized prediction.

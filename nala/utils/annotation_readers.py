@@ -6,11 +6,11 @@ import requests
 from nala.structures.data import Annotation
 
 
-class Annotator:
+class AnnotationReader:
     """
     Abstract class for annotating the dataset.
     Subclasses that inherit this class should:
-    * Be named [Name]Annotator
+    * Be named [Name]AnnotationReader
     * Implement the abstract method annotate
     * Append new items to the list field "annotations" of each Part in the dataset
     """
@@ -23,7 +23,7 @@ class Annotator:
         return
 
 
-class ReadFromAnnJsonAnnotator(Annotator):
+class AnnJsonAnnotationReader(AnnotationReader):
     """
     Reads the annotations from .ann.json format.
 

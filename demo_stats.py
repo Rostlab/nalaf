@@ -1,16 +1,11 @@
 from configparser import ConfigParser
 
 from nala.utils.readers import HTMLReader
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.preprocessing.annotators import ReadFromAnnJsonAnnotator
-from nala.preprocessing.labelers import SimpleLabeler
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import TmVarNLDefiner
-from nala.features.simple import SimpleFeatureGenerator
-from nala.learning.crfsuite import CRFSuite
 from nala.utils.writers import StatsWriter
 
 
@@ -43,7 +38,7 @@ if __name__ == "__main__":
         # NLTKTokenizer().tokenize(dataset)
 
         # prepare
-        ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)
+        AnnJsonAnnotationReader(ann_path).annotate(dataset)
 
         extra_methods = 3
         start_min_length = 18

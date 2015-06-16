@@ -12,7 +12,8 @@ from nala.features.simple import SimpleFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
 
 if __name__ == "__main__":
-    config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable.'
+    config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \
+                      'Defaults to config.ini.'
     config_ini_error = """
     The configuration file doesn't have the expected format.
     The file should have the following format:
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     """
 
     parser = argparse.ArgumentParser(description='A simple demo of using the nala pipeline')
-    parser.add_argument('-c', '--config', type=argparse.FileType('r'), help=config_ini_help, required=True)
+    parser.add_argument('-c', '--config', type=argparse.FileType('r'), help=config_ini_help, default='config.ini')
     args = parser.parse_args()
 
     config = configparser.ConfigParser()

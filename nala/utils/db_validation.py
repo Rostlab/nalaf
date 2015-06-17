@@ -10,20 +10,8 @@ from configparser import ConfigParser
 # would be param1/*.plain.html and param2/*.ann.json
 
 
-def main():
+def main(root_folder="../../", html_path='resources/IDP4_plain_html/pool', ann_path='resources/IDP4_members_json/pool/abojchevski'):
     documents = {}
-    root_folder = "../../"  # hard coded root folder (will stay the same)
-
-    # check for root folder proper destination
-    assert any(glob.glob(root_folder + "demo.py"))
-
-    # config load
-    config = ConfigParser()
-    config.read('../config.ini')
-
-    # folder load from config
-    html_path = config['paths']['html_path']
-    ann_path = config['paths']['ann_path']
 
     # get files from folders
     filelist = glob.glob(root_folder + html_path + "/*.plain.html")
@@ -67,7 +55,7 @@ def import_html_to_db(documents, filelist):
 def import_json_to_db(documents, jsonlist):
     """ Import ann.json files to documents object. """
     for j in jsonlist:
-        with open(j, 'r') as f:
+        with open(j, 'r', encoding='utf-8') as f:
             json_object = json.loads(f.read())
             pubmedid = json_object['sources'][0]['id']
             doc = documents[pubmedid]
@@ -82,8 +70,6 @@ def import_json_to_db(documents, jsonlist):
                     end_char_part = start_char_part + len(text)
                     an_array.append(
                         {'start': start_char_part, 'end': end_char_part, 'prob': 1, 'text': text})
-                else:
-                    next
 
 
 def check_db_integrity(documents):

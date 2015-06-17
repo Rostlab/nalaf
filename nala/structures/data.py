@@ -257,7 +257,7 @@ class Dataset:
                     # abstract nr of tokens increase
                     if is_abstract:
                         abstract_mentions_nr += 1
-                        abstract_token_nr += token_n
+                        abstract_token_nr += token_nr
                         abstract_nl_mentions.append(ann.text)
                     else:
                         # full document nr of tokens increase

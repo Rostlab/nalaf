@@ -91,10 +91,11 @@ class StatsWriter:
             match = re.search(re_compiled_param, row['mode'])
             if match:
                 x_pos.append(int(match.group(1)))
-                label.append(row['mode'][:2] + match.group(1))
+                label.append(row['mode'])
+                # match.group(1) = min_length param as int
             else:
                 x_pos.append(simple_counter)
-                label.append(row['mode'][:4])
+                label.append(row['mode'])
                 simple_counter += 1
 
             # print(nl_total_ratio)
@@ -127,32 +128,35 @@ class StatsWriter:
             simple_array.append(row['nl_mention_nr'])
 
         # subplot for nl total ratio array
-        plt.subplot(221)
+        plt.subplot(111)
         plt.bar(x_pos, nl_total_ratio_array)
         plt.xticks(x_pos, label, rotation=90)
         plt.ylabel("NL vs Total mention ratio")
-        plt.legend()
+        # plt.legend()
 
         # subplot for abstract vs full ratio
-        plt.subplot(222)
+        plt.subplot(122)
         plt.bar(x_pos, abstract_full_ratio_array)
         plt.xticks(x_pos, label, rotation=90)
         plt.ylabel("Abstract vs Full document ratio")
 
+        # OPTIONAL combined plot
+        # OPTIONAL legend included (must be some different graph (scatter, line, ...) system)
+
         # subplot for abstract token ratio
-        plt.subplot(223)
-        plt.bar(x_pos, abstract_token_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
-        plt.ylabel("Abstract: NL Tokens / Tot Tokens")
+        # plt.subplot(223)
+        # plt.bar(x_pos, abstract_token_ratio_array)
+        # plt.xticks(x_pos, label, rotation=90)
+        # plt.ylabel("Abstract: NL Tokens / Tot Tokens")
 
         # subplot for full token ratio
-        plt.subplot(224)
-        plt.bar(x_pos, full_token_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
-        plt.ylabel("Full: Nl Tokens / Tot Tokens")
+        # plt.subplot(224)
+        # plt.bar(x_pos, full_token_ratio_array)
+        # plt.xticks(x_pos, label, rotation=90)
+        # plt.ylabel("Full: Nl Tokens / Tot Tokens")
 
         # subplot minimum one abstract/full
-        # TODO subplot minimum one abstract/full
+        # OPTIONAL subplot minimum one abstract/full
 
         # plt.plot(annotate_array, nl_total_ratio_array, 'rs', annotate_array, abstract_full_ratio_array, 'bs')
         # plt.axis([self.init_counter, self.init_counter + total_counter - 1, 0, 3])

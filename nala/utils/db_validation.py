@@ -13,6 +13,8 @@ def main(root_folder="../../", html_path='resources/IDP4_plain_html/pool', ann_p
     filelist = glob.glob(root_folder + html_path + "/*.plain.html")
     jsonlist = glob.glob(root_folder + ann_path + "/*.ann.json")
 
+
+def main():
     # import html files
     import_html_to_db(documents, filelist)
     # import json files

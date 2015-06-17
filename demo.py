@@ -49,9 +49,9 @@ if __name__ == "__main__":
     try:
         config.read_file(args.config)
 
-        html_path = config.get('paths','html_path')
-        ann_path = config.get('paths','ann_path')
-        crf_path = config.get('paths','crf_path')
+        html_path = config.get('paths', 'html_path')
+        ann_path = config.get('paths', 'ann_path')
+        crf_path = config.get('paths', 'crf_path')
 
         # if only to check db then do that...
         if args.check_db:

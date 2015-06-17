@@ -1,3 +1,5 @@
+![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
+
 # Goals:
 
 1. Study significance of NL mentions in mutation mention recognition

@@ -143,7 +143,6 @@ class StatsWriter:
         plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
 
         # test coment
-        # test 2
         # test 3
 
         # OPTIONAL combined plot

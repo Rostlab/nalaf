@@ -26,7 +26,8 @@ setup(
     install_requires=[
         'nltk',
         'beautifulsoup4',
-        'requests'
+        'requests',
+        'matplotlib' # TODO Figure out if we need this, since we might not want this huge dependency
     ],
     include_package_data=True,
     zip_safe=False,

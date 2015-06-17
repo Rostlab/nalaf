@@ -71,13 +71,11 @@ class StatsWriter:
         for row in self.data:
             total_counter += 1
             # TODO plt.axhan or sth like that for highlighting area of inclusive method with param
-            # TODO xticks for labelling
             # TODO add standard error
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
             # full = full_tokens/tokens in full
             # abstract full ratio = abstract/full
-
 
             is_not_ok = row['abstract_tot_token_nr'] == 0 or row['full_tot_token_nr'] == 0 or \
                     row['abstract_nl_token_nr'] == 0 or row['full_nl_token_nr'] == 0
@@ -93,10 +91,11 @@ class StatsWriter:
             match = re.search(re_compiled_param, row['mode'])
             if match:
                 x_pos.append(int(match.group(1)))
-                label.append(row['mode'][:2] + match.group(1))
+                label.append(row['mode'])
+                # match.group(1) = min_length param as int
             else:
                 x_pos.append(simple_counter)
-                label.append(row['mode'][:4])
+                label.append(row['mode'])
                 simple_counter += 1
 
             # print(nl_total_ratio)
@@ -124,40 +123,42 @@ class StatsWriter:
                 simple_abstract_ratio = row['abstract_nl_mention_nr'] / float(row['abstract_tot_token_nr'])
             else:
                 simple_abstract_ratio = 0
-            # TODO include in graph "abstract nl nr / abstract tot token nr"
-
-            # full_nl_nr /full_tot_token_nr
-            # TODO full nl nr / full tot token nr
 
             # nl mention nr
             simple_array.append(row['nl_mention_nr'])
 
         # subplot for nl total ratio array
-        plt.subplot(221)
+        plt.subplot(121)
         plt.bar(x_pos, nl_total_ratio_array)
         plt.xticks(x_pos, label, rotation=90)
         plt.ylabel("NL vs Total mention ratio")
+        plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
 
         # subplot for abstract vs full ratio
-        plt.subplot(222)
+        plt.subplot(122)
         plt.bar(x_pos, abstract_full_ratio_array)
         plt.xticks(x_pos, label, rotation=90)
         plt.ylabel("Abstract vs Full document ratio")
+        plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
+        plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
+
+        # OPTIONAL combined plot
+        # OPTIONAL legend included (must be some different graph (scatter, line, ...) system)
 
         # subplot for abstract token ratio
-        plt.subplot(223)
-        plt.bar(x_pos, abstract_token_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
-        plt.ylabel("Abstract: NL Tokens / Tot Tokens")
+        # plt.subplot(223)
+        # plt.bar(x_pos, abstract_token_ratio_array)
+        # plt.xticks(x_pos, label, rotation=90)
+        # plt.ylabel("Abstract: NL Tokens / Tot Tokens")
 
         # subplot for full token ratio
-        plt.subplot(224)
-        plt.bar(x_pos, full_token_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
-        plt.ylabel("Full: Nl Tokens / Tot Tokens")
+        # plt.subplot(224)
+        # plt.bar(x_pos, full_token_ratio_array)
+        # plt.xticks(x_pos, label, rotation=90)
+        # plt.ylabel("Full: Nl Tokens / Tot Tokens")
 
         # subplot minimum one abstract/full
-        # TODO subplot minimum one abstract/full
+        # OPTIONAL subplot minimum one abstract/full
 
         # plt.plot(annotate_array, nl_total_ratio_array, 'rs', annotate_array, abstract_full_ratio_array, 'bs')
         # plt.axis([self.init_counter, self.init_counter + total_counter - 1, 0, 3])

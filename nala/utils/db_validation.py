@@ -3,27 +3,25 @@ import json
 import glob
 import re
 from bs4 import BeautifulSoup
+from configparser import ConfigParser
 
 
-# TODO params for html and json files
-# would be param1/*.plain.html and param2/*.ann.json
-resources = "../../resources/"
-filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
-jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
+def main(root_folder="../../", html_path='resources/IDP4_plain_html/pool', ann_path='resources/IDP4_members_json/pool/abojchevski'):
+    documents = {}
 
-documents = {}
+    # get files from folders
+    filelist = glob.glob(root_folder + html_path + "/*.plain.html")
+    jsonlist = glob.glob(root_folder + ann_path + "/*.ann.json")
 
-
-def main():
     # import html files
-    import_html_to_db()
+    import_html_to_db(documents, filelist)
     # import json files
-    import_json_to_db()
+    import_json_to_db(documents, jsonlist)
     # check database
-    check_db_integrity()
+    check_db_integrity(documents)
 
 
-def import_html_to_db():
+def import_html_to_db(documents, filelist):
     """
     Import the raw html files imported from tagtog.net.
     Format is with parts that have part-ids e.g. "s1s2" or "s1h3".
@@ -50,10 +48,10 @@ def import_html_to_db():
             documents[str(pubmedid)] = doc
 
 
-def import_json_to_db():
+def import_json_to_db(documents, jsonlist):
     """ Import ann.json files to documents object. """
     for j in jsonlist:
-        with open(j, 'r') as f:
+        with open(j, 'r', encoding='utf-8') as f:
             json_object = json.loads(f.read())
             pubmedid = json_object['sources'][0]['id']
             doc = documents[pubmedid]
@@ -68,11 +66,9 @@ def import_json_to_db():
                     end_char_part = start_char_part + len(text)
                     an_array.append(
                         {'start': start_char_part, 'end': end_char_part, 'prob': 1, 'text': text})
-                else:
-                    next
 
 
-def check_db_integrity():
+def check_db_integrity(documents):
     """
     Check documents-object for offsets annotations.
     Logs some information if Errors exist.

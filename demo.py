@@ -78,17 +78,17 @@ if __name__ == "__main__":
             TmVarRegexNLDefiner().define(dataset)
             tmvarstats = dataset.stats()
             tmvarmentions = tmvarstats['nl_mention_array']
-            stats.addrow(tmvarstats, 'tmregex')
+            stats.addrow(tmvarstats, 'tmVarRegex')
             dataset.cleannldefinitions()
 
             # exclusive
             ExclusiveNLDefiner().define(dataset)
-            stats.addrow(dataset.stats(), 'exclusive')
+            stats.addrow(dataset.stats(), 'Exclusive')
             dataset.cleannldefinitions()
 
             # tmvar nl
             TmVarNLDefiner().define(dataset)
-            stats.addrow(dataset.stats(), 'tmnl')
+            stats.addrow(dataset.stats(), 'tmVarComplete')
             dataset.cleannldefinitions()
 
             # inclusive
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 inclusivementions = inclusivestats['nl_mention_array']
                 intersectionset = [ x for x in inclusivementions if x not in tmvarmentions]
                 print(intersectionset)
-                stats.addrow(dataset.stats(), 'inclusive_' + str(i))
+                stats.addrow(dataset.stats(), 'Inclusive_' + str(i))
                 dataset.cleannldefinitions()
 
             # finally generation of graph itself

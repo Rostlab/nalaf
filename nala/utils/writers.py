@@ -144,6 +144,7 @@ class StatsWriter:
 
         # test coment
         # test 2
+        # test 3
 
         # OPTIONAL combined plot
         # OPTIONAL legend included (must be some different graph (scatter, line, ...) system)

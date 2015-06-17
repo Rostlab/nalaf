@@ -183,6 +183,14 @@ class Dataset:
             for annotation in part.annotations:
                 yield part_id, annotation
 
+    def all_annotations_with_ids(self):
+        """ yields pubmedid, partid and ann through whole dataset
+        """
+        for pubmedid, doc in self.documents.items():
+            for partid, part in doc.key_value_parts():
+                for ann in part.annotations:
+                    yield pubmedid, partid, ann
+
     def cleannldefinitions(self):
         """
         cleans all is_nl = True to = False
@@ -215,15 +223,18 @@ class Dataset:
         full_document_token_nr = 0
         full_nl_mentions = []
 
+        # nl-docid set
+        nl_doc_id_set = { 'empty' }
+
         # is abstract var
         is_abstract = True
 
         # precompile abstract match
         regex_abstract_id = re.compile(r'^s[12][shp]')
 
-        for part_id, ann in self.annotations_with_partids():
+        for pubmedid, partid, ann in self.all_annotations_with_ids():
             # abstract?
-            if regex_abstract_id.match(part_id):
+            if regex_abstract_id.match(partid):
                 is_abstract = True
             else:
                 is_abstract = False
@@ -239,10 +250,14 @@ class Dataset:
                     nl_nr += 1
                     nl_token_nr += token_nr
 
+                    # min doc attribute
+                    if pubmedid not in nl_doc_id_set:
+                        nl_doc_id_set.add(pubmedid)
+
                     # abstract nr of tokens increase
                     if is_abstract:
                         abstract_mentions_nr += 1
-                        abstract_token_nr += token_nr
+                        abstract_token_nr += token_n
                         abstract_nl_mentions.append(ann.text)
                     else:
                         # full document nr of tokens increase
@@ -254,8 +269,8 @@ class Dataset:
                     nl_mentions.append(ann.text)
 
         # post-processing for abstract vs full document tokens
-        for part_id, part in self.partids_with_parts():
-            if regex_abstract_id.match(part_id):
+        for partid, part in self.partids_with_parts():
+            if regex_abstract_id.match(partid):
                 # OPTIONAL use nltk or different tokenizer
                 total_token_abstract += len(part.text.split(" "))
             else:

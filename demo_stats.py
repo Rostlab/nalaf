@@ -93,5 +93,8 @@ if __name__ == "__main__":
         # crf.train()
         # crf.create_input_file(dataset, 'test')
         # crf.test()
-    except KeyError:
+    except KeyError as e:
         print('Please define a config.ini file as described above')
+        raise
+    except:
+        raise

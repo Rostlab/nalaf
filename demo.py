@@ -5,9 +5,10 @@ from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
 from nala.preprocessing.annotators import ReadFromAnnJsonAnnotator
 from nala.preprocessing.labelers import SimpleLabeler
-from nala.preprocessing.definers import TmVarRegexNLDefiner
+from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.features.simple import SimpleFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
+import json
 
 if __name__ == "__main__":
     # Please define a config.ini file located at nala/config.ini,
@@ -26,7 +27,7 @@ if __name__ == "__main__":
 
     try:
         config = ConfigParser()
-        config.read('config.ini')
+        config.read('nala/config.ini')
 
         html_path = config['paths']['html_path']
         ann_path = config['paths']['ann_path']
@@ -34,20 +35,20 @@ if __name__ == "__main__":
 
         dataset = HTMLReader(html_path).read()
 
-        NLTKSplitter().split(dataset)
-        NLTKTokenizer().tokenize(dataset)
+        # NLTKSplitter().split(dataset)
+        # NLTKTokenizer().tokenize(dataset)
 
         ReadFromAnnJsonAnnotator(ann_path).annotate(dataset)
-        TmVarRegexNLDefiner().define(dataset)
-        print('\n'.join([ann.text for ann in dataset.annotations() if ann.is_nl]))  # print the NL ones
-
-        SimpleLabeler().label(dataset)
-        SimpleFeatureGenerator().generate(dataset)
-
-        crf = CRFSuite(crf_path)
-        crf.create_input_file(dataset, 'train')
-        crf.train()
-        crf.create_input_file(dataset, 'test')
-        crf.test()
+        ExclusiveNLDefiner().define(dataset)
+        print(json.dumps([ann.text for ann in dataset.annotations() if ann.is_nl if len(ann.text) < 36], indent=4, sort_keys=True))  # print the NL ones
+        print(len([True for ann in dataset.annotations() if ann.is_nl]))
+        # SimpleLabeler().label(dataset)
+        # SimpleFeatureGenerator().generate(dataset)
+        #
+        # crf = CRFSuite(crf_path)
+        # crf.create_input_file(dataset, 'train')
+        # crf.train()
+        # crf.create_input_file(dataset, 'test')
+        # crf.test()
     except KeyError:
         print('Please define a config.ini file as described above')

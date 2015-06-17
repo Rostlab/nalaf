@@ -3,27 +3,41 @@ import json
 import glob
 import re
 from bs4 import BeautifulSoup
+from configparser import ConfigParser
 
 
 # TODO params for html and json files
 # would be param1/*.plain.html and param2/*.ann.json
-resources = "../../resources/"
-filelist = glob.glob(resources + "IDP4_plain_html/pool/*.plain.html")
-jsonlist = glob.glob(resources + "IDP4_members_json/pool/aboj*/*.ann.json")
-
-documents = {}
 
 
 def main():
+    documents = {}
+    root_folder = "../../"  # hard coded root folder (will stay the same)
+
+    # check for root folder proper destination
+    assert any(glob.glob(root_folder + "demo.py"))
+
+    # config load
+    config = ConfigParser()
+    config.read('../config.ini')
+
+    # folder load from config
+    html_path = config['paths']['html_path']
+    ann_path = config['paths']['ann_path']
+
+    # get files from folders
+    filelist = glob.glob(root_folder + html_path + "/*.plain.html")
+    jsonlist = glob.glob(root_folder + ann_path + "/*.ann.json")
+
     # import html files
-    import_html_to_db()
+    import_html_to_db(documents, filelist)
     # import json files
-    import_json_to_db()
+    import_json_to_db(documents, jsonlist)
     # check database
-    check_db_integrity()
+    check_db_integrity(documents)
 
 
-def import_html_to_db():
+def import_html_to_db(documents, filelist):
     """
     Import the raw html files imported from tagtog.net.
     Format is with parts that have part-ids e.g. "s1s2" or "s1h3".
@@ -50,7 +64,7 @@ def import_html_to_db():
             documents[str(pubmedid)] = doc
 
 
-def import_json_to_db():
+def import_json_to_db(documents, jsonlist):
     """ Import ann.json files to documents object. """
     for j in jsonlist:
         with open(j, 'r') as f:
@@ -72,7 +86,7 @@ def import_json_to_db():
                     next
 
 
-def check_db_integrity():
+def check_db_integrity(documents):
     """
     Check documents-object for offsets annotations.
     Logs some information if Errors exist.

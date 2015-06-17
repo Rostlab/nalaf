@@ -71,13 +71,11 @@ class StatsWriter:
         for row in self.data:
             total_counter += 1
             # TODO plt.axhan or sth like that for highlighting area of inclusive method with param
-            # TODO xticks for labelling
             # TODO add standard error
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
             # full = full_tokens/tokens in full
             # abstract full ratio = abstract/full
-
 
             is_not_ok = row['abstract_tot_token_nr'] == 0 or row['full_tot_token_nr'] == 0 or \
                     row['abstract_nl_token_nr'] == 0 or row['full_nl_token_nr'] == 0
@@ -124,10 +122,6 @@ class StatsWriter:
                 simple_abstract_ratio = row['abstract_nl_mention_nr'] / float(row['abstract_tot_token_nr'])
             else:
                 simple_abstract_ratio = 0
-            # TODO include in graph "abstract nl nr / abstract tot token nr"
-
-            # full_nl_nr /full_tot_token_nr
-            # TODO full nl nr / full tot token nr
 
             # nl mention nr
             simple_array.append(row['nl_mention_nr'])
@@ -137,6 +131,7 @@ class StatsWriter:
         plt.bar(x_pos, nl_total_ratio_array)
         plt.xticks(x_pos, label, rotation=90)
         plt.ylabel("NL vs Total mention ratio")
+        plt.legend()
 
         # subplot for abstract vs full ratio
         plt.subplot(222)

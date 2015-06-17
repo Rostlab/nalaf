@@ -159,7 +159,6 @@ class StatsWriter:
 
         # subplot minimum one abstract/full
         # OPTIONAL subplot minimum one abstract/full
-        # test
 
         # plt.plot(annotate_array, nl_total_ratio_array, 'rs', annotate_array, abstract_full_ratio_array, 'bs')
         # plt.axis([self.init_counter, self.init_counter + total_counter - 1, 0, 3])

@@ -60,7 +60,6 @@ class ExclusiveNLDefiner(NLDefiner):
 
     def __init__(self):
         self.max_spaces = 2
-        # TODO save that in config file
         self.conventions_file = pkg_resources.resource_filename('nala.data', 'regex_st.json')
         self.tmvarregex_file = pkg_resources.resource_filename('nala.data', 'RegEx.NL')
 

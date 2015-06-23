@@ -1,6 +1,7 @@
 import abc
 from nltk.tokenize import word_tokenize
 from nala.structures.data import Token
+import re
 
 
 class Tokenizer:
@@ -28,3 +29,24 @@ class NLTKTokenizer(Tokenizer):
         """
         for part in dataset.parts():
             part.sentences = [[Token(word) for word in word_tokenize(sentence)] for sentence in part.sentences]
+
+
+class TmVarTokenizer(Tokenizer):
+    """
+    Implementation of the TmVar tokenizer as descriped in their paper. Code ported from perl.
+    Requires
+    """
+    def tokenize(self, dataset):
+        """
+        :type dataset: structures.data.Dataset
+        """
+        for part in dataset.parts():
+            for index, sentence in enumerate(part.sentences):
+                sentence = re.sub('([0-9])([A-Za-z])', r'\1 \2', sentence)
+                sentence = re.sub('([A-Z])([a-z])', r'\1 \2', sentence)
+                sentence = re.sub('([a-z])([A-Z])', r'\1 \2', sentence)
+                sentence = re.sub('([A-Za-z])([0-9])', r'\1 \2', sentence)
+                sentence = re.sub('([a-z])(fs)', r'\1 \2', sentence)
+                sentence = re.sub('([\W\-_])', r' \1 ', sentence)
+
+                part.sentences[index] = [Token(token) for token in sentence.split()]#18

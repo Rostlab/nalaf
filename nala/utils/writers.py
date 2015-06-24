@@ -5,15 +5,16 @@ import math
 
 
 class StatsWriter:
+    """ Is able to be populated by stats and then be exported into various formats.
+            file is the csvfile saved into
+            data is the stats object
+    """
     def __init__(self, csvfile, graphfile, init_counter=15):
         self.csvfile = csvfile
         self.graphfile = graphfile
         self.data = []
         self.init_counter = init_counter
-        """ Is able to be populated by stats and then be exported into various formats.
-            file is the csvfile saved into
-            data is the stats object
-        """
+        """ internal constant being defined """
 
     def addrow(self, dictstats, mode):
         """
@@ -130,7 +131,8 @@ class StatsWriter:
         # subplot for nl total ratio array
         plt.subplot(121)
         plt.bar(x_pos, nl_total_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
+        plt.xticks([x + 0.3for x in x_pos], label, rotation=90)
+        print([x + 0.3 for x in x_pos])
         plt.ylabel("NL vs Total mention ratio")
         plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
 

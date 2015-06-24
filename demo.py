@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
         # if only to check db then do that...
         if args.check_db:
-            dbcheck.main(root_folder='./', html_path=html_path, ann_path=ann_path)
+            dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
         dataset = HTMLReader(html_path).read()
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
             # exclusive
             ExclusiveNLDefiner().define(dataset)
-            stats.addrow(dataset.stats(), 'Exclusive')
+            stats.addrow(dataset.stats(), 'Carsten')
             dataset.cleannldefinitions()
 
             # tmvar nl

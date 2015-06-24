@@ -6,15 +6,13 @@ from bs4 import BeautifulSoup
 from configparser import ConfigParser
 
 
-def main(root_folder="../../", html_path='resources/IDP4_plain_html/pool', ann_path='resources/IDP4_members_json/pool/abojchevski'):
+def main(html_path='', ann_path=''):
     documents = {}
 
     # get files from folders
-    filelist = glob.glob(root_folder + html_path + "/*.plain.html")
-    jsonlist = glob.glob(root_folder + ann_path + "/*.ann.json")
+    filelist = glob.glob(html_path + "/*.plain.html")
+    jsonlist = glob.glob(ann_path + "/*.ann.json")
 
-
-def main():
     # import html files
     import_html_to_db(documents, filelist)
     # import json files

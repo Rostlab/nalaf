@@ -42,4 +42,5 @@ __pycache__/
 config.ini
 
 # Cache files
-cache.json
+*cache.json
+

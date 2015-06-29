@@ -130,6 +130,8 @@ class TmVarNLDefiner(NLDefiner):
         then it is considered a standard mention
     otherwise we consider it a natural language mention.
 
+    NOTE: Make sure to clear the cache (delete cache.ini file) when running the definer for different corpora.
+
     Implements the abstract class NLDefiner.
     """
     def define(self, dataset):

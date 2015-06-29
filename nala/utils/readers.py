@@ -41,7 +41,6 @@ class SETHReader:
         self.corpus_file = corpus_file
         """the directory containing the .txt files"""
 
-    @property
     def read(self):
         """
         read each .txt file in the directory, parse it and create and instance of Document

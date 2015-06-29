@@ -137,12 +137,14 @@ class StatsWriter:
         plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
 
         # subplot for abstract vs full ratio
-        plt.subplot(122)
-        plt.bar(x_pos, abstract_full_ratio_array)
-        plt.xticks(x_pos, label, rotation=90)
-        plt.ylabel("Abstract vs Full document ratio")
-        plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
-        plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
+        # only if the array contains non zeros
+        if set(abstract_full_ratio_array) != {0}:
+            plt.subplot(122)
+            plt.bar(x_pos, abstract_full_ratio_array)
+            plt.xticks(x_pos, label, rotation=90)
+            plt.ylabel("Abstract vs Full document ratio")
+            plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
+            plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
 
         # OPTIONAL combined plot
         # OPTIONAL legend included (must be some different graph (scatter, line, ...) system)

@@ -3,6 +3,7 @@ from nala.structures.data import Dataset, Document, Part
 import re
 import glob
 import csv
+import os
 
 
 class HTMLReader:
@@ -55,5 +56,44 @@ class SETHReader:
                 document = Document()
                 document.parts['abstract'] = Part(row[1])
                 dataset.documents[row[0]] = document
+
+        return dataset
+
+
+class VerspoorReader:
+    """
+    Reader for the Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
+    Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
+    """
+
+    def __init__(self, directory):
+        self.directory = directory
+        """the directory containing the .html files"""
+
+    def read(self):
+        """
+        read each html file in the directory, parse it and create and instance of Document
+        form a dataset consisting of every document parsed and return it
+
+        :returns structures.data.Dataset
+        """
+        dataset = Dataset()
+        file_list = glob.glob(str(self.directory + "/*.txt"))
+        for file_path in file_list:
+            file_name = os.path.basename(file_path)
+
+            pmid, serial, *_, paragraph, = file_name.replace('.txt', '').split('-')
+            # print(pmid, serial, paragraph)
+
+            with open(file_path) as file:
+                text = file.read()
+            text = text.replace('** IGNORE LINE **', '')
+
+            if pmid in dataset:
+                dataset.documents[pmid].parts[serial + paragraph] = Part(text)
+            else:
+                document = Document()
+                document.parts[serial + paragraph] = Part(text)
+                dataset.documents[pmid] = document
 
         return dataset

@@ -63,7 +63,7 @@ class SETHReader:
 class VerspoorReader:
     """
     Reader for the Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
-    Format: PMCID-serial-section-paragraph.txt: contain the text from a paragraph of the paper
+    Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
     """
 
     def __init__(self, directory):

@@ -37,7 +37,8 @@ class TmVarDefaultTest(unittest.TestCase):
         expected_nr_up = iter([1,0])
         expected_nr_lo = iter([3,1])
         expected_nr_alpha = iter([4,1])
-        expected_nr_spec_chars = iter([0,1])
+        expected_nr_spec_chars = iter([None, "SpecC1"])
+        expected_chr_key = iter([None, None])
 
         for token in self.dataset.tokens():
             self.assertEqual(token.features['length[0]'], next(expected_length))
@@ -45,7 +46,8 @@ class TmVarDefaultTest(unittest.TestCase):
             self.assertEqual(token.features['num_up[0]'], next(expected_nr_up))
             self.assertEqual(token.features['num_lo[0]'], next(expected_nr_lo))
             self.assertEqual(token.features['num_alpha[0]'], next(expected_nr_alpha))
-            self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars))
+            self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars), msg=token.word)
+            self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
             # print(token.features)
 

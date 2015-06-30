@@ -20,7 +20,12 @@ class TmVarDefault(FeatureGenerator):
         """
         :type dataset: structures.data.Dataset
         """
-        self.reg_spec_chars = re.compile('[;:,.\->+_]')
+        self.reg_spec_chars = re.compile(';:,.\->+_]')
+        self.reg_chr_keys = re.compile('q|p|q[0-9]+|p[0-9]+|qter|pter|XY|t')
+        self.reg_char_simple_bracket = re.compile('[\(\)]')
+        self.reg_char_square_bracket = re.compile('[\[\]]')
+        self.reg_char_curly_bracket = re.compile('[\{\}]')
+        self.reg_char_slashes = re.compile('[\/\\\]')
         for token in dataset.tokens():
             # nr of digits
             # TODO 0,1,2,3,4+ instead of len = nr
@@ -39,10 +44,12 @@ class TmVarDefault(FeatureGenerator):
             token.features['num_alpha[0]'] = self.n_chars(token.word)
 
             # nr of specific chars: ";:,.->+_"
-            token.features['num_spec_chars[0]'] = self.n_spec_chars(token.word)
+            token.features['num_spec_chars[0]'] = self.spec_chars(token.word)
 
             # chromosomal keytokens
+            token.features['num_has_chr_key[0]'] = self.is_chr_key(token.word)
 
+            #
 
     # TODO check if ok the implementation (edge cases e.g. numeric means 123.232? or 123 and 232?)
     def n_lower_chars(self, str):
@@ -57,5 +64,19 @@ class TmVarDefault(FeatureGenerator):
     def n_chars(self, str):
         return sum(1 for c in str if c.isalpha())
 
-    def n_spec_chars(self, str):
-        return sum(1 for c in str if self.reg_spec_chars.match(c))
+    def spec_chars(self, str):
+        if self.reg_spec_chars.match(str):
+            return "SpecC1"
+        elif self.reg_char_simple_bracket.match(str):
+            return "SpecC2"
+        elif self.reg_char_curly_bracket.match(str):
+            return "SpecC3"
+        elif self.reg_char_square_bracket.match(str):
+            return "SpecC4"
+        elif self.reg_char_slashes.match(str):
+            return "SpecC5"
+        else:
+            return None
+
+    def is_chr_key(self, str):
+        return self.reg_chr_keys.match(str)

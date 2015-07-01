@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from nala.structures.data import Dataset, Document, Part
+from nala.structures.data import Dataset, Document, Part, Annotation
 import re
 import glob
 import csv
@@ -97,3 +97,47 @@ class VerspoorReader:
                 dataset.documents[pmid] = document
 
         return dataset
+
+
+class TmVarReader:
+    """
+    Reader for the tmVar-corpus (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
+
+    Note:
+        This reader is a bit of an exception as it not only reads the articles,
+        but the annotations as well in a single pass. This is due to how the tmVar corpus
+        is distributed.
+
+
+    Format:
+        [pmid]|t|[title]
+        [pmid]|a|[abstract]
+        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
+        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
+        ...
+
+        pmid|t|title
+        ...
+    """
+
+    def __init__(self, corpus_file):
+        self.corpus_file = corpus_file
+        """the directory containing the .html files"""
+
+    def read(self):
+        dataset = Dataset()
+        with open(self.corpus_file, encoding='utf-8') as file:
+
+            for line in file:
+                pmid, abstract = next(file).split('|a|')
+
+                document = Document()
+                document.parts['abstract'] = Part(abstract)
+
+                line = next(file)
+                while line != '\n':
+                    _, start, end, text, *_ = line.split('\t')
+                    document.parts['abstract'].annotations.append(Annotation('e_2', start, text))
+                    line = next(file)
+
+

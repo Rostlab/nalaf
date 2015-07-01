@@ -6,10 +6,14 @@ class TmVarDefault(FeatureGenerator):
     """
     Generates tmVar CRF features based on the value of the token itself.
     * w[0] = the value of the words itself
+    This FeatureGenerator mainly uses Regular Expressions (which are initialized in the constructor).
+    The generate function iterates over the dataset and creates the features which all get separately created in their own function.
+
+    Hints:
+    - when a feature is not found (as in: regex don't apply) then the feature gets the value None.
 
     Implements the abstract class FeatureGenerator.
     """
-    # TODO add introductory explanation
     def __init__(self):
         """
         Contains all regular expressions.
@@ -22,15 +26,20 @@ class TmVarDefault(FeatureGenerator):
         self.reg_char_slashes = re.compile('.*[\/\\\].*')
         self.reg_mutat_type = re.compile('.*(del|ins|dup|tri|qua|con|delins|indel).*')
         self.reg_frameshift_type = re.compile('.*(fs|fsX|fsx).*')
-        self.reg_mutat_word = re.compile('^(deletion|delta|elta|insertion|repeat|inversion|deletions|insertions|repeats|inversions).*')
-        self.reg_mutat_article = re.compile('^(single|a|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+|[0-9]+\.[0-9]+).*')
+        self.reg_mutat_word = re.compile(
+            '^(deletion|delta|elta|insertion|repeat|inversion|deletions|insertions|repeats|inversions).*')
+        self.reg_mutat_article = re.compile(
+            '^(single|a|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+|[0-9]+\.[0-9]+).*')
         self.reg_mutat_byte = re.compile('.*(kb|mb).*')
-        self.reg_mutat_basepair = re.compile('.*(base|bases|pair|amino|acid|acids|codon|postion|postions|bp|nucleotide|nucleotides).*')
+        self.reg_mutat_basepair = re.compile(
+            '.*(base|bases|pair|amino|acid|acids|codon|postion|postions|bp|nucleotide|nucleotides).*')
         self.reg_type1 = re.compile('^[cgrm]$')
         self.reg_type12 = re.compile('^(ivs|ex|orf)$')
         self.reg_dna_symbols = re.compile('^[ATCGUatcgu]$')
-        self.reg_prot_symbols1 = re.compile('.*(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|tyrosine|stop|frameshift).*')
-        self.reg_prot_symbols2 = re.compile('^(cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$')
+        self.reg_prot_symbols1 = re.compile(
+            '.*(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|tyrosine|stop|frameshift).*')
+        self.reg_prot_symbols2 = re.compile(
+            '^(cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$')
         self.reg_prot_symbols3 = re.compile('^(ys|le|er|ln|et|sn|ro|ys|sp|hr|he|la|ly|is|eu|rg|rp|al|lu|yr)$')
         self.reg_prot_symbols4 = re.compile('^[CISQMNPKDTFAGHLRWVEYX]$')
         self.reg_rs_code1 = re.compile('^(rs|RS|Rs)[0-9].*')
@@ -40,6 +49,7 @@ class TmVarDefault(FeatureGenerator):
         """
         :type dataset: structures.data.Dataset
         """
+        # TODO last token
         for token in dataset.tokens():
             # nr of digits
             # TODO 0,1,2,3,4+ instead of len = nr
@@ -50,9 +60,6 @@ class TmVarDefault(FeatureGenerator):
 
             # nr of lower case
             token.features['num_lo[0]'] = self.n_lower_chars(token.word)
-
-            # nr of chars
-            token.features['length[0]'] = len(token.word)
 
             # nr of letters
             token.features['num_alpha[0]'] = self.n_chars(token.word)
@@ -96,18 +103,21 @@ class TmVarDefault(FeatureGenerator):
             # suffix patterns
             # TODO suffix patterns
 
-    # NOTE check if ok the implementation (edge cases e.g. numeric means 123.232? or 123 and 232?)
     def n_lower_chars(self, str):
-        return sum(1 for c in str if c.islower())
+        result = sum(1 for c in str if c.islower())
+        return "L:4+" if result > 4 else result
 
     def n_upper_chars(self, str):
-        return sum(1 for c in str if c.isupper())
+        result = sum(1 for c in str if c.isupper())
+        return "U:4+" if result > 4 else result
 
     def n_nr_chars(self, str):
-        return sum(1 for c in str if c.isnumeric())
+        result = sum(1 for c in str if c.isnumeric())
+        return "N:4+" if result > 4 else result
 
     def n_chars(self, str):
-        return sum(1 for c in str if c.isalpha())
+        result = sum(1 for c in str if c.isalpha())
+        return "A:4+" if result > 4 else result
 
     def spec_chars(self, str):
         if self.reg_spec_chars.match(str):
@@ -127,25 +137,30 @@ class TmVarDefault(FeatureGenerator):
         return "ChroKey" if self.reg_chr_keys.match(str) else None
 
     def mutation_type(self, str):
-        if self.reg_frameshift_type.match(str):  # NOTE check if this is as in code (2x if but not if else)
+        lc_tmp = str.lower()
+
+        # NOTE 2x if in code which makes no sense because first if gets always overwritten
+        if self.reg_frameshift_type.match(lc_tmp):
             return "FrameShiftType"
-        elif self.reg_mutat_type.match(str):
+        elif self.reg_mutat_type.match(lc_tmp):
             return "MutatType"
         else:
             return None
 
     def mutation_word(self, str):
-        return "MutatWord" if self.reg_mutat_word.match(str) else None
+        lc_tmp = str.lower()
+        return "MutatWord" if self.reg_mutat_word.match(lc_tmp) else None
 
     def mutation_article_bp(self, str):
         mutat_article = ""  # NOTE is this programming ok?
+        lc_tmp = str.lower()
 
-        # TODO change to sensefull way
-        if self.reg_mutat_article.match(str):
+        # NOTE was if -> base | if -> byte | elif -> bp | else -> None
+        if self.reg_mutat_article.match(lc_tmp):
             mutat_article = "Base"
-        if self.reg_mutat_byte.match(str):
+        elif self.reg_mutat_byte.match(lc_tmp):
             mutat_article = "Byte"
-        elif self.reg_mutat_basepair.match(str):
+        elif self.reg_mutat_basepair.match(lc_tmp):
             mutat_article = "bp"
         else:
             mutat_article = None

@@ -1,6 +1,4 @@
 import unittest
-from nala.preprocessing.tokenizers import Tokenizer
-from nala.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
 from nala.structures.data import Dataset, Document, Part, Token
 from nala.features.tmvar import TmVarDefault
 from nala.features import FeatureGenerator
@@ -8,7 +6,7 @@ from nala.features import FeatureGenerator
 
 class TmVarDefaultTest(unittest.TestCase):
     """
-    Test the NLTKTokenizer class and it's main method tokenize()
+    Test the TmVarDefault class and it's main method generate() with including separate helper-functions for each feature that gets generated.
     """
 
     @classmethod
@@ -33,11 +31,10 @@ class TmVarDefaultTest(unittest.TestCase):
             self.assertTrue(len(token.features) > 0)
 
     def test_generate(self):
-        expected_length = iter([13, 8])
         expected_nr = iter([0, 4])
         expected_nr_up = iter([1, 0])
-        expected_nr_lo = iter([12, 3])
-        expected_nr_alpha = iter([13, 3])
+        expected_nr_lo = iter(["L:4+", 3])
+        expected_nr_alpha = iter(["A:4+", 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
         expected_chr_key = iter(["ChroKey", "ChroKey"])
         expected_mutat_type = iter(["MutatWord", None])
@@ -48,9 +45,9 @@ class TmVarDefaultTest(unittest.TestCase):
         # expected_dna_symbols
         # expected_protein_symbols
         # expected_rscode
+        # NOTE implemented as extra features
 
         for token in self.dataset.tokens():
-            self.assertEqual(token.features['length[0]'], next(expected_length))
             self.assertEqual(token.features['num_nr[0]'], next(expected_nr))
             self.assertEqual(token.features['num_up[0]'], next(expected_nr_up))
             self.assertEqual(token.features['num_lo[0]'], next(expected_nr_lo))
@@ -60,55 +57,39 @@ class TmVarDefaultTest(unittest.TestCase):
             # print(token.features['num_has_chr_key[0]'], token.word)
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-
-            import json
-            print(json.dumps(token.features, indent=3, sort_keys=True))
+            # import json
+            # print(json.dumps(token.features, indent=3, sort_keys=True))
 
     def test_mutation_article_bp(self):
-        mutat_article = ""  # NOTE is this programming ok?
-
         self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
         self.assertEqual(self.feature.mutation_article_bp("BLUSDmb"), "Byte")
-        self.assertEqual(self.feature.mutation_article_bp("1232bp"), "bp")
+        self.assertEqual(self.feature.mutation_article_bp("Flowerpowerbp"), "bp")
         self.assertEqual(self.feature.mutation_article_bp("the"), None)
 
-    def type1(self, str):
-        if self.reg_type1.match(str):
-            return "Type1"
-        elif self.reg_type12.match(str):
-            return "Type1_2"
-        else:
-            return None
+    def test_type1(self):
+        self.assertEqual(self.feature.type1("g"), "Type1")
+        self.assertEqual(self.feature.type1("orf"), "Type1_2")
+        self.assertEqual(self.feature.type1("blaaa"), None)
 
-    def type2(self, str):
-        return "Type2" if str == "p" else None
+    def test_type2(self):
+        self.assertEqual(self.feature.type2("p"), "Type2")
+        self.assertEqual(self.feature.type2("as"), None)
 
-    def dna_symbols(self, str):
-        return "DNASym" if self.reg_dna_symbols.match(str) else None
+    def test_dna_symbols(self):
+        self.assertEqual(self.feature.dna_symbols("A"), "DNASym")
+        self.assertEqual(self.feature.dna_symbols("asd"), None)
 
-    def protein_symbols(self, str):
-        uc_tmp = str  # upper case
-        lc_tmp = str.lower()  # lower case
+    def test_protein_symbols(self):
+        self.assertEqual(self.feature.protein_symbols("glutamine"), "ProteinSymFull")
+        self.assertEqual(self.feature.protein_symbols("asn"), "ProteinSymTri")
+        self.assertEqual(self.feature.protein_symbols("eu"), "ProteinSymTriSub")
+        self.assertEqual(self.feature.protein_symbols("X"), "ProteinSymChar")
+        self.assertEqual(self.feature.protein_symbols("flowerpower"), None)
 
-        if self.reg_prot_symbols1.match(lc_tmp):
-            return "ProteinSymFull"
-        elif self.reg_prot_symbols2.match(lc_tmp):
-            return "ProteinSymTri"
-        # TODO last token include: "&& $last_token[...]"
-        elif self.reg_prot_symbols3.match(lc_tmp):
-            return "ProteinSymTriSub"
-        elif self.reg_prot_symbols4.match(uc_tmp):
-            return "ProteinSymChar"
-        else:
-            return None
-
-    def rscode(self, str):
-        if self.reg_rs_code1.match(str):
-            return "RSCode"
-        elif self.reg_rs_code2.match(str):
-            return "RSCode"
-        else:
-            return None
+    def test_rscode(self):
+        self.assertEqual(self.feature.rscode("rs0"), "RSCode")
+        self.assertEqual(self.feature.rscode("rs"), "RSCode")
+        self.assertEqual(self.feature.rscode("rsssss"), None)
 
 if __name__ == '__main__':
     unittest.main()

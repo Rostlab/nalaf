@@ -50,9 +50,9 @@ class TmVarDefault(FeatureGenerator):
         :type dataset: structures.data.Dataset
         """
         # TODO last token
+        last_token_str = ""
         for token in dataset.tokens():
             # nr of digits
-            # TODO 0,1,2,3,4+ instead of len = nr
             token.features['num_nr[0]'] = self.n_nr_chars(token.word)
 
             # nr of upper case
@@ -89,7 +89,7 @@ class TmVarDefault(FeatureGenerator):
             token.features['dna_symbols[0]'] = self.dna_symbols(token.word)
 
             # protein symbols
-            token.features['protein_symbols[0]'] = self.protein_symbols(token.word)
+            token.features['protein_symbols[0]'] = self.protein_symbols(token.word, last_token_str)
 
             # RScode
             token.features['rs_code[0]'] = self.rscode(token.word)
@@ -102,6 +102,9 @@ class TmVarDefault(FeatureGenerator):
 
             # suffix patterns
             # TODO suffix patterns
+
+            # last token
+            last_token_str = token.word
 
     def n_lower_chars(self, str):
         result = sum(1 for c in str if c.islower())
@@ -181,7 +184,7 @@ class TmVarDefault(FeatureGenerator):
     def dna_symbols(self, str):
         return "DNASym" if self.reg_dna_symbols.match(str) else None
 
-    def protein_symbols(self, str):
+    def protein_symbols(self, str, last_str):
         uc_tmp = str  # upper case
         lc_tmp = str.lower()  # lower case
 
@@ -190,7 +193,7 @@ class TmVarDefault(FeatureGenerator):
         elif self.reg_prot_symbols2.match(lc_tmp):
             return "ProteinSymTri"
         # TODO last token include: "&& $last_token[...]"
-        elif self.reg_prot_symbols3.match(lc_tmp):
+        elif self.reg_prot_symbols3.match(lc_tmp) and self.reg_prot_symbols4.match(last_str):
             return "ProteinSymTriSub"
         elif self.reg_prot_symbols4.match(uc_tmp):
             return "ProteinSymChar"

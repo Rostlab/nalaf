@@ -37,14 +37,6 @@ class TmVarDefaultTest(unittest.TestCase):
         expected_nr_alpha = iter(["A:4+", 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
         expected_chr_key = iter(["ChroKey", "ChroKey"])
-        expected_mutat_type = iter(["MutatWord", None])
-        expected_mutat_word = iter(["FrameShiftType", "MutatType"])
-        # expected_mutat_article
-        # expected_type1
-        # expected_type2
-        # expected_dna_symbols
-        # expected_protein_symbols
-        # expected_rscode
         # NOTE implemented as extra features
 
         for token in self.dataset.tokens():
@@ -54,11 +46,18 @@ class TmVarDefaultTest(unittest.TestCase):
             self.assertEqual(token.features['num_alpha[0]'], next(expected_nr_alpha))
             self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars),
                              msg="word={} | feature={}".format(token.word, token.features['num_spec_chars[0]']))
-            # print(token.features['num_has_chr_key[0]'], token.word)
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-            # import json
-            # print(json.dumps(token.features, indent=3, sort_keys=True))
+    # TODO implement separate test functions for each feature that is already implemented in test_generate
+
+    def test_mutation_type(self):
+        self.assertEqual(self.feature.mutation_type("fs"), "FrameShiftType")
+        self.assertEqual(self.feature.mutation_type("del"), "MutatType")
+        self.assertEqual(self.feature.mutation_type("der"), None)
+
+    def test_mutation_word(self):
+        self.assertEqual(self.feature.mutation_word("repeats"), "MutatWord")
+        self.assertEqual(self.feature.mutation_word("repessts"), None)
 
     def test_mutation_article_bp(self):
         self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
@@ -80,11 +79,11 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.dna_symbols("asd"), None)
 
     def test_protein_symbols(self):
-        self.assertEqual(self.feature.protein_symbols("glutamine"), "ProteinSymFull")
-        self.assertEqual(self.feature.protein_symbols("asn"), "ProteinSymTri")
-        self.assertEqual(self.feature.protein_symbols("eu"), "ProteinSymTriSub")
-        self.assertEqual(self.feature.protein_symbols("X"), "ProteinSymChar")
-        self.assertEqual(self.feature.protein_symbols("flowerpower"), None)
+        self.assertEqual(self.feature.protein_symbols("glutamine", "bla"), "ProteinSymFull")
+        self.assertEqual(self.feature.protein_symbols("asn", "bla"), "ProteinSymTri")
+        self.assertEqual(self.feature.protein_symbols("eu", "X"), "ProteinSymTriSub")
+        self.assertEqual(self.feature.protein_symbols("X", "X"), "ProteinSymChar")
+        self.assertEqual(self.feature.protein_symbols("flowerpower", "AAA"), None)
 
     def test_rscode(self):
         self.assertEqual(self.feature.rscode("rs0"), "RSCode")

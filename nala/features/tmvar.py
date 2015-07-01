@@ -49,7 +49,6 @@ class TmVarDefault(FeatureGenerator):
         """
         :type dataset: structures.data.Dataset
         """
-        # TODO last token
         last_token_str = ""
         for token in dataset.tokens():
             # nr of digits
@@ -108,19 +107,19 @@ class TmVarDefault(FeatureGenerator):
 
     def n_lower_chars(self, str):
         result = sum(1 for c in str if c.islower())
-        return "L:4+" if result > 4 else result
+        return "L4+" if result > 4 else result
 
     def n_upper_chars(self, str):
         result = sum(1 for c in str if c.isupper())
-        return "U:4+" if result > 4 else result
+        return "U4+" if result > 4 else result
 
     def n_nr_chars(self, str):
         result = sum(1 for c in str if c.isnumeric())
-        return "N:4+" if result > 4 else result
+        return "N4+" if result > 4 else result
 
     def n_chars(self, str):
         result = sum(1 for c in str if c.isalpha())
-        return "A:4+" if result > 4 else result
+        return "A4+" if result > 4 else result
 
     def spec_chars(self, str):
         if self.reg_spec_chars.match(str):
@@ -192,7 +191,6 @@ class TmVarDefault(FeatureGenerator):
             return "ProteinSymFull"
         elif self.reg_prot_symbols2.match(lc_tmp):
             return "ProteinSymTri"
-        # TODO last token include: "&& $last_token[...]"
         elif self.reg_prot_symbols3.match(lc_tmp) and self.reg_prot_symbols4.match(last_str):
             return "ProteinSymTriSub"
         elif self.reg_prot_symbols4.match(uc_tmp):

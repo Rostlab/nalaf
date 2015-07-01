@@ -33,8 +33,8 @@ class TmVarDefaultTest(unittest.TestCase):
     def test_generate(self):
         expected_nr = iter([0, 4])
         expected_nr_up = iter([1, 0])
-        expected_nr_lo = iter(["L:4+", 3])
-        expected_nr_alpha = iter(["A:4+", 3])
+        expected_nr_lo = iter(["L4+", 3])
+        expected_nr_alpha = iter(["A4+", 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
         expected_chr_key = iter(["ChroKey", "ChroKey"])
         # NOTE implemented as extra features
@@ -48,7 +48,7 @@ class TmVarDefaultTest(unittest.TestCase):
                              msg="word={} | feature={}".format(token.word, token.features['num_spec_chars[0]']))
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-    # TODO implement separate test functions for each feature that is already implemented in test_generate
+    # OPTIONAL implement separate test functions for each feature that is already implemented in test_generate
 
     def test_mutation_type(self):
         self.assertEqual(self.feature.mutation_type("fs"), "FrameShiftType")

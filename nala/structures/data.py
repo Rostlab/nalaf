@@ -134,6 +134,9 @@ class Dataset:
         for doc_id, document in self.documents.items():
             yield document
 
+    def __contains__(self, item):
+        return item in self.documents
+
     def parts(self):
         """
         helper functions that iterates through all parts

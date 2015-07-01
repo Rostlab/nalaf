@@ -22,7 +22,7 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 ##  Requirements
 
 * Requires Python 3
-* 
+
 
 ## Goals of 2 theses and this method:
 

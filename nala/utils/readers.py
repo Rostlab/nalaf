@@ -129,15 +129,18 @@ class TmVarReader:
         with open(self.corpus_file, encoding='utf-8') as file:
 
             for line in file:
+                title = line.split('|t|')[-1]
                 pmid, abstract = next(file).split('|a|')
 
                 document = Document()
-                document.parts['abstract'] = Part(abstract)
+                document.parts['abstract'] = Part(title + abstract)
 
                 line = next(file)
                 while line != '\n':
                     _, start, end, text, *_ = line.split('\t')
-                    document.parts['abstract'].annotations.append(Annotation('e_2', start, text))
+                    document.parts['abstract'].annotations.append(Annotation('e_2', int(start), text))
                     line = next(file)
 
+                dataset.documents[pmid] = document
 
+        return dataset

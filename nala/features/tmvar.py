@@ -9,10 +9,10 @@ class TmVarDefault(FeatureGenerator):
 
     Implements the abstract class FeatureGenerator.
     """
-
-    def generate(self, dataset):
+    # TODO add introductory explanation
+    def __init__(self):
         """
-        :type dataset: structures.data.Dataset
+        Contains all regular expressions.
         """
         self.reg_spec_chars = re.compile('.*[-;:,.>+_].*')
         self.reg_chr_keys = re.compile('.*(q|p|q[0-9]+|p[0-9]+|qter|pter|XY|t).*')
@@ -36,6 +36,10 @@ class TmVarDefault(FeatureGenerator):
         self.reg_rs_code1 = re.compile('^(rs|RS|Rs)[0-9].*')
         self.reg_rs_code2 = re.compile('^(rs|RS|Rs)$')
 
+    def generate(self, dataset):
+        """
+        :type dataset: structures.data.Dataset
+        """
         for token in dataset.tokens():
             # nr of digits
             # TODO 0,1,2,3,4+ instead of len = nr
@@ -136,6 +140,7 @@ class TmVarDefault(FeatureGenerator):
     def mutation_article_bp(self, str):
         mutat_article = ""  # NOTE is this programming ok?
 
+        # TODO change to sensefull way
         if self.reg_mutat_article.match(str):
             mutat_article = "Base"
         if self.reg_mutat_byte.match(str):

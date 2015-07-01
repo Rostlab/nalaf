@@ -67,10 +67,10 @@ class TmVarDefaultTest(unittest.TestCase):
     def test_mutation_article_bp(self):
         mutat_article = ""  # NOTE is this programming ok?
 
-        self.assertEqual(TmVarDefault().mutation_article_bp("three"), "Base")
-        self.assertEqual(TmVarDefault().mutation_article_bp("BLUSDmb"), "Byte")
-        self.assertEqual(TmVarDefault().mutation_article_bp("1232bp"), "bp")
-        self.assertEqual(TmVarDefault().mutation_article_bp("the"), None)
+        self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
+        self.assertEqual(self.feature.mutation_article_bp("BLUSDmb"), "Byte")
+        self.assertEqual(self.feature.mutation_article_bp("1232bp"), "bp")
+        self.assertEqual(self.feature.mutation_article_bp("the"), None)
 
     def type1(self, str):
         if self.reg_type1.match(str):

@@ -60,8 +60,55 @@ class TmVarDefaultTest(unittest.TestCase):
             # print(token.features['num_has_chr_key[0]'], token.word)
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-            print(token.features)
 
+            import json
+            print(json.dumps(token.features, indent=3, sort_keys=True))
+
+    def test_mutation_article_bp(self):
+        mutat_article = ""  # NOTE is this programming ok?
+
+        self.assertEqual(TmVarDefault().mutation_article_bp("three"), "Base")
+        self.assertEqual(TmVarDefault().mutation_article_bp("BLUSDmb"), "Byte")
+        self.assertEqual(TmVarDefault().mutation_article_bp("1232bp"), "bp")
+        self.assertEqual(TmVarDefault().mutation_article_bp("the"), None)
+
+    def type1(self, str):
+        if self.reg_type1.match(str):
+            return "Type1"
+        elif self.reg_type12.match(str):
+            return "Type1_2"
+        else:
+            return None
+
+    def type2(self, str):
+        return "Type2" if str == "p" else None
+
+    def dna_symbols(self, str):
+        return "DNASym" if self.reg_dna_symbols.match(str) else None
+
+    def protein_symbols(self, str):
+        uc_tmp = str  # upper case
+        lc_tmp = str.lower()  # lower case
+
+        if self.reg_prot_symbols1.match(lc_tmp):
+            return "ProteinSymFull"
+        elif self.reg_prot_symbols2.match(lc_tmp):
+            return "ProteinSymTri"
+        # TODO last token include: "&& $last_token[...]"
+        elif self.reg_prot_symbols3.match(lc_tmp):
+            return "ProteinSymTriSub"
+        elif self.reg_prot_symbols4.match(uc_tmp):
+            return "ProteinSymChar"
+        else:
+            return None
+
+    def rscode(self, str):
+        if self.reg_rs_code1.match(str):
+            return "RSCode"
+        elif self.reg_rs_code2.match(str):
+            return "RSCode"
+        else:
+            return None
 
 if __name__ == '__main__':
     unittest.main()

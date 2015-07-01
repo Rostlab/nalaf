@@ -83,6 +83,14 @@ class TmVarDefault(FeatureGenerator):
             # RScode
             token.features['rs_code[0]'] = self.rscode(token.word)
 
+            # patterns
+            # TODO patterns
+
+            # prefix patterns
+            # TODO prefix patterns
+
+            # suffix patterns
+            # TODO suffix patterns
 
     # NOTE check if ok the implementation (edge cases e.g. numeric means 123.232? or 123 and 232?)
     def n_lower_chars(self, str):

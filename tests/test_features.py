@@ -39,10 +39,15 @@ class TmVarDefaultTest(unittest.TestCase):
         expected_nr_lo = iter([12, 3])
         expected_nr_alpha = iter([13, 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
-        expected_chr_key = iter([True, True])
+        expected_chr_key = iter(["ChroKey", "ChroKey"])
         expected_mutat_type = iter(["MutatWord", None])
         expected_mutat_word = iter(["FrameShiftType", "MutatType"])
         # expected_mutat_article
+        # expected_type1
+        # expected_type2
+        # expected_dna_symbols
+        # expected_protein_symbols
+        # expected_rscode
 
         for token in self.dataset.tokens():
             self.assertEqual(token.features['length[0]'], next(expected_length))

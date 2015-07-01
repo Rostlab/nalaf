@@ -5,10 +5,12 @@ from nala.structures.data import Dataset, Document, Part, Token
 from nala.features.tmvar import TmVarDefault
 from nala.features import FeatureGenerator
 
+
 class TmVarDefaultTest(unittest.TestCase):
     """
     Test the NLTKTokenizer class and it's main method tokenize()
     """
+
     @classmethod
     def setUpClass(cls):
         # create a sample dataset to test
@@ -17,12 +19,11 @@ class TmVarDefaultTest(unittest.TestCase):
         doc_id1 = Document()
         # 15 tokens in 2 sentences
         doc_id1.parts['p1'] = Part('one ')
-        doc_id1.parts['p1'].sentences = [[Token('oneA'), Token('j23.23')]]
+        doc_id1.parts['p1'].sentences = [[Token('insertionefsA'), Token('dup23.23')]]
         cls.dataset.documents['doc_id1'] = doc_id1
 
         cls.feature = TmVarDefault()
         cls.feature.generate(dataset=cls.dataset)
-
 
     def test_implements_feature_interface(self):
         self.assertIsInstance(self.feature, FeatureGenerator)
@@ -31,14 +32,17 @@ class TmVarDefaultTest(unittest.TestCase):
         for token in self.dataset.tokens():
             self.assertTrue(len(token.features) > 0)
 
-    def test_feature_attributes(self):
-        expected_length = iter([4, 6])
-        expected_nr = iter([0,4])
-        expected_nr_up = iter([1,0])
-        expected_nr_lo = iter([3,1])
-        expected_nr_alpha = iter([4,1])
+    def test_generate(self):
+        expected_length = iter([13, 8])
+        expected_nr = iter([0, 4])
+        expected_nr_up = iter([1, 0])
+        expected_nr_lo = iter([12, 3])
+        expected_nr_alpha = iter([13, 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
-        expected_chr_key = iter([None, None])
+        expected_chr_key = iter([True, True])
+        expected_mutat_type = iter(["MutatWord", None])
+        expected_mutat_word = iter(["FrameShiftType", "MutatType"])
+        # expected_mutat_article
 
         for token in self.dataset.tokens():
             self.assertEqual(token.features['length[0]'], next(expected_length))
@@ -46,10 +50,13 @@ class TmVarDefaultTest(unittest.TestCase):
             self.assertEqual(token.features['num_up[0]'], next(expected_nr_up))
             self.assertEqual(token.features['num_lo[0]'], next(expected_nr_lo))
             self.assertEqual(token.features['num_alpha[0]'], next(expected_nr_alpha))
-            self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars), msg=token.word)
+            self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars),
+                             msg="word={} | feature={}".format(token.word, token.features['num_spec_chars[0]']))
+            # print(token.features['num_has_chr_key[0]'], token.word)
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-            # print(token.features)
+            print(token.features)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -45,12 +45,26 @@ class TmVarDefault(FeatureGenerator):
         self.reg_rs_code1 = re.compile('^(rs|RS|Rs)[0-9].*')
         self.reg_rs_code2 = re.compile('^(rs|RS|Rs)$')
 
+        # patterns
+        self.reg_shape_uc = re.compile('[A-Z]')
+        self.reg_shape_uc_plus = re.compile('[A-Z]+')
+
+        self.reg_shape_lc = re.compile('[a-z]')
+        self.reg_shape_lc_plus = re.compile('[a-z]+')
+
+        self.reg_shape_nr = re.compile('[0-9]')
+        self.reg_shape_nr_plus = re.compile('[0-9]+')
+
+        self.reg_shape_chars = re.compile('[A-Za-z]')
+        self.reg_shape_chars_plus = re.compile('[A-Za-z]+')
+
     def generate(self, dataset):
         """
         :type dataset: structures.data.Dataset
         """
         last_token_str = ""
         for token in dataset.tokens():
+
             # nr of digits
             token.features['num_nr[0]'] = self.n_nr_chars(token.word)
 
@@ -95,6 +109,7 @@ class TmVarDefault(FeatureGenerator):
 
             # patterns
             # TODO patterns
+            token.features['shape1[0]'] = self.rscode(token.word)
 
             # prefix patterns
             # TODO prefix patterns
@@ -205,3 +220,35 @@ class TmVarDefault(FeatureGenerator):
             return "RSCode"
         else:
             return None
+
+    def shape1(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_uc.sub('A', str)
+            pattern = self.reg_shape_lc.sub('a', pattern)
+            pattern = self.reg_shape_nr.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape2(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_chars.sub('a', str)
+            pattern = self.reg_shape_nr.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape3(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_uc_plus.sub('A', str)
+            pattern = self.reg_shape_lc_plus.sub('a', pattern)
+            pattern = self.reg_shape_nr_plus.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape4(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_chars_plus.sub('a', str)
+            pattern = self.reg_shape_nr_plus.sub('0', pattern)
+            return pattern
+        return None
+
+    # OPTIONAL discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data)

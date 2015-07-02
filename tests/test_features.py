@@ -90,5 +90,17 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.rscode("rs"), "RSCode")
         self.assertEqual(self.feature.rscode("rsssss"), None)
 
+    def test_shape1(self):
+        self.assertEqual(self.feature.shape1("Bs0ssaDB2"), "Aa0aaaAA0")
+
+    def test_shape2(self):
+        self.assertEqual(self.feature.shape2("Bs0ssaDB2"), "aa0aaaaa0")
+
+    def test_shape3(self):
+        self.assertEqual(self.feature.shape3("Bs0ssaDB2"), "Aa0aA0")
+
+    def test_shape4(self):
+        self.assertEqual(self.feature.shape4("Bs0ssaDB2"), "a0a0")
+
 if __name__ == '__main__':
     unittest.main()

@@ -33,8 +33,8 @@ class TmVarDefaultTest(unittest.TestCase):
     def test_generate(self):
         expected_nr = iter([0, 4])
         expected_nr_up = iter([1, 0])
-        expected_nr_lo = iter(["L:4+", 3])
-        expected_nr_alpha = iter(["A:4+", 3])
+        expected_nr_lo = iter(["L4+", 3])
+        expected_nr_alpha = iter(["A4+", 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
         expected_chr_key = iter(["ChroKey", "ChroKey"])
         # NOTE implemented as extra features
@@ -48,7 +48,7 @@ class TmVarDefaultTest(unittest.TestCase):
                              msg="word={} | feature={}".format(token.word, token.features['num_spec_chars[0]']))
             self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
-    # TODO implement separate test functions for each feature that is already implemented in test_generate
+    # OPTIONAL implement separate test functions for each feature that is already implemented in test_generate
 
     def test_mutation_type(self):
         self.assertEqual(self.feature.mutation_type("fs"), "FrameShiftType")
@@ -89,6 +89,25 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.rscode("rs0"), "RSCode")
         self.assertEqual(self.feature.rscode("rs"), "RSCode")
         self.assertEqual(self.feature.rscode("rsssss"), None)
+
+    def test_shape1(self):
+        self.assertEqual(self.feature.shape1("Bs0ssaDB2"), "Aa0aaaAA0")
+
+    def test_shape2(self):
+        self.assertEqual(self.feature.shape2("Bs0ssaDB2"), "aa0aaaaa0")
+
+    def test_shape3(self):
+        self.assertEqual(self.feature.shape3("Bs0ssaDB2"), "Aa0aA0")
+
+    def test_shape4(self):
+        self.assertEqual(self.feature.shape4("Bs0ssaDB2"), "a0a0")
+
+    def test_prefix_pattern(self):
+        self.assertEqual(self.feature.prefix_pattern("A"), ["A", None, None, None, None])
+        self.assertEqual(self.feature.prefix_pattern("ASDASD"), ["A", "AS", "ASD", "ASDA", "ASDAS"])
+
+    def test_suffix_pattern(self):
+        self.assertEqual(self.feature.suffix_pattern("ABC"), ["C", "BC", "ABC", None, None])
 
 if __name__ == '__main__':
     unittest.main()

@@ -45,13 +45,26 @@ class TmVarDefault(FeatureGenerator):
         self.reg_rs_code1 = re.compile('^(rs|RS|Rs)[0-9].*')
         self.reg_rs_code2 = re.compile('^(rs|RS|Rs)$')
 
+        # patterns
+        self.reg_shape_uc = re.compile('[A-Z]')
+        self.reg_shape_uc_plus = re.compile('[A-Z]+')
+
+        self.reg_shape_lc = re.compile('[a-z]')
+        self.reg_shape_lc_plus = re.compile('[a-z]+')
+
+        self.reg_shape_nr = re.compile('[0-9]')
+        self.reg_shape_nr_plus = re.compile('[0-9]+')
+
+        self.reg_shape_chars = re.compile('[A-Za-z]')
+        self.reg_shape_chars_plus = re.compile('[A-Za-z]+')
+
     def generate(self, dataset):
         """
         :type dataset: structures.data.Dataset
         """
-        # TODO last token
         last_token_str = ""
         for token in dataset.tokens():
+
             # nr of digits
             token.features['num_nr[0]'] = self.n_nr_chars(token.word)
 
@@ -96,6 +109,7 @@ class TmVarDefault(FeatureGenerator):
 
             # patterns
             # TODO patterns
+            token.features['shape1[0]'] = self.rscode(token.word)
 
             # prefix patterns
             # TODO prefix patterns
@@ -108,19 +122,19 @@ class TmVarDefault(FeatureGenerator):
 
     def n_lower_chars(self, str):
         result = sum(1 for c in str if c.islower())
-        return "L:4+" if result > 4 else result
+        return "L4+" if result > 4 else result
 
     def n_upper_chars(self, str):
         result = sum(1 for c in str if c.isupper())
-        return "U:4+" if result > 4 else result
+        return "U4+" if result > 4 else result
 
     def n_nr_chars(self, str):
         result = sum(1 for c in str if c.isnumeric())
-        return "N:4+" if result > 4 else result
+        return "N4+" if result > 4 else result
 
     def n_chars(self, str):
         result = sum(1 for c in str if c.isalpha())
-        return "A:4+" if result > 4 else result
+        return "A4+" if result > 4 else result
 
     def spec_chars(self, str):
         if self.reg_spec_chars.match(str):
@@ -192,7 +206,6 @@ class TmVarDefault(FeatureGenerator):
             return "ProteinSymFull"
         elif self.reg_prot_symbols2.match(lc_tmp):
             return "ProteinSymTri"
-        # TODO last token include: "&& $last_token[...]"
         elif self.reg_prot_symbols3.match(lc_tmp) and self.reg_prot_symbols4.match(last_str):
             return "ProteinSymTriSub"
         elif self.reg_prot_symbols4.match(uc_tmp):
@@ -207,3 +220,55 @@ class TmVarDefault(FeatureGenerator):
             return "RSCode"
         else:
             return None
+
+    def shape1(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_uc.sub('A', str)
+            pattern = self.reg_shape_lc.sub('a', pattern)
+            pattern = self.reg_shape_nr.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape2(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_chars.sub('a', str)
+            pattern = self.reg_shape_nr.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape3(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_uc_plus.sub('A', str)
+            pattern = self.reg_shape_lc_plus.sub('a', pattern)
+            pattern = self.reg_shape_nr_plus.sub('0', pattern)
+            return pattern
+        return None
+
+    def shape4(self, str):
+        if not self.reg_spec_chars.match(str):
+            pattern = self.reg_shape_chars_plus.sub('a', str)
+            pattern = self.reg_shape_nr_plus.sub('0', pattern)
+            return pattern
+        return None
+
+    def prefix_pattern(self, str):
+        prefix_array = []
+        for x in (1,2,3,4,5):  # PYTHONIC (1..5)
+            if len(str) >= x:
+                prefix_array.append(str[:x])
+            else:
+                prefix_array.append(None)
+        return prefix_array
+
+
+    def suffix_pattern(self, str):
+        suffix_array = []
+        for x in (1,2,3,4,5):  # PYTHONIC more way
+            if len(str) >= x:
+                suffix_array.append(str[-x:])
+            else:
+                suffix_array.append(None)
+        return suffix_array
+
+    # TODO as array or as string with spaces?
+    # OPTIONAL discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data)

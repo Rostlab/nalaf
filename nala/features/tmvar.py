@@ -251,4 +251,24 @@ class TmVarDefault(FeatureGenerator):
             return pattern
         return None
 
+    def prefix_pattern(self, str):
+        prefix_array = []
+        for x in (1,2,3,4,5):  # PYTHONIC (1..5)
+            if len(str) >= x:
+                prefix_array.append(str[:x])
+            else:
+                prefix_array.append(None)
+        return prefix_array
+
+
+    def suffix_pattern(self, str):
+        suffix_array = []
+        for x in (1,2,3,4,5):  # PYTHONIC more way
+            if len(str) >= x:
+                suffix_array.append(str[-x:])
+            else:
+                suffix_array.append(None)
+        return suffix_array
+
+    # TODO as array or as string with spaces?
     # OPTIONAL discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data)

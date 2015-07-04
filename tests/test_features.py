@@ -102,5 +102,12 @@ class TmVarDefaultTest(unittest.TestCase):
     def test_shape4(self):
         self.assertEqual(self.feature.shape4("Bs0ssaDB2"), "a0a0")
 
+    def test_prefix_pattern(self):
+        self.assertEqual(self.feature.prefix_pattern("A"), ["A", None, None, None, None])
+        self.assertEqual(self.feature.prefix_pattern("ASDASD"), ["A", "AS", "ASD", "ASDA", "ASDAS"])
+
+    def test_suffix_pattern(self):
+        self.assertEqual(self.feature.suffix_pattern("ABC"), ["C", "BC", "ABC", None, None])
+
 if __name__ == '__main__':
     unittest.main()

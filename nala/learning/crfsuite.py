@@ -27,8 +27,8 @@ class CRFSuite:
 
             for sentence in dataset.sentences():
                 for token in sentence:
-                    features = '\t'.join(['%s=%s' % (key, value.replace(':', '_COLON_')) if type(value) is str
-                                          else '%s:%f' % (key, value)
+                    features = '\t'.join(['{}={}'.format(key, str(value).replace(':', '_COLON_')) if 'embedding' not in key
+                                          else '{}:{}'.format(key, value)
                                           for key, value in token.features.items()])
 
                     if mode in ('train', 'test'):

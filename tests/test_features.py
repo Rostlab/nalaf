@@ -1,6 +1,6 @@
 import unittest
 from nala.structures.data import Dataset, Document, Part, Token
-from nala.features.tmvar import TmVarDefault
+from nala.features.tmvar import TmVarFeatureGenerator
 from nala.features import FeatureGenerator
 
 
@@ -20,7 +20,7 @@ class TmVarDefaultTest(unittest.TestCase):
         doc_id1.parts['p1'].sentences = [[Token('insertionefsA'), Token('dup23.23')]]
         cls.dataset.documents['doc_id1'] = doc_id1
 
-        cls.feature = TmVarDefault()
+        cls.feature = TmVarFeatureGenerator()
         cls.feature.generate(dataset=cls.dataset)
 
     def test_implements_feature_interface(self):

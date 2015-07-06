@@ -2,7 +2,7 @@ from nala.features import FeatureGenerator
 import re
 
 
-class TmVarDefault(FeatureGenerator):
+class TmVarFeatureGenerator(FeatureGenerator):
     """
     Generates tmVar CRF features based on the value of the token itself.
     * w[0] = the value of the words itself

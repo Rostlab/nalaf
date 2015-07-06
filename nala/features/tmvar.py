@@ -2,7 +2,7 @@ from nala.features import FeatureGenerator
 import re
 
 
-class TmVarDefault(FeatureGenerator):
+class TmVarFeatureGenerator(FeatureGenerator):
     """
     Generates tmVar CRF features based on the value of the token itself.
     * w[0] = the value of the words itself
@@ -253,7 +253,7 @@ class TmVarDefault(FeatureGenerator):
 
     def prefix_pattern(self, str):
         prefix_array = []
-        for x in (1,2,3,4,5):  # PYTHONIC (1..5)
+        for x in range(1, 6):
             if len(str) >= x:
                 prefix_array.append(str[:x])
             else:
@@ -263,7 +263,7 @@ class TmVarDefault(FeatureGenerator):
 
     def suffix_pattern(self, str):
         suffix_array = []
-        for x in (1,2,3,4,5):  # PYTHONIC more way
+        for x in range(1, 6):
             if len(str) >= x:
                 suffix_array.append(str[-x:])
             else:

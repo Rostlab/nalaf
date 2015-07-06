@@ -65,7 +65,7 @@ class SETHAnnotationReader(AnnotationReader):
     We map:
         SNP to e_2 (mutation entity)
         Gene to e_1 (protein entity)
-        RS is skipped
+        RS to e_2 (mutation entity)
 
     Implements the abstract class Annotator.
     """
@@ -89,7 +89,7 @@ class SETHAnnotationReader(AnnotationReader):
                     if row[0].startswith('T'):
                         entity_type, start, end = row[1].split()
 
-                        if entity_type == 'SNP':
+                        if entity_type == 'SNP' or entity_type == 'RS':
                             ann = Annotation('e_2', start, row[2])
                             document.parts['abstract'].annotations.append(ann)
                         elif entity_type == 'Gene':

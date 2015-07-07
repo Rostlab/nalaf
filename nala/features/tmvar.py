@@ -112,10 +112,12 @@ class TmVarFeatureGenerator(FeatureGenerator):
             token.features['shape1[0]'] = self.rscode(token.word)
 
             # prefix patterns
-            # TODO prefix patterns
+            for index, value in enumerate(self.prefix_pattern(token.word)):
+                token.features['prefix{}[0]'.format(index+1)] = value
 
             # suffix patterns
-            # TODO suffix patterns
+            for index, value in enumerate(self.suffix_pattern(token.word)):
+                token.features['suffix{}[0]'.format(index+1)] = value
 
             # last token
             last_token_str = token.word

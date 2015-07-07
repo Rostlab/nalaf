@@ -6,7 +6,7 @@ from nala.utils.readers import HTMLReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
-from nala.preprocessing.labelers import SimpleLabeler
+from nala.preprocessing.labelers import BIOLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import TmVarNLDefiner
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         TmVarRegexNLDefiner().define(dataset)
 
         if not args.quick_nl:
-            SimpleLabeler().label(dataset)
+            BIOLabeler().label(dataset)
             SimpleFeatureGenerator().generate(dataset)
 
             crf = CRFSuite(crf_path)

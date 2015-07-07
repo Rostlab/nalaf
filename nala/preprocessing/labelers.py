@@ -20,7 +20,7 @@ class Labeler:
         return
 
 
-class SimpleLabeler(Labeler):
+class BIOLabeler(Labeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the BIO (beginning, inside, outside) format. Creates labels
@@ -48,10 +48,10 @@ class SimpleLabeler(Labeler):
                         start = ann.offset
                         end = ann.offset + len(ann.text)
                         if start == so_far:
-                            token.original_labels[0].value = 'B-%s' % ann.class_id
+                            token.original_labels[0].value = 'B-{}'.format(ann.class_id)
                             break
                         elif start < so_far < end:
-                            token.original_labels[0].value = 'I-%s' % ann.class_id
+                            token.original_labels[0].value = 'I-{}'.format(ann.class_id)
                             break
 
 
@@ -78,6 +78,7 @@ class TmVarLabeler(Labeler):
     Requires the TmVarTokenizer to be used.
     Implements the abstract class Labeler.
     """
+
     def __init__(self):
         # A
         self.label_reference_sequence = re.compile('(^[cgrm]$)|(^(ivs|ex|orf)$)')
@@ -143,3 +144,44 @@ class TmVarLabeler(Labeler):
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
                                 break
+
+
+class BIEOLabeler(Labeler):
+    """
+    Implements a simple labeler using the annotations of the dataset
+    using the BIEO (beginning, inside, ending, outside) format. Creates labels
+    based on the class_id value in the Annotation object. That is:
+    * B-[class_id]
+    * I-[class_id]
+    * E-[class_id]
+    * O
+
+    Requires the list field "annotations" to be previously set.
+    Implements the abstract class Labeler.
+    """
+
+    def label(self, dataset):
+        """
+        :type dataset: structures.data.Dataset
+        """
+        for part in dataset.parts():
+            so_far = 0
+            previous_token = None
+            for sentence in part.sentences:
+                for token in sentence:
+                    so_far = part.text.find(token.word, so_far)
+                    token.original_labels = [Label('O')]
+
+                    for ann in part.annotations:
+                        start = ann.offset
+                        end = ann.offset + len(ann.text)
+                        if start == so_far:
+                            token.original_labels[0].value = 'B-{}'.format(ann.class_id)
+                            previous_token = token
+                            break
+                        elif start < so_far < end:
+                            token.original_labels[0].value = 'I-{}'.format(ann.class_id)
+                            previous_token = token
+                            break
+                    if previous_token is not None and token.original_labels[0].value is 'O':
+                        previous_token.original_labels[0].value = 'E-{}'.format(ann.class_id)

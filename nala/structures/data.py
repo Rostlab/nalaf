@@ -1,6 +1,9 @@
 class Label:
     """
     Represents the label associated with each Token.
+
+    :type value: str
+    :type confidence: float
     """
 
     def __init__(self, value, confidence=None):
@@ -17,6 +20,11 @@ class Token:
     """
     Represent a token - the smallest unit on which we perform operations.
     Usually one token represent one word from the document.
+
+    :type word: str
+    :type original_labels: list[Label]
+    :type predicted_labels: list[Label]
+    :type features: dict
     """
 
     def __init__(self, word):
@@ -44,6 +52,11 @@ class Token:
 class Annotation:
     """
     Represent a single annotation, that is denotes a span of text which represents some entitity.
+
+    :type class_id: str
+    :type offset: int
+    :type text: str
+    :type is_nl: bool
     """
 
     def __init__(self, class_id, offset, text):
@@ -61,6 +74,10 @@ class Part:
     """
     Represent chunks of text grouped in the document that for some reason belong together.
     Each part hold a reference to the annotations for that chunk of text.
+
+    :type text: str
+    :type sentences: list[list[Token]]
+    :type annotations: list[Annotation]
     """
 
     def __init__(self, text):
@@ -84,6 +101,8 @@ class Part:
 class Document:
     """
     Class representing a single document, for example an article from PubMed.
+
+    :type parts: dict
     """
 
     def __init__(self):
@@ -111,6 +130,8 @@ class Dataset:
     """
     Class representing a group of documents.
     Instances of this class are the main object that gets passed around and modified by different modules.
+
+    :type documents: dict
     """
 
     def __init__(self):
@@ -141,6 +162,8 @@ class Dataset:
         """
         helper functions that iterates through all parts
         that is each part of each document in the dataset
+
+        :rtype: collections.Iterable[Part]
         """
         for document in self:
             for part in document:
@@ -150,6 +173,8 @@ class Dataset:
         """
         helper functions that iterates through all parts
         that is each part of each document in the dataset
+
+        :rtype: collections.Iterable[Annotation]
         """
         for part in self.parts():
             for annotation in part.annotations:
@@ -159,6 +184,8 @@ class Dataset:
         """
         helper functions that iterates through all sentences
         that is each sentence of each part of each document in the dataset
+
+        :rtype: collections.Iterable[list[list[Token]]]
         """
         for part in self.parts():
             for sentence in part.sentences:
@@ -168,26 +195,39 @@ class Dataset:
         """
         helper functions that iterates through all tokens
         that is each token of each sentence of each part of each document in the dataset
+
+        :rtype: collections.Iterable[Token]
         """
         for sentence in self.sentences():
             for token in sentence:
                 yield token
 
     def partids_with_parts(self):
-        """ helper function that yields part id with part"""
+        """
+        helper function that yields part id with part
+
+        :rtype: collections.Iterable[(str, Part)]
+        """
         for document in self:
             for part_id, part in document.key_value_parts():
                 yield part_id, part
 
     def annotations_with_partids(self):
-        """ helper function that return annotation object with part id
-        to be able to find out abstract or full document """
+        """
+        helper function that return annotation object with part id
+        to be able to find out abstract or full document
+
+        :rtype: collections.Iterable[(str, Annotation)]
+        """
         for part_id, part in self.partids_with_parts():
             for annotation in part.annotations:
                 yield part_id, annotation
 
     def all_annotations_with_ids(self):
-        """ yields pubmedid, partid and ann through whole dataset
+        """
+        yields pubmedid, partid and ann through whole dataset
+
+        :rtype: collections.Iterable[(str, str, Annotation)]
         """
         for pubmedid, doc in self.documents.items():
             for partid, part in doc.key_value_parts():

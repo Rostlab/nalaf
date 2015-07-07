@@ -106,6 +106,8 @@ class TmVarLabeler(Labeler):
             token.original_labels[0].value = 'T'  # Mutation type
         elif self.label_frameshift.match(token.word):
             token.original_labels[0].value = 'F'  # Frame shift
+        elif previous_token is not None and previous_token.original_labels[0].value is 'F' and token.word is 'X':
+            token.original_labels[0].value = 'F'  # Frame shift
         elif self.label_snip.match(token.word):
             token.original_labels[0].value = 'R'  # SNP
         elif self.dna_symbols.match(token.word) or self.protein_symbols.match(token.word):

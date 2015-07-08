@@ -185,7 +185,7 @@ class Dataset:
         helper functions that iterates through all sentences
         that is each sentence of each part of each document in the dataset
 
-        :rtype: collections.Iterable[list[list[Token]]]
+        :rtype: collections.Iterable[list[Token]]
         """
         for part in self.parts():
             for sentence in part.sentences:

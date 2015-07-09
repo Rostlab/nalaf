@@ -56,6 +56,7 @@ class StatsWriter:
         # xposition as int and label as string
         x_pos = []
         label = []
+        bar_color = []
 
         # param arrays to be shown in graph
         simple_array = []  # nl absolute nr
@@ -72,7 +73,6 @@ class StatsWriter:
 
         for row in self.data:
             total_counter += 1
-            # TODO plt.axhan or sth like that for highlighting area of inclusive method with param
             # TODO add standard error
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
@@ -99,6 +99,12 @@ class StatsWriter:
                 x_pos.append(simple_counter)
                 label.append(row['mode'])
                 simple_counter += 1
+
+            # TODO make interesting bars as param not hard coded
+            if row['mode'] == "Carsten" or row['mode'] == "Inclusive_18":
+                bar_color.append('orange')
+            else:
+                bar_color.append('blue')
 
             # print(nl_total_ratio)
             # nl total ratio
@@ -133,9 +139,9 @@ class StatsWriter:
         fig1 = plt.figure()
         fig1.add_axes([0.1, 0.22, 0.88, 0.74])
         # plt.subplot(121)
-        plt.bar(x_pos, nl_total_ratio_array)
+        plt.bar(x_pos, nl_total_ratio_array, color=bar_color)
         plt.xticks([x + 0.3 for x in x_pos], label, rotation=90)
-        print([x + 0.3 for x in x_pos])
+        # print([x + 0.3 for x in x_pos])
         # fig.ylabel("NL vs Total mention ratio")
         plt.xlim(min(x_pos), max(x_pos) * 1.05)
         plt.show()
@@ -146,7 +152,7 @@ class StatsWriter:
             # plt.subplot(122)
             fig2 = plt.figure()
             fig2.add_axes([0.1, 0.22, 0.88, 0.74])
-            plt.bar(x_pos, abstract_full_ratio_array)
+            plt.bar(x_pos, abstract_full_ratio_array, color=bar_color)
             plt.xticks(x_pos, label, rotation=90)  # TODO shift position to get correct labeling on bars
             plt.ylabel("Abstract vs Full document ratio")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
@@ -167,7 +173,7 @@ class StatsWriter:
         # plt.ylabel("Full: Nl Tokens / Tot Tokens")
 
         # subplot minimum one abstract/full
-        # OPTIONAL subplot minimum one abstract/full
+        # OPTIONAL plot minimum one abstract/full
 
         # plt.plot(annotate_array, nl_total_ratio_array, 'rs', annotate_array, abstract_full_ratio_array, 'bs')
         # plt.axis([self.init_counter, self.init_counter + total_counter - 1, 0, 3])

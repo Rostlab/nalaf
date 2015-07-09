@@ -9,6 +9,7 @@ class StatsWriter:
             file is the csvfile saved into
             data is the stats object
     """
+
     def __init__(self, csvfile, graphfile, init_counter=15):
         self.csvfile = csvfile
         self.graphfile = graphfile
@@ -79,7 +80,7 @@ class StatsWriter:
             # abstract full ratio = abstract/full
 
             is_not_ok = row['abstract_tot_token_nr'] == 0 or row['full_tot_token_nr'] == 0 or \
-                    row['abstract_nl_token_nr'] == 0 or row['full_nl_token_nr'] == 0
+                        row['abstract_nl_token_nr'] == 0 or row['full_nl_token_nr'] == 0
             if is_not_ok:
                 abstract_full_ratio = 0
                 abstract_token_ratio = 0
@@ -129,25 +130,29 @@ class StatsWriter:
             simple_array.append(row['nl_mention_nr'])
 
         # subplot for nl total ratio array
-        plt.subplot(121)
+        fig1 = plt.figure()
+        fig1.add_axes([0.1, 0.22, 0.88, 0.74])
+        # plt.subplot(121)
         plt.bar(x_pos, nl_total_ratio_array)
-        plt.xticks([x + 0.3for x in x_pos], label, rotation=90)
+        plt.xticks([x + 0.3 for x in x_pos], label, rotation=90)
         print([x + 0.3 for x in x_pos])
-        plt.ylabel("NL vs Total mention ratio")
-        plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
+        # fig.ylabel("NL vs Total mention ratio")
+        plt.xlim(min(x_pos), max(x_pos) * 1.05)
+        plt.show()
 
         # subplot for abstract vs full ratio
         # only if the array contains non zeros
         if set(abstract_full_ratio_array) != {0}:
-            plt.subplot(122)
+            # plt.subplot(122)
+            fig2 = plt.figure()
+            fig2.add_axes([0.1, 0.22, 0.88, 0.74])
             plt.bar(x_pos, abstract_full_ratio_array)
-            plt.xticks(x_pos, label, rotation=90)
+            plt.xticks(x_pos, label, rotation=90)  # TODO shift position to get correct labeling on bars
             plt.ylabel("Abstract vs Full document ratio")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
-            plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
-
-        # OPTIONAL combined plot
-        # OPTIONAL legend included (must be some different graph (scatter, line, ...) system)
+            # plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
+            plt.ylim(1, 3)
+            # OPTIONAL define better border for ylim
 
         # subplot for abstract token ratio
         # plt.subplot(223)

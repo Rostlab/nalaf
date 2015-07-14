@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class Label:
     """
     Represents the label associated with each Token.
@@ -106,7 +109,7 @@ class Document:
     """
 
     def __init__(self):
-        self.parts = {}
+        self.parts = OrderedDict()
         """
         parts the document consists of, encoded as a dictionary
         where the key (string) is the id of the part
@@ -135,7 +138,7 @@ class Dataset:
     """
 
     def __init__(self):
-        self.documents = {}
+        self.documents = OrderedDict()
         """
         documents the dataset consists of, encoded as a dictionary
         where the key (string) is the id of the document, for example PubMed id

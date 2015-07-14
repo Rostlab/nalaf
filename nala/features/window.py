@@ -28,7 +28,7 @@ class WindowFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for sentence in dataset.sentences():
             for index, token in enumerate(sentence):

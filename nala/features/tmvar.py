@@ -60,7 +60,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         last_token_str = ""
         for token in dataset.tokens():

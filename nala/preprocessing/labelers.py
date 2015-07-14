@@ -15,7 +15,7 @@ class Labeler:
     @abc.abstractmethod
     def label(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return
 
@@ -35,7 +35,7 @@ class BIOLabeler(Labeler):
 
     def label(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             so_far = 0
@@ -126,7 +126,7 @@ class TmVarLabeler(Labeler):
 
     def label(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             so_far = 0
@@ -162,7 +162,7 @@ class BIEOLabeler(Labeler):
 
     def label(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             so_far = 0

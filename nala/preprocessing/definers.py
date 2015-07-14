@@ -17,7 +17,7 @@ class NLDefiner:
     @abc.abstractmethod
     def define(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return
 

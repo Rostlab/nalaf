@@ -18,7 +18,7 @@ class AnnotationReader:
     @abc.abstractmethod
     def annotate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return
 
@@ -36,7 +36,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
@@ -76,7 +76,7 @@ class SETHAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for filename in glob.glob(str(self.directory + "/*.ann")):
             with open(filename, 'r', encoding='utf-8') as file:
@@ -125,7 +125,7 @@ class VerspoorAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         file_list = glob.glob(str(self.directory + "/*.ann"))
         for file_path in file_list:

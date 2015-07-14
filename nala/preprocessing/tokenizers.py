@@ -17,7 +17,7 @@ class Tokenizer:
     @abc.abstractmethod
     def tokenize(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return
 
@@ -25,7 +25,7 @@ class Tokenizer:
 class NLTKTokenizer(Tokenizer):
     def tokenize(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             part.sentences = [[Token(word) for word in word_tokenize(sentence)] for sentence in part.sentences]
@@ -38,7 +38,7 @@ class TmVarTokenizer(Tokenizer):
     """
     def tokenize(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             for index, sentence in enumerate(part.sentences):

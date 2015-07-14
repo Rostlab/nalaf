@@ -11,7 +11,7 @@ class SimpleFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for token in dataset.tokens():
             token.features['word[0]'] = token.word

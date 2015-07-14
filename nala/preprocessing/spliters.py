@@ -15,7 +15,7 @@ class Splitter:
     @abc.abstractmethod
     def split(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return
 
@@ -30,7 +30,7 @@ class NLTKSplitter(Splitter):
 
     def split(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
             part.sentences = sent_tokenize(part.text)

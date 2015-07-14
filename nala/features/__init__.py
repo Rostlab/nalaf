@@ -13,6 +13,6 @@ class FeatureGenerator:
     @abc.abstractmethod
     def generate(self, dataset):
         """
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         """
         return

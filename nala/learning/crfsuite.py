@@ -1,5 +1,5 @@
 import os
-
+from nala.structures.data import Label
 
 class CRFSuite:
     """
@@ -19,7 +19,7 @@ class CRFSuite:
         Creates the input files for training, testing or prediction in the appropriate format required by CRFSuite.
         Saves the files in the same directory where the executable is located.
 
-        :type dataset: structures.data.Dataset
+        :type dataset: nala.structures.data.Dataset
         :param mode: one of the following 'train' or 'test' or 'predict'
         :type mode: str
         """
@@ -42,11 +42,36 @@ class CRFSuite:
         Train and save a CRF model with the latest train file.
         """
         os.chdir(self.directory)
-        os.system('crfsuite learn %s -m %s train' % (options, self.model_filename))
+        if options:
+            os.system('crfsuite learn {}'.format(options))
+        else:
+            os.system('crfsuite learn -m {} train'.format(self.model_filename))
 
     def test(self, options=''):
         """
         Test a CRF model with the latest model and test file.
         """
         os.chdir(self.directory)
-        os.system('crfsuite tag %s -qt -m %s test' % (options, self.model_filename))
+        if options:
+            os.system('crfsuite tag {}'.format(options))
+        else:
+            os.system('crfsuite tag -qt -m {} test'.format(self.model_filename))
+
+    def read_predictions(self, dataset, prediction_file='output.txt'):
+        # TODO fix docstring
+        """
+        Reads in the predictions made by our model
+        and stores them into the token.predicted_label[]
+
+        :type dataset: nala.structures.data.Dataset
+        """
+
+        os.chdir(self.directory)
+        with open(prediction_file) as file:
+            for sentence in dataset.sentences():
+                for token in sentence:
+                    label, probablity = file.readline().split(':')
+                    token.predicted_labels = [Label(label, float(probablity))]
+
+                file.readline()  # skip the empty line signifying new sentence
+

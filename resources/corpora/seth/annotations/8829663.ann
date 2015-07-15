@@ -1,0 +1,7 @@
+T1	SNP 11 19	1098insA
+T2	SNP 45 50	R359Q
+T3	SNP 24 29	Y313H
+T4	Gene 88 111	beta-glucocerebrosidase
+R1	AssociatedTo Arg1:T2 Arg2:T4	
+R2	AssociatedTo Arg1:T3 Arg2:T4	
+R3	AssociatedTo Arg1:T1 Arg2:T4	

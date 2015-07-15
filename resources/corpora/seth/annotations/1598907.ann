@@ -1,0 +1,17 @@
+T1	Gene 52 70	lipoprotein lipase
+T2	SNP 21 33	Trp86----Arg
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+T3	Gene 205 223	lipoprotein lipase
+T4	Gene 225 228	LPL
+R2	Equals Arg1:T3 Arg2:T4	
+T5	Gene 311 314	LPL
+T6	SNP 431 443	Trp86----Arg
+T7	SNP 360 414	T----C transition for codon 86 (TGG) at nucleotide 511
+T8	SNP 464 499	C----T transition at nucleotide 571
+T9	SNP 555 569	Gln106----Stop
+R3	AssociatedTo Arg1:T7 Arg2:T5	
+R4	AssociatedTo Arg1:T6 Arg2:T5	
+R5	AssociatedTo Arg1:T8 Arg2:T5	
+R6	AssociatedTo Arg1:T9 Arg2:T5	
+T10	Gene 733 736	LPL
+T11	SNP 838 850	Trp86----Arg

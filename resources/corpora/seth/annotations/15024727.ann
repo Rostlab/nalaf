@@ -1,0 +1,14 @@
+T1	Gene 515 522	cubilin
+T3	Gene 524 528	CUBN
+T4	Gene 568 571	AMN
+R2	Equals Arg1:T1 Arg2:T3	
+T2	Gene 556 566	amnionless
+R1	Equals Arg1:T2 Arg2:T4	
+T5	Gene 530 534	MGA1
+R3	Equals Arg1:T1 Arg2:T5	
+T6	Gene 882 886	CUBN
+T7	Gene 952 955	AMN
+T8	Gene 1051 1054	AMN
+T9	Gene 1085 1089	CUBN
+T10	Gene 1134 1138	CUBN
+T11	Gene 1143 1146	AMN

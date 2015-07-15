@@ -1,0 +1,13 @@
+T1	Gene 54 58	MCAD
+T2	Gene 17 52	medium chain acyl-CoA dehydrogenase
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 103 107	MCAD
+T4	Gene 66 101	Medium chain acyl-CoA dehydrogenase
+R2	Equals Arg1:T4 Arg2:T3	
+T5	Gene 195 199	MCAD
+T7	SNP 580 588	985A-->G
+T8	SNP 596 633	glutamate substitution for lysine-304
+T9	SNP 1019 1027	985A-->G
+T10	Gene 988 992	MCAD
+T11	Gene 931 953	acyl-CoA dehydrogenase
+T6	SNP 529 537	985A-->G

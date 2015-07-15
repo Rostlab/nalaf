@@ -1,0 +1,16 @@
+T1	Gene 26 59	N-myc downstream-regulated gene 1
+T2	Gene 61 66	NDRG1
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 154 187	N-myc downstream-regulated gene 1
+T4	Gene 189 194	NDRG1
+R2	Equals Arg1:T3 Arg2:T4	
+T5	SNP 445 450	R148X
+T6	Gene 553 558	NDRG1
+T7	Gene 820 825	NDRG1
+T8	SNP 914 923	IVS8-1G>A
+T9	SNP 925 937	g.2290787G>A
+R3	AssociatedTo Arg1:T8 Arg2:T7	
+R4	AssociatedTo Arg1:T9 Arg2:T7	
+T10	SNP 1047 1056	IVS8-1G>A
+T11	SNP 1177 1182	R148X
+T12	Gene 1234 1239	NDRG1

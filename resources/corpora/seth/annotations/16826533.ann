@@ -1,0 +1,7 @@
+T1	Gene 13 18	WNT7A
+T2	Gene 452 475	dorsoventral-patterning
+T3	Gene 481 486	WNT7A
+R1	Equals Arg1:T2 Arg2:T3	
+T4	Gene 668 673	WNT7A
+T5	Gene 1025 1030	WNT7A
+T6	Gene 742 747	Wnt7a

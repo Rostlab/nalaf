@@ -1,0 +1,8 @@
+T1	SNP 669 674	N543H
+T2	SNP 719 727	2393del9
+T3	Gene 591 614	low-density lipoprotein
+T4	Gene 616 619	LDL
+R1	Equals Arg1:T3 Arg2:T4	
+T5	SNP 638 653	missense Asn543
+R2	AssociatedTo Arg1:T5 Arg2:T3	
+T6	Gene 1662 1665	LDL

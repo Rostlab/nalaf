@@ -1,0 +1,3 @@
+T1	SNP 16 21	A141D
+T2	Gene 40 44	CFTR
+R1	AssociatedTo Arg1:T1 Arg2:T2	

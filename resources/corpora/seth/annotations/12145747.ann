@@ -1,0 +1,9 @@
+T1	Gene 66 69	TTN
+T2	Gene 278 281	TTN
+T3	Gene 514 517	TTN
+T4	Gene 591 594	TTN
+T5	SNP 860 898	Leu-->Pro mutation at position 293,357
+T6	Gene 902 906	Mex6
+R1	AssociatedTo Arg1:T5 Arg2:T6	
+T7	Gene 923 927	Mex6
+T8	Gene 976 980	Mex5

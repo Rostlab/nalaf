@@ -1,0 +1,16 @@
+T1	SNP 68 74	W1282X
+T2	Gene 87 91	CFTR
+R1	AssociatedTo Arg1:T1 Arg2:T2	
+T3	SNP 247 257	Trp1282Ter
+T4	SNP 268 274	W1282X
+T5	Gene 283 338	cystic fibrosis (CF) transmembrane conductance regulato
+T6	Gene 341 345	CFTR
+R2	Equals Arg1:T5 Arg2:T6	
+R3	AssociatedTo Arg1:T4 Arg2:T5	
+R4	AssociatedTo Arg1:T3 Arg2:T5	
+T7	SNP 764 770	W1282X
+T8	SNP 894 900	W1282X
+T9	Gene 918 933	cystic fibrosis
+R5	AssociatedTo Arg1:T8 Arg2:T9	
+T10	SNP 1156 1162	W1282X
+T11	SNP 1708 1714	W1282X

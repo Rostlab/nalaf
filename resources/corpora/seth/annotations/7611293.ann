@@ -1,0 +1,17 @@
+T1	SNP 21 26	I278T
+T2	Gene 35 62	cystathionine beta-synthase
+R1	AssociatedTo Arg1:T1 Arg2:T2	
+T3	Gene 163 190	Cystathionine beta-synthase
+T4	Gene 192 195	CBS
+R2	Equals Arg1:T3 Arg2:T4	
+T5	SNP 572 577	T833C
+T6	SNP 664 669	I278T
+R3	AssociatedTo Arg1:T5 Arg2:T4	
+R4	AssociatedTo Arg1:T6 Arg2:T4	
+T7	SNP 760 765	I278T
+T9	SNP 996 1001	I278T
+T10	SNP 1188 1193	G139R
+T11	SNP 1198 1203	E144K
+T12	SNP 1283 1288	I278T
+T8	SNP 964 969	I278T
+T13	SNP 625 662	threonine for isoleucine at codon 278

@@ -1,0 +1,21 @@
+T1	Gene 37 42	CYP21
+T2	Gene 13 35	steroid 21-hydroxylase
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 321 328	P450c21
+T4	Gene 297 319	Steroid 21-hydroxylase
+R2	Equals Arg1:T4 Arg2:T3	
+T5	Gene 413 435	17-hydroxyprogesterone
+T6	Gene 440 452	progesterone
+T7	Gene 456 496	11-deoxycortisol and deoxycorticosterone
+T8	Gene 556 562	CYP21B
+T9	Gene 549 554	CYP21
+R3	Equals Arg1:T9 Arg2:T8	
+T10	Gene 655 661	CYP21P
+T11	Gene 663 669	CYP21A
+R4	Equals Arg1:T10 Arg2:T11	
+T12	Gene 685 690	CYP21
+T13	Gene 781 786	CYP21
+T14	Gene 791 797	CYP21P
+T15	Gene 834 839	CYP21
+T16	Gene 879 885	CYP21P
+T17	Gene 889 894	CYP21

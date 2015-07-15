@@ -1,0 +1,6 @@
+T1	Gene 42 47	SMAD4
+T2	Gene 478 483	SMAD4
+T3	Gene 505 554	transducer mediating transforming growth factor β
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 664 669	SMAD4
+T5	Gene 1042 1047	SMAD4

@@ -1,0 +1,5 @@
+T1	Gene 16 20	LIPA
+T2	SNP 21 27	Tyr22X
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+T3	Gene 33 53	ysosomal acid lipase
+R2	Equals Arg1:T1 Arg2:T3	

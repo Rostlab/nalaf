@@ -1,0 +1,21 @@
+T1	Gene 48 54	LGMD1A
+T2	Gene 0 8	myotilin
+T3	Gene 91 97	LGMD1A
+T4	Gene 56 89	Limb-girdle muscular dystrophy 1A
+R1	Equals Arg1:T4 Arg2:T3	
+T5	Gene 553 558	LGMD1
+T6	SNP 636 640	S55F
+R2	AssociatedTo Arg1:T6 Arg2:T5	
+T7	Gene 753 761	myotilin
+T8	SNP 790 794	T57I
+R3	AssociatedTo Arg1:T8 Arg2:T7	
+T9	SNP 829 833	T57I
+T10	SNP 838 842	S55F
+T11	Gene 920 928	myotilin
+R4	AssociatedTo Arg1:T10 Arg2:T11	
+R5	AssociatedTo Arg1:T9 Arg2:T11	
+T12	Gene 1228 1234	LGMD1A
+T13	Gene 1331 1337	LGMD1A
+T14	Gene 1311 1319	myotilin
+T15	SNP 608 634	serine 55 to phenylalanine
+R6	AssociatedTo Arg1:T15 Arg2:T5	

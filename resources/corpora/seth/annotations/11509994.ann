@@ -1,0 +1,5 @@
+T1	SNP 928 933	R183P
+T2	Gene 574 580	BCKDHB
+R1	AssociatedTo Arg1:T1 Arg2:T2	
+T3	SNP 1089 1094	R183P
+R2	AssociatedTo Arg1:T3 Arg2:T2	

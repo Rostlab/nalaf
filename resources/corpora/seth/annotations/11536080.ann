@@ -1,0 +1,8 @@
+T1	SNP 706 713	D7S2472
+T2	Gene 738 745	elastin
+T3	Gene 752 755	ELN
+R1	Equals Arg1:T2 Arg2:T3	
+R2	AssociatedTo Arg1:T1 Arg2:T3	
+T4	Gene 859 863	ELN,
+T5	Gene 999 1002	ELN
+T6	Gene 1207 1210	ELN

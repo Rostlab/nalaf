@@ -1,0 +1,7 @@
+T1	Gene 102 105	IgE
+T2	Gene 84 100	Immunoglobulin E
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 316 319	IgE
+T4	Gene 1055 1058	IgE
+T5	Gene 1142 1145	IgE
+T6	Gene 1709 1712	IgE

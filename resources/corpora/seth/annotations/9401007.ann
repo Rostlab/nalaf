@@ -1,0 +1,8 @@
+T1	Gene 104 108	Cx32
+T2	Gene 536 540	Cx32
+T3	Gene 523 534	connexin 32
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 705 709	Cx32
+T5	Gene 755 759	Cx32
+T6	Gene 1027 1031	Cx32
+T7	Gene 1304 1308	Cx32

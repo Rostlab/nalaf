@@ -1,0 +1,8 @@
+T1	Gene 384 414	cytochrome oxidase subunit III
+T2	Gene 374 378	HVR1
+T3	Gene 344 372	human hypervariable region 1
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 535 539	HVR1
+T5	Gene 623 627	HVR1
+T6	Gene 826 830	HVR1
+T7	Gene 1004 1008	HVR1

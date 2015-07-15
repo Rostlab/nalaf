@@ -1,0 +1,6 @@
+T1	Gene 161 206	Very-long-chain acyl-coenzyme A dehydrogenase
+T2	Gene 208 213	VLCAD
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 1476 1481	VLCAD
+T4	Gene 2139 2144	VLCAD
+T5	Gene 1348 1353	VLCAD

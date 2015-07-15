@@ -1,0 +1,8 @@
+T1	Gene 37 42	ABCD1
+T2	Gene 10 30	adrenoleukodystrophy
+T3	SNP 53 58	S636I
+T4	Gene 78 83	ABCD1
+T5	SNP 98 103	R104C
+R1	Equals Arg1:T2 Arg2:T1	
+R2	AssociatedTo Arg1:T3 Arg2:T1	
+R3	AssociatedTo Arg1:T5 Arg2:T4	

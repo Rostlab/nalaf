@@ -1,0 +1,8 @@
+T1	Gene 28 33	UGRP1
+T2	Gene 401 406	UGRP1
+T3	Gene 417 446	uteroglobin-related protein 1
+T4	Gene 526 531	UGRP1
+R1	Equals Arg1:T2 Arg2:T3	
+T5	Gene 684 689	UGRP1
+T6	SNP 624 670	G --> A polymorphism was identified at -112 bp
+R2	AssociatedTo Arg1:T6 Arg2:T5	

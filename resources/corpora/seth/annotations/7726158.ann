@@ -1,0 +1,8 @@
+T1	Gene 29 64	methylenetetrahydrofolate reductase
+T2	Gene 116 151	methylenetetrahydrofolate reductase
+T3	Gene 430 435	MTHFR
+T4	Gene 388 428	5,10-methylenetetrahydrofolate reductase
+R1	Equals Arg1:T4 Arg2:T3	
+T5	Gene 522 527	MTHFR
+T6	Gene 663 668	MTHFR
+T7	Gene 733 738	MTHFR

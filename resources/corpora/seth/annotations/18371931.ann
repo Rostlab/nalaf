@@ -1,0 +1,10 @@
+T1	Gene 672 677	NPHP3
+T2	Gene 907 918	NPHP3/Nphp3
+T3	Gene 1034 1039	Nphp3
+T4	Gene 1133 1138	Nphp3
+T5	Gene 1258 1263	NPHP3
+T6	Gene 1595 1609	nephrocystin-3
+T7	Gene 949 963	nephrocystin-3
+T8	Gene 8 22	nephrocystin-3
+T9	Gene 1706 1720	nephrocystin-3
+R1	Equals Arg1:T3 Arg2:T7	

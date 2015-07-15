@@ -1,0 +1,8 @@
+T1	Gene 151 155	GLI3
+T2	Gene 189 221	zinc-finger transcription factor
+T3	Gene 184 188	GLI3
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 384 388	GLI3
+T5	Gene 505 509	GLI3
+T6	Gene 592 596	GLI3
+T7	Gene 1713 1717	GLI3

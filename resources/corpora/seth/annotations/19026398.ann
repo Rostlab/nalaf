@@ -1,0 +1,8 @@
+T1	Gene 13 24	contactin-1
+T2	Gene 895 900	CNTN1
+T3	Gene 976 987	contactin-1
+R1	Equals Arg1:T2 Arg2:T3	
+T4	Gene 989 1000	Contactin-1
+T5	Gene 1144 1155	contactin-1
+T6	Gene 1381 1392	contactin-1
+T7	Gene 1639 1650	contactin-1

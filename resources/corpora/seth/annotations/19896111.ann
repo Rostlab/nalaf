@@ -1,0 +1,3 @@
+T1	Gene 545 557	Trichohyalin
+T2	Gene 564 568	TCHH
+R1	Equals Arg1:T1 Arg2:T2	

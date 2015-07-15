@@ -1,0 +1,17 @@
+T1	Gene 117 121	IDUA
+T2	SNP 537 549	Gly409-->Arg
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+T4	SNP 636 647	Tyr64-->Ter
+T5	SNP 658 670	Gln310-->Ter
+T6	SNP 684 696	Thr366-->Pro
+R3	AssociatedTo Arg1:T4 Arg2:T1	
+R4	AssociatedTo Arg1:T5 Arg2:T1	
+R5	AssociatedTo Arg1:T6 Arg2:T1	
+T7	SNP 786 798	Thr366-->Pro
+T9	SNP 902 914	Gly409-->Arg
+T10	SNP 1124 1135	Tyr64-->Ter
+T11	SNP 1185 1197	Gln310-->Ter
+T12	Gene 1648 1652	IDUA
+R6	AssociatedTo Arg1:T9 Arg2:T12	
+R7	AssociatedTo Arg1:T10 Arg2:T12	
+R8	AssociatedTo Arg1:T11 Arg2:T12	

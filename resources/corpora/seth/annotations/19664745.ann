@@ -1,0 +1,11 @@
+T1	Gene 9 14	renin
+T2	SNP 373 383	p.Leu16del
+T3	SNP 413 423	p.Leu16Arg
+T4	Gene 479 484	renin
+R1	AssociatedTo Arg1:T3 Arg2:T4	
+R2	AssociatedTo Arg1:T2 Arg2:T4	
+T5	SNP 847 857	p.Leu16del
+T6	SNP 873 883	p.Leu16Arg
+T7	Gene 946 951	renin
+T8	SNP 1113 1123	p.Leu16del
+T9	Gene 1622 1627	renin

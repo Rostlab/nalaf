@@ -1,0 +1,7 @@
+T1	Gene 47 57	IL2RA/CD25
+T2	Gene 259 264	IL2RA
+T3	Gene 266 270	CD25
+T4	Gene 298 309	IL-2R alpha
+T5	Gene 332 345	interleukin-2
+T6	Gene 347 351	IL-2
+R1	Equals Arg1:T5 Arg2:T6	

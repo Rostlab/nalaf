@@ -1,0 +1,7 @@
+T1	Gene 688 708	ferredoxin reductase
+T2	Gene 715 719	FDXR
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 729 765	cyclin-dependent kinase inhibitor 1A
+T4	Gene 772 778	CDKN1A
+R2	Equals Arg1:T3 Arg2:T4	
+T5	Gene 873 877	FDXR

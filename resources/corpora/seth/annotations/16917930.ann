@@ -1,0 +1,5 @@
+T1	Gene 69 73	TP53
+T2	Gene 528 532	TP53
+T3	Gene 542 545	p53
+R1	Equals Arg1:T2 Arg2:T3	
+T4	Gene 1213 1217	TP53

@@ -1,0 +1,6 @@
+T1	Gene 18 45	vesicle-trafficking protein
+T2	Gene 46 50	VAPB
+R1	Equals Arg1:T1 Arg2:T2	
+T4	Gene 695 699	VAPB
+T3	Gene 614 693	vesicle-associated membrane protein/synaptobrevin-associated membrane protein B
+R2	Equals Arg1:T3 Arg2:T4	

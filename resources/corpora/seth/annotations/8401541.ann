@@ -1,0 +1,5 @@
+T1	Gene 46 49	ADA
+T2	SNP 58 63	Q254X
+T3	SNP 68 81	del nt1050-54
+T4	Gene 25 44	adenosine deaminase
+R1	Equals Arg1:T4 Arg2:T1	

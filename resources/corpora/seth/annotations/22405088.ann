@@ -1,0 +1,17 @@
+T1	Gene 38 43	TRPV3
+T2	Gene 383 388	TRPV3
+T3	SNP 403 414	p.Gly573Ser
+R1	AssociatedTo Arg1:T3 Arg2:T2	
+T4	Gene 539 544	TRPV3
+T5	SNP 561 572	p.Gly573Ser
+T6	SNP 592 603	p.Gly573Cys
+T7	SNP 608 619	p.Trp692Gly
+R2	AssociatedTo Arg1:T5 Arg2:T4	
+R3	AssociatedTo Arg1:T6 Arg2:T4	
+R4	AssociatedTo Arg1:T7 Arg2:T4	
+T8	Gene 650 705	transient receptor potential vanilloid-3 cation channel
+T9	Gene 707 712	TRPV3
+R5	Equals Arg1:T8 Arg2:T9	
+T10	Gene 828 833	TRPV3
+T11	Gene 1120 1125	TRPV3
+T12	Gene 1252 1257	TRPV3

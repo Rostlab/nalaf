@@ -1,0 +1,13 @@
+T1	Gene 34 38	BAG3
+T2	Gene 596 608	athanogene 3
+T3	Gene 610 614	BAG3
+T4	Gene 579 584	Bcl-2
+R1	Equals Arg1:T2 Arg2:T3	
+T5	Gene 732 736	BAG3
+T6	Gene 943 947	BAG3
+T7	SNP 973 984	p.Arg218Trp
+T8	SNP 989 1000	p.Leu462Pro
+R2	AssociatedTo Arg1:T7 Arg2:T6	
+R3	AssociatedTo Arg1:T8 Arg2:T6	
+T9	Gene 1180 1184	BAG3
+T10	Gene 1319 1323	BAG3

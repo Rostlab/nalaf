@@ -1,0 +1,18 @@
+T1	Gene 17 38	sepiapterin reductase
+T2	Gene 861 864	SPR
+R1	Equals Arg1:T2 Arg2:T1	
+T3	SNP 1018 1023	Q119X
+R2	AssociatedTo Arg1:T3 Arg2:T2	
+T4	SNP 1101 1118	1397-1401delAGAAC
+T5	Gene 1143 1151	SPR-gene
+R3	Equals Arg1:T5 Arg2:T2	
+R4	AssociatedTo Arg1:T4 Arg2:T5	
+T6	SNP 1201 1206	R150G
+R5	AssociatedTo Arg1:T6 Arg2:T5	
+T7	Gene 1666 1682	aldose reductase
+T8	Gene 1689 1707	carbonyl reductase
+T9	Gene 1684 1686	AR
+T10	Gene 1709 1711	CR
+T11	Gene 1718 1741	dihydrofolate reductase
+R6	Equals Arg1:T7 Arg2:T9	
+R7	Equals Arg1:T8 Arg2:T10	

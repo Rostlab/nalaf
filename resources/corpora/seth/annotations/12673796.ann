@@ -1,0 +1,7 @@
+T1	Gene 1138 1142	TP53
+T2	Gene 1149 1152	p53
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 1306 1315	positions
+T4	Gene 1476 1480	MSH2
+T5	SNP 1504 1510	965G>A
+R2	AssociatedTo Arg1:T5 Arg2:T4	

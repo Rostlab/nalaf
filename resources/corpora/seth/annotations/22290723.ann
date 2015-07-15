@@ -1,0 +1,6 @@
+T2	Gene 62 68	CDKAL1
+T3	Gene 418 490	cyclin-dependent kinase 5 regulatory subunit-associated protein 1-like 1
+T4	Gene 492 498	CDKAL1
+R1	Equals Arg1:T3 Arg2:T4	
+T5	Gene 1046 1052	CDKAL1
+T6	Gene 857 863	CDKAL1

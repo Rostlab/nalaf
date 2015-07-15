@@ -1,0 +1,24 @@
+T1	Gene 50 56	MAN2B1
+T2	Gene 252 258	MAN2B1
+T3	SNP 265 273	c.157G>T
+T4	SNP 275 283	c.562C>T
+T5	SNP 285 293	c.599A>T
+T6	SNP 295 304	c.293dupA
+T7	SNP 306 315	c.2402G>A
+T8	SNP 317 323	p.E53X
+T9	SNP 325 332	p.R188X
+T10	SNP 334 341	p.H200L
+T11	SNP 343 354	p.Y99VfsX61
+T12	SNP 356 363	p.G801D
+R1	AssociatedTo Arg1:T3 Arg2:T2	
+R2	AssociatedTo Arg1:T4 Arg2:T2	
+R3	AssociatedTo Arg1:T5 Arg2:T2	
+R4	AssociatedTo Arg1:T6 Arg2:T2	
+R5	AssociatedTo Arg1:T7 Arg2:T2	
+R6	AssociatedTo Arg1:T8 Arg2:T2	
+R7	AssociatedTo Arg1:T9 Arg2:T2	
+R8	AssociatedTo Arg1:T10 Arg2:T2	
+R9	AssociatedTo Arg1:T11 Arg2:T2	
+R10	AssociatedTo Arg1:T12 Arg2:T2	
+T13	SNP 737 744	p.H200L
+T14	SNP 792 799	p.G801D

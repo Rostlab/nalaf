@@ -1,0 +1,12 @@
+T1	Gene 13 18	LTBP4
+T2	Gene 183 239	latent transforming growth factor-beta binding protein 4
+T3	Gene 241 246	LTBP4
+R1	Equals Arg1:T2 Arg2:T3	
+T4	Gene 1271 1276	LTBP4
+T5	Gene 1184 1189	LTBP4
+T6	Gene 1328 1333	LTBP4
+T7	Gene 1387 1418	transforming growth factor-beta
+T8	Gene 1420 1428	TGF-beta
+R2	Equals Arg1:T7 Arg2:T8	
+T9	Gene 1676 1684	TGF-beta
+T10	Gene 1832 1837	LTBP4

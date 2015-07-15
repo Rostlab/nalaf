@@ -280,7 +280,7 @@ class Dataset:
 
         for pubmedid, partid, ann in self.all_annotations_with_ids():
             # abstract?
-            if regex_abstract_id.match(partid):
+            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):  # TODO check for len(partid) > 7 and ... is enough for the out of index error handling
                 is_abstract = True
             else:
                 is_abstract = False
@@ -316,7 +316,7 @@ class Dataset:
 
         # post-processing for abstract vs full document tokens
         for partid, part in self.partids_with_parts():
-            if regex_abstract_id.match(partid):
+            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
                 # OPTIONAL use nltk or different tokenizer
                 total_token_abstract += len(part.text.split(" "))
             else:

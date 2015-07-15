@@ -85,7 +85,11 @@ class VerspoorReader:
             pmid, serial, *_, paragraph, = file_name.replace('.txt', '').split('-')
             # print(pmid, serial, paragraph)
 
-            with open(file_path) as file:
+            # for abstract stats generation
+            if serial == '01':
+                serial = 'abstract'
+
+            with open(file_path, encoding='utf-8') as file:
                 text = file.read()
             text = text.replace('** IGNORE LINE **', '')
 

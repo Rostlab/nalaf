@@ -1,0 +1,11 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Microsatellite instability. Three of five microsatellite markers (BAT-25, BAT-26 and D5S346) presented different alleles (*) in the proband's primary tumor (T') and its metastasis (T") of those inherited from his biological mother (BM) and father (BF).
+
+DNA sequencing of hMSH2 and hMLH1 genes
+
+A second blood sample was obtained from the proband's mother and forwarded to the Department of Clinical Cancer Genetics (City of Hope Cancer Center, Duarte, California, USA) to full mutation analysis of the hMSH2 and hMLH1 genes. The sample was amplified followed by direct sequencing to screen the coding regions of both the hMSH2 and the hMLH1 genes for germline mutation in the DNA.
+
+After establishing the familial mutation in the proband's mother, located in the exon 12 of hMSH2 gene, it was searched in the proband's sisters by direct sequencing using a manual Sequenase PCR products kit (Amersham Biosciences).
+

@@ -1,0 +1,176 @@
+T81_2	mutation 1455 1471	somatic mutation
+T29	Concepts_Ideas 1367 1375	sporadic
+T28	cohort-patient 1347 1354	cancers
+T27	disease 1341 1354	HNPCC cancers
+T26	Disorder 1336 1340	MSI+
+T76_2	size 751 764	five to seven
+T25	Concepts_Ideas 1221 1229	sporadic
+T24	Concepts_Ideas 1199 1209	hereditary
+T23	disease 1153 1160	cancers
+T22	disease 1103 1110	Cancers
+T21	body-part 873 883	colorectal
+T5_cancer	disease 647 653	cancer
+T78_2	mutation 765 784	oncogenic mutations
+T38	disease 1484 1497	HNPCC cancers
+T37	cohort-patient 1413 1420	cancers
+T39	cohort-patient 1490 1497	cancers
+T34	Concepts_Ideas 1399 1407	sporadic
+T36	disease 1413 1420	cancers
+T35	Disorder 1408 1412	MSI+
+T30	Disorder 1376 1380	MSI+
+T32	cohort-patient 1381 1388	cancers
+T31	disease 1381 1388	cancers
+T15_2	size 1440 1443	one
+T88_2	gene 2195 2198	MMR
+T14_2	cohort-patient 3117 3125	patients
+T49	Concepts_Ideas 1686 1694	sporadic
+T48	cohort-patient 1663 1670	cancers
+T24_2	size 1631 1644	three to four
+T43	cohort-patient 1604 1611	cancers
+T42	disease 1600 1611	FAP cancers
+T41	disease 1600 1603	FAP
+T102	mutation 2869 2878	mutations
+T40	Concepts_Ideas 1587 1595	sporadic
+T101	mutation 2791 2800	mutations
+T47	disease 1659 1670	FAP cancers
+T46	disease 1659 1662	FAP
+T44	disease 1604 1611	cancers
+T50	disease 1695 1702	cancers
+T59	disease 2081 2088	cancers
+T52	body-part 1866 1876	colorectal
+T51	mutation 1813 1831	germline mutations
+T54	disease 1886 1892	cancer
+T53	Concepts_Ideas 1877 1885	familial
+T55	disease 1904 1907	FAP
+T58	Disorder 2076 2080	MSI+
+T57	Concepts_Ideas 2067 2075	sporadic
+T75	Concepts_Ideas 2957 2965	sporadic
+T76	Disorder 2966 2970	MSI+
+T73	Disorder 2883 2887	MSI+
+T74	disease 2888 2895	cancers
+T79	disease 2997 3004	cancers
+T77	Concepts_Ideas 2983 2991	sporadic
+T78	Disorder 2992 2996	MSI-
+T7_cancers	disease 3081 3088	cancers
+T71	disease 2837 2844	cancers
+T70	ethnicity 2829 2836	Finnish
+T62	Concepts_Ideas 2168 2205	Inactivation of the normal MMR allele
+T6_cancers	disease 884 891	cancers
+T63	Physiology 2266 2274	MMR loss
+T64	Concepts_Ideas 2278 2286	sporadic
+T65	Disorder 2287 2291	MSI+
+T66	disease 2292 2299	cancers
+T68	Concepts_Ideas 2815 2823	sporadic
+T69	Disorder 2824 2828	MSI-
+T61	Physiology 2319 2344	MLH1 promoter methylation
+T60	disease 2153 2166	HNPCC cancers
+T96	mutation 1645 1654	mutations
+T6	disease 873 891	colorectal cancers
+T7	disease 3070 3088	colorectal cancers
+T90_2	size 2785 2790	seven
+T4	Physiology 2239 2242	LOH
+T5	disease 636 653	Colorectal cancer
+T8	disease 1211 1216	HNPCC
+T9	disease 1341 1346	HNPCC
+T93	Disorder 1138 1142	MSI-
+T87_2	size 1678 1681	six
+T92	Disorder 1130 1134	MSI+
+T91	Physiology 2495 2523	Epigenetic MLH1 inactivation
+T90	cohort-patient 2888 2895	cancers
+T89_2	size 2854 2868	seven or eight
+T88	Disorder 1148 1152	MSI+
+T89	cohort-patient 2837 2844	cancers
+T84	disease 3240 3247	cancers
+T85	Concepts_Ideas 3217 3225	sporadic
+T86	Disorder 3226 3230	MSI+
+T87	Disorder 3235 3239	MSI-
+T58_2	gene 1841 1844	MMR
+T1	gene 2319 2323	MLH1
+T3	gene 1833 1836	APC
+T2	gene 2506 2510	MLH1
+T10	disease 1484 1489	HNPCC
+T11	disease 1912 1917	HNPCC
+T12	disease 2153 2158	HNPCC
+T13	disease 2252 2257	HNPCC
+T81	Disorder 3035 3039	MSI+
+T15	disease 358 365	cancers
+T80	Concepts_Ideas 3026 3034	sporadic
+T16	disease 199 206	cancers
+T83	body-part 3070 3080	colorectal
+T17	disease 488 494	cancer
+T82	disease 3040 3047	cancers
+T18	disease 615 621	cancer
+T19	body-part 636 646	Colorectal
+R42_m	has Arg1:T86 Arg2:T84
+R15_1	has Arg1:T48 Arg2:T47
+R26_2	has Arg1:T93 Arg2:T22
+R33_2	has Arg1:T96 Arg2:T87_2
+R43_1	has Arg1:T24 Arg2:T23
+R47_2	has Arg1:T89 Arg2:T101
+R0_T21_T6_cancers	relatedTo Arg1:T21 Arg2:T6_cancers
+R45_2	has Arg1:T14_2 Arg2:T82
+R25_1	has Arg1:T62 Arg2:T13
+R0_T91_T2	has Arg1:T91 Arg2:T2
+R8_2	has Arg1:T81_2 Arg2:T15_2
+R20_m	has Arg1:T78 Arg2:T79
+R0_T83_T7_cancers	relatedTo Arg1:T83 Arg2:T7_cancers
+R21_m	has Arg1:T77 Arg2:T79
+R25_2	has Arg1:T92 Arg2:T22
+R24_1	has Arg1:T4 Arg2:T13
+R4_m	has Arg1:T30 Arg2:T31
+R18_m	has Arg1:T73 Arg2:T74
+R21_1	has Arg1:T53 Arg2:T11
+R30_m	relatedTo Arg1:T47 Arg2:T96
+R20_1	has Arg1:T53 Arg2:T55
+R59_1	relatedTo Arg1:T74 Arg2:T102
+R51_m	has Arg1:T90 Arg2:T70
+R28_m	has Arg1:T25 Arg2:T23
+R3_m	has Arg1:T26 Arg2:T27
+R43_m	has Arg1:T85 Arg2:T84
+R10_m	has Arg1:T57 Arg2:T59
+R2_m	has Arg1:T88 Arg2:T23
+R37_2	has Arg1:T102 Arg2:T89_2
+R50_2	has Arg1:T68 Arg2:T74
+R12_m	has Arg1:T64 Arg2:T66
+R22_2	has Arg1:T78_2 Arg2:T76_2
+R5_m	has Arg1:T29 Arg2:T31
+R6_m	has Arg1:T35 Arg2:T36
+R31_m	has Arg1:T49 Arg2:T50
+R23_2	has Arg1:T96 Arg2:T24_2
+R40_m	has Arg1:T80 Arg2:T82
+R11_m	has Arg1:T65 Arg2:T66
+R17_m	has Arg1:T68 Arg2:T71
+R0_T61_T1	has Arg1:T61 Arg2:T1
+R0_T62_T88_2	has Arg1:T62 Arg2:T88_2
+R41_m	has Arg1:T87 Arg2:T84
+R14_m	has Arg1:T69 Arg2:T71
+R34_m	has Arg1:T63 Arg2:T66
+R16_m	relatedTo Arg1:T52 Arg2:T54
+R9_m	has Arg1:T58 Arg2:T59
+R10_1	has Arg1:T37 Arg2:T36
+R36_m	has Arg1:T81 Arg2:T82
+R29_m	has Arg1:T40 Arg2:T42
+R52_2	has Arg1:T90 Arg2:T102
+R15_m	has Arg1:T53 Arg2:T54
+R53_1	relatedTo Arg1:T47 Arg2:T96
+R58_1	relatedTo Arg1:T71 Arg2:T101
+R46_m	has Arg1:T89 Arg2:T71
+R49_m	has Arg1:T90 Arg2:T74
+R55_1	relatedTo Arg1:T52 Arg2:T55
+R48_m	has Arg1:T89 Arg2:T70
+R7_m	has Arg1:T34 Arg2:T36
+R35_m	has Arg1:T61 Arg2:T66
+R54_1	relatedTo Arg1:T52 Arg2:T11
+R1_1	has Arg1:T24 Arg2:T8
+R39_m	has Arg1:T75 Arg2:T79
+R3_1	has Arg1:T26 Arg2:T27
+R4_1	has Arg1:T28 Arg2:T27
+R12_1	has Arg1:T43 Arg2:T42
+R13_2	has Arg1:T101 Arg2:T90_2
+R17_1	has Arg1:T3 Arg2:T51
+R14_1	has Arg1:T43 Arg2:T42
+R32_2	relatedTo Arg1:T50 Arg2:T96
+R38_m	has Arg1:T76 Arg2:T79
+R5_1	has Arg1:T32 Arg2:T31
+R11_1	has Arg1:T39 Arg2:T38
+R0_T19_T5_cancer	relatedTo Arg1:T19 Arg2:T5_cancer

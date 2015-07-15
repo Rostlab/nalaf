@@ -1,0 +1,47 @@
+T6	gene 2500 2505	hMSH2
+T7	gene 2571 2576	hMSH2
+T4	gene 1896 1901	hMSH2
+T5	gene 1987 1992	hMSH2
+T28	mutation 2490 2499	Pro622Leu
+T27	mutation 1767 1778	p.Pro622Thr
+T8	cohort-patient 782 789	proband
+T26	mutation 1741 1803	proline 622 to threonine (p.Pro622Thr) amino acid substitution
+T9	mutation 1645 1654	c.1864C>A
+T25	mutation 1643 1678	a c.1864C>A transversion in exon 12
+T24	disease 1457 1462	tumor
+T23	Disorder 1481 1499	high frequency MSI
+T22	Disorder 1407 1448	dysfunction of the mismatch repair system
+T21	disease 1294 1299	tumor
+T20	cohort-patient 1276 1285	proband's
+T16_2	mutation 2447 2456	Pro640Leu
+T28_2	gender 2110 2116	mother
+T1	gene 1579 1584	hMLH1
+T3	gene 1682 1687	hMSH2
+T2	gene 1569 1574	hMSH2
+T27_2	cohort-patient 2100 2116	proband's mother
+T10	Disorder 1501 1506	MSI-H
+T11	disease 1858 1863	HNPCC
+T12	cohort-patient 737 741	case
+T13	gender 204 207	his
+T14	gender 877 880	his
+T15	gender 1129 1132	his
+T16	gender 1365 1368	his
+T17	cohort-patient 113 122	proband's
+T18	cohort-patient 1092 1101	proband's
+T19	disease 1102 1107	tumor
+R6_2	has Arg1:T27_2 Arg2:T28_2
+R4_m	has Arg1:T23 Arg2:T24
+R6_1	has Arg1:T20 Arg2:T16
+R15_1	has Arg1:T3 Arg2:T27
+R1_1	has Arg1:T17 Arg2:T13
+R9_1	has Arg1:T10 Arg2:T24
+R4_1	has Arg1:T18 Arg2:T15
+R12_1	has Arg1:T3 Arg2:T9
+R3_m	has Arg1:T18 Arg2:T19
+R2_m	has Arg1:T6 Arg2:T28
+R2_1	has Arg1:T12 Arg2:T14
+R14_1	has Arg1:T8 Arg2:T14
+R5_m	has Arg1:T20 Arg2:T21
+R11_1	has Arg1:T3 Arg2:T27
+R1_m	has Arg1:T3 Arg2:T9
+R7_1	has Arg1:T22 Arg2:T24

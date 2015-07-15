@@ -1,0 +1,21 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Patients
+
+25 colorectal cancer patients undergoing elective standard oncological resection at the department of surgery, Charité, Campus Benjamin Franklin, Berlin, Germany were prospectively recruited for this study. The study was approved by the local ethical committee and informed consent was obtained from all patients. Rectal cancer patients receiving neo-adjuvant radiochemotherapy were excluded from this study.
+
+Tissue samples and UV-laser microdissection
+
+Transmural cancer specimens were snap frozen (liquid nitrogen) within 20 minutes following excision and stored at -80°C. All tissue samples were evaluated by a pathologist before and during laser micro-dissection to ensure an enrichment of vital tumor cells. Six-micron serial frozen sections were cut on a standard cryostat and mounted on RNase-free foil (2,5 μm) coated on glass slides followed by immediate fixation (70% ethanol for 30s), H&E staining, and ethanol dehydration (70%, 95% and finally 100% ethanol). After vacuum drying the membranes carrying the sections were manually turned and coated on new RNase free glass slides. Optically transparent CapSure LCM caps (ARCTURUS, CA) were placed on the foil over a selected field of cells. Vital colorectal epithelial carcinoma cells (> 90% proportion) from the invasion front were isolated using UV-LCM Systems from PALM (Microlaser Technologie, Germany) and SL (Microtest GmbH, Germany). After visual control of completeness of dissection the captured cells were immersed in denaturation buffer (GTC Extraction Buffer, 2% beta-mercaptoethanol, Promega, WI) and stored at -80°C.
+
+mRNA-extraction, cRNA-preparation and -amplification
+
+Poly(A)+ RNAs were isolated using PolyATtract 1000 kit (Promega, Heidelberg, Germany) according to the manufacturer's recommendations. For each sample the cDNA synthesis and repetitive in vitro transcription were performed three times, as described previously [38-40]. In brief, the total amount of prepared mRNA from one sample was used. First strand cDNA synthesis was initiated using the Affymetrix T7-oligo-dT promoter-primer combination. The second strand cDNA was synthesized by internal priming. In vitro transcription was performed using Ambion's Megascript kit (Ambion, Huntington, UK) as recommended by the manufacturer. From the generated cRNA a new first strand synthesis was initiated using 0.025 mM of a random hexamer as primer. After completion, the second strand synthesis was primed using the Affymetrix T7-oligo-dT promoter-primer combination at a concentration of 0.1 mM. A second in vitro transcription was performed and then the procedure was repeated one additional time. During the third in vitro transcription biotin-labeled nucleotides were incorporated into the cRNA as recommended by the Affymetrix protocol.
+
+Microarray hybridization
+
+BIO+cRNAs were hybridized on Affymetrix Human Genome U133A and U133B GeneChips, that consist of 44.928 probe sets (Affymetrix, Santa Clara, CA). Fragmentation, preparation of hybridization cocktails, hybridization, washing, staining and scanning of Affymetrix GeneChip were performed according to the manufacturer's protocols.
+

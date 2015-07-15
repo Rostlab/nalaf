@@ -1,0 +1,72 @@
+T2_cancer	disease 894 900	cancer
+T41_2	Concepts_Ideas 1217 1240	enhanced aggressiveness
+T6	disease 171 173	MP
+T7	disease 381 386	polyp
+T4	disease 714 718	CRCs
+T5	Disorder 637 658	chomosomally unstable
+T29	Physiology 1381 1401	inactivation of TP53
+T28	mutation 1360 1368	mutation
+T8	Concepts_Ideas 372 380	serrated
+T27	Physiology 1277 1351	methylation of the DNA repair gene O-6-methylguanine DNA methyltransferase
+T9	mutation 396 404	mutation
+T26	gene 1372 1376	KRAS
+T25	gene 1353 1357	MGMT
+T42	Physiology 1120 1143	inhibition of apoptosis
+T24	disease 1204 1211	lesions
+T41	Disorder 1068 1081	crypt fission
+T23	disease 1179 1185	polyps
+T22	Concepts_Ideas 1170 1178	serrated
+T40	Disorder 1045 1063	hyperproliferation
+T21	disease 1100 1108	adenomas
+T20	body-part 883 893	colorectal
+T1	gene 1397 1401	TP53
+T3	disease 659 663	CRCs
+T2	disease 883 900	colorectal cancer
+T36_2	mutation 1381 1393	inactivation
+T10	gene 408 412	BRAF
+T38	disease 602 611	carcinoma
+T11	Physiology 427 442	DNA methylation
+T37	disease 594 601	adenoma
+T12	body-part 548 558	colorectal
+T13	disease 559 572	tumorigenesis
+T39	gene 1312 1351	O-6-methylguanine DNA methyltransferase
+T14	Concepts_Ideas 681 689	serrated
+T34	disease 241 244	HPs
+T15	Disorder 728 754	microsatellite instability
+T33	disease 203 205	SA
+T16	Disorder 756 759	MSI
+T17	mutation 762 770	mutation
+T36	disease 109 116	lesions
+T18	gene 774 778	BRAF
+T35	Concepts_Ideas 1510 1522	precancerous
+T30	disease 1523 1529	polyps
+T19	Physiology 793 808	DNA methylation
+T32	disease 94 96	SA
+T31	disease 87 89	HP
+R16_m	has Arg1:T41 Arg2:T21
+R0_T20_T2_cancer	relatedTo Arg1:T20 Arg2:T2_cancer
+R10_1	has Arg1:T16 Arg2:T4
+R15_1	has Arg1:T29 Arg2:T30
+R0_T27_T39	has Arg1:T27 Arg2:T39
+R15_m	has Arg1:T11 Arg2:T7
+R8_m	has Arg1:T19 Arg2:T4
+R7_1	has Arg1:T14 Arg2:T4
+R7_m	has Arg1:T15 Arg2:T4
+R4_m	has Arg1:T5 Arg2:T3
+R18_m	has Arg1:T42 Arg2:T23
+R18_1	relatedTo Arg1:T30 Arg2:T28
+R0_T29_T36_2	has Arg1:T29 Arg2:T36_2
+R12_2	has Arg1:T1 Arg2:T36_2
+R19_2	has Arg1:T41_2 Arg2:T24
+R13_m	has Arg1:T35 Arg2:T30
+R17_1	has Arg1:T27 Arg2:T30
+R10_m	has Arg1:T22 Arg2:T23
+R3_m	relatedTo Arg1:T12 Arg2:T13
+R2_m	has Arg1:T10 Arg2:T9
+R5_m	has Arg1:T18 Arg2:T17
+R6_m	relatedTo Arg1:T4 Arg2:T17
+R17_m	has Arg1:T40 Arg2:T21
+R11_m	has Arg1:T26 Arg2:T28
+R0_T29_T1	has Arg1:T29 Arg2:T1
+R1_m	has Arg1:T8 Arg2:T7
+R14_m	relatedTo Arg1:T7 Arg2:T9

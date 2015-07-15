@@ -1,0 +1,43 @@
+T15_2	gene 1428 1432	BCL2
+T14_2	disease 212 217	tumor
+T6	gene 2542 2545	APC
+T7	gene 1434 1439	SMAD4
+T4	gene 2269 2272	APC
+T5	gene 2342 2345	APC
+T33_2	gene 1497 1500	DCC
+T8	disease 1847 1864	colorectal cancer
+T24_2	gene 2069 2072	MCC
+T9	disease 1361 1373	colon cancer
+T10_cancer	disease 1773 1779	cancer
+T29_2	gene 603 607	BCL2
+T32_2	disease 467 472	tumor
+T16_2	body-part 2218 2228	colorectal
+T28_2	gene 1558 1562	MBD2
+T30_2	gene 1545 1553	LOC51320
+T17_2	gene 2350 2353	MCC
+T26_2	gene 1456 1460	TCF4
+T1	gene 1818 1821	APC
+T9_cancer	disease 1367 1373	cancer
+T23_2	disease 2871 2876	tumor
+T22_2	disease 2853 2858	tumor
+T31_2	disease 449 454	tumor
+T3	gene 1926 1929	APC
+T25_2	gene 2104 2108	CDO1
+T2	gene 1921 1924	APC
+T27_2	body-part 1847 1857	colorectal
+T8_cancer	disease 1858 1864	cancer
+T10	disease 1767 1779	colon cancer
+T11	cohort-patient 728 736	patients
+T20_2	gene 2276 2279	MCC
+T12	cohort-patient 1038 1046	patients
+T13	cohort-patient 1156 1164	patients
+T14	cohort-patient 305 312	Patient
+T15	cohort-patient 616 623	patient
+T16	cohort-patient 922 929	patient
+T17	cohort-patient 2709 2716	Patient
+T21_2	disease 2616 2621	tumor
+T18	body-part 1361 1366	colon
+T19	body-part 1767 1772	colon
+R0_T27_2_T8_cancer	relatedTo Arg1:T27_2 Arg2:T8_cancer
+R0_T18_T9_cancer	relatedTo Arg1:T18 Arg2:T9_cancer
+R0_T19_T10_cancer	relatedTo Arg1:T19 Arg2:T10_cancer

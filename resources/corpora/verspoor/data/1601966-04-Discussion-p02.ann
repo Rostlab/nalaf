@@ -1,0 +1,29 @@
+T15_2	size 2391 2395	7.7%
+T9_2	body-part 1134 1144	colorectal
+T16_2	size 2276 2286	81 of 2146
+T11_2	cohort-patient 442 449	samples
+T17_2	cohort-patient 2287 2292	genes
+T14_2	Physiology 2373 2389	under-expression
+T1_merge	disease 1134 1152	colorectal cancers
+T8_2	disease 1713 1718	tumor
+T3	disease 599 602	CRC
+T2	disease 150 153	CRC
+T6	disease 3049 3052	CRC
+T7	cohort-patient 2204 2212	patients
+T12_2	cohort-patient 2362 2367	genes
+T4	disease 1051 1054	CRC
+T19_2	size 2336 2340	3.8%
+T5	disease 2200 2203	CRC
+T1_merge_cancers	disease 1145 1152	cancers
+T10_2	disease 436 441	tumor
+T18_2	Physiology 2319 2334	over-expression
+T13_2	size 2350 2361	164 of 2146
+R0_T9_2_T1_merge_cancers	relatedTo Arg1:T9_2 Arg2:T1_merge_cancers
+R7_2	has Arg1:T17_2 Arg2:T16_2
+R6_2	has Arg1:T12_2 Arg2:T15_2
+R5_2	has Arg1:T14_2 Arg2:T12_2
+R8_2	has Arg1:T18_2 Arg2:T17_2
+R1_2	has Arg1:T7 Arg2:T5
+R9_2	has Arg1:T17_2 Arg2:T19_2
+R4_2	has Arg1:T12_2 Arg2:T13_2
+R3_2	has Arg1:T11_2 Arg2:T10_2

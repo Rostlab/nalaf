@@ -1,0 +1,42 @@
+T21_merge	size 2671 2673	50
+T6	gene 1870 1874	MSH6
+T7	gene 1907 1911	MSH2
+T4	gene 1913 1917	MLH1
+T5	gene 1855 1859	MSH2
+T8	gene 1922 1926	MSH6
+T9	disease 1669 1686	colorectal cancer
+T26	cohort-patient 2812 2818	people
+T10_cancer	disease 2660 2666	cancer
+T25	disease 2805 2811	normal
+T24	Disorder 2788 2791	MSS
+T23	disease 2719 2725	cancer
+T22	cohort-patient 2674 2680	people
+T20	body-part 2649 2659	colorectal
+T14_merge	disease 2681 2695	without cancer
+T1	gene 82 86	MLH1
+T9_cancer	disease 1680 1686	cancer
+T3	gene 1861 1865	MLH1
+T2	gene 578 583	hMLH1
+T10	disease 2649 2666	colorectal cancer
+T11	cohort-patient 1651 1659	patients
+T12	cohort-patient 2631 2639	patients
+T13	cohort-patient 2792 2800	patients
+T15	Disorder 1665 1668	MSI
+T16	body-part 1669 1679	colorectal
+T18_merge	size 2628 2630	50
+T17	mutation 1843 1851	Mutation
+T19	Disorder 2645 2648	MSS
+R4_m	has Arg1:T19 Arg2:T10
+R6_1	has Arg1:T6 Arg2:T17
+R0_T20_T10_cancer	relatedTo Arg1:T20 Arg2:T10_cancer
+R9_2	has Arg1:T24 Arg2:T13
+R4_1	has Arg1:T5 Arg2:T17
+R12_1	has Arg1:T26 Arg2:T25
+R2_m	has Arg1:T15 Arg2:T9
+R0_T16_T9_cancer	relatedTo Arg1:T16 Arg2:T9_cancer
+R5_2	has Arg1:T12 Arg2:T10
+R8_m	has Arg1:T12 Arg2:T18_merge
+R5_1	has Arg1:T3 Arg2:T17
+R6_m	has Arg1:T22 Arg2:T21_merge
+R11_1	has Arg1:T22 Arg2:T14_merge
+R7_m	has Arg1:T11 Arg2:T9

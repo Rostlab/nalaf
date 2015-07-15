@@ -1,0 +1,7 @@
+T4	ethnicity 100 107	Swedish
+T5	disease 108 117	Polyposis
+T1	gene 169 172	APC
+T3	cohort-patient 128 134	Family
+T2	cohort-patient 84 92	family 1
+R2_1	has Arg1:T2 Arg2:T5
+R1_m	has Arg1:T2 Arg2:T4

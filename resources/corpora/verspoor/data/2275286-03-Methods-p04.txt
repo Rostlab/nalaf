@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Statistical methods
+
+The data are presented as mean and standard deviation (x ± SD) or percentage. Student t-test, chi-square test or Log-rank test were used for statistic analysis as appropriate (SPSS Inc., Chicago, IL, USA), with p < 0.05 indicating statistical significance.
+

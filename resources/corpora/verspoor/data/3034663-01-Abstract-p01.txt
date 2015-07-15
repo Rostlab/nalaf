@@ -1,0 +1,20 @@
+Evidence for classification of c.1852_1853AA>GC in MLH1 as a neutral variant for Lynch syndrome
+
+Abstract
+
+Background
+
+Lynch syndrome (LS) is an autosomal dominant inherited cancer syndrome characterized by early onset cancers of the colorectum, endometrium and other tumours. A significant proportion of DNA variants in LS patients are unclassified. Reports on the pathogenicity of the c.1852_1853AA>GC (p.Lys618Ala) variant of the MLH1 gene are conflicting. In this study, we provide new evidence indicating that this variant has no significant implications for LS.
+
+Methods
+
+The following approach was used to assess the clinical significance of the p.Lys618Ala variant: frequency in a control population, case-control comparison, co-occurrence of the p.Lys618Ala variant with a pathogenic mutation, co-segregation with the disease and microsatellite instability in tumours from carriers of the variant. We genotyped p.Lys618Ala in 1034 individuals (373 sporadic colorectal cancer [CRC] patients, 250 index subjects from families suspected of having LS [revised Bethesda guidelines] and 411 controls). Three well-characterized LS families that fulfilled the Amsterdam II Criteria and consisted of members with the p.Lys618Ala variant were included to assess co-occurrence and co-segregation. A subset of colorectal tumour DNA samples from 17 patients carrying the p.Lys618Ala variant was screened for microsatellite instability using five mononucleotide markers.
+
+Results
+
+Twenty-seven individuals were heterozygous for the p.Lys618Ala variant; nine had sporadic CRC (2.41%), seven were suspected of having hereditary CRC (2.8%) and 11 were controls (2.68%). There were no significant associations in the case-control and case-case studies. The p.Lys618Ala variant was co-existent with pathogenic mutations in two unrelated LS families. In one family, the allele distribution of the pathogenic and unclassified variant was in trans, in the other family the pathogenic variant was detected in the MSH6 gene and only the deleterious variant co-segregated with the disease in both families. Only two positive cases of microsatellite instability (2/17, 11.8%) were detected in tumours from p.Lys618Ala carriers, indicating that this variant does not play a role in functional inactivation of MLH1 in CRC patients.
+
+Conclusions
+
+The p.Lys618Ala variant should be considered a neutral variant for LS. These findings have implications for the clinical management of CRC probands and their relatives.
+

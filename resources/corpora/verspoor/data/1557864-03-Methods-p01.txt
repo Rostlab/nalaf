@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Cell culture
+
+All cell lines were cultured in medium supplemented with 100 U/ml penicillin, 100 μg/ml streptomycin and 50 μg/ml gentamycin at 37°C in humidified air with 5% CO2 (except for SW48 which was cultured with 10% CO2). The human ovarian cancer cell lines SKOV6, HOC7, SKOV3, 2774, KB3.1 and CAOV3 were cultured in DMEM/HAMF12 medium with 10% fetal calf serum, A2780 in RPMI 1640 medium with 10% fetal calf serum and OVCAR3 in RPMI 1640 with 20% fetal calf serum and 0.01 mg/ml insulin. The human colon cancer cell lines SW480 and SW48, included as controls, were cultured in RPMI 1640 with 5% fetal calf serum and DMEM/HAMF12 with 10% fetal calf serum respectively. The ovarian cancer cell line A2780 has been cultured separately in two different research laboratories at our department. The isolated DNA and RNA from each culture were used for further analysis.
+
+The MTT colorimetric assay, which measures the number of viable cells capable of reducing the tetrazolium compound (Sigma-Aldrich, Zwijndrecht, The Netherlands) to a blue formazan product, was used to quantitate the chemosensitivity of the ovarian cancer cell lines to cisplatin. The assay was performed as described previously by us [38].
+
+Patients
+
+The study design was approved by the medical ethical committee of the Erasmus MC Rotterdam, the Netherlands (MEC 02.949). Tissue of 75 ovarian cancer patients and four normal stromal ovarian tissues collected at the Erasmus MC in Rotterdam were included in this study. The patient and tumor characteristics are listed in Table 1. Forty-six patients received platinum-based chemotherapy of whom 34 responded to treatment defined as complete response, partial response, stable disease or no relapse within 6 months after chemotherapy, whereas eleven patients had progressive disease or a relapse within 6 months after chemotherapy. In one patient the response was not known. The response rate of 74% (34/46) is comparable with the response rate of 80% seen in the clinic. A more detailed description of the response definitions has been previously described by us [5]. The median age at the time of surgery was 52 years (range 27–83).
+
+DNA isolation: microsatellite analysis and methylation specific PCR
+
+Microsatellite analysis and methylation specific PCR (MSP) were performed on DNA from eight ovarian cancer cell lines, 75 ovarian cancer specimens (part of a collection of ovarian tumor specimens described by us previously [39]) and the four normal stromal ovarian specimens (see study design in Figure 2).
+

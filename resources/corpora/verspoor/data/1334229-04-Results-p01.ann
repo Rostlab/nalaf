@@ -1,0 +1,170 @@
+T84_merge	size 1865 1872	121/656
+T80_merge	size 1860 1863	18%
+T29	gene 1261 1267	CTNNB1
+T28	gene 998 1004	CTNNB1
+T27	gene 770 776	CTNNB1
+T26	gene 336 342	CTNNB1
+T25	gene 291 297	CTNNB1
+T24	gene 164 170	CTNNB1
+T23	gene 2501 2506	K-ras
+T22	gene 2276 2281	K-ras
+T21	gene 1966 1971	K-ras
+T20	gene 1767 1772	K-ras
+T52_merge	size 237 242	seven
+T38	disease 2587 2594	tumours
+T61_merge	size 658 677	Three of these five
+T37	disease 2453 2460	tumours
+T39	disease 314 332	colorectal cancers
+T34	disease 977 984	tumours
+T33	disease 678 685	tumours
+T36	disease 1468 1475	tumours
+T35	disease 1291 1298	tumours
+T30	disease 9 16	Tumours
+T32	disease 254 261	tumours
+T31	disease 199 205	tumour
+T96_merge	size 2450 2452	11
+T49	Physiology 94 117	lacked hMLH1 expression
+T48	mutation 137 156	mutations in exon 3
+T72_merge	size 1453 1456	103
+T64_merge	size 711 714	Two
+T43	cohort-patient 33 41	patients
+T40_cancer	disease 726 732	cancer
+T42	mutation 1268 1277	mutations
+T102	Physiology 1570 1594	lack of hMLH1 expression
+T41	mutation 1005 1013	mutation
+T40	disease 715 732	colorectal cancer
+T101	mutation 1347 1356	mutations
+T46	body-part 579 593	proximal colon
+T45	cohort-patient 210 217	patient
+T44	cohort-patient 733 741	patients
+T50	mutation 67 90	truncating APC mutation
+T59	mutation 477 558	codons 37 and 45, all were C→T transitions, leading to Ser→Phe amino acid changes
+T47_merge	size 22 32	464 of 656
+T68_merge	size 1847 1854	130/656
+T54	cohort-patient 254 261	tumours
+T53	body-part 243 253	colorectal
+T55	mutation 279 304	mutation in CTNNB1 exon 3
+T58	cohort-patient 325 332	cancers
+T57	body-part 314 324	colorectal
+T76	mutation 1494 1529	truncating or missense APC mutation
+T73	body-part 1457 1467	colorectal
+T74	cohort-patient 1468 1475	tumours
+T79	mutation 1621 1665	Truncating as well as missense APC mutations
+T77	mutation 2478 2486	mutation
+T78	mutation 1534 1559	activating K-ras mutation
+T39_cancers	disease 325 332	cancers
+T87_merge_merge	mutation 371 507	loss of one of the Ser/Thr phosphorylation sites and subsequent stabilisation of the protein, occurred at codons 37 and 45, all were C→T
+T91_merge	mutation 1943 1971	activating mutation in K-ras
+T71	Physiology 1388 1404	hMLH1 expression
+T70	cohort-patient 1291 1298	tumours
+T62	cohort-patient 678 685	tumours
+T63	Physiology 693 709	hMLH1 deficiency
+T65	body-part 715 725	colorectal
+T66	mutation 863 904	amino acid alteration at codons 22 and 29
+T67	mutation 1189 1213	truncating APC mutations
+T56_merge	size 309 313	five
+T69_merge	size 1287 1290	656
+T60	mutation 619 638	activating mutation
+T99	Physiology 2517 2540	lacked hMLH1 expression
+T97	cohort-patient 2453 2460	tumours
+T51_merge	size 1842 1845	20%
+T90_merge	mutation 1909 1935	truncating mutation in APC
+T6	gene 2542 2547	hMLH1
+T7	gene 78 81	APC
+T4	gene 1578 1583	hMLH1
+T5	gene 2524 2529	hMLH1
+T8	gene 1200 1203	APC
+T9	gene 1364 1367	APC
+T94	mutation 2265 2290	activating K-ras mutation
+T93	mutation 2234 2257	truncating APC mutation
+T88	mutation 754 762	mutation
+T89	Physiology 2542 2558	hMLH1 deficiency
+T85	cohort-patient 1736 1745	mutations
+T86	cohort-patient 1773 1782	mutations
+T58_2	cohort-patient 1114 1121	samples
+T1	gene 101 106	hMLH1
+T3	gene 1388 1393	hMLH1
+T2	gene 693 698	hMLH1
+T10	gene 1517 1520	APC
+T11	gene 1652 1655	APC
+T12	gene 1732 1735	APC
+T13	gene 1932 1935	APC
+T14	gene 2245 2248	APC
+T15	gene 2494 2497	APC
+T81	mutation 1670 1696	activating K-ras mutations
+T16	gene 646 651	K-ras
+T17	gene 1372 1377	K-ras
+T83	mutation 1756 1802	activating K-ras mutations in codons 12 and 13
+T18	gene 1545 1550	K-ras
+T82	mutation 1721 1745	Truncating APC mutations
+T19	gene 1681 1686	K-ras
+R34_1	has Arg1:T18 Arg2:T78
+R0_T57_T39_cancers	relatedTo Arg1:T57 Arg2:T39_cancers
+R42_m	has Arg1:T12 Arg2:T82
+R29_1	has Arg1:T74 Arg2:T36
+R15_1	has Arg1:T58 Arg2:T59
+R32_m	has Arg1:T21 Arg2:T91_merge
+R33_1	has Arg1:T10 Arg2:T76
+R0_T71_T3	has Arg1:T71 Arg2:T3
+R8_1	has Arg1:T54 Arg2:T32
+R21_m	has Arg1:T9 Arg2:T101
+R25_2	has Arg1:T102 Arg2:T36
+R24_1	has Arg1:T44 Arg2:T66
+R4_m	has Arg1:T49 Arg2:T30
+R0_T102_T4	has Arg1:T102 Arg2:T4
+R60_1	has Arg1:T27 Arg2:T88
+R30_m	has Arg1:T86 Arg2:T84_merge
+R54_m	has Arg1:T97 Arg2:T37
+R0_T63_T2	has Arg1:T63 Arg2:T2
+R20_2	relatedTo Arg1:T40 Arg2:T27
+R53_m	has Arg1:T70 Arg2:T35
+R19_m	has Arg1:T44 Arg2:T64_merge
+R51_m	has Arg1:T58 Arg2:T39
+R13_m	has Arg1:T58 Arg2:T56_merge
+R28_m	has Arg1:T85 Arg2:T51_merge
+R43_m	has Arg1:T62 Arg2:T33
+R10_m	has Arg1:T54 Arg2:T52_merge
+R2_m	has Arg1:T43 Arg2:T30
+R0_T65_T40_cancer	relatedTo Arg1:T65 Arg2:T40_cancer
+R5_m	has Arg1:T24 Arg2:T48
+R31_m	has Arg1:T85 Arg2:T68_merge
+R40_m	has Arg1:T13 Arg2:T90_merge
+R17_m	has Arg1:T44 Arg2:T40
+R23_1	has Arg1:T27 Arg2:T66
+R52_m	has Arg1:T28 Arg2:T41
+R1_m	has Arg1:T43 Arg2:T47_merge
+R41_m	has Arg1:T63 Arg2:T33
+R34_m	has Arg1:T15 Arg2:T77
+R16_m	relatedTo Arg1:T46 Arg2:T39
+R9_m	has Arg1:T25 Arg2:T55
+R33_m	has Arg1:T97 Arg2:T96_merge
+R24_m	has Arg1:T74 Arg2:T72_merge
+R36_m	has Arg1:T99 Arg2:T37
+R26_m	has Arg1:T85 Arg2:T82
+R0_T49_T1	has Arg1:T49 Arg2:T1
+R29_m	has Arg1:T86 Arg2:T80_merge
+R15_m	has Arg1:T29 Arg2:T42
+R27_m	has Arg1:T86 Arg2:T83
+R52_1	has Arg1:T97 Arg2:T77
+R0_T89_T6	has Arg1:T89 Arg2:T6
+R50_m	has Arg1:T22 Arg2:T94
+R44_m	has Arg1:T62 Arg2:T61_merge
+R46_m	has Arg1:T11 Arg2:T79
+R49_m	has Arg1:T14 Arg2:T93
+R8_m	relatedTo Arg1:T53 Arg2:T32
+R45_m	has Arg1:T8 Arg2:T67
+R47_m	has Arg1:T19 Arg2:T81
+R48_m	has Arg1:T20 Arg2:T83
+R7_m	has Arg1:T16 Arg2:T60
+R0_T100_2_T2	has Arg1:T63 Arg2:T2
+R35_m	has Arg1:T23 Arg2:T77
+R54_1	has Arg1:T26 Arg2:T87_merge_merge
+R39_m	has Arg1:T17 Arg2:T101
+R14_1	has Arg1:T26 Arg2:T59
+R38_m	has Arg1:T7 Arg2:T50
+R11_2	relatedTo Arg1:T32 Arg2:T25
+R11_1	has Arg1:T54 Arg2:T55
+R23_m	relatedTo Arg1:T73 Arg2:T36
+R14_2	relatedTo Arg1:T39 Arg2:T26
+R0_T99_T5	has Arg1:T99 Arg2:T5
+R22_m	has Arg1:T70 Arg2:T69_merge

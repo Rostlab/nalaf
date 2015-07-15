@@ -1,0 +1,319 @@
+T60_merge	size 783 787	four
+T21_merge_merge	mutation 213 329	Twenty-eight mutations were in codon 12 (20 G→A, seven G→T and one G→C) and six mutations were in codon 13 (all G→A)
+T116	disease 1638 1642	TVAs
+T117	disease 1643 1646	VAs
+T118	disease 1697 1700	TAs
+T119	disease 1730 1733	TAS
+T114_merge	size 1585 1589	4.8%
+T48_merge	size 667 670	two
+T49_merge	size 676 679	one
+T29	mutation 195 203	mutation
+T27	disease 178 184	polyps
+T139_merge	size 1992 1995	33%
+T26	cohort-patient 178 184	polyps
+T24	size 331 334	One
+T23	cohort-patient 344 351	adenoma
+T120	gene 1672 1676	KRAS
+T22	cohort-patient 507 509	TA
+T121	mutation 1677 1685	mutation
+T20	disease 147 149	TA
+T124	cohort-patient 1638 1646	TVAs/VAs
+T123	Concepts_Ideas 1701 1708	< 10 mm
+T127	cohort-patient 1730 1733	TAS
+T52_merge	size 688 691	one
+T100_merge	size 1501 1504	one
+T126	cohort-patient 1697 1700	TAs
+T129	gene 1813 1817	KRAS
+T91_2	cohort-patient 1297 1304	classes
+T25_2	size 213 225	Twenty-eight
+T27_2	size 500 506	single
+T38	cohort-patient 556 562	polyps
+T36_merge	size 546 555	82 of 189
+T37	disease 556 562	polyps
+T131	disease 1855 1861	polyps
+T34	gene 519 523	BRAF
+T130	mutation 1818 1826	mutation
+T33	gene 432 436	BRAF
+T25_merge	size 168 177	34 of 188
+T93_merge	size 1435 1438	one
+T35	mutation 524 532	mutation
+T30	Concepts_Ideas 335 343	serrated
+T134	gene 1955 1959	BRAF
+T32	gene 360 364	KRAS
+T133	cohort-patient 1925 1929	SSAs
+T31	mutation 378 430	codon 12 (G→T at position 35 and T→G at position 36)
+T132	disease 1925 1929	SSAs
+T88_2	size 1181 1186	seven
+T142_merge	size 2017 2020	40%
+T106_merge	size 1521 1524	six
+T150_merge	size 2093 2095	4%
+T1_2	mutation 449 454	V600E
+T43	disease 637 643	polyps
+T128_merge	size 1755 1758	17%
+T42	mutation 584 593	mutations
+T41	gene 579 583	KRAS
+T102	cohort-patient 1505 1508	SSA
+T40	gene 570 574	BRAF
+T101	disease 1505 1508	SSA
+T47	cohort-patient 671 674	TAs
+T46	disease 671 674	TAs
+T45	cohort-patient 637 643	polyps
+T109	gene 1532 1536	KRAS
+T107	cohort-patient 1525 1528	TAs
+T108	disease 1525 1528	TAs
+T105	cohort-patient 1514 1516	MP
+T104	disease 1514 1516	MP
+T50	disease 680 683	TVA
+T180_2	cohort-patient 1787 1790	TAs
+T39_merge	size 564 567	43%
+T59	mutation 735 744	mutations
+T113	cohort-patient 1593 1601	adenomas
+T112	mutation 1573 1581	mutation
+T51	cohort-patient 680 683	TVA
+T111	gene 1568 1572	BRAF
+T54	disease 692 695	SSA
+T110	mutation 1537 1545	mutation
+T53	cohort-patient 692 695	SSA
+T56	cohort-patient 721 729	adenomas
+T44_merge	size 632 636	four
+T58	gene 762 766	KRAS
+T57	gene 753 757	BRAF
+T75	gene 1102 1106	KRAS
+T76	gene 1124 1128	BRAF
+T73	gene 1051 1055	MGMT
+T74	disease 1060 1065	polyp
+T79	Concepts_Ideas 1360 1367	sessile
+T77	disease 1198 1203	polyp
+T78	disease 1308 1313	polyp
+T159	age 2299 2307	55 years
+T158	disease 2294 2297	HPs
+T55_merge	size 702 707	three
+T66_merge	size 917 922	seven
+T161	cohort-patient 147 149	TA
+T163	cohort-patient 135 138	SSA
+T165	Concepts_Ideas 510 517	< 10 mm
+T166	Concepts_Ideas 708 720	conventional
+T167	gene 1010 1049	O-6-methylguanine DNA methyltransferase
+T168	Physiology 1262 1271	MGMT loss
+T72	mutation 975 983	mutation
+T71	gene 970 974	BRAF
+T70	disease 507 509	TA
+T160	Concepts_Ideas 150 157	< 10 mm
+T62	gene 810 814	BRAF
+T103_merge	size 1510 1513	one
+T63	mutation 815 824	mutations
+T64	gene 863 867	KRAS
+T65	gene 872 876	BRAF
+T67	disease 923 928	polyp
+T68	gene 961 965	KRAS
+T69	disease 480 486	polyps
+T162_merge	size 143 146	one
+T169	Concepts_Ideas 1734 1741	> 10 mm
+T122_merge	size 1687 1690	50%
+T63_2	mutation 651 665	both mutations
+T28_merge	size 186 189	18%
+T92_merge	size 1395 1398	one
+T61	cohort-patient 788 796	adenomas
+T99	cohort-patient 1496 1499	HPs
+T115_merge	size 1558 1563	26.5%
+T98	disease 1496 1499	HPs
+T96	cohort-patient 1482 1488	polyps
+T137	disease 1987 1990	SAs
+T135_merge	size 1970 1973	81%
+T136	mutation 1960 1968	mutation
+T90_merge	size 1356 1359	one
+T138	cohort-patient 1987 1990	SAs
+T143	gene 2034 2038	KRAS
+T6	disease 1407 1414	adenoma
+T144	mutation 2039 2047	mutation
+T7	disease 1593 1601	adenomas
+T145	disease 2074 2078	SSAs
+T4	disease 788 796	adenomas
+T146	cohort-patient 2074 2078	SSAs
+T5	disease 1377 1384	adenoma
+T140	disease 2012 2015	MPs
+T8	cohort-patient 929 935	groups
+T141	cohort-patient 2012 2015	MPs
+T9	gene 2175 2179	BRAF
+T94	cohort-patient 1439 1441	TA
+T91	cohort-patient 1407 1414	adenoma
+T10_2	size 1291 1296	seven
+T147_merge	size 2080 2082	3%
+T154_2	size 356 359	two
+T89_2	cohort-patient 1187 1194	classes
+T88	disease 1482 1488	polyps
+T89	cohort-patient 1377 1384	adenoma
+T97_merge	size 1490 1495	seven
+T84	Concepts_Ideas 1399 1406	tubular
+T85	gene 1427 1431	BRAF
+T86	disease 1439 1441	TA
+T87	gene 1443 1447	MGMT
+T125_merge	size 1710 1713	18%
+T95_merge	size 1479 1481	15
+T164_merge	size 131 134	one
+T150_2	mutation 833 841	Mutation
+T149	cohort-patient 2088 2091	HPs
+T148	disease 2088 2091	HPs
+T3	disease 721 729	adenomas
+T2	disease 344 351	adenoma
+T156	cohort-patient 2228 2236	subjects
+T157	cohort-patient 2280 2288	subjects
+T154	disease 2242 2246	SSAs
+T10	gene 1262 1266	MGMT
+T155	age 2248 2256	64 years
+T152	disease 2199 2203	SSAs
+T11	disease 1787 1790	TAs
+T153	disease 2207 2210	HPs
+T12	gender 1904 1911	females
+T37_2	size 289 292	six
+T13	body-part 1871 1885	proximal colon
+T151	mutation 2180 2188	mutation
+T14	gene 63 67	KRAS
+T15	gene 72 76	BRAF
+T81	disease 1386 1389	SSA
+T16	mutation 77 85	mutation
+T80	Concepts_Ideas 1368 1376	serrated
+T17	gene 116 120	KRAS
+T83	disease 1416 1418	TA
+T82	gene 1348 1352	KRAS
+T18	gene 207 211	KRAS
+T19	disease 135 138	SSA
+R116_m	has Arg1:T26 Arg2:T29
+R47_1	has Arg1:T80 Arg2:T81
+R42_m	has Arg1:T58 Arg2:T59
+R29_2	has Arg1:T31 Arg2:T154_2
+R40_1	has Arg1:T61 Arg2:T63
+R50_1	has Arg1:T84 Arg2:T83
+R32_m	has Arg1:T41 Arg2:T42
+R85_m	has Arg1:T156 Arg2:T154
+R107_2	has Arg1:T146 Arg2:T147_merge
+R64_m	has Arg1:T96 Arg2:T88
+R106_1	has Arg1:T160 Arg2:T20
+R75_m	has Arg1:T89 Arg2:T90_merge
+R105_2	has Arg1:T146 Arg2:T144
+R8_2	has Arg1:T21_merge_merge Arg2:T37_2
+R20_m	has Arg1:T30 Arg2:T2
+R111_2	has Arg1:T149 Arg2:T148
+R21_m	has Arg1:T23 Arg2:T2
+R114_m	has Arg1:T163 Arg2:T164_merge
+R80_m	has Arg1:T143 Arg2:T144
+R0_T168_T10	has Arg1:T168 Arg2:T10
+R106_2	has Arg1:T146 Arg2:T145
+R65_m	has Arg1:T107 Arg2:T108
+R83_m	has Arg1:T157 Arg2:T158
+R24_2	has Arg1:T33 Arg2:T1_2
+R71_m	has Arg1:T113 Arg2:T110
+R30_m	has Arg1:T38 Arg2:T37
+R126_2	has Arg1:T180_2 Arg2:T130
+R87_m	has Arg1:T124 Arg2:T116
+R122_m	has Arg1:T53 Arg2:T42
+R19_m	relatedTo Arg1:T13 Arg2:T131
+R69_1	has Arg1:T113 Arg2:T7
+R22_2	relatedTo Arg1:T2 Arg2:T32
+R22_1	has Arg1:T45 Arg2:T42
+R40_m	has Arg1:T166 Arg2:T3
+R17_m	has Arg1:T113 Arg2:T114_merge
+R89_1	relatedTo Arg1:T13 Arg2:T11
+R97_m	has Arg1:T133 Arg2:T136
+R33_m	has Arg1:T45 Arg2:T43
+R102_m	has Arg1:T138 Arg2:T137
+R120_m	has Arg1:T47 Arg2:T42
+R96_m	has Arg1:T133 Arg2:T132
+R99_m	has Arg1:T141 Arg2:T140
+R101_m	has Arg1:T141 Arg2:T136
+R67_m	has Arg1:T105 Arg2:T104
+R95_m	has Arg1:T127 Arg2:T121
+R92_m	has Arg1:T126 Arg2:T125_merge
+R52_2	has Arg1:T89_2 Arg2:T88_2
+R27_m	has Arg1:T34 Arg2:T35
+R98_m	has Arg1:T133 Arg2:T135_merge
+R25_m	has Arg1:T38 Arg2:T39_merge
+R77_m	has Arg1:T120 Arg2:T121
+R44_m	has Arg1:T56 Arg2:T3
+R45_m	has Arg1:T56 Arg2:T59
+R90_m	has Arg1:T126 Arg2:T121
+R100_m	has Arg1:T141 Arg2:T142_merge
+R59_m	has Arg1:T91 Arg2:T6
+R109_m	has Arg1:T94 Arg2:T93_merge
+R60_m	has Arg1:T89 Arg2:T5
+R63_m	has Arg1:T96 Arg2:T95_merge
+R54_2	has Arg1:T91_2 Arg2:T10_2
+R123_2	has Arg1:T180_2 Arg2:T11
+R39_m	has Arg1:T53 Arg2:T54
+R61_m	has Arg1:T71 Arg2:T72
+R62_m	has Arg1:T68 Arg2:T72
+R124_2	has Arg1:T180_2 Arg2:T131
+R119_m	has Arg1:T23 Arg2:T31
+R69_m	has Arg1:T99 Arg2:T98
+R37_m	has Arg1:T47 Arg2:T48_merge
+R23_m	has Arg1:T113 Arg2:T115_merge
+R79_m	has Arg1:T134 Arg2:T136
+R57_m	has Arg1:T84 Arg2:T6
+R35_2	has Arg1:T63_2 Arg2:T45
+R15_2	has Arg1:T22 Arg2:T27_2
+R115_m	has Arg1:T161 Arg2:T162_merge
+R84_m	has Arg1:T155 Arg2:T156
+R74_m	has Arg1:T109 Arg2:T110
+R58_m	has Arg1:T94 Arg2:T86
+R88_1	relatedTo Arg1:T11 Arg2:T130
+R76_m	has Arg1:T91 Arg2:T92_merge
+R110_2	has Arg1:T149 Arg2:T150_merge
+R7_2	has Arg1:T21_merge_merge Arg2:T25_2
+R48_1	has Arg1:T79 Arg2:T81
+R125_2	has Arg1:T180_2 Arg2:T12
+R56_m	has Arg1:T79 Arg2:T5
+R55_m	has Arg1:T80 Arg2:T5
+R82_m	has Arg1:T159 Arg2:T157
+R103_m	has Arg1:T138 Arg2:T139_merge
+R4_m	has Arg1:T26 Arg2:T28_merge
+R18_m	has Arg1:T113 Arg2:T112
+R72_m	has Arg1:T111 Arg2:T112
+R112_2	has Arg1:T149 Arg2:T144
+R77_1	has Arg1:T123 Arg2:T118
+R86_m	has Arg1:T124 Arg2:T117
+R13_m	has Arg1:T53 Arg2:T52_merge
+R28_m	has Arg1:T38 Arg2:T35
+R3_m	has Arg1:T18 Arg2:T29
+R43_m	has Arg1:T56 Arg2:T55_merge
+R10_m	has Arg1:T165 Arg2:T70
+R2_m	has Arg1:T161 Arg2:T20
+R93_m	has Arg1:T127 Arg2:T128_merge
+R12_m	has Arg1:T51 Arg2:T49_merge
+R5_m	has Arg1:T26 Arg2:T25_merge
+R117_2	has Arg1:T64 Arg2:T150_2
+R79_1	has Arg1:T169 Arg2:T119
+R6_m	has Arg1:T26 Arg2:T27
+R31_m	has Arg1:T40 Arg2:T42
+R11_m	has Arg1:T32 Arg2:T31
+R118_2	has Arg1:T65 Arg2:T150_2
+R70_m	has Arg1:T99 Arg2:T97_merge
+R1_m	has Arg1:T163 Arg2:T19
+R121_m	has Arg1:T51 Arg2:T42
+R41_m	has Arg1:T57 Arg2:T59
+R14_m	has Arg1:T102 Arg2:T100_merge
+R94_m	has Arg1:T127 Arg2:T119
+R34_m	has Arg1:T45 Arg2:T44_merge
+R16_m	has Arg1:T105 Arg2:T103_merge
+R9_m	has Arg1:T22 Arg2:T70
+R89_m	has Arg1:T124 Arg2:T122_merge
+R36_m	has Arg1:T47 Arg2:T46
+R26_m	has Arg1:T38 Arg2:T36_merge
+R51_2	has Arg1:T89_2 Arg2:T77
+R88_m	has Arg1:T124 Arg2:T121
+R53_2	has Arg1:T91_2 Arg2:T78
+R50_m	has Arg1:T8 Arg2:T66_merge
+R104_m	has Arg1:T138 Arg2:T136
+R46_m	has Arg1:T61 Arg2:T4
+R49_m	has Arg1:T8 Arg2:T67
+R91_m	has Arg1:T126 Arg2:T118
+R47_m	has Arg1:T61 Arg2:T60_merge
+R48_m	has Arg1:T62 Arg2:T63
+R78_m	has Arg1:T129 Arg2:T130
+R81_m	has Arg1:T9 Arg2:T151
+R108_m	has Arg1:T15 Arg2:T16
+R3_1	has Arg1:T23 Arg2:T24
+R68_m	has Arg1:T102 Arg2:T101
+R38_m	has Arg1:T51 Arg2:T50
+R66_m	has Arg1:T107 Arg2:T106_merge
+R73_2	relatedTo Arg1:T131 Arg2:T130
+R113_m	has Arg1:T14 Arg2:T16

@@ -1,0 +1,25 @@
+T7_2	mutation 342 351	mutations
+T14_2	size 332 341	Sixty-one
+T1	gene 214 217	APC
+T3	gene 557 560	APC
+T2	gene 525 528	APC
+T6	cohort-patient 636 642	family
+T7	mutation 489 505	splicing defects
+T4	gene 614 617	APC
+T5	cohort-patient 75 83	patients
+T10	mutation 513 535	mutation in APC exon 1
+T11	mutation 554 569	5' APC mutation
+T12	Physiology 606 628	reduced APC expression
+T13	size 632 635	one
+T8	ethnicity 100 107	Swedish
+T9	disease 108 117	Polyposis
+T10_2	mutation 478 487	mosaicism
+R2_m	has Arg1:T2 Arg2:T10
+R6_1	has Arg1:T6 Arg2:T13
+R2_1	has Arg1:T5 Arg2:T9
+R5_1	has Arg1:T3 Arg2:T11
+R0_T12_T4	has Arg1:T12 Arg2:T4
+R4_1	has Arg1:T2 Arg2:T7
+R4_2	has Arg1:T12 Arg2:T6
+R1_m	has Arg1:T5 Arg2:T8
+R3_2	has Arg1:T7_2 Arg2:T14_2

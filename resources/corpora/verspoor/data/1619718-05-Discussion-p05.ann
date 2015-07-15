@@ -1,0 +1,76 @@
+T22_merge	size 348 353	three
+T20_merge	size 308 311	16%
+T41_2	gene 415 418	p53
+T7	body-part 107 117	colorectal
+T19_merge	size 296 306	four of 25
+T4	disease 66 69	MPs
+T5	disease 74 77	SAs
+T29	gene 505 509	BRAF
+T28	Concepts_Ideas 486 494	sporadic
+T27	disease 448 454	polyps
+T8	disease 118 124	polyps
+T6_merge	size 101 103	2%
+T9	cohort-patient 118 124	polyps
+T26	disease 431 435	SSAs
+T25	cohort-patient 348 353	three
+T24	cohort-patient 296 306	four of 25
+T23	Physiology 384 418	aberrant nuclear expression of p53
+T40	Physiology 791 797	fusion
+T21	Disorder 320 340	high-grade dysplasia
+T1	gene 976 980	MLH1
+T3	disease 582 586	CRCs
+T2	disease 495 499	CRCs
+T10	Concepts_Ideas 146 154	serrated
+T38	disease 809 815	cancer
+T11	disease 155 161	polyps
+T42_2	gene 984 987	p53
+T37	disease 799 805	polyps
+T12	Disorder 167 176	dysplasia
+T13	mutation 191 199	mutation
+T14	gene 210 214	KRAS
+T39	Physiology 956 987	loss of function of MLH1 of p53
+T15	gene 218 222	BRAF
+T34	Disorder 540 564	with and without DNA MSI
+T33	mutation 597 605	mutation
+T16	Physiology 236 262	loss of expression of MGMT
+T17	gene 258 262	MGMT
+T36	Physiology 722 762	inactivation of the DNA repair gene MGMT
+T35	gene 758 762	MGMT
+T18	disease 277 279	MP
+T30	mutation 510 518	mutation
+T32	gene 592 596	KRAS
+T31	Physiology 523 538	DNA methylation
+R16_m	has Arg1:T31 Arg2:T2
+R9_m	has Arg1:T15 Arg2:T13
+R15_1	relatedTo Arg1:T18 Arg2:T13
+R15_2	relatedTo Arg1:T2 Arg2:T29
+R0_T39_T1	has Arg1:T39 Arg2:T1
+R0_T23_T41_2	has Arg1:T23 Arg2:T41_2
+R25_1	relatedTo Arg1:T3 Arg2:T33
+R8_m	has Arg1:T14 Arg2:T13
+R20_m	has Arg1:T16 Arg2:T11
+R7_m	has Arg1:T12 Arg2:T11
+R24_1	has Arg1:T34 Arg2:T2
+R21_2	has Arg1:T21 Arg2:T24
+R4_m	has Arg1:T9 Arg2:T4
+R0_T16_T17	has Arg1:T16 Arg2:T17
+R18_m	has Arg1:T40 Arg2:T37
+R19_m	relatedTo Arg1:T11 Arg2:T13
+R12_1	has Arg1:T16 Arg2:T18
+R13_m	has Arg1:T28 Arg2:T2
+R13_1	has Arg1:T12 Arg2:T18
+R3_m	has Arg1:T9 Arg2:T5
+R10_m	has Arg1:T24 Arg2:T19_merge
+R2_m	has Arg1:T9 Arg2:T8
+R12_m	has Arg1:T25 Arg2:T22_merge
+R14_1	has Arg1:T10 Arg2:T18
+R22_2	has Arg1:T23 Arg2:T25
+R5_m	relatedTo Arg1:T7 Arg2:T8
+R6_m	has Arg1:T10 Arg2:T11
+R0_T36_T35	has Arg1:T36 Arg2:T35
+R11_m	has Arg1:T24 Arg2:T20_merge
+R17_m	has Arg1:T32 Arg2:T33
+R23_1	relatedTo Arg1:T2 Arg2:T30
+R14_m	has Arg1:T29 Arg2:T30
+R1_m	has Arg1:T9 Arg2:T6_merge
+R0_T39_T42_2	has Arg1:T39 Arg2:T42_2

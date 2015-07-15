@@ -1,0 +1,14 @@
+T6	disease 338 344	cancer
+T7	body-part 377 387	colorectal
+T1_cancers	disease 388 395	cancers
+T4	body-part 825 830	colon
+T5	disease 69 75	cancer
+T2_cancer	disease 638 644	cancer
+T8	body-part 627 637	colorectal
+T9	disease 818 824	normal
+T1	disease 377 395	colorectal cancers
+T3	disease 504 510	cancer
+T2	disease 627 644	colorectal cancer
+R3_m	relatedTo Arg1:T4 Arg2:T9
+R0_T8_T2_cancer	relatedTo Arg1:T8 Arg2:T2_cancer
+R0_T7_T1_cancers	relatedTo Arg1:T7 Arg2:T1_cancers

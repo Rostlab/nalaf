@@ -1,0 +1,219 @@
+T114	body-part 2639 2648	glandular
+T60_merge	size 1735 1740	three
+T115	disease 3624 3630	polyps
+T116	gene 3774 3778	KRAS
+T118	Concepts_Ideas 1126 1131	mixed
+T81_2	cohort-patient 2225 2228	SAs
+T29	Physiology 749 772	aberrant p53 expression
+T28	disease 698 701	VAs
+T27	Disorder 661 680	low-grade dysplasia
+T26	disease 652 655	TAs
+T24	mutation 87 101	G:T mismatches
+T120	cohort-patient 1814 1821	adenoma
+T21	mutation 217 244	Partial methylation of MLH1
+T122	disease 2171 2180	carcinoma
+T121	Physiology 1912 1926	p53 expression
+T20	gene 201 205	KRAS
+T123	body-part 2836 2846	epithelial
+T129	Concepts_Ideas 3019 3030	traditional
+T70_merge	size 1966 1970	4.3%
+T36_merge	size 1042 1045	12%
+T37	cohort-patient 1055 1063	adenomas
+T39	Physiology 877 926	Aberrant retention of presumed mutant nuclear p53
+T34	Disorder 1031 1040	dysplasia
+T33	Concepts_Ideas 1010 1018	serrated
+T7_merge	gene 3798 3803	APC60
+T35	cohort-patient 1019 1025	polyps
+T30	Disorder 816 836	high-grade dysplasia
+T32	disease 1019 1025	polyps
+T31	disease 850 859	carcinoma
+T132_2	Concepts_Ideas 2538 2546	aberrant
+T49	mutation 1283 1291	mutation
+T48	gene 1278 1282	BRAF
+T134_2	gene 344 347	p53
+T43	mutation 1148 1156	mutation
+T100	gene 3222 3226	MGMT
+T42	gene 1143 1147	BRAF
+T41	Physiology 1093 1119	aberrant expression of p53
+T102	gene 3383 3387	KRAS
+T101	mutation 3357 3379	G:C to A:T transitions
+T40	disease 1081 1087	polyps
+T47	disease 1200 1205	polyp
+T45	cohort-patient 1081 1087	polyps
+T44	disease 1132 1137	polyp
+T109	disease 3498 3501	TAs
+T107	mutation 3477 3485	mutation
+T108	Concepts_Ideas 3492 3497	small
+T105	gene 3472 3476	KRAS
+T106	gene 3463 3467	MGMT
+T103	disease 3582 3588	normal
+T50	Physiology 1293 1308	DNA methylation
+T104	Physiology 3441 3467	loss of expression of MGMT
+T59	Physiology 1697 1731	aberrant nuclear expression of p53
+T119_merge	size 1799 1805	single
+T52	Disorder 1328 1360	DNA microsatellite stable status
+T113	body-part 3589 3599	colorectal
+T51	mutation 1315 1323	mutation
+T112	Physiology 3552 3571	Methylation of MGMT
+T80_2	size 2245 2253	5 to 50%
+T111	gene 3567 3571	MGMT
+T54	Physiology 1406 1452	Loss of expression of the DNA repair gene MGMT
+T53	gene 1448 1452	MGMT
+T110	disease 3534 3539	polyp
+T56	mutation 1570 1591	G:C to A:T transition
+T58	Physiology 1635 1681	complete or partial loss of expression of MGMT
+T57	gene 1677 1681	MGMT
+T75	Physiology 2078 2092	MGMT silencing
+T76	gene 2078 2082	MGMT
+T73	Concepts_Ideas 2018 2039	none had loss of MGMT
+T74	gene 2035 2039	MGMT
+T77	disease 2163 2170	adenoma
+T78	mutation 2102 2110	mutation
+T72	Physiology 1990 2013	aberrant p53 expression
+T71	cohort-patient 1974 1982	adenomas
+T62	disease 1750 1756	polyps
+T63	cohort-patient 1750 1756	polyps
+T64	Disorder 1762 1771	dysplasia
+T65	Concepts_Ideas 1806 1813	tubular
+T66	Physiology 1827 1850	aberrant p53 expression
+T67	gene 1903 1907	MGMT
+T68	body-part 1930 1940	colorectal
+T69	disease 1941 1947	polyps
+T20_2	Physiology 217 244	Partial methylation of MLH1
+T38_merge	size 1065 1067	1%
+T119_2	Physiology 3783 3803	methylation of APC60
+T61	Concepts_Ideas 1741 1749	serrated
+T99	mutation 3132 3140	mutation
+T97	mutation 2962 2970	mutation
+T98	gene 3127 3131	KRAS
+T95	disease 2893 2899	polyps
+T96	gene 2957 2961	KRAS
+T6	gene 2208 2212	TP53
+T135_2	gene 2342 2345	p53
+T4	gene 1605 1609	TP53
+T5	gene 2097 2101	TP53
+T8	disease 1269 1272	CRC
+T9	disease 1055 1063	adenomas
+T94	Concepts_Ideas 2884 2892	serrated
+T93	Concepts_Ideas 2781 2801	villous architecture
+T92	mutation 2690 2698	mutation
+T91	gene 2685 2689	KRAS
+T131_2	body-part 2547 2552	crypt
+T90	Concepts_Ideas 2639 2658	glandular serration
+T116_2	body-part 3589 3606	colorectal mucosa
+T89_2	disease 2553 2557	foci
+T88	disease 2568 2571	HPs
+T89	Concepts_Ideas 2562 2567	small
+T84	disease 2431 2437	polyps
+T85	gene 2474 2478	KRAS
+T86	mutation 2479 2487	mutation
+T87	Disorder 2525 2557	hyperplastic aberrant crypt foci
+T1	gene 240 244	MLH1
+T3	gene 1310 1314	TP53
+T2	gene 210 214	TP53
+T10	disease 1814 1821	adenoma
+T11	disease 1974 1982	adenomas
+T12	mutation 2213 2221	mutation
+T13	disease 2719 2727	adenomas
+T14	disease 3031 3038	adenoma
+T81	gene 2305 2309	MGMT
+T15	Concepts_Ideas 2836 2856	epithelial serration
+T16	cohort-patient 2876 2883	Group B
+T80	disease 2225 2228	SAs
+T17	gene 54 58	MGMT
+T83	Physiology 2319 2345	aberrant expression of p53
+T46_merge	size 1070 1073	One
+T18	Physiology 54 71	MGMT inactivation
+T82	Physiology 2305 2314	MGMT loss
+T19	mutation 189 197	mutation
+R57_m	has Arg1:T108 Arg2:T109
+R42_m	has Arg1:T5 Arg2:T78
+R29_1	relatedTo Arg1:T8 Arg2:T51
+R35_1	has Arg1:T59 Arg2:T62
+R0_T117_T7_merge	has Arg1:T119_2 Arg2:T7_merge
+R36_2	has Arg1:T121 Arg2:T69
+R0_T112_T111	has Arg1:T112 Arg2:T111
+R43_2	has Arg1:T81_2 Arg2:T80
+R36_1	has Arg1:T58 Arg2:T62
+R9_1	has Arg1:T29 Arg2:T31
+R32_m	has Arg1:T65 Arg2:T10
+R58_m	relatedTo Arg1:T113 Arg2:T103
+R43_1	has Arg1:T72 Arg2:T11
+R45_2	has Arg1:T81_2 Arg2:T12
+R56_m	has Arg1:T105 Arg2:T107
+R44_1	has Arg1:T73 Arg2:T11
+R20_m	has Arg1:T48 Arg2:T49
+R46_2	has Arg1:T81_2 Arg2:T80_2
+R49_1	has Arg1:T132_2 Arg2:T88
+R8_1	has Arg1:T30 Arg2:T31
+R55_m	has Arg1:T98 Arg2:T99
+R21_m	has Arg1:T3 Arg2:T51
+R0_T75_T76	has Arg1:T75 Arg2:T76
+R0_T90_T114	has Arg1:T114 Arg2:T90
+R0_T58_T57	has Arg1:T58 Arg2:T57
+R24_2	has Arg1:T72 Arg2:T71
+R0_T73_T74	has Arg1:T73 Arg2:T74
+R60_2	has Arg1:T87 Arg2:T89_2
+R30_m	has Arg1:T64 Arg2:T62
+R54_m	has Arg1:T129 Arg2:T14
+R59_2	has Arg1:T131_2 Arg2:T89_2
+R0_T18_T17	has Arg1:T18 Arg2:T17
+R53_m	has Arg1:T96 Arg2:T97
+R0_T54_T53	has Arg1:T54 Arg2:T53
+R19_m	has Arg1:T45 Arg2:T40
+R51_m	has Arg1:T16 Arg2:T95
+R13_m	has Arg1:T39 Arg2:T9
+R28_m	has Arg1:T63 Arg2:T62
+R3_m	has Arg1:T2 Arg2:T19
+R10_m	has Arg1:T39 Arg2:T32
+R2_m	has Arg1:T20 Arg2:T19
+R61_1	has Arg1:T112 Arg2:T115
+R37_2	relatedTo Arg1:T69 Arg2:T67
+R12_m	has Arg1:T37 Arg2:T38_merge
+R0_T119_2_T7_merge	has Arg1:T119_2 Arg2:T7_merge
+R5_m	has Arg1:T27 Arg2:T26
+R22_1	has Arg1:T41 Arg2:T44
+R6_m	has Arg1:T35 Arg2:T32
+R31_m	has Arg1:T66 Arg2:T10
+R23_2	has Arg1:T73 Arg2:T71
+R11_m	has Arg1:T37 Arg2:T9
+R40_m	relatedTo Arg1:T13 Arg2:T92
+R17_m	has Arg1:T41 Arg2:T40
+R23_1	has Arg1:T45 Arg2:T43
+R52_m	has Arg1:T94 Arg2:T95
+R1_m	has Arg1:T102 Arg2:T101
+R41_m	has Arg1:T104 Arg2:T109
+R14_m	has Arg1:T42 Arg2:T43
+R34_m	has Arg1:T120 Arg2:T119_merge
+R16_m	has Arg1:T45 Arg2:T46_merge
+R9_m	has Arg1:T35 Arg2:T36_merge
+R0_T20_2_T1	has Arg1:T20_2 Arg2:T1
+R0_T104_T106	has Arg1:T104 Arg2:T106
+R33_m	has Arg1:T120 Arg2:T10
+R26_m	has Arg1:T52 Arg2:T8
+R29_m	has Arg1:T63 Arg2:T60_merge
+R51_1	relatedTo Arg1:T88 Arg2:T86
+R15_m	has Arg1:T118 Arg2:T44
+R27_m	has Arg1:T61 Arg2:T62
+R0_T20_2_T21	has Arg1:T20_2 Arg2:T21
+R61_2	has Arg1:T132_2 Arg2:T89_2
+R25_m	has Arg1:T50 Arg2:T8
+R50_m	relatedTo Arg1:T109 Arg2:T107
+R0_T83_T135_2	has Arg1:T83 Arg2:T135_2
+R44_m	has Arg1:T6 Arg2:T12
+R0_T15_T123	has Arg1:T123 Arg2:T15
+R49_m	has Arg1:T91 Arg2:T92
+R8_m	has Arg1:T34 Arg2:T32
+R55_1	has Arg1:T15 Arg2:T13
+R47_m	has Arg1:T85 Arg2:T86
+R48_m	has Arg1:T89 Arg2:T88
+R7_m	has Arg1:T33 Arg2:T32
+R35_m	relatedTo Arg1:T68 Arg2:T69
+R18_2	relatedTo Arg1:T44 Arg2:T42
+R54_1	has Arg1:T93 Arg2:T13
+R0_T82_T81	has Arg1:T82 Arg2:T81
+R39_m	has Arg1:T71 Arg2:T70_merge
+R62_m	has Arg1:T112 Arg2:T103
+R38_m	has Arg1:T71 Arg2:T11
+R28_1	relatedTo Arg1:T8 Arg2:T49
+R22_m	has Arg1:T4 Arg2:T56

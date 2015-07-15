@@ -1,0 +1,18 @@
+T9_2	disease 93 102	proband's
+T1	gene 502 507	hMSH2
+T3	ethnicity 760 769	Argentina
+T2	gene 785 790	hMSH2
+T6	disease 664 671	healthy
+T7	mutation 748 756	mutation
+T4	disease 321 326	HNPCC
+T10	mutation 477 494	germline mutation
+T5	disease 734 739	HNPCC
+T11	cohort-patient 672 680	controls
+T12	cohort-patient 526 532	family
+T8	gender 168 171	his
+T9	cohort-patient 93 102	proband's
+R3_m	relatedTo Arg1:T5 Arg2:T7
+R2_m	has Arg1:T1 Arg2:T10
+R1_1	has Arg1:T9 Arg2:T8
+R3_1	has Arg1:T2 Arg2:T7
+R1_m	has Arg1:T11 Arg2:T6

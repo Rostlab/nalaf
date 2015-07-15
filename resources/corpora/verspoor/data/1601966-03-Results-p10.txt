@@ -1,0 +1,15 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Down-regulation of mRNA expression in human chromosomal region 18q21.2-18q23 – the BCL2 region (T/N relative expression heat map). Heat map of fold change of tumor-versus-normal expression. Genes are given in chromosomal order on the horizontal axis. Patient codes are given on the vertical axis. The legend depicts which colors code for which expression changes on a loge scale (green: down in tumor; red: up in tumor). View in conjunction with Figures 25 and 26.
+
+Down-regulation of mRNA expression in human chromosomal region 18q21.2-18q23 – the BCL2 region (patient counts with coordinate up-regulation). Grayscale cross-comparison plot of up-regulation patterns across patients (analogous to Figures 7, 10, 13). View this plot in conjunction with Figures 24 and 26.
+
+Down-regulation of mRNA expression in human chromosomal region 18q21.2-18q23 – the BCL2 region (patient counts with coordinate down-regulation). Grayscale cross-comparison plot of down-regulation patterns across patients (analogous to Figures 8, 11, 14). View this plot in conjunction with Figures 24 and 25. Note, that many more patients show down-regulation as indicated by dark spots in this plot than up-regulation as indicated by dark spots in Figure 25. This region has been reported in other studies to be frequently deleted in colon cancer (see Table 4). Note the expression down-regulation of BCL2. SMAD4 (Hs.298320) and TCF4 are only weakly down-regulated. The DCC gene is also located in this region between LOC51320 and MBD2 but no informative expression measures were obtained.
+
+5q22.2-5q23.1
+
+Not unexpected, we found loss of expression in region 5q22.2-5q23.1 (see Figures 27, 28, 29). This interval harbors two known TSGs in colon cancer, the adenomatous polyposis coli gene (APC) gene and the mutated in colorectal cancer (MCC). We were not able to obtain expression values for APC. APC is located at the border of a region at 5q22.2-5q22.3 that harbors several drastically down-regulated genes. Central in this region is the MCC gene. The distal border is the CDO1 gene. We assume that deletion or epigenetic silencing of this region is a frequent mechanism contributing to colorectal tumorigenesis. It is possible that also APC or MCC show reduced expression, that genes in this region other than APC and MCC are piggy-back genes, and that their misregulation is not of functional significance for tumorigenesis.
+
+Down-regulation of mRNA expression in human chromosomal region 5q22.2-5q23.1 – the APC region (T/N relative expression heat map). Heat map of fold change of tumor-versus-normal expression. Genes are given in chromosomal order on the horizontal axis. Patient codes are given on the vertical axis. The legend depicts which colors code for which expression changes on a loge scale (green: down in tumor; red: up in tumor). View in conjunction with Figures 28 and 29.
+

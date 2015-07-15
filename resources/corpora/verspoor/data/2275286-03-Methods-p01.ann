@@ -1,0 +1,23 @@
+T12_merge	size 112 115	158
+T2_cancer	disease 139 145	cancer
+T3_merge	disease 660 668	diseases
+T1	disease 597 615	ulcerative colitis
+T2	disease 128 145	colorectal cancer
+T6	cohort-patient 353 361	patients
+T7	cohort-patient 407 415	Patients
+T4	cohort-patient 63 71	Patients
+T5	cohort-patient 146 154	patients
+T10	disease 934 940	normal
+T11	ethnicity 292 299	Chinese
+T13	body-part 128 138	colorectal
+T8	cohort-patient 533 541	Patients
+T14	disease 446 455	carcinoma
+T9	disease 708 717	polyposis
+T15	disease 694 697	FAP
+T16	disease 916 921	tumor
+T17	body-part 941 947	mucosa
+R3_m	has Arg1:T5 Arg2:T12_merge
+R0_T13_T2_cancer	relatedTo Arg1:T13 Arg2:T2_cancer
+R4_m	relatedTo Arg1:T17 Arg2:T10
+R2_2	has Arg1:T5 Arg2:T2
+R3_1	has Arg1:T7 Arg2:T14

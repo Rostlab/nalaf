@@ -1,0 +1,23 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Patients
+
+Data were prospectively collected from 158 consecutive colorectal cancer patients who received surgical treatments in the National Colorectal Center of the Third Affiliated Hospital of Nanjing University of Traditional Chinese Medicine (NUTCM) from October 2004 to June 2006. All patients signed an informed consent before the study. Patients who had histologically proven carcinoma and received operative treatment in our hospital were included in the study. Patients were excluded if they: (1) had evidence of concomitant ulcerative colitis, (2) presented with clinically unresectable diseases, (3) were diagnosed with FAP and other polyposis syndromes, (4) refused operative treatment or refused to participate in the study. This study was approved by the ethical committee of the NUTCM.
+
+Extraction of genomic DNA
+
+Fresh tissue samples of tumor and matched normal mucosa were obtained from the surgical specimen once it was removed. DNA was extracted using a tissue DNA extraction kit from the Beijing Bio-lab Materials Institute (Beijing, China) and was stored at -80°C until analysis.
+
+Synthesis of fluorescent primer
+
+A reference panel of 5 MSI markers recommended by NCI: BAT-26, BAT-25, D2S123, D5S346 and D17S250 were used in this study. The primers of BAT-40 and MYCL were also applied. The fluorescent primers were synthesized at Applied Biosystem Company (Foster City, CA) with a previously published method [6,7].
+
+Microsatellite instability analysis
+
+Microsatellite instability was analyzed according to a method previously reported [6,7]. Briefly, the 5 microsatellites were amplified by multiple PCR. The reaction system consisted of 1 μL of template (extracted genomic DNA, 100 ng), 4 μL of mixed primers (primer mix) and 15 μL of ABI Prism True Allele PCR Premix (containing AmpliTaq Gold DNA Polymerase buffer, magnesium chloride and dNTPs) (Applied Biosystems Company). The reaction initially underwent pre-denature at 95°C for 15 minutes, then 30 cycles of: denaturation at 94°C for 1 minute, annealing at 56°C for 1 minute and extension at 72°C for 1 minute were performed. An additional extension at 72°C for 25 minutes was performed subsequently.
+
+PCR reaction product (1 μL) was then mixed with 0.4 μL LIZ (internal standard) and 9 μL of formamide. Heat denaturation was performed on the mixture at 95°C for 5 minutes, and the sample was kept at 4°C for 5 minutes. Then the product was put in a 96 well plate, and capillary electrophoresis was performed with an AB13100-Avant sequencer (Applied Biosystem Shanghai Division, Shanghai, China) for 45 minutes. Data was automatically analyzed with Genotyper 2.5 software (Applied Biosystem Shanghai Division) and the original data was generated. The electrophoresis was then repeated on the next day to ensure the accuracy of the analysis.
+

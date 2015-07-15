@@ -1,0 +1,122 @@
+T23_merge	disease 117 138	adenomatous polyposis
+T17_merge	age 1645 1667	mean age of 37.5 years
+T49_merge	size 1533 1536	30%
+T29	disease 588 597	Polyposis
+T28	disease 558 561	FAP
+T26	mutation 256 274	germline mutations
+T25	disease 238 241	FAP
+T7_cancer	disease 1968 1974	cancer
+T57_merge	size 1672 1675	29%
+T24	Concepts_Ideas 175 195	dominantly inherited
+T22	Concepts_Ideas 206 214	familial
+T39_2	Disorder 1438 1453	Dense polyposis
+T21	disease 206 236	familial adenomatous polyposis
+T20	ethnicity 580 587	Swedish
+T62	Physiology 1905 1926	less-severe phenotype
+T63	body-part 1957 1967	colorectal
+T64	Concepts_Ideas 1935 1974	high risk of having a colorectal cancer
+T65	body-part 2072 2082	colorectal
+T66	Concepts_Ideas 2090 2099	morbidity
+T28_2	size 939 948	Sixty-one
+T56_merge	size 1636 1639	25%
+T32_merge	size 976 988	81 of the 96
+T27_merge	size 545 547	96
+T38	mutation 1232 1247	codon 1250–1464
+T36_merge	size 1131 1132	9
+T34	mutation 1100 1125	biallelic MUTYH mutations
+T33_merge	size 1071 1082	6 of the 96
+T21_2	Disorder 117 128	adenomatous
+T18_merge	age 1681 1703	mean age of 46.6 years
+T35	gene 1110 1115	MUTYH
+T30	Physiology 902 927	lowered expression of APC
+T61	mutation 1848 1881	mutations outside codon 1250–1464
+T31	mutation 963 972	mutations
+T60	cohort-patient 1830 1838	Probands
+T6	disease 1599 1616	colorectal cancer
+T7	disease 1957 1974	colorectal cancer
+T4	gene 959 962	APC
+T5	gene 1844 1847	APC
+T48	Physiology 1502 1518	severe phenotype
+T8	disease 2072 2089	colorectal cancer
+T9	disease 2060 2067	disease
+T42	age 1352 1356	34.4
+T40	age 1285 1316	median age at diagnosis of 21.8
+T47	cohort-patient 1486 1518	probands with a severe phenotype
+T44	disease 1444 1453	polyposis
+T50	cohort-patient 1540 1580	those with mutations outside this region
+T1	gene 282 285	APC
+T3	gene 924 927	APC
+T2	gene 504 507	APC
+T59	Concepts_Ideas 1815 1824	classical
+T43_merge	age 1352 1377	34.4 (range, 14–57) years
+T8_cancer	disease 2083 2089	cancer
+T6_cancer	disease 1610 1616	cancer
+T10	cohort-patient 462 470	patients
+T11	cohort-patient 548 570	unrelated FAP patients
+T12	cohort-patient 1083 1091	patients
+T37_2	mutation 1018 1020	27
+T13	cohort-patient 1133 1156	mutation-negative cases
+T14	cohort-patient 139 147	families
+T52	cohort-patient 1206 1248	Probands with a genotype (codon 1250–1464)
+T15	cohort-patient 355 363	families
+T51	cohort-patient 1384 1424	those with mutations outside this region
+T16	cohort-patient 989 997	families
+T54	cohort-patient 1623 1631	probands
+T46_merge	size 1475 1478	75%
+T53	body-part 1599 1609	colorectal
+T19	ethnicity 109 116	Swedish
+T55	Concepts_Ideas 1586 1595	morbidity
+T41_merge	age 1312 1337	21.8 (range, 11–49) years
+T58	disease 1825 1828	FAP
+R29_1	has Arg1:T43_merge Arg2:T51
+R0_T63_T7_cancer	relatedTo Arg1:T63 Arg2:T7_cancer
+R26_1	has Arg1:T40 Arg2:T52
+R33_2	has Arg1:T62 Arg2:T60
+R25_1	has Arg1:T50 Arg2:T49_merge
+R8_1	relatedTo Arg1:T25 Arg2:T26
+R20_m	has Arg1:T17_merge Arg2:T54
+R21_m	has Arg1:T54 Arg2:T57_merge
+R0_T64_T7	has Arg1:T64 Arg2:T7
+R24_1	has Arg1:T47 Arg2:T44
+R4_m	has Arg1:T1 Arg2:T26
+R18_m	has Arg1:T54 Arg2:T6
+R0_T30_T3	has Arg1:T30 Arg2:T3
+R19_m	has Arg1:T54 Arg2:T56_merge
+R13_m	has Arg1:T12 Arg2:T34
+R10_m	has Arg1:T16 Arg2:T32_merge
+R3_m	has Arg1:T14 Arg2:T19
+R28_m	has Arg1:T13 Arg2:T36_merge
+R37_1	has Arg1:T59 Arg2:T58
+R2_m	has Arg1:T14 Arg2:T23_merge
+R12_m	has Arg1:T16 Arg2:T31
+R22_1	has Arg1:T39_2 Arg2:T44
+R5_m	relatedTo Arg1:T21 Arg2:T26
+R6_m	has Arg1:T11 Arg2:T28
+R11_m	has Arg1:T12 Arg2:T33_merge
+R42_1	has Arg1:T66 Arg2:T8
+R0_T65_T8_cancer	relatedTo Arg1:T65 Arg2:T8_cancer
+R9_m	has Arg1:T4 Arg2:T31
+R10_1	relatedTo Arg1:T25 Arg2:T1
+R24_m	has Arg1:T60 Arg2:T61
+R29_m	has Arg1:T41_merge Arg2:T52
+R15_m	has Arg1:T47 Arg2:T46_merge
+R27_m	has Arg1:T35 Arg2:T34
+R0_T53_T6_cancer	relatedTo Arg1:T53 Arg2:T6_cancer
+R8_m	has Arg1:T11 Arg2:T27_merge
+R7_m	has Arg1:T11 Arg2:T20
+R30_2	has Arg1:T39_2 Arg2:T47
+R0_T64_T7_cancer	has Arg1:T64 Arg2:T7_cancer
+R6_1	has Arg1:T24 Arg2:T25
+R1_2	has Arg1:T21_2 Arg2:T23_merge
+R3_1	has Arg1:T24 Arg2:T21
+R4_1	has Arg1:T22 Arg2:T21
+R0_T64_T63	has Arg1:T63 Arg2:T64
+R32_1	has Arg1:T55 Arg2:T6
+R5_1	has Arg1:T22 Arg2:T25
+R11_1	relatedTo Arg1:T21 Arg2:T1
+R23_m	has Arg1:T5 Arg2:T61
+R14_2	has Arg1:T31 Arg2:T28_2
+R31_2	has Arg1:T48 Arg2:T47
+R28_1	has Arg1:T42 Arg2:T51
+R16_2	has Arg1:T4 Arg2:T37_2
+R22_m	has Arg1:T18_merge Arg2:T54

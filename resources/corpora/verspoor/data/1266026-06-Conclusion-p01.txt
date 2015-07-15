@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Conclusion
+
+The biology of cancer must underlie the epidemiology of cancer. Here we illustrate that multistage models provide conceptually plausible solutions even when colorectal cancers are divided into biologically relevant and quite different subtypes. Ages at cancer are consistent with five or six somatic oncogenic mutations for hereditary (HNPCC) MSI+ cancers and seven or eight mutations for its sporadic counterpart. The apparent requirement for more than one additional somatic mutation in sporadic MSI+ cancers may reflect that MMR inactivation is commonly epigenetic, which may involve multiple steps. Ages at MSI- cancers were consistent with six or seven oncogenic mutations, with similar estimates for all clinical stages, suggesting that mutations acquired very early in life dictate the cancer phenotype at the time of transformation. Better integration of cancer epidemiology with its biology remains a further challenge.
+

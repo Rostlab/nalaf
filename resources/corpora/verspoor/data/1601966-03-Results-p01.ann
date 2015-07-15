@@ -1,0 +1,57 @@
+T3_2	cohort-patient 1645 1652	patient
+T6	body-part 1980 1985	colon
+T7	body-part 2670 2675	colon
+T4	cohort-patient 2325 2332	patient
+T5	cohort-patient 2905 2912	patient
+T29	body-part 1951 1961	colorectal
+T28	cohort-patient 1938 1945	samples
+T27	body-part 1891 1901	colorectal
+T8	disease 326 331	tumor
+T26	disease 1876 1881	tumor
+T9	disease 344 350	normal
+T25	disease 1865 1871	normal
+T24	disease 1761 1767	tumors
+T23	cohort-patient 1721 1728	samples
+T22	disease 1714 1720	normal
+T21	disease 1591 1597	normal
+T20	disease 1581 1586	tumor
+T1	cohort-patient 1532 1540	patients
+T3	cohort-patient 1598 1605	samples
+T2	cohort-patient 1620 1628	patients
+T10	size 1009 1011	50
+T38	disease 2812 2818	normal
+T11	cohort-patient 1012 1019	samples
+T12	size 1382 1394	18 out of 25
+T37	cohort-patient 2883 2890	samples
+T13	disease 1395 1401	normal
+T14	cohort-patient 1402 1409	tissues
+T15	size 1451 1452	8
+T34	disease 2729 2735	tumors
+T16	disease 1453 1459	normal
+T33	disease 2663 2669	normal
+T36	disease 2872 2877	tumor
+T17	cohort-patient 1460 1467	tissues
+T18	disease 1508 1513	tumor
+T35	disease 2765 2771	normal
+T30	disease 1962 1968	tumors
+T19	cohort-patient 1514 1521	samples
+T32	disease 2256 2261	tumor
+T31	disease 1973 1979	normal
+R6_1	has Arg1:T17 Arg2:T16
+R10_1	has Arg1:T23 Arg2:T22
+R15_1	has Arg1:T28 Arg2:T30
+R1_1	has Arg1:T11 Arg2:T10
+R18_1	has Arg1:T37 Arg2:T36
+R3_1	has Arg1:T14 Arg2:T12
+R4_1	has Arg1:T19 Arg2:T18
+R9_1	has Arg1:T3 Arg2:T20
+R12_1	relatedTo Arg1:T27 Arg2:T25
+R3_m	relatedTo Arg1:T7 Arg2:T33
+R2_m	relatedTo Arg1:T6 Arg2:T31
+R2_1	has Arg1:T14 Arg2:T13
+R5_1	has Arg1:T1 Arg2:T18
+R8_1	has Arg1:T3 Arg2:T21
+R11_1	relatedTo Arg1:T27 Arg2:T26
+R1_m	relatedTo Arg1:T29 Arg2:T30
+R7_1	has Arg1:T17 Arg2:T15
+R16_1	has Arg1:T28 Arg2:T31

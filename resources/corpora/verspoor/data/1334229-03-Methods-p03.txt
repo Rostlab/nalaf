@@ -1,0 +1,16 @@
+hMLH1 expression
+
+Formalin-fixed, paraffin-embedded tissue sections cut at 4 μm, which included tumour tissue with normal adjacent mucosa, were used for immunohistochemistry. Endogenous peroxidase activity was blocked by 3% H2O2. Slides were submitted to microwave antigen retrieval in 1 mM EDTA buffer (pH 8.0) and incubated with 10% normal horse serum for ten min at room temperature. Then, sections were incubated overnight at 4°C with mouse monoclonal antibodies against hMLH1 protein (clone G168-15, PharMingen, San Diego, CA) at a 1:100 dilution. Antibody binding was detected by incubating the sections at room temperature with the peroxidase-labelled DAKO Envision System (DAKO, Carpinteris, CA), using DAB as a chromogen. Sections were counterstained with diluted haematoxylin.
+
+Lesions were considered to lack hMLH1 protein expression when unequivocal absence of nuclear staining of the tumour epithelial cells was observed. Nuclear staining of normal epithelial and stromal cells or lymphocytes served as an internal positive control. Staining was scored independently by at least two observers and in case of discordant results discussed with a pathologist until consensus was reached. hMLH1 expression could be determined in 724 of 737 patients.
+
+BAT-26
+
+Analysis of the BAT-26 mononucleotide repeat was performed in a random sample of tumour specimens from 114 patients, and a series of 48 of 58 tumours that lacked hMLH1 expression, to assess the concordance between the microsatellite instability marker BAT-26 and hMLH1 expression. The primer sequences and PCR conditions for the BAT-26 mononucleotide repeat were used as described previously [31].
+
+Statistical analysis
+
+In the statistical analysis, data from 656 patients for whom information on APC and K-ras mutation status as well as hMLH1 expression was complete were included.
+
+The χ2 test and Cramérs V test were used to estimate the association of the co-occurrence of K-ras and APC gene mutations. Characteristics of patients (age at diagnosis, sex, family history of colorectal cancer) and tumours (tumour sub-localisation, Dukes' stage and tumour differentiation) were compared between patients with and without an activating K-ras or a truncating APC mutation as well as patients harbouring tumours with and without hMLH1 expression, using Students T-test (age at diagnosis) and χ2 tests (sex, family history of colorectal cancer, tumour sub-localisation, Dukes' stage and differentiation). Additionally, patient and tumour characteristics of tumours with an activating K-ras and/or a truncating APC mutation were compared to tumours lacking hMLH1 expression. All P-values are reported for a two-sided test; P-values of less than 0.05 were considered to be statistically significant.
+

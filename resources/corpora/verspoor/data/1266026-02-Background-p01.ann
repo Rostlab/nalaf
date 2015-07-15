@@ -1,0 +1,119 @@
+T64_2	cohort-patient 1230 1237	cancers
+T2_cancer	disease 626 632	cancer
+T4_cancers	disease 1083 1090	cancers
+T67_2	mutation 1390 1407	somatic mutations
+T65_2	mutation 933 942	mutations
+T55_merge	size 1062 1064	5%
+T33_2	Disorder 1248 1259	adenomatous
+T28	disease 1271 1274	FAP
+T8_cancers	disease 2056 2063	cancers
+T27	body-part 1072 1082	colorectal
+T26	body-part 1015 1025	colorectal
+T34_2	Concepts_Ideas 1239 1247	familial
+T25	disease 978 984	cancer
+T7_cancers	disease 1840 1847	cancers
+T22	mutation 1158 1176	germline mutations
+T39_2	size 1534 1537	two
+T21	ethnicity 946 953	Finland
+T20	ethnicity 908 915	England
+T62	cohort-patient 1141 1152	individuals
+T6_cancers	disease 1521 1528	cancers
+T65	body-part 1304 1314	colorectal
+T28_2	Concepts_Ideas 1280 1290	hereditary
+T27_2	Disorder 1291 1303	nonpolyposis
+T38	cohort-patient 1586 1593	cancers
+T37	Physiology 1648 1683	somatic loss of DNA mismatch repair
+T34	disease 1586 1593	cancers
+T33	body-part 1510 1520	colorectal
+T35	Disorder 1602 1628	microsatellite instability
+T30	disease 1230 1237	cancers
+T61	body-part 1829 1839	colorectal
+T31	Concepts_Ideas 1219 1229	hereditary
+T60	Disorder 1765 1775	aneuploidy
+T6	disease 1510 1528	colorectal cancers
+T7	disease 1829 1847	colorectal cancers
+T49	Disorder 2168 2172	MSI+
+T12_2	cohort-patient 1538 1544	groups
+T4	disease 1072 1090	colorectal cancers
+T48	Concepts_Ideas 2152 2162	hereditary
+T5_merge	disease 1280 1321	hereditary nonpolyposis colorectal cancer
+T8	disease 2045 2063	colorectal cancers
+T9	disease 2414 2431	colorectal cancer
+T43	Disorder 1816 1819	CIN
+T42	Disorder 1743 1746	CIN
+T41	Disorder 1718 1741	chromosomal instability
+T40	disease 1702 1709	cancers
+T47	Concepts_Ideas 2140 2148	sporadic
+T3_cancer	disease 1026 1032	cancer
+T46	body-part 2045 2055	colorectal
+T45	Disorder 1824 1828	MSI+
+T44	Physiology 1780 1802	loss of heterozygosity
+T11_merge	disease 1239 1269	familial adenomatous polyposis
+T16_2	size 883 894	five to six
+T50	Disorder 2176 2180	MSI-
+T17_2	mutation 895 904	mutations
+T1	Physiology 1804 1807	LOH
+T9_cancer	disease 2425 2431	cancer
+T3	disease 1015 1032	colorectal cancer
+T2	disease 615 632	Colorectal cancer
+T39_merge	size 1564 1573	10 to 15%
+T59	age 1352 1364	younger ages
+T47_2	gene 1685 1688	MMR
+T19_2	size 920 932	six to seven
+T10	disease 1323 1328	HNPCC
+T12	Concepts_Ideas 1577 1585	sporadic
+T13	disease 66 72	Cancer
+T15	disease 450 456	cancer
+T52	disease 2323 2329	cancer
+T16	disease 491 497	cancer
+T51	disease 2182 2189	Cancers
+T17	disease 592 598	cancer
+T54	Concepts_Ideas 1103 1111	familial
+T53	body-part 2414 2424	colorectal
+T18	body-part 615 625	Colorectal
+T56	cohort-patient 1083 1090	cancers
+T58	disease 2017 2023	cancer
+T57	disease 1909 1914	tumor
+R16_m	has Arg1:T38 Arg2:T34
+R9_m	relatedTo Arg1:T65 Arg2:T5_merge
+R10_1	has Arg1:T35 Arg2:T34
+R0_T46_T8_cancers	relatedTo Arg1:T46 Arg2:T8_cancers
+R0_T33_T6_cancers	relatedTo Arg1:T33 Arg2:T6_cancers
+R29_2	has Arg1:T47 Arg2:T8
+R24_m	has Arg1:T37 Arg2:T38
+R10_2	has Arg1:T27_2 Arg2:T5_merge
+R27_2	has Arg1:T65_2 Arg2:T19_2
+R0_T53_T9_cancer	relatedTo Arg1:T53 Arg2:T9_cancer
+R26_2	has Arg1:T17_2 Arg2:T16_2
+R15_m	has Arg1:T12 Arg2:T34
+R0_T18_T2_cancer	relatedTo Arg1:T18 Arg2:T2_cancer
+R7_2	has Arg1:T33_2 Arg2:T11_merge
+R25_1	relatedTo Arg1:T65 Arg2:T10
+R0_T27_T4_cancers	relatedTo Arg1:T27 Arg2:T4_cancers
+R8_2	has Arg1:T34_2 Arg2:T11_merge
+R0_T26_T3_cancer	relatedTo Arg1:T26 Arg2:T3_cancer
+R20_m	has Arg1:T43 Arg2:T7
+R7_1	has Arg1:T31 Arg2:T10
+R30_2	has Arg1:T48 Arg2:T8
+R4_m	has Arg1:T56 Arg2:T4
+R6_1	has Arg1:T31 Arg2:T5_merge
+R1_1	has Arg1:T60 Arg2:T40
+R21_1	has Arg1:T54 Arg2:T4
+R4_1	has Arg1:T31 Arg2:T11_merge
+R19_m	has Arg1:T45 Arg2:T7
+R0_T61_T7_cancers	relatedTo Arg1:T61 Arg2:T7_cancers
+R13_1	has Arg1:T41 Arg2:T40
+R28_m	has Arg1:T62 Arg2:T22
+R17_1	has Arg1:T1 Arg2:T40
+R14_1	has Arg1:T42 Arg2:T40
+R32_2	has Arg1:T50 Arg2:T8
+R5_m	has Arg1:T56 Arg2:T55_merge
+R5_1	has Arg1:T31 Arg2:T28
+R6_m	has Arg1:T31 Arg2:T30
+R11_2	has Arg1:T28_2 Arg2:T5_merge
+R23_2	has Arg1:T35 Arg2:T38
+R17_m	has Arg1:T38 Arg2:T39_merge
+R11_1	has Arg1:T37 Arg2:T34
+R14_2	has Arg1:T12_2 Arg2:T39_2
+R31_2	has Arg1:T49 Arg2:T8
+R16_1	has Arg1:T44 Arg2:T40

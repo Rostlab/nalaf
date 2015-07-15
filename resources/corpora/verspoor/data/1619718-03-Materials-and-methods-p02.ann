@@ -1,0 +1,44 @@
+T7_2	disease 332 338	polyps
+T6	disease 2532 2534	SA
+T7	gene 731 735	BRAF
+T4	disease 2497 2503	polyps
+T5	Concepts_Ideas 2520 2531	traditional
+T6_2	mutation 1551 1556	A1796
+T8	gene 722 726	KRAS
+T1_2	mutation 1299 1304	V600E
+T9	mutation 736 745	mutations
+T24_2	body-part 383 389	mucosa
+T29_2	Physiology 3492 3515	aberrant p53 expression
+T2_2	mutation 1315 1320	V599E
+T22	disease 2539 2541	MP
+T21	disease 3317 3323	Polyps
+T20	gene 3369 3373	MGMT
+T9_2	disease 376 382	normal
+T28_2	Physiology 3347 3373	loss of expression of MGMT
+T30_2	gene 3501 3504	p53
+T26_2	mutation 752 760	mutation
+T3	disease 2471 2479	adenomas
+T27_2	mutation 1267 1275	mutation
+T10	gene 747 751	KRAS
+T11	gene 896 900	KRAS
+T12	gene 1262 1266	BRAF
+T13	gene 1558 1562	BRAF
+T15	Concepts_Ideas 2488 2496	serrated
+T16	Disorder 2509 2518	dysplasia
+T17	disease 2558 2564	polyps
+T18	gene 2603 2607	MGMT
+T19	disease 3457 3463	Polyps
+R0_T29_2_T30_2	has Arg1:T29_2 Arg2:T30_2
+R6_2	has Arg1:T13 Arg2:T6_2
+R0_T28_2_T20	has Arg1:T28_2 Arg2:T20
+R4_m	has Arg1:T15 Arg2:T4
+R10_2	has Arg1:T28_2 Arg2:T21
+R1_2	relatedTo Arg1:T24_2 Arg2:T9_2
+R9_2	has Arg1:T12 Arg2:T27_2
+R3_m	has Arg1:T5 Arg2:T6
+R2_m	has Arg1:T7 Arg2:T9
+R8_2	has Arg1:T10 Arg2:T26_2
+R5_m	has Arg1:T16 Arg2:T4
+R11_2	has Arg1:T29_2 Arg2:T19
+R7_1	has Arg1:T5 Arg2:T22
+R7_m	has Arg1:T8 Arg2:T9

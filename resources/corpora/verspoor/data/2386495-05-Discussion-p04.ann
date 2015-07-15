@@ -1,0 +1,172 @@
+T76	mutation 2606 2631	biallelic MUTYH mutations
+T74	mutation 2568 2577	mutations
+T79	Concepts_Ideas 2791 2800	classical
+T77	gene 2616 2621	MUTYH
+T78	disease 2801 2804	FAP
+T63_merge	size 2209 2216	Fifteen
+T81_2	Phenomena 2924 2941	mutation-negative
+T48_merge	size 785 787	57
+T66_merge	size 2330 2333	six
+T57_2	mutation 2198 2207	mutations
+T29	cohort-patient 1871 1876	cases
+T28	cohort-patient 765 776	individuals
+T27	cohort-patient 3061 3069	patients
+T26	cohort-patient 2924 2950	mutation-negative patients
+T25	cohort-patient 633 641	patients
+T24	disease 2985 2992	disease
+T23	disease 2719 2726	disease
+T22	disease 808 815	disease
+T21	disease 622 629	disease
+T71	mutation 2439 2447	mutation
+T20	disease 167 174	disease
+T70	gene 2474 2479	MUTYH
+T62	disease 2152 2161	Polyposis
+T52_merge	size 1326 1329	two
+T64	mutation 2246 2254	mutation
+T65	gene 2315 2320	MUTYH
+T67	cohort-patient 2337 2341	them
+T68	gene 2372 2377	MUTYH
+T79_2	size 2038 2040	61
+T69	mutation 2362 2387	biallelic MUTYH mutations
+T78_2	mutation 1891 1912	germline epimutations
+T38	cohort-patient 972 978	family
+T61_merge	size 2115 2127	81 of the 96
+T37	cohort-patient 745 751	family
+T63_2	cohort-patient 2330 2333	six
+T39	cohort-patient 1339 1353	family members
+T34	cohort-patient 2490 2498	families
+T33	cohort-patient 2128 2136	families
+T36	cohort-patient 673 681	Family 1
+T35	cohort-patient 2547 2555	families
+T44_2	Phenomena 647 671	no detected APC mutation
+T30	cohort-patient 2224 2229	cases
+T32	cohort-patient 3171 3176	cases
+T60	mutation 2055 2064	mutations
+T31	cohort-patient 2764 2769	cases
+T6	gene 1088 1091	APC
+T7	gene 1263 1266	APC
+T4	gene 952 955	APC
+T49	cohort-patient 792 800	affected
+T5	gene 1012 1015	APC
+T72_merge	size 2521 2524	90%
+T8	gene 1419 1422	APC
+T9	gene 1655 1658	APC
+T75_merge	size 2584 2586	6%
+T43	ethnicity 2144 2151	Swedish
+T42	ethnicity 712 719	Swedish
+T41	cohort-patient 502 506	case
+T40	cohort-patient 2827 2835	family 1
+T46	disease 720 729	Polyposis
+T45	mutation 663 671	mutation
+T44	Physiology 510 532	reduced APC expression
+T84	disease 3086 3089	FAP
+T85	Concepts_Ideas 3075 3085	attenuated
+T86	Physiology 3111 3130	inactivation of APC
+T87	disease 3167 3170	FAP
+T50	disease 792 800	affected
+T73_merge	size 2536 2539	84%
+T1	gene 1941 1945	MLH1
+T3	gene 659 662	APC
+T2	gene 518 521	APC
+T59	Disorder 1965 1989	hereditary non-polyposis
+T10	gene 1803 1806	APC
+T11	gene 2051 2054	APC
+T12	gene 2194 2197	APC
+T47_merge	size 761 764	150
+T13	gene 2242 2245	APC
+T14	gene 2466 2469	APC
+T15	gene 2564 2567	APC
+T81	Physiology 2880 2917	inactivation of the APC transcription
+T16	gene 2900 2903	APC
+T51	Physiology 1080 1102	lowered APC expression
+T80	cohort-patient 2837 2841	C152
+T83	mutation 3032 3041	mutations
+T17	gene 3049 3052	APC
+T80_2	Disorder 2242 2263	APC-mutation negative
+T54	Physiology 1606 1658	Hypermethylation of CpG sites in the promoter of APC
+T18	gene 3127 3130	APC
+T82	Concepts_Ideas 2966 2976	attenuated
+T53	disease 1330 1338	affected
+T19	disease 1990 1993	CRC
+T56	disease 1720 1726	tumors
+T55	body-part 1709 1719	colorectal
+T58	disease 1965 1993	hereditary non-polyposis CRC
+T48_2	mutation 1267 1278	c.5465A > T
+T57	Physiology 1777 1842	germ-line inactivation of APC caused by promoter hypermethylation
+R47_1	has Arg1:T86 Arg2:T87
+R41_2	has Arg1:T81_2 Arg2:T26
+R34_2	has Arg1:T44 Arg2:T41
+R42_m	has Arg1:T82 Arg2:T24
+R35_1	has Arg1:T79 Arg2:T78
+R35_2	has Arg1:T1 Arg2:T78_2
+R36_2	has Arg1:T29 Arg2:T78_2
+R40_2	has Arg1:T80_2 Arg2:T30
+R36_1	has Arg1:T40 Arg2:T78
+R9_1	has Arg1:T49 Arg2:T22
+R32_m	has Arg1:T32 Arg2:T87
+R45_1	has Arg1:T86 Arg2:T84
+R7_2	has Arg1:T28 Arg2:T42
+R25_1	has Arg1:T67 Arg2:T69
+R8_2	has Arg1:T37 Arg2:T42
+R46_2	has Arg1:T86 Arg2:T32
+R8_1	has Arg1:T49 Arg2:T50
+R0_T59_T58	has Arg1:T59 Arg2:T58
+R21_m	has Arg1:T34 Arg2:T72_merge
+R7_1	has Arg1:T49 Arg2:T48_merge
+R18_m	has Arg1:T68 Arg2:T69
+R20_1	has Arg1:T13 Arg2:T64
+R20_2	has Arg1:T63_2 Arg2:T66_merge
+R13_m	has Arg1:T11 Arg2:T60
+R28_m	has Arg1:T35 Arg2:T75_merge
+R43_m	has Arg1:T26 Arg2:T24
+R10_m	has Arg1:T39 Arg2:T52_merge
+R2_m	has Arg1:T28 Arg2:T47_merge
+R37_1	has Arg1:T80 Arg2:T78
+R0_T81_T16	has Arg1:T81 Arg2:T16
+R37_2	has Arg1:T29 Arg2:T19
+R0_T86_T18	has Arg1:T86 Arg2:T18
+R12_m	relatedTo Arg1:T55 Arg2:T56
+R0_T44_T2	has Arg1:T44 Arg2:T2
+R5_m	has Arg1:T3 Arg2:T45
+R22_1	has Arg1:T30 Arg2:T64
+R31_m	has Arg1:T85 Arg2:T84
+R17_m	has Arg1:T30 Arg2:T63_merge
+R23_1	has Arg1:T67 Arg2:T66_merge
+R38_2	has Arg1:T60 Arg2:T79_2
+R1_m	has Arg1:T36 Arg2:T42
+R14_m	has Arg1:T33 Arg2:T61_merge
+R38_1	has Arg1:T31 Arg2:T78
+R9_m	has Arg1:T39 Arg2:T53
+R33_m	has Arg1:T27 Arg2:T84
+R24_m	has Arg1:T70 Arg2:T71
+R39_2	has Arg1:T33 Arg2:T57_2
+R26_m	has Arg1:T15 Arg2:T74
+R29_m	has Arg1:T35 Arg2:T76
+R15_m	has Arg1:T33 Arg2:T43
+R27_m	has Arg1:T35 Arg2:T74
+R25_m	has Arg1:T35 Arg2:T73_merge
+R0_T57_T10	has Arg1:T57 Arg2:T10
+R0_T44_2_T45	has Arg1:T44_2 Arg2:T45
+R44_m	has Arg1:T17 Arg2:T83
+R0_T80_2_T13	has Arg1:T80_2 Arg2:T13
+R45_m	has Arg1:T27 Arg2:T83
+R30_2	has Arg1:T77 Arg2:T76
+R6_2	has Arg1:T7 Arg2:T48_2
+R1_1	has Arg1:T25 Arg2:T21
+R18_1	has Arg1:T33 Arg2:T60
+R0_T44_2_T3	has Arg1:T44_2 Arg2:T3
+R3_1	has Arg1:T25 Arg2:T45
+R4_2	has Arg1:T28 Arg2:T22
+R19_1	has Arg1:T33 Arg2:T62
+R3_2	has Arg1:T28 Arg2:T48_merge
+R19_2	has Arg1:T63_2 Arg2:T69
+R13_1	has Arg1:T54 Arg2:T56
+R14_1	has Arg1:T59 Arg2:T19
+R0_T51_T6	has Arg1:T51 Arg2:T6
+R5_1	has Arg1:T36 Arg2:T46
+R0_T80_2_T64	has Arg1:T80_2 Arg2:T64
+R11_2	has Arg1:T39 Arg2:T48_2
+R23_m	has Arg1:T14 Arg2:T71
+R0_T54_T9	has Arg1:T54 Arg2:T9
+R16_2	has Arg1:T12 Arg2:T57_2
+R22_m	has Arg1:T34 Arg2:T71

@@ -1,0 +1,17 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Detection of methylation of MLH1 promoter by quantitative MSP
+
+DNA was chemically modified by sodium bisulfite to convert all unmethylated cytosines to uracils, while leaving methylcytosines unaltered (EZ DNA methylation gold kit; Zymo Research, Orange, CA), and eluted in 50 μL of elution buffer [10,11]. The bisulfite-modified DNA was then used as a template for the fluorescence-based real-time PCR assay [12].
+
+The sequences of primers and the fluorogenic probe were designed by MethPrimer software. Primer sequence for hMLH1 was: CGTTATATATCGTTCGTAGTATTCGTGTTT(Forward), and CTATCGCCGCCTCATCGT (Reverse), probe sequence was 6FAM-CGCGACGTCAAACGCCACTACG-TAMRA. For the MSP, 5 μL of bisulfite-converted DNA was used in each amplification. PCR was performed in a reaction volume of 25 μL consisting of 5 pmol of each primer, 250 pmol of probe, 200 μM each of dATP, dCTP, and dGTP, 400 μM dUTP, 3.5 mM MgCl2, 1× TaqMan Buffer A, and 2 units of AmpliTaq Gold polymerase (Applied Biosystem Shanghai Division, Shanghai, China) at the following condition: 95°C for 10 min, followed by 50 cycles at 95°C for 15 s, and 60°C for 1 min. All PCR was performed in the ABI-7000 Real-Time PCR Detection system (Applied Biosystem Shanghai Division, Shanghai, China). CpGenomeTM Universal methylated DNA (Chemicon International Inc., city, CA, USA) was included as positive control in all amplifications and glyceraldehyde-3-phosphate dehydrogenase (GAPDH) quantification of all untreated DNA was used as loading control.
+
+Extraction of genomic DNA from blood
+
+Blood from peripheral veins (2 mL) was taken from patients with MSI colorectal cancer, and genomic DNA was extracted using a kit from Beijing Bio-Lab Materials Institute. The extracted genomic DNA was stored at -80°C until further analysis.
+
+Mutation of MSH2, MLH1 and MSH6 genes
+
+Primers for all exons of MSH2, MLH1 and MSH6 were designed for PCR amplification as previously reported. PCR amplification was performed using the reagents from ABI Company, following the protocol provided by the company. After amplification, the PCR products were purified by electrophoresis through a 1.5% low melting point agarose gel, and then were sequenced on an AB13100-Avant sequencer (Applied Biosystem Shanghai Division) using fluorescently labeled primers, following the protocols supplied by the manufacturer. By comparing the obtained sequence with the known sequence, nonsense, missense, and frameshift mutations were identified. Nonsense and frameshift mutations were considered pathogenic. All missense mutations were screened in 50 patients with MSS colorectal cancer and 50 people without cancer or a family history of cancer. They were judged as pathogenic if they could not be found in MSS patients and normal people, otherwise, they were judged as polymorphisms.
+

@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Up-regulation of mRNA levels in human chromosomal region 17q21.33-23.2 (patient counts with coordinate up-regulation). Grayscale cross-comparison plots of up-regulation patterns across patients (analogous to Figures 7, 10, 13). View this plot in conjunction with Figures 18 and 20. Note, that many more patients show up-regulation as indicated by dark spots in this plot than down-regulation as indicated by dark spots in Figure 20. This region has been reported in other studies to be frequently amplified in colon cancer (see Table 3).
+
+Up-regulation of mRNA levels in human chromosomal region 17q21.33-23.2 (patient counts with coordinate down-regulation). Grayscale cross-comparison plots of down-regulation patterns across patients (analogous to Figures 8, 11, 14). View this plot in conjunction with Figures 18 and 19.
+
+Individual chromosomal islands with loss of expression
+
+1p36.13-1p36.11
+
+The most strongly down-regulated region in our study is 1p36.13-1p36.11 (see Figures 9, 10, 11). A larger chromosome region comprising this fragment has recently been reported to be frequently deleted in CRC (see Tables 1 and 4). No tumor suppressor gene has been found yet. Our data suggest multiple genes that could act as class II TSGs. Several have been associated with proliferative processes or even cancer before. The PLA2G2A encodes phospholipase A2 group IIA which has been proposed as a TSG and a marker for metastasis and patient survival in gastric cancer [30]. The E2F2 transcription factor is a known regulator of TSGs and interacts specifically with the RB protein. It plays an important role in the cell cycle. The CDC42 protein is a small Rho-like GTPase. It acts in intracellular signaling and is involved in various processes like control of morphology, migration, endocytosis, and the cell cycle. Therefore, PLAG2A, E2F2 and CDC42 are the primary candidate tumor suppressors in this region.
+
+Expression in Islands frequently deleted in CRC.
+
+Literature survey of chromosomal regions with evidence for deletions in colorectal cancers. We checked all regions of frequent chromosomal deletions for congruence with expression patterns. Congruence between literature CGH data and our expression data was declared on the presumption that allelic loss causes mRNA down-regulation.
+
+Down-regulation of mRNA expression in human chromosomal region 1p36.13-1p36.11 (T/N relative expression heat map). Heat map of fold change of tumor-versus-normal expression. Genes are given in chromosomal order on the horizontal axis. Patient codes are given on the vertical axis. The legend depicts which colors code for which expression changes on a loge scale (green: down in tumor; red: up in tumor). View in conjunction with Figures 10 and 11.
+

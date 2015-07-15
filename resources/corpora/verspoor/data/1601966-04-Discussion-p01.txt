@@ -1,0 +1,15 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Discussion
+
+Global analysis of chromosomal regions with expression gain or loss
+
+We found that 25% of the genes lie in regions that are affected by expression imbalance in colon cancer. This does not mean that 25% of the genes are misregulated as many genes that fall into these regions are not expressed at all in tumors and in normal epithelium of the colon. Additionally, we note that these numbers are probably an upper limit because the sliding window approach probably included several genes in close proximity to the boundaries of misexpressed regions. Nevertheless, the number of regions of imbalanced expression is remarkable and suggest that there is extensive regulation in CRC at the genomic level. Recently, Nakao et al. estimated from genome-wide array CGH data that ~17% of the human genome is affected by DNA copy number changes in CRC [23]. Prior to a more detailed analysis of individual regions in this study, this suggested that not all regional expression changes in CRC will be explainable by DNA copy number aberrations.
+
+There are only slightly more genes with expression loss than regions with expression gain. One can argue that a tumor ought to show a higher frequency of expression loss than expression gain. Reasons are that there should be a tendency to lose tumor suppressor genes selectively and to lose non-essential genes (genomic ballast) as a side effect. If transcription would be a process that is predominantly driven by positive regulation of transcriptional activators, one would assume that any partial genome loss results in a slow down of transcription. In the light of these considerations, an equally high number of regions with expression gain can be interpreted in two ways. Either positive selection drives expression gain of some regions in cancer cells, or a default phenotype of transcription suppression dominates in normal cells which is relaxed during tumor cell development.
+
+Gene expression in chromosomal regions with frequent DNA copy number changes in CRC
+
+Most studies reported frequent gains of chromosome 7, 8q, 13q, 20q and losses of 4 and 18q in CRC [18,19,21-25]. These broadly-defined alterations are in perfect agreement with chromosome-specific trends in our expression data, especially the exclusive presence of domains of expression gain on 8, 13 and 20 and the exclusive presence of domains of expression loss on chromosome 4 and 18 (see Table 2 and Figures 21, 22, 23, 24, 25, 26). There is a single discrepancy for chromosome 7: region 7q11-7q12 has been reported as amplified in CRC, but its expression is significantly down-regulated in our tumor samples.
+

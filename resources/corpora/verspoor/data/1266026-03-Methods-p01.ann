@@ -1,0 +1,50 @@
+T5_cancers	disease 343 350	cancers
+T4_cancers	disease 121 128	cancers
+T20_merge	size 1067 1074	108,275
+T10_merge	size 104 109	1,022
+T6	disease 1318 1323	HNPCC
+T7	disease 2540 2546	cancer
+T4	disease 110 128	colorectal cancers
+T5	disease 332 350	colorectal cancers
+T29	disease 2070 2076	cancer
+T28	ethnicity 1625 1632	Finnish
+T8	body-part 1134 1139	colon
+T27	ethnicity 967 991	United States of America
+T9	cohort-patient 1075 1082	records
+T26	disease 2253 2259	cancer
+T25	disease 1491 1497	cancer
+T24	disease 1271 1278	cancers
+T23	ethnicity 1159 1164	white
+T22	body-part 1144 1150	rectum
+T21	disease 1109 1115	cancer
+T1	gene 423 427	MLH1
+T3	gene 431 435	MSH2
+T2	gene 509 513	MLH1
+T11	cohort-patient 121 128	cancers
+T12	body-part 110 120	colorectal
+T13	ethnicity 175 195	southeastern Finland
+T14	body-part 332 342	colorectal
+T34	ethnicity 2374 2381	Finnish
+T15	disease 289 296	cancers
+T16	mutation 401 419	Germline mutations
+T33	ethnicity 1747 1760	United States
+T17	mutation 514 532	germline mutations
+T18	ethnicity 501 508	Finnish
+T30	cohort-patient 2260 2265	cases
+T19	disease 1009 1016	cancers
+T32	ethnicity 1652 1659	Finnish
+T31	disease 1178 1192	adenocarcinoma
+R0_T12_T4_cancers	relatedTo Arg1:T12 Arg2:T4_cancers
+R10_1	relatedTo Arg1:T22 Arg2:T21
+R0_T14_T5_cancers	relatedTo Arg1:T14 Arg2:T5_cancers
+R9_1	relatedTo Arg1:T8 Arg2:T21
+R4_1	has Arg1:T1 Arg2:T16
+R3_m	has Arg1:T11 Arg2:T10_merge
+R2_m	has Arg1:T11 Arg2:T4
+R8_m	has Arg1:T11 Arg2:T13
+R5_m	has Arg1:T2 Arg2:T17
+R8_1	has Arg1:T9 Arg2:T21
+R5_1	has Arg1:T3 Arg2:T16
+R6_m	has Arg1:T9 Arg2:T20_merge
+R11_1	has Arg1:T9 Arg2:T23
+R7_m	has Arg1:T30 Arg2:T26

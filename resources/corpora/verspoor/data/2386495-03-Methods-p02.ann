@@ -1,0 +1,32 @@
+T23_merge	size 2224 2226	29
+T24_merge	size 2241 2243	18
+T6	gene 2415 2418	APC
+T7	gene 3321 3324	APC
+T4	gene 2074 2077	APC
+T5	gene 2103 2106	APC
+T27	gene 3471 3475	GAPD
+T8	gene 3411 3414	APC
+T26	gene 3329 3333	GAPD
+T9	gene 3525 3528	APC
+T25	gene 2439 2443	GAPD
+T22	mutation 655 663	mutation
+T21	gene 685 690	MUTYH
+T20	disease 638 641	FAP
+T1	gene 88 91	APC
+T23_2	mutation 3764 3775	c.5465A > T
+T3	gene 678 681	APC
+T2	gene 122 125	APC
+T10	cohort-patient 575 583	Patients
+T11	cohort-patient 2227 2235	patients
+T12	cohort-patient 1891 1902	individuals
+T13	cohort-patient 3690 3701	individuals
+T14	cohort-patient 2244 2252	families
+T15	cohort-patient 2849 2856	patient
+T16	cohort-patient 3560 3567	patient
+T17	cohort-patient 584 588	C107
+T18	cohort-patient 590 594	C257
+T19	cohort-patient 599 603	C505
+R3_m	has Arg1:T3 Arg2:T22
+R2_m	has Arg1:T11 Arg2:T23_merge
+R4_m	has Arg1:T21 Arg2:T22
+R1_m	has Arg1:T14 Arg2:T24_merge

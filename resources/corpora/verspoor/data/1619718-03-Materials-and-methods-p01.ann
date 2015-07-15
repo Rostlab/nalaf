@@ -1,0 +1,211 @@
+T114	body-part 2331 2388	nuclei are elongated, hyperchromatic and pseudostratified
+T23_merge	size 892 895	190
+T115	body-part 2681 2696	splenic flexure
+T116	Disorder 2246 2264	cytological atypia
+T118	body-part 2105 2115	epithelial
+T119	body-part 1362 1372	epithelium
+T63_merge	size 1133 1135	15
+T29	Concepts_Ideas 1066 1073	sessile
+T28	Concepts_Ideas 1028 1035	villous
+T27	Concepts_Ideas 1010 1023	tubulovillous
+T26	Concepts_Ideas 977 984	tubular
+T57_merge	size 1061 1063	22
+T24	cohort-patient 896 902	polyps
+T22	disease 896 902	polyps
+T21	disease 829 835	polyps
+T20	gene 788 792	KRAS
+T38	mutation 1468 1476	mutation
+T61_merge	size 1104 1106	10
+T37	gene 1463 1467	BRAF
+T39	disease 1642 1648	polyps
+T34	disease 1199 1204	polyp
+T33	disease 1180 1185	polyp
+T36	body-part 1391 1405	proximal colon
+T25_merge	size 810 817	Fifteen
+T35	Concepts_Ideas 1190 1198	serrated
+T30	Concepts_Ideas 273 280	sessile
+T32	Concepts_Ideas 1171 1179	serrated
+T31	Concepts_Ideas 1163 1170	sessile
+T53_merge	size 972 974	49
+T101_2	Disorder 2432 2551	non-adenomatous forms of dysplasia in which the nuclei are enlarged, ovoid, vesicular and contain a prominent nucleolus
+T49	disease 1074 1077	SAs
+T48	disease 1051 1054	VAs
+T100	Concepts_Ideas 322 334	conventional
+T43	disease 348 351	HPs
+T42	disease 302 305	MPs
+T102	disease 1079 1083	SSAs
+T41	disease 268 271	SAs
+T101	Concepts_Ideas 454 459	large
+T40	Concepts_Ideas 1633 1641	Serrated
+T47	disease 1046 1050	TVAs
+T46	disease 995 998	TAs
+T45	disease 963 966	HPs
+T44	disease 440 443	HPs
+T109	Concepts_Ideas 1856 1898	resemble either SA or conventional adenoma
+T107	Concepts_Ideas 1711 1719	combined
+T108	Concepts_Ideas 1794 1813	resembles HP or SSA
+T105	Concepts_Ideas 1287 1299	greater size
+T106	Concepts_Ideas 1374 1405	predilection for proximal colon
+T103	Concepts_Ideas 1112 1123	traditional
+T104	Disorder 1210 1232	atypical proliferation
+T50	disease 1095 1098	MPs
+T59	cohort-patient 1074 1077	SAs
+T52	cohort-patient 963 966	HPs
+T112	Concepts_Ideas 2301 2313	conventional
+T51	disease 1124 1127	SAs
+T111	Concepts_Ideas 2067 2078	homogeneous
+T54	cohort-patient 985 993	adenomas
+T56	cohort-patient 1036 1044	adenomas
+T75	Concepts_Ideas 1748 1756	serrated
+T76	Disorder 1775 1789	non-dysplastic
+T73	disease 1680 1683	SAs
+T74	disease 1720 1726	lesion
+T79	Disorder 1826 1836	dysplastic
+T77	disease 1804 1806	HP
+T78	disease 1810 1813	SSA
+T55_merge	size 1005 1007	62
+T107_2	Concepts_Ideas 464 477	well-oriented
+T72	disease 1672 1675	MPs
+T71	Disorder 1324 1346	atypical proliferation
+T70	Disorder 1301 1322	aberrant architecture
+T62	cohort-patient 1124 1127	SAs
+T64	disease 1138 1141	SSA
+T65	disease 1242 1245	SSA
+T66	disease 1268 1270	HP
+T67	Disorder 1348 1372	hypermucinous epithelium
+T58_merge	size 1090 1092	32
+T60	cohort-patient 1095 1098	MPs
+T99	Concepts_Ideas 285 296	traditional
+T97	Disorder 2231 2240	dysplasia
+T98	Disorder 1654 1663	dysplasia
+T95	body-part 2722 2728	rectum
+T6	cohort-patient 249 254	group
+T7	cohort-patient 829 835	polyps
+T4	disease 1891 1898	adenoma
+T5	disease 2314 2321	adenoma
+T8	body-part 2659 2673	proximal colon
+T9	body-part 2705 2717	distal colon
+T94	disease 2637 2643	polyps
+T93	disease 2404 2407	SAs
+T92	disease 2268 2270	SA
+T91	Concepts_Ideas 2105 2125	epithelial serration
+T90	disease 2149 2152	SSA
+T88	disease 2079 2086	lesions
+T89	disease 2143 2145	HP
+T108_2	mutation 793 801	mutation
+T84	Concepts_Ideas 1995 2003	serrated
+T85	Concepts_Ideas 2008 2020	non-serrated
+T14_merge	size 198 202	1250
+T86	Disorder 2047 2057	dysplastic
+T87	disease 2059 2062	SAs
+T1	disease 335 343	adenomas
+T3	disease 1036 1044	adenomas
+T2	disease 985 993	adenomas
+T10	body-part 90 100	colorectal
+T11	disease 101 107	polyps
+T12	disease 228 235	lesions
+T13	cohort-patient 228 235	lesions
+T81	disease 1685 1688	MPs
+T15	disease 555 561	Polyps
+T80	disease 1872 1874	SA
+T16	disease 675 680	polyp
+T83	disease 1934 1941	lesions
+T17	disease 682 688	polyps
+T82	disease 1964 1967	MPs
+T18	disease 716 722	cancer
+T19	gene 779 783	BRAF
+R0_T108_T77	has Arg1:T108 Arg2:T77
+R34_1	has Arg1:T32 Arg2:T64
+R47_1	has Arg1:T84 Arg2:T82
+R41_1	has Arg1:T76 Arg2:T78
+R42_m	has Arg1:T109 Arg2:T81
+R66_2	has Arg1:T111 Arg2:T87
+R40_1	has Arg1:T76 Arg2:T77
+R0_T108_T78	has Arg1:T108 Arg2:T78
+R50_1	has Arg1:T91 Arg2:T89
+R32_m	has Arg1:T70 Arg2:T65
+R33_1	has Arg1:T31 Arg2:T64
+R43_1	has Arg1:T79 Arg2:T4
+R64_m	has Arg1:T98 Arg2:T73
+R48_1	has Arg1:T85 Arg2:T82
+R0_T91_T118	has Arg1:T118 Arg2:T91
+R20_m	has Arg1:T62 Arg2:T63_merge
+R46_2	has Arg1:T114 Arg2:T92
+R49_1	has Arg1:T86 Arg2:T82
+R21_m	has Arg1:T62 Arg2:T51
+R65_m	has Arg1:T40 Arg2:T73
+R0_T67_T119	has Arg1:T119 Arg2:T67
+R0_T106_T36	has Arg1:T36 Arg2:T106
+R73_m	relatedTo Arg1:T95 Arg2:T94
+R78_1	relatedTo Arg1:T36 Arg2:T65
+R71_m	relatedTo Arg1:T8 Arg2:T94
+R18_m	has Arg1:T29 Arg2:T49
+R30_m	has Arg1:T37 Arg2:T38
+R54_m	has Arg1:T112 Arg2:T5
+R72_m	relatedTo Arg1:T9 Arg2:T94
+R77_1	relatedTo Arg1:T115 Arg2:T94
+R19_m	has Arg1:T59 Arg2:T49
+R13_m	has Arg1:T54 Arg2:T2
+R28_m	has Arg1:T98 Arg2:T39
+R3_m	has Arg1:T13 Arg2:T12
+R43_m	has Arg1:T107 Arg2:T74
+R10_m	has Arg1:T52 Arg2:T45
+R2_m	has Arg1:T13 Arg2:T14_merge
+R12_m	has Arg1:T54 Arg2:T55_merge
+R5_m	has Arg1:T7 Arg2:T21
+R79_1	has Arg1:T116 Arg2:T92
+R6_m	has Arg1:T7 Arg2:T25_merge
+R31_m	has Arg1:T105 Arg2:T65
+R40_m	has Arg1:T108 Arg2:T81
+R11_m	has Arg1:T52 Arg2:T53_merge
+R17_m	has Arg1:T27 Arg2:T3
+R68_2	has Arg1:T112 Arg2:T92
+R42_1	has Arg1:T79 Arg2:T80
+R1_m	relatedTo Arg1:T10 Arg2:T11
+R41_m	has Arg1:T79 Arg2:T81
+R14_m	has Arg1:T56 Arg2:T57_merge
+R16_m	has Arg1:T28 Arg2:T3
+R57_2	has Arg1:T6 Arg2:T42
+R9_m	has Arg1:T26 Arg2:T2
+R33_m	has Arg1:T109 Arg2:T4
+R24_m	has Arg1:T32 Arg2:T33
+R36_m	has Arg1:T67 Arg2:T65
+R26_m	has Arg1:T35 Arg2:T34
+R67_m	has Arg1:T97 Arg2:T87
+R51_2	has Arg1:T107_2 Arg2:T44
+R29_m	has Arg1:T40 Arg2:T39
+R51_1	has Arg1:T91 Arg2:T90
+R52_2	has Arg1:T20 Arg2:T108_2
+R15_m	has Arg1:T56 Arg2:T3
+R27_m	has Arg1:T104 Arg2:T34
+R61_2	relatedTo Arg1:T65 Arg2:T38
+R53_2	has Arg1:T19 Arg2:T108_2
+R25_m	has Arg1:T31 Arg2:T33
+R50_m	has Arg1:T101 Arg2:T44
+R44_m	has Arg1:T91 Arg2:T87
+R49_m	has Arg1:T100 Arg2:T1
+R8_m	has Arg1:T24 Arg2:T23_merge
+R45_m	has Arg1:T111 Arg2:T88
+R55_2	has Arg1:T6 Arg2:T41
+R58_2	has Arg1:T6 Arg2:T1
+R47_m	has Arg1:T30 Arg2:T41
+R48_m	has Arg1:T99 Arg2:T41
+R7_m	has Arg1:T24 Arg2:T22
+R35_m	has Arg1:T106 Arg2:T65
+R56_2	has Arg1:T6 Arg2:T43
+R59_m	has Arg1:T60 Arg2:T50
+R60_m	has Arg1:T60 Arg2:T61_merge
+R63_m	has Arg1:T40 Arg2:T72
+R18_1	has Arg1:T27 Arg2:T47
+R75_1	has Arg1:T101_2 Arg2:T93
+R39_m	has Arg1:T76 Arg2:T81
+R62_m	has Arg1:T98 Arg2:T72
+R0_T109_T80	has Arg1:T109 Arg2:T80
+R76_1	has Arg1:T114 Arg2:T5
+R19_1	has Arg1:T28 Arg2:T48
+R69_m	has Arg1:T101_2 Arg2:T93
+R17_1	has Arg1:T26 Arg2:T46
+R37_m	has Arg1:T71 Arg2:T65
+R38_m	has Arg1:T75 Arg2:T81
+R23_m	has Arg1:T59 Arg2:T58_merge
+R22_m	has Arg1:T103 Arg2:T51

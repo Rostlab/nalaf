@@ -1,0 +1,14 @@
+T6	cohort-patient 301 317	proband's mother
+T7	gender 311 317	mother
+T4	body-part 362 373	endometrial
+T5	disease 374 388	adenocarcinoma
+T8	cohort-patient 90 97	sisters
+T9	disease 154 161	cancers
+T1	disease 130 135	HNPCC
+T3	gender 90 97	sisters
+T2	disease 319 329	unaffected
+R3_m	relatedTo Arg1:T4 Arg2:T5
+R2_m	has Arg1:T6 Arg2:T7
+R3_1	has Arg1:T6 Arg2:T2
+R4_1	has Arg1:T6 Arg2:T5
+R1_m	has Arg1:T8 Arg2:T3

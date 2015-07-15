@@ -1,0 +1,23 @@
+T1	disease 271 274	CRC
+T3	cohort-patient 2142 2150	patients
+T2	cohort-patient 1599 1607	patients
+T6	cohort-patient 275 282	samples
+T4	cohort-patient 2690 2698	patients
+T5	Physiology 229 263	regions of misregulated expression
+T10	disease 2546 2551	tumor
+T11	disease 2003 2008	tumor
+T12	disease 2016 2022	normal
+T8	disease 1467 1472	tumor
+T13	disease 2559 2565	normal
+T9	disease 1480 1486	normal
+T14	cohort-patient 2023 2030	samples
+T15	cohort-patient 1487 1494	samples
+T16	cohort-patient 2566 2573	samples
+R6_1	has Arg1:T14 Arg2:T11
+R1_1	has Arg1:T5 Arg2:T1
+R2_1	has Arg1:T6 Arg2:T1
+R5_1	has Arg1:T14 Arg2:T12
+R8_1	has Arg1:T16 Arg2:T10
+R3_1	has Arg1:T15 Arg2:T9
+R4_1	has Arg1:T15 Arg2:T8
+R7_1	has Arg1:T16 Arg2:T13

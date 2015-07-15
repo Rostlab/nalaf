@@ -1,0 +1,29 @@
+T1_cancer	disease 2294 2300	cancer
+T14_2	Concepts_Ideas 1360 1367	primary
+T1	disease 2283 2300	colorectal cancer
+T3	disease 425 428	CRC
+T2	disease 303 306	CRC
+T6	disease 2050 2062	colon cancer
+T7	cohort-patient 2301 2309	patients
+T4	disease 967 970	CRC
+T6_cancer	disease 2056 2062	cancer
+T5	disease 1265 1268	CRC
+T10	body-part 1409 1414	colon
+T11	body-part 2050 2055	colon
+T12	body-part 281 291	colorectal
+T13	disease 292 301	carcinoma
+T8	cohort-patient 1437 1444	patient
+T14	disease 694 700	tumors
+T9	body-part 1368 1373	colon
+T15	disease 1374 1383	carcinoma
+T16	disease 1402 1408	normal
+T17	body-part 2283 2293	colorectal
+R3_m	relatedTo Arg1:T10 Arg2:T16
+R0_T11_T6_cancer	relatedTo Arg1:T11 Arg2:T6_cancer
+R7_2	has Arg1:T8 Arg2:T16
+R6_2	has Arg1:T8 Arg2:T15
+R0_T17_T1_cancer	relatedTo Arg1:T17 Arg2:T1_cancer
+R4_m	relatedTo Arg1:T9 Arg2:T15
+R5_2	has Arg1:T14_2 Arg2:T15
+R1_1	relatedTo Arg1:T12 Arg2:T13
+R8_m	has Arg1:T7 Arg2:T1

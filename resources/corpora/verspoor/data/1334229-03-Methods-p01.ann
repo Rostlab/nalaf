@@ -1,0 +1,93 @@
+T29_merge	size 307 313	58,279
+T54_merge	size 1898 1900	5%
+T28	cohort-patient 1055 1069	incident cases
+T26	cohort-patient 1805 1813	patients
+T10_cancer	disease 1310 1316	cancer
+T25	cohort-patient 1652 1660	patients
+T24	cohort-patient 1317 1325	patients
+T22	ethnicity 597 608	Netherlands
+T20	ethnicity 516 527	Netherlands
+T63	cohort-patient 329 334	women
+T65	body-part 1534 1546	rectosigmoid
+T59_merge	size 2014 2017	95%
+T56_merge	size 1979 1982	775
+T50_merge	size 1783 1786	819
+T38	cohort-patient 186 202	study population
+T37	body-part 2558 2563	colon
+T39	cohort-patient 314 317	men
+T34	body-part 1359 1364	Colon
+T33	gender 314 317	men
+T58_merge	size 2009 2012	737
+T36	body-part 1436 1463	cecum through sigmoid colon
+T35	body-part 1429 1434	colon
+T32	gender 329 334	women
+T31	cohort-patient 1145 1151	cohort
+T11_cancer	disease 1645 1651	cancer
+T53_merge	size 1886 1896	Forty-four
+T21_merge	disease 1369 1382	rectal cancer
+T12_cancer	disease 1798 1804	cancer
+T6	disease 2459 2465	tumour
+T7	disease 2518 2524	Tumour
+T49	body-part 1634 1644	colorectal
+T4	disease 2040 2046	tumour
+T48	body-part 1571 1577	rectum
+T5	disease 2318 2324	tumour
+T64_merge	size 322 328	62,573
+T8	disease 2658 2664	tumour
+T9	disease 1100 1117	colorectal cancer
+T41	age 335 370	between the ages of 55 and 69 years
+T40	ethnicity 270 281	Netherlands
+T47	body-part 1369 1375	rectal
+T46	ethnicity 1329 1334	Dutch
+T45	body-part 1299 1309	colorectal
+T44	body-part 1100 1110	colorectal
+T1	disease 1271 1277	tumour
+T9_cancer	disease 1111 1117	cancer
+T3	disease 1902 1908	tumour
+T2	disease 1615 1621	Tumour
+T43_merge	size 1051 1054	929
+T10	disease 1299 1316	colorectal cancer
+T11	disease 1634 1651	colorectal cancer
+T12	disease 1787 1804	colorectal cancer
+T13	ethnicity 43 54	Netherlands
+T14	disease 80 86	cancer
+T15	disease 394 400	cancer
+T52	ethnicity 1873 1884	Netherlands
+T51	body-part 1787 1797	colorectal
+T16	disease 461 467	cancer
+T17	cohort-patient 385 406	Incident cancer cases
+T18	disease 564 570	cancer
+T19	cohort-patient 450 456	cohort
+T55	cohort-patient 1909 1923	tissue samples
+T57	cohort-patient 1993 2007	tissue samples
+R0_T44_T9_cancer	relatedTo Arg1:T44 Arg2:T9_cancer
+R16_m	has Arg1:T26 Arg2:T12
+R9_m	has Arg1:T28 Arg2:T9
+R24_m	has Arg1:T38 Arg2:T40
+R27_1	relatedTo Arg1:T48 Arg2:T21_merge
+R27_2	has Arg1:T57 Arg2:T59_merge
+R26_1	relatedTo Arg1:T65 Arg2:T21_merge
+R26_2	has Arg1:T57 Arg2:T58_merge
+R0_T51_T12_cancer	relatedTo Arg1:T51 Arg2:T12_cancer
+R15_m	has Arg1:T25 Arg2:T11
+R0_T45_T10_cancer	relatedTo Arg1:T45 Arg2:T10_cancer
+R25_m	has Arg1:T24 Arg2:T46
+R25_1	relatedTo Arg1:T36 Arg2:T21_merge
+R8_m	has Arg1:T28 Arg2:T43_merge
+R20_m	has Arg1:T55 Arg2:T54_merge
+R21_m	has Arg1:T57 Arg2:T56_merge
+R7_m	has Arg1:T17 Arg2:T15
+R24_1	relatedTo Arg1:T35 Arg2:T21_merge
+R4_m	has Arg1:T63 Arg2:T64_merge
+R18_m	has Arg1:T26 Arg2:T50_merge
+R0_T49_T11_cancer	relatedTo Arg1:T49 Arg2:T11_cancer
+R19_m	has Arg1:T55 Arg2:T3
+R13_m	relatedTo Arg1:T47 Arg2:T21_merge
+R3_m	has Arg1:T63 Arg2:T32
+R2_m	has Arg1:T39 Arg2:T29_merge
+R12_m	relatedTo Arg1:T34 Arg2:T21_merge
+R5_m	has Arg1:T41 Arg2:T63
+R6_m	has Arg1:T41 Arg2:T39
+R11_m	has Arg1:T24 Arg2:T10
+R23_m	has Arg1:T55 Arg2:T53_merge
+R1_m	has Arg1:T39 Arg2:T33

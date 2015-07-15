@@ -1,0 +1,23 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Clinical characterization and the mutation spectrum in Swedish adenomatous polyposis families
+
+Abstract
+
+Background
+
+The dominantly inherited condition familial adenomatous polyposis (FAP) is caused by germline mutations in the APC gene. Finding the causative mutations has great implications for the families. Correlating the genotypes to the phenotypes could help to improve the diagnosis and follow-up of patients.
+
+Methods
+
+Mutation screening of APC and the clinical characterization of 96 unrelated FAP patients from the Swedish Polyposis Registry was performed. In addition to generally used mutation screening methods, analyses of splicing-affecting mutations and investigations of the presence of low-frequency mutation alleles, indicating mosaics, have been performed, as well as quantitative real-time polymerase chain reaction to detect lowered expression of APC.
+
+Results
+
+Sixty-one different APC mutations in 81 of the 96 families were identified and 27 of those are novel. We have previously shown that 6 of the 96 patients carried biallelic MUTYH mutations. The 9 mutation-negative cases all display an attenuated or atypical phenotype. Probands with a genotype (codon 1250–1464) predicting a severe phenotype had a median age at diagnosis of 21.8 (range, 11–49) years compared with 34.4 (range, 14–57) years among those with mutations outside this region (P < 0.017). Dense polyposis (> 1000) occurred in 75% of the probands with a severe phenotype compared with 30% in those with mutations outside this region. The morbidity in colorectal cancer among probands was 25% at a mean age of 37.5 years and 29% at a mean age of 46.6 years.
+
+Conclusion
+
+Using a variety of mutation-detection techniques, we have achieved a 100% detection frequency in classical FAP. Probands with APC mutations outside codon 1250–1464, although exhibiting a less-severe phenotype, are at high risk of having a colorectal cancer at diagnosis indicating that age at diagnosis is as important as the severity of the disease for colorectal cancer morbidity.
+

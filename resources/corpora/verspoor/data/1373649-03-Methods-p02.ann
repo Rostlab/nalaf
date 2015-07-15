@@ -1,0 +1,30 @@
+T12_merge	mutation 769 825	mutation in the proband's mother, located in the exon 12
+T1	gene 336 341	hMLH1
+T3	gene 690 695	hMLH1
+T2	gene 567 572	hMLH1
+T6	gene 676 681	hMSH2
+T7	gene 829 834	hMSH2
+T4	gene 326 331	hMSH2
+T5	gene 557 562	hMSH2
+T10	disease 204 209	tumor
+T11	cohort-patient 186 195	proband's
+T13	cohort-patient 393 409	proband's mother
+T8	gender 874 881	sisters
+T14	cohort-patient 785 801	proband's mother
+T9	gender 263 266	his
+T15	cohort-patient 864 881	proband's sisters
+T16	gender 795 801	mother
+T17	gender 403 409	mother
+T18	cohort-patient 278 284	mother
+T19	gender 278 284	mother
+T21	gender 294 300	father
+T20	cohort-patient 294 300	father
+R3_m	has Arg1:T15 Arg2:T8
+R2_m	has Arg1:T14 Arg2:T16
+R4_m	has Arg1:T7 Arg2:T12_merge
+R1_1	has Arg1:T11 Arg2:T10
+R2_1	has Arg1:T11 Arg2:T9
+R5_m	has Arg1:T14 Arg2:T12_merge
+R8_1	has Arg1:T18 Arg2:T19
+R9_1	has Arg1:T20 Arg2:T21
+R1_m	has Arg1:T13 Arg2:T17

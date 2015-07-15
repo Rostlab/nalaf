@@ -1,0 +1,5 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Progression to cancer has been modeled by a number of investigators with different approaches and assumptions [3-6,11-14,29,30]. In our previously reported approach there is no growth until after the last required mutation has been acquired [11]. In this paper we apply this model to cancer subtypes instead of considering colorectal cancers as a single uniform disease. Modeling is potentially more informative and specific when applied to distinct cancer subtypes because their progression pathways can differ. The ability to apply a simple multistage model to different colorectal cancer subtypes that have marked differences in final types of mutations and clinical outcomes suggests its basic underlying premise (most critical alterations first accumulate in normal colon) may be correct.
+

@@ -1,0 +1,122 @@
+T73	Phenomena 2246 2253	Dukes A
+T73_2	Disorder 1974 1995	family history of FAP
+T67_2	body-part 2279 2294	valvula Bauhini
+T48_merge	size 658 660	96
+T49_merge	size 843 845	15
+T29	disease 1992 1995	FAP
+T28	disease 1407 1410	FAP
+T27	disease 268 271	FAP
+T26	cohort-patient 1596 1604	families
+T25	cohort-patient 846 854	families
+T24	cohort-patient 758 766	families
+T23	cohort-patient 661 669	families
+T22	cohort-patient 326 334	families
+T21	cohort-patient 293 301	families
+T72	disease 2235 2244	carcinoma
+T71	Concepts_Ideas 2180 2193	tubulovillous
+T20	cohort-patient 159 167	families
+T70	Concepts_Ideas 2168 2175	Tubular
+T62	body-part 1780 1792	fundic gland
+T63	disease 1793 1799	polyps
+T64	cohort-patient 1917 1921	C896
+T65	cohort-patient 2005 2009	C107
+T66	body-part 2049 2059	intestinal
+T67	Disorder 2049 2068	intestinal bleeding
+T68	disease 2124 2130	polyps
+T28_2	cohort-patient 1094 1100	family
+T69	body-part 2150 2160	colorectal
+T27_2	cohort-patient 353 383	living disease-affected member
+T50_merge	size 726 757	Twenty-four of the remaining 39
+T38	ethnicity 111 118	Swedish
+T37	ethnicity 525 531	Sweden
+T63_2	Concepts_Ideas 2094 2123	10–20 small (less than 10 mm)
+T39	gender 2020 2023	her
+T34	age 1435 1444	age of 75
+T33	age 1380 1389	age of 50
+T36	age 2227 2233	age 50
+T35	age 2072 2078	age 47
+T30	cohort-patient 1909 1916	Patient
+T61	disease 1775 1778	FGP
+T32	cohort-patient 2354 2361	patient
+T60	disease 1739 1741	DL
+T31	cohort-patient 1997 2004	Patient
+T71_2	disease 1854 1860	polyps
+T51_merge	size 904 916	six of these
+T53_merge	mutation 938 964	bi-allelic MUTYH mutations
+T72_2	disease 1872 1878	polyps
+T6	disease 2194 2202	adenomas
+T70_2	mutation 799 808	mutations
+T7	disease 2327 2335	adenomas
+T4	disease 223 231	adenomas
+T5	disease 1938 1946	adenomas
+T8	disease 360 367	disease
+T9	disease 407 414	disease
+T42	disease 182 185	FAP
+T40	disease 119 128	Polyposis
+T44	body-part 212 222	colorectal
+T1	gene 716 719	APC
+T3	gene 1702 1705	APC
+T2	gene 790 793	APC
+T69_2	mutation 699 708	mutations
+T59	disease 1752 1758	lesion
+T10	cohort-patient 63 71	Patients
+T19_2	cohort-patient 1081 1086	cases
+T11	cohort-patient 431 439	patients
+T12	cohort-patient 548 556	patients
+T47_merge	size 403 406	315
+T13	cohort-patient 917 925	patients
+T14	cohort-patient 1113 1121	patients
+T15	cohort-patient 1450 1458	patients
+T16	cohort-patient 1566 1580	index patients
+T54	gene 949 954	MUTYH
+T17	cohort-patient 1660 1668	Patients
+T45_merge	size 274 283	Sixty-one
+T46_merge	size 322 325	135
+T18	cohort-patient 1263 1274	individuals
+T56	gene 1709 1714	MUTYH
+T19	disease 1218 1221	FAP
+T55	cohort-patient 971 979	Probands
+T41_merge	size 155 158	196
+T58	body-part 1743 1751	duodenal
+T57	mutation 1690 1698	mutation
+R16_m	relatedTo Arg1:T58 Arg2:T59
+R9_m	has Arg1:T23 Arg2:T48_merge
+R29_1	has Arg1:T35 Arg2:T31
+R29_2	has Arg1:T24 Arg2:T70_2
+R27_1	has Arg1:T31 Arg2:T39
+R27_2	has Arg1:T23 Arg2:T69_2
+R26_2	has Arg1:T1 Arg2:T69_2
+R15_m	relatedTo Arg1:T62 Arg2:T63
+R33_1	has Arg1:T73 Arg2:T72
+R25_1	has Arg1:T30 Arg2:T29
+R8_m	has Arg1:T11 Arg2:T47_merge
+R21_m	relatedTo Arg1:T69 Arg2:T68
+R7_m	has Arg1:T11 Arg2:T9
+R25_2	has Arg1:T27_2 Arg2:T8
+R30_2	has Arg1:T73_2 Arg2:T64
+R24_1	has Arg1:T64 Arg2:T29
+R4_m	has Arg1:T20 Arg2:T38
+R18_m	has Arg1:T65 Arg2:T39
+R18_1	relatedTo Arg1:T58 Arg2:T60
+R20_1	relatedTo Arg1:T62 Arg2:T61
+R20_2	has Arg1:T63_2 Arg2:T68
+R0_T73_2_T29	has Arg1:T73_2 Arg2:T29
+R19_m	has Arg1:T35 Arg2:T65
+R13_m	has Arg1:T54 Arg2:T53_merge
+R3_m	has Arg1:T20 Arg2:T42
+R10_m	has Arg1:T24 Arg2:T50_merge
+R17_1	has Arg1:T56 Arg2:T57
+R2_m	relatedTo Arg1:T44 Arg2:T4
+R0_T67_T66	has Arg1:T66 Arg2:T67
+R12_m	has Arg1:T13 Arg2:T51_merge
+R5_m	has Arg1:T21 Arg2:T45_merge
+R6_m	has Arg1:T22 Arg2:T46_merge
+R11_m	has Arg1:T25 Arg2:T49_merge
+R17_m	has Arg1:T64 Arg2:T5
+R23_m	has Arg1:T70 Arg2:T6
+R23_1	has Arg1:T30 Arg2:T5
+R28_2	has Arg1:T2 Arg2:T70_2
+R1_m	has Arg1:T20 Arg2:T41_merge
+R14_m	has Arg1:T13 Arg2:T53_merge
+R22_m	has Arg1:T71 Arg2:T6
+R16_1	has Arg1:T3 Arg2:T57

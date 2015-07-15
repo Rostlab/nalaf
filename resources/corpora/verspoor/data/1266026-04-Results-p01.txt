@@ -1,0 +1,13 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results
+
+The presence or absence of MSI was determined for 1,022 colorectal cancers obtained from nine large regional hospitals in southeastern Finland [9]. There were 895 (87.6%) MSI- cancers and 127 (12.4%) MSI+ cancers. The MSI+ cancers were further classified as sporadic (N = 98 or 9.6% of all cancers) or HNPCC (N = 29 or 2.9% of all cancers) based on germline MLH1 or MSH2 mutations (Table 1).
+
+Ages at cancer can be used to estimate likely numbers of oncogenic mutations required before transformation [3-6,11]. Average ages for sporadic MSI+, MSI-, and HNPCC cancers were respectively 71.5, 67.5, and 50.3 years (Figure 1A). For HNPCC cancers, estimated numbers of oncogenic mutations were between four and seven (95% credibility interval), with the most likely value of five mutations (Table 1). For MSI+ sporadic cancers, estimated numbers of mutations were between six and nine (95% credibility interval) with more likely values of seven or eight mutations. The most likely number of mutations was seven for sporadic MSI- cancers.
+
+Duke's stage and age at clinical presentation (Figure 1B) were documented for 884 of the 895 MSI- sporadic cancers (Table 1). Average ages were 68.6 years for stage A, 69.0 years for stage B, 65.2 years for stage C, and 65.4 years for stage D. The most likely numbers of oncogenic mutations were seven for stage A cancers, eight for stage B cancers, and six for stage C or D cancers (Table 1).
+
+Mutation number estimates with respect to clinical stage may be biased with the Finnish data because it includes only specimens with tissue available for molecular analysis. Advanced cancers may not be removed. Therefore, a similar analysis was performed on a population-based cancer registry [10] from the United States of America (SEER 11 Regs Public-Use, Nov 2001 Sub (1992–1999)), which records ages and stages at diagnosis regardless of treatment (Table 2). The average age at diagnosis was 70.5 years, consistent with an estimate of six mutations to colorectal cancer for the 108,275 white males and females with stage data. Like the Finnish cancers, ages were similar for SEER patients of different clinical stages, with an estimate of six mutations for cancers with localized, regional or distant clinical stages (Table 2 and Figure 1C).
+

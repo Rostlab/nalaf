@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Subsequently, it was argued that HP and SA are related lesions.11 The latter could arise within the former (giving a MP) or could develop as de novo SA but through mechanisms shared with HPs. This proposal subsequently received strong support through the demonstration of molecular alterations common to both types of serrated polyp, notably mutation of BRAF and extensive DNA methylation.12 This viewpoint was consolidated through the formal recognition of two largely independent pathways of colorectal tumorigenesis: (i) the traditional adenoma–carcinoma sequence associated with chomosomally unstable CRCs,13 and (ii) the ‘serrated pathway’ culminating in CRCs with DNA microsatellite instability (MSI), mutation of BRAF and extensive DNA methylation.12,14–20
+
+This paper explores the possibility that the early evolution of colorectal cancer is not limited to two essentially independent pathways, but often combines components of these pathways. Indeed, the successful ‘fusion’ of the hyperproliferation and crypt fission that characterize adenomas21 with the inhibition of apoptosis that has been linked with serrated polyps22,23 may generate lesions with enhanced aggressiveness. Specifically, it is suggested that methylation of the DNA repair gene O-6-methylguanine DNA methyltransferase (MGMT), mutation of KRAS and inactivation of TP53 provide critical combinations of molecular ‘cross-over’ between the two pathways that occur at the stage of precancerous polyps.
+

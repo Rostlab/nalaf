@@ -1,0 +1,118 @@
+T73_2	Disorder 1537 1553	MMR inactivation
+T74_2	gene 1828 1831	MMR
+T63_merge	size 1332 1338	eleven
+T55_merge	size 1753 1757	1315
+T49_merge	size 1470 1472	75
+T29	disease 722 732	carcinomas
+T28	cohort-patient 722 732	carcinomas
+T27	gene 681 685	PMS2
+T76_2	gene 320 323	MMR
+T26	body-part 1758 1765	ovarian
+T75_2	gene 1890 1893	MMR
+T25	body-part 1617 1624	ovarian
+T24	body-part 1576 1583	ovarian
+T23	body-part 1473 1480	ovarian
+T22	body-part 1094 1101	ovarian
+T21	body-part 743 750	ovarian
+T20	body-part 714 721	ovarian
+T62	cohort-patient 1270 1280	responders
+T64	cohort-patient 1339 1353	non-responders
+T65	Disorder 1358 1376	not related to MSI
+T30_merge	size 711 713	75
+T79_2	gene 1403 1406	MMR
+T59_merge	size 1248 1250	11
+T77_2	gene 498 501	MMR
+T38	Physiology 902 925	no MLH1 mRNA expression
+T61_merge	size 1267 1269	34
+T37	cohort-patient 895 900	SKOV3
+T33	Disorder 779 782	MSI
+T36	Physiology 841 892	no MLH1 mRNA expression due to promoter methylation
+T35	cohort-patient 818 828	cell lines
+T32	cohort-patient 758 768	cell lines
+T60	cohort-patient 1251 1265	non-responders
+T71_2	gene 1039 1042	MMR
+T72_2	gene 1537 1540	MMR
+T6	gene 660 664	MSH2
+T70_2	gene 962 965	MMR
+T7	gene 666 670	MSH3
+T4	gene 905 909	MLH1
+T5	gene 1120 1124	MLH1
+T48	Physiology 1434 1453	No MMR inactivation
+T8	gene 672 676	MSH6
+T9	disease 98 112	ovarian cancer
+T43	cohort-patient 1102 1112	carcinomas
+T42	disease 1102 1112	carcinomas
+T40	cohort-patient 1065 1075	cell lines
+T46	Concepts_Ideas 1156 1180	none of these showed MSI
+T45	disease 1863 1868	tumor
+T44	Physiology 1120 1145	MLH1 promoter methylation
+T31_merge	size 737 742	eight
+T50	cohort-patient 1491 1500	specimens
+T1	gene 546 550	MLH1
+T3	gene 844 848	MLH1
+T2	gene 654 658	MLH1
+T39_merge	size 1059 1064	eight
+T69_2	Physiology 1396 1419	not to MMR inactivation
+T34_merge	size 799 817	three of the eight
+T10	disease 153 167	ovarian cancer
+T11	disease 341 355	ovarian cancer
+T12	disease 743 757	ovarian cancer
+T47_merge	size 1182 1191	Forty-six
+T13	disease 1576 1590	ovarian cancer
+T14	disease 1758 1772	ovarian cancer
+T15	cohort-patient 1201 1209	patients
+T52	disease 1625 1635	carcinomas
+T16	cohort-patient 1773 1781	patients
+T51	disease 1481 1490	carcinoma
+T80_2	gene 1437 1440	MMR
+T17	body-part 98 105	ovarian
+T54	cohort-patient 1591 1601	cell lines
+T18	body-part 153 160	ovarian
+T19	body-part 341 348	ovarian
+T56	cohort-patient 834 839	A2780
+T41_merge	size 1078 1093	Seven of the 75
+T58	Physiology 937 971	no altered expression of MMR genes
+T57	cohort-patient 931 935	2774
+R16_m	has Arg1:T44 Arg2:T42
+R9_m	has Arg1:T32 Arg2:T31_merge
+R34_2	has Arg1:T33 Arg2:T35
+R33_m	has Arg1:T46 Arg2:T42
+R24_m	relatedTo Arg1:T26 Arg2:T14
+R35_2	has Arg1:T65 Arg2:T64
+R26_m	has Arg1:T16 Arg2:T55_merge
+R29_m	has Arg1:T60 Arg2:T59_merge
+R15_m	has Arg1:T43 Arg2:T42
+R27_m	has Arg1:T40 Arg2:T39_merge
+R0_T48_T80_2	has Arg1:T48 Arg2:T80_2
+R25_m	has Arg1:T16 Arg2:T14
+R8_m	has Arg1:T32 Arg2:T12
+R20_m	has Arg1:T50 Arg2:T51
+R0_T38_T4	has Arg1:T38 Arg2:T4
+R7_m	relatedTo Arg1:T21 Arg2:T12
+R21_2	has Arg1:T48 Arg2:T50
+R4_m	relatedTo Arg1:T20 Arg2:T29
+R18_m	has Arg1:T50 Arg2:T49_merge
+R18_1	has Arg1:T48 Arg2:T51
+R30_m	has Arg1:T62 Arg2:T61_merge
+R12_2	has Arg1:T58 Arg2:T57
+R0_T69_2_T79_2	has Arg1:T69_2 Arg2:T79_2
+R19_m	relatedTo Arg1:T23 Arg2:T51
+R13_m	has Arg1:T43 Arg2:T41_merge
+R0_T58_T70_2	has Arg1:T58 Arg2:T70_2
+R28_m	has Arg1:T64 Arg2:T63_merge
+R3_m	relatedTo Arg1:T19 Arg2:T11
+R10_m	has Arg1:T35 Arg2:T34_merge
+R0_T44_T5	has Arg1:T44 Arg2:T5
+R2_m	relatedTo Arg1:T18 Arg2:T10
+R32_2	has Arg1:T38 Arg2:T37
+R5_m	has Arg1:T28 Arg2:T30_merge
+R6_m	has Arg1:T28 Arg2:T29
+R11_2	has Arg1:T36 Arg2:T56
+R31_m	has Arg1:T54 Arg2:T13
+R17_m	has Arg1:T15 Arg2:T47_merge
+R0_T73_2_T72_2	has Arg1:T73_2 Arg2:T72_2
+R23_m	relatedTo Arg1:T25 Arg2:T52
+R0_T36_T3	has Arg1:T36 Arg2:T3
+R1_m	relatedTo Arg1:T17 Arg2:T9
+R14_m	relatedTo Arg1:T22 Arg2:T42
+R22_m	relatedTo Arg1:T24 Arg2:T13

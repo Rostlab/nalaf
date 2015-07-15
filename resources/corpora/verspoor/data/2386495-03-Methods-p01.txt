@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Patients
+
+Between 1957 and 31 December 2004 the Swedish Polyposis Registry included data on 196 families with verified FAP (defined as more than 100 colorectal adenomas or if less with a family history of FAP). Sixty-one of these families are now extinct but 135 families with at least one living disease-affected member remain. Presently, 315 disease-affected living patients are included in the registry. The geographical catchment area comprises the whole of Sweden. Details of how patients have been eligible for accession into the registry are given in [30]. In this study we have analyzed 96 families included in the registry for mutations in the APC gene. Twenty-four of the remaining 39 families have been analyzed for APC gene mutations at other genetic laboratories and 15 families remain to be tested. We have previously reported six of these patients who carried bi-allelic MUTYH mutations [31]. Probands were defined as those diagnosed on the basis of the occurrence of symptoms and irrespective of other cases in the family and call-up patients, as those identified as subjects at risk on the basis of studies of pedigrees and found to have FAP. De novo mutations were defined in those individuals where none of the parents carried the mutation or where the parents had a negative colonoscopy after the age of 50 or died of a non-FAP related cause after the age of 75. All patients have given their consent and the local ethics committees have approved the study. The clinical features of index patients of each of the families analyzed are listed in Additional file 1 and Table 1.
+
+Patients without any detected mutation in APC or MUTYH
+
+Age, age at diagnosis; DL, duodenal lesion; dom, dominant; FGP, fundic gland polyps; NA, no available data; NI, no inheritance; Number of polyps, number of polyps at diagnosis; rec, recessive
+
+Patient C896, with only five adenomas, was included because of a family history of FAP. Patient C107 underwent her first colonoscopy due to intestinal bleeding at age 47. At diagnosis, 10–20 small (less than 10 mm) polyps were found in most colorectal parts. Tubular and tubulovillous adenomas were removed yearly. At age 50, carcinoma (Dukes A) was diagnosed 4 cm from valvula Bauhini in conjunction with several new adenomas. At that time the patient underwent total colectomy with ileorectal anastomosis (IRA).
+
+DNA, RNA and cDNA preparation
+
+Genomic DNA was isolated from samples of venous blood, anti-coagulated in ethylenediaminetetraacetic acid (EDTA). DNA purification was performed using the PuregeneR DNA Isolation Kit (Gentra Systems, Minneapolis, MN) according to the manufacturer's recommendations. DNA was extracted from paraffin-embedded tissue as described previously [32]. Histopaque (Sigma, St Louis, MO) or Lymphoprep (Axis-Shield PoC AS, Oslo, Norway) was used for purification of the lymphocytes, and total RNA was extracted using RNA-Stat 60 (Tel-Test, Friendswood, TX). cDNA was synthesized as described previously [33].
+

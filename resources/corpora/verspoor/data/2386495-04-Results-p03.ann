@@ -1,0 +1,46 @@
+T6	gene 1672 1675	APC
+T7	gene 1791 1794	APC
+T4	gene 695 698	APC
+T5	gene 854 857	APC
+T29	mutation 2305 2332	mutation affecting splicing
+T28	mutation 2159 2289	frameshift, caused by the 11-bp deletion in the 3' end of exon 7, which leads to the premature truncation of the protein in exon 8
+T8	gene 2140 2143	APC
+T27	mutation 2097 2124	aberrant splicing of exon 7
+T9	gene 2340 2343	APC
+T26	mutation 1818 1828	c.834G > C
+T25	cohort-patient 1696 1700	C633
+T24	mutation 1676 1684	mutation
+T23	mutation 1013 1025	c.835-7T > G
+T22	cohort-patient 959 963	C496
+T21	mutation 473 531	new AG splice-acceptor site eight bases upstream of exon 8
+T20	mutation 403 415	c.835-7T > G
+T1	mutation 2507 2523	c.423-6del8ins13
+T3	gene 151 154	APC
+T2	mutation 2539 2575	c. 423 -6delAAATAGGTinsGAAGCAAGATCAG
+T10	gene 2489 2492	APC
+T11	gene 2503 2506	APC
+T12	gene 2535 2538	APC
+T13	cohort-patient 106 113	patient
+T14	cohort-patient 720 727	patient
+T15	cohort-patient 951 958	patient
+T16	cohort-patient 993 1000	patient
+T17	cohort-patient 1688 1695	patient
+T18	cohort-patient 2404 2411	patient
+T19	cohort-patient 114 118	C496
+T30	cohort-patient 2412 2416	C232
+T31	mutation 2428 2446	deletion/insertion
+R4_m	has Arg1:T11 Arg2:T1
+R10_1	has Arg1:T30 Arg2:T29
+R3_1	has Arg1:T15 Arg2:T23
+R9_1	has Arg1:T18 Arg2:T29
+R12_1	has Arg1:T10 Arg2:T1
+R13_1	has Arg1:T10 Arg2:T31
+R3_m	has Arg1:T12 Arg2:T2
+R2_m	has Arg1:T22 Arg2:T23
+R14_1	has Arg1:T11 Arg2:T31
+R5_m	has Arg1:T6 Arg2:T24
+R5_1	has Arg1:T17 Arg2:T24
+R8_1	has Arg1:T9 Arg2:T29
+R6_m	has Arg1:T25 Arg2:T24
+R1_m	has Arg1:T16 Arg2:T23
+R7_1	has Arg1:T8 Arg2:T28

@@ -1,0 +1,13 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Loss of expression of mgmt
+
+Loss of expression of MGMT was distributed differently (P < 0.001) across the different types of polyps, being observed most frequently among MPs, TA > 10 mm and TVAs/VAs (Table 1). There was no correlation between loss of expression of MGMT and either KRAS or BRAF mutation across the full range of polyp types. However, among TAs < 10 mm, KRAS mutation occurred in 3/25 (12%) adenomas with no MGMT loss but in 4/8 (50%) adenomas with MGMT loss (P < 0.04). Since there were few KRAS mutations in this subset and most KRAS mutations (5/7) were G→A, it was not possible to demonstrate an association between MGMT loss and G→A mutation in KRAS.
+
+Aberrant expression of p53 and correlation with MGMT loss
+
+Sixty-two TAs, 22 TVAs/VAs, 15 SAs and 10 MPs were immunostained for p53. Weak expression of nuclear p53 occurred frequently within the proliferative compartment in all types of polyps and was ignored. Aberrant p53 expression was observed in only four polyps: one TA, one MP (Figure 1B) and two SAs (Figure 2). Overall, only 1/84 (1%) conventional adenomas showed aberrant expression of p53 compared with 3/25 (12%) serrated polyps with dysplasia (P < 0.04). In the latter, aberrant p53 expression coincided with high-grade dysplasia and reduced or complete loss of expression of MGMT (Figures 1B and 2). The TA with aberrant p53 expression had normal expression of MGMT.
+
+High-power field of a serrated adenoma with high-grade dysplasia (A) in which there is aberrant nuclear expression of p53 (B) and loss of nuclear expression of O-6-methylguanine DNA methyltransferase (C).
+

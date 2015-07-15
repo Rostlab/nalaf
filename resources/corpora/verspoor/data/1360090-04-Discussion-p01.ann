@@ -1,0 +1,217 @@
+T114	body-part 818 842	infiltrating lymphocytes
+T115	disease 963 969	polyps
+T118	disease 1871 1878	tumours
+T80_merge	size 1930 1931	9
+T29	Disorder 669 673	MSI+
+T28	disease 674 680	tumors
+T27	disease 651 657	tumors
+T26	Disorder 646 650	MSI-
+T25	mutation 616 624	mutation
+T24	gene 611 615	BRAF
+T23	gene 425 429	BRAF
+T22	Physiology 382 407	MLH1 promoter methylation
+T122	size 2326 2329	52%
+T21	Concepts_Ideas 184 192	sporadic
+T121	size 2319 2321	5%
+T20	disease 168 174	tumors
+T74_merge	mutation 1937 1948	BRAF mutant
+T32_merge	size 662 665	39%
+T39	cohort-patient 806 812	tumors
+T34	disease 729 735	tumors
+T33	cohort-patient 674 680	tumors
+T36	cohort-patient 729 735	tumors
+T35	Physiology 744 792	methylation of the MLH1 promoter proximal region
+T30	cohort-patient 651 657	tumors
+T49	disease 1079 1085	tumors
+T48	mutation 1024 1033	mutations
+T43	Concepts_Ideas 914 922	sporadic
+T100	mutation 2620 2629	mutations
+T42	mutation 855 863	mutation
+T102	disease 2647 2653	tumors
+T41	gene 850 854	BRAF
+T101	Disorder 2642 2646	MSI-
+T40	disease 806 812	tumors
+T47	gene 1019 1023	BRAF
+T46	Physiology 939 954	MLH1-methylated
+T45	Physiology 929 934	CIMP+
+T44	Disorder 923 927	MSI+
+T109	mutation 2902 2911	mutations
+T108	gene 2897 2901	BRAF
+T105	Disorder 2771 2775	MSI-
+T106	Disorder 2787 2791	MSI+
+T103	gene 2707 2711	BRAF
+T104	mutation 2712 2721	mutations
+T50	Concepts_Ideas 1123 1131	sporadic
+T59	mutation 1401 1409	mutation
+T51_2	size 885 891	70–80%
+T37_merge	size 794 797	46%
+T113	cohort-patient 1444 1450	tumors
+T52	Physiology 1142 1157	MLH1 methylated
+T51	Disorder 1132 1136	MSI+
+T111	mutation 2995 3003	mutation
+T53	Physiology 1163 1168	CIMP+
+T110	gene 2990 2994	BRAF
+T56	mutation 1351 1360	mutations
+T55	gene 1346 1350	BRAF
+T58	gene 1396 1400	KRAS
+T75	Physiology 1955 1960	CIMP-
+T76	gene 1961 1965	BRAF
+T73	gene 1937 1941	BRAF
+T79	cohort-patient 1973 1979	tumors
+T77	mutation 1966 1972	mutant
+T78	disease 1973 1979	tumors
+T107_2	size 2604 2607	43%
+T127_2	size 2917 2919	21
+T91_merge	size 2266 2269	39%
+T72	Disorder 1932 1936	MSI-
+T71	Physiology 1850 1855	CIMP+
+T70	Disorder 1841 1845	MSI+
+T62	mutation 1487 1495	mutation
+T63	gene 1528 1532	BRAF
+T64	mutation 1533 1542	mutations
+T65	Disorder 1583 1587	MSI+
+T67	disease 1774 1780	tumors
+T68	gene 1786 1790	BRAF
+T69	mutation 1791 1799	mutation
+T112_merge	size 1432 1434	3%
+T38_merge	size 844 847	48%
+T92_merge	size 2252 2254	4%
+T61	disease 1444 1450	tumors
+T60	Physiology 1438 1443	CIMP-
+T99	gene 2615 2619	BRAF
+T97	Disorder 2569 2573	MSI-
+T98	disease 2574 2580	tumors
+T95	Disorder 2469 2473	MSI+
+T96	disease 2474 2480	tumors
+T81_merge	size 1953 1954	5
+T117_2	cohort-patient 2615 2629	BRAF mutations
+T6	gene 1142 1146	MLH1
+T70_2	Disorder 1569 1582	HNPCC-related
+T7	gene 1482 1486	TP53
+T4	gene 763 767	MLH1
+T5	gene 939 943	MLH1
+T8	disease 314 317	CRC
+T9	disease 955 958	CRC
+T94	mutation 2433 2442	mutations
+T93	gene 2428 2432	BRAF
+T90	cohort-patient 2271 2277	tumors
+T88	Disorder 2260 2264	MSI+
+T89	disease 2271 2277	tumors
+T85	gene 2220 2224	BRAF
+T31_merge	size 640 642	4%
+T86	mutation 2225 2233	mutation
+T87	Disorder 2246 2250	MSI-
+T1	mutation 75 80	V600E
+T3	gene 382 386	MLH1
+T2	mutation 430 435	V600E
+T10	disease 1588 1591	CRC
+T11	disease 2792 2795	CRC
+T12	disease 2839 2842	CRC
+T13	disease 196 201	HNPCC
+T14	disease 338 343	HNPCC
+T15	disease 1569 1574	HNPCC
+T16	cohort-patient 2843 2851	patients
+T83	mutation 2031 2039	mutation
+T17	body-part 1195 1209	proximal colon
+T18	gene 70 74	BRAF
+T82	gene 2026 2030	BRAF
+T19	Disorder 163 167	MSI+
+R42_m	has Arg1:T101 Arg2:T102
+R29_2	has Arg1:T70_2 Arg2:T10
+R27_1	relatedTo Arg1:T49 Arg2:T48
+R40_1	relatedTo Arg1:T67 Arg2:T69
+R0_T22_T3	has Arg1:T22 Arg2:T3
+R32_m	has Arg1:T73 Arg2:T74_merge
+R0_T70_2_T15	has Arg1:T70_2 Arg2:T15
+R64_m	has Arg1:T45 Arg2:T115
+R49_2	has Arg1:T75 Arg2:T79
+R75_m	has Arg1:T88 Arg2:T89
+R49_1	has Arg1:T72 Arg2:T78
+R20_m	has Arg1:T47 Arg2:T48
+R21_m	has Arg1:T58 Arg2:T59
+R65_m	has Arg1:T50 Arg2:T49
+R71_m	has Arg1:T79 Arg2:T77
+R60_2	relatedTo Arg1:T115 Arg2:T42
+R30_m	has Arg1:T68 Arg2:T69
+R19_m	has Arg1:T41 Arg2:T42
+R50_2	has Arg1:T117_2 Arg2:T107_2
+R17_m	has Arg1:T114 Arg2:T40
+R40_m	has Arg1:T97 Arg2:T98
+R42_1	has Arg1:T71 Arg2:T67
+R69_2	relatedTo Arg1:T61 Arg2:T56
+R33_m	has Arg1:T76 Arg2:T77
+R67_m	has Arg1:T52 Arg2:T49
+R27_m	has Arg1:T63 Arg2:T64
+R25_m	has Arg1:T60 Arg2:T61
+R0_T35_T4	has Arg1:T35 Arg2:T4
+R77_m	has Arg1:T90 Arg2:T91_merge
+R44_m	has Arg1:T16 Arg2:T12
+R45_m	has Arg1:T108 Arg2:T109
+R35_m	has Arg1:T82 Arg2:T83
+R59_m	relatedTo Arg1:T9 Arg2:T42
+R63_m	has Arg1:T46 Arg2:T115
+R54_2	has Arg1:T42 Arg2:T51_2
+R39_m	has Arg1:T95 Arg2:T96
+R62_m	has Arg1:T44 Arg2:T115
+R61_m	has Arg1:T43 Arg2:T115
+R4_1	has Arg1:T19 Arg2:T13
+R37_m	has Arg1:T90 Arg2:T89
+R14_1	has Arg1:T33 Arg2:T25
+R0_T52_T6	has Arg1:T52 Arg2:T6
+R23_m	has Arg1:T113 Arg2:T61
+R14_2	relatedTo Arg1:T27 Arg2:T24
+R31_2	relatedTo Arg1:T67 Arg2:T68
+R41_2	has Arg1:T117_2 Arg2:T100
+R41_1	has Arg1:T70 Arg2:T67
+R57_m	has Arg1:T43 Arg2:T9
+R0_T46_T5	has Arg1:T46 Arg2:T5
+R15_2	relatedTo Arg1:T28 Arg2:T24
+R74_m	has Arg1:T87 Arg2:T89
+R58_m	has Arg1:T44 Arg2:T9
+R76_m	has Arg1:T90 Arg2:T92_merge
+R48_1	has Arg1:T75 Arg2:T78
+R56_m	has Arg1:T45 Arg2:T9
+R55_m	has Arg1:T46 Arg2:T9
+R81_2	has Arg1:T109 Arg2:T127_2
+R4_m	has Arg1:T24 Arg2:T25
+R18_m	has Arg1:T39 Arg2:T38_merge
+R53_m	has Arg1:T105 Arg2:T11
+R77_1	has Arg1:T90 Arg2:T122
+R80_2	has Arg1:T117_2 Arg2:T102
+R13_m	has Arg1:T36 Arg2:T34
+R51_m	has Arg1:T93 Arg2:T94
+R10_m	has Arg1:T33 Arg2:T32_merge
+R43_m	has Arg1:T103 Arg2:T104
+R3_m	has Arg1:T23 Arg2:T2
+R28_m	has Arg1:T65 Arg2:T10
+R37_1	has Arg1:T65 Arg2:T15
+R2_m	has Arg1:T19 Arg2:T20
+R12_m	has Arg1:T36 Arg2:T37_merge
+R79_2	relatedTo Arg1:T96 Arg2:T94
+R5_m	has Arg1:T26 Arg2:T27
+R6_m	has Arg1:T30 Arg2:T31_merge
+R11_m	has Arg1:T35 Arg2:T34
+R70_m	has Arg1:T79 Arg2:T80_merge
+R1_m	has Arg1:T18 Arg2:T1
+R52_m	has Arg1:T106 Arg2:T11
+R34_m	has Arg1:T79 Arg2:T78
+R16_m	has Arg1:T39 Arg2:T40
+R9_m	has Arg1:T33 Arg2:T28
+R24_m	has Arg1:T113 Arg2:T112_merge
+R26_m	has Arg1:T7 Arg2:T62
+R36_m	has Arg1:T85 Arg2:T86
+R8_m	has Arg1:T30 Arg2:T27
+R46_m	has Arg1:T110 Arg2:T111
+R48_m	has Arg1:T79 Arg2:T74_merge
+R47_m	has Arg1:T79 Arg2:T81_merge
+R7_m	has Arg1:T29 Arg2:T28
+R78_m	has Arg1:T90 Arg2:T86
+R3_1	has Arg1:T21 Arg2:T20
+R76_1	has Arg1:T90 Arg2:T121
+R68_m	has Arg1:T53 Arg2:T49
+R38_m	has Arg1:T99 Arg2:T100
+R66_m	has Arg1:T51 Arg2:T49
+R11_1	has Arg1:T30 Arg2:T25
+R73_2	has Arg1:T72 Arg2:T79
+R73_1	has Arg1:T113 Arg2:T56
+R22_m	has Arg1:T55 Arg2:T56

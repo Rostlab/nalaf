@@ -1,0 +1,25 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Patients
+
+Three first-degree relatives (mother and two sisters) of a male who died of poorly differentiated colorectal adenocarcinoma at age 23 contacted us for genetic counseling. A detailed family and medical history was obtained through interview with the proband relatives and their consent for release of medical records and use of the pathological tissue blocks still available.
+
+The early onset of the colon cancer in the proband and the study of the family's pedigree (fig. 1), that fulfill the strict Amsterdam-1 criteria, prompted genetic analysis with suspicion of HNPCC. They were informed about the risks, benefits and limitations of the study protocol.
+
+Pedigree showing HNPCC family. An arrow indicates the male index patient (III:3) diagnosed with colorectal adenocarcinoma at the age of 23 years. Family members suffering from a malignancy are indicated by a shaded circle or square. The age, type of malignancy, as well as the generation (roman figures), are described below the indicated patient. The family fulfill the Amsterdam-I criteria with presence of extracolonic tumors in the extended pedigree, having more than three carcinomas of colon (C) or ovary (O) in the affected members. The syndrome is present in all three generations (I-III) and three family members are younger than 50 years (III:3, II:1 and I:3). At the moment of the study the proband's mother (II-5) was an unaffected carrier, but two years later she developed an endometrial (E) adenocarcinoma.
+
+Study protocol
+
+As screening method for HNPCC we searched for MSI in the proband's primary tumor and metastasis tissue blocks. The absence of proband's non-tumor DNA for MSI testing was overcome studying the alleles carried by his progenitors. Once the MSI was established, a second blood sample was obtained from the proband's mother (obligate carrier but at the moment of the study still unaffected) to full mutation analysis of the hMSH2 and hMLH1 genes by direct sequencing. After identifying the family mutation, we searched it in both proband's sisters.
+
+DNA preparation for genetic testing
+
+Peripheral blood was collected from the three consulting family members and the proband's father. Genomic DNA isolation from their lymphocytes was performed using a standard phenol-chloroform extraction. DNA from the proband was obtained from the formalin-fixed, paraffin embedded tissue blocks and isolated by microdissection of tumor, deparaffinization, proteinase K treatment, and ethanol precipitation [7].
+
+Determination of MSI
+
+The reference panel of 5 microsatellite markers standardized by the National Cancer Institute for the screening of HNPCC (BAT-25, BAT-26, D2S123, D5S346 and D17S250) were PCR amplified using the corresponding specific primers for each one [8]. All the PCR products were electrophoresed through a denaturing 6% polyacrylamide gels and visualized by silver staining (fig. 2).
+

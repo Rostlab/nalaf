@@ -1,0 +1,9 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Conclusion
+
+Roughly a quarter of all human genes is located in islands of misregulated gene expression in colorectal cancer. There are only slightly more down-regulated than up-regulated genes. Chromosomal regions that are linked to hereditary colorectal cancer often exhibit deregulated expression, suggesting that they are implicated in spontaneous CRC not only through collection of mutations. Thus, genes in these chromosomal hotspots may be systematically tested in patients with sporadic CRC for molecular lesions and for transcriptional silencing.
+
+Chromosomal regions that are frequently deleted in CRC very often comprise islands in which we found reduced expression. Although many regions that are known to be amplified in colorectal tumors show a gain of expression, there are also a considerable number of amplified islands that show no alterations or even down-regulation. Comparison of published CGH studies with our expression data suggests that amplified or deleted chromosomal regions are responsible for many islands with aberrant expression. However, we suggest that it is necessary to invoke other mechanism like epigenetic regulation of chromatin or disruption of enhancer actions to explain the remaining expression imbalances.
+

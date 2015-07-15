@@ -1,0 +1,59 @@
+T40_2	gene 136 139	MMR
+T38_2	Physiology 1590 1624	mismatch repair (MMR) inactivation
+T6	disease 1509 1523	ovarian cancer
+T7	disease 1628 1642	ovarian cancer
+T4	gene 571 575	MSH2
+T5	disease 1146 1160	ovarian cancer
+T29	disease 1766 1776	carcinomas
+T28	cohort-patient 1766 1776	carcinomas
+T8	disease 1787 1801	ovarian cancer
+T34_2	gene 676 679	MMR
+T9	disease 1935 1949	ovarian cancer
+T25	cohort-patient 365 374	cell line
+T24	body-part 352 364	endometrioid
+T23	cohort-patient 232 242	cell lines
+T39_2	gene 1284 1287	MMR
+T21	Physiology 292 305	MMR deficient
+T20	disease 223 231	melanoma
+T30_merge	size 1781 1786	eight
+T1	gene 398 402	MLH1
+T35_2	gene 1126 1129	MMR
+T3	gene 407 411	MSH2
+T2	gene 537 541	MLH1
+T36_2	gene 1607 1610	MMR
+T32_merge	size 1930 1934	1315
+T10	cohort-patient 1524 1532	patients
+T27_merge	size 1745 1757	seventy-five
+T11	cohort-patient 1950 1958	patients
+T12	body-part 211 218	ovarian
+T37_2	gene 1409 1412	MMR
+T13	body-part 1146 1153	ovarian
+T14	body-part 1509 1516	ovarian
+T15	body-part 1628 1635	ovarian
+T34	cohort-patient 376 381	HEC59
+T16	body-part 1758 1765	ovarian
+T33	cohort-patient 337 343	HCT116
+T36	Disorder 384 411	deficient for MLH1 and MSH2
+T17	body-part 1787 1794	ovarian
+T18	body-part 1935 1942	ovarian
+T19	body-part 330 335	colon
+T31	cohort-patient 1802 1812	cell lines
+R9_m	has Arg1:T31 Arg2:T30_merge
+R4_m	relatedTo Arg1:T15 Arg2:T7
+R1_1	has Arg1:T21 Arg2:T20
+R15_2	has Arg1:T38_2 Arg2:T7
+R13_m	relatedTo Arg1:T16 Arg2:T29
+R3_m	has Arg1:T10 Arg2:T6
+R10_m	has Arg1:T31 Arg2:T8
+R2_m	relatedTo Arg1:T14 Arg2:T6
+R0_T36_T1	has Arg1:T36 Arg2:T1
+R12_m	has Arg1:T28 Arg2:T27_merge
+R8_m	relatedTo Arg1:T18 Arg2:T9
+R5_m	relatedTo Arg1:T17 Arg2:T8
+R6_m	has Arg1:T11 Arg2:T32_merge
+R0_T38_2_T36_2	has Arg1:T38_2 Arg2:T36_2
+R11_m	has Arg1:T28 Arg2:T29
+R0_T36_T3	has Arg1:T36 Arg2:T3
+R7_m	has Arg1:T11 Arg2:T9
+R14_m	has Arg1:T23 Arg2:T20
+R1_m	relatedTo Arg1:T13 Arg2:T5

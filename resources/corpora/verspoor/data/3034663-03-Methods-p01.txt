@@ -1,0 +1,20 @@
+Methods
+
+Controls and sporadic and familial CRC cases
+
+We genotyped the p.Lys618Ala variant in MLH1 in 1034 individuals (373 sporadic CRC patients, 250 index subjects from families suspected of having LS [revised Bethesda Guidelines] and 411 controls). The controls were selected from the same hospitals, had no personal histories of cancer and had diagnoses unrelated to the variables of interest. They were matched for age, gender and race/ethnicity with the sporadic CRC patients.
+
+No familial history of cancer was available from the control group. Patients diagnosed at an age over 50 years and not referred to Genetic Counselling Units were considered as sporadic CRC. Samples from sporadic CRC patients were obtained from the Elche University Hospital BioBank and the Castellon Provincial Hospital BioBank. Written consent to be included in the respective biobanks was obtained from each patient. CRC patients, as index subjects from families with suspicion of LS that attended Genetic Counselling at the Cancer Units of the Elche and La Fe Hospitals, were recruited. The study was approved by the Ethics Committee of the Elche University Hospital.
+
+The median age of patients in the sporadic CRC group was 70 years (range, 52-93 years), 47 years (range, 21-87 years) for the familial group and 71 years (range, 25-96 years) for the controls. The sex distribution was 58% men and 42% women for the sporadic CRC group and 53.3% men and 46.7% women for the controls.
+
+Families carrying the p.Lys618Ala variant
+
+Three characterized LS families that fulfilled the Amsterdam II Criteria and that consisted of members with the p.Lys618Ala variant were included to assess co-occurrence and co-segregation. Two families attended the Genetic Counselling in Cancer Units of the Elche and La Fe Hospitals and one family was a member of the EPICOLON cohort [7].
+
+Concomitant deleterious variants were detected in two of the families: one in the MLH1 gene (c.676C>T; p.Arg226X) and the other in the MSH6 gene (c.3013C>T; p.Arg1005X). Seventeen affected and unaffected family members from these two families were tested for the pathogenic and p.Lys618Ala variants.
+
+Genotyping of the MLH1 p.Lys618Ala variant
+
+DNA from blood cells (familial cancer cases and controls) or colorectal mucosa of normal appearance (sporadic cases) was used for the c.1852_1853AA>GC variant genotyping. This was assessed using the iPLEX Gold method (Sequenom, CA, USA), in which single-base extension and MALDI-TOF technology are employed for allelic discrimination. These experiments were carried out at the Centro Español de Genotipado (CEGEN) genotyping platform facilities. Quality control for genotyping was conducted by direct sequencing of familial cancer subjects who underwent genetic analysis for MLH1 (49/1034, 4.7%).
+

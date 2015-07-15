@@ -1,0 +1,362 @@
+T114	Concepts_Ideas 866 886	unstable with BAT-40
+T115	Concepts_Ideas 945 965	unstable with BAT-40
+T118	Disorder 1189 1204	D2S123 unstable
+T110_merge	size 1140 1142	18
+T80_merge	size 391 393	84
+T151_merge	size 1693 1698	73.7%
+T29_cancer	disease 130 136	cancer
+T85_merge	size 584 587	146
+T121	Disorder 1221 1236	D5S346 unstable
+T124	Phenomena 1272 1298	Negative staining for MSH2
+T127	Phenomena 1320 1346	negative staining for MSH6
+T100_merge	size 1006 1008	15
+T126	cohort-patient 1314 1318	CRCs
+T129	cohort-patient 1362 1366	CRCs
+T105_merge	size 1065 1070	76.8%
+T131	cohort-patient 1378 1381	CRC
+T130	size 1368 1371	One
+T135	cohort-patient 1429 1433	CRCs
+T134	Phenomena 1434 1461	stained negatively for MLH1
+T132	Phenomena 1386 1417	negative for both MSH6 and MSH2
+T172_merge	size 2257 2260	59%
+T75_merge	size 262 265	two
+T123_merge	size 1242 1246	9.6%
+T128_merge	size 1360 1361	6
+T102	cohort-patient 1009 1016	cancers
+T101	disease 1009 1016	cancers
+T107	Disorder 1088 1091	MSI
+T108	cohort-patient 1092 1097	group
+T106	Disorder 1076 1079	MSS
+T113	Disorder 1156 1171	BAT-25 unstable
+T112	Disorder 1123 1138	BAT-26 unstable
+T76	cohort-patient 262 265	two
+T74	disease 239 257	ulcerative colitis
+T137_merge	size 1498 1503	three
+T159	Disorder 1984 1987	MSI
+T158	Physiology 1935 1960	MLH1 promoter methylation
+T77_merge	size 293 297	Five
+T161	Disorder 2035 2038	MSI
+T162	Disorder 2043 2046	MSS
+T163	body-part 2047 2057	colorectal
+T164	Disorder 2111 2114	MSS
+T165	Disorder 2119 2122	MSI
+T166	Disorder 2149 2152	MSS
+T167	age 2163 2170	younger
+T168	age 2196 2207	70.9 ± 17.8
+T117_merge	size 1177 1182	11.0%
+T91_merge	size 821 823	17
+T72	body-part 119 129	colorectal
+T185_merge	size 2731 2736	29.4%
+T70	gender 394 398	male
+T160	disease 1988 1992	CRCs
+T62	cohort-patient 2153 2158	group
+T89_merge	size 795 797	17
+T63	cohort-patient 2189 2194	group
+T64	cohort-patient 2354 2359	group
+T65	cohort-patient 2511 2517	groups
+T184_2	cohort-patient 1238 1240	14
+T66	cohort-patient 2580 2586	groups
+T67	cohort-patient 2692 2698	groups
+T68	cohort-patient 2724 2729	group
+T69	gender 406 412	female
+T183_2	cohort-patient 1206 1208	11
+T169	age 2215 2225	61.0 ± 9.4
+T120_merge	size 1210 1214	7.5%
+T153_merge	size 1728 1733	33.3%
+T174	Concepts_Ideas 2280 2301	stage III or stage IV
+T173	Disorder 2262 2265	MSI
+T178	size 2507 2510	two
+T179	disease 2551 2556	tumor
+T122_merge	size 1238 1240	14
+T176	Disorder 2350 2353	MSS
+T177	disease 2471 2476	tumor
+T170	Disorder 2185 2188	MSI
+T60	cohort-patient 2624 2629	cases
+T98	cohort-patient 978 982	CRCs
+T96	cohort-patient 935 939	CRCs
+T136	Phenomena 1463 1494	Negative staining was not found
+T139	cohort-patient 1508 1512	CRCs
+T138	Disorder 1504 1507	MSI
+T143	Disorder 1576 1579	MSS
+T6	gene 1582 1586	MLH1
+T144	Physiology 1582 1607	MLH1 promoter methylation
+T7	gene 1663 1667	MLH1
+T4	gene 1457 1461	MLH1
+T146	Disorder 1629 1632	MSI
+T5	gene 1550 1554	MLH1
+T140	size 1518 1521	one
+T141	cohort-patient 1522 1525	CRC
+T8	gene 1857 1861	MLH1
+T142	Phenomena 1541 1563	negative MLH1 staining
+T9	gene 1935 1939	MLH1
+T94	cohort-patient 856 860	CRCs
+T92	cohort-patient 821 823	17
+T90	cohort-patient 795 797	17
+T88	Disorder 790 793	MSI
+T84	age 419 433	60.8 ± 10.5 yr
+T95_merge	size 913 928	Seven out of 17
+T125_merge	size 1312 1313	8
+T30_merge_cancers	disease 2058 2065	cancers
+T1	Disorder 1253 1269	D17S250 unstable
+T181_2	cohort-patient 1140 1142	18
+T148	Physiology 1639 1676	Hypermethylation of the MLH1 promoter
+T3	gene 711 715	MLH1
+T147	cohort-patient 1633 1637	CRCs
+T2	gene 671 675	MLH1
+T157	Concepts_Ideas 1900 1931	negative both for MSH6 and MSH2
+T154	cohort-patient 1748 1752	CRCs
+T155	disease 1748 1752	CRCs
+T150	cohort-patient 1716 1720	CRCs
+T81	cohort-patient 394 398	male
+T82	cohort-patient 406 412	female
+T83_merge	size 403 405	62
+T145_merge	size 1626 1628	34
+T104_merge	size 1051 1054	112
+T29	disease 119 136	colorectal cancer
+T28	Disorder 1885 1890	MSI-H
+T27	Disorder 1742 1747	MSI-L
+T26	Disorder 1710 1715	MSI-H
+T25	Disorder 1372 1377	MSI-H
+T24	Disorder 1030 1035	MSI-L
+T23	Disorder 996 1001	MSI-H
+T22	Disorder 929 934	MSI-H
+T21	Disorder 906 911	MSI-H
+T71_merge	size 63 86	One hundred fifty-eight
+T20	Disorder 850 855	MSI-L
+T87_merge	size 778 783	23.2%
+T79_merge	size 377 380	146
+T99_merge	size 984 989	55.9%
+T181_merge	size 2603 2616	more than 50%
+T133_merge	size 1419 1428	Seventeen
+T38	disease 1508 1512	CRCs
+T61_merge	size 1099 1101	13
+T37	disease 1429 1433	CRCs
+T39	disease 1522 1525	CRC
+T34	disease 1314 1318	CRCs
+T33	disease 978 982	CRCs
+T36	disease 1378 1381	CRC
+T93_merge	size 836 849	Two out of 17
+T35	disease 1362 1366	CRCs
+T152_merge	size 1725 1741	5 (33.3%) out 15
+T32	disease 935 939	CRCs
+T31	disease 856 860	CRCs
+T86_merge	size 758 767	34 of 146
+T49	cohort-patient 331 339	patients
+T182_2	cohort-patient 1173 1175	16
+T48	cohort-patient 298 306	patients
+T43	cohort-patient 1891 1895	CRCs
+T42	size 1881 1884	One
+T41	disease 1716 1720	CRCs
+T40	disease 1633 1637	CRCs
+T47	cohort-patient 200 208	patients
+T46	cohort-patient 87 95	patients
+T44	cohort-patient 1988 1992	CRCs
+T182	disease 2631 2645	Adenocarcinoma
+T180	body-part 2565 2571	rectum
+T50	cohort-patient 381 389	patients
+T186	Disorder 2742 2750	mucinous
+T73_merge	size 194 199	Three
+T184	Disorder 2720 2723	MSI
+T189	Physiology 270 282	unresectable
+T188	body-part 144 154	Colorectal
+T187	disease 2751 2760	carcinoma
+T59	cohort-patient 573 578	cases
+T119_merge	size 1206 1208	11
+T116_merge	size 1173 1175	16
+T52	cohort-patient 768 776	patients
+T51	cohort-patient 504 512	patients
+T54	cohort-patient 1102 1110	patients
+T53	cohort-patient 1055 1063	patients
+T56	cohort-patient 2133 2141	Patients
+T55	cohort-patient 2123 2131	patients
+T175_merge	size 2336 2341	35.7%
+T111_merge	size 1144 1149	12.3%
+T58	cohort-patient 2704 2712	patients
+T57	cohort-patient 2266 2274	patients
+T171_merge	size 2239 2255	Twenty out of 34
+T103_merge	size 1018 1023	44.1%
+T30_merge	disease 2047 2065	colorectal cancers
+T78_merge	size 329 330	2
+T179_2	body-part 2742 2750	mucinous
+T109_merge	size 1112 1116	8.9%
+T183_merge	size 2700 2703	Ten
+T156_merge	disease 1891 1895	CRCs
+T97_merge	size 975 977	19
+T149_merge	size 1689 1709	14 (73.7%) out of 19
+T10	gene 696 700	MSH2
+T11	gene 702 706	MSH6
+T12	gene 1294 1298	MSH2
+T13	gene 1342 1346	MSH6
+T14	gene 1404 1408	MSH6
+T15	gene 1413 1417	MSH2
+T16	gene 1918 1922	MSH6
+T17	gene 1927 1931	MSH2
+T18	Disorder 803 808	MSI-H
+T45_merge	disease 283 291	diseases
+T19	Disorder 829 834	MSI-L
+R42_m	has Arg1:T129 Arg2:T35
+R99_2	has Arg1:T107 Arg2:T54
+R99_1	has Arg1:T67 Arg2:T182
+R50_1	has Arg1:T132 Arg2:T36
+R26_2	has Arg1:T115 Arg2:T96
+R67_1	has Arg1:T144 Arg2:T40
+R32_m	has Arg1:T98 Arg2:T33
+R85_m	has Arg1:T68 Arg2:T185_merge
+R101_2	has Arg1:T181_2 Arg2:T111_merge
+R107_2	has Arg1:T118 Arg2:T182_2
+R64_m	has Arg1:T154 Arg2:T155
+R49_2	has Arg1:T134 Arg2:T135
+R75_m	has Arg1:T161 Arg2:T30_merge
+R105_2	has Arg1:T182_2 Arg2:T116_merge
+R105_1	has Arg1:T189 Arg2:T45_merge
+R20_m	has Arg1:T20 Arg2:T31
+R111_2	has Arg1:T1 Arg2:T184_2
+R0_T72_T29_cancer	relatedTo Arg1:T72 Arg2:T29_cancer
+R104_2	has Arg1:T113 Arg2:T181_2
+R120_2	has Arg1:T166 Arg2:T62
+R80_m	has Arg1:T57 Arg2:T171_merge
+R106_2	has Arg1:T182_2 Arg2:T117_merge
+R65_m	has Arg1:T148 Arg2:T41
+R83_m	has Arg1:T60 Arg2:T179
+R21_2	has Arg1:T114 Arg2:T94
+R71_m	has Arg1:T159 Arg2:T160
+R60_1	has Arg1:T141 Arg2:T140
+R30_m	has Arg1:T102 Arg2:T100_merge
+R108_2	has Arg1:T107 Arg2:T182_2
+R59_2	has Arg1:T144 Arg2:T147
+R59_1	has Arg1:T136 Arg2:T38
+R126_2	has Arg1:T174 Arg2:T64
+R109_2	has Arg1:T184_2 Arg2:T122_merge
+R19_m	has Arg1:T94 Arg2:T93_merge
+R95_2	has Arg1:T19 Arg2:T92
+R97_2	has Arg1:T106 Arg2:T53
+R40_m	has Arg1:T126 Arg2:T125_merge
+R17_m	has Arg1:T92 Arg2:T91_merge
+R42_1	has Arg1:T115 Arg2:T32
+R116_2	has Arg1:T107 Arg2:T183_2
+R33_m	has Arg1:T98 Arg2:T99_merge
+R0_T158_T9	has Arg1:T158 Arg2:T9
+R67_m	has Arg1:T154 Arg2:T153_merge
+R29_m	has Arg1:T102 Arg2:T103_merge
+R94_2	has Arg1:T88 Arg2:T52
+R115_2	has Arg1:T121 Arg2:T183_2
+R27_m	has Arg1:T102 Arg2:T101
+R0_T148_T7	has Arg1:T148 Arg2:T7
+R52_1	has Arg1:T131 Arg2:T130
+R0_T134_T4	has Arg1:T134 Arg2:T4
+R25_m	has Arg1:T22 Arg2:T32
+R77_m	has Arg1:T168 Arg2:T63
+R44_m	has Arg1:T131 Arg2:T36
+R62_1	has Arg1:T142 Arg2:T39
+R113_2	has Arg1:T183_2 Arg2:T119_merge
+R45_m	has Arg1:T25 Arg2:T36
+R114_2	has Arg1:T183_2 Arg2:T120_merge
+R63_1	has Arg1:T143 Arg2:T39
+R90_m	has Arg1:T58 Arg2:T187
+R35_m	has Arg1:T53 Arg2:T105_merge
+R6_1	has Arg1:T76 Arg2:T75_merge
+R60_m	has Arg1:T150 Arg2:T41
+R63_m	has Arg1:T26 Arg2:T41
+R54_2	has Arg1:T143 Arg2:T141
+R123_2	has Arg1:T173 Arg2:T57
+R39_m	has Arg1:T126 Arg2:T34
+R61_m	has Arg1:T150 Arg2:T149_merge
+R62_m	has Arg1:T150 Arg2:T151_merge
+R12_2	has Arg1:T84 Arg2:T50
+R124_2	has Arg1:T176 Arg2:T64
+R92_2	has Arg1:T47 Arg2:T75_merge
+R69_m	has Arg1:T157 Arg2:T156_merge
+R32_1	has Arg1:T23 Arg2:T33
+R122_2	has Arg1:T170 Arg2:T63
+R37_m	has Arg1:T54 Arg2:T61_merge
+R0_T124_T12	has Arg1:T124 Arg2:T12
+R94_1	has Arg1:T65 Arg2:T177
+R23_m	has Arg1:T96 Arg2:T32
+R31_2	has Arg1:T23 Arg2:T98
+R121_2	has Arg1:T164 Arg2:T55
+R79_m	has Arg1:T57 Arg2:T172_merge
+R16_1	has Arg1:T84 Arg2:T81
+R41_2	has Arg1:T124 Arg2:T126
+R41_1	has Arg1:T114 Arg2:T31
+R0_T186_T179_2	has Arg1:T179_2 Arg2:T186
+R57_m	has Arg1:T147 Arg2:T145_merge
+R15_1	has Arg1:T84 Arg2:T82
+R84_m	has Arg1:T60 Arg2:T181_merge
+R36_1	has Arg1:T24 Arg2:T101
+R74_m	has Arg1:T162 Arg2:T30_merge
+R100_2	has Arg1:T112 Arg2:T54
+R58_m	has Arg1:T146 Arg2:T40
+R88_2	has Arg1:T68 Arg2:T187
+R76_m	has Arg1:T169 Arg2:T62
+R86_2	has Arg1:T68 Arg2:T183_merge
+R110_2	has Arg1:T184_2 Arg2:T123_merge
+R45_1	has Arg1:T124 Arg2:T34
+R48_1	has Arg1:T127 Arg2:T35
+R125_2	has Arg1:T174 Arg2:T57
+R56_m	has Arg1:T147 Arg2:T40
+R46_2	has Arg1:T132 Arg2:T131
+R82_m	relatedTo Arg1:T180 Arg2:T179
+R7_1	has Arg1:T76 Arg2:T45_merge
+R81_1	has Arg1:T44 Arg2:T160
+R4_m	has Arg1:T47 Arg2:T73_merge
+R18_m	has Arg1:T94 Arg2:T31
+R96_2	has Arg1:T21 Arg2:T94
+R96_1	has Arg1:T66 Arg2:T179
+R72_m	has Arg1:T158 Arg2:T160
+R0_T127_T13	has Arg1:T127 Arg2:T13
+R53_m	has Arg1:T138 Arg2:T38
+R112_2	has Arg1:T107 Arg2:T184_2
+R119_2	has Arg1:T165 Arg2:T55
+R77_1	has Arg1:T43 Arg2:T42
+R127_2	has Arg1:T184 Arg2:T68
+R51_m	has Arg1:T141 Arg2:T39
+R13_m	has Arg1:T59 Arg2:T85_merge
+R3_m	has Arg1:T46 Arg2:T29
+R43_m	has Arg1:T129 Arg2:T128_merge
+R10_m	has Arg1:T81 Arg2:T70
+R2_m	has Arg1:T46 Arg2:T71_merge
+R5_m	has Arg1:T49 Arg2:T78_merge
+R117_2	has Arg1:T127 Arg2:T129
+R6_m	has Arg1:T48 Arg2:T77_merge
+R11_m	has Arg1:T81 Arg2:T80_merge
+R118_2	has Arg1:T136 Arg2:T139
+R98_2	has Arg1:T107 Arg2:T108
+R70_m	has Arg1:T43 Arg2:T156_merge
+R52_m	has Arg1:T139 Arg2:T137_merge
+R14_m	has Arg1:T52 Arg2:T86_merge
+R0_T132_T14	has Arg1:T132 Arg2:T14
+R34_m	has Arg1:T98 Arg2:T97_merge
+R16_m	has Arg1:T90 Arg2:T89_merge
+R9_m	has Arg1:T50 Arg2:T79_merge
+R0_T132_T15	has Arg1:T132 Arg2:T15
+R89_m	has Arg1:T58 Arg2:T183_merge
+R0_T157_T17	has Arg1:T157 Arg2:T17
+R24_m	has Arg1:T96 Arg2:T95_merge
+R0_T157_T16	has Arg1:T157 Arg2:T16
+R0_T142_T5	has Arg1:T142 Arg2:T5
+R36_m	has Arg1:T53 Arg2:T104_merge
+R15_m	has Arg1:T52 Arg2:T87_merge
+R50_m	has Arg1:T139 Arg2:T38
+R8_m	has Arg1:T82 Arg2:T83_merge
+R91_m	has Arg1:T47 Arg2:T74
+R55_1	has Arg1:T134 Arg2:T37
+R55_2	has Arg1:T142 Arg2:T141
+R47_m	has Arg1:T135 Arg2:T133_merge
+R48_m	has Arg1:T135 Arg2:T37
+R7_m	has Arg1:T82 Arg2:T69
+R103_2	has Arg1:T107 Arg2:T181_2
+R78_m	has Arg1:T167 Arg2:T62
+R81_m	has Arg1:T64 Arg2:T175_merge
+R103_1	has Arg1:T184 Arg2:T187
+R102_1	has Arg1:T186 Arg2:T187
+R102_2	has Arg1:T181_2 Arg2:T110_merge
+R74_1	has Arg1:T27 Arg2:T155
+R93_2	has Arg1:T18 Arg2:T90
+R93_1	has Arg1:T65 Arg2:T178
+R0_T163_T30_merge_cancers	relatedTo Arg1:T163 Arg2:T30_merge_cancers
+R68_m	has Arg1:T28 Arg2:T156_merge
+R38_m	has Arg1:T54 Arg2:T109_merge
+R66_m	has Arg1:T154 Arg2:T152_merge
+R0_T144_T6	has Arg1:T144 Arg2:T6
+R28_2	has Arg1:T24 Arg2:T102
+R22_m	has Arg1:T21 Arg2:T31

@@ -1,0 +1,4 @@
+The MLH1 p.Lys618Ala (c.1852_1853AA>GC) variant was initially considered a deleterious variant based on its recurrent presence in LS families, in silico predictions and in vitro experiments on its functional effect. However, recent data on its co-segregation with LS have cast doubt on its clinical significance [6]. In this study, we provide evidence supporting the contention that this variant has no significant implications in LS.
+
+The following approach was used to assess the clinical significance of the p.Lys618Ala variant: frequency in a control population, case-control and case-case comparisons, co-occurrence with a pathogenic mutation, co-segregation with the disease and MSI in tumours from carrier individuals.
+

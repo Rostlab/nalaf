@@ -1,0 +1,25 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Comparisons of clinical features between MSS and MSI group
+
+*Statistical analysis was made between MSI and MSS group only
+
+MSI state, germline mutations, and consequential changes in amino-acid sequence
+
+The MSI state, mutation sites, and consequential changes in amino-acid sequences of MMR genes are summarized in Table 4. In 34 MSI CRCs and one MSS CRC with MLH1 negative staining, 8 had MMR gene germline mutations, accounting for 22.9% of MSI colorectal cancers and 5.5% of all colorectal cancers. Three patients had MSH6 germline mutations and 5 had MSH2 germline mutations; the clinical features of these patients are summarized in Table 5. None of the patients had MLH1 gene mutations. Seven patients in the MSI group had A/T heterozygosis in MSH6 codon 380 of exon 5, but it did not cause changes in the amino acid sequence. The germline mutations of the MSI-L and MSI-H CRCs are summarized in Table 6. Six CRCs with mutations were MSI-H and two patients with mutations were MSI-L.
+
+Details of the 8 patients in MSS group identified to have MMR gene germline mutation
+
+Clinical features of patients in MSI group with MMR gene mutations
+
+*Amsterdam criteria II
+
+The mutation between the MSI-L and MSI-H
+
+P = 0.112
+
+Clinical features of patients in the MSI group with MMR gene mutations
+
+The clinical features of MSI patients with MMR gene mutations are shown in Table 5. Mean age was 58.8 years (range: 34–78). Six were female and 2 were male. Only one patient had right side colonic lesion and 2 had mucinous carcinoma. There were no patients in Dukes' A or with synchronous/metachronous disease. Only one patient fulfilled the Amsterdam Criteria (II).
+

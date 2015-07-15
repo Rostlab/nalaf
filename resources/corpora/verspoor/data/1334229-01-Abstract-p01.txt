@@ -1,0 +1,20 @@
+Mutations in , and genes and expression of hMLH1 in sporadic colorectal carcinomas from the Netherlands Cohort Study
+
+Abstract
+
+Background
+
+The early to intermediate stages of the majority of colorectal tumours are thought to be driven by aberrations in the Wnt (APC, CTNNB1) and Ras (K-ras) pathways. A smaller proportion of cancers shows mismatch repair deficiency. The aim of this study was to analyse the co-occurrence of these genetic alterations in relation to tumour and patient characteristics.
+
+Methods
+
+In a group of 656 unselected sporadic colorectal cancer patients, aberrations in the APC, K-ras, CTNNB1 genes, and expression of hMLH1 were investigated. Additionally, tumours were divided in groups based on molecular features and compared with respect to patient's age at diagnosis, sex, family history of colorectal cancer, tumour sub-localisation, Dukes' stage and differentiation.
+
+Results
+
+Mutations at the phosphorylation sites (codons 31, 33, 37, and 45) in the CTNNB1 gene were observed in tumours from only 5/464 patients. Tumours with truncating APC mutations and activating K-ras mutations in codons 12 and 13 occurred at similar frequencies (37% (245/656) and 36% (235/656), respectively). Seventeen percent of tumours harboured both an APC and a K-ras mutation (109/656). Nine percent of all tumours (58/656) lacked hMLH1 expression. Patients harbouring a tumour with absent hMLH1 expression were older, more often women, more often had proximal colon tumours that showed poorer differentiation when compared to patients harbouring tumours with an APC and/or K-ras mutation.
+
+Conclusion
+
+CTNNB1 mutations seem to be of minor importance in sporadic colorectal cancer. The main differences in tumour and patient characteristics are found between groups of patients based on mismatch repair deficiency.
+

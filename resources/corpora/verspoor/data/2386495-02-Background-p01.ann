@@ -1,0 +1,168 @@
+T75	mutation 1991 2012	Germline APC-mutation
+T77	disease 2026 2029	FAP
+T78	disease 2268 2271	FAP
+T29	disease 101 131	familial adenomatous polyposis
+T28	Concepts_Ideas 101 109	familial
+T27	Concepts_Ideas 70 90	dominantly inherited
+T26	cohort-patient 1003 1011	families
+T25	cohort-patient 1256 1261	cases
+T24	cohort-patient 2030 2038	patients
+T23	cohort-patient 1766 1774	patients
+T22	cohort-patient 1648 1656	patients
+T21	cohort-patient 549 557	Patients
+T72	disease 1981 1984	FAP
+T71	mutation 1828 1851	truncating APC mutation
+T20	cohort-patient 539 547	patients
+T70	Physiology 1670 1702	reduced or absent APC expression
+T62	mutation 1077 1088	truncations
+T79_merge	mutation 2346 2391	mutations in the central part of the APC gene
+T63	mutation 1123 1145	nonsense APC mutations
+T65	mutation 1209 1218	deletions
+T66	disease 1252 1255	FAP
+T67	mutation 1564 1585	splice-site mutations
+T69	disease 1644 1647	FAP
+T31_2	Concepts_Ideas 258 294	hundreds to thousands of adenomatous
+T38	body-part 403 416	extra-colonic
+T42_2	disease 638 646	desmoids
+T36_merge	disease 283 301	adenomatous polyps
+T37	body-part 365 375	colorectal
+T39	disease 441 444	FAP
+T34	Concepts_Ideas 220 229	classical
+T33	disease 230 233	FAP
+T35	body-part 322 337	large intestine
+T44_2	Disorder 683 694	adenomatous
+T30	disease 133 136	FAP
+T32	mutation 187 195	5q21-q22
+T31	mutation 151 169	germline mutations
+T60	disease 999 1002	FAP
+T12_cancer	disease 376 382	cancer
+T6	gene 1560 1563	APC
+T7	gene 1688 1691	APC
+T70_2	Concepts_Ideas 2558 2571	less than 100
+T4	gene 1132 1135	APC
+T49	disease 725 751	MUTYH-associated polyposis
+T48	gene 725 730	MUTYH
+T5	gene 1205 1208	APC
+T64_merge	mutation 1149 1197	frameshifts caused by small deletions/insertions
+T8	gene 1839 1842	APC
+T9	gene 2000 2003	APC
+T43	disease 535 538	FAP
+T42	body-part 497 505	duodenum
+T41	disease 479 489	carcinomas
+T40	body-part 446 454	Duodenal
+T90	mutation 2708 2762	in the part excluded by alternative splicing of exon 9
+T46	body-part 672 682	colorectal
+T45	disease 617 623	tumors
+T44	body-part 600 616	extra-intestinal
+T88	disease 2600 2612	adenomatosis
+T89	mutation 2641 2679	mutations in the far 5' and 3' regions
+T84	disease 2534 2538	AFAP
+T85	Concepts_Ideas 2498 2521	milder, attenuated form
+T50	disease 753 756	MAP
+T87	Disorder 2585 2620	later onset of adenomatosis and CRC
+T1	gene 177 180	APC
+T3	gene 1073 1076	APC
+T2	gene 971 974	APC
+T59	mutation 962 984	germline APC mutations
+T52_2	gene 885 897	1p32.1-p34.3
+T10	gene 2383 2386	APC
+T11	gene 2687 2690	APC
+T12	disease 365 382	colorectal cancer
+T47_merge	disease 683 704	adenomatous polyposis
+T13	disease 384 387	CRC
+T14	disease 782 785	CRC
+T15	disease 2617 2620	CRC
+T52	disease 765 785	MUTYH-associated CRC
+T81	Concepts_Ideas 2429 2442	severe course
+T68_merge	size 1630 1636	10–15%
+T80	mutation 2393 2420	Mutations around codon 1309
+T51	gene 765 770	MUTYH
+T16	disease 455 463	adenomas
+T54	gene 844 849	MUTYH
+T17	disease 2572 2580	adenomas
+T83	Disorder 2475 2492	profuse polyposis
+T18	disease 2446 2453	disease
+T53	disease 800 803	MAP
+T82	Disorder 2459 2470	early onset
+T56	mutation 851 865	mutY homologue
+T19	disease 2525 2532	disease
+T55	mutation 817 836	biallelic mutations
+T58	Physiology 906 937	inherited in a recessive manner
+T57	mutation 885 897	1p32.1-p34.3
+R34_1	relatedTo Arg1:T53 Arg2:T57
+R41_2	has Arg1:T25 Arg2:T65
+R41_1	has Arg1:T4 Arg2:T64_merge
+R29_1	has Arg1:T54 Arg2:T57
+R15_1	relatedTo Arg1:T35 Arg2:T33
+R35_2	has Arg1:T21 Arg2:T45
+R36_2	has Arg1:T21 Arg2:T42_2
+R26_1	relatedTo Arg1:T14 Arg2:T51
+R9_1	relatedTo Arg1:T30 Arg2:T32
+R32_m	relatedTo Arg1:T38 Arg2:T39
+R33_2	has Arg1:T20 Arg2:T41
+R33_1	relatedTo Arg1:T53 Arg2:T56
+R45_1	has Arg1:T70 Arg2:T69
+R25_1	relatedTo Arg1:T49 Arg2:T48
+R20_m	has Arg1:T25 Arg2:T66
+R21_m	has Arg1:T5 Arg2:T65
+R7_1	relatedTo Arg1:T30 Arg2:T31
+R4_m	relatedTo Arg1:T42 Arg2:T41
+R65_1	has Arg1:T11 Arg2:T90
+R18_m	has Arg1:T22 Arg2:T69
+R21_1	relatedTo Arg1:T42 Arg2:T43
+R30_m	has Arg1:T1 Arg2:T31
+R59_1	has Arg1:T85 Arg2:T84
+R19_m	has Arg1:T22 Arg2:T68_merge
+R3_m	relatedTo Arg1:T40 Arg2:T16
+R43_m	has Arg1:T10 Arg2:T79_merge
+R2_m	relatedTo Arg1:T35 Arg2:T36_merge
+R61_1	has Arg1:T70_2 Arg2:T19
+R12_m	has Arg1:T4 Arg2:T63
+R5_m	has Arg1:T20 Arg2:T43
+R22_1	relatedTo Arg1:T40 Arg2:T43
+R11_m	has Arg1:T3 Arg2:T62
+R40_m	has Arg1:T26 Arg2:T59
+R17_m	has Arg1:T9 Arg2:T75
+R42_2	has Arg1:T70 Arg2:T22
+R14_m	has Arg1:T70_2 Arg2:T84
+R0_T70_T7	has Arg1:T70 Arg2:T7
+R34_m	relatedTo Arg1:T44 Arg2:T45
+R16_m	has Arg1:T24 Arg2:T75
+R9_m	has Arg1:T26 Arg2:T60
+R10_1	relatedTo Arg1:T29 Arg2:T32
+R24_m	has Arg1:T82 Arg2:T18
+R10_2	has Arg1:T3 Arg2:T64_merge
+R0_T87_T15	has Arg1:T87 Arg2:T15
+R39_2	has Arg1:T52_2 Arg2:T55
+R26_m	has Arg1:T83 Arg2:T18
+R29_m	relatedTo Arg1:T29 Arg2:T31
+R15_m	has Arg1:T24 Arg2:T77
+R27_m	has Arg1:T11 Arg2:T89
+R25_m	relatedTo Arg1:T18 Arg2:T80
+R2_1	has Arg1:T28 Arg2:T30
+R44_m	has Arg1:T87 Arg2:T84
+R58_1	has Arg1:T85 Arg2:T84
+R8_m	has Arg1:T2 Arg2:T59
+R55_1	has Arg1:T81 Arg2:T18
+R63_1	has Arg1:T87 Arg2:T19
+R30_1	relatedTo Arg1:T53 Arg2:T54
+R6_2	has Arg1:T44_2 Arg2:T47_merge
+R6_1	has Arg1:T1 Arg2:T32
+R1_1	has Arg1:T28 Arg2:T29
+R1_2	has Arg1:T31_2 Arg2:T36_merge
+R3_1	has Arg1:T27 Arg2:T30
+R4_1	has Arg1:T27 Arg2:T29
+R32_1	relatedTo Arg1:T53 Arg2:T55
+R13_2	has Arg1:T70_2 Arg2:T17
+R37_m	relatedTo Arg1:T46 Arg2:T47_merge
+R14_1	relatedTo Arg1:T37 Arg2:T13
+R38_m	has Arg1:T54 Arg2:T55
+R0_T87_T88	has Arg1:T87 Arg2:T88
+R11_1	has Arg1:T34 Arg2:T33
+R23_m	has Arg1:T8 Arg2:T71
+R0_T37_T12_cancer	relatedTo Arg1:T37 Arg2:T12_cancer
+R28_2	relatedTo Arg1:T84 Arg2:T89
+R31_1	has Arg1:T58 Arg2:T53
+R28_1	has Arg1:T54 Arg2:T56
+R22_m	has Arg1:T6 Arg2:T67
+R16_1	relatedTo Arg1:T37 Arg2:T33

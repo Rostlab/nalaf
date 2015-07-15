@@ -1,0 +1,100 @@
+T45_merge_merge	mutation 507 558	germline mutations in the DNA mismatch repair genes
+T48_merge	size 693 696	two
+T29	body-part 439 446	ovarium
+T28	Disorder 355 372	early development
+T27	disease 255 292	Hereditary non-polyposis colon cancer
+T26	disease 93 130	hereditary non-polyposis colon cancer
+T25	body-part 411 416	colon
+T24	body-part 280 285	colon
+T23	body-part 118 123	colon
+T22	body-part 461 468	stomach
+T21	gender 1574 1577	his
+T20	gender 1029 1032	his
+T32_merge	size 648 653	three
+T38	cohort-patient 934 941	proband
+T37	Concepts_Ideas 307 325	autosomal dominant
+T39	disease 384 391	cancers
+T34	disease 739 753	adenocarcinoma
+T33	gender 682 688	mother
+T36	disease 862 868	tumors
+T35	cohort-patient 711 715	male
+T30	body-part 448 459	small bowel
+T31	body-part 473 486	urinary tract
+T6	gene 1761 1766	hMSH2
+T7	Disorder 1658 1663	MSI-H
+T49	body-part 728 738	colorectal
+T4	gene 567 572	hMSH2
+T5	gene 1385 1390	hMSH2
+T8	body-part 418 424	rectum
+T9	body-part 426 437	endometrium
+T43	mutation 1786 1848	proline 622 to threonine (p.Pro622Thr) amino acid substitution
+T42	mutation 1717 1757	missense (c.1864C>A) mutation in exon 12
+T41	disease 1591 1596	tumor
+T40	disease 1056 1061	Tumor
+T47	cohort-patient 697 704	sisters
+T46	cohort-patient 682 688	mother
+T44	disease 1905 1910	tumor
+T50	cohort-patient 1522 1531	proband's
+T1	Disorder 1615 1656	high frequency microsatellite instability
+T3	gene 1375 1380	hMLH1
+T2	gene 576 581	hMLH1
+T10	disease 294 299	HNPCC
+T11	disease 488 493	HNPCC
+T12	disease 1287 1292	HNPCC
+T13	disease 1687 1692	HNPCC
+T14	cohort-patient 654 676	first-degree relatives
+T15	cohort-patient 776 782	family
+T16	cohort-patient 1693 1699	family
+T51	disease 1532 1537	tumor
+T54	mutation 1812 1823	p.Pro622Thr
+T17	age 761 770	age of 23
+T53	body-part 849 861	extracolonic
+T18	gender 711 715	male
+T19	gender 697 704	sisters
+T55	mutation 1727 1736	c.1864C>A
+R9_m	has Arg1:T35 Arg2:T34
+R41_1	has Arg1:T16 Arg2:T43
+R24_m	has Arg1:T50 Arg2:T51
+R15_2	has Arg1:T14 Arg2:T19
+R40_1	has Arg1:T28 Arg2:T27
+R39_1	has Arg1:T28 Arg2:T10
+R26_m	has Arg1:T4 Arg2:T45_merge_merge
+R36_1	relatedTo Arg1:T24 Arg2:T10
+R29_m	has Arg1:T47 Arg2:T48_merge
+R27_m	has Arg1:T2 Arg2:T45_merge_merge
+R25_m	relatedTo Arg1:T11 Arg2:T45_merge_merge
+R25_1	has Arg1:T46 Arg2:T33
+R2_1	relatedTo Arg1:T11 Arg2:T2
+R8_m	has Arg1:T17 Arg2:T35
+R20_m	relatedTo Arg1:T29 Arg2:T39
+R8_1	has Arg1:T7 Arg2:T41
+R21_m	relatedTo Arg1:T31 Arg2:T39
+R7_m	has Arg1:T35 Arg2:T18
+R30_1	has Arg1:T50 Arg2:T21
+R4_m	has Arg1:T6 Arg2:T42
+R6_1	has Arg1:T15 Arg2:T36
+R18_m	relatedTo Arg1:T8 Arg2:T39
+R1_1	relatedTo Arg1:T11 Arg2:T4
+R19_m	relatedTo Arg1:T9 Arg2:T39
+R12_1	has Arg1:T16 Arg2:T42
+R13_m	has Arg1:T6 Arg2:T42
+R13_1	has Arg1:T16 Arg2:T43
+R28_m	has Arg1:T47 Arg2:T19
+R3_m	has Arg1:T16 Arg2:T13
+R10_m	relatedTo Arg1:T53 Arg2:T36
+R2_m	relatedTo Arg1:T24 Arg2:T27
+R37_1	has Arg1:T37 Arg2:T10
+R12_m	has Arg1:T16 Arg2:T42
+R14_1	has Arg1:T38 Arg2:T20
+R5_m	has Arg1:T14 Arg2:T32_merge
+R6_m	relatedTo Arg1:T49 Arg2:T34
+R11_m	has Arg1:T1 Arg2:T41
+R17_m	relatedTo Arg1:T25 Arg2:T39
+R11_1	has Arg1:T6 Arg2:T43
+R23_m	relatedTo Arg1:T30 Arg2:T39
+R14_2	relatedTo Arg1:T13 Arg2:T6
+R42_1	has Arg1:T6 Arg2:T43
+R1_m	relatedTo Arg1:T23 Arg2:T26
+R16_2	has Arg1:T14 Arg2:T33
+R22_m	relatedTo Arg1:T22 Arg2:T39
+R38_1	has Arg1:T37 Arg2:T27

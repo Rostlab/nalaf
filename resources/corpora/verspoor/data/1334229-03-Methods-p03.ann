@@ -1,0 +1,96 @@
+T29	disease 2606 2613	tumours
+T33_2	disease 788 795	Lesions
+T28	disease 2523 2530	tumours
+T27	disease 2497 2503	tumour
+T26	disease 2411 2417	tumour
+T25	disease 2271 2278	tumours
+T57_merge	mutation 2539 2555	activating K-ras
+T24	disease 2119 2125	tumour
+T23	disease 2077 2083	tumour
+T22	disease 2068 2075	tumours
+T21	disease 1410 1417	tumours
+T20	disease 1349 1355	tumour
+T50_merge	size 1401 1409	48 of 58
+T38	cohort-patient 2165 2173	patients
+T37	cohort-patient 1994 2002	patients
+T40_merge	mutation 2194 2210	activating K-ras
+T39	cohort-patient 2251 2259	patients
+T34	cohort-patient 1249 1257	patients
+T36	cohort-patient 1732 1740	patients
+T35	cohort-patient 1375 1383	patients
+T30	disease 2045 2062	colorectal cancer
+T60	mutation 1964 1973	mutations
+T31	disease 2392 2409	colorectal cancer
+T53_merge	size 1728 1731	656
+T6	gene 1531 1536	hMLH1
+T30_cancer	disease 2056 2062	cancer
+T7	gene 1806 1811	hMLH1
+T49	cohort-patient 1410 1417	tumours
+T4	gene 1198 1203	hMLH1
+T48	Physiology 1423 1446	lacked hMLH1 expression
+T5	gene 1430 1435	hMLH1
+T8	gene 2296 2301	hMLH1
+T9	gene 2622 2627	hMLH1
+T42	cohort-patient 2485 2492	patient
+T41	body-part 2392 2402	colorectal
+T46	Physiology 1198 1214	hMLH1 expression
+T45	Phenomena 862 889	absence of nuclear staining
+T44	Physiology 815 844	lack hMLH1 protein expression
+T1	gene 0 5	hMLH1
+T31_cancer	disease 2403 2409	cancer
+T3	gene 820 825	hMLH1
+T2	gene 475 480	hMLH1
+T43_merge	size 1238 1248	724 of 737
+T59	Physiology 2614 2638	lacking hMLH1 expression
+T52_2	Physiology 1806 1822	hMLH1 expression
+T10	gene 1765 1768	APC
+T11	gene 1955 1958	APC
+T12	gene 2227 2230	APC
+T47_merge	size 1371 1374	114
+T13	gene 2576 2579	APC
+T14	gene 1773 1778	K-ras
+T15	gene 1945 1950	K-ras
+T52	Physiology 1531 1547	hMLH1 expression
+T16	gene 2205 2210	K-ras
+T17	gene 2550 2555	K-ras
+T54	body-part 2045 2055	colorectal
+T18	disease 96 102	tumour
+T56	Physiology 2279 2312	with and without hMLH1 expression
+T19	disease 897 903	tumour
+T55	mutation 2216 2239	truncating APC mutation
+T58	mutation 2565 2588	truncating APC mutation
+T48_2	mutation 1779 1787	mutation
+R0_T52_2_T7	has Arg1:T52_2 Arg2:T7
+R16_m	has Arg1:T59 Arg2:T29
+R9_m	has Arg1:T11 Arg2:T60
+R0_T46_T4	has Arg1:T46 Arg2:T4
+R15_1	relatedTo Arg1:T28 Arg2:T58
+R0_T59_T9	has Arg1:T59 Arg2:T9
+R15_m	has Arg1:T17 Arg2:T57_merge
+R7_2	has Arg1:T14 Arg2:T48_2
+R2_1	has Arg1:T44 Arg2:T19
+R8_2	has Arg1:T10 Arg2:T48_2
+R20_m	has Arg1:T56 Arg2:T25
+R8_1	has Arg1:T39 Arg2:T25
+R0_T48_T5	has Arg1:T48 Arg2:T5
+R0_T41_T31_cancer	relatedTo Arg1:T41 Arg2:T31_cancer
+R4_m	has Arg1:T49 Arg2:T21
+R18_m	has Arg1:T13 Arg2:T58
+R1_1	has Arg1:T45 Arg2:T19
+R19_2	has Arg1:T48 Arg2:T49
+R13_m	has Arg1:T49 Arg2:T50_merge
+R3_m	has Arg1:T35 Arg2:T20
+R10_m	has Arg1:T15 Arg2:T60
+R17_1	relatedTo Arg1:T27 Arg2:T58
+R2_m	has Arg1:T35 Arg2:T47_merge
+R0_T44_T3	has Arg1:T44 Arg2:T3
+R14_1	relatedTo Arg1:T28 Arg2:T57_merge
+R0_T56_T8	has Arg1:T56 Arg2:T8
+R5_m	has Arg1:T48 Arg2:T21
+R6_m	has Arg1:T36 Arg2:T53_merge
+R0_T52_T6	has Arg1:T52 Arg2:T6
+R17_m	has Arg1:T12 Arg2:T55
+R0_T54_T30_cancer	relatedTo Arg1:T54 Arg2:T30_cancer
+R14_m	has Arg1:T16 Arg2:T40_merge
+R1_m	has Arg1:T34 Arg2:T43_merge
+R16_1	relatedTo Arg1:T27 Arg2:T57_merge

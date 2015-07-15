@@ -1,0 +1,27 @@
+T15_2	disease 429 434	tumor
+T14_2	disease 447 452	tumor
+T6	cohort-patient 1501 1509	patients
+T7	cohort-patient 1832 1840	patients
+T12_2	disease 3188 3193	tumor
+T4	cohort-patient 689 697	patients
+T5	cohort-patient 810 818	patients
+T8	cohort-patient 1104 1110	family
+T9	cohort-patient 285 292	Patient
+T1_2	gene 1948 1953	NM23A
+T13_2	disease 192 197	tumor
+T9_2	size 1823 1831	18 of 25
+T16_2	disease 2951 2956	tumor
+T17_2	gene 1911 1915	NME1
+T1	mutation 1949 1953	M23A
+T23_2	gene 2371 2377	MRPS23
+T3	disease 2811 2814	CRC
+T22_2	gene 2097 2101	NME2
+T2	disease 1757 1760	CRC
+T10	cohort-patient 576 583	patient
+T19_2	gene 2531 2539	FLJ20315
+T11	cohort-patient 1384 1391	patient
+T12	cohort-patient 3044 3051	Patient
+T20_2	gene 2540 2546	RNF124
+T21_2	gene 2635 2642	SUPT4H1
+T18_2	disease 3206 3211	tumor
+R1_2	has Arg1:T7 Arg2:T9_2

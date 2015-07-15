@@ -1,0 +1,152 @@
+T75	disease 2394 2396	LS
+T76	cohort-patient 2466 2474	probands
+T73	mutation 2189 2200	p.Lys618Ala
+T74	mutation 2331 2342	p.Lys618Ala
+T77	cohort-patient 882 890	carriers
+T54_merge	size 1000 1003	250
+T80_merge	size 1654 1659	2.68%
+T66_merge	size 1548 1552	nine
+T29	cohort-patient 2485 2494	relatives
+T28	cohort-patient 2100 2114	positive cases
+T27	cohort-patient 1489 1500	individuals
+T26	cohort-patient 940 951	individuals
+T25	cohort-patient 2303 2311	patients
+T57_merge	size 1090 1093	411
+T24	cohort-patient 1345 1353	patients
+T23	cohort-patient 990 998	patients
+T22	cohort-patient 324 332	patients
+T21	body-part 966 976	colorectal
+T72	Disorder 2118 2144	microsatellite instability
+T71_merge	size 2096 2099	two
+T20	disease 219 226	cancers
+T70	cohort-patient 1548 1552	nine
+T62	mutation 1367 1378	p.Lys618Ala
+T52_merge	size 935 939	1034
+T79_merge	size 1626 1630	2.8%
+T65	mutation 1527 1538	p.Lys618Ala
+T30_merge	size 1105 1110	Three
+T69	cohort-patient 1644 1652	controls
+T67_merge	size 1579 1584	seven
+T78_merge	size 1571 1576	2.41%
+T38	disease 1827 1829	LS
+T61_merge	size 1342 1344	17
+T37	mutation 1748 1759	p.Lys618Ala
+T39	cohort-patient 1579 1584	seven
+T34	cohort-patient 1847 1853	family
+T33_merge	size 2152 2157	11.8%
+T18_merge	size 2146 2150	2/17
+T82_merge	size 1843 1846	one
+T36	cohort-patient 689 707	control population
+T35	cohort-patient 1949 1955	family
+T32	cohort-patient 1830 1838	families
+T60	body-part 1307 1317	colorectal
+T31	cohort-patient 1133 1141	families
+T53_merge	size 953 956	373
+T81_merge	size 1813 1816	two
+T41_2	Concepts_Ideas 145 173	autosomal dominant inherited
+T6	disease 869 876	tumours
+T7	disease 1318 1324	tumour
+T49	mutation 755 766	p.Lys618Ala
+T4	gene 1999 2003	MSH6
+T48	mutation 653 664	p.Lys618Ala
+T5	disease 268 275	tumours
+T64_merge	size 1476 1488	Twenty-seven
+T8	disease 2176 2183	tumours
+T9	disease 966 983	colorectal cancer
+T43	body-part 246 257	endometrium
+T94	Physiology 2264 2295	functional inactivation of MLH1
+T93	mutation 1789 1809	pathogenic mutations
+T42	body-part 234 244	colorectum
+T41	disease 135 137	LS
+T40	mutation 31 47	c.1852_1853AA>GC
+T47	disease 564 566	LS
+T46	mutation 405 416	p.Lys618Ala
+T45	mutation 387 403	c.1852_1853AA>GC
+T44	disease 321 323	LS
+T88	Concepts_Ideas 1610 1620	hereditary
+T89	cohort-patient 2081 2089	families
+T84	Disorder 207 218	early onset
+T85	cohort-patient 1024 1032	families
+T86	Concepts_Ideas 957 965	sporadic
+T50	Disorder 839 865	microsatellite instability
+T87	Concepts_Ideas 1557 1565	sporadic
+T1	gene 51 55	MLH1
+T9_cancer	disease 977 983	cancer
+T3	gene 2291 2295	MLH1
+T2	gene 433 437	MLH1
+T59	mutation 1217 1228	p.Lys618Ala
+T10	disease 985 988	CRC
+T11	disease 1566 1569	CRC
+T12	disease 1621 1624	CRC
+T13	disease 2299 2302	CRC
+T14	disease 2462 2465	CRC
+T15	disease 81 95	Lynch syndrome
+T68_merge	size 1636 1638	11
+T51	mutation 920 931	p.Lys618Ala
+T16	disease 119 133	Lynch syndrome
+T17	cohort-patient 1004 1018	index subjects
+T19	disease 174 180	cancer
+T56	cohort-patient 1094 1102	controls
+T55	disease 1053 1055	LS
+T58	disease 1130 1132	LS
+R42_m	has Arg1:T28 Arg2:T33_merge
+R29_2	relatedTo Arg1:T8 Arg2:T73
+R15_1	has Arg1:T27 Arg2:T65
+R50_1	has Arg1:T94 Arg2:T13
+R9_1	has Arg1:T31 Arg2:T59
+R32_m	relatedTo Arg1:T13 Arg2:T3
+R43_1	has Arg1:T41_2 Arg2:T41
+R47_2	has Arg1:T72 Arg2:T28
+R48_1	relatedTo Arg1:T21 Arg2:T10
+R0_T94_T3	has Arg1:T94 Arg2:T3
+R49_2	has Arg1:T23 Arg2:T51
+R20_m	has Arg1:T27 Arg2:T64_merge
+R46_2	has Arg1:T24 Arg2:T7
+R21_m	has Arg1:T87 Arg2:T11
+R25_2	has Arg1:T32 Arg2:T37
+R4_m	has Arg1:T41_2 Arg2:T16
+R18_m	has Arg1:T24 Arg2:T61_merge
+R30_m	has Arg1:T28 Arg2:T8
+R19_m	has Arg1:T24 Arg2:T62
+R13_m	has Arg1:T17 Arg2:T54_merge
+R28_m	has Arg1:T72 Arg2:T8
+R43_m	has Arg1:T32 Arg2:T38
+R12_m	has Arg1:T23 Arg2:T53_merge
+R5_m	has Arg1:T84 Arg2:T20
+R6_m	relatedTo Arg1:T42 Arg2:T20
+R31_m	has Arg1:T76 Arg2:T14
+R40_m	has Arg1:T70 Arg2:T78_merge
+R11_m	has Arg1:T26 Arg2:T52_merge
+R17_m	relatedTo Arg1:T60 Arg2:T7
+R1_m	has Arg1:T1 Arg2:T40
+R41_m	has Arg1:T28 Arg2:T18_merge
+R14_m	has Arg1:T56 Arg2:T57_merge
+R34_m	has Arg1:T86 Arg2:T9
+R16_m	has Arg1:T31 Arg2:T30_merge
+R9_m	has Arg1:T2 Arg2:T45
+R33_m	has Arg1:T25 Arg2:T13
+R24_m	has Arg1:T32 Arg2:T81_merge
+R10_2	has Arg1:T50 Arg2:T6
+R39_1	has Arg1:T3 Arg2:T73
+R36_m	has Arg1:T70 Arg2:T66_merge
+R26_m	has Arg1:T34 Arg2:T82_merge
+R51_1	has Arg1:T41_2 Arg2:T41
+R15_m	has Arg1:T31 Arg2:T58
+R27_m	has Arg1:T28 Arg2:T71_merge
+R52_1	has Arg1:T41_2 Arg2:T16
+R2_2	relatedTo Arg1:T15 Arg2:T1
+R44_m	has Arg1:T2 Arg2:T46
+R8_m	has Arg1:T22 Arg2:T44
+R45_m	has Arg1:T77 Arg2:T49
+R48_m	has Arg1:T77 Arg2:T6
+R7_m	relatedTo Arg1:T43 Arg2:T20
+R6_1	has Arg1:T23 Arg2:T9
+R39_m	has Arg1:T39 Arg2:T12
+R3_2	has Arg1:T41_2 Arg2:T19
+R0_T21_T9_cancer	relatedTo Arg1:T21 Arg2:T9_cancer
+R32_1	has Arg1:T69 Arg2:T80_merge
+R37_m	has Arg1:T70 Arg2:T11
+R38_m	has Arg1:T39 Arg2:T67_merge
+R23_m	has Arg1:T69 Arg2:T68_merge
+R31_1	has Arg1:T39 Arg2:T79_merge
+R22_m	has Arg1:T88 Arg2:T12

@@ -1,0 +1,18 @@
+Methods
+
+Study population
+
+The prospective Netherlands Cohort Study on diet and cancer was initiated in September 1986. The study design has been described in detail elsewhere [29]. The study population originated from 204 municipal population registries throughout the Netherlands, and included a total of 58,279 men and 62,573 women between the ages of 55 and 69 years at baseline.
+
+Incident cancer cases are identified by monitoring of the entire cohort for cancer occurrence through annual record linkage to the Netherlands Cancer Registry, i.e. nine regional cancer registries throughout the Netherlands, and to PALGA, a nationwide network and registry of histo- and cytopathology [30]. Together, the NCR and PALGA provide a near 100% coverage of the municipalities included in the NLCS. The first 2.3 years of follow up were excluded because of possible pre-clinical disease affecting exposure status and because of incomplete nationwide coverage of PALGA in some of the municipalities included in the NLCS in that period. From 1989 until 1994, 929 incident cases with histologically confirmed colorectal cancer were identified within the cohort, of whom 819 could also be linked to a PALGA report of the lesion.
+
+The PALGA reports were used to identify and locate tumour tissue from eligible colorectal cancer patients in Dutch pathology laboratories. Colon and rectal cancer were classified according to site as follows, colon: cecum through sigmoid colon (ICD-O codes 153.0, 153.1, 153.2, 153.3, 153.4, 153.5, 153.6, 153.7), rectosigmoid (ICD-O code 154.0), and rectum (ICD-O code 154.1).
+
+Tissue samples
+
+Tumour material of colorectal cancer patients was collected after approval by the Ethical Review Board of Maastricht University, PALGA and the NCR. Tissue samples from 819 colorectal cancer patients were localized in 54 pathology laboratories throughout the Netherlands. Forty-four (5%) tumour tissue samples could not be retrieved from the pathology archives. Of 775 available tissue samples, 737 (95%) contained sufficient tumour material for molecular analyses. Tissue sections were cut from each sample, which were used for DNA isolation and immunohistochemical analysis.
+
+DNA isolation
+
+DNA isolation was described in detail elsewhere [27]. Briefly, a 4 μm section, cut from each paraffin-embedded tumour tissue block, was stained with haematoxylin and eosin (HE) for histopathological examination by a pathologist. Five 20 μm sections of tumour tissue were cut from each sample for DNA isolation. Tumour tissue was separated from normal colon epithelium using the HE section as a reference. Genomic DNA was extracted from macrodissected tumour tissue using proteinase K (Qiagen, St. Louis, MO, USA) and the Puregene DNA isolation kit (Gentra Systems, Minneapolis, MN, USA). DNA concentration and purity was measured at 260 and 280 nm.
+

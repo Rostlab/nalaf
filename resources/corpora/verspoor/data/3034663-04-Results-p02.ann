@@ -1,0 +1,93 @@
+T24_merge	size 99 101	17
+T26_merge	size 143 146	two
+T13_merge	size 195 198	1/8
+T41_2	Physiology 462 490	no BRAF p.Val600Glu mutation
+T6	disease 184 187	CRC
+T7	disease 224 227	CRC
+T4	disease 24 27	CRC
+T5	disease 102 105	CRC
+T29	gene 465 469	BRAF
+T28	Disorder 151 154	MSI
+T8	disease 285 288	CRC
+T27	cohort-patient 143 146	two
+T9	body-part 29 39	Colorectal
+T25	mutation 124 133	Lys618Ala
+T43	cohort-patient 377 381	II-3
+T42	cohort-patient 289 294	group
+T23	disease 77 88	Lung cancer
+T41	cohort-patient 204 207	one
+T22	disease 73 75	LC
+T40	cohort-patient 228 233	group
+T21	body-part 53 64	Oesophageal
+T3_cancer	disease 40 46	cancer
+T20	disease 48 51	ESC
+T45	cohort-patient 513 517	case
+T14_merge	size 235 238	1/9
+T1	gene 344 348	MLH1
+T3	disease 29 46	Colorectal cancer
+T2	gene 442 446	MLH1
+T10	disease 53 71	Oesophageal cancer
+T11	body-part 77 81	Lung
+T37	mutation 470 481	p.Val600Glu
+T12	cohort-patient 106 114	patients
+T39	cohort-patient 164 167	one
+T34	Physiology 302 348	loss of immunohistochemical expression of MLH1
+T15	Concepts_Ideas 276 284	familial
+T38_merge	size 156 161	11.8%
+T33	Disorder 246 258	MSI-positive
+T16	cohort-patient 13 22	Family #3
+T36	Physiology 419 460	no hypermethylation of MLH1 gene promoter
+T17	cohort-patient 391 403	third family
+T35	cohort-patient 362 375	index subject
+T18	cohort-patient 259 266	patient
+T19	Concepts_Ideas 175 183	familial
+T30	cohort-patient 188 193	group
+T32	Concepts_Ideas 215 223	sporadic
+R34_1	relatedTo Arg1:T11 Arg2:T22
+R9_m	has Arg1:T42 Arg2:T8
+R29_1	has Arg1:T34 Arg2:T8
+R15_1	has Arg1:T16 Arg2:T10
+R27_1	has Arg1:T33 Arg2:T8
+R27_2	has Arg1:T41_2 Arg2:T35
+R26_1	has Arg1:T28 Arg2:T7
+R26_2	has Arg1:T29 Arg2:T37
+R15_m	relatedTo Arg1:T21 Arg2:T10
+R0_T34_T1	has Arg1:T34 Arg2:T1
+R7_2	has Arg1:T40 Arg2:T7
+R25_1	has Arg1:T28 Arg2:T6
+R0_T41_2_T37	has Arg1:T41_2 Arg2:T37
+R8_m	has Arg1:T15 Arg2:T8
+R8_1	has Arg1:T41 Arg2:T25
+R0_T9_T3_cancer	relatedTo Arg1:T9 Arg2:T3_cancer
+R21_m	has Arg1:T41 Arg2:T7
+R25_2	has Arg1:T36 Arg2:T35
+R30_1	relatedTo Arg1:T9 Arg2:T4
+R24_2	has Arg1:T34 Arg2:T18
+R18_2	has Arg1:T28 Arg2:T39
+R4_m	has Arg1:T30 Arg2:T6
+R21_1	has Arg1:T40 Arg2:T25
+R20_2	has Arg1:T28 Arg2:T41
+R19_m	has Arg1:T39 Arg2:T6
+R19_1	has Arg1:T27 Arg2:T25
+R12_1	has Arg1:T16 Arg2:T4
+R13_m	has Arg1:T30 Arg2:T13_merge
+R17_2	has Arg1:T28 Arg2:T27
+R32_1	relatedTo Arg1:T21 Arg2:T20
+R13_1	has Arg1:T16 Arg2:T3
+R3_m	has Arg1:T12 Arg2:T25
+R10_m	has Arg1:T27 Arg2:T26_merge
+R17_1	has Arg1:T16 Arg2:T23
+R0_T36_T2	has Arg1:T36 Arg2:T2
+R2_m	has Arg1:T12 Arg2:T5
+R0_T41_2_T29	has Arg1:T41_2 Arg2:T29
+R12_m	relatedTo Arg1:T11 Arg2:T23
+R14_1	has Arg1:T16 Arg2:T20
+R22_2	has Arg1:T33 Arg2:T18
+R5_m	has Arg1:T19 Arg2:T6
+R6_m	has Arg1:T32 Arg2:T7
+R11_m	has Arg1:T27 Arg2:T38_merge
+R23_m	has Arg1:T18 Arg2:T8
+R23_1	has Arg1:T39 Arg2:T25
+R1_m	has Arg1:T12 Arg2:T24_merge
+R14_m	has Arg1:T40 Arg2:T14_merge
+R16_1	has Arg1:T16 Arg2:T22

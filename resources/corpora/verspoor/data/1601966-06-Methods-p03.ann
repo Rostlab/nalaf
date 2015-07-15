@@ -1,0 +1,13 @@
+T6	cohort-patient 1042 1050	patients
+T7	cohort-patient 1103 1111	patients
+T4	cohort-patient 827 835	patients
+T5	cohort-patient 880 888	patients
+T10	cohort-patient 159 166	patient
+T8	cohort-patient 1612 1620	patients
+T1_2	size 820 823	50%
+T9	cohort-patient 232 237	cases
+T2_2	disease 180 185	tumor
+T1	cohort-patient 652 660	patients
+T3	cohort-patient 773 781	patients
+T2	cohort-patient 707 715	patients
+R1_2	has Arg1:T4 Arg2:T1_2

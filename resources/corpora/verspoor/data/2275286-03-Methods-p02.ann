@@ -1,0 +1,19 @@
+T1	gene 713 717	MLH1
+T3	gene 698 702	MSH2
+T2	gene 1830 1834	MLH1
+T4	gene 704 708	MSH6
+T5	gene 1921 1925	MSH2
+T10	disease 534 538	CRCs
+T11	disease 731 734	CRC
+T12	disease 852 855	CRC
+T13	disease 2937 2942	tumor
+T8	Disorder 528 533	MSI-L
+T14	cohort-patient 2804 2811	patient
+T15	disease 145 151	normal
+T18	disease 101 106	tumor
+T22	body-part 621 631	colorectal
+T19	body-part 152 158	mucosa
+T20	disease 400 405	tumor
+T13_2	cohort-patient 1719 1724	cases
+R2_m	relatedTo Arg1:T19 Arg2:T15
+R1_m	has Arg1:T8 Arg2:T10

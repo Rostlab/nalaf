@@ -1,0 +1,129 @@
+T75	mutation 510 519	mutations
+T76	mutation 682 691	mutations
+T74	mutation 306 315	mutations
+T79	mutation 1319 1327	mutation
+T77	mutation 887 896	mutations
+T78	mutation 1032 1040	mutation
+T54_merge	size 1140 1143	37%
+T74_2	Physiology 2237 2295	no alterations were found in the K-ras, APC or hMLH1 genes
+T34_cancer	disease 1441 1447	cancer
+T48_merge	size 536 539	109
+T29	disease 616 622	tumour
+T28	disease 540 547	tumours
+T27	gene 89 94	SMAD4
+T76_2	Physiology 2587 2623	promotor hypermethylation of the APC
+T26	gene 2270 2275	K-ras
+T25	gene 2096 2101	K-ras
+T24	gene 1734 1739	K-ras
+T23	gene 1026 1031	K-ras
+T22	gene 881 886	K-ras
+T72	cohort-patient 2713 2736	adenomas and carcinomas
+T21	gene 812 817	K-ras
+T71	body-part 2702 2712	colorectal
+T20	gene 676 681	K-ras
+T70	Concepts_Ideas 2693 2701	sporadic
+T62	body-part 2218 2228	colorectal
+T63	cohort-patient 2229 2236	cancers
+T65	mutation 2413 2422	mutations
+T66	Physiology 2643 2664	impaired APC function
+T67_merge	size 2517 2520	11%
+T38	gene 2430 2434	Axin
+T37	mutation 787 796	mutations
+T39	disease 2229 2236	cancers
+T34	disease 1430 1447	colorectal cancer
+T33	disease 1409 1426	colorectal cancer
+T36	disease 2713 2721	adenomas
+T35	disease 2218 2235	colorectal cancer
+T30	disease 1301 1308	tumours
+T61	Concepts_Ideas 2209 2217	sporadic
+T32	disease 2324 2331	tumours
+T31	disease 2185 2191	tumour
+T60	ethnicity 1599 1610	Netherlands
+T51_merge	mutation 1147 1205	truncating mutations in the mutation cluster region of APC
+T33_cancer	disease 1420 1426	cancer
+T6	gene 485 488	APC
+T7	gene 668 671	APC
+T4	gene 68 71	APC
+T5	gene 324 327	APC
+T8	gene 804 807	APC
+T9	gene 873 876	APC
+T43	cohort-patient 2524 2539	patient samples
+T42	cohort-patient 540 547	tumours
+T41	disease 2726 2736	carcinomas
+T40	disease 133 142	carcinoma
+T45	body-part 213 223	colorectal
+T73_merge	size 2686 2689	18%
+T1	gene 2284 2289	hMLH1
+T35_cancer	disease 2229 2235	cancer
+T3	gene 500 504	TP53
+T2	gene 80 84	TP53
+T10	gene 1202 1205	APC
+T11	gene 1335 1338	APC
+T12	gene 1692 1695	APC
+T13	gene 2088 2091	APC
+T14	gene 2277 2280	APC
+T15	gene 2620 2623	APC
+T52	body-part 1290 1300	colorectal
+T16	gene 2652 2655	APC
+T17	gene 73 78	K-ras
+T18	gene 332 337	K-ras
+T53	cohort-patient 1147 1167	truncating mutations
+T46_merge	disease 213 238	colorectal carcinogenesis
+T19	gene 490 495	K-ras
+T56	body-part 1430 1440	colorectal
+T55	body-part 1409 1419	colorectal
+T44_merge	size 2205 2208	103
+T58	Concepts_Ideas 1400 1408	familial
+T57	Concepts_Ideas 1379 1387	sporadic
+R0_T76_2_T15	has Arg1:T76_2 Arg2:T15
+R29_1	has Arg1:T76_2 Arg2:T41
+R0_T55_T33_cancer	relatedTo Arg1:T55 Arg2:T33_cancer
+R40_1	relatedTo Arg1:T62 Arg2:T39
+R43_1	has Arg1:T38 Arg2:T65
+R0_T74_2_T1	has Arg1:T74_2 Arg2:T1
+R45_1	has Arg1:T66 Arg2:T41
+R25_1	has Arg1:T72 Arg2:T36
+R44_1	has Arg1:T66 Arg2:T36
+R20_m	has Arg1:T6 Arg2:T75
+R0_T74_2_T14	has Arg1:T74_2 Arg2:T14
+R24_1	has Arg1:T72 Arg2:T41
+R4_m	has Arg1:T42 Arg2:T28
+R18_m	has Arg1:T3 Arg2:T75
+R21_1	has Arg1:T21 Arg2:T37
+R30_m	has Arg1:T22 Arg2:T77
+R20_1	has Arg1:T43 Arg2:T32
+R19_m	has Arg1:T19 Arg2:T75
+R0_T66_T16	has Arg1:T66 Arg2:T16
+R13_m	relatedTo Arg1:T62 Arg2:T39
+R3_m	has Arg1:T18 Arg2:T74
+R28_m	has Arg1:T20 Arg2:T76
+R2_m	has Arg1:T5 Arg2:T74
+R12_m	has Arg1:T63 Arg2:T39
+R5_m	has Arg1:T42 Arg2:T48_merge
+R6_m	has Arg1:T23 Arg2:T78
+R17_m	has Arg1:T10 Arg2:T51_merge
+R31_m	has Arg1:T9 Arg2:T77
+R42_1	has Arg1:T43 Arg2:T65
+R14_m	has Arg1:T61 Arg2:T39
+R1_m	relatedTo Arg1:T45 Arg2:T46_merge
+R0_T62_T35_cancer	relatedTo Arg1:T62 Arg2:T35_cancer
+R16_m	has Arg1:T53 Arg2:T51_merge
+R9_m	has Arg1:T11 Arg2:T79
+R24_m	relatedTo Arg1:T71 Arg2:T41
+R26_m	has Arg1:T72 Arg2:T73_merge
+R29_m	has Arg1:T7 Arg2:T76
+R15_m	has Arg1:T63 Arg2:T44_merge
+R27_m	has Arg1:T70 Arg2:T41
+R25_m	has Arg1:T70 Arg2:T36
+R8_m	relatedTo Arg1:T52 Arg2:T30
+R0_T56_T34_cancer	relatedTo Arg1:T56 Arg2:T34_cancer
+R7_m	has Arg1:T53 Arg2:T54_merge
+R18_1	has Arg1:T8 Arg2:T37
+R12_1	has Arg1:T53 Arg2:T30
+R13_1	has Arg1:T57 Arg2:T33
+R0_T74_2_T26	has Arg1:T74_2 Arg2:T26
+R14_1	relatedTo Arg1:T36 Arg2:T15
+R11_2	has Arg1:T58 Arg2:T33
+R23_m	relatedTo Arg1:T71 Arg2:T36
+R28_1	has Arg1:T76_2 Arg2:T36
+R22_m	has Arg1:T43 Arg2:T67_merge

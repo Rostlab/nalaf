@@ -1,0 +1,162 @@
+T75	age 1516 1520	47.5
+T60_merge	size 1158 1169	7 out of 24
+T76	age 1522 1533	range 45–51
+T74	disease 1462 1468	cancer
+T79	age 1563 1584	high age at diagnosis
+T17_merge	size 414 419	three
+T77	body-part 1599 1609	colorectal
+T78	disease 1610 1619	polyposis
+T54_merge	size 1042 1045	30%
+T29	ethnicity 2255 2262	Swedish
+T28	ethnicity 1877 1884	Swedish
+T27	ethnicity 158 165	Swedish
+T26	cohort-patient 2328 2335	Patient
+T76_2	cohort-patient 1260 1263	CRC
+T85_merge	size 2223 2228	seven
+T75_2	size 63 72	Sixty-one
+T25	cohort-patient 1859 1867	families
+T24	cohort-patient 509 517	families
+T23	cohort-patient 427 443	families parents
+T22	cohort-patient 393 401	families
+T21	cohort-patient 166 174	families
+T71	cohort-patient 1404 1412	probands
+T20	cohort-patient 1506 1511	group
+T63	age 1268 1272	46.6
+T64	age 1274 1285	range 28–57
+T65	age 1291 1295	37.5
+T66	age 1297 1308	range 26–49
+T67	cohort-patient 1364 1372	probands
+T68	Concepts_Ideas 1341 1350	morbidity
+T79_2	size 2194 2197	six
+T59_merge	size 1153 1156	29%
+T56_merge	size 1076 1079	75%
+T69_merge	size 1377 1380	34%
+T35_merge	size 503 508	seven
+T70_merge	size 1382 1394	11 out of 32
+T38	mutation 608 617	mutations
+T61_merge	size 1206 1209	25%
+T39	cohort-patient 623 631	probands
+T34	mutation 473 481	mutation
+T33_merge	size 406 409	16%
+T30	mutation 87 96	mutations
+T32	mutation 360 376	de novo mutation
+T72_2	Disorder 1593 1619	dense colorectal polyposis
+T62_merge	size 1211 1221	2 out of 8
+T6	gene 1828 1831	APC
+T7	gene 2032 2035	APC
+T4	gene 702 705	APC
+T49	disease 938 943	polyp
+T5	gene 1798 1801	APC
+T48	body-part 927 937	colorectal
+T72_merge	size 1435 1451	four out of nine
+T8	gene 2408 2411	APC
+T9	disease 1175 1178	CRC
+T41	mutation 647 694	mutations in the region from codon 1250 to 1464
+T40	cohort-patient 633 641	Probands
+T47	cohort-patient 855 895	those with mutations outside this region
+T46	age 829 841	range, 14–57
+T45	age 823 827	34.4
+T44	age 789 801	range, 11–49
+T84	mutation 2198 2213	large deletions
+T31_merge	size 145 157	81 of the 96
+T86	mutation 2385 2400	Large deletions
+T50	Concepts_Ideas 975 998	higher age at diagnosis
+T17_2	cohort-patient 377 382	cases
+T73_merge	size 1453 1456	44%
+T1	gene 83 86	APC
+T3	gene 604 607	APC
+T2	gene 356 359	APC
+T43_merge	age 756 787	median age at diagnosis of 21.8
+T10	disease 1260 1263	CRC
+T11	disease 1354 1357	CRC
+T12	disease 1588 1591	CRC
+T13	cohort-patient 590 598	patients
+T37_merge	size 569 589	Thirty-two of the 81
+T14	cohort-patient 1709 1717	patients
+T52	Concepts_Ideas 1000 1005	dense
+T81	Physiology 1646 1667	less-severe phenotype
+T15	cohort-patient 1984 1992	patients
+T51	disease 1000 1015	dense polyposis
+T16	cohort-patient 2229 2247	unrelated patients
+T83	mutation 1832 1841	mutations
+T82	size 1545 1549	none
+T53	Concepts_Ideas 1017 1023	> 1000
+T18	cohort-patient 1147 1152	group
+T19	cohort-patient 1237 1242	group
+T55	cohort-patient 1053 1061	probands
+T58	mutation 1094 1131	mutations between codon 1250 and 1464
+T48_2	Disorder 1000 1015	dense polyposis
+T57	cohort-patient 1083 1088	those
+R34_1	has Arg1:T19 Arg2:T9
+R47_1	has Arg1:T72_2 Arg2:T78
+R41_2	has Arg1:T76_2 Arg2:T10
+R35_1	has Arg1:T68 Arg2:T11
+R27_1	has Arg1:T57 Arg2:T56_merge
+R50_1	has Arg1:T20 Arg2:T78
+R26_1	has Arg1:T57 Arg2:T58
+R43_2	has Arg1:T64 Arg2:T76_2
+R32_m	has Arg1:T75 Arg2:T20
+R45_1	has Arg1:T79 Arg2:T20
+R45_2	has Arg1:T66 Arg2:T76_2
+R25_1	has Arg1:T55 Arg2:T51
+R0_T48_2_T51	has Arg1:T48_2 Arg2:T51
+R48_1	has Arg1:T81 Arg2:T12
+R49_2	has Arg1:T84 Arg2:T79_2
+R44_2	has Arg1:T65 Arg2:T76_2
+R44_1	relatedTo Arg1:T77 Arg2:T78
+R46_2	has Arg1:T81 Arg2:T20
+R49_1	has Arg1:T20 Arg2:T82
+R7_1	has Arg1:T22 Arg2:T32
+R21_2	has Arg1:T55 Arg2:T49
+R18_m	has Arg1:T55 Arg2:T54_merge
+R21_1	has Arg1:T52 Arg2:T51
+R30_m	has Arg1:T71 Arg2:T73_merge
+R20_2	has Arg1:T55 Arg2:T56_merge
+R51_m	has Arg1:T16 Arg2:T29
+R13_m	has Arg1:T4 Arg2:T41
+R28_m	has Arg1:T67 Arg2:T70_merge
+R3_m	has Arg1:T21 Arg2:T31_merge
+R10_m	has Arg1:T13 Arg2:T37_merge
+R2_m	has Arg1:T21 Arg2:T27
+R37_2	has Arg1:T30 Arg2:T75_2
+R12_m	has Arg1:T39 Arg2:T38
+R5_m	has Arg1:T2 Arg2:T32
+R22_1	has Arg1:T50 Arg2:T51
+R31_m	has Arg1:T71 Arg2:T74
+R40_m	has Arg1:T44 Arg2:T40
+R11_m	has Arg1:T13 Arg2:T38
+R17_m	has Arg1:T18 Arg2:T59_merge
+R23_1	has Arg1:T53 Arg2:T51
+R1_m	has Arg1:T1 Arg2:T30
+R42_2	has Arg1:T63 Arg2:T76_2
+R14_m	has Arg1:T40 Arg2:T41
+R34_m	has Arg1:T6 Arg2:T83
+R16_m	relatedTo Arg1:T48 Arg2:T49
+R9_m	has Arg1:T3 Arg2:T38
+R57_1	has Arg1:T8 Arg2:T86
+R33_m	has Arg1:T76 Arg2:T20
+R24_m	has Arg1:T19 Arg2:T62_merge
+R39_2	has Arg1:T52 Arg2:T55
+R36_m	has Arg1:T25 Arg2:T28
+R26_m	has Arg1:T67 Arg2:T11
+R29_m	has Arg1:T71 Arg2:T72_merge
+R15_m	has Arg1:T43_merge Arg2:T40
+R27_m	has Arg1:T67 Arg2:T69_merge
+R0_T72_2_T77	has Arg1:T77 Arg2:T72_2
+R25_m	has Arg1:T19 Arg2:T61_merge
+R50_m	has Arg1:T16 Arg2:T84
+R8_m	has Arg1:T24 Arg2:T35_merge
+R47_m	has Arg1:T20 Arg2:T12
+R48_m	has Arg1:T25 Arg2:T83
+R7_m	has Arg1:T23 Arg2:T17_merge
+R35_m	has Arg1:T16 Arg2:T85_merge
+R6_2	has Arg1:T17_2 Arg2:T33_merge
+R18_1	has Arg1:T45 Arg2:T47
+R4_2	has Arg1:T17_2 Arg2:T32
+R19_1	has Arg1:T46 Arg2:T47
+R19_2	has Arg1:T55 Arg2:T58
+R38_m	has Arg1:T21 Arg2:T30
+R5_1	has Arg1:T22 Arg2:T33_merge
+R23_m	has Arg1:T18 Arg2:T9
+R28_1	has Arg1:T57 Arg2:T51
+R22_m	has Arg1:T18 Arg2:T60_merge

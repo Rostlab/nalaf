@@ -1,0 +1,135 @@
+T76	cohort-patient 1693 1699	eleven
+T74	cohort-patient 1879 1889	responders
+T79	cohort-patient 2312 2317	seven
+T77	cohort-patient 1720 1722	34
+T55_2	cohort-patient 1700 1715	did not respond
+T56_2	cohort-patient 1723 1726	did
+T63_merge	size 812 814	9%
+T81_2	gene 2457 2460	MMR
+T48_merge	size 2312 2317	seven
+T28	Concepts_Ideas 743 749	serous
+T27	body-part 728 738	clear cell
+T26	disease 750 764	adenocarcinoma
+T25	disease 701 715	adenocarcinoma
+T24	body-part 688 700	endometrioid
+T23	Disorder 675 683	mucinous
+T21	disease 162 171	carcinoma
+T71_merge	size 1855 1858	18%
+T20	body-part 1170 1175	colon
+T70	cohort-patient 1839 1853	non-responders
+T52_merge	size 2616 2618	54
+T65	Concepts_Ideas 1046 1069	MSI frequency of 20–30%
+T9_2	gene 2103 2106	MMR
+T66	Disorder 1082 1085	MSI
+T68	Disorder 2063 2079	MMR inactivation
+T79_2	gene 1497 1500	MMR
+T78_merge	size 1720 1722	34
+T69_merge	size 1821 1838	two of the eleven
+T50_merge	size 2399 2404	seven
+T38	Disorder 1217 1225	mucinous
+T61_merge	size 802 805	22%
+T37	disease 1146 1182	hereditary nonpolyposis colon cancer
+T40_merge	size 1591 1610	Forty-six of the 75
+T39	disease 1297 1307	carcinomas
+T33	body-part 1011 1023	endometrioid
+T36	disease 1132 1138	tumors
+T35	body-part 1121 1131	colorectal
+T32	disease 972 981	carcinoma
+T31	Concepts_Ideas 951 959	sporadic
+T22_merge	size 549 552	628
+T62_merge	size 807 810	16%
+T6	disease 1184 1189	HNPCC
+T7	cohort-patient 553 561	patients
+T4	disease 1024 1038	ovarian cancer
+T49	Phenomena 2318 2365	did not respond to cisplatin/paclitaxel therapy
+T5	disease 1575 1589	ovarian cancer
+T72_merge	size 1864 1878	four of the 34
+T64_merge	size 819 821	8%
+T8	cohort-patient 2017 2025	patients
+T9	cohort-patient 2405 2427	nonresponding patients
+T75_merge	size 1693 1699	eleven
+T43	Physiology 1772 1804	Methylation of the MLH1 promoter
+T42	cohort-patient 1619 1629	carcinomas
+T41	disease 1619 1629	carcinomas
+T47	cohort-patient 2292 2302	carcinomas
+T46	disease 2292 2302	carcinomas
+T73_merge	size 1891 1894	12%
+T1	gene 1791 1795	MLH1
+T3	Disorder 2225 2231	no MSI
+T2	gene 2541 2545	MLH1
+T59	Disorder 793 796	MSI
+T10	cohort-patient 1736 1743	patient
+T11	body-part 960 971	endometrial
+T12	body-part 154 161	ovarian
+T13	body-part 1024 1031	ovarian
+T14	body-part 1289 1296	ovarian
+T15	body-part 1575 1582	ovarian
+T16	body-part 1611 1618	ovarian
+T51	Disorder 2457 2473	MMR inactivation
+T80_2	gene 2063 2066	MMR
+T17	body-part 2284 2291	ovarian
+T54	cohort-patient 2627 2637	carcinomas
+T45_merge	size 2281 2283	34
+T53	disease 2627 2637	carcinomas
+T18	body-part 2619 2626	ovarian
+T19	body-part 2660 2667	ovarian
+T56	cohort-patient 172 179	tissues
+T55	disease 2668 2678	carcinomas
+T44_merge	size 2010 2016	eleven
+T58	cohort-patient 750 764	adenocarcinoma
+T57	cohort-patient 701 715	adenocarcinoma
+R41_1	has Arg1:T76 Arg2:T75_merge
+R0_T43_T1	has Arg1:T43 Arg2:T1
+R34_2	has Arg1:T3 Arg2:T46
+R42_m	has Arg1:T79 Arg2:T48_merge
+R32_m	has Arg1:T8 Arg2:T44_merge
+R48_2	has Arg1:T66 Arg2:T36
+R45_2	has Arg1:T56_2 Arg2:T78_merge
+R44_2	has Arg1:T55_2 Arg2:T75_merge
+R46_1	relatedTo Arg1:T20 Arg2:T6
+R20_m	has Arg1:T65 Arg2:T32
+R46_2	has Arg1:T66 Arg2:T37
+R21_m	relatedTo Arg1:T35 Arg2:T36
+R4_m	has Arg1:T28 Arg2:T26
+R18_m	relatedTo Arg1:T13 Arg2:T4
+R21_1	has Arg1:T49 Arg2:T46
+R30_m	has Arg1:T74 Arg2:T72_merge
+R20_1	has Arg1:T47 Arg2:T48_merge
+R19_m	has Arg1:T33 Arg2:T4
+R13_m	has Arg1:T58 Arg2:T64_merge
+R28_m	has Arg1:T70 Arg2:T69_merge
+R3_m	has Arg1:T7 Arg2:T22_merge
+R43_m	has Arg1:T9 Arg2:T50_merge
+R10_m	has Arg1:T57 Arg2:T61_merge
+R2_m	relatedTo Arg1:T12 Arg2:T21
+R12_m	has Arg1:T58 Arg2:T63_merge
+R5_m	has Arg1:T27 Arg2:T26
+R6_m	has Arg1:T23 Arg2:T25
+R31_m	has Arg1:T74 Arg2:T73_merge
+R17_m	has Arg1:T31 Arg2:T32
+R40_m	has Arg1:T54 Arg2:T52_merge
+R11_m	has Arg1:T58 Arg2:T26
+R42_1	has Arg1:T77 Arg2:T78_merge
+R1_m	has Arg1:T56 Arg2:T21
+R14_m	has Arg1:T59 Arg2:T26
+R41_m	relatedTo Arg1:T19 Arg2:T55
+R16_m	relatedTo Arg1:T11 Arg2:T32
+R9_m	has Arg1:T57 Arg2:T62_merge
+R33_m	relatedTo Arg1:T17 Arg2:T46
+R24_m	relatedTo Arg1:T15 Arg2:T5
+R0_T51_T81_2	has Arg1:T51 Arg2:T81_2
+R36_m	has Arg1:T47 Arg2:T45_merge
+R26_m	has Arg1:T42 Arg2:T40_merge
+R29_m	has Arg1:T70 Arg2:T71_merge
+R15_m	has Arg1:T59 Arg2:T25
+R27_m	relatedTo Arg1:T16 Arg2:T41
+R25_m	has Arg1:T42 Arg2:T41
+R8_m	has Arg1:T57 Arg2:T25
+R47_m	has Arg1:T38 Arg2:T37
+R7_m	has Arg1:T24 Arg2:T25
+R35_m	has Arg1:T47 Arg2:T46
+R39_m	relatedTo Arg1:T18 Arg2:T53
+R0_T68_T80_2	has Arg1:T68 Arg2:T80_2
+R38_m	has Arg1:T54 Arg2:T53
+R23_m	relatedTo Arg1:T14 Arg2:T39
+R22_m	relatedTo Arg1:T20 Arg2:T37

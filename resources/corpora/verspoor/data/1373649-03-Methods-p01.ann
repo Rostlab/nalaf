@@ -1,0 +1,121 @@
+T73_2	cohort-patient 2369 2376	proband
+T74_2	disease 2482 2487	tumor
+T56_2	cohort-patient 1504 1507	she
+T29	gender 2105 2112	sisters
+T28	gender 118 125	sisters
+T27	gender 785 789	male
+T26	gender 132 136	male
+T25	age 200 206	age 23
+T24	age 860 875	age of 23 years
+T23	disease 1153 1159	tumors
+T22	cohort-patient 790 803	index patient
+T21	cohort-patient 2209 2223	family members
+T20	body-part 1140 1152	extracolonic
+T62	gender 2242 2248	father
+T63	disease 1645 1650	tumor
+T9_merge	disease 1464 1482	unaffected carrier
+T64	disease 909 919	malignancy
+T38	gender 103 109	mother
+T36_merge	size 73 78	Three
+T61_merge	size 2192 2197	three
+T37	cohort-patient 103 109	mother
+T4_cancer	disease 478 484	cancer
+T34	body-part 472 477	colon
+T33	body-part 1236 1241	ovary
+T35	body-part 1223 1228	colon
+T30	gender 1504 1507	she
+T32	body-part 1521 1532	endometrial
+T31	gender 1781 1784	his
+T60	gender 1882 1888	mother
+T71_2	cohort-patient 1209 1219	carcinomas
+T6	disease 748 753	HNPCC
+T7	disease 1594 1599	HNPCC
+T49	cohort-patient 1380 1385	III:3
+T4	disease 472 484	colon cancer
+T48	age 1357 1378	younger than 50 years
+T5	disease 639 644	HNPCC
+T8	disease 2701 2706	HNPCC
+T43	disease 838 852	adenocarcinoma
+T42	disease 182 196	adenocarcinoma
+T41	cohort-patient 132 136	male
+T40	cohort-patient 118 125	sisters
+T46	disease 1209 1219	carcinomas
+T45	body-part 827 837	colorectal
+T44	body-part 171 181	colorectal
+T50	cohort-patient 1387 1391	II:1
+T1	cohort-patient 2232 2248	proband's father
+T3	gene 1989 1994	hMSH2
+T2	gene 1999 2004	hMLH1
+T39_merge	size 114 117	two
+T59	cohort-patient 2095 2112	proband's sisters
+T47_2	size 1203 1208	three
+T10	disease 1944 1954	unaffected
+T11	Physiology 149 170	poorly differentiated
+T12	cohort-patient 1696 1705	proband's
+T47_merge	size 1332 1337	three
+T13	cohort-patient 322 339	proband relatives
+T14	cohort-patient 492 499	proband
+T15	cohort-patient 805 810	III:3
+T52	cohort-patient 1433 1449	proband's mother
+T16	cohort-patient 754 760	family
+T51	cohort-patient 1396 1399	I:3
+T54	cohort-patient 1451 1455	II-5
+T17	cohort-patient 877 891	Family members
+T53	gender 1443 1449	mother
+T18	cohort-patient 1083 1089	family
+T56	cohort-patient 79 101	first-degree relatives
+T19	cohort-patient 1338 1352	family members
+T55	disease 1537 1551	adenocarcinoma
+T58	cohort-patient 1872 1888	proband's mother
+T57	cohort-patient 1627 1636	proband's
+R41_1	has Arg1:T17 Arg2:T64
+R29_1	has Arg1:T52 Arg2:T55
+R15_1	has Arg1:T18 Arg2:T23
+R35_2	has Arg1:T71_2 Arg2:T46
+R36_2	has Arg1:T71_2 Arg2:T47_2
+R26_1	has Arg1:T54 Arg2:T9_merge
+R9_2	has Arg1:T56 Arg2:T38
+R32_m	has Arg1:T40 Arg2:T39_merge
+R33_1	has Arg1:T12 Arg2:T31
+R25_1	has Arg1:T54 Arg2:T53
+R8_2	has Arg1:T56 Arg2:T28
+R20_m	has Arg1:T52 Arg2:T53
+R21_m	relatedTo Arg1:T32 Arg2:T55
+R24_2	has Arg1:T56_2 Arg2:T55
+R4_m	relatedTo Arg1:T44 Arg2:T42
+R18_m	has Arg1:T48 Arg2:T19
+R30_m	has Arg1:T40 Arg2:T28
+R19_m	has Arg1:T52 Arg2:T9_merge
+R13_m	has Arg1:T24 Arg2:T22
+R28_m	has Arg1:T1 Arg2:T62
+R3_m	has Arg1:T41 Arg2:T42
+R10_m	relatedTo Arg1:T45 Arg2:T43
+R2_m	has Arg1:T41 Arg2:T26
+R12_m	has Arg1:T22 Arg2:T43
+R5_m	has Arg1:T25 Arg2:T41
+R31_m	has Arg1:T37 Arg2:T38
+R23_2	has Arg1:T56_2 Arg2:T30
+R17_m	has Arg1:T19 Arg2:T47_merge
+R11_m	has Arg1:T22 Arg2:T27
+R1_m	has Arg1:T56 Arg2:T36_merge
+R14_m	relatedTo Arg1:T20 Arg2:T23
+R41_m	has Arg1:T58 Arg2:T10
+R34_m	has Arg1:T57 Arg2:T63
+R16_m	relatedTo Arg1:T33 Arg2:T46
+R10_1	has Arg1:T15 Arg2:T43
+R33_m	has Arg1:T11 Arg2:T42
+R0_T34_T4_cancer	relatedTo Arg1:T34 Arg2:T4_cancer
+R26_m	has Arg1:T58 Arg2:T60
+R29_m	has Arg1:T14 Arg2:T4
+R15_m	relatedTo Arg1:T35 Arg2:T46
+R27_m	has Arg1:T21 Arg2:T61_merge
+R25_m	has Arg1:T59 Arg2:T29
+R7_m	has Arg1:T16 Arg2:T6
+R39_m	has Arg1:T48 Arg2:T51
+R12_1	has Arg1:T24 Arg2:T15
+R32_1	has Arg1:T52 Arg2:T30
+R37_m	has Arg1:T48 Arg2:T49
+R14_1	has Arg1:T15 Arg2:T27
+R38_m	has Arg1:T48 Arg2:T50
+R28_1	has Arg1:T54 Arg2:T55
+R31_1	has Arg1:T54 Arg2:T30

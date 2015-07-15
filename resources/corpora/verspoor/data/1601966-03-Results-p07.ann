@@ -1,0 +1,31 @@
+T15_2	body-part 2087 2097	colorectal
+T8_2	disease 1930 1935	tumor
+T6	cohort-patient 357 365	patients
+T7	cohort-patient 782 790	patients
+T4	disease 564 576	colon cancer
+T12_2	disease 2490 2495	tumor
+T5	cohort-patient 239 247	patients
+T8	cohort-patient 1411 1416	group
+T6_2	gene 1378 1385	PLA2G2A
+T9	cohort-patient 126 133	patient
+T5_2	body-part 1506 1513	gastric
+T13_2	gene 1684 1689	CDC42
+T9_2	disease 1506 1520	gastric cancer
+T16_2	disease 2727 2732	tumor
+T17_2	disease 2745 2750	tumor
+T1_merge	disease 2087 2105	colorectal cancers
+T3	disease 2009 2012	CRC
+T2	disease 1157 1160	CRC
+T19_2	gene 1889 1893	E2F2
+T10	cohort-patient 665 672	patient
+T11	cohort-patient 1486 1493	patient
+T20_2	gene 1898 1903	CDC42
+T12	cohort-patient 2583 2590	Patient
+T4_cancer	disease 570 576	cancer
+T13	cohort-patient 880 890	Individual
+T1_merge_cancers	disease 2098 2105	cancers
+T14	body-part 564 569	colon
+T18_2	gene 1881 1887	PLAG2A
+R0_T15_2_T1_merge_cancers	relatedTo Arg1:T15_2 Arg2:T1_merge_cancers
+R2_2	relatedTo Arg1:T5_2 Arg2:T9_2
+R0_T14_T4_cancer	relatedTo Arg1:T14 Arg2:T4_cancer

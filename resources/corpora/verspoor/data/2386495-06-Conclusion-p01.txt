@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Conclusion
+
+We want to emphasize the importance of using a combination of techniques to achieve the highest mutation-detection frequency possible and it is also noteworthy that RNA-based screening is of importance when conducting a highly sensitive mutation-detection screening program as a number of mutations might otherwise be overlooked. The use of mRNA analyses has been crucial in order to detect and characterize splice variants and also to complement MLPA analyses. The MLPA method has improved and simplified the screening procedure significantly, but it is important to remember the limits of the method, which in our study is exemplified by a possible translocation that is not detectable by MLPA. Furthermore, the need to detect elusive APC changes such as mosaicism, which are not easily identified using standard techniques, remains. Such APC mutations may be the cause of some of the so-far unresolved de novo cases of attenuated or atypical FAP. Clinical data from this study indicate that the risk of having CRC at diagnosis among probands with mutations outside the region codon 1250–1464, although exhibiting a less-severe phenotype, is high indicating that age at diagnosis rather than severity of the disease predicts CRC morbidity. Early detection of probands contributes to the decrease in overall CRC morbidity seen in FAP in recent years.
+

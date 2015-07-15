@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Whole-chromosome plots of running average of fractions of samples showing up-/down-regulation in tumor versus normal samples (Chromosome 17,18,19,20,21,22,X,Y). For each chromosome you see a separate figure. Gray dots denote the number of patients with up- or down-regulation for a single gene. Orange/green lines represent a running average of these values. The plots are made to be easily comparable with whole-genome CGH plots (like e.g. those in Knösel et al. [21]) Further details of plot construction are described in the methods section.
+
+Individual chromosomal islands of up- or down-regulation.
+
+These are condensed results of the ChARM analyses: overlapping regions with evidence for up- or down-regulation from various analyses of different cross-correlation window sizes have been fused into single regions. The original ChARM output including p values for each region and additional annotation can be found in Additional file 1. Hereditary colorectal cancer syndromes are indicated along with their OMIM ID. Gene symbols are official or provisional HUGO symbols if available, otherwise names of Unigene clusters. Information about known tumor genes in misregulated regions were extracted from the literature. Tumor-associated genes are located within expression islands or in near vicinity.
+
+Statistics on expression imbalances across human chromosomes.
+
+Here, estimates of portions of chromosomes that are affected by regional regulation of expression are given. The second column gives the number of genes on a particular chromosome that were included in our analysis. The following columns contain the numbers of genes that are located in deregulated expression islands (up/down).
+
+Individual chromosomal islands with gain of expression
+
+8q11.23-q21.13
+
+Gain of expression in region 8q11.23-q21.13 is strongest in a small interval (8q12.1) that spans genes from TCEA1 to PLAG1 (see Figures 6, 7, 8). There have been numerous reports of copy number gains of chromosome 8q in CRC [18,21,23,25] which suggests a possible mechanism leading to over-expression in our patients. The known blood cell oncogene LYN is located in this interval and it is up-regulated in several of our tumor samples. It has been reported before that LYN is expressed in colorectal tumors [26]. The concerted up-regulation of LYN along with other genes in this region suggests a role for LYN in CRC. Another interesting gene in this interval is PLAG1 (pleomorphic adenoma gene 1) for which chromosomal aberrations have been described that lead to over-expression in salivary gland tumors [27,28]. No informative expression measures were obtained for the MOS protein kinase gene which is located between RPS20 and PLAG1, although this may be due to technical limitations. Genes encoding components of the translation machinery, the mitochondrial ribosomal protein MRPL15 and cytosolic ribosomal proteins RPL7 and RPS20, are located in this region, highlighting the need for enhanced translation in cancer cells. The concomitant down-regulation of the TOX and ANKTM1 genes in many patients in an environment of transcriptional activation is remarkable, but the functional significance remains unclear. Buffart et al. have reported amplifications of 8q11-q24 in metastasizing CRC [29], highlighting a possible mechanism for gain of expression in this region. In summary, our analysis suggests that chromosomal region 8q12.1 is a candidate target region for genetic alterations that lead to over-expression in CRC.
+

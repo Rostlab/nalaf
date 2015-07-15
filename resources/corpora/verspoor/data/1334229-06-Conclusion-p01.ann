@@ -1,0 +1,29 @@
+T1	gene 153 156	APC
+T3	gene 161 166	K-ras
+T2	gene 393 396	APC
+T6	disease 212 218	tumour
+T7	disease 281 288	Tumours
+T4	gene 404 409	K-ras
+T5	gene 66 72	CTNNB1
+T10	disease 125 142	colorectal cancer
+T11	mutation 167 176	mutations
+T12	mutation 410 419	mutations
+T13	body-part 125 135	colorectal
+T8	disease 380 387	tumours
+T9	disease 445 451	tumour
+T10_cancer	disease 136 142	cancer
+T15	Concepts_Ideas 116 124	sporadic
+T17	Physiology 302 328	mismatch repair deficiency
+T19	mutation 49 58	mutations
+R4_m	has Arg1:T3 Arg2:T11
+R0_T13_T10_cancer	relatedTo Arg1:T13 Arg2:T10_cancer
+R3_1	relatedTo Arg1:T6 Arg2:T3
+R9_2	relatedTo Arg1:T8 Arg2:T4
+R4_1	relatedTo Arg1:T6 Arg2:T1
+R10_m	has Arg1:T4 Arg2:T12
+R3_m	has Arg1:T15 Arg2:T10
+R7_2	relatedTo Arg1:T8 Arg2:T2
+R8_m	has Arg1:T2 Arg2:T12
+R5_m	has Arg1:T1 Arg2:T11
+R6_m	has Arg1:T17 Arg2:T7
+R1_m	has Arg1:T5 Arg2:T19

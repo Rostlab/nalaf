@@ -1,0 +1,172 @@
+T55_2	Physiology 1422 1446	low level of methylation
+T63_merge	size 1247 1261	One of the two
+T49_merge	size 1910 1930	Thirty-six of the 50
+T29	Disorder 272 275	MSI
+T28	Disorder 247 270	microsatellite instable
+T27	cohort-patient 123 132	cell line
+T26	body-part 1784 1791	ovarian
+T25	body-part 1673 1680	ovarian
+T75_2	gene 2297 2300	MMR
+T24	body-part 1069 1076	ovarian
+T23	body-part 1010 1017	ovarian
+T22	body-part 949 956	ovarian
+T21	body-part 900 907	ovarian
+T20	body-part 398 405	ovarian
+T52_merge	size 1005 1009	Five
+T38	Physiology 650 682	methylation of the MLH1 promoter
+T37	Disorder 570 573	MSS
+T34	Disorder 437 451	normal stromal
+T33_merge	size 432 436	four
+T36	Disorder 547 568	microsatellite stable
+T35	cohort-patient 452 460	controls
+T32	cohort-patient 416 423	tissues
+T31	disease 406 415	carcinoma
+T88_2	gene 2481 2484	MMR
+T48	Physiology 840 878	low level of MLH1 promoter methylation
+T42	cohort-patient 804 814	cell lines
+T41	Physiology 708 732	low level of methylation
+T47	cohort-patient 918 927	specimens
+T46	disease 908 917	carcinoma
+T44	Physiology 822 836	no methylation
+T50	disease 957 966	carcinoma
+T39_merge	size 604 618	One of the two
+T59	gene 1174 1178	PMS2
+T104_2	gene 2698 2701	MMR
+T51	Physiology 983 1003	abundant methylation
+T54	disease 1018 1028	carcinomas
+T103_2	gene 2560 2563	MMR
+T53	cohort-patient 1018 1028	carcinomas
+T56	disease 1077 1087	carcinomas
+T58	cohort-patient 1077 1087	carcinomas
+T57	Physiology 1095 1109	no methylation
+T75	cohort-patient 133 138	A2780
+T76	Physiology 1810 1844	abundant MLH1 promoter methylation
+T73	cohort-patient 1731 1741	carcinomas
+T74	disease 1792 1801	carcinoma
+T79	cohort-patient 233 237	2774
+T77	Physiology 1851 1875	low MLH1 mRNA expression
+T78	cohort-patient 223 228	SKOV3
+T55_merge	size 1066 1068	63
+T66_merge	size 1537 1540	two
+T72	disease 1731 1741	carcinomas
+T71	cohort-patient 1681 1691	carcinomas
+T70	disease 1681 1691	carcinomas
+T62	Physiology 1319 1360	complete methylation of the MLH1 promoter
+T64	Physiology 1369 1395	no mRNA expression of MLH1
+T65	cohort-patient 1554 1564	cell lines
+T30_merge	size 395 397	75
+T67	Disorder 1541 1553	MSI positive
+T68	Physiology 1584 1602	no MLH1 expression
+T69_merge	size 1660 1672	50 of the 75
+T60	Disorder 1282 1294	MSI positive
+T98	cohort-patient 1999 2009	responders
+T96	cohort-patient 1980 1994	non-responders
+T6	gene 1391 1395	MLH1
+T7	gene 1467 1471	MLH1
+T4	gene 1147 1151	MLH1
+T5	gene 1347 1351	MLH1
+T8	gene 1587 1591	MLH1
+T9	gene 1626 1630	MLH1
+T94	Physiology 1618 1635	express MLH1 mRNA
+T93	cohort-patient 1609 1613	2774
+T92	cohort-patient 1566 1571	SKOV3
+T87_2	gene 2369 2372	MMR
+T91	cohort-patient 1512 1522	cell lines
+T90	Physiology 1459 1482	highest MLH1 expression
+T88	cohort-patient 1407 1412	A2780
+T97_merge	size 1996 1998	28
+T84	cohort-patient 759 763	2774
+T85	cohort-patient 967 975	specimen
+T86	cohort-patient 1213 1223	cell lines
+T87	cohort-patient 1295 1311	A2780 cell lines
+T95_merge	size 1978 1979	7
+T1	gene 577 581	MLH1
+T3	gene 853 857	MLH1
+T2	gene 669 673	MLH1
+T43_merge	size 799 803	five
+T69_2	disease 437 443	normal
+T10	gene 1819 1823	MLH1
+T11	gene 1855 1859	MLH1
+T12	gene 1153 1157	MSH2
+T13	gene 1159 1163	MSH3
+T14	gene 1165 1169	MSH6
+T81	Concepts_Ideas 362 376	no aberrations
+T15	disease 108 122	ovarian cancer
+T80	cohort-patient 344 354	cell lines
+T16	cohort-patient 1931 1939	patients
+T83	cohort-patient 750 754	HOC7
+T17	cohort-patient 212 222	cell lines
+T45_merge	size 896 899	six
+T82	cohort-patient 619 633	A2780 sublines
+T18	cohort-patient 2018 2025	patient
+T19	body-part 108 115	ovarian
+R29_2	has Arg1:T35 Arg2:T69_2
+R40_1	has Arg1:T79 Arg2:T15
+R40_2	has Arg1:T44 Arg2:T42
+R43_2	has Arg1:T38 Arg2:T82
+R32_m	has Arg1:T96 Arg2:T95_merge
+R33_2	has Arg1:T67 Arg2:T65
+R47_2	has Arg1:T64 Arg2:T87
+R0_T94_T9	has Arg1:T94 Arg2:T9
+R0_T48_T3	has Arg1:T48 Arg2:T3
+R48_2	has Arg1:T55_2 Arg2:T88
+R44_2	has Arg1:T60 Arg2:T87
+R49_2	has Arg1:T90 Arg2:T88
+R20_m	has Arg1:T77 Arg2:T74
+R46_2	has Arg1:T62 Arg2:T87
+R0_T38_T2	has Arg1:T38 Arg2:T2
+R21_m	has Arg1:T16 Arg2:T49_merge
+R0_T76_T10	has Arg1:T76 Arg2:T10
+R0_T64_T6	has Arg1:T64 Arg2:T6
+R4_m	relatedTo Arg1:T21 Arg2:T46
+R18_m	relatedTo Arg1:T26 Arg2:T74
+R54_m	has Arg1:T71 Arg2:T70
+R19_m	has Arg1:T76 Arg2:T74
+R13_m	has Arg1:T58 Arg2:T56
+R10_m	has Arg1:T53 Arg2:T52_merge
+R3_m	has Arg1:T47 Arg2:T45_merge
+R0_T62_T5	has Arg1:T62 Arg2:T5
+R2_m	has Arg1:T47 Arg2:T46
+R37_2	has Arg1:T28 Arg2:T78
+R50_2	has Arg1:T68 Arg2:T92
+R12_m	has Arg1:T58 Arg2:T55_merge
+R5_m	has Arg1:T85 Arg2:T50
+R6_m	relatedTo Arg1:T22 Arg2:T50
+R31_m	has Arg1:T36 Arg2:T31
+R23_2	has Arg1:T41 Arg2:T82
+R17_m	has Arg1:T71 Arg2:T69_merge
+R11_m	has Arg1:T53 Arg2:T54
+R38_2	has Arg1:T28 Arg2:T79
+R1_m	has Arg1:T42 Arg2:T43_merge
+R14_m	relatedTo Arg1:T24 Arg2:T56
+R41_m	has Arg1:T82 Arg2:T39_merge
+R42_2	has Arg1:T34 Arg2:T35
+R0_T90_T7	has Arg1:T90 Arg2:T7
+R34_m	has Arg1:T65 Arg2:T66_merge
+R16_m	relatedTo Arg1:T25 Arg2:T70
+R9_m	relatedTo Arg1:T23 Arg2:T54
+R24_m	has Arg1:T32 Arg2:T30_merge
+R39_2	has Arg1:T81 Arg2:T80
+R39_1	has Arg1:T78 Arg2:T15
+R36_m	has Arg1:T75 Arg2:T15
+R26_m	has Arg1:T32 Arg2:T31
+R51_2	has Arg1:T94 Arg2:T93
+R52_2	has Arg1:T67 Arg2:T93
+R15_m	has Arg1:T57 Arg2:T56
+R27_m	has Arg1:T35 Arg2:T33_merge
+R53_2	has Arg1:T67 Arg2:T92
+R0_T77_T11	has Arg1:T77 Arg2:T11
+R25_m	relatedTo Arg1:T20 Arg2:T31
+R2_1	has Arg1:T28 Arg2:T15
+R8_m	has Arg1:T48 Arg2:T46
+R45_m	has Arg1:T87 Arg2:T63_merge
+R7_m	has Arg1:T51 Arg2:T50
+R30_2	has Arg1:T36 Arg2:T69_2
+R35_m	has Arg1:T98 Arg2:T97_merge
+R1_1	has Arg1:T27 Arg2:T15
+R3_1	has Arg1:T29 Arg2:T15
+R4_1	has Arg1:T17 Arg2:T15
+R13_1	has Arg1:T37 Arg2:T31
+R0_T68_T8	has Arg1:T68 Arg2:T8
+R28_2	has Arg1:T34 Arg2:T69_2
+R22_m	relatedTo Arg1:T19 Arg2:T15

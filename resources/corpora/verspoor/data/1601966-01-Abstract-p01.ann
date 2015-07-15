@@ -1,0 +1,41 @@
+T2_cancer	disease 881 887	cancer
+T6	cohort-patient 515 523	patients
+T7	body-part 1140 1145	colon
+T4	disease 1008 1011	CRC
+T5	disease 1140 1152	colon cancer
+T8	body-part 119 129	colorectal
+T27	body-part 1602 1612	colorectal
+T26	disease 1613 1622	carcinoma
+T9	disease 160 166	Cancer
+T25	Physiology 1261 1294	heterogeneous expression patterns
+T24	disease 1246 1252	tumors
+T23	body-part 1235 1245	colorectal
+T22	disease 934 939	tumor
+T21	Physiology 958 1004	chromosomal islands of misregulated expression
+T20	Physiology 893 915	deregulated expression
+T1_cancer	disease 130 136	cancer
+T14_merge	size 512 514	25
+T1	disease 119 136	colorectal cancer
+T3	disease 472 475	CRC
+T2	disease 870 887	colorectal cancer
+T5_cancer	disease 1146 1152	cancer
+T10	body-part 450 460	colorectal
+T11	disease 461 470	carcinoma
+T12	disease 481 487	normal
+T13	body-part 488 506	epithelial tissues
+T16	mutation 220 266	deletion and amplification of chromosome parts
+T18	Concepts_Ideas 859 869	hereditary
+T19	body-part 870 880	colorectal
+R9_m	relatedTo Arg1:T27 Arg2:T26
+R6_1	has Arg1:T21 Arg2:T4
+R0_T8_T1_cancer	relatedTo Arg1:T8 Arg2:T1_cancer
+R3_m	has Arg1:T6 Arg2:T14_merge
+R0_T7_T5_cancer	relatedTo Arg1:T7 Arg2:T5_cancer
+R2_m	relatedTo Arg1:T10 Arg2:T11
+R2_1	relatedTo Arg1:T13 Arg2:T12
+R8_2	has Arg1:T6 Arg2:T11
+R8_1	has Arg1:T25 Arg2:T24
+R5_1	has Arg1:T20 Arg2:T2
+R5_m	has Arg1:T18 Arg2:T2
+R0_T19_T2_cancer	relatedTo Arg1:T19 Arg2:T2_cancer
+R7_m	relatedTo Arg1:T23 Arg2:T24

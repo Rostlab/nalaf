@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results
+
+Microsatellite analysis
+
+Two sublines of the ovarian cancer cell line A2780 that have been cultured by two research groups in our department and the cell lines SKOV3 and 2774 showed a microsatellite instable (MSI) pattern for both mononucleotide markers BAT25 and BAT26. All other cell lines showed no aberrations. In addition, the 75 ovarian carcinoma tissues and the four normal stromal controls showed no aberrations for BAT25, BAT26 and BAT40 or D2S123, indicating that these are microsatellite stable (MSS).
+
+MLH1 promoter methylation
+
+One of the two A2780 sublines showed complete methylation of the MLH1 promoter while the other showed a low level of methylation. The results for HOC7 and 2774 were not informative and the other five cell lines showed no methylation. A low level of MLH1 promoter methylation was also seen in six ovarian carcinoma specimens and in addition, one ovarian carcinoma specimen showed abundant methylation. Five ovarian carcinomas were not informative while the other 63 ovarian carcinomas showed no methylation.
+
+Quantitative RT-PCR: expression of MLH1, MSH2, MSH3, MSH6 and PMS2
+
+The mRNA expression data for the cell lines is shown in Figure 3A. One of the two separately cultured MSI positive A2780 cell lines showed complete methylation of the MLH1 promoter and had no mRNA expression of MLH1. The other A2780 showed a low level of methylation but had the highest MLH1 expression levels compared to the other cell lines. Of the other two MSI positive cell lines, SKOV3 also showed no MLH1 expression while 2774 did express MLH1 mRNA.
+
+RNA was available for 50 of the 75 ovarian carcinomas and the mRNA expression data for these carcinomas is shown in Figure 3B. Interestingly, the ovarian carcinoma with an abundant MLH1 promoter methylation had a low MLH1 mRNA expression compared to the other carcinomas. Thirty-six of the 50 patients received platinum-based chemotherapy (7 non-responders, 28 responders and one patient with unknown response). There was no significant association between the response to platinum-based chemotherapy and the expression of each of these genes separately (Mann-Whitney test, p > 0.6). Since inactivation of only one of these genes might be sufficient to cause MMR deficiency, we used the expression of all of the five genes to mark MMR as active or inactive. If at least one of the five genes had an expression in the lowest quartile we marked MMR as inactive. If none of the genes had an expression in the lowest quartile MMR was marked as active (Figure 3B). Next the Mann-Whitney test demonstrated that there was no significant relation between the deducted MMR status and response to platinum-based chemotherapy (p = 0.665).
+

@@ -1,0 +1,15 @@
+T1_merge	disease 223 227	CRCs
+T3	gene 552 556	KRAS
+T2	disease 703 706	CRC
+T6	gene 414 418	BRAF
+T7	mutation 419 427	mutation
+T4	gene 135 139	BRAF
+T5	mutation 140 148	mutation
+T10	Disorder 318 330	hyperplastic
+T11	disease 331 337	polyps
+T12	Concepts_Ideas 342 350	serrated
+T13	disease 351 359	adenomas
+R3_m	has Arg1:T12 Arg2:T13
+R2_m	has Arg1:T10 Arg2:T11
+R4_m	has Arg1:T6 Arg2:T7
+R1_m	has Arg1:T4 Arg2:T5

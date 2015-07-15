@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Statistics
+
+Data were analysed by χ2 test, Fisher's exact test or T-test, as appropriate, using SAS software, version 8.2 (Cary, NC, USA). P-values < 0.05 were interpreted as significant.
+

@@ -1,0 +1,25 @@
+T15_2	gene 169 172	MMR
+T16_2	gene 289 292	MMR
+T17_2	gene 450 453	MMR
+T14_2	gene 69 72	MMR
+T8_merge	size 102 104	75
+T1	disease 208 222	ovarian cancer
+T3	body-part 105 112	ovarian
+T2	disease 361 375	ovarian cancer
+T6	body-part 361 368	ovarian
+T7	Physiology 66 85	No MMR inactivation
+T4	body-part 208 215	ovarian
+T5	body-part 249 256	ovarian
+T10	disease 113 122	carcinoma
+T12	disease 257 267	carcinomas
+T14	cohort-patient 223 233	cell lines
+T9	cohort-patient 123 132	specimens
+R3_m	relatedTo Arg1:T3 Arg2:T10
+R2_m	has Arg1:T9 Arg2:T8_merge
+R8_m	relatedTo Arg1:T6 Arg2:T2
+R5_m	relatedTo Arg1:T4 Arg2:T1
+R6_m	has Arg1:T14 Arg2:T1
+R0_T7_T14_2	has Arg1:T7 Arg2:T14_2
+R4_2	has Arg1:T7 Arg2:T10
+R1_m	has Arg1:T9 Arg2:T10
+R7_m	relatedTo Arg1:T5 Arg2:T12

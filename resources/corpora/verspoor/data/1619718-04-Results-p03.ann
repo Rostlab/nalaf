@@ -1,0 +1,175 @@
+T65_merge	size 1053 1056	one
+T97_2	gene 854 857	p53
+T63_merge	size 1045 1048	one
+T48_merge	size 813 815	15
+T29	cohort-patient 504 512	adenomas
+T26	cohort-patient 460 468	adenomas
+T57_merge	size 1032 1036	four
+T23	mutation 428 436	mutation
+T22	gene 423 427	KRAS
+T21	Physiology 474 486	no MGMT loss
+T20	Concepts_Ideas 414 421	< 10 mm
+T95_2	gene 749 752	p53
+T67_merge	size 1076 1079	two
+T27_2	size 616 619	5/7
+T74_merge	size 1196 1199	12%
+T70_merge	size 1116 1118	1%
+T38	gene 719 723	KRAS
+T37	mutation 703 706	G→A
+T36_merge	mutation 595 629	most KRAS mutations (5/7) were G→A
+T39	Physiology 689 698	MGMT loss
+T34	mutation 566 575	mutations
+T33	gene 561 565	KRAS
+T25_merge	size 455 458	12%
+T35	gene 600 604	KRAS
+T30	Physiology 518 527	MGMT loss
+T32	gene 518 522	MGMT
+T31	gene 477 481	MGMT
+T49	disease 816 819	SAs
+T42	disease 795 798	TAs
+T41	cohort-patient 795 798	TAs
+T40	gene 689 693	MGMT
+T47	disease 808 811	VAs
+T46	disease 803 807	TVAs
+T45	cohort-patient 803 811	TVAs/VAs
+T50	cohort-patient 816 819	SAs
+T73_merge	size 1190 1194	3/25
+T59	cohort-patient 1037 1043	polyps
+T52	cohort-patient 827 830	MPs
+T54	Physiology 859 889	Weak expression of nuclear p53
+T53	disease 827 830	MPs
+T56	Physiology 987 1010	Aberrant p53 expression
+T55	disease 963 969	polyps
+T44_merge	size 800 802	22
+T58	disease 1037 1043	polyps
+T75	Concepts_Ideas 1201 1209	serrated
+T76	disease 1210 1216	polyps
+T24_merge	size 449 453	3/25
+T77	cohort-patient 1210 1216	polyps
+T78	Disorder 1222 1231	dysplasia
+T98_2	gene 774 778	MGMT
+T96_2	gene 886 889	p53
+T72	Physiology 1149 1175	aberrant expression of p53
+T71	cohort-patient 1133 1141	adenomas
+T62	disease 1080 1083	SAs
+T64	cohort-patient 1049 1051	TA
+T66	cohort-patient 1057 1059	MP
+T68	cohort-patient 1080 1083	SAs
+T26_2	cohort-patient 626 629	G→A
+T69_merge	size 1110 1114	1/84
+T27_merge	size 494 497	4/8
+T28_merge	size 499 502	50%
+T61	disease 1057 1059	MP
+T60	disease 1049 1051	TA
+T51_merge	size 824 826	10
+T6	gene 104 108	MGMT
+T7	disease 179 185	polyps
+T4	disease 1489 1496	adenoma
+T5	Physiology 82 108	Loss of expression of MGMT
+T8	disease 224 227	MPs
+T9	disease 229 231	TA
+T92	Concepts_Ideas 1120 1132	conventional
+T91	cohort-patient 410 413	TAs
+T90	Physiology 1588 1657	loss of nuclear expression of O-6-methylguanine DNA methyltransferase
+T88	Disorder 1502 1522	high-grade dysplasia
+T89	Physiology 1545 1579	aberrant nuclear expression of p53
+T84	Physiology 1402 1425	aberrant p53 expression
+T85	Disorder 1430 1455	normal expression of MGMT
+T86	gene 1451 1455	MGMT
+T87	Concepts_Ideas 1480 1488	serrated
+T1	disease 460 468	adenomas
+T3	disease 1133 1141	adenomas
+T2	disease 504 512	adenomas
+T43_merge	size 785 794	Sixty-two
+T10	disease 244 248	TVAs
+T11	disease 249 252	VAs
+T12	Concepts_Ideas 232 239	> 10 mm
+T13	Physiology 297 323	loss of expression of MGMT
+T14	gene 319 323	MGMT
+T81	Physiology 1323 1369	reduced or complete loss of expression of MGMT
+T15	gene 335 339	KRAS
+T16	gene 343 347	BRAF
+T83	disease 1394 1396	TA
+T17	mutation 348 356	mutation
+T18	disease 382 387	polyp
+T82	gene 1365 1369	MGMT
+T19	disease 410 413	TAs
+T99_2	gene 996 999	p53
+R57_m	has Arg1:T66 Arg2:T65_merge
+R42_m	has Arg1:T89 Arg2:T4
+R0_T81_T82	has Arg1:T81 Arg2:T82
+R66_1	has Arg1:T92 Arg2:T3
+R32_m	has Arg1:T72 Arg2:T3
+R33_2	has Arg1:T77 Arg2:T76
+R58_m	has Arg1:T5 Arg2:T8
+R0_T85_T86	has Arg1:T85 Arg2:T86
+R56_m	has Arg1:T30 Arg2:T2
+R20_m	has Arg1:T59 Arg2:T58
+R55_m	has Arg1:T29 Arg2:T23
+R21_m	has Arg1:T59 Arg2:T57_merge
+R0_T39_T40	has Arg1:T39 Arg2:T40
+R18_m	has Arg1:T22 Arg2:T23
+R30_m	has Arg1:T71 Arg2:T70_merge
+R54_m	has Arg1:T26 Arg2:T23
+R53_m	has Arg1:T21 Arg2:T1
+R0_T54_T96_2	has Arg1:T54 Arg2:T96_2
+R19_m	has Arg1:T56 Arg2:T58
+R0_T13_T14	has Arg1:T13 Arg2:T14
+R51_m	has Arg1:T29 Arg2:T27_merge
+R13_m	has Arg1:T45 Arg2:T47
+R28_m	has Arg1:T68 Arg2:T62
+R3_m	has Arg1:T38 Arg2:T37
+R43_m	has Arg1:T90 Arg2:T4
+R10_m	has Arg1:T50 Arg2:T49
+R2_m	has Arg1:T15 Arg2:T17
+R37_1	has Arg1:T54 Arg2:T55
+R12_m	has Arg1:T45 Arg2:T46
+R5_m	has Arg1:T35 Arg2:T36_merge
+R31_m	has Arg1:T71 Arg2:T69_merge
+R40_m	has Arg1:T87 Arg2:T4
+R11_m	has Arg1:T50 Arg2:T48_merge
+R17_m	has Arg1:T33 Arg2:T34
+R52_m	has Arg1:T29 Arg2:T28_merge
+R1_m	has Arg1:T16 Arg2:T17
+R41_m	has Arg1:T88 Arg2:T4
+R14_m	has Arg1:T45 Arg2:T44_merge
+R34_m	has Arg1:T78 Arg2:T76
+R16_m	has Arg1:T41 Arg2:T43_merge
+R9_m	has Arg1:T52 Arg2:T51_merge
+R57_1	has Arg1:T72 Arg2:T76
+R24_m	has Arg1:T66 Arg2:T61
+R36_m	has Arg1:T77 Arg2:T74_merge
+R26_m	has Arg1:T68 Arg2:T67_merge
+R29_m	has Arg1:T71 Arg2:T3
+R15_m	has Arg1:T41 Arg2:T42
+R27_m	has Arg1:T56 Arg2:T62
+R25_m	has Arg1:T56 Arg2:T61
+R50_m	has Arg1:T29 Arg2:T2
+R44_m	has Arg1:T12 Arg2:T9
+R0_T21_T31	has Arg1:T21 Arg2:T31
+R46_m	has Arg1:T91 Arg2:T19
+R49_m	has Arg1:T26 Arg2:T24_merge
+R8_m	has Arg1:T52 Arg2:T53
+R0_T30_T32	has Arg1:T30 Arg2:T32
+R45_m	has Arg1:T20 Arg2:T19
+R47_m	has Arg1:T26 Arg2:T1
+R48_m	has Arg1:T26 Arg2:T25_merge
+R7_m	has Arg1:T64 Arg2:T63_merge
+R35_m	has Arg1:T75 Arg2:T76
+R59_m	has Arg1:T5 Arg2:T9
+R6_2	has Arg1:T26_2 Arg2:T27_2
+R0_T5_T6	has Arg1:T5 Arg2:T6
+R60_m	has Arg1:T5 Arg2:T11
+R63_m	has Arg1:T29 Arg2:T19
+R1_1	has Arg1:T5 Arg2:T7
+R39_m	has Arg1:T85 Arg2:T83
+R61_m	has Arg1:T5 Arg2:T10
+R62_m	has Arg1:T26 Arg2:T19
+R0_T56_T99_2	has Arg1:T56 Arg2:T99_2
+R4_2	has Arg1:T26_2 Arg2:T36_merge
+R19_1	has Arg1:T20 Arg2:T2
+R37_m	has Arg1:T77 Arg2:T73_merge
+R38_m	has Arg1:T84 Arg2:T83
+R23_m	has Arg1:T56 Arg2:T60
+R22_m	has Arg1:T64 Arg2:T60
+R16_1	has Arg1:T20 Arg2:T1

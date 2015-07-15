@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+A genome-wide map of aberrantly expressed chromosomal islands in colorectal cancer
+
+Abstract
+
+Background
+
+Cancer development is accompanied by genetic phenomena like deletion and amplification of chromosome parts or alterations of chromatin structure. It is expected that these mechanisms have a strong effect on regional gene expression.
+
+Results
+
+We investigated genome-wide gene expression in colorectal carcinoma (CRC) and normal epithelial tissues from 25 patients using oligonucleotide arrays. This allowed us to identify 81 distinct chromosomal islands with aberrant gene expression. Of these, 38 islands show a gain in expression and 43 a loss of expression. In total, 7.892 genes (25.3% of all human genes) are located in aberrantly expressed islands. Many chromosomal regions that are linked to hereditary colorectal cancer show deregulated expression. Also, many known tumor genes localize to chromosomal islands of misregulated expression in CRC.
+
+Conclusion
+
+An extensive comparison with published CGH data suggests that chromosomal regions known for frequent deletions in colon cancer tend to show reduced expression. In contrast, regions that are often amplified in colorectal tumors exhibit heterogeneous expression patterns: even show a decrease of mRNA expression. Because for several islands of deregulated expression chromosomal aberrations have never been observed, we speculate that additional mechanisms (like abnormal states of regional chromatin) also have a substantial impact on the formation of co-expression islands in colorectal carcinoma.
+

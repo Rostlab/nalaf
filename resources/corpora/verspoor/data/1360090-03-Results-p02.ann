@@ -1,0 +1,16 @@
+T6	body-part 282 292	colorectal
+T7	mutation 105 111	mutant
+T1_cancers	disease 123 130	cancers
+T4	body-part 112 122	colorectal
+T5	gene 270 274	BRAF
+T8	mutation 275 281	mutant
+T1	disease 112 130	colorectal cancers
+T2_cancers	disease 293 300	cancers
+T3	gene 100 104	BRAF
+T2	disease 282 300	colorectal cancers
+R3_m	has Arg1:T3 Arg2:T7
+R4_m	relatedTo Arg1:T1 Arg2:T7
+R0_T6_T2_cancers	relatedTo Arg1:T6 Arg2:T2_cancers
+R0_T4_T1_cancers	relatedTo Arg1:T4 Arg2:T1_cancers
+R5_m	has Arg1:T5 Arg2:T8
+R6_m	relatedTo Arg1:T2 Arg2:T8

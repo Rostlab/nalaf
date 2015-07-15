@@ -1,0 +1,26 @@
+Results
+
+No discordances were detected in the genotyping quality control. The genotype distributions in the control, sporadic and familial CRC populations did not deviate significantly from that expected for a population in Hardy-Weinberg equilibrium (Table 1).
+
+Allelic and genotypic frequencies and Hardy-Weinberg equilibrium
+
+*Individuals from apparently unrelated families
+
+Twenty-seven individuals were heterozygous for the p.Lys618Ala variant (Figure 1); 11 were controls (11/411, 2.68%), nine were CRC patients from the sporadic group (9/373, 2.41%) and seven were CRC patients from the familial group (7/250, 2.8%). None of the individuals was homozygous for the minor allele.
+
+Results of genotyping for the p.Lys618Ala variant using the iPLEX Sequenom (A) and sequencing (B) methods.
+
+There were no significant associations in the case-control and case-case studies (80% detection power, OR = 3.0; two-sided test, alpha level = 5%) (Table 2) and no statistically significant associations when the OR was adjusted for age and sex.
+
+Results of case-control and case-case analyses. Odds ratios (ORs) and 95% confidence intervals (95% CIs) for the p.Lys618Ala variant
+
+In one of the families with LS, the index subject was heterozygous for a pathogenic MLH1 variant (c.767C>T; p.Arg226X) and the p.Lys618Ala variant. Two of his offspring, who were diagnosed with CRC at the ages of 36 and 39 years, carried the deleterious variant but not the p.Lys618Ala variant. An unaffected daughter (III-12) carried the p.Lys618Ala variant but not the deleterious variant. Two nephews (III-3; III-4) were also diagnosed with CRC at the ages of 30 and 42 years and they carried only the deleterious variant. Two other healthy nephews (III-6; III-7) had the wild types of the two variants (Family #1, Figure 2).
+
+Pedigree for Family #1 (CRC: Colorectal cancer; GC: Gastric cancer; DC: Duodenal cancer).
+
+In the second LS family, the index subject, one sister and one brother with CRC (II-5; II-6; II-7, respectively) had a deleterious variant in MSH6 (c.3013C>T; p.Arg1005X) but did not have the p.Lys618Ala variant. This variant was present in only three of four unaffected nephews (III-2; III-3; III-4) and was inherited from the parental branch, in which there was no familial history of cancer. Individuals III-3 and III-4 inherited also the deleterious variant. No genetic testing was available from the father or paternal relatives (Family #2, Figure 3).
+
+Pedigree for Family #2 (CRC: Colorectal cancer; EC: Endometrial cancer).
+
+The p.Lys618Ala variant was present in the third family that fulfilled the Amsterdam II Criteria. A first-grade familiar non-carrier of this variant was diagnosed with a colonic polyp with a high grade of dysplasia at the age of 39 years and with four colonic polyps at the age of 42 years (Family #3, Figure 4).
+

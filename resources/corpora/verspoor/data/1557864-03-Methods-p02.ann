@@ -1,0 +1,67 @@
+T24_merge	size 228 230	75
+T6	gene 2165 2169	MLH1
+T7	gene 2562 2566	MLH1
+T4	gene 1947 1951	MLH1
+T5	gene 1992 1996	MLH1
+T29	Physiology 1936 1960	methylated MLH1 promoter
+T28	cohort-patient 1913 1923	cell lines
+T8	gene 2171 2175	MSH2
+T27	disease 379 389	carcinomas
+T9	gene 2177 2181	MSH3
+T26	cohort-patient 239 249	carcinomas
+T43	cohort-patient 1965 1970	SW480
+T25	disease 239 249	carcinomas
+T42	cohort-patient 1924 1928	SW48
+T41	cohort-patient 2397 2407	responders
+T23	body-part 1900 1905	colon
+T22	body-part 2253 2260	ovarian
+T21	body-part 2210 2217	ovarian
+T20	body-part 371 378	ovarian
+T1	gene 799 803	MLH1
+T3	gene 1293 1297	MLH1
+T2	gene 1012 1016	MLH1
+T34_merge	size 2240 2252	50 of the 75
+T32_merge	size 2204 2209	eight
+T10	gene 2183 2187	MSH6
+T11	gene 2584 2588	MSH2
+T36_merge	size 2306 2328	Thirty-six of these 50
+T12	gene 2606 2610	MSH3
+T37	cohort-patient 2416 2424	patients
+T13	gene 2628 2632	MSH6
+T40_merge	size 2394 2396	28
+T39	cohort-patient 2378 2392	non-responders
+T14	disease 1900 1912	colon cancer
+T15	disease 2210 2224	ovarian cancer
+T14_cancer	disease 1906 1912	cancer
+T38_merge	size 2376 2377	7
+T33	cohort-patient 2225 2235	cell lines
+T16	disease 2253 2267	ovarian cancer
+T17	cohort-patient 2329 2337	patients
+T18	gene 2653 2657	PMS2
+T35	cohort-patient 2268 2277	specimens
+T30	Physiology 1979 2005	unmethylated MLH1 promoter
+T19	body-part 231 238	ovarian
+T31	gene 2192 2196	PMS2
+R16_m	has Arg1:T41 Arg2:T40_merge
+R9_m	has Arg1:T35 Arg2:T34_merge
+R18_2	has Arg1:T30 Arg2:T43
+R4_m	relatedTo Arg1:T20 Arg2:T27
+R6_1	has Arg1:T29 Arg2:T14
+R15_m	has Arg1:T43 Arg2:T14
+R19_2	has Arg1:T29 Arg2:T42
+R3_m	has Arg1:T26 Arg2:T25
+R10_m	has Arg1:T35 Arg2:T16
+R2_m	relatedTo Arg1:T19 Arg2:T25
+R12_m	has Arg1:T17 Arg2:T36_merge
+R8_m	has Arg1:T33 Arg2:T32_merge
+R5_1	has Arg1:T28 Arg2:T14
+R0_T30_T5	has Arg1:T30 Arg2:T5
+R6_m	relatedTo Arg1:T21 Arg2:T15
+R11_m	relatedTo Arg1:T22 Arg2:T16
+R17_m	has Arg1:T39 Arg2:T38_merge
+R0_T29_T4	has Arg1:T29 Arg2:T4
+R7_m	has Arg1:T33 Arg2:T15
+R14_m	has Arg1:T42 Arg2:T14
+R1_m	has Arg1:T26 Arg2:T24_merge
+R7_1	has Arg1:T30 Arg2:T14
+R0_T23_T14_cancer	relatedTo Arg1:T23 Arg2:T14_cancer

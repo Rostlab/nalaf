@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results
+
+KRAS and BRAF mutation
+
+DNA failed to amplify in the KRAS assay for one SSA and one TA < 10 mm. Overall, 34 of 188 polyps (18%) had mutation of KRAS. Twenty-eight mutations were in codon 12 (20 G→A, seven G→T and one G→C) and six mutations were in codon 13 (all G→A). One serrated adenoma had two KRAS mutations in codon 12 (G→T at position 35 and T→G at position 36). BRAF mutation at V600E could be assessed in all polyps except for a single TA < 10 mm. BRAF mutation was found in 82 of 189 polyps (43%). BRAF and KRAS mutations were negatively correlated, with only four polyps having both mutations (two TAs, one TVA and one SSA). The three conventional adenomas with mutations of both BRAF and KRAS were among only four adenomas that had any BRAF mutations at all. Mutation frequencies for both KRAS and BRAF were distributed differently across the seven polyp groups (Table 1).
+
+Frequency of KRAS and BRAF mutation and loss of expression of O-6-methylguanine DNA methyltransferase (MGMT) by polyp type
+
+Mutation frequencies for both KRAS (P < 0.0001) and BRAF (P < 0.0001) are distributed differently across the seven classes of polyp (see Results for individual comparisons). Distribution of MGMT loss differs across the seven classes of polyp (P < 0.001).
+
+Note: no result for KRAS in one sessile serrated adenoma (SSA) and one tubular adenoma (TA) or for BRAF in one TA. MGMT immunstaining not performed in 15 polyps (seven HPs, one SSA, one MP and six TAs).
+
+KRAS mutation occurred in 26.5% and BRAF mutation in 4.8% of adenomas (all types) (Table 1) (P < 0.0001). TVAs/VAs were more likely to have KRAS mutation (50%) than TAs < 10 mm (18%) (P < 0.004) or TAS > 10 mm in diameter (17%) (P < 0.02). In the case of TAs there was a trend for KRAS mutation to occur more frequently in polyps from the proximal colon (P = 0.08) and in females (P = 0.07).
+
+SSAs were more likely to have BRAF mutation (81%) than either SAs (33%) (P < 0.001) or MPs (40%) (P < 0.02). KRAS mutation was infrequent among both SSAs (3%) and HPs (4%) (Table 1). Patient age, gender and anatomical location were not predictors of BRAF mutation in either SSAs or HPs. The mean age of subjects with SSAs (64 years) differed from that of subjects with HPs (55 years) (P < 0.001).
+

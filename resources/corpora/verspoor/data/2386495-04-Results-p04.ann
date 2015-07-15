@@ -1,0 +1,119 @@
+T75	cohort-patient 2782 2783	D
+T74	cohort-patient 2776 2777	C
+T65_merge	size 2418 2421	150
+T65_2	body-part 1073 1095	peripheral blood cells
+T63_merge	size 1893 1896	two
+T66_merge	size 2442 2444	57
+T29	cohort-patient 974 982	family 1
+T28	cohort-patient 856 862	family
+T27	cohort-patient 1220 1243	mutation-negative cases
+T26	cohort-patient 2755 2774	control individuals
+T25	cohort-patient 2422 2433	individuals
+T57_merge	size 1404 1407	two
+T24	cohort-patient 2215 2226	Individuals
+T23	cohort-patient 1947 1966	control individuals
+T22	cohort-patient 1629 1640	individuals
+T21	cohort-patient 1430 1441	individuals
+T72	cohort-patient 2744 2745	B
+T20	cohort-patient 1320 1331	individuals
+T71	cohort-patient 2738 2739	A
+T70	disease 2708 2716	affected
+T62	disease 1897 1900	FAP
+T52_merge	size 1192 1194	29
+T43_2	cohort-patient 2853 2861	controls
+T64	Physiology 1985 2006	normal APC expression
+T67	cohort-patient 2449 2457	affected
+T68	disease 2527 2536	Polyposis
+T69_merge	size 2704 2707	two
+T38	cohort-patient 86 93	patient
+T37	cohort-patient 2717 2736	members of family 1
+T63_2	mutation 2879 2890	c.5465A > T
+T39	cohort-patient 467 474	patient
+T34	cohort-patient 2377 2385	family 1
+T33	cohort-patient 2192 2198	family
+T36	cohort-patient 2503 2511	family 1
+T35	cohort-patient 2402 2408	family
+T30	cohort-patient 1471 1477	family
+T61	mutation 1703 1714	c.5465A > T
+T32	cohort-patient 2134 2140	family
+T60	mutation 1501 1509	mutation
+T31	cohort-patient 1910 1931	members of the family
+T51_merge	size 1107 1110	two
+T53_merge	size 1218 1219	9
+T6	gene 1497 1500	APC
+T7	gene 1579 1582	APC
+T4	gene 1259 1262	APC
+T49	disease 998 1007	Polyposis
+T5	gene 1368 1371	APC
+T48	disease 948 956	affected
+T8	gene 1992 1995	APC
+T9	gene 2073 2076	APC
+T43	cohort-patient 94 98	C633
+T42	ethnicity 2519 2526	Swedish
+T41	ethnicity 990 997	Swedish
+T40	cohort-patient 1018 1028	index case
+T46	Physiology 892 914	Lowered APC expression
+T45	Physiology 868 890	reduced APC expression
+T44	mutation 192 202	c.834G > C
+T59_2	cohort-patient 2442 2444	57
+T50	cohort-patient 1030 1034	C152
+T73_merge	size 2751 2754	two
+T1	gene 876 879	APC
+T3	gene 1050 1053	APC
+T2	gene 900 903	APC
+T59	disease 1421 1429	affected
+T10	gene 2262 2265	APC
+T11	gene 2598 2601	APC
+T12	gene 2875 2878	APC
+T47_merge	size 944 947	two
+T13	disease 2465 2472	disease
+T14	disease 1312 1319	healthy
+T15	cohort-patient 1195 1203	patients
+T16	cohort-patient 1292 1300	patients
+T54	gene 1268 1273	MUTYH
+T17	cohort-patient 2840 2848	patients
+T18	cohort-patient 957 968	individuals
+T56	Physiology 1360 1382	Reduced APC expression
+T19	cohort-patient 1111 1122	individuals
+T55	mutation 1274 1282	mutation
+T58	cohort-patient 1408 1415	samples
+R9_m	has Arg1:T16 Arg2:T55
+R10_2	has Arg1:T21 Arg2:T57_merge
+R15_1	has Arg1:T58 Arg2:T57_merge
+R15_2	has Arg1:T59_2 Arg2:T66_merge
+R0_T46_T2	has Arg1:T46 Arg2:T2
+R26_2	has Arg1:T56 Arg2:T30
+R25_1	has Arg1:T36 Arg2:T68
+R2_1	has Arg1:T18 Arg2:T48
+R8_m	has Arg1:T20 Arg2:T14
+R0_T45_T1	has Arg1:T45 Arg2:T1
+R7_m	has Arg1:T4 Arg2:T55
+R25_2	has Arg1:T30 Arg2:T57_merge
+R7_1	has Arg1:T29 Arg2:T49
+R0_T64_T8	has Arg1:T64 Arg2:T8
+R24_2	has Arg1:T56 Arg2:T21
+R21_2	has Arg1:T12 Arg2:T63_2
+R4_m	has Arg1:T15 Arg2:T52_merge
+R6_1	has Arg1:T18 Arg2:T49
+R18_m	has Arg1:T37 Arg2:T69_merge
+R3_1	has Arg1:T46 Arg2:T48
+R20_2	has Arg1:T26 Arg2:T73_merge
+R19_m	has Arg1:T37 Arg2:T70
+R13_m	has Arg1:T31 Arg2:T63_merge
+R3_m	has Arg1:T19 Arg2:T51_merge
+R17_1	has Arg1:T56 Arg2:T59
+R2_m	has Arg1:T29 Arg2:T41
+R12_m	has Arg1:T31 Arg2:T62
+R0_T56_T5	has Arg1:T56 Arg2:T5
+R22_2	has Arg1:T46 Arg2:T18
+R5_m	has Arg1:T27 Arg2:T53_merge
+R22_1	has Arg1:T67 Arg2:T13
+R6_m	has Arg1:T54 Arg2:T55
+R11_m	has Arg1:T6 Arg2:T60
+R17_m	has Arg1:T36 Arg2:T42
+R23_m	has Arg1:T18 Arg2:T41
+R23_1	has Arg1:T67 Arg2:T66_merge
+R1_m	has Arg1:T18 Arg2:T47_merge
+R14_m	has Arg1:T25 Arg2:T65_merge
+R16_2	has Arg1:T59_2 Arg2:T13
+R16_1	has Arg1:T21 Arg2:T59

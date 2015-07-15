@@ -1,0 +1,21 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results and discussion
+
+Our work shows that the absence of proband's non-tumor DNA for MSI testing can be overcome by studying the alleles carried by his progenitors avoiding the need for initial sequencing of the obligate carrier.
+
+Although BAT-26 has been reported to be sufficient for MSI-H detection even without normal tissue matching [9], careful interpretation is needed if MSI-H detection is based solely on this marker, since polymorphism at the BAT-26 locus has been detected [10].
+
+A more sensitive approach has been reported using a quasimonomorphic mononucleotide markers panel (that includes BAT-25 and BAT-26) without the need to match normal DNA[11].
+
+In the present case, we overcame the difficulty of having a proband post-mortem non-tumor tissue sample for MSI testing by studying the alleles carried by his progenitors. Microsatellites are inherited according to Mendelian rules like any other genetic markers. Each progenitor pass one of its two alleles to its offspring and by definition, the alleles present in the proband's tumor tissue but absent in his progenitors are the result of somatic mutation.
+
+Three out of five microsatellite markers (BAT-25, BAT-26 and D5S346) presented alleles in the proband's primary tumor (T') and its metastasis (T") different from those inherited from his parents. This observation suggested a dysfunction of the mismatch repair system and the tumor was classified as high frequency MSI (MSI-H) according to the NCI workshop [12]. Direct sequencing of the hMSH2 and hMLH1 genes was indicated, detecting a novel germline mutation, a c.1864C>A transversion in exon 12 of hMSH2 gene at the heterozygous state (fig. 3) leading to a proline 622 to threonine (p.Pro622Thr) amino acid substitution. This is the second report involving the 622 codon in HNPCC [13].
+
+DNA sequence analysis of hMSH2 exon 12. Genomic DNA was isolated from leucocytes and PCR amplified with the help of hMSH2 exon 12 flanking primers. In the image the result of the sequencing using the PCR forward primer. Panel A: proband's mother (obligate carrier), positive for the mutation. Panel B: negative control for the mutation.
+
+Evolutionary conservation, examined by alignment of sequences of homologous proteins for several species (fig. 4), suggests a functional relevance for the amino acid involved. This is also supported by the mutator phenotype described for Pro640Leu mutant yeast [14], homologous to Pro622Leu hMSH2 substitution in humans (fig. 4).
+
+Protein sequence alignment for hMSH2 and homologues. Human, Mouse, Rat, Chicken and Saccharomyces cerevisiae (the site of mutation is highlighted) protein sequence alignment. Evolutionary conservation may indicate the functional relevance of the aminoacid involved for the structure or functioning of the protein. *UniProtKB/Swiss-Prot 
+

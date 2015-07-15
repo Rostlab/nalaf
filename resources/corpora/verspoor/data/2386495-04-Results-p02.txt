@@ -1,0 +1,15 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Seven of the identified APC mutations were large deletions, ranging from a deletion of 86 bp in exon 15 to a deletion of the whole APC gene (Figure 1C). Three of these deletions have not, to the best of the authors' knowledge, been described earlier. The deletion encompassing APC exon 4 in patient 3765, c.423-1662_531+1825del3595, was detected by RNA-based PTT with subsequent cDNA sequencing and verified by long-range PCR on genomic DNA. We could not detect this deletion with MLPA even though a probe for exon 4 is included in the MLPA kit (see the discussion). Detection of the large deletion in patient C591, encompassing APC exons 13 through the 5' part of exon 15, was carried out with MLPA. The deletion in patient 2136 was identified by PTT and subsequent DNA sequencing.
+
+A case of APC mosaicism
+
+Three patients (C107, C257, and C505), negative for mutations in APC, were reported as de novo cases with no known family history of FAP. These patients where all screened for APC mutations present as low-frequency alleles using SSCP/HD. We did not detect any signs of low-frequency mutations in patients C257 and C505. However, in patient C107, aberrant bands, possibly originating from formation of heteroduplexes, was detected by SSCP/HD in a very low fraction of her blood lymphocytes. The c.2700_2701delTC mutation, which results in frame shift at codon 900, was found by sequencing of the aberrant bands excised from the SSCP/HD gel (Figure 2A). The mutation was detected in approximately one-third of the analyzed tumor-derived cells extracted from paraffin-embedded tissue by DNA sequencing (Figure 2B). The mutation was not detectable at all in the sequence determination of DNA extracted from blood lymphocytes from the patient (Figure 2C).
+
+Detection of the mosaic c.2700_2701delTC mutation in patient C107. Nucleotide 2700 is indicated with an arrow. (A) The aberrant bands indicated by the bracket were excised from the SSCP/HD gel. The resulting DNA sequence is shown to the right. (B) DNA sequence from DNA extracted from tumor-derived cells from the patient. (C) The DNA sequence from DNA isolated from the patient's blood lymphocytes.
+
+Mutation at the far 5'end
+
+DNA sequencing of APC exon 1 in patient C157 revealed the c.70C > T substitution which introduces a nonsense mutation in codon 24 (Figure 1). The mutation was also detectable by SSCP/HD analysis but was not detectable by PTT due to its localization close to the 5' end of the PTT fragment. However, indication for a mutation was observed as lowered intensity of the full-length fragment.
+

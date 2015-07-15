@@ -1,0 +1,18 @@
+T6	ethnicity 304 311	Chinese
+T7	cohort-patient 110 120	population
+T4	cohort-patient 365 373	families
+T5	ethnicity 102 109	Chinese
+T10	ethnicity 243 250	Western
+T11	cohort-patient 312 322	population
+T8	gene 190 193	MMR
+T9	mutation 194 212	germline mutations
+T1	disease 89 94	HNPCC
+T3	cohort-patient 229 237	patients
+T2	disease 359 364	HNPCC
+R2_m	has Arg1:T4 Arg2:T2
+R6_1	has Arg1:T11 Arg2:T6
+R1_1	has Arg1:T7 Arg2:T5
+R5_1	has Arg1:T7 Arg2:T9
+R3_1	has Arg1:T3 Arg2:T10
+R4_1	has Arg1:T7 Arg2:T1
+R1_m	has Arg1:T8 Arg2:T9

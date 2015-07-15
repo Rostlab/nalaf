@@ -1,0 +1,89 @@
+T13_merge	disease 2214 2258	autosomal dominant inherited cancer syndrome
+T29	cohort-patient 1820 1828	controls
+T28	body-part 2394 2399	ovary
+T27	body-part 2377 2392	small intestine
+T26	body-part 2367 2375	pancreas
+T25	body-part 2358 2365	stomach
+T24	cohort-patient 731 737	family
+T23	cohort-patient 412 418	family
+T22	cohort-patient 382 390	families
+T21	cohort-patient 1810 1815	cases
+T20	cohort-patient 643 648	cases
+T23_2	gene 2593 2596	MMR
+T38	disease 2671 2673	LS
+T42_2	Disorder 2428 2441	LS-associated
+T37	Physiology 2571 2605	loss of expression of MMR proteins
+T39	Concepts_Ideas 2214 2232	autosomal dominant
+T34	Physiology 2471 2507	DNA mismatch repair (MMR) deficiency
+T33	disease 2428 2430	LS
+T36	Disorder 2563 2566	MSI
+T35	Disorder 2535 2561	microsatellite instability
+T30	disease 2204 2206	LS
+T32	body-part 2413 2422	bile duct
+T31	body-part 2401 2408	bladder
+T41_2	gene 2492 2495	MMR
+T6	disease 2174 2188	Lynch syndrome
+T7	disease 236 242	cancer
+T4	disease 2307 2310	CRC
+T48	Concepts_Ideas 2233 2242	inherited
+T5	disease 1909 1916	disease
+T8	disease 284 290	cancer
+T9	disease 358 364	cancer
+T43	mutation 1536 1554	missense mutations
+T42	mutation 189 208	germ-line mutations
+T41	body-part 2288 2298	colorectal
+T40	Disorder 2276 2287	early onset
+T3_cancer	disease 2299 2305	cancer
+T45	mutation 1635 1657	missense substitutions
+T44	mutation 1558 1582	small in-frame deletions
+T1	disease 2343 2350	tumours
+T3	disease 2288 2305	colorectal cancer
+T2	disease 2442 2449	tumours
+T19_2	Disorder 745 769	strong history of cancer
+T10	disease 636 642	cancer
+T11	disease 763 769	cancer
+T12	disease 1320 1326	cancer
+T14	disease 2313 2319	cancer
+T15	body-part 2327 2338	endometrium
+T16	cohort-patient 212 220	patients
+T17	cohort-patient 941 949	patients
+T18	Concepts_Ideas 627 635	familial
+T19	Concepts_Ideas 226 235	inherited
+R9_m	relatedTo Arg1:T26 Arg2:T1
+R10_1	has Arg1:T34 Arg2:T33
+R0_T37_T23_2	has Arg1:T37 Arg2:T23_2
+R15_1	has Arg1:T16 Arg2:T42
+R15_2	has Arg1:T37 Arg2:T2
+R0_T42_2_T33	has Arg1:T42_2 Arg2:T33
+R26_1	has Arg1:T39 Arg2:T6
+R0_T34_T41_2	has Arg1:T34 Arg2:T41_2
+R25_1	has Arg1:T39 Arg2:T30
+R0_T41_T3_cancer	relatedTo Arg1:T41 Arg2:T3_cancer
+R8_m	relatedTo Arg1:T25 Arg2:T1
+R7_m	relatedTo Arg1:T15 Arg2:T14
+R24_1	relatedTo Arg1:T41 Arg2:T4
+R0_T19_2_T11	has Arg1:T19_2 Arg2:T11
+R18_m	has Arg1:T40 Arg2:T3
+R18_1	has Arg1:T39 Arg2:T6
+R21_1	has Arg1:T40 Arg2:T14
+R20_1	has Arg1:T40 Arg2:T4
+R4_2	has Arg1:T19_2 Arg2:T24
+R19_2	has Arg1:T34 Arg2:T2
+R12_1	has Arg1:T36 Arg2:T33
+R0_T48_T13_merge	has Arg1:T48 Arg2:T13_merge
+R13_m	relatedTo Arg1:T27 Arg2:T1
+R13_1	has Arg1:T37 Arg2:T33
+R3_m	has Arg1:T20 Arg2:T10
+R10_m	relatedTo Arg1:T32 Arg2:T1
+R17_1	has Arg1:T39 Arg2:T30
+R2_m	has Arg1:T16 Arg2:T7
+R5_2	has Arg1:T39 Arg2:T13_merge
+R12_m	relatedTo Arg1:T28 Arg2:T1
+R22_1	has Arg1:T40 Arg2:T1
+R11_m	relatedTo Arg1:T31 Arg2:T1
+R17_m	has Arg1:T18 Arg2:T10
+R11_1	has Arg1:T35 Arg2:T33
+R14_2	has Arg1:T35 Arg2:T2
+R1_m	has Arg1:T19 Arg2:T7
+R16_2	has Arg1:T42_2 Arg2:T2
+R0_T39_T13_merge	has Arg1:T39 Arg2:T13_merge

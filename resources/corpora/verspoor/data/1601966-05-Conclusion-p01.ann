@@ -1,0 +1,22 @@
+T7_2	body-part 298 308	colorectal
+T2_cancer	disease 309 315	cancer
+T1_cancer	disease 171 177	cancer
+T9_2	body-part 160 170	colorectal
+T11_2	disease 566 573	lesions
+T1	disease 160 177	colorectal cancer
+T8_2	Concepts_Ideas 287 297	hereditary
+T3	disease 405 408	CRC
+T2	disease 298 315	colorectal cancer
+T6	cohort-patient 525 533	patients
+T12_2	disease 798 804	tumors
+T4	disease 548 551	CRC
+T5	disease 661 664	CRC
+T10_2	Concepts_Ideas 539 547	sporadic
+T13_2	body-part 787 797	colorectal
+R6_2	relatedTo Arg1:T13_2 Arg2:T12_2
+R0_T7_2_T2_cancer	relatedTo Arg1:T7_2 Arg2:T2_cancer
+R5_2	has Arg1:T6 Arg2:T4
+R1_2	has Arg1:T9_2 Arg2:T1
+R4_2	has Arg1:T10_2 Arg2:T4
+R0_T1_colorectal_T1_cancer	relatedTo Arg1:T9_2 Arg2:T1_cancer
+R3_2	has Arg1:T8_2 Arg2:T2

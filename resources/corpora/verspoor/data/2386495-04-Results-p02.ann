@@ -1,0 +1,97 @@
+T29	mutation 97 112	large deletions
+T28	mutation 82 91	mutations
+T27	gender 1330 1333	her
+T34_2	mutation 852 861	mosaicism
+T26	cohort-patient 840 844	case
+T25	cohort-patient 2275 2282	patient
+T24	cohort-patient 2186 2193	patient
+T23	cohort-patient 2129 2136	patient
+T22	cohort-patient 1868 1875	patient
+T21	cohort-patient 1793 1800	patient
+T20	cohort-patient 1195 1202	patient
+T43_2	body-part 1334 1351	blood lymphocytes
+T3_merge	mutation 1832 1855	mosaic c.2700_2701delTC
+T38	mutation 759 767	deletion
+T42_2	Concepts_Ideas 969 999	no known family history of FAP
+T37	mutation 687 726	exons 13 through the 5' part of exon 15
+T45_2	body-part 2196 2213	blood lymphocytes
+T40_merge	size 863 868	Three
+T39	cohort-patient 779 783	2136
+T33	cohort-patient 353 357	3765
+T36	cohort-patient 664 668	C591
+T35	mutation 638 652	large deletion
+T44_2	body-part 1766 1783	blood lymphocytes
+T30	mutation 129 157	deletion of 86 bp in exon 15
+T32	mutation 309 341	deletion encompassing APC exon 4
+T15_2	cohort-patient 958 963	cases
+T53_merge	mutation 2301 2372	c.70C > T substitution which introduces a nonsense mutation in codon 24
+T6	gene 331 334	APC
+T7	gene 683 686	APC
+T49	disease 1584 1589	tumor
+T4	gene 78 81	APC
+T48	mutation 1401 1425	frame shift at codon 900
+T5	gene 185 188	APC
+T8	gene 848 851	APC
+T9	gene 928 931	APC
+T43	cohort-patient 895 899	C505
+T42	cohort-patient 885 889	C257
+T41	cohort-patient 879 883	C107
+T47	cohort-patient 1203 1207	C107
+T46	cohort-patient 1177 1181	C505
+T45	mutation 1043 1052	mutations
+T44	mutation 915 924	mutations
+T31_merge	mutation 163 193	deletion of the whole APC gene
+T50	cohort-patient 1876 1880	C107
+T1	mutation 374 385	1825del3595
+T2	mutation 1357 1373	c.2700_2701delTC
+T34_merge	mutation 359 385	c.423-1662_531+1825del3595
+T10	gene 1039 1042	APC
+T11	gene 2261 2264	APC
+T12	cohort-patient 869 877	patients
+T13	cohort-patient 1007 1015	patients
+T14	cohort-patient 1159 1167	patients
+T52	cohort-patient 2283 2287	C157
+T15	disease 996 999	FAP
+T16	cohort-patient 1168 1172	C257
+T51	disease 2100 2105	tumor
+T17	cohort-patient 345 352	patient
+T18	cohort-patient 656 663	patient
+T19	cohort-patient 771 778	patient
+R16_m	has Arg1:T11 Arg2:T53_merge
+R29_1	has Arg1:T23 Arg2:T51
+R15_1	has Arg1:T36 Arg2:T35
+R15_2	has Arg1:T52 Arg2:T53_merge
+R27_1	has Arg1:T22 Arg2:T3_merge
+R26_1	has Arg1:T20 Arg2:T27
+R9_2	has Arg1:T42_2 Arg2:T12
+R0_T42_2_T15	has Arg1:T42_2 Arg2:T15
+R8_m	has Arg1:T9 Arg2:T44
+R20_m	has Arg1:T47 Arg2:T27
+R8_1	has Arg1:T6 Arg2:T34_merge
+R7_m	has Arg1:T36 Arg2:T37
+R7_1	has Arg1:T17 Arg2:T32
+R18_2	has Arg1:T42_2 Arg2:T42
+R4_m	has Arg1:T17 Arg2:T34_merge
+R6_1	has Arg1:T33 Arg2:T32
+R1_1	has Arg1:T4 Arg2:T28
+R18_1	has Arg1:T18 Arg2:T37
+R20_1	has Arg1:T19 Arg2:T38
+R3_1	has Arg1:T4 Arg2:T30
+R3_2	has Arg1:T5 Arg2:T30
+R19_2	has Arg1:T42_2 Arg2:T41
+R12_1	has Arg1:T33 Arg2:T34_merge
+R13_m	has Arg1:T10 Arg2:T45
+R17_2	has Arg1:T42_2 Arg2:T43
+R13_1	has Arg1:T33 Arg2:T1
+R10_m	has Arg1:T39 Arg2:T38
+R2_m	has Arg1:T5 Arg2:T31_merge
+R12_m	has Arg1:T12 Arg2:T40_merge
+R14_1	has Arg1:T7 Arg2:T35
+R5_m	has Arg1:T6 Arg2:T1
+R5_1	has Arg1:T6 Arg2:T32
+R6_m	has Arg1:T7 Arg2:T37
+R11_2	has Arg1:T8 Arg2:T34_2
+R11_1	has Arg1:T17 Arg2:T1
+R14_m	has Arg1:T50 Arg2:T3_merge
+R1_m	has Arg1:T4 Arg2:T29
+R16_1	has Arg1:T18 Arg2:T35

@@ -1,0 +1,34 @@
+T4_2	gene 1587 1592	CDC42
+T15_2	gene 2484 2489	GPR49
+T14_2	gene 2318 2324	GPR125
+T6	cohort-patient 847 855	patients
+T7	cohort-patient 1007 1015	patients
+T4	cohort-patient 249 257	patients
+T5	cohort-patient 409 417	patients
+T8	cohort-patient 1215 1223	patients
+T9	cohort-patient 2556 2562	family
+T24_2	disease 2122 2128	tumors
+T5_2	disease 1734 1739	tumor
+T1_cancer	disease 1431 1437	cancer
+T9_2	gene 2511 2516	PCDH7
+T16_2	body-part 1420 1430	colorectal
+T11_2	disease 1556 1561	tumor
+T17_2	disease 2067 2072	tumor
+T26_2	gene 1568 1575	PLA2G2A
+T1	disease 1420 1437	colorectal cancer
+T23_2	disease 2875 2881	cancer
+T22_2	body-part 2115 2121	breast
+T3	disease 2092 2095	CRC
+T2	disease 1860 1863	CRC
+T27_2	gene 1577 1581	E2F2
+T10	cohort-patient 134 141	patient
+T19_2	disease 2290 2295	tumor
+T11	cohort-patient 575 582	patient
+T20_2	gene 1942 1947	SLIT2
+T12	cohort-patient 728 735	patient
+T13	cohort-patient 1175 1182	patient
+T21_2	body-part 2106 2110	lung
+T18_2	disease 2097 2104	gliomas
+R2_2	relatedTo Arg1:T22_2 Arg2:T24_2
+R0_T16_2_T1_cancer	relatedTo Arg1:T16_2 Arg2:T1_cancer
+R3_2	relatedTo Arg1:T21_2 Arg2:T24_2

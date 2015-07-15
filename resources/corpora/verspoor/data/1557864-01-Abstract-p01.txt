@@ -1,0 +1,25 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Mismatch repair and treatment resistance in ovarian cancer
+
+Abstract
+
+Background
+
+The treatment of ovarian cancer is hindered by intrinsic or acquired resistance to platinum-based chemotherapy. The aim of this study is to determine the frequency of mismatch repair (MMR) inactivation in ovarian cancer and its association with resistance to platinum-based chemotherapy.
+
+Methods
+
+We determined, microsatellite instability (MSI) as a marker for MMR inactivation (analysis of BAT25 and BAT26), MLH1 promoter methylation status (methylation specific PCR on bisulfite treated DNA) and mRNA expression of MLH1, MSH2, MSH3, MSH6 and PMS2 (quantitative RT-PCR) in 75 ovarian carcinomas and eight ovarian cancer cell lines
+
+Results
+
+MSI was detected in three of the eight cell lines i.e. A2780 (no MLH1 mRNA expression due to promoter methylation), SKOV3 (no MLH1 mRNA expression) and 2774 (no altered expression of MMR genes). Overall, there was no association between cisplatin response and MMR status in these eight cell lines.
+
+Seven of the 75 ovarian carcinomas showed MLH1 promoter methylation, however, none of these showed MSI. Forty-six of these patients received platinum-based chemotherapy (11 non-responders, 34 responders, one unknown response). The resistance seen in the eleven non-responders was not related to MSI and therefore also not to MMR inactivation.
+
+Conclusion
+
+No MMR inactivation was detected in 75 ovarian carcinoma specimens and no association was seen between MMR inactivation and resistance in the ovarian cancer cell lines as well as the ovarian carcinomas. In the discussion, the results were compared to that of twenty similar studies in the literature including in total 1315 ovarian cancer patients. Although no association between response and MMR status was seen in the primary tumor the possible role of MMR inactivation in acquired resistance deserves further investigation.
+

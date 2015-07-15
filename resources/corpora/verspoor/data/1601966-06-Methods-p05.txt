@@ -1,0 +1,17 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Availability and requirements
+
+Project name: Colorectal carcinoma comparative chromosomal gene expression analysis (CC-CCGEA) [41].
+
+Project home page: 
+
+Operating system(s): all
+
+Programming language: Perl-CGI
+
+Licence: GNU GPL
+
+Restrictions to use by non-academics: none
+

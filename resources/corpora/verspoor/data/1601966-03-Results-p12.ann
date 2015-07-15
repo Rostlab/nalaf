@@ -1,0 +1,19 @@
+T4_2	gene 139 142	FOS
+T2_cancer	disease 903 909	cancer
+T15_2	gene 940 943	FOS
+T9_2	gene 1082 1090	KIAA0317
+T11_2	gene 1101 1108	SIPA1L1
+T14_2	gene 1128 1133	PSEN1
+T3_2	gene 446 449	FOS
+T1	gene 1076 1080	MLH3
+T3	cohort-patient 263 271	patients
+T2	disease 897 909	colon cancer
+T6	cohort-patient 151 158	patient
+T7	cohort-patient 458 465	patient
+T4	cohort-patient 574 582	patients
+T12_2	gene 1110 1114	NUMB
+T5	cohort-patient 692 700	patients
+T8	body-part 897 902	colon
+T10_2	gene 1093 1100	IAA0440
+T13_2	gene 1116 1123	SYNJ2BP
+R0_T8_T2_cancer	relatedTo Arg1:T8 Arg2:T2_cancer

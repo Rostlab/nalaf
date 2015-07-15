@@ -1,0 +1,88 @@
+T55_2	cohort-patient 1068 1075	tumours
+T29	Physiology 1114 1130	hMLH1 deficiency
+T21_cancers	disease 125 132	cancers
+T28	cohort-patient 806 814	patients
+T27	disease 769 774	HNPCC
+T26	mutation 1025 1033	mutation
+T25	mutation 498 507	mutations
+T29_2	cohort-patient 759 765	groups
+T23	disease 788 805	colorectal cancer
+T22_cancer	disease 318 324	cancer
+T22	disease 307 324	colorectal cancer
+T39_2	size 1052 1064	small number
+T21	disease 114 132	colorectal cancers
+T20	disease 1485 1492	tumours
+T38	body-part 307 317	colorectal
+T37	Concepts_Ideas 298 306	sporadic
+T34	body-part 114 124	colorectal
+T33	Concepts_Ideas 105 113	sporadic
+T35	Physiology 138 181	promoter region of hMLH1 is hypermethylated
+T30	body-part 1525 1539	proximal colon
+T32	Physiology 63 90	absence of hMLH1 expression
+T31	Disorder 7 30	microsatellite instable
+T23_cancer	disease 799 805	cancer
+T6	gene 1341 1346	hMLH1
+T7	gene 1469 1474	hMLH1
+T49	mutation 1313 1322	mutations
+T4	gene 981 986	hMLH1
+T48	mutation 1135 1144	mutations
+T5	gene 1114 1119	hMLH1
+T8	gene 511 514	APC
+T9	gene 1012 1015	APC
+T43	Disorder 1469 1484	hMLH1 deficient
+T41	body-part 788 798	colorectal
+T40	Concepts_Ideas 779 787	sporadic
+T45	cohort-patient 31 38	tumours
+T50	Physiology 1330 1357	absence of hMLH1 expression
+T1	gene 74 79	hMLH1
+T3	gene 416 421	hMLH1
+T2	gene 157 162	hMLH1
+T10	gene 1148 1151	APC
+T11	gene 1296 1299	APC
+T12	gene 519 524	K-ras
+T13	gene 1019 1024	K-ras
+T14	gene 1159 1164	K-ras
+T15	gene 1307 1312	K-ras
+T51	Physiology 981 997	hMLH1 deficiency
+T16	disease 31 38	tumours
+T17	disease 1068 1075	tumours
+T46_merge	size 54 57	90%
+T53	Physiology 409 432	absent hMLH1 expression
+T18	disease 1218 1225	tumours
+T19	disease 1424 1430	tumour
+R16_m	has Arg1:T9 Arg2:T26
+R9_m	has Arg1:T8 Arg2:T25
+R27_2	has Arg1:T55_2 Arg2:T17
+R26_2	has Arg1:T29_2 Arg2:T23
+R9_1	has Arg1:T29 Arg2:T17
+R15_m	has Arg1:T13 Arg2:T26
+R0_T35_T2	has Arg1:T35 Arg2:T2
+R0_T50_T6	has Arg1:T50 Arg2:T6
+R25_m	has Arg1:T28 Arg2:T27
+R0_T32_T1	has Arg1:T32 Arg2:T1
+R8_m	has Arg1:T37 Arg2:T22
+R20_m	has Arg1:T11 Arg2:T49
+R0_T43_T7	has Arg1:T43 Arg2:T7
+R21_m	has Arg1:T43 Arg2:T20
+R0_T38_T22_cancer	relatedTo Arg1:T38 Arg2:T22_cancer
+R0_T34_T21_cancers	relatedTo Arg1:T34 Arg2:T21_cancers
+R24_1	relatedTo Arg1:T17 Arg2:T48
+R0_T41_T23_cancer	relatedTo Arg1:T41 Arg2:T23_cancer
+R18_m	has Arg1:T14 Arg2:T48
+R19_m	has Arg1:T15 Arg2:T49
+R13_m	has Arg1:T28 Arg2:T23
+R3_m	has Arg1:T32 Arg2:T16
+R10_m	has Arg1:T12 Arg2:T25
+R2_m	has Arg1:T45 Arg2:T46_merge
+R0_T51_T4	has Arg1:T51 Arg2:T4
+R5_m	has Arg1:T33 Arg2:T21
+R0_T29_T5	has Arg1:T29 Arg2:T5
+R6_m	has Arg1:T35 Arg2:T21
+R11_2	has Arg1:T29_2 Arg2:T27
+R23_2	has Arg1:T45 Arg2:T16
+R17_m	has Arg1:T10 Arg2:T48
+R0_T53_T3	has Arg1:T53 Arg2:T3
+R28_2	has Arg1:T55_2 Arg2:T39_2
+R1_m	has Arg1:T31 Arg2:T16
+R14_m	has Arg1:T40 Arg2:T23
+R22_m	relatedTo Arg1:T30 Arg2:T20

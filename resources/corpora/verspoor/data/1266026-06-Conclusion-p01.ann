@@ -1,0 +1,42 @@
+T4_2	size 426 440	seven or eight
+T6	disease 319 325	cancer
+T4	disease 122 128	cancer
+T5	body-part 223 233	colorectal
+T28	mutation 809 818	mutations
+T8	Concepts_Ideas 390 400	hereditary
+T9	Disorder 409 413	MSI+
+T26	mutation 724 743	oncogenic mutations
+T24	mutation 535 551	somatic mutation
+T23	mutation 441 450	mutations
+T22	mutation 358 385	somatic oncogenic mutations
+T21	disease 929 935	cancer
+T20	disease 859 865	cancer
+T1_cancers	disease 234 241	cancers
+T17_2	size 711 723	six or seven
+T1	disease 223 241	colorectal cancers
+T3	disease 81 87	cancer
+T2	disease 402 407	HNPCC
+T10	disease 414 421	cancers
+T12	Concepts_Ideas 459 467	sporadic
+T13	Concepts_Ideas 555 563	sporadic
+T14	Disorder 564 568	MSI+
+T15	disease 569 576	cancers
+T21_2	size 520 523	one
+T17	Disorder 677 681	MSI-
+T18	disease 682 689	cancers
+R4_m	has Arg1:T14 Arg2:T15
+R10_1	relatedTo Arg1:T2 Arg2:T22
+R0_T5_T1_cancers	relatedTo Arg1:T5 Arg2:T1_cancers
+R1_1	has Arg1:T8 Arg2:T2
+R9_2	has Arg1:T26 Arg2:T17_2
+R12_1	relatedTo Arg1:T15 Arg2:T24
+R10_m	relatedTo Arg1:T18 Arg2:T26
+R3_m	has Arg1:T8 Arg2:T10
+R2_m	has Arg1:T9 Arg2:T10
+R7_2	has Arg1:T23 Arg2:T4_2
+R2_1	has Arg1:T9 Arg2:T2
+R8_2	has Arg1:T24 Arg2:T21_2
+R5_m	has Arg1:T13 Arg2:T15
+R5_1	has Arg1:T12 Arg2:T10
+R6_m	has Arg1:T17 Arg2:T18
+R11_1	relatedTo Arg1:T10 Arg2:T23

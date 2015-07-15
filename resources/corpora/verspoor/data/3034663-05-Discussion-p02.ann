@@ -1,0 +1,87 @@
+T42_merge	size 1104 1107	one
+T29_merge	size 621 624	two
+T55_merge	size 1732 1737	11.8%
+T49_merge	size 1714 1717	two
+T28	mutation 575 586	p.Lys618Ala
+T27	disease 557 559	LS
+T26	cohort-patient 1210 1216	family
+T25	cohort-patient 1108 1114	family
+T24	cohort-patient 802 808	family
+T23	cohort-patient 687 693	family
+T22	disease 1452 1454	LS
+T21	cohort-patient 1091 1099	families
+T20	cohort-patient 625 633	families
+T62	Concepts_Ideas 1812 1838	Bethesda Criteria-positive
+T50_merge	size 1659 1661	17
+T38	mutation 941 950	c.3202C>T
+T37	mutation 929 939	p.Arg1068X
+T40_merge	size 1074 1077	two
+T39	mutation 1017 1028	p.Lys618Ala
+T34	disease 792 794	LS
+T33	mutation 741 757	c.1852_1853AA>GC
+T36	mutation 889 905	c.1852_1853AA>GC
+T35	mutation 876 887	p.Lys618Ala
+T30	cohort-patient 663 676	index subject
+T32	mutation 726 736	c.546-2A>G
+T61	mutation 1561 1579	germ-line mutation
+T31	disease 684 686	LS
+T53_merge	size 1872 1876	8/17
+T6	disease 1839 1846	tumours
+T7	disease 1957 1960	CRC
+T48	mutation 1675 1686	p.Lys618Ala
+T5	disease 1662 1669	tumours
+T8	disease 2084 2087	CRC
+T9	disease 2216 2219	CRC
+T43	Disorder 1469 1472	MSI
+T41	disease 1088 1090	LS
+T46	Disorder 1616 1619	MSI
+T45	disease 1596 1598	LS
+T44	Physiology 1512 1526	MMR deficiency
+T1	gene 2076 2080	MLH1
+T3	gene 1260 1264	MSH6
+T4_merge	disease 1452 1462	LS tumours
+T2	gene 924 928	MSH6
+T10	disease 2390 2393	CRC
+T11	disease 2223 2231	adenomas
+T12	disease 158 160	LS
+T13	mutation 1385 1396	p.Lys618Ala
+T14	disease 124 134	unaffected
+T15	cohort-patient 2088 2096	patients
+T16	cohort-patient 135 146	individuals
+T51	cohort-patient 1662 1669	tumours
+T17	cohort-patient 1718 1723	cases
+T18	cohort-patient 1865 1870	cases
+T19	cohort-patient 1961 1966	group
+T57	disease 99 107	affected
+R16_m	has Arg1:T25 Arg2:T42_merge
+R9_m	has Arg1:T43 Arg2:T22
+R29_1	relatedTo Arg1:T31 Arg2:T32
+R26_1	relatedTo Arg1:T8 Arg2:T1
+R9_1	has Arg1:T30 Arg2:T31
+R15_m	has Arg1:T15 Arg2:T8
+R8_m	has Arg1:T21 Arg2:T40_merge
+R20_m	has Arg1:T51 Arg2:T5
+R8_1	has Arg1:T17 Arg2:T55_merge
+R7_m	has Arg1:T21 Arg2:T41
+R30_1	has Arg1:T2 Arg2:T35
+R7_1	has Arg1:T24 Arg2:T34
+R24_1	has Arg1:T18 Arg2:T53_merge
+R4_m	has Arg1:T23 Arg2:T31
+R6_1	has Arg1:T30 Arg2:T33
+R18_1	has Arg1:T2 Arg2:T36
+R3_1	has Arg1:T20 Arg2:T28
+R19_m	has Arg1:T51 Arg2:T50_merge
+R13_m	has Arg1:T17 Arg2:T49_merge
+R32_1	has Arg1:T18 Arg2:T6
+R3_m	has Arg1:T20 Arg2:T29_merge
+R10_m	has Arg1:T44 Arg2:T22
+R17_1	has Arg1:T16 Arg2:T57
+R12_m	has Arg1:T51 Arg2:T48
+R5_m	has Arg1:T2 Arg2:T37
+R5_1	has Arg1:T30 Arg2:T32
+R6_m	has Arg1:T2 Arg2:T38
+R11_m	has Arg1:T46 Arg2:T45
+R14_m	has Arg1:T19 Arg2:T7
+R1_m	has Arg1:T16 Arg2:T14
+R31_1	has Arg1:T62 Arg2:T6
+R28_1	has Arg1:T20 Arg2:T27

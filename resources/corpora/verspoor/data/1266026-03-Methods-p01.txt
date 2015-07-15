@@ -1,0 +1,17 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+Specimens
+
+MSI status was determined for 1,022 colorectal cancers sampled from nine large regional hospitals in southeastern Finland as part of a study to characterize genetic alterations in a well-defined population [9]. The cancers represent approximately 60% of all colorectal cancers removed from this population in 1994 to 1998 [9]. Germline mutations in MLH1 or MSH2 were detected by allelic specific PCR assays (for the two common Finnish MLH1 germline mutations) or by direct genomic sequencing of coding exons [9]. The data can be downloaded from the following website: . Approval for this research was obtained from the appropriate ethics committees, which are in compliance with the Helsinki Declaration.
+
+A second data set (SEER 11 Regs Public-Use, Nov 2001 Sub (1992–1999)) was obtained from the Surveillance, Epidemiology, and End Results (SEER) Program, a population-based registry in the United States of America that records all cancers regardless of clinical treatment [10]. A total of 108,275 records were analyzed for ages at cancer selected by site (colon and rectum), race (white), histology (adenocarcinoma, ICD-0-2 codes 8000–8500), and stage (localized, regional, or distant). These cancers were not characterized with respect to HNPCC or MSI.
+
+Quantitative analysis
+
+Numbers of oncogenic alterations (genetic mutations or epigenetic alterations) required for transformation were estimated from ages at cancer using a Bayesian approach as previously described [11]. This method requires the use of a life table from census data: for the Finnish data set we used a Finnish life table from the World Health Organization website , for the SEER dataset we used a United States life table as described previously [11]. The model assumes the first visible clonal expansion occurs at the time of transformation and ignores the interval after transformation. The analysis ignores temporal trends, which may influence our mutation estimates.
+
+For the SEER dataset, we also fit our model for cancer progression [11] with the inferential method described in reference 12. This method does not require a life table, but unlike our method it does require information on all the cancer cases for the population at risk. Therefore this method is appropriate for analysing the SEER dataset but not the Finnish dataset. Our method [11] is appropriate for analysing both datasets. For the SEER dataset, the two methods inferred the same number of mutations required for cancer.
+

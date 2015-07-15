@@ -1,0 +1,43 @@
+T15_2	gene 844 850	TGFBR2
+T6	disease 1407 1410	CRC
+T5	disease 1388 1391	CRC
+T8	disease 225 230	HNPCC
+T9	disease 473 478	HNPCC
+T24_2	disease 153 163	carcinomas
+T29_2	disease 267 276	carcinoma
+T13_2	Concepts_Ideas 1377 1387	hereditary
+T28_2	size 298 303	three
+T17_2	gene 708 712	PMS2
+T30_2	body-part 256 266	colorectal
+T26_2	body-part 142 152	colorectal
+T1	gene 653 657	MLH3
+T23_2	body-part 193 203	colorectal
+T3	gene 822 826	MSH6
+T2	gene 800 804	MSH2
+T25_2	cohort-patient 153 163	carcinomas
+T4_merge	disease 168 211	hereditary non-polyposis colorectal cancers
+T27_2	size 132 134	5%
+T10	disease 504 509	HNPCC
+T19_2	disease 924 933	carcinoma
+T11	cohort-patient 554 562	patients
+T12	cohort-patient 304 313	relatives
+T20_2	body-part 913 923	colorectal
+T13	cohort-patient 2599 2606	cohorts
+T14	cohort-patient 371 378	patient
+T15	cohort-patient 2591 2598	patient
+T16	age 407 425	less than 50 years
+T21_2	Concepts_Ideas 902 912	hereditary
+T7_merge	disease 213 219	HNPCCs
+T18_2	gene 628 632	PMS1
+R7_2	relatedTo Arg1:T26_2 Arg2:T24_2
+R6_2	has Arg1:T25_2 Arg2:T24_2
+R10_2	has Arg1:T12 Arg2:T28_2
+R5_2	relatedTo Arg1:T23_2 Arg2:T4_merge
+R2_2	relatedTo Arg1:T20_2 Arg2:T19_2
+R8_2	has Arg1:T25_2 Arg2:T27_2
+R1_2	has Arg1:T13_2 Arg2:T5
+R11_2	relatedTo Arg1:T30_2 Arg2:T29_2
+R9_2	has Arg1:T25_2 Arg2:T4_merge
+R4_2	has Arg1:T16 Arg2:T14
+R12_2	has Arg1:T12 Arg2:T29_2
+R3_2	has Arg1:T21_2 Arg2:T19_2

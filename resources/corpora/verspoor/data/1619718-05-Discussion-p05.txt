@@ -1,0 +1,5 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+In summary, MPs and SAs account for only about 2% of colorectal polyps. Nevertheless, those serrated polyps with dysplasia show frequent mutation of either KRAS or BRAF and frequent loss of expression of MGMT (particularly MP). Additionally, four of 25 (16%) showed high-grade dysplasia and in three of these there was concordant aberrant nuclear expression of p53. Along with SSAs, these rare polyps may serve as the precursors of sporadic CRCs with BRAF mutation and DNA methylation (with and without DNA MSI) and a subset of CRCs with KRAS mutation. Their malignant potential is explained by the accumulation of genetic alterations that may in turn depend upon the inactivation of the DNA repair gene MGMT.28 The importance of these ‘fusion’ polyps as cancer precursors may be under-appreciated because critical rate-limiting changes governing malignant transition, particularly in association with loss of function of MLH1 of p53, occur rapidly and can rarely be ‘caught in the act’.
+

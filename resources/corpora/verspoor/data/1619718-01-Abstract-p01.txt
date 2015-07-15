@@ -1,0 +1,23 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Advanced colorectal polyps with the molecular and morphological features of serrated polyps and adenomas: concept of a ‘fusion’ pathway to colorectal cancer
+
+Abstract
+
+Jass J R, Baker K, Zlobec I, Higuchi T, Barker M, Buchanan D & Young J (2006) Histopathology 49, 121–131
+
+Advanced colorectal polyps with the molecular and morphological features of serrated polyps and adenomas: concept of a ‘fusion’ pathway to colorectal cancer
+
+Aim
+
+To establish and explain the pattern of molecular signatures across colorectal polyps.
+
+Methods and results
+
+Thirty-two sessile serrated adenomas (SSA), 10 mixed polyps (MP), 15 traditional serrated adenomas (SA), 49 hyperplastic polyps (HP) and 84 adenomas were assessed for mutation of KRAS and BRAF and aberrant expression of p53. The findings were correlated with loss of expression of O-6-methylguanine DNA methyltransferase (MGMT). KRAS mutation occurred more frequently (26.5%) than BRAF mutation (4.8%) in adenomas (P < 0.001) and particularly in adenomas with villous architecture (50%). Loss of expression of MGMT correlated with KRAS mutation in small tubular adenomas (P < 0.04). BRAF mutation was frequent in HPs (67%) and SSAs (81%), while KRAS mutation was infrequent (4% and 3%, respectively). Of MPs and SAs, 72% had either BRAF or KRAS mutation. Aberrant expression of p53 was uncommon overall, but occurred more frequently in MPs and SAs (12%) than adenomas (1%) (P < 0.04) and there was concordant loss of expression of MGMT.
+
+Conclusions
+
+Molecular alterations that are characteristic of the serrated pathway and adenoma–carcinoma sequence can co-occur in a minority of advanced colorectal polyps that then show morphological features of both pathways. These lesions account for only 2% of colorectal polyps, but may be relatively aggressive.
+

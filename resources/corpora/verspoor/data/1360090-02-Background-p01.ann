@@ -1,0 +1,112 @@
+T54_merge	size 1558 1561	275
+T29	Disorder 587 591	MSI+
+T28	mutation 559 568	mutations
+T27	gene 554 558	BRAF
+T26	mutation 522 531	mutations
+T25	gene 517 521	KRAS
+T22	gene 382 386	BRAF
+T21	mutation 315 325	1796T to A
+T20	disease 252 262	carcinomas
+T62	disease 1172 1180	adenomas
+T63	gene 90 93	RAF
+T64	gene 138 144	MEK1/2
+T65	gene 168 171	RAS
+T38	Concepts_Ideas 867 875	sporadic
+T37	Concepts_Ideas 830 838	familial
+T39	disease 876 882	tumors
+T34	disease 685 691	tumors
+T33	Disorder 680 684	MSI+
+T58_merge	size 232 237	5–15%
+T36	Concepts_Ideas 817 825	sporadic
+T35	body-part 722 732	colorectal
+T30	Concepts_Ideas 592 600	sporadic
+T61	Concepts_Ideas 1163 1171	serrated
+T32	Physiology 634 659	MLH1 promoter methylation
+T60	disease 1152 1158	polyps
+T31	disease 601 607	tumors
+T15_2	cohort-patient 906 911	group
+T14_2	cohort-patient 839 844	cases
+T6	disease 264 267	CRC
+T7	disease 902 905	CRC
+T49	mutation 1364 1372	mutation
+T4	gene 634 638	MLH1
+T48	gene 1359 1363	KRAS
+T5	disease 697 739	hereditary non-polyposis colorectal cancer
+T8	disease 1562 1566	CRCs
+T9	disease 1759 1763	CRCs
+T43	Physiology 1094 1099	CIMP+
+T42	Physiology 931 962	CpG island methylator phenotype
+T41	Physiology 964 969	CIMP+
+T46	mutation 1247 1256	mutations
+T45	gene 1242 1246	BRAF
+T44	disease 1100 1106	tumors
+T50	gene 1458 1462	BRAF
+T1	mutation 352 357	V600E
+T3	mutation 1515 1520	V600E
+T2	mutation 387 392	V600E
+T59	Disorder 1133 1151	large hyperplastic
+T10	cohort-patient 252 262	carcinomas
+T11	mutation 1692 1715	oncogenic BRAF mutation
+T12	disease 741 746	HNPCC
+T13	cohort-patient 748 756	patients
+T14	Disorder 862 866	MSI+
+T15	Disorder 1085 1089	MSI+
+T52	disease 1446 1452	tumors
+T51	mutation 1463 1471	mutation
+T16	gene 205 209	BRAF
+T17	gene 66 70	BRAF
+T18	mutation 181 201	Activating mutations
+T53	gene 1510 1514	BRAF
+T56	gene 1702 1706	BRAF
+T19	body-part 241 251	colorectal
+T55	cohort-patient 1562 1566	CRCs
+T68_2	disease 1266 1273	lesions
+T57	disease 1888 1894	tumors
+R16_m	has Arg1:T15 Arg2:T44
+R9_m	has Arg1:T30 Arg2:T31
+R34_2	has Arg1:T36 Arg2:T14_2
+R24_m	has Arg1:T50 Arg2:T51
+R35_1	relatedTo Arg1:T19 Arg2:T6
+R35_2	has Arg1:T42 Arg2:T15_2
+R39_2	relatedTo Arg1:T62 Arg2:T46
+R39_1	has Arg1:T41 Arg2:T7
+R36_m	relatedTo Arg1:T31 Arg2:T28
+R26_m	has Arg1:T53 Arg2:T3
+R32_m	has Arg1:T16 Arg2:T21
+R29_m	has Arg1:T56 Arg2:T11
+R33_2	has Arg1:T37 Arg2:T14_2
+R15_m	has Arg1:T43 Arg2:T44
+R27_m	has Arg1:T55 Arg2:T54_merge
+R0_T32_T4	has Arg1:T32 Arg2:T4
+R8_m	has Arg1:T27 Arg2:T28
+R20_m	has Arg1:T61 Arg2:T62
+R21_m	has Arg1:T59 Arg2:T60
+R7_m	has Arg1:T25 Arg2:T26
+R25_2	relatedTo Arg1:T52 Arg2:T50
+R24_1	relatedTo Arg1:T52 Arg2:T51
+R4_m	relatedTo Arg1:T19 Arg2:T20
+R18_m	has Arg1:T14 Arg2:T39
+R18_1	has Arg1:T42 Arg2:T39
+R30_m	has Arg1:T10 Arg2:T18
+R0_T39_2_T4	has Arg1:T32 Arg2:T4
+R19_2	has Arg1:T15_2 Arg2:T7
+R13_m	has Arg1:T13 Arg2:T5
+R13_1	has Arg1:T33 Arg2:T5
+R28_m	has Arg1:T55 Arg2:T8
+R3_m	has Arg1:T10 Arg2:T20
+R10_m	has Arg1:T29 Arg2:T31
+R2_m	has Arg1:T10 Arg2:T58_merge
+R37_1	relatedTo Arg1:T35 Arg2:T12
+R37_m	has Arg1:T32 Arg2:T31
+R5_2	relatedTo Arg1:T20 Arg2:T16
+R12_m	relatedTo Arg1:T35 Arg2:T5
+R22_1	relatedTo Arg1:T44 Arg2:T46
+R6_m	has Arg1:T22 Arg2:T2
+R31_m	has Arg1:T16 Arg2:T1
+R11_m	has Arg1:T33 Arg2:T34
+R17_m	has Arg1:T38 Arg2:T39
+R23_m	has Arg1:T48 Arg2:T49
+R14_2	has Arg1:T13 Arg2:T34
+R1_m	has Arg1:T16 Arg2:T18
+R22_m	has Arg1:T45 Arg2:T46
+R38_1	has Arg1:T42 Arg2:T7

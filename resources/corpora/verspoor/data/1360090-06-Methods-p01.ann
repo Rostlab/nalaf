@@ -1,0 +1,31 @@
+T9_merge	size 67 70	275
+T9_2	Disorder 434 447	HNPCC-related
+T1	mutation 768 773	V600E
+T3	disease 398 401	CRC
+T2	gene 653 657	TP53
+T6	gene 749 753	BRAF
+T7	gene 1019 1023	BRAF
+T4	disease 434 439	HNPCC
+T5	mutation 725 745	Mutations in exon 15
+T10	body-part 71 81	colorectal
+T11	disease 82 88	tumors
+T12	cohort-patient 82 88	tumors
+T13	gene 630 634	KRAS
+T8	cohort-patient 412 416	case
+T14	mutation 635 643	mutation
+T15	mutation 658 666	mutation
+T16	mutation 1024 1032	mutation
+T17	gene 1239 1243	BRAF
+T18	mutation 1244 1252	mutation
+R10_m	has Arg1:T8 Arg2:T4
+R3_m	has Arg1:T12 Arg2:T11
+R2_m	relatedTo Arg1:T10 Arg2:T11
+R9_m	has Arg1:T7 Arg2:T16
+R4_m	has Arg1:T12 Arg2:T9_merge
+R8_m	has Arg1:T17 Arg2:T18
+R5_m	has Arg1:T13 Arg2:T14
+R11_2	has Arg1:T9_2 Arg2:T8
+R6_m	has Arg1:T6 Arg2:T5
+R0_T9_2_T4	has Arg1:T9_2 Arg2:T4
+R1_m	has Arg1:T2 Arg2:T15
+R7_m	has Arg1:T6 Arg2:T1

@@ -1,0 +1,100 @@
+T64_2	Concepts_Ideas 536 550	drug-resistant
+T67_2	mutation 2867 2870	-/-
+T66_2	mutation 2858 2861	-/-
+T65_2	gene 2015 2019	PMS2
+T60_2	gene 2154 2157	MMR
+T57_2	gene 2703 2706	MMR
+T29	cohort-patient 425 433	patients
+T28	disease 3324 3329	HNPCC
+T27	disease 3054 3059	HNPCC
+T26	gene 2884 2888	PMS2
+T25	disease 1412 1426	ovarian cancer
+T24	disease 921 935	ovarian cancer
+T23	disease 66 80	Ovarian cancer
+T22	gene 2289 2293	ExoI
+T21	gene 2436 2440	PCNA
+T20	gene 2331 2335	PCNA
+T61_2	gene 1450 1453	MMR
+T26_2	disease 551 558	disease
+T31_2	cohort-patient 629 637	patients
+T38	body-part 3040 3045	colon
+T37	body-part 1412 1419	ovarian
+T45_2	Disorder 3115 3118	MSI
+T39	disease 130 136	cancer
+T34	body-part 66 73	Ovarian
+T33	cohort-patient 3061 3069	families
+T36	body-part 921 928	ovarian
+T35	body-part 180 187	ovarian
+T30	cohort-patient 492 500	patients
+T62_2	gene 1584 1587	MMR
+T32	cohort-patient 3330 3338	patients
+T31	gene 2943 2947	PMS1
+T71_2	mutation 2888 2891	-/-
+T50_2	Disorder 3312 3315	MSI
+T6	gene 1638 1642	MSH6
+T70_2	mutation 2947 2950	-/-
+T7	gene 1713 1717	MSH2
+T4	gene 1623 1627	MSH2
+T49	gene 3265 3269	PMS2
+T48	Disorder 3180 3183	MSI
+T5	gene 1629 1633	MSH3
+T8	gene 1722 1726	MSH6
+T9	gene 1820 1824	MSH2
+T42	disease 355 360	tumor
+T41	disease 188 202	adenocarcinoma
+T40	body-part 116 129	gynecological
+T47	gene 3200 3204	PMS2
+T45	disease 3016 3052	hereditary nonpolyposis colon cancer
+T59_2	gene 2076 2079	MMR
+T50	gene 3271 3275	PMS1
+T58_2	gene 2804 2807	MMR
+T53_2	gene 2479 2482	MMR
+T1	gene 2006 2010	MLH1
+T49_2	Physiology 3291 3308	MSH3 inactivation
+T3	gene 3151 3155	MLH1
+T2	gene 2872 2876	MLH1
+T43_merge	size 418 421	20%
+T69_2	mutation 2876 2879	-/-
+T10	gene 1829 1833	MSH3
+T11	gene 2854 2858	MSH2
+T12	gene 2863 2867	MSH3
+T13	gene 2931 2935	MSH6
+T14	gene 3142 3146	MSH2
+T52	mutation 3120 3138	germline mutations
+T15	gene 3191 3195	MSH6
+T16	gene 3259 3263	MSH6
+T17	gene 3291 3295	MSH3
+T18	gene 1117 1121	PCNA
+T53	gene 1081 1115	proliferating cell nuclear antigen
+T19	gene 1124 1128	PCNA
+T68_2	mutation 2935 2938	-/-
+R9_m	has Arg1:T14 Arg2:T52
+R10_1	has Arg1:T50_2 Arg2:T28
+R15_2	has Arg1:T11 Arg2:T66_2
+R8_2	has Arg1:T33 Arg2:T52
+R8_1	has Arg1:T48 Arg2:T45
+R7_m	has Arg1:T33 Arg2:T45
+R7_1	relatedTo Arg1:T45 Arg2:T3
+R21_2	has Arg1:T48 Arg2:T33
+R18_2	has Arg1:T26 Arg2:T71_2
+R4_m	relatedTo Arg1:T36 Arg2:T24
+R6_1	relatedTo Arg1:T45 Arg2:T14
+R20_2	has Arg1:T31 Arg2:T70_2
+R0_T49_2_T17	has Arg1:T49_2 Arg2:T17
+R19_2	has Arg1:T13 Arg2:T68_2
+R17_2	has Arg1:T2 Arg2:T69_2
+R3_m	has Arg1:T29 Arg2:T43_merge
+R17_1	relatedTo Arg1:T38 Arg2:T27
+R13_2	has Arg1:T64_2 Arg2:T26_2
+R10_m	has Arg1:T3 Arg2:T52
+R2_m	relatedTo Arg1:T35 Arg2:T41
+R12_m	relatedTo Arg1:T40 Arg2:T39
+R22_2	has Arg1:T50_2 Arg2:T32
+R5_m	relatedTo Arg1:T37 Arg2:T25
+R5_1	has Arg1:T45_2 Arg2:T45
+R6_m	relatedTo Arg1:T38 Arg2:T45
+R23_2	has Arg1:T49_2 Arg2:T32
+R11_m	has Arg1:T32 Arg2:T28
+R14_2	has Arg1:T30 Arg2:T26_2
+R16_2	has Arg1:T12 Arg2:T67_2
+R1_m	relatedTo Arg1:T34 Arg2:T23

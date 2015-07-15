@@ -1,0 +1,28 @@
+T16_2	Physiology 442 458	hMLH1 expression
+T17_2	cohort-patient 538 545	patient
+T14_2	cohort-patient 197 205	patients
+T1	gene 442 447	hMLH1
+T9_cancer	disease 627 633	cancer
+T3	gene 364 367	APC
+T2	gene 252 255	APC
+T6	gene 369 375	CTNNB1
+T7	disease 527 533	tumour
+T4	gene 260 265	K-ras
+T8_cancer	disease 159 165	cancer
+T10	mutation 266 275	mutations
+T5	gene 380 385	K-ras
+T12	mutation 347 356	mutations
+T13	cohort-patient 634 642	patients
+T8	disease 148 165	colorectal cancer
+T14	body-part 616 626	colorectal
+T9	disease 616 633	colorectal cancer
+T17	body-part 148 158	colorectal
+R0_T16_2_T1	has Arg1:T16_2 Arg2:T1
+R3_m	has Arg1:T2 Arg2:T10
+R2_m	has Arg1:T4 Arg2:T10
+R6_1	has Arg1:T5 Arg2:T12
+R0_T17_T8_cancer	relatedTo Arg1:T17 Arg2:T8_cancer
+R5_m	has Arg1:T13 Arg2:T9
+R5_1	has Arg1:T6 Arg2:T12
+R4_1	has Arg1:T3 Arg2:T12
+R0_T14_T9_cancer	relatedTo Arg1:T14 Arg2:T9_cancer

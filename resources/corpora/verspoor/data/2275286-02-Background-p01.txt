@@ -1,0 +1,9 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Background
+
+HNPCC is an autosomal dominant syndrome, which accounts for about 1–5% of colorectal cancer [1]. HNPCC patients are characterized by earlier symptoms, more mucinous carcinoma, more synchronous and metachronous colorectal tumors and more extra-colonic tumors, but have better survival [1,2]. It is believed that HNPCC is secondary to a germline mutation resulting in a defective MMR gene. A defective MMR gene results in increased DNA replication errors and MSI, which causes the occurrence of tumors in different organs, especially in the colorectum. Identification of HPNCC families is important because the diagnosis, treatment and follow up of these individuals should be different from those with sporadic colorectal cancer [2]. However, the clinical diagnosis of HNPCC patients is very difficult for lack of specific clinical phenotype. Though Amsterdam criteria I and II were established for HNPCC diagnosis[3,4], many HNPCC families still do not meet the criteria.
+
+MSI is an important phenotype of MMR gene mutation. In 1997, the National Cancer Institute (NCI) recommended screening MSI CRCs using the Bethesda guidelines [5]. After compiling evidence from years of global studies and follow up, NCI revised the Bethesda guidelines in 2004, which is called the revised Bethesda standard [6]. NCI recommended screening of HNPCC based on detection of MSI in the tumor and loss of expression of a MMR gene using immunohistochemistry (IHC) staining [6]. However, until now, there has been no research about the applicability of the NCI recommendations to the Chinese population with colorectal cancers. The aim of this study is to detect and study MSI carrier and mismatch repair (MMR) gene germline mutation carriers among a Chinese population with colorectal cancer.
+

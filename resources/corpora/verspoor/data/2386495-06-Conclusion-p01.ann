@@ -1,0 +1,26 @@
+T11_2	Concepts_Ideas 1002 1010	atypical
+T1	gene 803 806	APC
+T3	disease 1079 1082	CRC
+T2	gene 907 910	APC
+T6	disease 1276 1283	disease
+T7	cohort-patient 979 984	cases
+T4	disease 1293 1296	CRC
+T5	disease 1375 1378	CRC
+T10	Concepts_Ideas 988 998	attenuated
+T11	cohort-patient 1102 1110	probands
+T12	mutation 1116 1160	mutations outside the region codon 1250–1464
+T8	mutation 911 920	mutations
+T13	Concepts_Ideas 1297 1306	morbidity
+T9	disease 1011 1014	FAP
+T15	cohort-patient 1327 1335	probands
+T16	Concepts_Ideas 1379 1388	morbidity
+T17	disease 1397 1400	FAP
+T13_2	Concepts_Ideas 971 978	de novo
+R3_m	has Arg1:T7 Arg2:T9
+R2_m	has Arg1:T10 Arg2:T9
+R4_m	has Arg1:T2 Arg2:T8
+R6_1	has Arg1:T16 Arg2:T5
+R5_2	has Arg1:T13_2 Arg2:T7
+R1_2	has Arg1:T11_2 Arg2:T9
+R5_1	has Arg1:T13 Arg2:T4
+R4_1	has Arg1:T11 Arg2:T12

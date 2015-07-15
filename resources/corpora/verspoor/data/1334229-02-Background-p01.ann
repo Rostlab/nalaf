@@ -1,0 +1,138 @@
+T75	body-part 2127 2137	colorectal
+T76	Physiology 2151 2193	chromosomal and microsatellite instability
+T33_merge_cancers	disease 832 839	cancers
+T73	body-part 1752 1762	colorectal
+T74	body-part 1984 1994	colorectal
+T38_merge_cancers	disease 2396 2403	cancers
+T79	Disorder 2537 2562	defective mismatch repair
+T77	body-part 2385 2395	colorectal
+T78	Disorder 2413 2439	microsatellite instability
+T34_cancer	disease 1638 1644	cancer
+T29	disease 2825 2832	tumours
+T28	disease 2760 2767	tumours
+T27	disease 2692 2699	tumours
+T26	disease 2575 2582	tumours
+T75_2	gene 3086 3091	women
+T25	disease 2314 2321	tumours
+T24	disease 1051 1058	tumours
+T23	disease 439 445	tumour
+T22	gene 474 479	SMAD4
+T21	gene 3194 3200	CTNNB1
+T72	body-part 1627 1637	colorectal
+T71	mutation 1465 1513	missense mutations in codons 12 and 13 of exon 1
+T20	gene 1203 1209	CTNNB1
+T62	disease 634 648	carcinogenesis
+T63	Physiology 2682 2691	aneuploid
+T64	Disorder 3021 3042	microsatellite stable
+T65	body-part 821 831	colorectal
+T66	mutation 867 917	mutations in the N-terminal domain of the APC gene
+T68	Physiology 745 774	Activation of the Wnt pathway
+T69	mutation 1092 1195	activating missense mutations at one of the phosphorylation sites at codons 31, 33, 37 and 45 of exon 3
+T77_2	mutation 703 715	inactivation
+T37_cancer	disease 2138 2144	cancer
+T78_2	mutation 1545 1565	activating mutations
+T37	disease 2127 2144	colorectal cancer
+T39	disease 2959 2976	colorectal cancer
+T34	disease 1627 1644	colorectal cancer
+T38_merge	disease 2385 2403	colorectal cancers
+T33_merge	disease 821 839	colorectal cancers
+T36	disease 1984 2001	colorectal cancer
+T39_cancer	disease 2970 2976	cancer
+T35	disease 1752 1769	colorectal cancer
+T30	disease 3043 3050	tumours
+T61	body-part 623 633	colorectal
+T32	disease 295 312	colorectal cancer
+T31	disease 3133 3140	tumours
+T60	body-part 295 305	colorectal
+T6	gene 909 912	APC
+T7	gene 1073 1076	APC
+T4	gene 2724 2728	TP53
+T5	gene 469 472	APC
+T48	disease 2352 2359	cancers
+T8	gene 1675 1678	APC
+T9	gene 1824 1827	APC
+T43	Physiology 698 715	TP53 inactivation
+T42	disease 1358 1364	cancer
+T41	mutation 3180 3189	mutations
+T40	mutation 2610 2619	mutations
+T47	Physiology 1325 1354	Activation of the Ras pathway
+T46	disease 2053 2059	cancer
+T45	disease 1995 2001	cancer
+T32_cancer	disease 306 312	cancer
+T44	Physiology 987 1028	loss of the β-catenin regulating function
+T85	Disorder 2195 2218	Chromosomal instability
+T50	disease 1763 1769	cancer
+T1	gene 481 485	TP53
+T3	gene 1839 1843	TP53
+T2	gene 698 702	TP53
+T59	Concepts_Ideas 286 294	sporadic
+T52_2	Disorder 2932 2955	positive family history
+T10	gene 2709 2712	APC
+T11	gene 515 520	K-ras
+T12	gene 1580 1585	K-ras
+T13	gene 1683 1688	K-ras
+T14	gene 1829 1834	K-ras
+T15	gene 2714 2719	K-ras
+T81	body-part 2959 2969	colorectal
+T52	cohort-patient 2784 2789	group
+T16	mutation 1077 1086	mutations
+T80	Disorder 2801 2824	microsatellite instable
+T51	cohort-patient 2916 2924	patients
+T17	mutation 1658 1667	mutations
+T54	gender 3086 3091	women
+T83	Disorder 3152 3178	microsatellite instability
+T18	Disorder 2645 2667	chromosomally instable
+T19	gene 507 513	CTNNB1
+T56	Physiology 2304 2313	aneuploid
+T55	body-part 2864 2878	proximal colon
+T58	disease 246 260	carcinogenesis
+T57	body-part 234 244	colorectal
+R0_T43_T2	has Arg1:T43 Arg2:T2
+R41_1	relatedTo Arg1:T27 Arg2:T40
+R0_T77_T38_merge_cancers	relatedTo Arg1:T77 Arg2:T38_merge_cancers
+R0_T72_T34_cancer	relatedTo Arg1:T72 Arg2:T34_cancer
+R27_1	has Arg1:T15 Arg2:T40
+R26_1	has Arg1:T10 Arg2:T40
+R0_T81_T39_cancer	relatedTo Arg1:T81 Arg2:T39_cancer
+R0_T73_T50	relatedTo Arg1:T73 Arg2:T50
+R44_1	has Arg1:T51 Arg2:T29
+R8_1	has Arg1:T76 Arg2:T37
+R20_m	relatedTo Arg1:T55 Arg2:T29
+R0_T75_T37_cancer	relatedTo Arg1:T75 Arg2:T37_cancer
+R0_T65_T33_merge_cancers	relatedTo Arg1:T65 Arg2:T33_merge_cancers
+R18_m	has Arg1:T18 Arg2:T27
+R21_1	has Arg1:T85 Arg2:T48
+R20_1	has Arg1:T85 Arg2:T25
+R0_T60_T32_cancer	relatedTo Arg1:T60 Arg2:T32_cancer
+R19_m	has Arg1:T80 Arg2:T29
+R10_m	has Arg1:T7 Arg2:T16
+R3_m	relatedTo Arg1:T61 Arg2:T62
+R28_m	has Arg1:T79 Arg2:T38_merge
+R2_m	has Arg1:T59 Arg2:T32
+R12_m	has Arg1:T12 Arg2:T71
+R22_2	has Arg1:T51 Arg2:T39
+R22_1	has Arg1:T21 Arg2:T41
+R5_m	has Arg1:T8 Arg2:T17
+R6_m	has Arg1:T13 Arg2:T17
+R17_m	has Arg1:T63 Arg2:T27
+R11_m	has Arg1:T20 Arg2:T69
+R23_2	has Arg1:T2 Arg2:T77_2
+R16_m	has Arg1:T78 Arg2:T38_merge
+R24_m	has Arg1:T64 Arg2:T30
+R26_m	relatedTo Arg1:T31 Arg2:T21
+R29_m	has Arg1:T6 Arg2:T66
+R15_m	has Arg1:T56 Arg2:T25
+R0_T74_T45	relatedTo Arg1:T74 Arg2:T45
+R25_m	has Arg1:T83 Arg2:T31
+R30_1	has Arg1:T44 Arg2:T33_merge
+R30_2	has Arg1:T12 Arg2:T78_2
+R1_1	relatedTo Arg1:T57 Arg2:T58
+R19_1	relatedTo Arg1:T24 Arg2:T69
+R13_1	has Arg1:T64 Arg2:T29
+R0_T43_T77_2	has Arg1:T43 Arg2:T77_2
+R13_2	relatedTo Arg1:T42 Arg2:T12
+R32_2	has Arg1:T52_2 Arg2:T51
+R5_1	relatedTo Arg1:T33_merge Arg2:T66
+R28_1	has Arg1:T4 Arg2:T40
+R31_1	has Arg1:T47 Arg2:T42
+R16_1	has Arg1:T68 Arg2:T33_merge

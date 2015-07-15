@@ -1,0 +1,3 @@
+T1_2	disease 110 119	carcinoma
+T2_2	body-part 99 109	Colorectal
+R1_2	relatedTo Arg1:T2_2 Arg2:T1_2

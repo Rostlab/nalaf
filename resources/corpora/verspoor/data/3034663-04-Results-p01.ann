@@ -1,0 +1,250 @@
+T114	disease 2705 2710	polyp
+T60_merge	size 1322 1325	Two
+T115	Disorder 2718 2741	high grade of dysplasia
+T116	body-part 2779 2786	colonic
+T117	disease 2787 2793	polyps
+T118	Concepts_Ideas 527 535	sporadic
+T119	Concepts_Ideas 594 602	familial
+T28	cohort-patient 2410 2428	paternal relatives
+T27	cohort-patient 2302 2307	III-3
+T26	cohort-patient 636 647	individuals
+T85_merge	size 2141 2154	three of four
+T25	cohort-patient 391 402	individuals
+T23	cohort-patient 594 608	familial group
+T22	cohort-patient 527 541	sporadic group
+T122	cohort-patient 1781 1790	Family #1
+T21	disease 2155 2165	unaffected
+T121	cohort-patient 1493 1499	III-12
+T20	disease 1472 1482	unaffected
+T124	cohort-patient 1982 1986	II-6
+T123	cohort-patient 1976 1980	II-5
+T125	cohort-patient 1988 1992	II-7
+T126	cohort-patient 2430 2439	Family #2
+T38	cohort-patient 2570 2582	third family
+T37	cohort-patient 2466 2475	Family #2
+T39	cohort-patient 2627 2659	first-grade familiar non-carrier
+T34	disease 1852 1854	GC
+T33	cohort-patient 1817 1826	Family #1
+T36	cohort-patient 2400 2406	father
+T93_merge	size 610 615	7/250
+T35	cohort-patient 1902 1918	second LS family
+T32	cohort-patient 1188 1196	families
+T100_2	gender 2410 2418	paternal
+T49	gender 1943 1949	sister
+T48	gender 1958 1965	brother
+T72_merge	size 1700 1703	Two
+T100	cohort-patient 2175 2180	III-2
+T43	mutation 1272 1280	c.767C>T
+T42	cohort-patient 1210 1223	index subject
+T102	cohort-patient 2189 2194	III-4
+T41	disease 1202 1204	LS
+T101	cohort-patient 2182 2187	III-3
+T3_cancer	disease 1844 1850	cancer
+T46	age 2749 2764	age of 39 years
+T45	mutation 1301 1312	p.Lys618Ala
+T44	mutation 1282 1291	p.Arg226X
+T107	cohort-patient 143 154	populations
+T105	Concepts_Ideas 117 125	sporadic
+T16_2	mutation 2337 2356	deleterious variant
+T106	Concepts_Ideas 130 138	familial
+T103	cohort-patient 2312 2317	III-4
+T104	cohort-patient 2818 2827	Family #3
+T50	gender 1329 1332	his
+T59	mutation 716 727	p.Lys618Ala
+T47_merge	size 543 548	9/373
+T113	body-part 2697 2704	colonic
+T52	age 1637 1652	30 and 42 years
+T68_merge	size 1566 1569	Two
+T51	cohort-patient 108 115	control
+T112	age 2801 2816	age of 42 years
+T111	cohort-patient 576 584	patients
+T110	cohort-patient 509 517	patients
+T55	mutation 429 440	p.Lys618Ala
+T57	cohort-patient 469 477	controls
+T29_merge	size 561 566	seven
+T75	disease 1872 1874	DC
+T76	body-part 1876 1884	Duodenal
+T73	gender 1718 1725	nephews
+T74	cohort-patient 1718 1725	nephews
+T79	cohort-patient 1924 1937	index subject
+T24_merge	size 479 485	11/411
+T77	disease 1876 1891	Duodenal cancer
+T78	disease 1909 1911	LS
+T54_merge	size 378 390	Twenty-seven
+T110_2	cohort-patient 139 142	CRC
+T70	cohort-patient 1570 1577	nephews
+T62	cohort-patient 1333 1342	offspring
+T63	age 1387 1402	36 and 39 years
+T64	mutation 1448 1459	p.Lys618Ala
+T65	gender 1483 1491	daughter
+T66	cohort-patient 1483 1491	daughter
+T30_merge	size 624 628	None
+T67	mutation 1513 1524	p.Lys618Ala
+T69	gender 1570 1577	nephews
+T56_merge	size 461 463	11
+T4_cancer	disease 2493 2499	cancer
+T40_merge	size 1177 1180	one
+T58_merge	size 495 499	nine
+T92_merge	size 550 555	2.41%
+T61	cohort-patient 1329 1332	his
+T99	cohort-patient 1734 1739	III-7
+T97	cohort-patient 1586 1591	III-4
+T98	cohort-patient 1727 1732	III-6
+T95	mutation 1153 1164	p.Lys618Ala
+T96	cohort-patient 1579 1584	III-3
+T6	disease 505 508	CRC
+T7	disease 572 575	CRC
+T4	disease 2482 2499	Colorectal cancer
+T5	disease 139 142	CRC
+T8	disease 1368 1371	CRC
+T9	disease 1618 1621	CRC
+T91	mutation 2531 2542	p.Lys618Ala
+T90	disease 2505 2523	Endometrial cancer
+T88	gender 2400 2406	father
+T89	disease 2501 2503	EC
+T84	mutation 2087 2098	p.Lys618Ala
+T31_merge	size 487 492	2.68%
+T86	cohort-patient 2166 2173	nephews
+T87	gender 2166 2173	nephews
+T1	gene 1258 1262	MLH1
+T3	disease 1833 1850	Colorectal cancer
+T2	gene 2037 2041	MSH6
+T10	disease 1828 1831	CRC
+T11	disease 1971 1974	CRC
+T12	disease 2477 2480	CRC
+T13	body-part 1833 1843	Colorectal
+T14	disease 1856 1870	Gastric cancer
+T15	body-part 1856 1863	Gastric
+T81	cohort-patient 1958 1965	brother
+T80	cohort-patient 1943 1949	sister
+T16	disease 2282 2288	cancer
+T83	mutation 2054 2064	p.Arg1005X
+T17	body-part 2482 2492	Colorectal
+T82	mutation 2043 2052	c.3013C>T
+T18	body-part 2505 2516	Endometrial
+T19	disease 1710 1717	healthy
+T94_merge	size 617 621	2.8%
+R42_m	has Arg1:T86 Arg2:T87
+R27_1	has Arg1:T52 Arg2:T97
+R40_1	has Arg1:T2 Arg2:T83
+R40_2	has Arg1:T111 Arg2:T94_merge
+R66_1	has Arg1:T97 Arg2:T9
+R99_1	has Arg1:T121 Arg2:T65
+R50_1	has Arg1:T37 Arg2:T12
+R67_1	has Arg1:T96 Arg2:T9
+R32_m	has Arg1:T112 Arg2:T39
+R107_1	relatedTo Arg1:T76 Arg2:T75
+R101_1	has Arg1:T99 Arg2:T73
+R25_1	has Arg1:T70 Arg2:T68_merge
+R106_1	relatedTo Arg1:T15 Arg2:T34
+R44_2	has Arg1:T103 Arg2:T16_2
+R111_1	has Arg1:T125 Arg2:T48
+R44_1	has Arg1:T80 Arg2:T82
+R20_m	relatedTo Arg1:T76 Arg2:T77
+R8_1	has Arg1:T23 Arg2:T7
+R49_1	has Arg1:T36 Arg2:T88
+R21_m	has Arg1:T74 Arg2:T72_merge
+R60_1	has Arg1:T23 Arg2:T55
+R108_1	has Arg1:T123 Arg2:T11
+R30_m	has Arg1:T38 Arg2:T91
+R59_1	has Arg1:T22 Arg2:T55
+R109_1	has Arg1:T124 Arg2:T11
+R19_m	has Arg1:T52 Arg2:T70
+R0_T118_T22	has Arg1:T118 Arg2:T22
+R17_m	relatedTo Arg1:T15 Arg2:T14
+R97_1	has Arg1:T1 Arg2:T45
+R42_1	has Arg1:T81 Arg2:T82
+R68_1	has Arg1:T52 Arg2:T96
+R0_T119_T23	has Arg1:T119 Arg2:T23
+R33_m	relatedTo Arg1:T113 Arg2:T114
+R39_2	has Arg1:T111 Arg2:T93_merge
+R29_m	relatedTo Arg1:T116 Arg2:T117
+R27_m	has Arg1:T2 Arg2:T82
+R0_T13_T3_cancer	relatedTo Arg1:T13 Arg2:T3_cancer
+R115_1	relatedTo Arg1:T18 Arg2:T89
+R82_1	has Arg1:T37 Arg2:T90
+R113_1	relatedTo Arg1:T17 Arg2:T12
+R25_m	has Arg1:T80 Arg2:T11
+R2_1	has Arg1:T107 Arg2:T5
+R58_1	has Arg1:T57 Arg2:T55
+R62_1	has Arg1:T23 Arg2:T94_merge
+R63_1	has Arg1:T42 Arg2:T41
+R56_1	has Arg1:T22 Arg2:T47_merge
+R30_1	has Arg1:T33 Arg2:T10
+R35_m	has Arg1:T57 Arg2:T24_merge
+R4_1	has Arg1:T25 Arg2:T55
+R92_1	has Arg1:T104 Arg2:T114
+R32_1	has Arg1:T33 Arg2:T14
+R17_1	has Arg1:T42 Arg2:T45
+R23_m	relatedTo Arg1:T18 Arg2:T90
+R31_1	has Arg1:T33 Arg2:T3
+R16_1	has Arg1:T1 Arg2:T44
+R0_T17_T4_cancer	relatedTo Arg1:T17 Arg2:T4_cancer
+R41_1	has Arg1:T81 Arg2:T82
+R34_2	has Arg1:T110_2 Arg2:T5
+R57_m	has Arg1:T80 Arg2:T49
+R35_1	has Arg1:T81 Arg2:T48
+R15_1	has Arg1:T1 Arg2:T43
+R9_1	has Arg1:T23 Arg2:T29_merge
+R43_1	has Arg1:T80 Arg2:T83
+R100_1	has Arg1:T98 Arg2:T73
+R110_1	has Arg1:T124 Arg2:T49
+R45_1	has Arg1:T79 Arg2:T83
+R45_2	has Arg1:T27 Arg2:T16_2
+R56_m	has Arg1:T35 Arg2:T78
+R46_1	has Arg1:T79 Arg2:T82
+R55_m	has Arg1:T74 Arg2:T73
+R7_1	has Arg1:T22 Arg2:T58_merge
+R81_1	has Arg1:T37 Arg2:T89
+R78_1	has Arg1:T100 Arg2:T87
+R4_m	has Arg1:T57 Arg2:T56_merge
+R18_m	has Arg1:T70 Arg2:T9
+R54_m	has Arg1:T70 Arg2:T69
+R96_1	has Arg1:T119 Arg2:T7
+R112_1	has Arg1:T125 Arg2:T11
+R53_m	has Arg1:T66 Arg2:T67
+R80_1	has Arg1:T102 Arg2:T87
+R77_1	has Arg1:T102 Arg2:T21
+R51_m	has Arg1:T66 Arg2:T20
+R13_m	has Arg1:T32 Arg2:T41
+R28_m	has Arg1:T86 Arg2:T85_merge
+R3_m	has Arg1:T25 Arg2:T54_merge
+R43_m	has Arg1:T86 Arg2:T21
+R10_m	has Arg1:T111 Arg2:T7
+R2_m	has Arg1:T105 Arg2:T5
+R61_1	has Arg1:T23 Arg2:T93_merge
+R37_2	has Arg1:T110 Arg2:T47_merge
+R12_m	has Arg1:T32 Arg2:T40_merge
+R5_m	has Arg1:T110 Arg2:T58_merge
+R79_1	has Arg1:T101 Arg2:T87
+R6_m	has Arg1:T110 Arg2:T6
+R31_m	has Arg1:T46 Arg2:T39
+R38_2	has Arg1:T110 Arg2:T92_merge
+R1_m	has Arg1:T106 Arg2:T5
+R41_m	has Arg1:T26 Arg2:T30_merge
+R14_m	has Arg1:T62 Arg2:T60_merge
+R98_1	has Arg1:T121 Arg2:T20
+R38_1	has Arg1:T79 Arg2:T11
+R16_m	has Arg1:T62 Arg2:T8
+R9_m	has Arg1:T111 Arg2:T29_merge
+R57_1	has Arg1:T22 Arg2:T92_merge
+R36_m	has Arg1:T57 Arg2:T31_merge
+R26_m	has Arg1:T81 Arg2:T11
+R51_1	has Arg1:T37 Arg2:T4
+R15_m	has Arg1:T63 Arg2:T62
+R50_m	has Arg1:T66 Arg2:T65
+R46_m	has Arg1:T115 Arg2:T114
+R49_m	has Arg1:T61 Arg2:T50
+R8_m	has Arg1:T22 Arg2:T6
+R47_m	has Arg1:T42 Arg2:T43
+R48_m	has Arg1:T42 Arg2:T44
+R7_m	has Arg1:T118 Arg2:T6
+R75_1	has Arg1:T100 Arg2:T21
+R72_1	has Arg1:T33 Arg2:T34
+R71_1	has Arg1:T99 Arg2:T19
+R102_1	relatedTo Arg1:T13 Arg2:T10
+R76_1	has Arg1:T101 Arg2:T21
+R74_1	has Arg1:T33 Arg2:T77
+R70_1	has Arg1:T98 Arg2:T19
+R73_1	has Arg1:T33 Arg2:T75
+R22_m	has Arg1:T74 Arg2:T19

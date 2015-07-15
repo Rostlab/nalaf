@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Regarding the location of gene mutations, we found that 3 patients bore mutations in exon 7 of MSH2, 2 had mutations in exon 12 of MSH2, 1 had a mutation in exon 2 of MSH6, and 2 had mutations in exon 5 of MSH6. No MLH1 mutations were found in our cohort. All 8 mutations were considered pathogenic mutations. The mutation of C1886 A > G, C1668 C > T was reported as a pathogenic mutation previously [22-25]. However, the other six mutations have not been reported in other publications and are likely to be novel mutations. We also attempted to screen for the presence of all these mutations in 50 randomly selected patients in the MSS group and in 50 normal people. The result of this screen was negative, and all these CRCs with mutations stained negatively for MSH2 or/and MSH6, indicating that these 6 mutations may be pathogenic mutations but not polymorphisms. In terms of the clinical features of the 8 cases with mutations, only 1 conformed to the Amsterdam criteria II; all the others did not have any family history of malignancy. Moreover, the median age was 59 with 4 patients that were older than 60 years old.
+
+One limitation of this study is that it is a single-center study with a relatively small sample size. Therefore, the results of this study need to be confirmed by a well designed multi-center study, which is one of our ongoing studies in China.
+

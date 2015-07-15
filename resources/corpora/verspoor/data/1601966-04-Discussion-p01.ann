@@ -1,0 +1,15 @@
+T6	disease 2608 2611	CRC
+T7	disease 226 238	colon cancer
+T12_2	disease 383 389	normal
+T4	disease 2066 2069	CRC
+T5	disease 2165 2168	CRC
+T10	body-part 408 413	colon
+T11_2	disease 369 375	tumors
+T8	cohort-patient 949 959	individual
+T9	body-part 226 231	colon
+T7_cancer	disease 232 238	cancer
+T1	disease 739 742	CRC
+T3	disease 1042 1045	CRC
+T2	disease 902 905	CRC
+R0_T9_T7_cancer	relatedTo Arg1:T9 Arg2:T7_cancer
+R2_2	relatedTo Arg1:T10 Arg2:T12_2

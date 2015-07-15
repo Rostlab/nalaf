@@ -1,0 +1,25 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Microsatellite instability analysis in hereditary non-polyposis colon cancer using the Bethesda consensus panel of microsatellite markers in the absence of proband normal tissue
+
+Abstract
+
+Background
+
+Hereditary non-polyposis colon cancer (HNPCC) is an autosomal dominant syndrome predisposing to the early development of various cancers including those of colon, rectum, endometrium, ovarium, small bowel, stomach and urinary tract. HNPCC is caused by germline mutations in the DNA mismatch repair genes, mostly hMSH2 or hMLH1.
+
+In this study, we report the analysis for genetic counseling of three first-degree relatives (the mother and two sisters) of a male who died of colorectal adenocarcinoma at the age of 23. The family fulfilled strict Amsterdam-I criteria (AC-I) with the presence of extracolonic tumors in the extended pedigree. We overcame the difficulty of having a proband post-mortem non-tumor tissue sample for MSI testing by studying the alleles carried by his progenitors.
+
+Methods
+
+Tumor MSI testing is described as initial screening in both primary and metastasis tumor tissue blocks, using the reference panel of 5 microsatellite markers standardized by the National Cancer Institute (NCI) for the screening of HNPCC (BAT-25, BAT-26, D2S123, D5S346 and D17S250). Subsequent mutation analysis of the hMLH1 and hMSH2 genes was performed.
+
+Results
+
+Three of five microsatellite markers (BAT-25, BAT-26 and D5S346) presented different alleles in the proband's tumor as compared to those inherited from his parents. The tumor was classified as high frequency microsatellite instability (MSI-H). We identified in the HNPCC family a novel germline missense (c.1864C>A) mutation in exon 12 of hMSH2 gene, leading to a proline 622 to threonine (p.Pro622Thr) amino acid substitution.
+
+Conclusion
+
+This approach allowed us to establish the tumor MSI status using the NCI recommended panel in the absence of proband's non-tumor tissue and before sequencing the obligate carrier. According to the Human Gene Mutation Database (HGMD) and the International Society for Gastrointestinal Hereditary Tumors (InSiGHT) Database this is the first report of this mutation.
+

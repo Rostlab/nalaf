@@ -1,0 +1,13 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Background
+
+Cancer is thought to arise through a multistep process involving sequential cycles of mutation and selection [1]. The identities and numbers of mutations required for transformation are uncertain, but perhaps six general cellular functions are typically altered [2]. Numbers of oncogenic mutations may also be inferred from the age-related increases in frequencies observed with many cancer types. For example, logarithms of cancer frequencies versus age typically yield straight lines, with slopes proportional to numbers of cancer mutations [3].
+
+Colorectal cancer epidemiology is consistent with approximately five to seven oncogenic mutations before transformation [3-6]. The variability in estimated numbers of mutations may reflect a number of differences. For example, estimates vary between populations, with five to six mutations in England and six to seven mutations in Finland [4]. Recent advances in cancer genetics also reveal biologic colorectal cancer heterogeneity. Approximately 5% of all colorectal cancers have strong familial predispositions and arise in individuals with germline mutations in critical susceptibility loci [7]. Such hereditary cancers (familial adenomatous polyposis (FAP) and hereditary nonpolyposis colorectal cancer (HNPCC)) typically present at younger ages and should require fewer somatic mutations than their sporadic counterparts because one mutation is inherited.
+
+Genetic instability also divides colorectal cancers into two groups [8]. Approximately 10 to 15% of sporadic cancers exhibit microsatellite instability (MSI) secondary to somatic loss of DNA mismatch repair (MMR). Most other cancers exhibit chromosomal instability (CIN) characterized by aneuploidy and loss of heterozygosity (LOH) [7,8]. CIN and MSI+ colorectal cancers have different characteristics with respect to mutated loci, tumor location, morphology, and clinical outcomes [7,8].
+
+Numbers of oncogenic mutations may differ between cancer subtypes. Therefore, colorectal cancers arising in a population-based setting were molecularly classified as either sporadic or hereditary, and MSI+ or MSI-. Cancers were also classified with respect to clinical stage because additional mutations may be required for invasion or metastasis. Ages at cancer for each subgroup were used to infer numbers of mutations required for each type of colorectal cancer.
+

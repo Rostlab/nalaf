@@ -1,0 +1,170 @@
+T75	Concepts_Ideas 2409 2417	serrated
+T76	disease 2427 2429	SA
+T73	disease 2396 2399	SSA
+T74	Concepts_Ideas 2401 2408	sessile
+T79	Concepts_Ideas 2453 2460	tubular
+T77	Concepts_Ideas 2431 2439	serrated
+T78	disease 2449 2451	TA
+T29	disease 261 268	lesions
+T28	Concepts_Ideas 252 260	serrated
+T27	mutation 235 243	mutation
+T26	gene 230 234	BRAF
+T25	disease 193 199	polyps
+T24	Disorder 112 121	dysplasia
+T23	disease 100 106	polyps
+T22	Concepts_Ideas 91 99	serrated
+T21	cohort-patient 2183 2190	patient
+T72	disease 2389 2394	polyp
+T71	Disorder 2376 2388	hyperplastic
+T20	cohort-patient 585 592	Group A
+T70	disease 2372 2374	HP
+T62	disease 1808 1814	cancer
+T63	disease 1848 1854	lesion
+T64	Physiology 1911 1978	inactivation of either TP535 or the DNA mismatch repair gene MLH113
+T65	Physiology 2057 2083	loss of expression of MLH1
+T66	disease 2122 2128	polyps
+T67	body-part 2235 2245	colorectal
+T68	disease 2246 2253	lesions
+T69	body-part 2273 2283	colorectal
+T1_merge	gene 1972 1978	MLH113
+T38	Concepts_Ideas 476 484	serrated
+T37	disease 458 465	lesions
+T39	Disorder 510 520	dysplastic
+T34	gene 393 397	KRAS
+T33	mutation 381 389	mutation
+T36	mutation 436 444	mutation
+T35	gene 431 435	KRAS
+T30	disease 292 298	polyps
+T61	disease 1719 1726	lesions
+T32	Concepts_Ideas 363 370	villous
+T31	Concepts_Ideas 350 358	serrated
+T60	body-part 1708 1718	colorectal
+T6	disease 2273 2290	colorectal cancer
+T7	disease 1183 1186	CRC
+T49	Concepts_Ideas 968 987	glandular serration
+T5	gene 2496 2500	TP53
+T48	disease 955 962	lesions
+T8	disease 1311 1314	CRC
+T9	disease 1467 1471	CRCs
+T43	Concepts_Ideas 646 665	goblet cell variant
+T42	disease 669 671	HP
+T93	disease 2634 2641	lesions
+T87_2	mutation 2471 2483	Inactivation
+T41	disease 602 608	polyps
+T92	disease 2317 2320	ACF
+T91	disease 2337 2341	foci
+T40	Concepts_Ideas 593 601	serrated
+T47	disease 853 855	SA
+T90	body-part 2331 2336	crypt
+T45	gene 753 757	KRAS
+T44	mutation 758 766	mutation
+T88	Disorder 2359 2369	dysplastic
+T89	Concepts_Ideas 2322 2330	Aberrant
+T84	Concepts_Ideas 998 1009	traditional
+T85	Concepts_Ideas 1698 1707	malignant
+T86	Concepts_Ideas 1838 1847	precursor
+T50	disease 1011 1013	SA
+T87	Disorder 2343 2355	hyperplastic
+T3	gene 2487 2491	MLH1
+T4_merge	gene 1934 1939	TP535
+T2	gene 2079 2083	MLH1
+T69_2	mutation 1911 1923	inactivation
+T59	disease 1516 1522	polyps
+T6_cancer	disease 2284 2290	cancer
+T10	disease 325 333	adenomas
+T11	disease 1409 1417	adenomas
+T12	disease 1534 1542	adenomas
+T13	disease 2137 2144	adenoma
+T14	disease 2418 2425	adenoma
+T15	disease 2440 2447	adenoma
+T52	body-part 1076 1086	Colorectal
+T81	Concepts_Ideas 312 324	conventional
+T16	disease 2461 2468	adenoma
+T51	disease 1071 1074	crc
+T80	Physiology 2471 2500	Inactivation of MLH1 and TP53
+T17	disease 2196 2210	Lynch syndrome
+T54	body-part 1219 1229	colorectal
+T83	Disorder 943 954	adenomatous
+T53	disease 1087 1093	polyps
+T82	Concepts_Ideas 840 851	traditional
+T18	cohort-patient 185 192	Group A
+T56	Concepts_Ideas 1422 1430	serrated
+T19	cohort-patient 284 291	Group B
+T55	disease 1230 1243	tumorigenesis
+T58	Concepts_Ideas 1507 1515	serrated
+T57	disease 1431 1437	polyps
+R41_1	has Arg1:T77 Arg2:T76
+R0_T64_T4_merge	has Arg1:T64 Arg2:T4_merge
+R29_1	has Arg1:T65 Arg2:T17
+R15_1	relatedTo Arg1:T37 Arg2:T36
+R15_2	has Arg1:T4_merge Arg2:T69_2
+R27_1	has Arg1:T58 Arg2:T12
+R43_2	has Arg1:T18 Arg2:T29
+R36_1	has Arg1:T71 Arg2:T70
+R0_T80_T87_2	has Arg1:T80 Arg2:T87_2
+R33_2	relatedTo Arg1:T42 Arg2:T45
+R43_1	has Arg1:T79 Arg2:T78
+R45_2	has Arg1:T19 Arg2:T33
+R0_T64_T1_merge	has Arg1:T64 Arg2:T1_merge
+R44_2	has Arg1:T19 Arg2:T10
+R20_m	has Arg1:T71 Arg2:T72
+R21_m	has Arg1:T75 Arg2:T14
+R4_m	has Arg1:T28 Arg2:T29
+R21_1	relatedTo Arg1:T41 Arg2:T44
+R30_m	relatedTo Arg1:T52 Arg2:T53
+R13_m	has Arg1:T84 Arg2:T50
+R28_m	has Arg1:T86 Arg2:T63
+R3_m	has Arg1:T26 Arg2:T27
+R10_m	has Arg1:T20 Arg2:T41
+R2_m	has Arg1:T24 Arg2:T23
+R37_1	has Arg1:T74 Arg2:T73
+R12_m	has Arg1:T43 Arg2:T42
+R5_m	has Arg1:T18 Arg2:T25
+R6_m	has Arg1:T19 Arg2:T30
+R31_m	has Arg1:T45 Arg2:T44
+R11_m	has Arg1:T40 Arg2:T41
+R40_m	has Arg1:T87 Arg2:T91
+R17_m	relatedTo Arg1:T67 Arg2:T68
+R1_m	has Arg1:T22 Arg2:T23
+R42_2	has Arg1:T18 Arg2:T27
+R41_m	has Arg1:T88 Arg2:T91
+R38_1	has Arg1:T75 Arg2:T73
+R34_m	has Arg1:T82 Arg2:T47
+R9_m	has Arg1:T35 Arg2:T36
+R0_T80_T3	has Arg1:T80 Arg2:T3
+R10_1	has Arg1:T31 Arg2:T30
+R57_1	has Arg1:T87 Arg2:T92
+R24_m	has Arg1:T79 Arg2:T16
+R0_T80_T5	has Arg1:T80 Arg2:T5
+R36_m	has Arg1:T49 Arg2:T48
+R26_m	relatedTo Arg1:T60 Arg2:T61
+R29_m	relatedTo Arg1:T54 Arg2:T55
+R27_m	has Arg1:T85 Arg2:T61
+R25_m	has Arg1:T56 Arg2:T57
+R58_1	has Arg1:T88 Arg2:T92
+R46_m	has Arg1:T65 Arg2:T13
+R8_m	has Arg1:T34 Arg2:T33
+R55_1	has Arg1:T89 Arg2:T92
+R0_T69_T6_cancer	relatedTo Arg1:T69 Arg2:T6_cancer
+R47_m	has Arg1:T21 Arg2:T13
+R48_m	has Arg1:T21 Arg2:T17
+R56_1	has Arg1:T90 Arg2:T92
+R7_m	has Arg1:T81 Arg2:T10
+R30_1	has Arg1:T65 Arg2:T66
+R0_T65_T2	has Arg1:T65 Arg2:T2
+R35_m	has Arg1:T83 Arg2:T48
+R0_T64_T69_2	has Arg1:T64 Arg2:T69_2
+R18_2	has Arg1:T3 Arg2:T87_2
+R6_1	has Arg1:T28 Arg2:T25
+R39_m	has Arg1:T89 Arg2:T91
+R19_2	has Arg1:T5 Arg2:T87_2
+R12_1	relatedTo Arg1:T30 Arg2:T33
+R13_1	has Arg1:T38 Arg2:T37
+R37_m	has Arg1:T58 Arg2:T59
+R14_1	has Arg1:T39 Arg2:T37
+R38_m	has Arg1:T90 Arg2:T91
+R5_1	relatedTo Arg1:T25 Arg2:T27
+R11_1	has Arg1:T32 Arg2:T30
+R23_m	has Arg1:T77 Arg2:T15
+R14_2	has Arg1:T1_merge Arg2:T69_2
+R22_m	has Arg1:T74 Arg2:T14

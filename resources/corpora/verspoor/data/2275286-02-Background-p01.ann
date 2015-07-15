@@ -1,0 +1,122 @@
+T2_cancer	disease 787 793	cancer
+T46_2	Disorder 434 447	defective MMR
+T57_2	gene 466 469	MMR
+T29	body-part 303 316	extra-colonic
+T28	disease 287 293	tumors
+T27	body-part 276 286	colorectal
+T29_2	Concepts_Ideas 334 349	better survival
+T24	disease 231 240	carcinoma
+T23	cohort-patient 151 157	cancer
+T22	body-part 140 150	colorectal
+T20	Concepts_Ideas 78 96	autosomal dominant
+T43_2	gene 1072 1075	MMR
+T1_cancer	disease 151 157	cancer
+T30_2	body-part 222 230	mucinous
+T25_2	Disorder 217 240	more mucinous carcinoma
+T27_2	Concepts_Ideas 242 293	more synchronous and metachronous colorectal tumors
+T38	disease 635 640	HPNCC
+T37	Concepts_Ideas 456 474	defective MMR gene
+T4_cancer	disease 1832 1838	cancer
+T39	Concepts_Ideas 767 775	sporadic
+T34	Disorder 523 526	MSI
+T33	mutation 401 418	germline mutation
+T36	body-part 605 615	colorectum
+T35	disease 559 565	tumors
+T44_2	mutation 1081 1089	mutation
+T30	disease 317 323	tumors
+T32	gene 444 447	MMR
+T31	Concepts_Ideas 434 452	defective MMR gene
+T21_merge	size 132 136	1–5%
+T50_2	cohort-patient 1780 1788	carriers
+T6	disease 66 71	HNPCC
+T7	disease 163 168	HNPCC
+T49	cohort-patient 1638 1648	population
+T4	disease 1821 1838	colorectal cancer
+T48	body-part 1654 1664	colorectal
+T5	disease 1162 1166	CRCs
+T8	disease 377 382	HNPCC
+T9	disease 834 839	HNPCC
+T24_2	Disorder 199 215	earlier symptoms
+T40	body-part 776 786	colorectal
+T47	Physiology 1445 1477	loss of expression of a MMR gene
+T3_cancer	disease 1665 1671	cancer
+T46	disease 1435 1440	tumor
+T45	Disorder 1424 1427	MSI
+T44	Disorder 1158 1161	MSI
+T50	cohort-patient 1805 1815	population
+T1	disease 140 157	colorectal cancer
+T53_2	cohort-patient 1723 1730	carrier
+T3	disease 1654 1671	colorectal cancer
+T2	disease 776 793	colorectal cancer
+T10	disease 964 969	HNPCC
+T11	disease 991 996	HNPCC
+T12	disease 1396 1401	HNPCC
+T13	cohort-patient 169 177	patients
+T14	cohort-patient 840 848	patients
+T52	Disorder 1719 1730	MSI carrier
+T15	cohort-patient 719 730	individuals
+T51	body-part 1821 1831	colorectal
+T16	cohort-patient 641 649	families
+T54	gene 1752 1755	MMR
+T17	cohort-patient 997 1005	families
+T53	gene 1735 1750	mismatch repair
+T18	ethnicity 1630 1637	Chinese
+T19	ethnicity 1797 1804	Chinese
+T55	mutation 1762 1779	germline mutation
+T48_2	gene 1469 1472	MMR
+R34_1	has Arg1:T50 Arg2:T4
+R0_T51_T4_cancer	relatedTo Arg1:T51 Arg2:T4_cancer
+R0_T40_T2_cancer	relatedTo Arg1:T40 Arg2:T2_cancer
+R29_1	has Arg1:T45 Arg2:T46
+R15_1	has Arg1:T32 Arg2:T33
+R35_1	has Arg1:T54 Arg2:T55
+R27_2	has Arg1:T50_2 Arg2:T19
+R26_2	has Arg1:T52 Arg2:T53_2
+R9_2	has Arg1:T25_2 Arg2:T13
+R33_1	has Arg1:T50 Arg2:T19
+R8_2	has Arg1:T24_2 Arg2:T13
+R8_1	has Arg1:T25_2 Arg2:T24
+R0_T27_2_T28	has Arg1:T27_2 Arg2:T28
+R0_T25_T30_2	has Arg1:T30_2 Arg2:T25_2
+R24_2	has Arg1:T50_2 Arg2:T55
+R0_T27_2_T27	has Arg1:T27 Arg2:T27_2
+R4_m	relatedTo Arg1:T29 Arg2:T30
+R18_m	has Arg1:T17 Arg2:T11
+R30_m	has Arg1:T23 Arg2:T21_merge
+R20_1	has Arg1:T37 Arg2:T35
+R0_T48_T3_cancer	relatedTo Arg1:T48 Arg2:T3_cancer
+R13_m	has Arg1:T46_2 Arg2:T8
+R37_1	has Arg1:T50 Arg2:T55
+R2_m	has Arg1:T13 Arg2:T7
+R0_T22_T1_cancer	relatedTo Arg1:T22 Arg2:T1_cancer
+R5_m	relatedTo Arg1:T27 Arg2:T28
+R17_m	has Arg1:T14 Arg2:T9
+R14_m	has Arg1:T16 Arg2:T38
+R38_1	has Arg1:T52 Arg2:T4
+R0_T31_T32	has Arg1:T31 Arg2:T32
+R0_T25_2_T24	has Arg1:T25_2 Arg2:T24
+R29_m	has Arg1:T23 Arg2:T6
+R15_m	has Arg1:T39 Arg2:T2
+R25_m	relatedTo Arg1:T8 Arg2:T33
+R0_T47_T48_2	has Arg1:T47 Arg2:T48_2
+R0_T46_2_T32	has Arg1:T46_2 Arg2:T32
+R30_1	has Arg1:T47 Arg2:T12
+R7_m	has Arg1:T27_2 Arg2:T28
+R18_1	relatedTo Arg1:T36 Arg2:T35
+R3_1	has Arg1:T23 Arg2:T1
+R4_1	has Arg1:T20 Arg2:T6
+R12_2	has Arg1:T29_2 Arg2:T13
+R0_T37_T57_2	has Arg1:T37 Arg2:T57_2
+R19_1	has Arg1:T34 Arg2:T35
+R12_1	has Arg1:T27_2 Arg2:T7
+R19_2	has Arg1:T43_2 Arg2:T44_2
+R13_1	relatedTo Arg1:T27 Arg2:T7
+R32_1	has Arg1:T49 Arg2:T3
+R14_1	relatedTo Arg1:T29 Arg2:T7
+R11_2	has Arg1:T27_2 Arg2:T13
+R11_1	has Arg1:T25_2 Arg2:T7
+R23_m	has Arg1:T53 Arg2:T55
+R0_T25_2_T30_2	has Arg1:T30_2 Arg2:T25_2
+R28_2	has Arg1:T50_2 Arg2:T4
+R28_1	has Arg1:T49 Arg2:T18
+R22_m	has Arg1:T44 Arg2:T5

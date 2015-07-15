@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Conclusion
+
+No MMR inactivation was detected in 75 ovarian carcinoma specimens and no association was seen between MMR inactivation and resistance in the ovarian cancer cell lines as well as the ovarian carcinomas. We hypothesize that MMR inactivation is not clearly associated with intrinsic resistance in ovarian cancer. However, it might play a role in acquired resistance due to selection of MMR deficient cells during platinum-based chemotherapy, but this needs further investigation.
+

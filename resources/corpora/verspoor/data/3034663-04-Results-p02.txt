@@ -1,0 +1,6 @@
+Pedigree for Family #3 (CRC: Colorectal cancer; ESC: Oesophageal cancer; LC: Lung cancer).
+
+Of the 17 CRC patients with the Lys618Ala variant, two had MSI (11.8%), one in the familial CRC group (1/8) and one in the sporadic CRC group (1/9).
+
+The MSI-positive patient from the familial CRC group showed loss of immunohistochemical expression of MLH1. This is the index subject (II-3) for the third family (Figure 4) and no hypermethylation of MLH1 gene promoter; no BRAF p.Val600Glu mutation were detected in this case.
+

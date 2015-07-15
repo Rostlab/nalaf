@@ -1,0 +1,15 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Background
+
+Hereditary non-polyposis colorectal cancer (HNPCC) is an inherited syndrome predisposing to the early development of cancers of colon, rectum, endometrium, ovarium, small bowel, stomach and urinary tract [1,2].
+
+Since there are no premonitory signs of susceptibility to HNPCC, family history has been the primary method for identifying patients at risk. Defined by the International Collaborative group on HNPCC, the typical HNPCC family fulfill the following criteria (referred to as the Amsterdam-I criteria [3]): 1. Three or more relatives with histologically verified colorectal cancer, one of whom is a first-degree relative of the other two; 2. Colorectal cancer affecting at least 2 successive generations; and 3. At least one relative diagnosed with colorectal cancer under the age of 50. The fulfillment of these criteria prompted further genetics investigations. More recently it has been revised to take into account the prevalence of extracolonic cancer in certain HNPCC families [4].
+
+This autosomal dominantly inherited disorder is caused by germline mutations in genes coding proteins responsible for the repair of DNA replication errors, which are referred to as DNA mismatch repair (MMR) genes [5]. DNA mismatch repair machinery plays a critical role in genomic stability, including correction of mispaired bases associated with DNA replication and recombination. Germline mutations in one allele of any of these genes followed by the somatic loss or inactivation of the wild-type allele leads to a defective mismatch repair mechanism. The current "gold standard" for assessing tumor DNA MMR activity is molecular microsatellite instability (MSI) testing. In most cases, it involves extracting DNA from both tumor and normal tissue. The DNA is subjected to polymerase chain reaction (PCR) amplification of five or more different chromosomal loci that compare "microsatellites", running the PCR products through a gel to separate DNA fragments by size, comparing the tumor-normal pairs, and scoring for differences between the two. Instability at two or more out of five markers defines a tumor as MSI-H and prompts further analysis, as sequencing of DNA MMR genes. A number of them have been associated with HNPCC, including hMSH2, hMLH1, hPMS1, hPMS2, hMSH3, and hMSH6. Most of the HNPCC families in which mutations have been identified involved hMSH2 and hMLH1 genes [6].
+
+A much less labor-intensive alternative method used to prescreen high-risk individuals for further germline mutation analysis is immunohistochemistry (IHC) testing for MLH1 and MSH2 expression. IHC testing may identify which gene to target for analysis.
+
+We describe MSI testing in the absence of proband non-tumor tissue using the Bethesda consensus panel (mononucleotide repeats BAT25 and BAT26, and dinucleotide repeats D2S123, D5S346, and D17S250) and we report a novel hMSH2 germline mutation found in the family.
+

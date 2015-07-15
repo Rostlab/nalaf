@@ -1,0 +1,236 @@
+T42_merge	age 664 674	50.3 years
+T97_2	size 753 775	between four and seven
+T28	Concepts_Ideas 321 329	sporadic
+T27	cohort-patient 286 293	cancers
+T34_2	cohort-patient 365 370	HNPCC
+T26	disease 286 293	cancers
+T25	Disorder 281 285	MSI+
+T24	cohort-patient 268 275	cancers
+T23	disease 268 275	cancers
+T22	Disorder 263 267	MSI+
+T32_merge	size 382 386	2.9%
+T38	disease 622 629	cancers
+T37	Disorder 606 610	MSI-
+T39	cohort-patient 622 629	cancers
+T34	disease 464 470	cancer
+T33	mutation 412 443	germline MLH1 or MSH2 mutations
+T36	Concepts_Ideas 591 599	sporadic
+T35	Disorder 600 604	MSI+
+T100_2	size 998 1012	seven or eight
+T21_merge	size 256 261	12.4%
+T41_2	cohort-patient 591 604	sporadic MSI+
+T16_merge	size 227 232	87.6%
+T64_merge	size 2075 2082	108,275
+T100	Concepts_Ideas 2267 2313	localized, regional or distant clinical stages
+T41	age 654 658	67.5
+T102	mutation 1013 1022	mutations
+T40	age 648 652	71.5
+T101	mutation 1050 1059	mutations
+T47	disease 878 885	cancers
+T46	Concepts_Ideas 869 877	sporadic
+T45	Disorder 864 868	MSI+
+T44	disease 616 629	HNPCC cancers
+T11_merge	size 113 118	1,022
+T109_2	size 1452 1455	six
+T107	cohort-patient 2141 2148	cancers
+T3_cancers	disease 130 137	cancers
+T108	mutation 2240 2249	mutations
+T105	cohort-patient 1460 1472	stage C or D
+T105_2	cohort-patient 1412 1419	cancers
+T106	mutation 2036 2045	mutations
+T103	cohort-patient 1404 1411	stage A
+T104	cohort-patient 1431 1438	stage B
+T50	Concepts_Ideas 1074 1082	sporadic
+T106_2	size 1394 1399	seven
+T59	cohort-patient 698 705	cancers
+T52	disease 1088 1095	cancers
+T51	Disorder 1083 1087	MSI-
+T103_2	size 1064 1069	seven
+T54	Disorder 1191 1195	MSI-
+T56	cohort-patient 1205 1212	cancers
+T55	Concepts_Ideas 1196 1204	sporadic
+T57	disease 1205 1212	cancers
+T29_merge	size 335 337	98
+T75	cohort-patient 1305 1312	stage C
+T76	cohort-patient 1333 1340	stage D
+T73	cohort-patient 1257 1264	stage A
+T74	cohort-patient 1281 1288	stage B
+T79	disease 1473 1480	cancers
+T77	disease 1412 1419	cancers
+T78	disease 1439 1446	cancers
+T20_merge	size 251 254	127
+T110_2	cohort-patient 1473 1480	cancers
+T98_2	size 923 943	between six and nine
+T107_2	cohort-patient 1439 1446	cancers
+T72	age 1318 1328	65.4 years
+T71	age 1290 1300	65.2 years
+T70	age 1266 1276	69.0 years
+T62	disease 1676 1683	cancers
+T63	body-part 2049 2059	colorectal
+T65	cohort-patient 2089 2106	males and females
+T66	age 1960 1999	average age at diagnosis was 70.5 years
+T30_merge	size 341 345	9.6%
+T68	disease 2254 2261	cancers
+T69	age 1242 1252	68.6 years
+T84_2	size 2236 2239	six
+T42_2	cohort-patient 606 611	MSI-,
+T4_cancer	disease 2060 2066	cancer
+T58_merge	size 1176 1190	884 of the 895
+T61	cohort-patient 1088 1095	cancers
+T60	cohort-patient 878 885	cancers
+T99	ethnicity 2083 2088	white
+T97	Concepts_Ideas 1431 1438	stage B
+T98	Concepts_Ideas 1460 1472	stage C or D
+T95	mutation 1369 1388	oncogenic mutations
+T96	Concepts_Ideas 1404 1411	stage A
+T50_2	size 834 838	five
+T6	disease 616 621	HNPCC
+T7	disease 692 697	HNPCC
+T4	disease 2049 2066	colorectal cancer
+T5	disease 365 370	HNPCC
+T8	cohort-patient 2177 2185	patients
+T9	gender 2099 2106	females
+T94	Concepts_Ideas 1333 1340	stage D
+T93	Concepts_Ideas 1305 1312	stage C
+T92	Concepts_Ideas 1281 1288	stage B
+T91	Concepts_Ideas 1257 1264	stage A
+T90	mutation 908 917	mutations
+T88	disease 394 401	cancers
+T89	mutation 728 747	oncogenic mutations
+T108_2	size 1421 1426	eight
+T84	disease 2141 2148	cancers
+T85	disease 353 360	cancers
+T31_merge	size 376 378	29
+T86	cohort-patient 353 360	cancers
+T113_2	size 2032 2035	six
+T87	cohort-patient 394 401	cancers
+T112_2	disease 1770 1776	cancer
+T1	gene 421 425	MLH1
+T3	disease 119 137	colorectal cancers
+T2	gene 429 433	MSH2
+T43_merge	disease 692 705	HNPCC cancers
+T10	gender 2089 2094	males
+T12	body-part 119 129	colorectal
+T13	cohort-patient 130 137	cancers
+T14	ethnicity 185 205	southeastern Finland
+T81	ethnicity 1800 1824	United States of America
+T80	ethnicity 1573 1580	Finnish
+T17	Disorder 234 238	MSI-
+T83	ethnicity 2133 2140	Finnish
+T18	disease 239 246	cancers
+T19	cohort-patient 239 246	cancers
+T99_2	mutation 839 848	mutations
+T15_merge	size 222 225	895
+R47_1	has Arg1:T8 Arg2:T68
+R42_m	has Arg1:T56 Arg2:T57
+R29_2	has Arg1:T42_2 Arg2:T38
+R27_1	has Arg1:T40 Arg2:T39
+R27_2	has Arg1:T40 Arg2:T41_2
+R66_2	has Arg1:T99_2 Arg2:T50_2
+R67_2	has Arg1:T102 Arg2:T100_2
+R67_1	has Arg1:T103 Arg2:T95
+R32_m	has Arg1:T13 Arg2:T14
+R0_T63_T4_cancer	relatedTo Arg1:T63 Arg2:T4_cancer
+R25_1	has Arg1:T39 Arg2:T44
+R49_2	has Arg1:T106 Arg2:T113_2
+R20_m	has Arg1:T2 Arg2:T33
+R21_m	has Arg1:T1 Arg2:T33
+R65_m	has Arg1:T59 Arg2:T43_merge
+R83_m	relatedTo Arg1:T68 Arg2:T108
+R25_2	has Arg1:T41 Arg2:T42_2
+R65_1	has Arg1:T105 Arg2:T79
+R71_m	has Arg1:T61 Arg2:T52
+R59_2	has Arg1:T92 Arg2:T74
+R64_1	has Arg1:T104 Arg2:T78
+R64_2	has Arg1:T90 Arg2:T98_2
+R69_1	has Arg1:T105 Arg2:T95
+R22_1	relatedTo Arg1:T5 Arg2:T33
+R0_T36_T41_2	has Arg1:T36 Arg2:T41_2
+R40_m	has Arg1:T70 Arg2:T74
+R68_2	has Arg1:T59 Arg2:T99_2
+R68_1	has Arg1:T104 Arg2:T95
+R69_2	has Arg1:T60 Arg2:T102
+R39_2	has Arg1:T91 Arg2:T73
+R52_1	has Arg1:T87 Arg2:T5
+R0_T35_T41_2	has Arg1:T35 Arg2:T41_2
+R61_2	has Arg1:T93 Arg2:T75
+R0_T96_T103	has Arg1:T96 Arg2:T103
+R58_1	relatedTo Arg1:T7 Arg2:T89
+R44_m	has Arg1:T55 Arg2:T57
+R62_2	has Arg1:T94 Arg2:T76
+R45_m	has Arg1:T54 Arg2:T57
+R0_T98_T105	has Arg1:T98 Arg2:T105
+R56_1	relatedTo Arg1:T43_merge Arg2:T89
+R30_2	has Arg1:T41_2 Arg2:T38
+R35_m	has Arg1:T45 Arg2:T47
+R18_2	has Arg1:T34_2 Arg2:T31_merge
+R63_m	has Arg1:T72 Arg2:T76
+R60_m	has Arg1:T71 Arg2:T75
+R18_1	has Arg1:T87 Arg2:T32_merge
+R0_T97_T104	has Arg1:T97 Arg2:T104
+R19_1	has Arg1:T87 Arg2:T31_merge
+R19_2	has Arg1:T34_2 Arg2:T32_merge
+R17_2	has Arg1:T34_2 Arg2:T5
+R17_1	has Arg1:T87 Arg2:T88
+R37_m	has Arg1:T51 Arg2:T52
+R23_m	has Arg1:T35 Arg2:T38
+R33_2	has Arg1:T89 Arg2:T97_2
+R58_m	has Arg1:T100 Arg2:T68
+R56_m	has Arg1:T66 Arg2:T65
+R55_m	has Arg1:T65 Arg2:T4
+R82_m	relatedTo Arg1:T4 Arg2:T106
+R78_1	relatedTo Arg1:T79 Arg2:T95
+R78_2	has Arg1:T110_2 Arg2:T95
+R81_2	has Arg1:T107_2 Arg2:T78
+R4_m	has Arg1:T17 Arg2:T18
+R0_T37_T42_2	has Arg1:T37 Arg2:T42_2
+R54_m	has Arg1:T65 Arg2:T99
+R72_m	has Arg1:T61 Arg2:T101
+R53_m	has Arg1:T65 Arg2:T9
+R77_1	relatedTo Arg1:T78 Arg2:T95
+R77_2	has Arg1:T107_2 Arg2:T95
+R80_2	has Arg1:T95 Arg2:T108_2
+R13_m	has Arg1:T28 Arg2:T85
+R51_m	has Arg1:T65 Arg2:T64_merge
+R10_m	has Arg1:T24 Arg2:T21_merge
+R43_m	has Arg1:T56 Arg2:T58_merge
+R3_m	has Arg1:T13 Arg2:T11_merge
+R28_m	has Arg1:T42_merge Arg2:T39
+R61_1	has Arg1:T103 Arg2:T77
+R2_m	has Arg1:T13 Arg2:T3
+R12_m	has Arg1:T25 Arg2:T26
+R79_2	has Arg1:T95 Arg2:T109_2
+R5_m	has Arg1:T19 Arg2:T18
+R6_m	has Arg1:T19 Arg2:T16_merge
+R31_m	has Arg1:T60 Arg2:T47
+R11_m	has Arg1:T24 Arg2:T20_merge
+R14_m	has Arg1:T86 Arg2:T85
+R41_m	has Arg1:T60 Arg2:T90
+R52_m	has Arg1:T65 Arg2:T10
+R34_m	has Arg1:T46 Arg2:T47
+R16_m	has Arg1:T86 Arg2:T29_merge
+R9_m	has Arg1:T24 Arg2:T23
+R57_2	has Arg1:T108 Arg2:T84_2
+R57_1	has Arg1:T59 Arg2:T89
+R24_m	has Arg1:T36 Arg2:T38
+R26_m	has Arg1:T39 Arg2:T38
+R15_m	has Arg1:T86 Arg2:T30_merge
+R53_1	has Arg1:T59 Arg2:T7
+R50_m	has Arg1:T69 Arg2:T73
+R8_m	has Arg1:T22 Arg2:T23
+R46_m	has Arg1:T96 Arg2:T77
+R48_m	has Arg1:T98 Arg2:T79
+R47_m	has Arg1:T97 Arg2:T78
+R7_m	has Arg1:T19 Arg2:T15_merge
+R75_2	has Arg1:T95 Arg2:T106_2
+R72_1	has Arg1:T107 Arg2:T84
+R71_1	has Arg1:T107 Arg2:T83
+R76_1	relatedTo Arg1:T77 Arg2:T95
+R76_2	has Arg1:T110_2 Arg2:T79
+R74_2	has Arg1:T105_2 Arg2:T95
+R38_m	has Arg1:T50 Arg2:T52
+R0_T12_T3_cancers	relatedTo Arg1:T12 Arg2:T3_cancers
+R73_2	has Arg1:T105_2 Arg2:T77
+R28_1	has Arg1:T41 Arg2:T39
+R22_m	has Arg1:T37 Arg2:T38
+R70_2	has Arg1:T101 Arg2:T103_2

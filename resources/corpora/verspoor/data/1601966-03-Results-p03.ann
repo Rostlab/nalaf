@@ -1,0 +1,66 @@
+T29	gene 2430 2433	LYN
+T28	gene 2368 2371	LYN
+T27	disease 2324 2330	tumors
+T26	body-part 2313 2323	colorectal
+T25	gene 2293 2296	LYN
+T24	cohort-patient 2251 2258	samples
+T23	disease 2245 2250	tumor
+T22	gene 2487 2492	PLAG1
+T21	gene 2172 2175	LYN
+T20	Physiology 2109 2124	over-expression
+T1_cancer	disease 1018 1024	cancer
+T28_2	gene 2494 2520	pleomorphic adenoma gene 1
+T31_2	disease 1276 1281	Tumor
+T22_2	gene 2954 2959	RPS20
+T38	gene 2755 2760	PLAG1
+T37	gene 2745 2750	RPS20
+T39	disease 3039 3045	cancer
+T34	body-part 2608 2622	salivary gland
+T33	Physiology 2589 2604	over-expression
+T36	gene 2696 2699	MOS
+T21_2	gene 2945 2949	RPL7
+T35	disease 2623 2629	tumors
+T30	Physiology 2351 2371	up-regulation of LYN
+T32	mutation 2532 2555	chromosomal aberrations
+T14_2	Concepts_Ideas 996 1006	Hereditary
+T6	disease 2506 2513	adenoma
+T7	cohort-patient 293 301	patients
+T4	disease 3315 3318	CRC
+T5	disease 3548 3551	CRC
+T8	cohort-patient 2132 2140	patients
+T9	cohort-patient 3121 3129	patients
+T43	Disorder 3271 3297	amplifications of 8q11-q24
+T42	gene 3100 3106	ANKTM1
+T41	gene 3092 3095	TOX
+T40	Physiology 3069 3112	down-regulation of the TOX and ANKTM1 genes
+T1	disease 1007 1024	colorectal cancer
+T3	disease 2437 2440	CRC
+T2	disease 2044 2047	CRC
+T10	body-part 1007 1017	colorectal
+T11	gene 1932 1937	TCEA1
+T12	disease 151 156	tumor
+T13	disease 164 170	normal
+T14	cohort-patient 171 178	samples
+T15	disease 1204 1209	tumor
+T17	gene 1941 1946	PLAG1
+T19	mutation 2006 2040	copy number gains of chromosome 8q
+T18_2	gene 2905 2911	MRPL15
+R4_m	relatedTo Arg1:T34 Arg2:T35
+R10_1	has Arg1:T30 Arg2:T3
+R6_1	has Arg1:T20 Arg2:T2
+R15_1	has Arg1:T33 Arg2:T35
+R1_1	has Arg1:T14 Arg2:T13
+R0_T10_T1_cancer	relatedTo Arg1:T10 Arg2:T1_cancer
+R0_T30_T28	has Arg1:T30 Arg2:T28
+R9_1	has Arg1:T24 Arg2:T23
+R12_1	relatedTo Arg1:T27 Arg2:T25
+R13_1	has Arg1:T22 Arg2:T32
+R0_T40_T41	has Arg1:T40 Arg2:T41
+R3_m	relatedTo Arg1:T26 Arg2:T27
+R17_1	has Arg1:T43 Arg2:T4
+R0_T40_T42	has Arg1:T40 Arg2:T42
+R2_1	has Arg1:T14 Arg2:T12
+R2_2	has Arg1:T14_2 Arg2:T1
+R5_1	relatedTo Arg1:T2 Arg2:T19
+R7_1	has Arg1:T8 Arg2:T2
+R16_1	relatedTo Arg1:T35 Arg2:T32

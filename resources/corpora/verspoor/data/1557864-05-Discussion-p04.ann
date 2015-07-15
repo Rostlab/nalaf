@@ -1,0 +1,28 @@
+T1	gene 328 332	MLH1
+T3	gene 634 638	MLH1
+T2	gene 521 525	MLH1
+T6	disease 343 355	colon cancer
+T7	disease 776 790	ovarian cancer
+T4	gene 688 692	MLH1
+T6_cancer	disease 349 355	cancer
+T19_2	gene 1084 1087	MMR
+T5	gene 643 647	MSH2
+T10	body-part 776 783	ovarian
+T11	body-part 1236 1243	ovarian
+T20_2	gene 896 899	MMR
+T12	body-part 343 348	colon
+T13	Disorder 328 342	MLH1 deficient
+T8	disease 1236 1250	ovarian cancer
+T14	Physiology 521 537	MLH1 methylation
+T9	cohort-patient 791 799	patients
+T16	Physiology 676 704	increase in MLH1 methylation
+T18_2	gene 1193 1196	MMR
+R0_T16_T4	has Arg1:T16 Arg2:T4
+R3_m	relatedTo Arg1:T10 Arg2:T7
+R2_m	has Arg1:T13 Arg2:T6
+R4_m	has Arg1:T9 Arg2:T7
+R5_m	relatedTo Arg1:T11 Arg2:T8
+R3_1	has Arg1:T16 Arg2:T7
+R0_T14_T2	has Arg1:T14 Arg2:T2
+R0_T13_T1	has Arg1:T13 Arg2:T1
+R0_T12_T6_cancer	relatedTo Arg1:T12 Arg2:T6_cancer

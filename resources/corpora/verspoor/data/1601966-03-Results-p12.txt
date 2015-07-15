@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Down-regulation of mRNA expression in human chromosomal region 14q24.1-14q24.3 – the FOS region (patient counts with coordinate up-regulation). Grayscale cross-comparison plot of up-regulation patterns across patients (analogous to Figures 7, 10, 13). View this plot in conjunction with Figures 30 and 32.
+
+Down-regulation of mRNA expression in human chromosomal region 14q24.1-14q24.3 – the FOS region (patient counts with coordinate down-regulation). Grayscale cross-comparison plot of down-regulation patterns across patients (analogous to Figures 8, 11, 14). View this plot in conjunction with Figures 30 and 31. Note, that many more patients show down-regulation as indicated by dark spots in this plot than up-regulation as indicated by dark spots in Figure 31. This region has been reported in other studies to be frequently deleted in colon cancer metastases (see Table 1). The FOS oncogene is the 5th gene from the right and is one of the most strongly down-regulated genes in this region. Note the expression of MLH3, KIAA0317, KIAA0440/SIPA1L1, NUMB, SYNJ2BP and PSEN1.
+

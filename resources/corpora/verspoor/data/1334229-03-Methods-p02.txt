@@ -1,0 +1,16 @@
+K-ras mutation analysis
+
+Mutation analysis of the exon 1 fragment of the K-ras oncogene, spanning codons 8–29, was performed on archival colorectal adenocarcinoma specimens of 737 patients, using nested PCR, followed by direct sequencing of purified fragments [27]. The detection limit was 5% mutated DNA and duplicate experiments revealed a good reproducibility (88%) [27].
+
+APC mutation analysis
+
+The majority of somatic mutations in the APC gene are found within the mutation cluster region (codons 1286–1520). Mutation analysis of the mutation cluster region was performed on adenocarcinoma DNA using nested PCR for amplification of the mutation cluster region as four overlapping DNA fragments followed by direct sequencing of purified fragments, as previously described [28]. An alternative nested PCR strategy was performed when nested PCR failed for any of the fragments, using different primers. The detection limit was 5% mutated DNA and duplicate experiments revealed good reproducibility (85%)[28]. From 72 of the 737 patients with sufficient DNA yield, one or more fragments of the mutation cluster region could not be amplified and these patients were not included in this study.
+
+CTNNB1 mutation analysis
+
+All 464 samples without a truncating APC mutation (n = 411) and all samples with absent hMLH1 expression (n = 58) were analysed for mutations in the phosphorylation sites at codons 33, 37, 41 and 45 in exon 3 of the CTNNB1 gene. This selection was made, since most mutations are expected in these samples. Tumours lacking truncating APC mutations may harbour CTNNB1 mutations [7], and microsatellite instable tumours are also expected to more frequently have mutations in CTNNB1 [26].
+
+Amplification of exon 3 of the CTNNB1 gene entailed a semi-nested PCR strategy, which covered codons 33, 37, 41 and 45. Flank PCR was performed to generate a 308 bp fragment (primers, forward: 5'-CCAATCTACTAATGCTAATACTG-3', reverse: 5'-GCATTCTGACTTTCAGTAAGGC-3') that was used in a 1:100 dilution for amplification of the final PCR product (primers, forward: 5'-CCAATCTACTAATGCTAATACTG-3', reverse: 5'-CTTCCTCAGGATTGCCTTTACC-3'). In each PCR, one round of 35 cycles was performed.
+
+The semi-nested PCR products from samples without a truncating APC mutation were screened for mutations using denaturing high-pressure liquid chromatography (dHPLC) on a WAVE 3500 HT system (Transgenomic Inc., UK). WAVE analysis was optimised and validated using specific mutations in cell line DNA, i.e. HCT116 (codon 45: 3 bp deletion) and SW48 (codon 33: C→A) as well as DNA derived from desmoid tumours from patients (codon 41: A→G and codon 45: C→T) as positive controls. All of these mutations were repeatedly confirmed by sequencing. WAVE analysis was carried out at two different temperatures (57.7 en 60°C). Samples showing an aberrant elution profile were re-amplified and re-screened. When an aberrant elution profile was confirmed, direct sequencing was performed. All samples without hMLH1 expression were analysed by direct sequencing without screening. The sequence profile was analysed on an ALFexpress II DNA analysis system using ALFwin software (Amersham Biosciences, Roosendaal, the Netherlands).
+

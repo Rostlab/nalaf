@@ -1,0 +1,102 @@
+T2_cancer	disease 108 114	cancer
+T57_2	size 1160 1171	five or six
+T29	mutation 1393 1402	mutations
+T28	disease 1215 1222	cancers
+T27	mutation 1325 1334	mutations
+T26	disease 1131 1138	cancers
+T25	Disorder 1126 1130	MSI+
+T24	disease 1092 1098	cancer
+T23	body-part 865 875	colorectal
+T22	mutation 1243 1252	mutations
+T21	disease 897 904	cancers
+T20	Disorder 892 896	MSI-
+T30_2	size 1319 1324	seven
+T31_2	size 1891 1903	six to eight
+T25_2	cohort-patient 1215 1222	cancers
+T5_cancer	disease 1496 1502	cancer
+T20_2	size 1228 1242	seven or eight
+T39	Concepts_Ideas 1585 1593	Sporadic
+T34	Concepts_Ideas 1339 1347	sporadic
+T33	Disorder 1348 1352	MSI-
+T36	disease 1427 1433	cancer
+T35	disease 1353 1360	cancers
+T30	Concepts_Ideas 1261 1269	sporadic
+T32	disease 1291 1297	cancer
+T31	Concepts_Ideas 1196 1206	hereditary
+T6	disease 884 889	HNPCC
+T7	disease 1208 1213	HNPCC
+T19_merge	mutation 1172 1191	oncogenic mutations
+T4	disease 841 882	hereditary nonpolyposis colorectal cancer
+T49	disease 1860 1866	cancer
+T48	Disorder 1855 1859	MSI-
+T5	disease 1485 1502	colorectal cancer
+T8	disease 244 250	cancer
+T9	body-part 696 706	colorectal
+T43	Disorder 1691 1695	MSI+
+T42	Concepts_Ideas 1680 1690	hereditary
+T41	disease 1599 1606	cancers
+T40	Disorder 1594 1598	MSI+
+T47	disease 1783 1790	cancers
+T46	Disorder 1778 1782	MSI+
+T45	Concepts_Ideas 1769 1777	sporadic
+T44	disease 1696 1703	cancers
+T3_cancers	disease 707 714	cancers
+T16_2	disease 966 972	cancer
+T50	mutation 1867 1876	mutations
+T1	gene 1743 1747	MLH1
+T49_2	size 1380 1392	six to eight
+T35_2	cohort-patient 1353 1360	cancers
+T3	disease 696 714	colorectal cancers
+T2	disease 97 114	colorectal cancer
+T10	disease 284 291	Cancers
+T11	disease 436 442	cancer
+T12	Concepts_Ideas 511 519	sporadic
+T13	disease 520 526	cancer
+T52	disease 1938 1944	cancer
+T16	cohort-patient 707 714	cancers
+T54	body-part 97 107	colorectal
+T17	body-part 1485 1495	colorectal
+T18	Physiology 1716 1747	epigenetic inactivation of MLH1
+T53	disease 2159 2165	cancer
+T55	mutation 1904 1913	mutations
+T18_2	mutation 784 822	germline DNA mismatch repair mutations
+T15_merge	size 690 695	1,022
+R16_m	has Arg1:T39 Arg2:T41
+R10_1	has Arg1:T31 Arg2:T7
+R29_2	has Arg1:T27 Arg2:T30_2
+R27_2	has Arg1:T19_merge Arg2:T57_2
+R26_1	relatedTo Arg1:T28 Arg2:T19_merge
+R26_m	has Arg1:T34 Arg2:T35
+R9_2	has Arg1:T20 Arg2:T21
+R15_m	has Arg1:T43 Arg2:T44
+R7_2	has Arg1:T22 Arg2:T20_2
+R25_m	has Arg1:T42 Arg2:T44
+R25_1	relatedTo Arg1:T7 Arg2:T19_merge
+R8_m	has Arg1:T25 Arg2:T26
+R0_T17_T5_cancer	relatedTo Arg1:T17 Arg2:T5_cancer
+R20_m	relatedTo Arg1:T49 Arg2:T50
+R21_m	has Arg1:T18 Arg2:T47
+R30_2	has Arg1:T35_2 Arg2:T35
+R24_2	has Arg1:T30 Arg2:T28
+R18_2	has Arg1:T25_2 Arg2:T19_merge
+R4_m	has Arg1:T16 Arg2:T15_merge
+R1_1	has Arg1:T31 Arg2:T26
+R0_T18_T1	has Arg1:T18 Arg2:T1
+R0_T54_T2_cancer	relatedTo Arg1:T54 Arg2:T2_cancer
+R19_2	has Arg1:T25_2 Arg2:T28
+R13_m	has Arg1:T33 Arg2:T35
+R10_m	has Arg1:T31 Arg2:T28
+R0_T9_T3_cancers	relatedTo Arg1:T9 Arg2:T3_cancers
+R2_m	has Arg1:T12 Arg2:T13
+R32_2	has Arg1:T29 Arg2:T49_2
+R5_m	has Arg1:T16 Arg2:T3
+R22_1	relatedTo Arg1:T23 Arg2:T6
+R6_m	relatedTo Arg1:T23 Arg2:T4
+R11_2	has Arg1:T50 Arg2:T31_2
+R17_m	has Arg1:T48 Arg2:T49
+R11_1	has Arg1:T30 Arg2:T26
+R23_m	has Arg1:T45 Arg2:T47
+R31_2	has Arg1:T35_2 Arg2:T27
+R28_2	has Arg1:T25_2 Arg2:T22
+R14_m	has Arg1:T40 Arg2:T41
+R22_m	has Arg1:T46 Arg2:T47

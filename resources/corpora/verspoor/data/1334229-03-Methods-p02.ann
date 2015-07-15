@@ -1,0 +1,85 @@
+T29	cohort-patient 1229 1236	samples
+T26	disease 580 594	adenocarcinoma
+T24	disease 148 162	adenocarcinoma
+T23	body-part 137 147	colorectal
+T22	mutation 1587 1596	mutations
+T21	cohort-patient 2601 2609	patients
+T20	cohort-patient 1152 1160	patients
+T35_merge	size 1331 1333	58
+T27_merge	size 1016 1029	72 of the 737
+T38	mutation 2241 2264	truncating APC mutation
+T37	Disorder 1606 1629	microsatellite instable
+T42_2	Disorder 2580 2587	desmoid
+T45_2	mutation 50 109	exon 1 fragment of the K-ras oncogene, spanning codons 8–29
+T39	mutation 6 14	mutation
+T34	cohort-patient 1289 1296	samples
+T28_merge	size 1225 1228	464
+T33_merge	size 1276 1279	411
+T36	mutation 1543 1567	truncating APC mutations
+T25_merge	size 176 179	737
+T30	mutation 1247 1270	truncating APC mutation
+T32	mutation 1353 1429	mutations in the phosphorylation sites at codons 33, 37, 41 and 45 in exon 3
+T31	Physiology 1302 1325	absent hMLH1 expression
+T50_2	Physiology 1237 1270	without a truncating APC mutation
+T6	gene 1554 1557	APC
+T7	gene 2252 2255	APC
+T4	gene 440 443	APC
+T49	cohort-patient 2647 2664	positive controls
+T5	gene 1258 1261	APC
+T48	mutation 1202 1210	mutation
+T8	gene 0 5	K-ras
+T9	gene 73 78	K-ras
+T43	mutation 2611 2624	codon 41: A→G
+T42	mutation 2537 2550	codon 33: C→A
+T41	mutation 380 388	mutation
+T40	mutation 2502 2525	codon 45: 3 bp deletion
+T47	mutation 1680 1689	mutations
+T46	mutation 415 432	somatic mutations
+T45	Physiology 2978 3002	without hMLH1 expression
+T44	mutation 2629 2642	codon 45: C→T
+T53_2	cohort-patient 2970 2977	samples
+T1	gene 1309 1314	hMLH1
+T3	gene 376 379	APC
+T2	gene 2986 2991	hMLH1
+T10	gene 1195 1201	CTNNB1
+T11	gene 1437 1443	CTNNB1
+T12	gene 1580 1586	CTNNB1
+T13	gene 1693 1699	CTNNB1
+T14	gene 1738 1744	CTNNB1
+T15	disease 1527 1534	Tumours
+T16	disease 1630 1637	tumours
+T17	disease 2588 2595	tumours
+T18	cohort-patient 180 188	patients
+T19	cohort-patient 1030 1038	patients
+R16_m	has Arg1:T21 Arg2:T43
+R9_m	has Arg1:T37 Arg2:T16
+R10_1	has Arg1:T34 Arg2:T35_merge
+R0_T50_2_T5	has Arg1:T50_2 Arg2:T5
+R27_1	has Arg1:T49 Arg2:T17
+R26_1	has Arg1:T49 Arg2:T44
+R9_1	has Arg1:T29 Arg2:T33_merge
+R15_m	has Arg1:T21 Arg2:T17
+R25_1	has Arg1:T49 Arg2:T43
+R8_m	has Arg1:T5 Arg2:T30
+R0_T45_T2	has Arg1:T45 Arg2:T2
+R7_m	has Arg1:T7 Arg2:T38
+R24_1	has Arg1:T49 Arg2:T42
+R4_m	has Arg1:T29 Arg2:T28_merge
+R18_m	relatedTo Arg1:T23 Arg2:T24
+R18_1	has Arg1:T8 Arg2:T39
+R21_1	has Arg1:T10 Arg2:T48
+R0_T50_2_T30	has Arg1:T50_2 Arg2:T30
+R20_1	has Arg1:T4 Arg2:T46
+R0_T31_T1	has Arg1:T31 Arg2:T1
+R19_m	has Arg1:T18 Arg2:T24
+R19_1	has Arg1:T3 Arg2:T41
+R13_m	has Arg1:T12 Arg2:T22
+R3_m	has Arg1:T19 Arg2:T27_merge
+R10_m	has Arg1:T13 Arg2:T47
+R2_m	has Arg1:T11 Arg2:T32
+R6_m	has Arg1:T6 Arg2:T36
+R11_m	relatedTo Arg1:T16 Arg2:T13
+R17_m	has Arg1:T21 Arg2:T44
+R23_1	has Arg1:T49 Arg2:T40
+R14_2	has Arg1:T42_2 Arg2:T17
+R1_m	has Arg1:T18 Arg2:T25_merge

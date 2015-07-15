@@ -1,0 +1,81 @@
+T42_merge	size 963 964	8
+T29_merge	mutation 237 256	mutations in exon 5
+T22_merge	mutation 161 181	mutations in exon 12
+T26_merge	mutation 199 217	mutation in exon 2
+T21_merge	size 155 156	2
+T20_merge	mutation 126 145	mutations in exon 7
+T6	gene 819 823	MSH2
+T7	gene 831 835	MSH6
+T19_merge	size 110 111	3
+T4	gene 221 225	MSH6
+T5	gene 260 264	MSH6
+T28	cohort-patient 231 232	2
+T8	disease 776 780	CRCs
+T9	cohort-patient 112 120	patients
+T43	mutation 976 985	mutations
+T25	cohort-patient 191 192	1
+T29_2	Physiology 266 283	No MLH1 mutations
+T24	size 191 192	1
+T41	mutation 786 795	mutations
+T23	cohort-patient 155 156	2
+T40	Phenomena 796 835	stained negatively for MSH2 or/and MSH6
+T39_2	Physiology 781 795	with mutations
+T44	age 1110 1127	median age was 59
+T1	gene 269 273	MLH1
+T3	gene 185 189	MSH2
+T2	gene 149 153	MSH2
+T34_merge	size 650 652	50
+T10	cohort-patient 671 679	patients
+T27_merge	size 231 232	2
+T38	cohort-patient 714 720	people
+T11	cohort-patient 1135 1143	patients
+T36_merge	size 704 706	50
+T12	cohort-patient 965 970	cases
+T37	disease 707 713	normal
+T13	cohort-patient 691 696	group
+T39	cohort-patient 776 780	CRCs
+T14	cohort-patient 302 308	cohort
+T15	cohort-patient 1066 1072	family
+T33	mutation 393 404	C1668 C > T
+T16	age 1154 1177	older than 60 years old
+T45_merge	size 1133 1134	4
+T35	Disorder 687 690	MSS
+T18	ethnicity 1418 1423	China
+T30	size 266 268	No
+T32	mutation 380 391	C1886 A > G
+T31	mutation 274 283	mutations
+R0_T29_2_T31	has Arg1:T29_2 Arg2:T31
+R16_m	has Arg1:T40 Arg2:T8
+R9_m	has Arg1:T28 Arg2:T27_merge
+R15_1	has Arg1:T14 Arg2:T31
+R15_m	has Arg1:T38 Arg2:T36_merge
+R0_T39_2_T41	has Arg1:T39_2 Arg2:T41
+R0_T40_T7	has Arg1:T40 Arg2:T7
+R0_T40_T6	has Arg1:T40 Arg2:T6
+R0_T29_2_T1	has Arg1:T29_2 Arg2:T1
+R8_m	has Arg1:T25 Arg2:T26_merge
+R20_m	has Arg1:T11 Arg2:T45_merge
+R21_m	has Arg1:T16 Arg2:T11
+R7_m	has Arg1:T4 Arg2:T26_merge
+R7_1	has Arg1:T25 Arg2:T24
+R24_2	has Arg1:T35 Arg2:T10
+R4_m	has Arg1:T23 Arg2:T21_merge
+R18_m	has Arg1:T12 Arg2:T42_merge
+R21_1	has Arg1:T39 Arg2:T41
+R20_1	has Arg1:T39 Arg2:T8
+R19_m	has Arg1:T12 Arg2:T43
+R13_m	has Arg1:T10 Arg2:T34_merge
+R17_2	has Arg1:T39_2 Arg2:T8
+R3_m	has Arg1:T9 Arg2:T19_merge
+R10_m	has Arg1:T5 Arg2:T29_merge
+R2_m	has Arg1:T9 Arg2:T20_merge
+R12_m	has Arg1:T1 Arg2:T31
+R14_1	has Arg1:T14 Arg2:T30
+R22_2	has Arg1:T29_2 Arg2:T14
+R5_m	has Arg1:T23 Arg2:T22_merge
+R6_m	has Arg1:T3 Arg2:T22_merge
+R23_2	has Arg1:T35 Arg2:T13
+R11_m	has Arg1:T28 Arg2:T29_merge
+R0_T29_2_T30	has Arg1:T29_2 Arg2:T30
+R14_m	has Arg1:T38 Arg2:T37
+R1_m	has Arg1:T2 Arg2:T20_merge

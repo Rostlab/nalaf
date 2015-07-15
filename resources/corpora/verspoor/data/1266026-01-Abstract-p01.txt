@@ -1,0 +1,23 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Numbers of mutations to different types of colorectal cancer
+
+Abstract
+
+Background
+
+The numbers of oncogenic mutations required for transformation are uncertain but may be inferred from how cancer frequencies increase with aging. Cancers requiring more mutations will tend to appear later in life. This type of approach may be confounded by biologic heterogeneity because different cancer subtypes may require different numbers of mutations. For example, a sporadic cancer should require at least one more somatic mutation relative to its hereditary counterpart.
+
+Methods
+
+To better estimate numbers of mutations before transformation, 1,022 colorectal cancers were classified with respect to microsatellite instability (MSI) and germline DNA mismatch repair mutations characteristic of hereditary nonpolyposis colorectal cancer (HNPCC). MSI- cancers were also classified with respect to clinical stage. Ages at cancer and a Bayesian algorithm were used to estimate the numbers of oncogenic mutations required for transformation for each cancer subtype.
+
+Results
+
+Ages at MSI+ cancers were consistent with five or six oncogenic mutations for hereditary (HNPCC) cancers, and seven or eight mutations for its sporadic counterpart. Ages at cancer were consistent with seven mutations for sporadic MSI- cancers, and were similar (six to eight mutations) regardless of clinical cancer stage.
+
+Conclusion
+
+Different biologic subtypes of colorectal cancer appear to require different numbers of oncogenic mutations before transformation. Sporadic MSI+ cancers may require more than a single additional somatic alteration compared to hereditary MSI+ cancers because the epigenetic inactivation of MLH1 commonly observed in sporadic MSI+ cancers may be a multistep process. Interestingly, estimated numbers of MSI- cancer mutations were similar (six to eight mutations) regardless of clinical cancer stage, suggesting a propensity to spread or metastasize does not require additional mutations after transformation. Estimates of oncogenic mutation numbers may help explain some of the biology underlying different cancer subtypes.
+

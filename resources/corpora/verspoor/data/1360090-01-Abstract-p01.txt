@@ -1,0 +1,19 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+mutations are associated with distinctive clinical, pathological and molecular features of colorectal cancer independently of microsatellite instability status
+
+Abstract
+
+Background
+
+BRAF is a member of RAF family of serine/threonine kinases and mediates cellular responses to growth signals through the RAS-RAF-MAP kinase pathway. Activating mutations in BRAF have recently been found in about 10% of colorectal cancers, with the vast majority being a V600E hotspot mutation. The aim of the present study was to evaluate the clinical, pathological and molecular phenotype of colorectal tumors with BRAF mutations.
+
+Results
+
+Mutations in BRAF were identified in 8% (23/275) of colorectal cancers. They were 5–10-fold more frequent in tumors with infiltrating lymphocytes, location in the proximal colon, poor histological grade and mucinous appearance (P < 0.002 for each). Tumors with BRAF mutation were also 10-fold more likely to show microsatellite instability and frequent DNA methylation (P < 0.0001) compared to tumors without this mutation. The characteristic morphological features of tumors with BRAF mutation (infiltrating lymphocytes, poor grade, mucinous) remained after stratification according to microsatellite instability and methylator phenotypes. Mutations in BRAF were mutually exclusive with mutations in KRAS but showed no clear association with the presence of TP53 mutation.
+
+Conclusion
+
+BRAF mutation identifies a colorectal cancer subgroup with distinctive phenotypic properties independent of microsatellite instability status and thus could be a valuable marker for studies into the clinical properties of these tumors.
+

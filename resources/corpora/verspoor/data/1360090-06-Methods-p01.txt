@@ -1,0 +1,9 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Methods
+
+The 275 colorectal tumors investigated in this study were obtained from the Colorectal Unit of the Royal Adelaide Hospital. These were snap frozen in liquid nitrogen within 20–40 min after resection and stored at -70°C prior to extraction of DNA. Clinical data available for this series included patient age, sex and family history of CRC. Only one case was confirmed as HNPCC-related. Pathological data included nodal involvement, tumor site, histological grade, mucinous appearance and the presence of infiltrating lymphocytes. Evaluation of MSI+ [21], CIMP+ [18], KRAS mutation [22] and TP53 mutation [23] were performed as described previously by our group. Mutations in exon 15 of BRAF including the V600E hotspot were detected using the PCR primer sequences reported earlier [1], the F-SSCP method [22,23] and confirmed by direct sequencing.
+
+Statistical analyses were performed using SPSS Version 12.0 (Chicago, Illinois, USA). Associations between BRAF mutation and clinical, pathological or molecular features were evaluated using Fisher's exact or Pearson's chi-squared tests as appropriate. Multivariate analysis was performed using binary logistic regression with BRAF mutation as the dependent variable.
+

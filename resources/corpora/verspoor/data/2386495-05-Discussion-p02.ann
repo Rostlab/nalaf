@@ -1,0 +1,137 @@
+T64_2	Disorder 1085 1117	APC- and MUTYH-mutation negative
+T60_2	mutation 2232 2247	large deletions
+T29	ethnicity 2176 2183	Swedish
+T33_2	disease 851 857	polyps
+T28	cohort-patient 1499 1503	case
+T27	cohort-patient 818 822	case
+T26	cohort-patient 2486 2493	patient
+T25	cohort-patient 2385 2392	patient
+T24	cohort-patient 931 938	patient
+T23	cohort-patient 762 769	Patient
+T22	cohort-patient 75 82	patient
+T21	cohort-patient 893 901	family 1
+T20	cohort-patient 1815 1823	families
+T62	mutation 2072 2087	Large deletions
+T63	mutation 2121 2136	large deletions
+T52_merge	age 1209 1230	high age at diagnosis
+T65	cohort-patient 2494 2498	3765
+T66	mutation 2460 2482	deletion of APC exon 4
+T38	Concepts_Ideas 842 857	100–1000 polyps
+T61_merge	disease 1829 1859	colorectal polyposis syndromes
+T37	age 859 867	46 years
+T39	Physiology 903 928	reduced expression of APC
+T34	cohort-patient 770 774	C159
+T33	mutation 346 379	mutations in the first four exons
+T36	Concepts_Ideas 826 836	attenuated
+T35	disease 837 840	FAP
+T44_2	disease 1190 1196	polyps
+T30	cohort-patient 84 88	C157
+T32	disease 213 222	polyposis
+T31	mutation 104 113	c.70C > T
+T60	body-part 1829 1839	colorectal
+T40_2	disease 1008 1014	polyps
+T10_merge	disease 2042 2069	non-polyposis CRC syndromes
+T6	gene 1649 1652	APC
+T7	gene 2095 2098	APC
+T49	mutation 1100 1108	mutation
+T4	gene 1085 1088	APC
+T48	gene 1094 1099	MUTYH
+T5	gene 1330 1333	APC
+T64_merge	size 2197 2199	9%
+T8	gene 2144 2147	APC
+T9	gene 2472 2475	APC
+T42	Concepts_Ideas 956 965	classical
+T41	disease 966 969	FAP
+T40	cohort-patient 939 943	C152
+T46	disease 1052 1058	polyps
+T45	body-part 1039 1051	fundic gland
+T44	body-part 1016 1024	duodenal
+T59_2	size 2226 2228	5%
+T50	Concepts_Ideas 1142 1152	attenuated
+T53_2	mutation 1542 1563	splice-site mutations
+T1	gene 383 386	APC
+T35_2	mutation 790 811	3' localized mutation
+T3	gene 925 928	APC
+T2	gene 685 688	APC
+T59	mutation 1636 1645	mutations
+T47_2	Disorder 992 1014	large number of polyps
+T51_2	Physiology 1492 1498	mosaic
+T11	disease 1025 1033	adenomas
+T12	disease 1161 1168	disease
+T13	cohort-patient 328 336	patients
+T14	cohort-patient 1118 1126	patients
+T15	cohort-patient 1298 1306	patients
+T51	Concepts_Ideas 1176 1196	low number of polyps
+T16	cohort-patient 2184 2192	patients
+T17	cohort-patient 1416 1421	cases
+T53	body-part 1255 1267	extracolonic
+T18	cohort-patient 1611 1616	cases
+T56	Concepts_Ideas 1405 1415	attenuated
+T19	cohort-patient 2005 2010	cases
+T55	disease 1345 1348	FAP
+T58	mutation 1519 1528	c.70C > T
+T57	disease 1425 1428	FAP
+R34_2	has Arg1:T17 Arg2:T58
+R35_2	has Arg1:T17 Arg2:T53_2
+R15_2	has Arg1:T51_2 Arg2:T28
+R36_2	has Arg1:T18 Arg2:T59
+R27_2	has Arg1:T39 Arg2:T21
+R26_1	has Arg1:T51 Arg2:T12
+R26_2	has Arg1:T13 Arg2:T33
+R32_m	has Arg1:T56 Arg2:T57
+R0_T39_T3	has Arg1:T39 Arg2:T3
+R33_2	has Arg1:T51_2 Arg2:T17
+R43_1	has Arg1:T26 Arg2:T66
+R25_1	has Arg1:T50 Arg2:T12
+R44_1	has Arg1:T65 Arg2:T66
+R20_m	has Arg1:T6 Arg2:T59
+R8_1	has Arg1:T23 Arg2:T35
+R21_m	relatedTo Arg1:T60 Arg2:T61_merge
+R24_1	has Arg1:T14 Arg2:T49
+R4_m	has Arg1:T36 Arg2:T35
+R21_1	has Arg1:T24 Arg2:T46
+R30_m	has Arg1:T52_merge Arg2:T14
+R13_m	has Arg1:T40 Arg2:T46
+R3_m	has Arg1:T38 Arg2:T35
+R10_m	has Arg1:T48 Arg2:T49
+R2_m	has Arg1:T16 Arg2:T29
+R37_1	has Arg1:T7 Arg2:T62
+R0_T38_T33_2	has Arg1:T38 Arg2:T33_2
+R12_m	has Arg1:T40 Arg2:T11
+R6_m	has Arg1:T37 Arg2:T34
+R31_m	has Arg1:T17 Arg2:T57
+R11_m	relatedTo Arg1:T45 Arg2:T46
+R38_2	has Arg1:T16 Arg2:T59_2
+R42_1	has Arg1:T9 Arg2:T66
+R1_m	has Arg1:T30 Arg2:T31
+R14_m	has Arg1:T4 Arg2:T49
+R16_m	has Arg1:T47_2 Arg2:T41
+R9_m	relatedTo Arg1:T44 Arg2:T11
+R10_1	has Arg1:T37 Arg2:T23
+R24_m	has Arg1:T16 Arg2:T63
+R39_2	has Arg1:T16 Arg2:T60_2
+R29_m	has Arg1:T14 Arg2:T12
+R25_m	has Arg1:T1 Arg2:T33
+R2_1	has Arg1:T22 Arg2:T31
+R8_m	has Arg1:T40 Arg2:T41
+R0_T64_2_T49	has Arg1:T64_2 Arg2:T49
+R0_T64_2_T4	has Arg1:T64_2 Arg2:T4
+R7_m	has Arg1:T34 Arg2:T35
+R30_1	has Arg1:T15 Arg2:T55
+R0_T64_2_T48	has Arg1:T64_2 Arg2:T48
+R18_1	has Arg1:T24 Arg2:T11
+R4_1	has Arg1:T37 Arg2:T27
+R0_T43_T40_2	has Arg1:T47_2 Arg2:T40_2
+R19_2	has Arg1:T64_2 Arg2:T14
+R13_1	has Arg1:T24 Arg2:T41
+R17_2	has Arg1:T51 Arg2:T14
+R37_m	has Arg1:T20 Arg2:T61_merge
+R5_2	has Arg1:T34 Arg2:T35_2
+R14_1	has Arg1:T39 Arg2:T41
+R0_T47_2_T40_2	has Arg1:T47_2 Arg2:T40_2
+R11_1	has Arg1:T42 Arg2:T41
+R23_m	has Arg1:T8 Arg2:T63
+R0_T51_T44_2	has Arg1:T51 Arg2:T44_2
+R28_2	has Arg1:T39 Arg2:T40
+R31_1	relatedTo Arg1:T55 Arg2:T5
+R22_m	has Arg1:T16 Arg2:T64_merge

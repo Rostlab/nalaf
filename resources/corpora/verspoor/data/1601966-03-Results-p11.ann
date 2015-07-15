@@ -1,0 +1,37 @@
+T7_2	gene 2680 2687	SYNJ2BP
+T15_2	gene 2579 2584	PSEN1
+T14_2	disease 3171 3176	tumor
+T10_merge	disease 1506 1512	HNPCC7
+T6	disease 1250 1267	colorectal cancer
+T12_2	gene 1161 1166	DMXL1
+T4	gene 442 445	APC
+T5	gene 921 924	APC
+T8	disease 1784 1787	CRC
+T24_2	gene 1025 1030	TIGA1
+T9	disease 893 905	colon cancer
+T16_2	gene 2750 2754	NUMB
+T11_2	disease 3153 3158	tumor
+T26_2	gene 1537 1540	FOS
+T1	gene 1427 1431	MLH3
+T9_cancer	disease 899 905	cancer
+T23_2	gene 1115 1120	TIGA1
+T22_2	gene 1056 1060	DCP2
+T3	gene 137 140	APC
+T25_2	gene 1153 1157	DCP2
+T2	gene 1935 1939	MLH3
+T27_2	gene 1646 1649	FOS
+T6_cancer	disease 1261 1267	cancer
+T19_2	body-part 1480 1490	colorectal
+T11	cohort-patient 261 269	patients
+T12	cohort-patient 570 578	patients
+T20_2	body-part 1250 1260	colorectal
+T13	cohort-patient 688 696	patients
+T14	cohort-patient 149 156	patient
+T15	cohort-patient 454 461	patient
+T16	cohort-patient 3009 3016	Patient
+T21_2	gene 1048 1051	DP1
+T17	body-part 893 898	colon
+T7_merge	disease 1455 1504	hereditary non-polyposis colorectal cancer type 7
+R2_2	relatedTo Arg1:T19_2 Arg2:T7_merge
+R0_T17_T9_cancer	relatedTo Arg1:T17 Arg2:T9_cancer
+R0_T20_2_T6_cancer	relatedTo Arg1:T20_2 Arg2:T6_cancer

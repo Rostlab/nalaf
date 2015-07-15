@@ -1,0 +1,103 @@
+T33_2	disease 1455 1461	normal
+T29	cohort-patient 757 766	cell line
+T28	cohort-patient 581 591	cell lines
+T27	cohort-patient 316 326	cell lines
+T26	cohort-patient 81 91	cell lines
+T34_2	body-part 1462 1469	stromal
+T25	body-part 568 573	colon
+T57_merge	size 1681 1683	34
+T24	body-part 2547 2554	ovarian
+T23	body-part 2462 2469	ovarian
+T22	body-part 2412 2419	ovarian
+T21	body-part 2382 2389	ovarian
+T20	body-part 1470 1477	ovarian
+T1_cancer	disease 574 580	cancer
+T31_2	disease 2532 2538	normal
+T35_merge	size 1828 1834	eleven
+T38	cohort-patient 2397 2407	cell lines
+T34	disease 1572 1577	tumor
+T33	cohort-patient 1478 1485	tissues
+T36	age 2206 2217	range 27–83
+T30	cohort-patient 1191 1201	cell lines
+T32	Disorder 1455 1469	normal stromal
+T10_merge	size 1419 1421	75
+T6	disease 2382 2396	ovarian cancer
+T7	disease 2412 2426	ovarian cancer
+T49	cohort-patient 363 368	CAOV3
+T4	disease 1176 1190	ovarian cancer
+T48	cohort-patient 353 358	KB3.1
+T5	disease 1422 1436	ovarian cancer
+T9	age 2196 2204	52 years
+T43	cohort-patient 2555 2564	specimens
+T42	Disorder 2532 2546	normal stromal
+T41	disease 2470 2475	tumor
+T40	cohort-patient 2427 2436	specimens
+T47	cohort-patient 347 351	2774
+T46	cohort-patient 340 345	SKOV3
+T45	cohort-patient 334 338	HOC7
+T44	cohort-patient 327 332	SKOV6
+T31_merge	size 1450 1454	four
+T14_merge	size 1617 1626	Forty-six
+T50	cohort-patient 592 597	SW480
+T8_merge	size 2527 2531	four
+T1	disease 568 580	colon cancer
+T3	disease 742 756	ovarian cancer
+T2	disease 301 315	ovarian cancer
+T39_merge	size 2409 2411	75
+T59	ethnicity 1517 1526	Rotterdam
+T11	cohort-patient 1437 1445	patients
+T12	cohort-patient 1627 1635	patients
+T13	cohort-patient 1835 1843	patients
+T37_merge	size 2376 2381	eight
+T52	cohort-patient 767 772	A2780
+T15	cohort-patient 1924 1931	patient
+T16	body-part 301 308	ovarian
+T51	cohort-patient 602 606	SW48
+T54	disease 1762 1769	disease
+T17	body-part 742 749	ovarian
+T18	body-part 1176 1183	ovarian
+T53	cohort-patient 1560 1567	patient
+T19	body-part 1422 1429	ovarian
+T56	cohort-patient 2476 2485	specimens
+T55	disease 1860 1867	disease
+T58	cohort-patient 1681 1683	34
+R34_m	has Arg1:T49 Arg2:T2
+R16_m	has Arg1:T58 Arg2:T57_merge
+R9_m	has Arg1:T11 Arg2:T10_merge
+R0_T32_T33_2	has Arg1:T32 Arg2:T33_2
+R33_m	has Arg1:T46 Arg2:T2
+R29_2	has Arg1:T42 Arg2:T31_2
+R24_m	has Arg1:T40 Arg2:T39_merge
+R10_2	has Arg1:T34_2 Arg2:T33_2
+R36_m	has Arg1:T47 Arg2:T2
+R26_m	has Arg1:T56 Arg2:T41
+R0_T25_T1_cancer	relatedTo Arg1:T25 Arg2:T1_cancer
+R32_m	has Arg1:T45 Arg2:T2
+R15_m	has Arg1:T12 Arg2:T14_merge
+R27_m	has Arg1:T29 Arg2:T3
+R25_m	has Arg1:T40 Arg2:T7
+R8_m	has Arg1:T11 Arg2:T5
+R20_m	relatedTo Arg1:T22 Arg2:T7
+R21_m	relatedTo Arg1:T23 Arg2:T41
+R7_m	has Arg1:T30 Arg2:T4
+R35_m	has Arg1:T48 Arg2:T2
+R4_m	has Arg1:T28 Arg2:T1
+R18_m	has Arg1:T38 Arg2:T6
+R30_m	has Arg1:T52 Arg2:T3
+R19_m	has Arg1:T38 Arg2:T37_merge
+R28_m	has Arg1:T13 Arg2:T35_merge
+R13_2	has Arg1:T33 Arg2:T33_2
+R2_m	has Arg1:T27 Arg2:T2
+R37_m	has Arg1:T50 Arg2:T1
+R12_m	has Arg1:T33 Arg2:T31_merge
+R38_m	has Arg1:T51 Arg2:T1
+R5_m	relatedTo Arg1:T17 Arg2:T3
+R6_m	relatedTo Arg1:T18 Arg2:T4
+R11_2	relatedTo Arg1:T20 Arg2:T33_2
+R31_m	has Arg1:T44 Arg2:T2
+R23_2	relatedTo Arg1:T24 Arg2:T31_2
+R17_m	relatedTo Arg1:T21 Arg2:T6
+R14_2	has Arg1:T43 Arg2:T31_2
+R1_m	relatedTo Arg1:T16 Arg2:T2
+R31_1	relatedTo Arg1:T19 Arg2:T5
+R22_m	has Arg1:T43 Arg2:T8_merge

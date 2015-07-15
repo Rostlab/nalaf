@@ -1,0 +1,21 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results
+
+Figure 1A shows representative Fluorescent-SSCP results for the screening of BRAF mutations in this CRC series, while Figure 1B shows DNA sequencing confirmation of the 1799T to A transversion resulting in the V600E mutation. The overall frequency of BRAF mutation was 8.4% (23/275), comparing favourably with frequencies of 9–11% reported for other large studies of this tumor type [6,16,17]. The mean age of patients with and without BRAF mutation was identical (Table 1). Strong associations were observed between BRAF mutation and tumor origin in the proximal side of the large bowel, poor histological grade, mucinous appearance and the presence of infiltrating lymphocytes. Higher frequencies of BRAF mutation were also observed in females and in node negative tumors but these did not reach significance.
+
+(A) Representative F-SSCP gel used to detect BRAF mutationsin colorectal cancer. WT, wild-type; M, mutation. (B) DNA sequencing gel resultconfirms the presence of a 1799T to A mutation giving rise to the V600E mutation.
+
+Associations between BRAF mutation and clinicopathological features of colorectal cancer.
+
+a Data was unavailable for gender in 43 cases, infiltrating lymphocytes in 55 cases, nodal involvement in 77 cases, tumor site in 56 cases, grade in 106 cases and mucinous appearance in 89 cases.
+
+BRAF mutations showed no association with TP53 mutations and were mutually exclusive with the presence of KRAS mutations (Table 2). In contrast, BRAF mutations were approximately 10-fold more frequent in MSI+ and CIMP+ tumors compared to tumors without these phenotypes. A strong association was also seen with methylation of the MLH1 gene promoter and in particular with methylation of its proximal region. We have previously examined the methylation status of 7 different CpG islands in this CRC series [18]. The mean number of these methylated sites was 3-fold higher in tumors with BRAF mutation compared to those without (2.6 ± 1.7 vs 0.8 ± 1.0; P < 0.001). Multivariate analysis revealed that MSI+ was the only significant independent predictor of BRAF mutation (RR = 6.3, 95%CI [1.2–32.3]; P = 0.028) in a model that included CIMP+, tumor site, histological grade, presence of infiltrating lymphocytes and mucinous appearance.
+
+Associations between BRAF mutation and molecular features of colorectal cancer.
+
+a Data was unavailable for MSI status in 40 cases, methylation status in 83 cases, KRAS mutation in 26 cases and TP53 mutation in 26 cases
+
+We next examined whether the characteristic features of tumors with BRAF mutation were still apparent following stratification into MSI and CIMP phenotypes. Although the statistical power of this subgroup analysis was limited, the morphological features of infiltrating lymphocytes, poor histological grade and mucinous appearance were clearly associated with BRAF mutation regardless of tumor MSI status (Table 3). Similarly, these features were each more common in tumors with BRAF mutation in both the CIMP- and CIMP+ subgroups (Table 4). Similar to previous observations in a separate CRC cohort [20], the frequency of KRAS mutation was lower in MSI+ compared to MSI- tumors (P = 0.034; Table 3), while the frequency of TP53 mutation was also considerably lower in MSI+ tumors with wildtype BRAF than in MSI- tumors with wildtype BRAF (P = 0.014).
+

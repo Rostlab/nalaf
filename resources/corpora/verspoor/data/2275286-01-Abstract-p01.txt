@@ -1,0 +1,23 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Detection of mismatch repair gene germline mutation carrier among Chinese population with colorectal cancer
+
+Abstract
+
+Background
+
+Hereditary nonpolyposis colorectal cancer (HNPCC) is an autosomal dominant syndrome. The National Cancer Institute (NCI) has recommended the Revised Bethesda guidelines for screening HNPCC. There has been a great deal of research on the value of these tests in other countries. However, literature about the Chinese population is scarce. Our objective is to detect and study microsatellite instability (MSI) and mismatch repair (MMR) gene germline mutation carriers among a Chinese population with colorectal cancer.
+
+Methods
+
+In 146 prospectively recruited consecutive patients with clinically proven colorectal cancer, MSI carriers were identified by analysis of tumor tissue using multiplex fluorescence polymerase chain reaction (PCR) using the NCI recommended panel and classified into microsatellite instability-low (MSI-L), microsatellite instability-high (MSI-H) and microsatellite stable (MSS) groups. Immunohistochemical staining for MSH2, MSH6 and MLH1 on tissue microarrays (TMAs) was performed, and methylation of the MLH1 promoter was analyzed by quantitative methylation specific PCR (MSP). Germline mutation analysis of blood samples was performed for MSH2, MSH6 and MLH1 genes.
+
+Results
+
+Thirty-four out of the 146 colorectal cancers (CRCs, 23.2%) were MSI, including 19 MSI-H CRCs and 15 MSI-L CRCS. Negative staining for MSH2 was found in 8 CRCs, negative staining for MSH6 was found in 6 CRCs. One MSI-H CRC was negative for both MSH6 and MSH2. Seventeen CRCs stained negatively for MLH1. MLH1 promoter methylation was determined in 34 MSI CRCs. Hypermethylation of the MLH1 promoter occurred in 14 (73.7%) out of 19 MSI-H CRCs and 5 (33.3%) out of 15 MSI-L CRCs. Among the 34 MSI carriers and one MSS CRC with MLH1 negative staining, 8 had a MMR gene germline mutation, which accounted for 23.5% of all MSI colorectal cancers and 5.5% of all the colorectal cancers. Five patients harbored MSH2 germline mutations, and three patients harbored MSH6 germline mutations. None of the patients had an MLH1 mutation. Mutations were commonly located in exon 7 and 12 of MSH2 and exon 5 of MSH6. Right colonic lesions and mucinous carcinoma were not common in MSI carriers.
+
+Conclusion
+
+Our data may imply that the characteristics of HNPCC in the Chinese population are probably different from those of Western countries. Application of NCI recommended criteria may not be effective enough to identify Chinese HNPCC families. Further studies are necessary to echo or refute our results so as to make the NCI recommendation more universally applicable.
+

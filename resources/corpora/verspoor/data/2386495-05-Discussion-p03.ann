@@ -1,0 +1,168 @@
+T60_merge	size 1123 1128	three
+T74_2	Physiology 2325 2334	mosaisicm
+T29	cohort-patient 1205 1212	patient
+T28	cohort-patient 1093 1100	patient
+T27	cohort-patient 851 858	patient
+T76_2	mutation 3456 3474	missense mutations
+T26	cohort-patient 780 787	patient
+T75_2	size 2426 2429	Two
+T25	cohort-patient 472 479	patient
+T29_2	mutation 2338 2359	somatic APC mutations
+T24	cohort-patient 221 228	patient
+T23	cohort-patient 1353 1359	family
+T22	cohort-patient 1029 1035	family
+T21	cohort-patient 1581 1589	families
+T20	cohort-patient 2030 2035	cases
+T85_2	Concepts_Ideas 3786 3797	synchronous
+T91_2	Physiology 1220 1244	APC mutational mosaicism
+T74_merge	size 1961 1964	25%
+T38	age 867 873	age 73
+T37	cohort-patient 3514 3518	case
+T39	disease 948 954	polyps
+T34	cohort-patient 3744 3751	patient
+T33	cohort-patient 3607 3614	patient
+T36	cohort-patient 1477 1481	case
+T35	cohort-patient 56 60	case
+T30	cohort-patient 1428 1435	patient
+T32	cohort-patient 3053 3060	patient
+T31	cohort-patient 2717 2724	patient
+T88_2	Physiology 791 797	mosaic
+T49	disease 555 559	AFAP
+T48	cohort-patient 480 484	C107
+T43	body-part 1931 1936	colon
+T42	body-part 829 834	colon
+T41	gender 1119 1122	her
+T40	gender 898 901	her
+T46	mutation 161 178	de novo mutations
+T45	cohort-patient 229 233	C107
+T44	gene 132 137	MUTYH
+T50	mutation 590 687	mutations are situated either in the 5' or 3' regions or the alternatively spliced part of exon 9
+T59	cohort-patient 1093 1110	patient's parents
+T47_merge	size 117 122	three
+T52	cohort-patient 840 863	parents of patient C107
+T51	cohort-patient 859 863	C107
+T53	age 878 886	80 years
+T55	cohort-patient 908 916	children
+T58	gender 1008 1016	paternal
+T57	gender 996 1004	maternal
+T75	disease 2074 2077	NF2
+T76	disease 2179 2184	tumor
+T73	disease 1994 1997	NF2
+T79	disease 2384 2390	tumors
+T77	disease 2321 2324	FAP
+T78	mutation 2567 2605	aberrant splicing of APC exons 7 and 8
+T54_merge	size 902 907	three
+T67_2	Physiology 2039 2048	mosaicism
+T72	disease 1968 1992	neurofibromatosis type 2
+T71	mutation 1834 1843	mutations
+T70	disease 1660 1664	AFAP
+T62	cohort-patient 1213 1217	C107
+T63	disease 1313 1316	FAP
+T64	Concepts_Ideas 1304 1312	sporadic
+T65	cohort-patient 1363 1367	C107
+T66	Concepts_Ideas 1468 1476	sporadic
+T67	disease 1572 1575	FAP
+T68	disease 1576 1580	AFAP
+T69	disease 1656 1659	FAP
+T84_2	Concepts_Ideas 3777 3785	multiple
+T56_merge	age 922 933	31–40 years
+T44_2	Physiology 64 77	APC mosaicism
+T61	cohort-patient 1129 1137	children
+T71_2	Physiology 2078 2098	mutational mosaicism
+T6	gene 1830 1833	APC
+T7	gene 2346 2349	APC
+T90_2	body-part 1754 1759	blood
+T4	gene 1220 1223	APC
+T5	gene 1724 1727	APC
+T8	gene 2445 2448	APC
+T9	gene 2588 2591	APC
+T93	Physiology 3759 3775	milder phenotype
+T87_2	Disorder 123 146	APC- and MUTYH-negative
+T92	mutation 3692 3705	c.845-17A > G
+T91	body-part 3798 3808	colorectal
+T90	mutation 3529 3572	aberrant splice-acceptor site of APC exon 8
+T88	disease 3630 3639	polyposis
+T89	Concepts_Ideas 3620 3629	classical
+T59_2	Concepts_Ideas 1293 1300	de novo
+T84	mutation 2761 2858	introduction of a new active splice site 6 bp upstream of the wildtype AG splice site of intron 7
+T85	mutation 2993 3003	c.834G > C
+T86	cohort-patient 3061 3065	C633
+T87	mutation 3099 3129	missense mutation at codon 278
+T1	mutation 192 208	c.2700_2701delTC
+T3	gene 123 126	APC
+T2	gene 64 67	APC
+T10	gene 2632 2635	APC
+T11	gene 3440 3443	APC
+T12	gene 3562 3565	APC
+T13	disease 959 962	CRC
+T14	disease 3809 3817	adenomas
+T81	mutation 2436 2458	germline APC mutations
+T15	disease 574 581	disease
+T16	cohort-patient 147 155	patients
+T83	mutation 2731 2743	c.835-7T > G
+T17	cohort-patient 1665 1673	patients
+T82	cohort-patient 2725 2729	C496
+T18	cohort-patient 1999 2007	patients
+T19	cohort-patient 1317 1322	cases
+R34_1	has Arg1:T12 Arg2:T90
+R35_1	has Arg1:T33 Arg2:T90
+R29_2	has Arg1:T85_2 Arg2:T14
+R35_2	has Arg1:T88_2 Arg2:T26
+R27_1	has Arg1:T31 Arg2:T84
+R36_2	has Arg1:T66 Arg2:T36
+R27_2	has Arg1:T34 Arg2:T14
+R26_1	has Arg1:T82 Arg2:T84
+R9_1	has Arg1:T27 Arg2:T40
+R33_2	has Arg1:T8 Arg2:T81
+R0_T29_2_T7	has Arg1:T29_2 Arg2:T7
+R25_1	has Arg1:T31 Arg2:T83
+R7_2	has Arg1:T56_merge Arg2:T55
+R20_m	has Arg1:T18 Arg2:T72
+R0_T87_2_T44	has Arg1:T87_2 Arg2:T44
+R21_m	has Arg1:T18 Arg2:T74_merge
+R4_m	has Arg1:T52 Arg2:T40
+R18_m	has Arg1:T6 Arg2:T71
+R20_1	has Arg1:T18 Arg2:T73
+R3_m	has Arg1:T45 Arg2:T1
+R28_m	relatedTo Arg1:T91 Arg2:T14
+R37_2	has Arg1:T66 Arg2:T30
+R12_m	has Arg1:T64 Arg2:T63
+R22_2	has Arg1:T74_2 Arg2:T77
+R22_1	has Arg1:T7 Arg2:T29_2
+R5_m	has Arg1:T38 Arg2:T27
+R6_m	has Arg1:T53 Arg2:T27
+R17_m	has Arg1:T17 Arg2:T69
+R23_1	has Arg1:T9 Arg2:T78
+R38_2	has Arg1:T81 Arg2:T75_2
+R14_m	has Arg1:T21 Arg2:T68
+R38_1	has Arg1:T93 Arg2:T14
+R34_m	has Arg1:T16 Arg2:T47_merge
+R16_m	has Arg1:T17 Arg2:T70
+R9_m	has Arg1:T61 Arg2:T60_merge
+R10_2	has Arg1:T91_2 Arg2:T19
+R24_m	has Arg1:T86 Arg2:T85
+R39_2	has Arg1:T11 Arg2:T76_2
+R26_m	has Arg1:T33 Arg2:T88
+R15_m	has Arg1:T21 Arg2:T67
+R25_m	has Arg1:T34 Arg2:T92
+R2_2	has Arg1:T87_2 Arg2:T16
+R8_m	has Arg1:T55 Arg2:T54_merge
+R0_T91_2_T4	has Arg1:T91_2 Arg2:T4
+R30_1	has Arg1:T32 Arg2:T87
+R30_2	has Arg1:T84_2 Arg2:T14
+R1_1	has Arg1:T24 Arg2:T1
+R1_2	has Arg1:T44_2 Arg2:T35
+R0_T44_2_T2	has Arg1:T44_2 Arg2:T2
+R3_1	has Arg1:T44 Arg2:T46
+R4_1	has Arg1:T3 Arg2:T46
+R19_2	has Arg1:T67_2 Arg2:T18
+R32_1	has Arg1:T89 Arg2:T88
+R13_2	has Arg1:T59_2 Arg2:T63
+R0_T87_2_T3	has Arg1:T87_2 Arg2:T3
+R32_2	has Arg1:T71_2 Arg2:T75
+R11_2	has Arg1:T19 Arg2:T63
+R11_1	has Arg1:T28 Arg2:T41
+R23_m	has Arg1:T82 Arg2:T83
+R31_2	has Arg1:T29_2 Arg2:T79
+R28_1	has Arg1:T32 Arg2:T85
+R31_1	has Arg1:T86 Arg2:T87

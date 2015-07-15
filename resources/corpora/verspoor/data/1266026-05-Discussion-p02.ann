@@ -1,0 +1,70 @@
+T7_2	disease 1802 1809	adenoma
+T4_cancers	disease 3334 3341	cancers
+T38_2	disease 1309 1314	tumor
+T29	disease 3110 3116	cancer
+T28	body-part 3008 3018	colorectal
+T27	Disorder 3003 3007	MSI-
+T26	Concepts_Ideas 2994 3002	sporadic
+T25	disease 2778 2785	cancers
+T24	Disorder 2773 2777	MSI-
+T23	Disorder 2764 2768	MSI+
+T22	disease 2093 2099	cancer
+T5_2	disease 1547 1554	adenoma
+T21	disease 1899 1906	cancers
+T20	Disorder 1894 1898	MSI-
+T38	disease 2278 2294	normal-appearing
+T37	disease 2402 2408	cancer
+T39	disease 2952 2968	normal appearing
+T34	disease 2594 2599	tumor
+T33	disease 2236 2242	cancer
+T36	disease 2483 2488	tumor
+T2_cancers	disease 1238 1245	cancers
+T32	disease 1670 1675	tumor
+T31	body-part 3323 3333	colorectal
+T6	disease 1651 1659	adenomas
+T7	Disorder 2391 2401	metastatic
+T4	disease 3323 3341	colorectal cancers
+T5	Concepts_Ideas 2379 2387	invasive
+T8	disease 746 759	breast cancer
+T9	Disorder 1885 1889	MSI+
+T43	mutation 2244 2253	mutations
+T42	Concepts_Ideas 2084 2092	familial
+T40	mutation 1592 1601	mutations
+T47	mutation 3141 3150	mutations
+T46	Disorder 2976 2993	Early or advanced
+T45	mutation 3066 3075	mutations
+T1_cancers	disease 65 72	cancers
+T3_cancers	disease 3019 3026	cancers
+T1	disease 54 72	Colorectal cancers
+T3	disease 3008 3026	colorectal cancers
+T2	disease 1227 1245	colorectal cancers
+T10	body-part 2295 2300	colon
+T11	body-part 2969 2974	colon
+T12	body-part 54 64	Colorectal
+T13	disease 296 303	cancers
+T14	disease 476 483	cancers
+T15	body-part 746 752	breast
+T16	disease 944 951	cancers
+T17	body-part 1227 1237	colorectal
+T18	disease 1555 1561	cancer
+T19	disease 1585 1591	cancer
+T41_merge	age 1622 1647	after the age of 50 years
+R16_m	has Arg1:T9 Arg2:T21
+R9_m	relatedTo Arg1:T11 Arg2:T39
+R0_T12_T1_cancers	relatedTo Arg1:T12 Arg2:T1_cancers
+R15_1	relatedTo Arg1:T38 Arg2:T43
+R0_T28_T3_cancers	relatedTo Arg1:T28 Arg2:T3_cancers
+R4_2	relatedTo Arg1:T19 Arg2:T40
+R15_m	has Arg1:T20 Arg2:T21
+R0_T17_T2_cancers	relatedTo Arg1:T17 Arg2:T2_cancers
+R13_m	has Arg1:T23 Arg2:T25
+R10_m	relatedTo Arg1:T10 Arg2:T38
+R2_m	relatedTo Arg1:T15 Arg2:T8
+R12_m	has Arg1:T7 Arg2:T37
+R14_1	has Arg1:T42 Arg2:T22
+R6_m	has Arg1:T27 Arg2:T3
+R11_m	has Arg1:T24 Arg2:T25
+R7_m	has Arg1:T26 Arg2:T3
+R14_m	has Arg1:T5 Arg2:T37
+R16_1	has Arg1:T46 Arg2:T3
+R0_T31_T4_cancers	relatedTo Arg1:T31 Arg2:T4_cancers

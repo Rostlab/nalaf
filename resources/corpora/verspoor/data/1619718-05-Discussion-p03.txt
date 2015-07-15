@@ -1,0 +1,17 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+The preceding findings indicate that serrated polyps with dysplasia evolve through at least two independent histogenetic pathways. Group A polyps are likely to be initiated by BRAF mutation and are serrated lesions at the outset. Group B polyps may begin as conventional adenomas and then become serrated and villous following mutation of KRAS. There may be instances in which KRAS mutation can initiate lesions which are serrated at the outset and become dysplastic. While this suggestion remains speculative, it may apply to the Group A serrated polyps that show a distinct likeness to the goblet cell variant of HP in which columnar cells are eosinophilic and lack mucin-filled microvesicles and KRAS mutation is frequent (Figure 1E,F).16,25 The literature refers to the concept of ‘traditional’ SA.43 Based on the current findings, it is likely that several mechanisms can account for adenomatous lesions with glandular serration and that ‘traditional’ SA is not a single entity.
+
+Concept of ‘fusion’ pathways to crc
+
+Colorectal polyps have traditionally been classified into distinct histogenetic types that may progress to CRC through independent pathways of colorectal tumorigenesis (Table 2). However, in addition to the two ‘classical’ pathways to CRC shown in Table 2, there may be ‘fusion’ pathways that combine mechanisms associated with both adenomas and serrated polyps. This would explain why many CRCs display phenotypes associated with serrated polyps as well as adenomas.44 Three possible examples of such fusion pathways are shown in Table 3. It is difficult to observe directly the actual point of transition from benign to malignant colorectal lesions. Once the key rate-limiting step is achieved it is likely that the transition to cancer occurs rapidly and the precursor lesion is then overtaken by the malignancy. Changes leading to inactivation of either TP535 or the DNA mismatch repair gene MLH113 are likely to be two such rate-limiting mechanisms. Only a single instance of loss of expression of MLH1 was observed in the present series of polyps and the adenoma in question was inferred to be from a patient with Lynch syndrome.24
+
+Concept of discrete colorectal lesions and progression to colorectal cancer via independent pathways
+
+ACF, Aberrant crypt foci (hyperplastic or dysplastic); HP, hyperplastic polyp; SSA, sessile serrated adenoma; SA, serrated adenoma; TA, tubular adenoma.
+
+Inactivation of MLH1 and TP53 is associated with malignant progression.
+
+‘Fusion’ pathways brought about by the sequential alteration of genes (linked to separate lesions and pathways in Table 2) and with the second alteration associated with a superimposed morphology
+

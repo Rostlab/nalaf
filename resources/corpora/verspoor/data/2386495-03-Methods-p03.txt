@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Statistics
+
+Student's t-test was used to analyze continuous data, and Fisher's exact test was used to analyze categorical data. Differences were considered statistically significant at a level of P < 0.05.
+

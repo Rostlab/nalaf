@@ -1,0 +1,69 @@
+T41_2	size 982 985	38%
+T6	gene 1956 1960	MLH1
+T7	gene 2158 2162	MLH1
+T4	gene 1821 1825	MLH1
+T5	gene 1878 1882	MLH1
+T29	disease 957 959	LS
+T28	ethnicity 3652 3660	Scottish
+T8	gene 996 1000	MSH2
+T27	body-part 3552 3562	colorectal
+T9	gene 1005 1009	MSH6
+T26	disease 772 774	LS
+T29_2	size 974 977	18%
+T25	cohort-patient 310 318	families
+T43	Concepts_Ideas 494 504	hereditary
+T24	cohort-patient 226 234	families
+T42	Concepts_Ideas 3490 3498	familial
+T23	cohort-patient 3490 3498	familial
+T41	Concepts_Ideas 3477 3485	sporadic
+T22	mutation 1210 1221	p.Lys618Ala
+T21	cohort-patient 3477 3485	sporadic
+T20	cohort-patient 869 874	cases
+T10_merge_merge	disease 805 830	CRC-predisposing syndrome
+T44	Concepts_Ideas 794 804	hereditary
+T28_2	size 969 972	32%
+T1	gene 990 994	MLH1
+T3	gene 1205 1209	MLH1
+T2	gene 1055 1059	MLH1
+T38	cohort-patient 3672 3683	populations
+T11	disease 865 868	CRC
+T37	ethnicity 3665 3671	Danish
+T12	cohort-patient 2585 2593	controls
+T42_2	cohort-patient 3499 3505	groups
+T13	mutation 3374 3385	p.Lys618Ala
+T40_merge	size 3420 3424	2.7%
+T39	Disorder 2146 2180	decrease in MLH1 protein stability
+T14	cohort-patient 3401 3408	control
+T34	gene 1969 1973	PMS2
+T15	disease 66 72	cancer
+T33	gene 1897 1901	PMS2
+T16	disease 255 261	cancer
+T36	disease 3563 3577	carcinogenesis
+T17	disease 505 511	cancer
+T35	mutation 2204 2215	p.Lys618Ala
+T18	disease 2574 2584	unaffected
+T30	mutation 1060 1071	p.Lys618Ala
+T19	cohort-patient 928 936	patients
+T32	gene 1829 1833	PMS2
+T31	mutation 1292 1303	p.Lys618Ala
+R0_T39_T7	has Arg1:T39 Arg2:T7
+R0_T42_T23	has Arg1:T42 Arg2:T23
+R4_m	has Arg1:T12 Arg2:T18
+R10_2	has Arg1:T19 Arg2:T28_2
+R15_2	has Arg1:T41 Arg2:T42_2
+R0_T41_T21	has Arg1:T41 Arg2:T21
+R9_2	has Arg1:T19 Arg2:T29
+R12_2	has Arg1:T19 Arg2:T29_2
+R12_1	has Arg1:T44 Arg2:T10_merge_merge
+R3_m	has Arg1:T3 Arg2:T22
+R13_2	has Arg1:T19 Arg2:T41_2
+R2_m	has Arg1:T2 Arg2:T30
+R8_m	has Arg1:T38 Arg2:T28
+R5_m	has Arg1:T14 Arg2:T13
+R8_1	has Arg1:T7 Arg2:T35
+R6_m	has Arg1:T14 Arg2:T40_merge
+R11_m	relatedTo Arg1:T27 Arg2:T36
+R11_1	has Arg1:T43 Arg2:T17
+R14_2	has Arg1:T42 Arg2:T42_2
+R7_m	has Arg1:T38 Arg2:T37
+R1_m	has Arg1:T20 Arg2:T11

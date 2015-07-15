@@ -1,0 +1,42 @@
+T7_2	disease 448 453	tumor
+T4_2	gene 2559 2563	BCL2
+T15_2	gene 2131 2134	DCC
+T14_2	gene 2182 2186	MBD2
+T8_2	disease 430 435	tumor
+T6	cohort-patient 1099 1107	patients
+T7	cohort-patient 286 293	Patient
+T4	cohort-patient 690 698	patients
+T12_2	disease 2158 2167	carcinoma
+T5	cohort-patient 981 989	patients
+T33_2	disease 2542 2548	cancer
+T8	cohort-patient 578 585	patient
+T24_2	gene 2012 2015	ME2
+T9	cohort-patient 865 872	patient
+T29_2	gene 1378 1384	GPR125
+T3_cancer	disease 1310 1316	cancer
+T13_2	body-part 2147 2157	colorectal
+T32_2	disease 2459 2464	tumor
+T9_2	gene 1389 1394	PCDH7
+T16_2	gene 2343 2348	SMAD7
+T11_2	disease 193 198	tumor
+T28_2	gene 1725 1729	BCL2
+T30_2	gene 1371 1376	SLIT2
+T17_2	gene 2333 2338	SMAD2
+T26_2	disease 1890 1896	cancer
+T1	gene 2030 2035	SMAD4
+T23_2	gene 1658 1662	BCL2
+T31_2	gene 1927 1931	BCL2
+T3	disease 1304 1316	colon cancer
+T22_2	disease 2854 2859	tumor
+T25_2	gene 2020 2024	MBD2
+T2	disease 1467 1470	CRC
+T27_2	gene 1816 1820	BCL2
+T19_2	gene 2762 2765	DCC
+T10	body-part 1304 1309	colon
+T20_2	gene 2697 2701	BCL2
+T21_2	gene 2793 2797	BCL2
+T18_2	mutation 2136 2143	deleted
+R2_2	has Arg1:T15_2 Arg2:T18_2
+R1_2	relatedTo Arg1:T13_2 Arg2:T12_2
+R0_T10_T3_cancer	relatedTo Arg1:T10 Arg2:T3_cancer
+R3_2	relatedTo Arg1:T12_2 Arg2:T18_2

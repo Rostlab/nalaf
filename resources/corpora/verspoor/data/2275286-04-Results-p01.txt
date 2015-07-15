@@ -1,0 +1,29 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Results
+
+One hundred fifty-eight patients received treatment for colorectal cancer in our Colorectal Center from October 2004 to June 2006. Three patients were excluded for concomitant ulcerative colitis and two for unresectable diseases. Five patients refused operation and 2 patients refused to participate in the study. 146 patients (84 male and 62 female, age: 60.8 ± 10.5 yr) were recruited into the study. Clinicopathological features of those patients are summarized in Table 1.
+
+Clinicopathological features of cases (N = 146)
+
+*Astler-Coller Dukes stage
+
+The results of the MSI analysis, hypermethylation of MLH1 and IHC staining of MSH2, MSH6 and MLH1
+
+With the original NCI five marker panel, 34 of 146 patients (23.2%) were MSI, 17 were MSI-H and another 17 were MSI-L. Two out of 17 MSI-L CRCs were unstable with BAT-40 and were judged as MSI-H. Seven out of 17 MSI-H CRCs were unstable with BAT-40. In all, 19 CRCs (55.9%) were MSI-H and 15 cancers (44.1%) were MSI-L. The remaining 112 patients (76.8% were MSS. In the MSI group, 13 patients (8.9%) were BAT-26 unstable, 18 (12.3%) were BAT-25 unstable, 16 (11.0%) were D2S123 unstable, 11 (7.5%) were D5S346 unstable, 14 (9.6%) were D17S250 unstable.
+
+Negative staining for MSH2 was found in 8 CRCs, negative staining for MSH6 was found in 6 CRCs. One MSI-H CRC was negative for both MSH6 and MSH2. Seventeen CRCs stained negatively for MLH1. Negative staining was not found in three MSI CRCs, and one CRC was found with negative MLH1 staining, but it was MSS.
+
+MLH1 promoter methylation was determined in 34 MSI CRCs. Hypermethylation of the MLH1 promoter occurred in 14 (73.7%) out of 19 MSI-H CRCs and 5 (33.3%) out 15 MSI-L CRCs. The results of MSI and IHC staining are summarized in Table 2.
+
+The result of MSI, hypermethylation of MLH1 and IHC staining
+
+*One MSI-H CRCs was negative both for MSH6 and MSH2
+
+# MLH1 promoter methylation was determined only in MSI CRCs.
+
+Comparison of clinical features between MSI and MSS colorectal cancers
+
+Table 3 summarizes the clinical features of MSS and MSI patients. Patients in the MSS group are younger than those in MSI group (70.9 ± 17.8 versus 61.0 ± 9.4, p = 0.045). Twenty out of 34 (59%) MSI patients were stage III or stage IV, significantly higher than those (35.7%) in the MSS group (p = 0.008). There were no differences in other demographic and clinical pathological features, including sex, tumor location and type between the two groups. The most common location of the tumor was the rectum in both groups, accounting for more than 50% of the cases. Adenocarcinoma was the most common pathological type in both groups. Ten patients in the MSI group (29.4%) had mucinous carcinoma.
+

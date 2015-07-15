@@ -1,0 +1,19 @@
+T1_cancer	disease 167 173	cancer
+T9_2	disease 2295 2300	tumor
+T11_2	disease 809 814	tumor
+T1	disease 156 173	colorectal cancer
+T8_2	disease 2843 2848	tumor
+T3	body-part 156 166	colorectal
+T2	mutation 613 636	Chromosomal aberrations
+T6	disease 499 505	tumors
+T7	disease 511 517	tumors
+T4	disease 280 285	tumor
+T10	Physiology 978 1020	aberrant alteration of chromatin structure
+T5	disease 325 330	tumor
+T11	disease 1554 1560	cancer
+T12	disease 2149 2154	tumor
+T8	mutation 643 698	homozygous and heterozygous deletions or amplifications
+T9	disease 958 964	cancer
+T2_2	cohort-patient 2338 2343	cases
+R1_1	has Arg1:T10 Arg2:T9
+R0_T3_T1_cancer	relatedTo Arg1:T3 Arg2:T1_cancer

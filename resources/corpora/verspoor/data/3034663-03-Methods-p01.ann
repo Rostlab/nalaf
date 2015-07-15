@@ -1,0 +1,179 @@
+T29	Concepts_Ideas 2225 2233	familial
+T28	cohort-patient 9 17	Controls
+T27	cohort-patient 108 119	individuals
+T26	cohort-patient 1175 1183	patients
+T25	cohort-patient 908 916	patients
+T24	Concepts_Ideas 688 696	sporadic
+T23	Concepts_Ideas 661 669	sporadic
+T22	Concepts_Ideas 461 469	sporadic
+T21	Concepts_Ideas 125 133	sporadic
+T20	disease 2051 2061	unaffected
+T87_merge	size 1442 1447	46.7%
+T52_merge	size 121 124	373
+T32_merge	size 1706 1709	Two
+T70_merge	size 2088 2091	two
+T38	cohort-patient 1473 1481	Families
+T39	cohort-patient 1539 1547	families
+T33	cohort-patient 1283 1297	familial group
+T36	cohort-patient 152 166	index subjects
+T30	cohort-patient 2304 2318	sporadic cases
+T31	cohort-patient 538 551	control group
+T53_merge	size 148 151	250
+T49	mutation 2015 2025	p.Arg1005X
+T48	mutation 2004 2013	c.3013C>T
+T100	cohort-patient 1204 1209	group
+T43	cohort-patient 1809 1815	family
+T42	cohort-patient 2092 2100	families
+T41	cohort-patient 1919 1927	families
+T102	Concepts_Ideas 1405 1413	sporadic
+T40	cohort-patient 1710 1718	families
+T101	age 1312 1330	range, 25-96 years
+T47	mutation 1961 1970	p.Arg226X
+T46	mutation 1951 1959	c.676C>T
+T45	cohort-patient 895 902	patient
+T44	cohort-patient 2062 2068	family
+T107	cohort-patient 2734 2742	subjects
+T105	disease 2038 2046	affected
+T106	cohort-patient 2241 2246	cases
+T103	cohort-patient 1418 1423	group
+T104	cohort-patient 1462 1470	controls
+T50	mutation 72 83	p.Lys618Ala
+T106_2	body-part 2212 2223	blood cells
+T59	disease 968 970	LS
+T37_merge	size 1805 1808	one
+T68_merge	size 1516 1521	Three
+T54	disease 201 203	LS
+T56	cohort-patient 242 250	controls
+T58	age 582 595	over 50 years
+T57	cohort-patient 257 265	controls
+T75	mutation 2337 2353	c.1852_1853AA>GC
+T76	Concepts_Ideas 22 30	sporadic
+T73	cohort-patient 2251 2259	controls
+T74	body-part 2264 2274	colorectal
+T79	gender 1379 1382	men
+T77	Concepts_Ideas 35 43	familial
+T55_merge	size 238 241	411
+T72	mutation 2182 2193	p.Lys618Ala
+T71	mutation 2136 2147	p.Lys618Ala
+T62	age 1302 1310	71 years
+T63	cohort-patient 1340 1348	controls
+T64	cohort-patient 1434 1437	men
+T65	mutation 1495 1506	p.Lys618Ala
+T66	disease 1536 1538	LS
+T67	mutation 1628 1639	p.Lys618Ala
+T78_merge	size 2784 2791	49/1034
+T35_merge	size 1908 1911	two
+T69_merge	size 2028 2037	Seventeen
+T82_merge	size 1387 1390	42%
+T61	age 1245 1253	47 years
+T60	age 1214 1222	70 years
+T99	Concepts_Ideas 1191 1199	sporadic
+T97	cohort-patient 921 935	index subjects
+T98	Concepts_Ideas 1283 1291	familial
+T95	cohort-patient 553 561	Patients
+T51_merge	size 103 107	1034
+T96	cohort-patient 701 709	patients
+T81_merge	size 1375 1378	58%
+T90_merge	size 2793 2797	4.7%
+T6	disease 44 47	CRC
+T7	disease 134 137	CRC
+T4	gene 2778 2782	MLH1
+T5	gene 1993 1997	MSH6
+T8	disease 470 473	CRC
+T9	disease 670 673	CRC
+T94	cohort-patient 474 482	patients
+T93	cohort-patient 138 146	patients
+T92	age 1255 1273	range, 21-87 years
+T91	cohort-patient 48 53	cases
+T88	gender 1448 1453	women
+T89	Concepts_Ideas 2718 2726	familial
+T84	cohort-patient 1391 1396	women
+T85	gender 1434 1437	men
+T86	cohort-patient 1448 1453	women
+T1	gene 95 99	MLH1
+T3	gene 2177 2181	MLH1
+T2	gene 1940 1944	MLH1
+T34_merge	size 1428 1433	53.3%
+T10	disease 697 700	CRC
+T11	disease 904 907	CRC
+T12	disease 1200 1203	CRC
+T13	disease 1414 1417	CRC
+T14	disease 334 340	cancer
+T15	disease 508 514	cancer
+T16	Concepts_Ideas 2304 2312	sporadic
+T80	cohort-patient 1379 1382	men
+T17	age 1224 1242	range, 52-93 years
+T83	gender 1391 1396	women
+T18	disease 2234 2240	cancer
+T19	disease 2727 2733	cancer
+R41_1	has Arg1:T41 Arg2:T46
+R57_m	has Arg1:T107 Arg2:T19
+R42_m	has Arg1:T44 Arg2:T20
+R32_m	has Arg1:T39 Arg2:T66
+R45_1	has Arg1:T41 Arg2:T48
+R56_m	has Arg1:T64 Arg2:T34_merge
+R44_1	has Arg1:T41 Arg2:T47
+R46_1	has Arg1:T41 Arg2:T49
+R20_m	has Arg1:T96 Arg2:T10
+R49_1	has Arg1:T107 Arg2:T78_merge
+R55_m	has Arg1:T64 Arg2:T85
+R21_m	has Arg1:T25 Arg2:T11
+R25_2	has Arg1:T80 Arg2:T79
+R4_m	has Arg1:T1 Arg2:T50
+R65_1	has Arg1:T17 Arg2:T26
+R18_m	has Arg1:T58 Arg2:T95
+R30_m	has Arg1:T102 Arg2:T13
+R59_1	has Arg1:T107 Arg2:T90_merge
+R53_m	has Arg1:T86 Arg2:T88
+R19_m	has Arg1:T24 Arg2:T10
+R51_m	has Arg1:T84 Arg2:T13
+R13_m	has Arg1:T62 Arg2:T63
+R28_m	has Arg1:T17 Arg2:T100
+R3_m	has Arg1:T76 Arg2:T6
+R43_m	has Arg1:T44 Arg2:T105
+R10_m	has Arg1:T23 Arg2:T9
+R2_m	has Arg1:T77 Arg2:T6
+R12_m	has Arg1:T101 Arg2:T63
+R5_m	has Arg1:T27 Arg2:T51_merge
+R6_m	has Arg1:T21 Arg2:T7
+R31_m	has Arg1:T103 Arg2:T13
+R40_m	has Arg1:T5 Arg2:T48
+R11_m	has Arg1:T56 Arg2:T55_merge
+R17_m	has Arg1:T92 Arg2:T33
+R52_m	has Arg1:T80 Arg2:T13
+R1_m	has Arg1:T91 Arg2:T6
+R41_m	has Arg1:T5 Arg2:T49
+R14_m	has Arg1:T94 Arg2:T8
+R34_m	has Arg1:T39 Arg2:T67
+R16_m	has Arg1:T95 Arg2:T9
+R9_m	has Arg1:T36 Arg2:T53_merge
+R33_m	has Arg1:T39 Arg2:T68_merge
+R24_m	has Arg1:T80 Arg2:T81_merge
+R36_m	has Arg1:T43 Arg2:T37_merge
+R26_m	has Arg1:T99 Arg2:T12
+R29_m	has Arg1:T84 Arg2:T82_merge
+R15_m	has Arg1:T22 Arg2:T8
+R27_m	has Arg1:T60 Arg2:T100
+R50_m	has Arg1:T84 Arg2:T83
+R44_m	has Arg1:T44 Arg2:T69_merge
+R46_m	has Arg1:T3 Arg2:T72
+R49_m	has Arg1:T89 Arg2:T19
+R8_m	has Arg1:T93 Arg2:T7
+R45_m	has Arg1:T42 Arg2:T70_merge
+R58_2	has Arg1:T27 Arg2:T50
+R47_m	has Arg1:T106 Arg2:T18
+R48_m	has Arg1:T29 Arg2:T18
+R7_m	has Arg1:T93 Arg2:T52_merge
+R30_1	has Arg1:T60 Arg2:T26
+R35_m	has Arg1:T40 Arg2:T32_merge
+R59_m	has Arg1:T38 Arg2:T65
+R54_1	has Arg1:T24 Arg2:T10
+R0_T98_T33	has Arg1:T98 Arg2:T33
+R54_2	has Arg1:T86 Arg2:T87_merge
+R39_m	has Arg1:T2 Arg2:T47
+R37_m	has Arg1:T41 Arg2:T35_merge
+R38_m	has Arg1:T2 Arg2:T46
+R0_T16_T30	has Arg1:T16 Arg2:T30
+R11_1	has Arg1:T26 Arg2:T12
+R23_m	has Arg1:T61 Arg2:T33
+R22_m	has Arg1:T100 Arg2:T12

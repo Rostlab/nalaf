@@ -1,0 +1,90 @@
+T5_cancers	disease 742 749	cancers
+T4_cancers	disease 467 474	cancers
+T29	Physiology 1023 1047	frequent DNA methylation
+T28	Disorder 992 1018	microsatellite instability
+T27	disease 928 934	Tumors
+T26	mutation 945 953	mutation
+T25	gene 940 944	BRAF
+T24	Concepts_Ideas 858 881	poor histological grade
+T23	disease 788 794	tumors
+T20	cohort-patient 742 749	cancers
+T38	mutation 1443 1451	mutation
+T37	gene 1380 1384	KRAS
+T39	body-part 1493 1503	colorectal
+T34	mutation 1320 1329	Mutations
+T33	mutation 1165 1173	mutation
+T36	mutation 1367 1376	mutations
+T18_merge	mutation 679 696	Mutations in BRAF
+T35	gene 1333 1337	BRAF
+T30	disease 1073 1079	tumors
+T32	gene 1160 1164	BRAF
+T31	disease 1148 1154	tumors
+T22_merge	size 716 718	8%
+T21_merge	size 720 726	23/275
+T6	disease 1493 1510	colorectal cancer
+T7	body-part 456 466	colorectal
+T4	disease 456 474	colorectal cancers
+T5	disease 731 749	colorectal cancers
+T48	body-part 800 824	infiltrating lymphocytes
+T16_merge	mutation 658 668	mutations.
+T8	body-part 842 856	proximal colon
+T9	body-part 145 155	colorectal
+T43	cohort-patient 467 474	cancers
+T42	Concepts_Ideas 1201 1211	poor grade
+T41	mutation 1471 1479	mutation
+T40	gene 1466 1470	BRAF
+T47	Disorder 1213 1221	mucinous
+T3_cancer	disease 156 162	cancer
+T46	body-part 1175 1199	infiltrating lymphocytes
+T45	Concepts_Ideas 886 905	mucinous appearance
+T53_2	disease 1694 1700	tumors
+T1	mutation 507 512	V600E
+T3	disease 145 162	colorectal cancer
+T2	gene 1438 1442	TP53
+T6_cancer	disease 1504 1510	cancer
+T10	body-part 630 640	colorectal
+T11	disease 641 647	tumors
+T12	gene 237 241	BRAF
+T13	gene 410 414	BRAF
+T14	mutation 386 406	Activating mutations
+T15	gene 653 657	BRAF
+T17	gene 692 696	BRAF
+T19	body-part 731 741	colorectal
+T44_merge	size 449 452	10%
+R0_T19_T5_cancers	relatedTo Arg1:T19 Arg2:T5_cancers
+R9_m	has Arg1:T20 Arg2:T5
+R29_1	has Arg1:T47 Arg2:T31
+R10_1	has Arg1:T20 Arg2:T18_merge
+R24_m	has Arg1:T13 Arg2:T1
+R15_1	has Arg1:T28 Arg2:T27
+R26_1	relatedTo Arg1:T4 Arg2:T14
+R26_m	has Arg1:T24 Arg2:T23
+R0_T7_T4_cancers	relatedTo Arg1:T7 Arg2:T4_cancers
+R15_m	has Arg1:T2 Arg2:T38
+R27_m	has Arg1:T45 Arg2:T23
+R25_m	relatedTo Arg1:T8 Arg2:T23
+R0_T9_T3_cancer	relatedTo Arg1:T9 Arg2:T3_cancer
+R0_T39_T6_cancer	relatedTo Arg1:T39 Arg2:T6_cancer
+R21_m	has Arg1:T32 Arg2:T33
+R7_m	has Arg1:T17 Arg2:T18_merge
+R6_2	relatedTo Arg1:T4 Arg2:T13
+R4_m	has Arg1:T43 Arg2:T44_merge
+R6_1	relatedTo Arg1:T11 Arg2:T16_merge
+R18_m	has Arg1:T35 Arg2:T34
+R18_1	relatedTo Arg1:T31 Arg2:T33
+R19_m	has Arg1:T40 Arg2:T41
+R13_m	has Arg1:T15 Arg2:T16_merge
+R3_m	has Arg1:T43 Arg2:T4
+R10_m	has Arg1:T20 Arg2:T21_merge
+R12_m	relatedTo Arg1:T10 Arg2:T11
+R14_1	relatedTo Arg1:T27 Arg2:T26
+R22_2	relatedTo Arg1:T31 Arg2:T32
+R5_m	has Arg1:T13 Arg2:T14
+R11_m	has Arg1:T20 Arg2:T22_merge
+R17_m	has Arg1:T37 Arg2:T36
+R23_m	has Arg1:T48 Arg2:T23
+R23_1	has Arg1:T42 Arg2:T31
+R14_m	has Arg1:T25 Arg2:T26
+R16_2	relatedTo Arg1:T27 Arg2:T25
+R28_1	has Arg1:T46 Arg2:T31
+R16_1	has Arg1:T29 Arg2:T27

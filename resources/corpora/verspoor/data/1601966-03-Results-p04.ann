@@ -1,0 +1,60 @@
+T29	gene 1326 1332	ANKTM1
+T28	gene 1318 1321	TOX
+T27	gene 1301 1306	PLAG1
+T34_2	gene 2389 2391	We
+T26	gene 1292 1295	LYN
+T25	gene 1263 1269	MRPL15
+T24	gene 1255 1261	LYPLA1
+T22	cohort-patient 1921 1928	patient
+T20	gene 1248 1253	TCEA1
+T3_merge	gene 3388 3396	TP53INP2
+T5_cancer	disease 2739 2745	cancer
+T38	gene 2300 2305	BLCAP
+T37	gene 2289 2295	MANBAL
+T39	gene 2598 2605	CTNN1L1
+T33	size 1369 1373	half
+T21_2	disease 3179 3185	cancer
+T36	gene 2268 2271	SRC
+T30	disease 1381 1386	tumor
+T32	cohort-patient 1387 1394	samples
+T31	Physiology 1318 1351	TOX and ANKTM1 are down-regulated
+T4_2	gene 3488 3491	p53
+T10_merge	disease 3560 3564	CRCs
+T6	disease 2204 2207	CRC
+T7	disease 2481 2484	CRC
+T5	disease 2728 2745	colorectal cancer
+T8	disease 2667 2670	CRC
+T24_2	gene 2426 2429	SRC
+T9	disease 2923 2926	CRC
+T43	gene 2981 2985	ITCH
+T42	body-part 2728 2738	colorectal
+T41	gene 2684 2691	CTNN1L1
+T40	Physiology 2577 2616	up-regulation of the CTNN1L1 transcript
+T47	gene 3263 3269	EIF2S2
+T46	Physiology 3212 3269	up-regulation of the translation initiation factor EIF2S2
+T45	disease 3117 3123	cancer
+T44	Physiology 2933 2986	up-regulation of the E3 ubiquitin ligase Itchy (ITCH)
+T17_2	cohort-patient 2194 2200	groups
+T1	mutation 3389 3393	P53I
+T35_2	gene 3363 3366	p53
+T4_merge	gene 3521 3529	TP53INP2
+T36_2	gene 3455 3458	p53
+T11	cohort-patient 691 699	patients
+T12	cohort-patient 851 859	patients
+T13	cohort-patient 1057 1065	patients
+T14	cohort-patient 1593 1601	patients
+T15	cohort-patient 1753 1761	patients
+T16	cohort-patient 2485 2493	patients
+T17	disease 2257 2262	tumor
+T18_2	disease 193 198	tumor
+R0_T31_T28	has Arg1:T31 Arg2:T28
+R1_1	has Arg1:T31 Arg2:T30
+R2_1	has Arg1:T32 Arg2:T33
+R0_T31_T29	has Arg1:T31 Arg2:T29
+R5_1	has Arg1:T40 Arg2:T8
+R3_1	has Arg1:T32 Arg2:T30
+R0_T44_T43	has Arg1:T44 Arg2:T43
+R0_T40_T39	has Arg1:T40 Arg2:T39
+R1_m	has Arg1:T16 Arg2:T7
+R0_T46_T47	has Arg1:T46 Arg2:T47
+R0_T42_T5_cancer	relatedTo Arg1:T42 Arg2:T5_cancer

@@ -1,0 +1,17 @@
+T7_2	size 73 75	25
+T4	cohort-patient 377 385	patients
+T5	cohort-patient 401 409	patients
+T1_cancer	disease 87 93	cancer
+T9_2	disease 539 545	cancer
+T6_2	body-part 76 86	colorectal
+T2_2	disease 387 400	Rectal cancer
+T10_2	disease 774 779	tumor
+T1	disease 76 93	colorectal cancer
+T8_2	body-part 387 393	Rectal
+T3	cohort-patient 94 102	patients
+T2	cohort-patient 63 71	Patients
+R5_2	has Arg1:T3 Arg2:T7_2
+R1_2	has Arg1:T3 Arg2:T1
+R4_2	has Arg1:T5 Arg2:T2_2
+R0_T6_2_T1_cancer	relatedTo Arg1:T6_2 Arg2:T1_cancer
+R3_2	relatedTo Arg1:T8_2 Arg2:T2_2

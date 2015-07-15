@@ -1,0 +1,272 @@
+T114	cohort-patient 2780 2788	adenomas
+T116	gene 2882 2886	KRAS
+T117	mutation 2887 2895	mutation
+T119	cohort-patient 2910 2918	adenomas
+T126_merge	size 3270 3274	four
+T29	disease 471 476	polyp
+T28	disease 404 409	polyp
+T27	disease 324 330	polyps
+T26	Concepts_Ideas 240 252	precancerous
+T124_merge	size 3239 3253	none of the 84
+T75_2	disease 1521 1527	normal
+T25	disease 253 259	polyps
+T24	disease 109 115	cancer
+T158_2	disease 1602 1608	normal
+T23	body-part 3518 3528	colorectal
+T120	Disorder 2926 2952	tubulovillous architecture
+T22	body-part 313 323	colorectal
+T122	mutation 3001 3009	mutation
+T21	disease 3674 3682	adenomas
+T121	gene 2996 3000	KRAS
+T20	disease 3254 3262	adenomas
+T87_merge	size 1823 1838	lower than 4.8%
+T127	Concepts_Ideas 3275 3283	serrated
+T128	disease 3284 3290	polyps
+T125	cohort-patient 3254 3262	adenomas
+T129	cohort-patient 3284 3290	polyps
+T99_merge	size 2233 2236	738
+T83_2	body-part 1528 1534	mucosa
+T38	disease 671 677	polyps
+T37	Concepts_Ideas 662 670	serrated
+T39	disease 754 759	polyp
+T131	Physiology 3314 3340	aberrant expression of p53
+T34	disease 575 578	SSA
+T33	disease 558 560	SA
+T36	Disorder 647 661	non-dysplastic
+T35	Disorder 545 589	with (MP and SA) and without (SSA) dysplasia
+T135	mutation 3365 3373	mutation
+T30	Concepts_Ideas 529 537	serrated
+T134	gene 3360 3364	KRAS
+T133	cohort-patient 3349 3355	fourth
+T32	disease 551 553	MP
+T132	cohort-patient 3301 3306	three
+T31	disease 538 544	polyps
+T49	cohort-patient 976 979	TAs
+T48	disease 1010 1013	VAs
+T100	cohort-patient 2237 2245	adenomas
+T43	disease 976 979	TAs
+T42	disease 815 821	polyps
+T102	cohort-patient 2264 2276	participants
+T41	Disorder 884 920	serrated and/or villous architecture
+T40	Disorder 849 876	hyperplastic and dysplastic
+T47	disease 1005 1009	TVAs
+T46	Concepts_Ideas 993 1000	> 10 mm
+T45	disease 989 992	TAs
+T44	Concepts_Ideas 980 987	< 10 mm
+T107	mutation 2659 2667	mutation
+T118_merge	size 2897 2900	93%
+T108	Concepts_Ideas 2704 2709	small
+T105	disease 2059 2062	TAs
+T106	gene 2654 2658	KRAS
+T103	gene 2374 2378	KRAS
+T104	mutation 2379 2387	mutation
+T50	cohort-patient 989 992	TAs
+T59	gene 1133 1137	BRAF
+T52	gene 1024 1028	KRAS
+T113	Concepts_Ideas 2805 2825	villous architecture
+T112	cohort-patient 2732 2740	adenomas
+T51	cohort-patient 1005 1013	TVAs/VAs
+T53	mutation 1029 1037	mutation
+T110	Concepts_Ideas 2720 2725	large
+T56	gene 1074 1078	BRAF
+T55	cohort-patient 1059 1067	adenomas
+T111_merge	size 2727 2730	17%
+T57	mutation 1079 1087	mutation
+T75	mutation 1565 1573	mutation
+T147_2	cohort-patient 1932 1940	adenomas
+T73	disease 1553 1558	polyp
+T74	gene 1560 1564	KRAS
+T79	gene 1655 1659	BRAF
+T77	body-part 1609 1626	colorectal mucosa
+T54_merge	size 1050 1055	26.5%
+T101_merge	size 2260 2263	639
+T72	mutation 1411 1419	mutation
+T71	gene 1406 1410	BRAF
+T70	disease 1365 1371	polyps
+T62	mutation 1188 1196	mutation
+T63	gene 1226 1230	BRAF
+T64	gene 1235 1239	KRAS
+T65	mutation 1240 1248	mutation
+T1_cancer	disease 2174 2180	cancer
+T66	body-part 1274 1284	colorectal
+T67	gene 1316 1320	BRAF
+T68	mutation 1321 1330	mutations
+T69	Concepts_Ideas 1356 1364	serrated
+T22_2	cohort-patient 299 307	patients
+T146_2	size 1878 1880	3%
+T42_2	cohort-patient 1160 1168	adenomas
+T63_2	size 1115 1132	Three of the four
+T109_merge	size 2711 2714	18%
+T58_merge	size 1109 1113	4.8%
+T145_2	size 1869 1871	0%
+T61	gene 1183 1187	KRAS
+T60	mutation 1138 1147	mutations
+T115_merge	size 2827 2830	50%
+T97	Concepts_Ideas 2132 2146	villous change
+T98	body-part 2163 2173	colorectal
+T95	Disorder 2083 2102	polypoid appearance
+T96	Disorder 2121 2130	dysplasia
+T137	disease 3582 3588	polyps
+T136	disease 3529 3535	polyps
+T139	disease 3641 3647	polyps
+T138	Concepts_Ideas 3576 3581	large
+T143	Concepts_Ideas 3688 3695	smaller
+T6	disease 1059 1067	adenomas
+T144	Concepts_Ideas 806 814	advanced
+T7	disease 1160 1168	adenomas
+T145	Concepts_Ideas 2040 2044	flat
+T4	disease 923 931	Adenomas
+T146	Concepts_Ideas 2049 2058	depressed
+T5	disease 937 945	adenomas
+T141	age 3713 3723	> 60 years
+T8	disease 1377 1385	adenomas
+T142	age 3746 3756	< 60 years
+T9	disease 1724 1732	adenomas
+T94	mutation 1995 2003	mutation
+T93	body-part 1974 1984	colorectal
+T92	gene 1966 1970	KRAS
+T91	body-part 1921 1931	colorectal
+T90	mutation 1845 1853	mutation
+T88	cohort-patient 1805 1813	adenomas
+T89	gene 1840 1844	BRAF
+T84	gene 1777 1781	BRAF
+T85	mutation 1782 1790	mutation
+T86	body-part 1794 1804	colorectal
+T1	disease 2163 2180	colorectal cancer
+T149	Concepts_Ideas 2905 2909	flat
+T148	Concepts_Ideas 2151 2162	synchronous
+T3	disease 627 635	adenomas
+T147	Concepts_Ideas 2104 2119	increasing size
+T2	disease 415 422	adenoma
+T10	disease 1805 1813	adenomas
+T152	mutation 3407 3415	mutation
+T11	disease 1932 1940	adenomas
+T153	cohort-patient 3452 3460	patients
+T12	disease 1985 1993	adenomas
+T150	disease 3199 3208	carcinoma
+T13	disease 2237 2245	adenomas
+T151	gene 3402 3406	KRAS
+T14	disease 2484 2491	adenoma
+T15	disease 2516 2523	adenoma
+T16	disease 2732 2740	adenomas
+T83	mutation 1694 1702	mutation
+T17	disease 2780 2788	adenomas
+T82	gene 1689 1693	BRAF
+T18	disease 2910 2918	adenomas
+T19	disease 3082 3089	adenoma
+T130_merge	size 3301 3306	three
+R42_m	has Arg1:T82 Arg2:T83
+R27_2	has Arg1:T42_2 Arg2:T63_2
+R50_1	has Arg1:T97 Arg2:T12
+R26_2	has Arg1:T42_2 Arg2:T7
+R32_m	relatedTo Arg1:T93 Arg2:T12
+R85_m	has Arg1:T56 Arg2:T57
+R64_m	has Arg1:T112 Arg2:T111_merge
+R87_2	relatedTo Arg1:T83_2 Arg2:T75_2
+R49_2	has Arg1:T147_2 Arg2:T11
+R75_m	has Arg1:T125 Arg2:T124_merge
+R20_m	has Arg1:T55 Arg2:T53
+R49_1	has Arg1:T96 Arg2:T12
+R8_1	has Arg1:T30 Arg2:T34
+R21_m	has Arg1:T55 Arg2:T57
+R80_m	has Arg1:T129 Arg2:T128
+R65_m	has Arg1:T129 Arg2:T126_merge
+R73_m	has Arg1:T120 Arg2:T18
+R83_m	has Arg1:T151 Arg2:T152
+R71_m	has Arg1:T114 Arg2:T115_merge
+R30_m	has Arg1:T138 Arg2:T137
+R19_m	has Arg1:T55 Arg2:T54_merge
+R40_m	has Arg1:T100 Arg2:T13
+R17_m	has Arg1:T88 Arg2:T87_merge
+R89_1	has Arg1:T147 Arg2:T12
+R68_1	has Arg1:T119 Arg2:T18
+R97_m	has Arg1:T112 Arg2:T109_merge
+R33_m	has Arg1:T92 Arg2:T94
+R39_2	has Arg1:T102 Arg2:T13
+R96_m	relatedTo Arg1:T12 Arg2:T94
+R99_m	has Arg1:T132 Arg2:T128
+R0_T98_T1_cancer	relatedTo Arg1:T98 Arg2:T1_cancer
+R67_m	has Arg1:T119 Arg2:T117
+R29_m	has Arg1:T143 Arg2:T21
+R95_m	has Arg1:T71 Arg2:T72
+R92_m	has Arg1:T55 Arg2:T58_merge
+R52_2	has Arg1:T147_2 Arg2:T146_2
+R25_m	has Arg1:T59 Arg2:T60
+R77_m	has Arg1:T127 Arg2:T128
+R44_m	has Arg1:T84 Arg2:T85
+R58_1	has Arg1:T112 Arg2:T16
+R62_2	has Arg1:T110 Arg2:T112
+R45_m	has Arg1:T88 Arg2:T10
+R63_2	has Arg1:T108 Arg2:T112
+R56_1	has Arg1:T110 Arg2:T16
+R56_2	has Arg1:T97 Arg2:T1
+R100_m	has Arg1:T133 Arg2:T128
+R59_m	has Arg1:T106 Arg2:T107
+R6_1	has Arg1:T35 Arg2:T33
+R60_m	has Arg1:T116 Arg2:T117
+R54_2	has Arg1:T95 Arg2:T1
+R61_m	has Arg1:T112 Arg2:T107
+R4_1	has Arg1:T30 Arg2:T32
+R69_m	has Arg1:T114 Arg2:T17
+R23_m	has Arg1:T40 Arg2:T42
+R14_2	has Arg1:T79 Arg2:T75
+R16_2	has Arg1:T35 Arg2:T31
+R57_m	has Arg1:T148 Arg2:T1
+R35_2	has Arg1:T147 Arg2:T1
+R84_m	has Arg1:T61 Arg2:T62
+R43_2	relatedTo Arg1:T9 Arg2:T82
+R74_m	has Arg1:T121 Arg2:T122
+R58_m	has Arg1:T103 Arg2:T104
+R76_m	has Arg1:T125 Arg2:T20
+R48_1	has Arg1:T95 Arg2:T12
+R91_1	has Arg1:T148 Arg2:T12
+R82_m	has Arg1:T133 Arg2:T135
+R90_2	relatedTo Arg1:T77 Arg2:T158_2
+R7_1	has Arg1:T35 Arg2:T32
+R78_1	has Arg1:T131 Arg2:T128
+R4_m	has Arg1:T30 Arg2:T31
+R18_m	has Arg1:T55 Arg2:T6
+R72_m	has Arg1:T113 Arg2:T17
+R86_m	has Arg1:T63 Arg2:T65
+R13_m	has Arg1:T52 Arg2:T53
+R10_m	has Arg1:T50 Arg2:T45
+R2_m	relatedTo Arg1:T22 Arg2:T27
+R12_m	has Arg1:T51 Arg2:T48
+R0_T35_T34	has Arg1:T35 Arg2:T34
+R5_m	has Arg1:T37 Arg2:T38
+R6_m	has Arg1:T36 Arg2:T38
+R31_m	relatedTo Arg1:T23 Arg2:T136
+R11_m	has Arg1:T51 Arg2:T47
+R98_2	has Arg1:T131 Arg2:T132
+R70_m	has Arg1:T114 Arg2:T107
+R1_m	has Arg1:T26 Arg2:T25
+R41_m	has Arg1:T100 Arg2:T99_merge
+R94_m	relatedTo Arg1:T70 Arg2:T68
+R34_m	has Arg1:T145 Arg2:T105
+R9_m	has Arg1:T49 Arg2:T43
+R57_1	has Arg1:T108 Arg2:T16
+R89_m	has Arg1:T69 Arg2:T70
+R24_m	has Arg1:T64 Arg2:T65
+R36_m	has Arg1:T146 Arg2:T105
+R51_2	has Arg1:T147_2 Arg2:T90
+R15_m	has Arg1:T74 Arg2:T75
+R88_m	has Arg1:T67 Arg2:T68
+R53_2	has Arg1:T147_2 Arg2:T145_2
+R50_m	relatedTo Arg1:T91 Arg2:T11
+R46_m	relatedTo Arg1:T86 Arg2:T10
+R8_m	has Arg1:T44 Arg2:T43
+R91_m	has Arg1:T144 Arg2:T42
+R55_2	has Arg1:T96 Arg2:T1
+R47_m	has Arg1:T88 Arg2:T85
+R48_m	has Arg1:T89 Arg2:T90
+R7_m	has Arg1:T46 Arg2:T45
+R78_m	has Arg1:T132 Arg2:T130_merge
+R81_m	has Arg1:T134 Arg2:T135
+R3_2	has Arg1:T22_2 Arg2:T27
+R93_2	relatedTo Arg1:T7 Arg2:T62
+R68_m	has Arg1:T149 Arg2:T18
+R38_m	has Arg1:T102 Arg2:T101_merge
+R5_1	has Arg1:T30 Arg2:T33
+R66_m	has Arg1:T119 Arg2:T118_merge
+R28_2	has Arg1:T42_2 Arg2:T60
+R22_m	has Arg1:T41 Arg2:T42

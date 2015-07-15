@@ -1,0 +1,7 @@
+T4_2	disease 1694 1699	tumor
+T1_2	disease 1321 1326	tumor
+T2_2	disease 1625 1630	tumor
+T3_2	disease 1531 1536	tumor
+T1	cohort-patient 1819 1824	cases
+T3	cohort-patient 2042 2049	patient
+T2	cohort-patient 1179 1186	patient

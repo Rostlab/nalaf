@@ -1,0 +1,7 @@
+** IGNORE LINE **
+** IGNORE LINE **
+** IGNORE LINE **
+Conclusion
+
+Findings from the present study and from previous work indicate that BRAF mutation is likely to be a convenient marker for the identification of a subset of CRCs with distinctive clinical, pathological and molecular features and which may originate in hyperplastic polyps and serrated adenomas [7,14,15]. In view of the strong associations between BRAF mutation and specific pathological (site, grade, mucinous, infiltrating lymphocytes) and molecular (methylated MSI+, CIMP+, wildtype KRAS) features, it will be interesting in future studies to determine the predictive significance of this marker for response to adjuvant therapies in CRC.
+

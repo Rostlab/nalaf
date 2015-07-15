@@ -1,0 +1,9 @@
+T4	disease 152 154	LS
+T5	cohort-patient 234 242	probands
+T5_2	Concepts_Ideas 132 147	neutral variant
+T1	disease 230 233	CRC
+T3	mutation 84 100	c.1852_1853AA>GC
+T2	cohort-patient 253 262	relatives
+R3_m	has Arg1:T5 Arg2:T1
+R2_2	has Arg1:T5_2 Arg2:T4
+R1_2	relatedTo Arg1:T4 Arg2:T3

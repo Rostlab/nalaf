@@ -1,0 +1,12 @@
+Microsatellite instability and MLH1 immunohistochemical expression
+
+A subset of colorectal tumour DNA samples from 17 patients carrying the p.Lys618Ala variant (eight from the familial group and nine from the sporadic CRC group) was screened for MSI status using five mononucleotide markers (BAT26, BAT25, NR21, NR24 and NR27) and multiplex PCR as previously described by Buhard et al [8].
+
+Tumours from p.Lys618Ala carrier cases in the familial group (seven index subjects and one relative) were also analysed for MLH1 protein expression using immunohistochemistry and anti-MLH1 antibodies (PharMingen, CA, USA) as described elsewhere [7]. Tumour cells were judged negative for protein expression only if they lacked staining in a sample in which normal colonocytes and stroma cells were stained. If no immunostaining of normal tissue could be demonstrated, the results were considered unreliable.
+
+MLH1 promoter hypermethylation by Methylation Sensitive Multiplex Ligation-dependent Probe Amplification (MS-MLPA), and BRAF p.Val600Glu mutation by direct sequencing from tumor DNA was also assess when MLH1 loss of expression was detected.
+
+Statistical analysis
+
+Hardy-Weinberg equilibrium was calculated for the control, sporadic CRC and familial CRC groups. Allelic and genotype frequencies were calculated. In the case-control study of sporadic CRC, we estimated the odds ratio (OR) and 95% confidence interval (95% CI) for the p.Lys618Ala variant using unconditional logistic regression adjusted for age and sex. We analysed for potential effect modification by age using an analysis stratified according to median age at diagnosis for the sporadic CRC cases (≤70 years or >70 years). A χ2 test was used to evaluate differences in p.Lys618Ala carrier frequencies between the tumour and control groups. A probability level of <0.05 was considered significant.
+

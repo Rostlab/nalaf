@@ -1,0 +1,73 @@
+Include
+
+Include all DNA-level or protein-level mutation mentions that fit within Human Genome Variation Society (HGVS) nomenclature guidelines (http://www.hgvs.org/mutnomen/) and some of those that do not, but that closely resemble the suggested formats.
+Ex. p.W10R (PMID 21903317)
+Ex. IVS-II-1 (G-->A) [roman numerals not recommended, but resembles HGVS format] (PMID 12144056)
+Ex. Ile262fs [fs = frameshift mutation] (PMID 21126715)
+
+Include all mentions in formulaic format that indicate 1) location or reference sequence, 2) mutation type (e.g., substitution, deletion), and 3) the original and/or new base or amino acid (e.g., A, T, C, G or Lys, W, R)
+Ex. c.1517A>G (PMID 22016685)
+Ex. rs601338A>G (PMID 22025780)
+
+Mentions can be included that are poorly written (have a weak, incomplete description) and do not include all 3 of the above preferred components, as long as mutation type is indicated.
+Ex. del 619 [indicating a deletion of 619 base pairs, not position] (PMID 22392582)
+Ex. C>A (PMID 22366648)
+
+Include individual dbSNP identifiers.
+Ex. rs928180 (PMID 19004027)
+
+Include mentions of minimal natural language that indicate a deletion, insertion, indel or delins (insertion/deletion) or duplication (but not substitution) of a specific number of base pairs.
+Ex. two splice-site deletions, 4 nucleotide substitutions and a 22-bp deletion in the intron/exon boundaries (PMID 22174939)
+Ex. 30-bp, rare 69-bp, or yet unknown 27-bp deletions [annotated as a single mention here since only last mention includes mutation type] (PMID 22337303)
+Ex. 32 base-pair (/\32) deletion; 32 deletion (PMID 20682662); Delta32 (PMID 19476483, PMID 18790087)
+
+Include mentions that contain minimal natural language, especially those that can be translated to appropriate characters that fit the HGVS guidelines.
+Ex. c.652T greater than G [equivalent to c.652T>G] (PMID 21654082)
+Ex. nucleotide 5215G>A [equivalent to g.5215G>A] (PMID 20455026)
+Ex. nucleotide 654 mutation (C-->T) [unnecessary inclusion of mutation] (PMID 1391961)
+Ex. codon 91 (C-->T) [codon instead of nucleotide used to denote position] (PMID 12144056)
+Ex. A G at nucleotide 313 [equivalent to g.313A>G] (based on PMID 22180037 with improper display)
+
+Include positional or reference sequence information only if it is part of the mention and not simply nearby natural language.
+Do include:
+Ex. Ex2+860G>C [exon 2] (PMID 22051099)
+Ex. codon 91 (C-->T) (PMID 12144056)
+Do NOT include:
+Ex. 3190C>T in exon 24 (PMID 22188495)
+
+
+Exclude
+
+Exclude mentions that are fully or mostly natural language; focus on mutation nomenclature in descriptive formula format.
+Ex. 4-nucleotide deletion of codon 41-42 (PMID 1391961)
+Ex. revealed a heterozygous A to G substitution in nucleotide 1517 (c.1517A>G) of exon 13 [only annotate the formulaic mention] (PMID 22016685)
+Ex. nucleotide substitution of G to C at codon 158 of exon 4 (PMID 21325775)
+Ex. C-to-G and C to T mentions (PMID 21080147)
+
+Exclude mentions with severely incomplete descriptions that do not give any indication of mutation type, even if it lists position.
+Ex. [natural language followed by] +5 position of IVS22 (PMID 21654082)
+Ex. IVS1-5:IVS1-5 (PMID 22392582)
+
+Exclude preceding or nearby gene symbols and database identifiers (except rsIDs/ssIDs), whether or not the mention fits HGVS guidelines.
+Ex. BRCA1 nucleotide 5215G>A (PMID 20455026)
+Ex. HBB:c.-138C>G (PMID 22392582)
+
+Exclude chromosome-level mutation mentions (e.g., translocations), as well as mentions making up all or part of a karyotype mention.
+Ex. 45,X,-Y,t(8;21)(15%)/90,XX,-Y,-Y,t(8;21)x2(80%)/46,XY(5%) (PMID 10905056)
+
+Exclude genotype and allele mentions, even when written to look like mutation mentions.
+Ex. combined G1359A and A1359A as a group and wild type G1359G as second group [referring to GA, AA, and GG genotypes] (PMID 21666969)
+Ex. DBH -1021T and the -889TT genotype (PMID 21070631)
+Do include:
+Ex. -1021C/T [describes a mutation, not genotype/allele]
+
+
+Special cases
+
+Annotate each individual mutation mention in a long list of mentions, even if written as a single mention.
+Ex. g.[267G>A, 271G>A, 290C>T, 326A>G] (PMID 20140707)
+EXCEPTION: Annotate entire complex mentions that fit or nearly fit HGVS guidelines.
+Ex. c.[742_743delAAinsT;746_747delCA] [two variations in one allele] (PMID 22196401)
+Ex. c.[109G>A]+[235delC] [compound mutation in two different alleles] (PMID 22196401)
+
+

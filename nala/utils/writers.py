@@ -156,7 +156,8 @@ class StatsWriter:
             fig2 = plt.figure()
             fig2.add_axes([0.1, 0.22, 0.88, 0.74])
             plt.bar(x_pos, abstract_full_ratio_array, color=bar_color)
-            plt.xticks(x_pos, label, rotation=90)  # TODO shift position to get correct labeling on bars
+            xticks_pos = list(map(lambda x: x + 0.4, x_pos))
+            plt.xticks(xticks_pos, label, rotation=90)  # TODO shift position to get correct labeling on bars
             plt.ylabel("Abstract vs Full document ratio")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
             # plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)

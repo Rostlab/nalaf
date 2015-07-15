@@ -59,6 +59,33 @@ class SETHReader:
 
         return dataset
 
+class MutationFinderReader:
+    """
+    Reader for the MutationFinder-corpus (http://mutationfinder.sourceforge.net/)
+    Format: PMID\tabstract (tab separated PMID and abstract) in 5 files
+    """
+
+    def __init__(self, corpus_folder):
+        self.corpus_folder = corpus_folder
+        """the directory containing the .txt files"""
+
+    def read(self):
+        """
+        read each .txt file in the directory, parse it and create and instance of Document
+        form a dataset consisting of every document parsed and return it
+
+        :returns structures.data.Dataset
+        """
+        dataset = Dataset()
+        with open(self.corpus_folder, encoding='utf-8') as file:
+            reader = csv.reader(file, delimiter='\t')
+            for row in reader:
+                document = Document()
+                document.parts['abstract'] = Part(row[1])
+                dataset.documents[row[0]] = document
+
+        return dataset
+
 
 class VerspoorReader:
     """

@@ -16,6 +16,8 @@ class StatsWriter:
         self.data = []
         self.init_counter = init_counter
         """ internal constant being defined """
+        self.ylim_max_nl_total = 0.5
+        """ upper ylim for plot y-axis for nl vs total mentions """
 
     def addrow(self, dictstats, mode):
         """
@@ -144,6 +146,7 @@ class StatsWriter:
         # print([x + 0.3 for x in x_pos])
         # fig.ylabel("NL vs Total mention ratio")
         plt.xlim(min(x_pos), max(x_pos) * 1.05)
+        plt.ylim(0, self.ylim_max_nl_total)
         plt.show()
 
         # subplot for abstract vs full ratio

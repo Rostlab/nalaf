@@ -274,3 +274,51 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
     # TODO as array or as string with spaces?
     # OPTIONAL discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data)
+
+
+class TmVarDictionaryFeatureGenerator(FeatureGenerator):
+    # TODO docsting
+    """
+    Implements the abstract class FeatureGenerator.
+    """
+    def __init__(self):
+        self.patterns = [
+            re.compile('([cgrm]\.[ATCGatcgu \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9\_\.\:]*)'),
+            re.compile('(IVS[ATCGatcgu \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9\_\.\:]*)'),
+            re.compile('([cgrm]\.[ATCGatcgu \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
+            re.compile('(IVS[ATCGatcgu \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
+            re.compile('([cgrm]\.[ATCGatcgu][0-9]+[ATCGatcgu])'),
+            re.compile('([ATCGatcgu][0-9]+[ATCGatcgu])'),
+            re.compile('([0-9]+(del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu]*)'),
+            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel|fsX|fsx|fsx|fs)[CISQMNPKDTFAGHLRWVEYX \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]*)'),
+            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
+            re.compile('([p]\.[A-Z][a-z]{0,2}[\W\-]{0,1}[0-9]+[\W\-]{0,1}[A-Z][a-z]{0,2})'),
+            re.compile('([p]\.[A-Z][a-z]{0,2}[\W\-]{0,1}[0-9]+[\W\-]{0,1}(fs|fsx|fsX))')]
+
+    def generate(self, dataset):
+        """
+        :type dataset: nala.structures.data.Dataset
+        """
+        for part in dataset.parts():
+            so_far = 0
+            matches = {}
+
+            for index, pattern in enumerate(self.patterns):
+                matches[index] = []
+                for match in pattern.finditer(part.text):
+                    matches[index].append((match.start(), match.end()))
+
+            for sentence in part.sentences:
+                for token in sentence:
+                    so_far = part.text.find(token.word, so_far)
+
+                    for match_index, match in matches.items():
+                        token.features['pattern{}[0]'.format(match_index)] = 'O'
+                        for start, end in match:
+                            if start == so_far:
+                                token.features['pattern{}[0]'.format(match_index)] = 'B'
+                                break
+                            elif start < so_far < end:
+                                token.features['pattern{}[0]'.format(match_index)] = 'I'
+                                break
+

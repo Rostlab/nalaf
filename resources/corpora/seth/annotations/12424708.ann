@@ -1,0 +1,20 @@
+T1	Gene 301 309	factor H
+T2	Gene 195 203	factor H
+T3	Gene 493 501	factor H
+T4	Gene 600 608	factor H
+T5	Gene 736 744	factor H
+T6	SNP 834 840	W1183L
+T7	SNP 842 848	V1197A
+T8	SNP 853 859	R1210C
+T9	Gene 815 823	factor H
+R1	AssociatedTo Arg1:T6 Arg2:T9	
+R2	AssociatedTo Arg1:T7 Arg2:T9	
+R3	AssociatedTo Arg1:T8 Arg2:T9	
+T10	Gene 885 893	factor H
+T11	Gene 1010 1018	factor H
+T12	Gene 1078 1086	factor H
+T13	Gene 1154 1162	factor H
+T14	Gene 1373 1381	factor H
+T15	Gene 46 54	factor H
+T16	SNP 913 919	R1210C
+R4	AssociatedTo Arg1:T16 Arg2:T10	

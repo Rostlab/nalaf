@@ -1,0 +1,4 @@
+T1	Gene 1457 1481	protein kinase C epsilon
+T2	Gene 1482 1495	(PKCepsilon),
+T3	Gene 1690 1700	PKCepsilon
+R1	Equals Arg1:T1 Arg2:T2	

@@ -1,0 +1,19 @@
+T1	Gene 106 117	haptoglobin
+T2	Gene 118 122	(Hp)
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 259 270	haptoglobin
+T4	Gene 276 280	(Hp)
+R2	Equals Arg1:T3 Arg2:T4	
+T5	Gene 326 350	haptoglobin-related gene
+T6	Gene 351 357	(Hpr),
+R3	Equals Arg1:T5 Arg2:T6	
+T7	Gene 595 604	Hpr alpha
+T8	Gene 616 624	Hpr beta
+T9	Gene 900 905	(Hp2)
+T10	Gene 938 943	Hp2-1
+T11	Gene 1007 1012	(Hp2)
+T12	Gene 1054 1057	Hp1
+T13	Gene 1141 1145	Hp1.
+T14	Gene 1343 1347	Hp2,
+T15	Gene 1493 1496	Hp1
+T16	Gene 1580 1585	(Hp2)

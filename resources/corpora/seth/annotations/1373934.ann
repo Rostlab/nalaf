@@ -1,0 +1,8 @@
+T1	Gene 67 82	cystic fibrosis
+T2	Gene 238 276	CF transmembrane conductance regulator
+T3	Gene 278 282	CFTR
+R1	Equals Arg1:T2 Arg2:T3	
+T4	Gene 345 349	CFTR
+T5	SNP 796 805	1949del84
+T6	Gene 904 908	CFTR
+R2	AssociatedTo Arg1:T5 Arg2:T4	

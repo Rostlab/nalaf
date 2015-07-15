@@ -1,0 +1,11 @@
+T3	Gene 1076 1101	human proteolipid protein
+T4	Gene 1108 1111	PLP
+R1	Equals Arg1:T3 Arg2:T4	
+T5	Gene 1037 1040	DMD
+T6	Gene 1218 1222	Sec4
+T7	Gene 1280 1283	Ras
+T8	Gene 1317 1321	RLGP
+T9	Gene 1352 1356	RLGP
+T10	Gene 1406 1410	RLGP
+T2	Gene 563 566	DMD
+T1	Gene 50 53	Ras

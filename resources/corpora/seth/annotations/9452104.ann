@@ -1,0 +1,9 @@
+T1	Gene 46 57	factor VIII
+T2	SNP 90 96	E1875G
+T3	SNP 98 104	G2088S
+T4	SNP 106 112	I2185T
+T5	SNP 135 144	1780delTC
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+R2	AssociatedTo Arg1:T3 Arg2:T1	
+R3	AssociatedTo Arg1:T4 Arg2:T1	
+R4	AssociatedTo Arg1:T5 Arg2:T1	

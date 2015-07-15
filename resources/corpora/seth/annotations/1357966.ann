@@ -1,0 +1,9 @@
+T1	Gene 151 155	INSR
+T2	Gene 133 149	insulin receptor
+R1	Equals Arg1:T2 Arg2:T1	
+T4	Gene 656 661	PstI,
+T5	Gene 662 667	RsaI,
+T6	Gene 672 676	SstI
+T7	Gene 689 693	MspI
+T8	Gene 764 769	BglII
+T9	Gene 1388 1392	INSR

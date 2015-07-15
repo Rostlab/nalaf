@@ -1,0 +1,9 @@
+T1	Gene 29 44	Zinc-Finger 469
+T3	Gene 718 733	Zinc-Finger 469
+T4	Gene 740 746	ZNF469
+R1	Equals Arg1:T3 Arg2:T4	
+T5	SNP 848 857	5943 delA
+T6	SNP 955 964	9527 delG
+R2	AssociatedTo Arg1:T5 Arg2:T4	
+R3	AssociatedTo Arg1:T6 Arg2:T4	
+T7	Gene 983 989	ZNF469

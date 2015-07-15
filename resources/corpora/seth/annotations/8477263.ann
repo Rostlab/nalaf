@@ -1,0 +1,4 @@
+T1	Gene 455 471	beta-thalassemia
+T2	Gene 1051 1062	beta-globin
+T3	SNP 1069 1078	-87 (C-A)
+R1	AssociatedTo Arg1:T3 Arg2:T2	

@@ -1,0 +1,20 @@
+T1	Gene 32 37	BCL10
+T2	Gene 100 105	BCL10
+T3	Gene 255 260	BCL10
+T4	SNP 526 558	C to G mutation at position 5744
+T5	SNP 560 568	g5744C>G
+T6	SNP 633 670	T deletion mutation at position 11311
+T7	SNP 672 682	g11311delT
+T8	SNP 748 781	C to T mutation at position 14116
+T9	SNP 783 792	g14116C>T
+T10	Gene 815 820	BCL10
+T11	Gene 591 596	BCL10
+R1	AssociatedTo Arg1:T5 Arg2:T11	
+R2	AssociatedTo Arg1:T4 Arg2:T11	
+T12	Gene 706 711	BCL10
+R3	AssociatedTo Arg1:T7 Arg2:T12	
+R4	AssociatedTo Arg1:T6 Arg2:T12	
+R5	AssociatedTo Arg1:T8 Arg2:T10	
+R6	AssociatedTo Arg1:T9 Arg2:T10	
+T13	Gene 955 960	BCL10
+T14	Gene 1070 1075	BCL10

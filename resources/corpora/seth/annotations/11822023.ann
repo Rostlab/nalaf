@@ -1,0 +1,4 @@
+T1	Gene 452 465	Ggamma-globin
+T2	SNP 411 444	(C-->T) at position -158 upstream
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+T3	Gene 584 597	Ggamma-globin

@@ -1,0 +1,9 @@
+T1	Gene 65 72	COL10A1
+T2	Gene 358 365	COL10A1
+T3	Gene 336 351	type X collagen
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 37 58	human type X collagen
+R2	Equals Arg1:T4 Arg2:T1	
+T5	Gene 562 569	COL10A1
+T6	Gene 1186 1193	COL10A1
+T7	Gene 1334 1341	COL10A1

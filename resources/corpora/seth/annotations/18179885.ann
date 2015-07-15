@@ -1,0 +1,10 @@
+T1	Gene 202 209	lactase
+T2	Gene 211 214	LCT
+R1	Equals Arg1:T1 Arg2:T2	
+T3	SNP 629 640	T/G(-13915)
+T4	Gene 718 722	MCM6
+T5	Gene 758 761	LCT
+T6	SNP 728 738	T/C(-3712)
+T7	Gene 1040 1070	hepatic nuclear factor 1 alpha
+T8	Gene 1072 1082	HNF1 alpha
+R2	Equals Arg1:T7 Arg2:T8	

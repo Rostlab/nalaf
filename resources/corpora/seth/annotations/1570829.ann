@@ -1,0 +1,7 @@
+T1	Gene 165 168	TDF
+T2	Gene 138 163	testis-determining factor
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 269 272	SRY
+T4	Gene 304 307	TDF
+T5	Gene 505 508	SRY
+T6	Gene 679 682	SRY

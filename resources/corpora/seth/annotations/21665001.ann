@@ -1,0 +1,8 @@
+T1	Gene 72 77	PLCD1
+T2	Gene 658 663	PLCD1
+T3	Gene 700 749	phosphoinositide-specific phospholipase C delta 1
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 839 844	PLCD1
+T5	Gene 892 897	PLCD1
+T6	Gene 1041 1046	PLCD1
+T7	Gene 1128 1133	PLCD1

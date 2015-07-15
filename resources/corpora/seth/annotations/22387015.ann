@@ -1,0 +1,8 @@
+T1	Gene 101 136	Fibroblast growth factor receptor 2
+T2	Gene 138 143	FGFR2
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 279 284	FGFR2
+T4	Gene 413 418	FGFR2
+T5	Gene 1001 1007	FGFR2.
+T6	Gene 1141 1146	FGFR2
+T7	Gene 1318 1323	FGFR2

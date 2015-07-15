@@ -1,0 +1,5 @@
+T1	Gene 51 55	PIGL
+T2	Gene 17 45	glycosylphosphatidylinositol
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 333 337	PIGL
+T4	Gene 560 564	CD59

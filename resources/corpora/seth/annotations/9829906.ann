@@ -1,0 +1,5 @@
+T1	Gene 51 56	FALDH
+T2	Gene 163 168	FALDH
+T3	Gene 133 161	fatty aldehyde dehydrogenase
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 824 829	FALDH

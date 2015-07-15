@@ -1,0 +1,10 @@
+T1	Gene 200 203	HLA
+T2	Gene 310 315	HLA-B
+T3	Gene 320 325	HLA-A
+T4	Gene 175 198	human leukocyte antigen
+R1	Equals Arg1:T4 Arg2:T1	
+T5	Gene 562 569	HLA-B54
+T6	Gene 574 582	HLA-A11,
+T7	Gene 881 892	HLA-B*5504,
+T8	Gene 1107 1112	TFIIH
+T9	Gene 1610 1615	HLA-B

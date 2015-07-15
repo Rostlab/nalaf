@@ -1,0 +1,17 @@
+T1	Gene 0 4	GJB2
+T2	Gene 387 391	GJB2
+T3	Gene 438 449	connexin 26
+T4	Gene 451 455	Cx26
+R1	Equals Arg1:T3 Arg2:T4	
+T5	Gene 502 506	GJB2
+T6	Gene 660 664	GJB2
+T7	SNP 714 720	35delG
+T8	SNP 737 743	35delG
+T9	SNP 771 775	W24X
+T10	SNP 791 801	non-35delG
+R2	AssociatedTo Arg1:T7 Arg2:T6	
+R3	AssociatedTo Arg1:T8 Arg2:T6	
+R4	AssociatedTo Arg1:T9 Arg2:T6	
+R5	AssociatedTo Arg1:T10 Arg2:T6	
+T11	SNP 855 861	35delG
+T12	Gene 951 955	Cx26

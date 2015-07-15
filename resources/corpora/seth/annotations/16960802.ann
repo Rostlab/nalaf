@@ -1,0 +1,14 @@
+T1	Gene 13 18	CABP4
+T2	Gene 42 64	Ca2+-binding protein 4
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 381 388	CACNA1F
+T7	Gene 626 633	CACNA1F
+T8	Gene 689 701	Cav1.4 alpha
+T4	Gene 852 859	CACNA1F
+R2	Equals Arg1:T7 Arg2:T8	
+T5	Gene 939 944	CABP4
+T6	Gene 1109 1121	Cav1.4 alpha
+T9	Gene 1144 1149	Cabp4
+T10	Gene 1153 1165	Cav1.4 alpha
+T11	Gene 1251 1256	CABP4
+T12	Gene 1513 1518	CABP4

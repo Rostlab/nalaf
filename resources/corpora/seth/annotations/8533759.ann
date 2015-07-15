@@ -1,0 +1,7 @@
+T1	SNP 964 969	R408W
+T2	SNP 971 975	I65T
+T3	SNP 981 985	F39L
+T4	Gene 694 697	PKU
+R1	AssociatedTo Arg1:T1 Arg2:T4	
+R2	AssociatedTo Arg1:T2 Arg2:T4	
+R3	AssociatedTo Arg1:T3 Arg2:T4	

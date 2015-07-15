@@ -1,0 +1,44 @@
+T1	SNP 818 827	Ala797Thr
+T2	Gene 865 872	betaMHC
+T3	SNP 875 883	Arg92Trp
+T4	Gene 916 920	cTnT
+T5	SNP 927 936	Arg645His
+T6	Gene 975 980	MyBPC
+T7	Gene 1001 1008	betaMHC
+T8	SNP 1020 1029	Arg403Trp
+T9	SNP 1034 1043	Arg249Gln
+T10	SNP 1094 1103	Gln499Lys
+T11	Gene 1107 1114	betaMHC
+T12	SNP 1119 1128	Val896Met
+T13	SNP 1133 1142	Deltac756
+T14	Gene 1146 1155	MyBPC-and
+T15	Gene 835 863	beta-myosin heavy-chain gene
+R1	Equals Arg1:T15 Arg2:T2	
+R2	AssociatedTo Arg1:T1 Arg2:T15	
+R3	AssociatedTo Arg1:T1 Arg2:T2	
+T16	Gene 891 914	cardiac troponin T gene
+R4	Equals Arg1:T16 Arg2:T4	
+R5	AssociatedTo Arg1:T3 Arg2:T16	
+R6	AssociatedTo Arg1:T3 Arg2:T4	
+T17	Gene 944 973	myosin-binding protein C gene
+R7	Equals Arg1:T17 Arg2:T6	
+R8	AssociatedTo Arg1:T5 Arg2:T17	
+R9	AssociatedTo Arg1:T5 Arg2:T6	
+R10	AssociatedTo Arg1:T8 Arg2:T7	
+R11	AssociatedTo Arg1:T9 Arg2:T7	
+R12	AssociatedTo Arg1:T10 Arg2:T11	
+R13	AssociatedTo Arg1:T13 Arg2:T14	
+R14	AssociatedTo Arg1:T12 Arg2:T14	
+T18	Gene 1171 1178	betaMHC
+T19	SNP 1179 1188	Arg719Gln
+R15	AssociatedTo Arg1:T19 Arg2:T18	
+T20	Gene 1324 1331	betaMHC
+T21	SNP 1332 1341	Arg403Trp
+T22	SNP 1346 1355	Ala797Thr
+R16	AssociatedTo Arg1:T21 Arg2:T20	
+R17	AssociatedTo Arg1:T22 Arg2:T20	
+T24	Gene 1603 1610	betaMHC
+T23	SNP 1365 1373	Arg92Trp
+R18	AssociatedTo Arg1:T23 Arg2:T20	
+T25	SNP 1794 1802	Arg92Trp
+R19	AssociatedTo Arg1:T25 Arg2:T24	

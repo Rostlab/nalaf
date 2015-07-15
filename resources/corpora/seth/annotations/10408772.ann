@@ -1,0 +1,8 @@
+T1	Gene 184 209	porphobilinogen deaminase
+T2	Gene 211 215	PBGD
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 1125 1129	PBGD
+T4	Gene 1205 1209	PBGD
+T5	Gene 1268 1272	PBGD
+T6	Gene 1394 1398	PBGD
+T7	Gene 1540 1544	PBGD

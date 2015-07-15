@@ -1,0 +1,19 @@
+T1	Gene 13 20	ANKRD11
+T2	Gene 491 498	ANKRD11
+T3	Gene 508 532	ankyrin repeat domain 11
+T4	Gene 548 584	ankyrin repeat-containing cofactor 1
+R1	Equals Arg1:T3 Arg2:T2	
+R2	Equals Arg1:T4 Arg2:T3	
+T5	SNP 610 621	c.7570-1G>C
+T6	SNP 623 643	p.Glu2524_Lys2525del
+T7	SNP 774 784	c.2305delT
+T8	SNP 786 801	p.Ser769GlnfsX8
+R3	AssociatedTo Arg1:T5 Arg2:T2	
+R4	AssociatedTo Arg1:T6 Arg2:T2	
+R5	AssociatedTo Arg1:T7 Arg2:T2	
+R6	AssociatedTo Arg1:T8 Arg2:T2	
+T9	Gene 875 882	ANKRD11
+T10	Gene 923 930	ANKRD11
+T11	Gene 1043 1050	ANKRD11
+T12	Gene 1258 1265	ANKRD11
+T13	Gene 1319 1326	ANKRD11

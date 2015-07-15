@@ -1,0 +1,5 @@
+T1	SNP 104 111	c145A>G
+T2	SNP 116 124	c1165G>C
+T3	Gene 49 76	beta(1)-adrenergic receptor
+R1	AssociatedTo Arg1:T1 Arg2:T3	
+R2	AssociatedTo Arg1:T2 Arg2:T3	

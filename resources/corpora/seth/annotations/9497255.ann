@@ -1,0 +1,6 @@
+T1	Gene 1598 1602	LEPR
+T2	Gene 1603 1621	(leptin receptor),
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 1635 1639	ASIP
+T4	Gene 1640 1667	(agouti-signaling protein),
+R2	Equals Arg1:T3 Arg2:T4	

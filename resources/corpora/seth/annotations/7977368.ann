@@ -1,0 +1,14 @@
+T1	SNP 476 481	A118T
+T2	SNP 483 488	A192V
+T3	SNP 490 495	R272C
+T4	SNP 497 502	G280R
+T5	SNP 504 509	R304W
+T6	SNP 515 520	R363L
+T7	Gene 13 41	argininosuccinate synthetase
+T8	Gene 184 212	argininosuccinate synthetase
+R1	AssociatedTo Arg1:T1 Arg2:T8	
+R2	AssociatedTo Arg1:T2 Arg2:T8	
+R3	AssociatedTo Arg1:T3 Arg2:T8	
+R4	AssociatedTo Arg1:T5 Arg2:T8	
+R5	AssociatedTo Arg1:T6 Arg2:T8	
+T9	SNP 819 824	R304W

@@ -1,0 +1,11 @@
+T1	Gene 94 98	GPD1
+T2	Gene 109 145	glycerol-3-phosphate dehydrogenase 1
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 1051 1055	GPD1
+T4	Gene 1071 1107	glycerol-3-phosphate dehydrogenase 1
+R2	Equals Arg1:T4 Arg2:T3	
+T5	SNP 1168 1178	c.361-1G>C
+R3	AssociatedTo Arg1:T5 Arg2:T3	
+T6	Gene 1681 1685	GPD1
+T7	Gene 1717 1721	GPD1
+T8	Gene 1783 1787	GPD1

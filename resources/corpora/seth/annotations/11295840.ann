@@ -1,0 +1,5 @@
+T1	SNP 44 49	G373D
+T2	Gene 58 79	alpha-galactosidase A
+T3	Gene 86 89	GLA
+R1	Equals Arg1:T2 Arg2:T3	
+R2	AssociatedTo Arg1:T1 Arg2:T2	

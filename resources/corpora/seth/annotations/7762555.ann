@@ -1,0 +1,30 @@
+T1	Gene 167 194	cystathionine beta-synthase
+T2	Gene 45 72	cystathionine beta-synthase
+T3	Gene 196 199	CBS
+R1	Equals Arg1:T1 Arg2:T3	
+T4	SNP 292 331	G-to-A transition at base 374 in exon 3
+R2	AssociatedTo Arg1:T4 Arg2:T3	
+T5	SNP 415 420	R125Q
+R3	AssociatedTo Arg1:T5 Arg2:T3	
+T6	SNP 552 591	C-to-T transition at base 770 in exon 7
+T7	SNP 674 679	T257M
+R4	AssociatedTo Arg1:T6 Arg2:T3	
+R5	AssociatedTo Arg1:T7 Arg2:T3	
+T8	SNP 1109 1113	P88S
+R6	AssociatedTo Arg1:T8 Arg2:T3	
+T9	SNP 1272 1277	A114V
+T10	SNP 1279 1284	E131D
+T11	SNP 1286 1291	P145L
+T12	SNP 1293 1298	I278T
+T13	SNP 1300 1305	G307S
+T14	SNP 1311 1319	A1224-2C
+T15	SNP 1384 1389	A114V
+T16	SNP 1394 1399	I278T
+T17	SNP 1505 1510	G307S
+T18	SNP 1515 1523	A1224-2C
+T19	SNP 344 398	arginine-to-glutamic acid substitution at position 125
+T20	SNP 603 657	threonine-to-methionine substitution at amino acid 257
+T21	SNP 1047 1092	proline-to-serine substitution at position 88
+R7	AssociatedTo Arg1:T19 Arg2:T3	
+R8	AssociatedTo Arg1:T20 Arg2:T3	
+R9	AssociatedTo Arg1:T21 Arg2:T3	

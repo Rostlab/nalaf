@@ -1,0 +1,9 @@
+T1	Gene 96 101	ENPP1
+T2	Gene 224 228	PHEX
+T3	Gene 230 235	FGF23
+T4	Gene 241 245	DMP1
+T5	Gene 467 472	ENPP1
+T6	Gene 430 465	pyrophosphatase/phosphodiesterase 1
+R1	Equals Arg1:T6 Arg2:T5	
+T7	Gene 580 585	ENPP1
+T9	Gene 992 997	ENPP1

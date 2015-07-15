@@ -1,0 +1,4 @@
+T1	SNP 131 142	C/T(-13910)
+T2	Gene 174 181	lactase
+T3	Gene 188 191	LCT
+R1	Equals Arg1:T2 Arg2:T3	

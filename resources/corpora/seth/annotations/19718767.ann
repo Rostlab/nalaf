@@ -1,0 +1,11 @@
+T1	Gene 0 5	NR2E3
+T2	Gene 174 179	NR2E3
+T3	Gene 193 232	photoreceptor-specific nuclear receptor
+T4	Gene 234 237	PNR
+R1	Equals Arg1:T3 Arg2:T4	
+T5	Gene 517 522	NR2E3
+T6	SNP 910 916	p.G56R
+T7	Gene 1052 1057	NR2E3
+T8	Gene 1324 1329	NR2E3
+T9	Gene 1367 1372	NR2E3
+T10	Gene 1517 1522	NR2E3

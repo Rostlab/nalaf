@@ -1,0 +1,32 @@
+T1	Gene 27 31	SHP2
+T2	Gene 32 38	PTPN11
+T3	Gene 77 81	GAB1
+T4	Gene 53 56	EGF
+T5	Gene 104 108	ERK2
+T6	Gene 109 114	MAPK1
+T7	Gene 283 289	PTPN11
+T8	Gene 301 307	PTPN11
+T9	Gene 316 371	Src homology 2 domain-containing tyrosine phosphatase 2
+T10	Gene 373 377	SHP2
+T11	Gene 381 386	SHP-2
+R1	Equals Arg1:T9 Arg2:T10	
+R2	Equals Arg1:T9 Arg2:T11	
+T12	Gene 585 591	PTPN11
+T13	Gene 605 611	SHP2's
+T14	Gene 699 703	SHP2
+T15	Gene 931 935	SHP2
+T16	Gene 972 997	signal-regulated kinase 2
+T17	Gene 1049 1053	SHP2
+T18	Gene 1937 1941	GAB1
+T19	Gene 1911 1935	Grb2-associated binder-1
+R3	Equals Arg1:T19 Arg2:T18	
+T20	Gene 1837 1842	MAPK1
+T21	Gene 1832 1836	ERK2
+T22	Gene 1794 1797	RAS
+T23	Gene 1798 1830	mitogen-activated protein kinase
+R4	Equals Arg1:T23 Arg2:T20	
+R5	Equals Arg1:T22 Arg2:T21	
+T24	Gene 1237 1241	SHP2
+T25	Gene 1315 1319	SHP2
+T26	Gene 1532 1536	SHP2
+T27	Gene 1506 1512	PTPN11

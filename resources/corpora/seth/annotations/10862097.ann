@@ -1,0 +1,9 @@
+T1	SNP 37 43	Y4236X
+T2	SNP 45 51	Q3820X
+T3	SNP 53 65	11745+2 ins3
+T4	Gene 123 127	PKD1
+T5	Gene 89 116	polycystic kidney disease 1
+R1	Equals Arg1:T5 Arg2:T4	
+R2	AssociatedTo Arg1:T3 Arg2:T5	
+R3	AssociatedTo Arg1:T2 Arg2:T5	
+R4	AssociatedTo Arg1:T1 Arg2:T5	

@@ -1,0 +1,7 @@
+T1	SNP 123 129	G8363A
+T2	Gene 93 121	mitochondrial tRNA(Lys) gene
+R1	AssociatedTo Arg1:T1 Arg2:T2	
+T3	SNP 140 146	G8363A
+T4	Gene 163 178	mtDNA tRNA(Lys)
+R2	AssociatedTo Arg1:T3 Arg2:T4	
+T5	SNP 491 497	G8363A

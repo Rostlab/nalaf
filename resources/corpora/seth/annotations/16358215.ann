@@ -1,0 +1,8 @@
+T1	Gene 122 129	SLC34A3
+T2	Gene 86 116	sodium-phosphate cotransporter
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 769 776	SLC34A3
+T4	Gene 1001 1008	SLC34A3
+T5	Gene 1155 1160	FGF23
+T6	Gene 1162 1189	fibroblast growth factor 23
+R2	Equals Arg1:T5 Arg2:T6	

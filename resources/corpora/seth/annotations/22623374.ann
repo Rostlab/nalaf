@@ -1,0 +1,5 @@
+T1	Gene 307 310	GBA
+T2	Gene 69 72	GBA
+T3	Gene 132 137	GCase
+T4	Gene 93 130	ysosomal acid beta-glucocerebrosidase
+R1	Equals Arg1:T4 Arg2:T3	

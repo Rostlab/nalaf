@@ -1,0 +1,7 @@
+T1	Gene 536 584	immediate early response 3 interacting protein 1
+T2	Gene 586 593	IER3IP1
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 638 645	IER3IP1
+T4	Gene 1324 1331	IER3IP1
+T5	Gene 1467 1474	IER3IP1
+T6	Gene 1529 1536	IER3IP1

@@ -1,0 +1,14 @@
+T1	Gene 397 401	LDLR
+T2	Gene 424 428	APOB
+T3	Gene 383 395	LDL-receptor
+T4	Gene 406 422	Apolipoprotein B
+R1	Equals Arg1:T4 Arg2:T2	
+R2	Equals Arg1:T3 Arg2:T1	
+T5	Gene 1212 1216	LDLR
+T6	SNP 1218 1226	c.108C4A
+T7	Gene 1247 1251	APOB
+T8	SNP 1253 1263	c.13154T4C
+T9	SNP 1268 1278	c.13181T4C
+R3	AssociatedTo Arg1:T6 Arg2:T5	
+R4	AssociatedTo Arg1:T8 Arg2:T7	
+R5	AssociatedTo Arg1:T9 Arg2:T7	

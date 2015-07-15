@@ -1,0 +1,7 @@
+T1	Gene 0 23	Alpha-B crystallin gene
+T2	Gene 25 30	CRYAB
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 466 471	CRYAB
+T4	Gene 510 515	CRYAB
+T5	SNP 557 564	450delA
+R2	AssociatedTo Arg1:T5 Arg2:T4	

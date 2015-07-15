@@ -1,0 +1,5 @@
+T1	Gene 125 132	Jagged1
+T2	Gene 134 138	JAG1
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 0 7	Jagged1
+T4	Gene 1138 1142	JAG1

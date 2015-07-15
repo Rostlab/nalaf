@@ -1,0 +1,11 @@
+T1	Gene 1168 1172	HBG1
+T2	Gene 1181 1187	HSPA1A
+T3	Gene 1205 1207	F9
+T4	Gene 1153 1166	gammaA-globin
+T5	Gene 1175 1180	hsp70
+T6	Gene 1194 1203	Factor IX
+R1	Equals Arg1:T4 Arg2:T1	
+R2	Equals Arg1:T5 Arg2:T2	
+R3	Equals Arg1:T6 Arg2:T3	
+T7	Gene 1049 1053	TDO2
+T8	Gene 1063 1068	K-ras

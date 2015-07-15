@@ -1,0 +1,3 @@
+T1	SNP 12 20	2314delG
+T2	Gene 29 57	Usher syndrome type IIA gene
+R1	AssociatedTo Arg1:T1 Arg2:T2	

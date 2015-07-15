@@ -1,0 +1,8 @@
+T1	Gene 53 72	type II procollagen
+T2	Gene 74 80	COL2A1
+T3	Gene 211 217	COL2A1
+T4	Gene 190 209	type II procollagen
+R1	Equals Arg1:T4 Arg2:T3	
+R2	Equals Arg1:T1 Arg2:T2	
+T5	Gene 1053 1059	COL2A1
+T6	Gene 1380 1399	type II procollagen

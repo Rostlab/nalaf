@@ -1,0 +1,7 @@
+T1	Gene 47 51	CFTR
+T2	SNP 58 63	R117P
+T3	SNP 65 74	deltaD192
+T4	SNP 80 91	3121-1G-->A
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+R2	AssociatedTo Arg1:T3 Arg2:T1	
+R3	AssociatedTo Arg1:T4 Arg2:T1	

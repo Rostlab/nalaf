@@ -1,0 +1,12 @@
+T1	Gene 24 27	IHH
+T2	Gene 758 773	Indian hedgehog
+T3	Gene 775 778	IHH
+R1	Equals Arg1:T2 Arg2:T3	
+T4	SNP 840 848	137C-->T
+T5	SNP 861 865	P46L
+R2	AssociatedTo Arg1:T4 Arg2:T3	
+R3	AssociatedTo Arg1:T5 Arg2:T3	
+T6	SNP 924 932	569T-->C
+T7	SNP 945 950	V190A
+R4	AssociatedTo Arg1:T6 Arg2:T3	
+R5	AssociatedTo Arg1:T7 Arg2:T3	

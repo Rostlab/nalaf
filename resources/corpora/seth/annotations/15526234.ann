@@ -1,0 +1,7 @@
+T1	Gene 1109 1114	ITGB3
+T2	Gene 780 785	ITGB3
+T3	Gene 763 778	integrin beta 3
+R1	Equals Arg1:T3 Arg2:T2	
+T4	Gene 1123 1144	serotonin transporter
+T5	Gene 1151 1155	5HTT
+R2	Equals Arg1:T4 Arg2:T5	

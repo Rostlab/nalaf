@@ -1,0 +1,5 @@
+T1	Gene 351 386	WW-domain-containing oxidoreductase
+T2	Gene 388 392	WWOX
+R1	Equals Arg1:T1 Arg2:T2	
+T3	Gene 1195 1199	WWOX
+T4	Gene 1575 1579	WWOX

@@ -1,0 +1,13 @@
+T1	Gene 76 82	PABPN1
+T2	Gene 294 299	PABP2
+T3	Gene 286 292	PABPN1
+T4	Gene 245 284	polyadenylate binding protein nuclear 1
+R1	Equals Arg1:T4 Arg2:T3	
+R2	Equals Arg1:T4 Arg2:T2	
+T5	Gene 441 447	PABPN1
+T6	Gene 661 667	PABPN1
+T7	SNP 674 686	c.27_28ins12
+T8	SNP 688 702	p.11_12insAAAA
+R3	AssociatedTo Arg1:T7 Arg2:T6	
+R4	AssociatedTo Arg1:T8 Arg2:T6	
+T9	Gene 841 847	PABPN1

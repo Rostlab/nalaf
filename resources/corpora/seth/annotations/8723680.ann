@@ -1,0 +1,9 @@
+T1	Gene 24 39	arylsulfatase A
+T2	SNP 59 64	D335V
+T3	SNP 69 74	T274M
+R1	AssociatedTo Arg1:T2 Arg2:T1	
+R2	AssociatedTo Arg1:T3 Arg2:T1	
+T4	Gene 217 232	arylsulfatase A
+T5	SNP 310 323	Asp335 by Val
+T6	SNP 721 726	T274M
+T7	SNP 768 800	Met274 substituted arylsulfatase

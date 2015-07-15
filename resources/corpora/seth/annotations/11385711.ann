@@ -1,0 +1,18 @@
+T1	SNP 4 8	R71G
+T2	Gene 9 14	BRCA1
+R1	AssociatedTo Arg1:T1 Arg2:T2	
+T3	Gene 100 105	BRCA1
+T4	SNP 233 239	330A>G
+T5	SNP 259 288	Arg to Gly change at codon 71
+T6	SNP 290 294	R71G
+R2	AssociatedTo Arg1:T4 Arg2:T3	
+R3	AssociatedTo Arg1:T5 Arg2:T3	
+R4	AssociatedTo Arg1:T6 Arg2:T3	
+T7	Gene 533 538	BRCA1
+T8	Gene 742 747	BRCA1
+T9	SNP 765 769	R71G
+R5	AssociatedTo Arg1:T9 Arg2:T8	
+T10	Gene 874 879	BRCA1
+T11	Gene 979 984	BRCA1
+T12	SNP 985 989	R71G
+R6	AssociatedTo Arg1:T12 Arg2:T11	

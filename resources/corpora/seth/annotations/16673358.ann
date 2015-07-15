@@ -1,0 +1,7 @@
+T1	Gene 369 372	WRN
+T2	Gene 391 397	RECQL2
+T3	Gene 401 405	REQ3
+R1	Equals Arg1:T1 Arg2:T2	
+R2	Equals Arg1:T1 Arg2:T3	
+T4	Gene 485 488	WRN
+T5	Gene 803 806	WRN

@@ -1,0 +1,29 @@
+T1	Gene 196 200	FSHR
+T2	Gene 183 194	follitropin
+T3	Gene 203 214	thyrotropin
+T4	Gene 216 220	TSHR
+T5	Gene 227 258	lutropin/chorionic gonadotropin
+T6	Gene 260 265	LHCGR
+T7	Gene 290 310	glycoprotein hormone
+T8	Gene 312 315	GPH
+T9	Gene 328 332	GPHR
+R1	Equals Arg1:T7 Arg2:T8	
+R2	Equals Arg1:T5 Arg2:T6	
+R3	Equals Arg1:T2 Arg2:T1	
+R4	Equals Arg1:T3 Arg2:T4	
+T10	Gene 800 804	FSHR
+T11	Gene 932 936	FSHR
+T12	SNP 1332 1340	c.383C>A
+T13	SNP 1342 1353	p.Ser128Tyr
+T14	SNP 1440 1451	p.Ser128Tyr
+T15	Gene 1382 1386	FSHR
+R5	AssociatedTo Arg1:T13 Arg2:T15	
+R6	AssociatedTo Arg1:T12 Arg2:T15	
+T16	Gene 1452 1456	FSHR
+R7	AssociatedTo Arg1:T14 Arg2:T16	
+T17	Gene 1706 1710	FSHR
+T18	Gene 1742 1746	FSHR
+T19	Gene 1747 1750	FSH
+T20	Gene 1841 1844	GPH
+T21	Gene 1845 1849	GPHR
+T22	SNP 1937 1948	p.Ser128Tyr

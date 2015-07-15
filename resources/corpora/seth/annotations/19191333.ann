@@ -1,0 +1,24 @@
+T1	Gene 51 55	RYR1
+T2	Gene 31 49	ryanodine receptor
+R1	Equals Arg1:T2 Arg2:T1	
+T3	Gene 147 151	RYR1
+T5	Gene 274 278	RYR1
+T4	Gene 370 374	RYR1
+T6	Gene 521 525	RYR1
+T7	Gene 773 777	RYR1
+T8	Gene 807 811	RYR1
+T9	SNP 881 892	p.Arg530His
+T10	SNP 894 906	p.Arg2163Pro
+T11	SNP 908 920	p.Asn2342Ser
+T12	SNP 922 934	p.Glu2371Gly
+T13	SNP 939 951	p.Arg2454His
+T14	SNP 1082 1092	Cys4664Arg
+T15	Gene 1077 1081	RYR1
+R2	AssociatedTo Arg1:T14 Arg2:T15	
+R3	AssociatedTo Arg1:T9 Arg2:T8	
+R4	AssociatedTo Arg1:T10 Arg2:T8	
+R5	AssociatedTo Arg1:T11 Arg2:T8	
+R6	AssociatedTo Arg1:T12 Arg2:T8	
+R7	AssociatedTo Arg1:T13 Arg2:T8	
+T16	Gene 1470 1474	RYR1
+T17	SNP 1169 1181	p.Cys4664Arg

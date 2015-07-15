@@ -139,12 +139,12 @@ class StatsWriter:
 
         # subplot for nl total ratio array
         fig1 = plt.figure()
-        fig1.add_axes([0.1, 0.22, 0.88, 0.74])
+        fig1.add_axes([0.1, 0.24, 0.88, 0.72])
         # plt.subplot(121)
         plt.bar(x_pos, nl_total_ratio_array, color=bar_color)
         plt.xticks([x + 0.3 for x in x_pos], label, rotation=90)
+        plt.ylabel("NL vs Total mentions")
         # print([x + 0.3 for x in x_pos])
-        # fig.ylabel("NL vs Total mention ratio")
         plt.xlim(min(x_pos), max(x_pos) * 1.05)
         plt.ylim(0, self.ylim_max_nl_total)
         plt.show()
@@ -154,11 +154,11 @@ class StatsWriter:
         if set(abstract_full_ratio_array) != {0}:
             # plt.subplot(122)
             fig2 = plt.figure()
-            fig2.add_axes([0.1, 0.22, 0.88, 0.74])
+            fig2.add_axes([0.1, 0.24, 0.88, 0.72])
             plt.bar(x_pos, abstract_full_ratio_array, color=bar_color)
             xticks_pos = list(map(lambda x: x + 0.4, x_pos))
-            plt.xticks(xticks_pos, label, rotation=90)  # TODO shift position to get correct labeling on bars
-            plt.ylabel("Abstract vs Full document ratio")
+            plt.xticks(xticks_pos, label, rotation=90)
+            plt.ylabel("Abstract vs Full documents")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
             # plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
             plt.ylim(1, 3)

@@ -1,27 +1,43 @@
-from nala.learning.evaluators import find_offsets
 import pkg_resources
 import csv
-
+import re
+from nala.learning.evaluators import _is_overlapping
+from nala.structures.data import Annotation
 
 def predict_with_regex_patterns(dataset):
+    # TODO figure out how to best set class_id independent since we don't know it
+    """
+    :type dataset: nala.structures.data.Dataset
+    """
     regex_patterns = construct_regex_patterns_from_predictions(dataset)
 
-    predicted_offsets = []
+    existing_predictions = []
+    for part_id, part in dataset.partids_with_parts():
+        for ann in part.predicted_annotations:
+            existing_predictions.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id))
 
     for part_id, part in dataset.partids_with_parts():
         for regex in regex_patterns:
             for match in regex.finditer(part.text):
-                predicted_offsets.append((match.start(), match.end(), part_id))
+                offset = (match.start(), match.end(), part_id, 'e_2')
+                if not _is_overlapping(offset, existing_predictions):
+                    existing_predictions.append(offset)
 
-    return predicted_offsets
+                    part.predicted_annotations.append(
+                        Annotation('e_2', match.start(), part.text[match.start():match.end()]))
 
 
 def construct_regex_patterns_from_predictions(dataset):
-    import re
-    _, _, predicted_items = find_offsets(dataset)
+    """
+    :type dataset: nala.structures.data.Dataset
+    """
 
     regex_patterns = []
-    for item in predicted_items:
+    for ann in dataset.predicted_annotations():
+        item = ann.text
+        # escape special regex characters
+        item = item.replace('.', '\.').replace('+', '\+').replace(')', '\)').replace('(', '\(')
+
         # numbers pattern
         item = re.sub('[0-9]+', '[0-9]+', item)
 
@@ -37,8 +53,6 @@ def construct_regex_patterns_from_predictions(dataset):
         item = re.sub('@@@@', '(IVS|EX)', item)
         item = re.sub('@@@', '(rs|ss)', item)
 
-        # escape special regex characters
-        item = item.replace('.', '\.').replace('+', '\+').replace(')', '\)').replace('(', '\(')
         regex_patterns.append(re.compile(item))
 
     # include already prepared regex patterns

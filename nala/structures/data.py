@@ -189,6 +189,17 @@ class Dataset:
             for annotation in part.annotations:
                 yield annotation
 
+    def predicted_annotations(self):
+        """
+        helper functions that iterates through all parts
+        that is each part of each document in the dataset
+
+        :rtype: collections.Iterable[Annotation]
+        """
+        for part in self.parts():
+            for annotation in part.predicted_annotations:
+                yield annotation
+
     def sentences(self):
         """
         helper functions that iterates through all sentences

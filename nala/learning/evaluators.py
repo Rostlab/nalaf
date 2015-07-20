@@ -44,7 +44,7 @@ class MentionLevelEvaluator(Evaluator):
                 0.5 when we have overlapping match
         """
 
-    def evaluate(self, dataset, post_processing_predictions=[]):
+    def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         :returns (precision, recall, f_measure): (float, float, float)
@@ -59,10 +59,6 @@ class MentionLevelEvaluator(Evaluator):
         as well as the value of the parameter 'strictness'.
         """
         real, predicted = find_offsets(dataset)
-
-        for prediction in post_processing_predictions:
-            if not _is_overlapping(prediction, predicted):
-                predicted.append(prediction)
 
         if self.strictness is 'exact':
             precision = sum(1 for item in predicted if item in real) / len(predicted)

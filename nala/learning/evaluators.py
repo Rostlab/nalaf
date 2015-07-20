@@ -90,11 +90,13 @@ def find_offsets(dataset):
     real_offsets = []
     predicted_offsets = []
 
-    for part_id, part in dataset.partids_with_parts():
-        for ann in part.annotations:
-            real_offsets.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id))
-        for ann in part.predicted_annotations:
-            predicted_offsets.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id))
+
+    for doc_id, doc in dataset.documents.items():
+        for part_id, part in doc.parts.items():
+            for ann in part.annotations:
+                real_offsets.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id, doc_id))
+            for ann in part.predicted_annotations:
+                predicted_offsets.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id, doc_id))
 
     return real_offsets, predicted_offsets
 
@@ -109,7 +111,7 @@ def _is_overlapping(offset_a, offset_list):
 
     Returns True if offset_a is overlapping with ANY of the offsets in offset_list,
     Returns False otherwise, where overlapping is defined as:
-        * class_id and part_id are equal
+        * class_id and part_id and doc_id are equal
         * and the range is overlapping, where overlapping range is defined as:
 
         Let condition_1 mean that range_a is completely after range_b
@@ -122,8 +124,7 @@ def _is_overlapping(offset_a, offset_list):
 
     """
     for offset_b in offset_list:
-        # (class_id_idA == class_idB) and (part_idA == part_idB) and (StartA <= EndB)  and  (EndA >= StartB)
-        if offset_a[3] == offset_b[3] and offset_a[2] == offset_b[2] and offset_a[0] <= offset_b[1] \
-                and offset_a[1] >= offset_b[0]:
+        # class_id and part_id and doc_id are equal and (StartA <= EndB) and (EndA >= StartB)
+        if offset_a[2:] == offset_b[2:] and offset_a[0] <= offset_b[1] and offset_a[1] >= offset_b[0]:
             return True
     return False

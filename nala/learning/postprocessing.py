@@ -12,22 +12,24 @@ def predict_with_regex_patterns(dataset):
     regex_patterns = construct_regex_patterns_from_predictions(dataset)
 
     existing_predictions = []
-    for part_id, part in dataset.partids_with_parts():
-        for ann in part.predicted_annotations:
-            existing_predictions.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id))
+    for doc_id, doc in dataset.documents.items():
+       for part_id, part in doc.parts.items():
+           for ann in part.predicted_annotations:
+                existing_predictions.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id, doc_id))
 
     filter_short = re.compile('^[A-Z][0-9][A-Z]')
 
-    for part_id, part in dataset.partids_with_parts():
-        for regex in regex_patterns:
-            for match in regex.finditer(part.text):
-                offset = (match.start(), match.end(), part_id, 'e_2')
-                matched_text = part.text[match.start():match.end()]
+    for doc_id, doc in dataset.documents.items():
+        for part_id, part in doc.parts.items():
+            for regex in regex_patterns:
+                for match in regex.finditer(part.text):
+                    offset = (match.start(), match.end(), part_id, 'e_2', doc_id)
+                    matched_text = part.text[match.start():match.end()]
 
-                if not _is_overlapping(offset, existing_predictions) and not filter_short.match(matched_text):
-                    existing_predictions.append(offset)
-                    part.predicted_annotations.append(
-                        Annotation('e_2', match.start(), matched_text))
+                    if not _is_overlapping(offset, existing_predictions) and not filter_short.match(matched_text):
+                        existing_predictions.append(offset)
+                        part.predicted_annotations.append(
+                            Annotation('e_2', match.start(), matched_text))
 
 
 def construct_regex_patterns_from_predictions(dataset):

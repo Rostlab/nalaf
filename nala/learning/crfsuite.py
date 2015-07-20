@@ -90,3 +90,5 @@ class CRFSuite:
 
                 file.readline()  # skip the empty line signifying new sentence
 
+        # call form_predicted_annotations() to populate the mention level predictions
+        dataset.form_predicted_annotations()

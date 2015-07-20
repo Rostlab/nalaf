@@ -95,7 +95,10 @@ class Part:
         self.annotations = []
         """the annotations of the chunk of text as populated by a call to Annotator"""
         self.predicted_annotations = []
-        """a list of predicted annotations as populated by a call to form_predicted_annotations()"""
+        """
+        a list of predicted annotations as populated by a call to form_predicted_annotations()
+        this represent the prediction on a mention label rather then on a token level
+        """
 
     def __iter__(self):
         """

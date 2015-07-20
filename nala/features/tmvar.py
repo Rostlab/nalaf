@@ -277,8 +277,20 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
 
 class TmVarDictionaryFeatureGenerator(FeatureGenerator):
-    # TODO docsting
     """
+    Implementation of the so called Dictionary Features from tmVar.
+
+    Following the HGVS mutation nomenclature, tmVar developed 11 (7 for genomic and 4 for protein mutations)
+    regular expressions patterns. For each part in our dataset we perform matching on the part.text field
+    with each of the 11 regular expression patterns.
+
+    When there is a match, each token in the corresponding matched text will be assigned to one of the three values
+    (B/I/E) for that feature (B for the beginning token; E for the last token and I for any other tokens in
+    between B and E). Any token that is not matched against these patterns will have the value of 'O' for this feature.
+
+    The names of dictionary features are pattern0[0], pattern1[0], ..., pattern10[0]
+    corresponding to the 11 regex patterns.
+
     Implements the abstract class FeatureGenerator.
     """
     def __init__(self):

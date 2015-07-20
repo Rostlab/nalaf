@@ -310,7 +310,8 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
 
             for sentence in part.sentences:
                 for token in sentence:
-                    so_far = part.text.find(token.word, so_far)
+                    so_far = part.text.find(token.word, so_far)  # so_far = token_start
+                    token_end = so_far + len(token.word)
 
                     for match_index, match in matches.items():
                         token.features['pattern{}[0]'.format(match_index)] = 'O'
@@ -318,7 +319,10 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
                             if start == so_far:
                                 token.features['pattern{}[0]'.format(match_index)] = 'B'
                                 break
-                            elif start < so_far < end:
+                            elif start < so_far < token_end < end:
                                 token.features['pattern{}[0]'.format(match_index)] = 'I'
+                                break
+                            elif token_end == end:
+                                token.features['pattern{}[0]'.format(match_index)] = 'E'
                                 break
 

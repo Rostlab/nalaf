@@ -16,15 +16,18 @@ def predict_with_regex_patterns(dataset):
         for ann in part.predicted_annotations:
             existing_predictions.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id))
 
+    filter_short = re.compile('^[A-Z][0-9][A-Z]')
+
     for part_id, part in dataset.partids_with_parts():
         for regex in regex_patterns:
             for match in regex.finditer(part.text):
                 offset = (match.start(), match.end(), part_id, 'e_2')
-                if not _is_overlapping(offset, existing_predictions):
-                    existing_predictions.append(offset)
+                matched_text = part.text[match.start():match.end()]
 
+                if not _is_overlapping(offset, existing_predictions) and not filter_short.match(matched_text):
+                    existing_predictions.append(offset)
                     part.predicted_annotations.append(
-                        Annotation('e_2', match.start(), part.text[match.start():match.end()]))
+                        Annotation('e_2', match.start(), matched_text))
 
 
 def construct_regex_patterns_from_predictions(dataset):

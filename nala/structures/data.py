@@ -258,6 +258,7 @@ class Dataset:
 
         Requires predicted_label[0].value for each token to be set.
         """
+        # TODO figure out how to best set class_id independent from Labeler used
         for part_id, part in self.partids_with_parts():
             so_far = 0
             for sentence in part.sentences:
@@ -275,7 +276,6 @@ class Dataset:
                         end = so_far + len(token.word)
                         part.predicted_annotations.append(Annotation('e_2', start, part.text[start:end]))
                     index += 1
-
 
     def cleannldefinitions(self):
         """

@@ -64,12 +64,12 @@ class MentionLevelEvaluator(Evaluator):
             precision = sum(1 for item in predicted if item in real) / len(predicted)
             recall = sum(1 for item in real if item in predicted) / len(real)
         elif self.strictness is 'overlapping':
-            precision = sum(1 for item in predicted if _is_overlapping(item, real)) / len(predicted)
-            recall = sum(1 for item in real if _is_overlapping(item, predicted)) / len(real)
+            precision = sum(1 for item in predicted if is_overlapping(item, real)) / len(predicted)
+            recall = sum(1 for item in real if is_overlapping(item, predicted)) / len(real)
         elif self.strictness is 'half_overlapping':
-            precision = sum(1 if item in real else 0.5 if _is_overlapping(item, real) else 0
+            precision = sum(1 if item in real else 0.5 if is_overlapping(item, real) else 0
                             for item in predicted) / len(predicted)
-            recall = sum(1 if item in predicted else 0.5 if _is_overlapping(item, predicted) else 0
+            recall = sum(1 if item in predicted else 0.5 if is_overlapping(item, predicted) else 0
                          for item in real) / len(real)
 
         f_measure = 2 * (precision * recall) / (precision + recall)
@@ -101,7 +101,7 @@ def find_offsets(dataset):
     return real_offsets, predicted_offsets
 
 
-def _is_overlapping(offset_a, offset_list):
+def is_overlapping(offset_a, offset_list):
     """
     :param offset_a:
     :param offset_list:
@@ -125,6 +125,6 @@ def _is_overlapping(offset_a, offset_list):
     """
     for offset_b in offset_list:
         # class_id and part_id and doc_id are equal and (StartA <= EndB) and (EndA >= StartB)
-        if offset_a[2:] == offset_b[2:] and offset_a[0] <= offset_b[1] and offset_a[1] >= offset_b[0]:
+        if offset_a[2:5] == offset_b[2:5] and offset_a[0] <= offset_b[1] and offset_a[1] >= offset_b[0]:
             return True
     return False

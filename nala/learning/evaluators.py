@@ -82,10 +82,10 @@ def find_offsets(dataset):
     """
     :type dataset: nala.structures.data.Dataset
 
-    Forms tuples of 4 elements representing the offsets of the real and predicted annotations
+    Forms tuples of 5 elements representing the offsets of the real and predicted annotations
     used in the MentionLevelEvaluator.
 
-    The tuple is (start, end, part_id, class_id).
+    The tuple is (start, end, part_id, class_id, doc_id).
     """
     real_offsets = []
     predicted_offsets = []

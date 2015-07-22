@@ -18,12 +18,19 @@ class WindowFeatureGenerator(FeatureGenerator):
     Implements the abstract class FeatureGenerator.
     """
 
-    def __init__(self, template=(-2, -1, 1, 2)):
+    def __init__(self, template=(-2, -1, 1, 2), include_list=None):
         self.template = template
         """
         Controls which previous/next tokens are taken into consideration.
         The default value is (-2, -1, 1, 2) which mean we take into consideration
         the previous two and the next two tokens relative to the current one.
+        """
+        self.include_list = include_list
+        """
+        Controls which features from the previous/next tokens are taken into consideration.
+        The default value is None which means we take into consideration all features per token.
+        If you want to consider the value of only specific features, provide the names of those
+        features in this list.
         """
 
     def generate(self, dataset):
@@ -32,7 +39,12 @@ class WindowFeatureGenerator(FeatureGenerator):
         """
         for sentence in dataset.sentences():
             for index, token in enumerate(sentence):
-                feature_names = list(token.features.keys())
+
+                if self.include_list is None:
+                    feature_names = list(token.features.keys())
+                else:
+                    feature_names = [name for name in token.features.keys() if name in self.include_list]
+
                 for feature_name in feature_names:
                     if feature_name.endswith('[0]'):
                         for template_index in self.template:

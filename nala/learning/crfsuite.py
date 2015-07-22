@@ -58,20 +58,37 @@ class CRFSuite:
             os.system('crfsuite tag -qt -m {} test'.format(self.model_filename))
 
     def read_predictions(self, dataset, prediction_file='output.txt'):
-        # TODO fix docstring
         """
-        Reads in the predictions made by our model
-        and stores them into the token.predicted_label[]
-
         :type dataset: nala.structures.data.Dataset
+
+        Reads in the predictions made by our model for each token and stores them into token.predicted_label[]
+
+        Requires a dataset object and the output prediction file.
+
+        The default output prediction file is 'output.txt'. The format is:
+            * [predicted label]:[marginal probability]
+            * in new line for each token
+            * followed by a blank line for the end of the sentence
+
+        IMPORTANT NOTE:
+        Assumes a call to the test() function was made previously with the 'i' option included.
+        Furthermore, it assumes we are calling it with the same dataset object used to create the test file.
+
+        For example first we would call:
+            * crf.create_input_file(dataset=test, mode='test')
+            * crf.test(options='-m default_model -i test > output.txt')
+        Then we would call:
+            * crf.read_predictions(dataset=test)
         """
 
         os.chdir(self.directory)
         with open(prediction_file) as file:
             for sentence in dataset.sentences():
                 for token in sentence:
-                    label, probablity = file.readline().split(':')
-                    token.predicted_labels = [Label(label, float(probablity))]
+                    label, probability = file.readline().split(':')
+                    token.predicted_labels = [Label(label, float(probability))]
 
                 file.readline()  # skip the empty line signifying new sentence
 
+        # call form_predicted_annotations() to populate the mention level predictions
+        dataset.form_predicted_annotations()

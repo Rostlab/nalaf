@@ -81,6 +81,7 @@ class Part:
     :type text: str
     :type sentences: list[list[Token]]
     :type annotations: list[Annotation]
+    :type predicted_annotations: list[Annotation]
     """
 
     def __init__(self, text):
@@ -93,6 +94,11 @@ class Part:
         """
         self.annotations = []
         """the annotations of the chunk of text as populated by a call to Annotator"""
+        self.predicted_annotations = []
+        """
+        a list of predicted annotations as populated by a call to form_predicted_annotations()
+        this represent the prediction on a mention label rather then on a token level
+        """
 
     def __iter__(self):
         """
@@ -183,6 +189,17 @@ class Dataset:
             for annotation in part.annotations:
                 yield annotation
 
+    def predicted_annotations(self):
+        """
+        helper functions that iterates through all parts
+        that is each part of each document in the dataset
+
+        :rtype: collections.Iterable[Annotation]
+        """
+        for part in self.parts():
+            for annotation in part.predicted_annotations:
+                yield annotation
+
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -236,6 +253,40 @@ class Dataset:
             for partid, part in doc.key_value_parts():
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
+
+    def form_predicted_annotations(self):
+        """
+        Populates part.predicted_annotations with a list of Annotation objects
+        based on the values of the field predicted_label for each token.
+
+        One annotation is the chunk of the text (e.g. mutation mention)
+        whose tokens have labels that are continuously not 'O'
+        For example:
+        ... O O O A D I S A O O O ...
+        ... ----- annotation ---- ...
+        here the text representing the tokens 'A, D, I, S, A' will be one predicted annotation (mention).
+        Assumes that the 'O' label means outside of mention.
+
+        Requires predicted_label[0].value for each token to be set.
+        """
+        # TODO figure out how to best set class_id independent from Labeler used
+        for part_id, part in self.partids_with_parts():
+            so_far = 0
+            for sentence in part.sentences:
+                index = 0
+                while index < len(sentence):
+                    token = sentence[index]
+                    so_far = part.text.find(token.word, so_far)
+
+                    if token.predicted_labels[0].value is not 'O':
+                        start = so_far
+                        while index + 1 < len(sentence) and sentence[index + 1].predicted_labels[0].value is not 'O':
+                            token = sentence[index + 1]
+                            so_far = part.text.find(token.word, so_far)
+                            index += 1
+                        end = so_far + len(token.word)
+                        part.predicted_annotations.append(Annotation('e_2', start, part.text[start:end]))
+                    index += 1
 
     def cleannldefinitions(self):
         """

@@ -4,7 +4,7 @@ from nala.features import FeatureGenerator
 class SimpleFeatureGenerator(FeatureGenerator):
     """
     Generates simple features based on the values of the tokens themselves.
-        * w[0] = the value of the word itself
+        * word[0] = the value of the word itself
 
     Implements the abstract class FeatureGenerator.
     """

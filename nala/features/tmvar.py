@@ -57,6 +57,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
         self.reg_shape_chars = re.compile('[A-Za-z]')
         self.reg_shape_chars_plus = re.compile('[A-Za-z]+')
+        # TODO re.search instead of re.match and exclude ".*" for regexs'
 
     def generate(self, dataset):
         """

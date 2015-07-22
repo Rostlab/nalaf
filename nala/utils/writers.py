@@ -43,6 +43,8 @@ class StatsWriter:
                           'full_nl_token_nr',
                           'full_tot_token_nr',
                           'nl_mention_array',
+                          'abstract_nr',
+                          'full_nr',
                           'abstract_nl_mention_array',
                           'full_nl_mention_array']
             w = csv.DictWriter(f, fieldnames=fieldnames)

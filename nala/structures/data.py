@@ -269,6 +269,14 @@ class Dataset:
         full_document_token_nr = 0
         full_nl_mentions = []
 
+        # abstract and full document count
+        abstract_doc_nr = 0
+        full_doc_nr = 0
+
+        # helper lists with unique pubmed ids that were already found
+        abstract_unique_list = []
+        full_unique_list = []
+
         # nl-docid set
         nl_doc_id_set = { 'empty' }
 
@@ -315,18 +323,19 @@ class Dataset:
                     nl_mentions.append(ann.text)
 
         # post-processing for abstract vs full document tokens
-        for partid, part in self.partids_with_parts():
-            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
-                # OPTIONAL use nltk or different tokenizer
-                total_token_abstract += len(part.text.split(" "))
-            else:
-                total_token_full += len(part.text.split(" "))
-
-        # report_array = []
-        #
-        # report_array.extend([nl_nr, mentions_nr, nl_token_nr, mentions_token_nr, abstract_mentions_nr, abstract_token_nr])
-        # report_array.extend([full_document_mentions_nr, full_document_token_nr, total_token_abstract, total_token_full])
-        # report_array.extend(nl_mentions)
+        for doc_id, doc in self.documents.items():
+            for partid, part in doc.parts.items():
+                if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
+                    # OPTIONAL use nltk or different tokenizer
+                    total_token_abstract += len(part.text.split(" "))
+                    if doc_id not in abstract_unique_list:
+                        abstract_doc_nr += 1
+                        abstract_unique_list.append(doc_id)
+                else:
+                    total_token_full += len(part.text.split(" "))
+                    if doc_id not in full_unique_list:
+                        full_doc_nr += 1
+                        full_unique_list.append(doc_id)
 
         report_dict = {
             'nl_mention_nr': nl_nr,
@@ -340,23 +349,10 @@ class Dataset:
             'full_nl_token_nr': full_document_token_nr,
             'full_tot_token_nr': total_token_full,
             'nl_mention_array': sorted(nl_mentions),
+            'abstract_nr': abstract_doc_nr,
+            'full_nr': full_doc_nr,
             'abstract_nl_mention_array': sorted(abstract_nl_mentions),
             'full_nl_mention_array': sorted(full_nl_mentions)
         }
-
-        # if total_token_abstract > 0 and total_token_full > 0:
-        #     # ratio calc (token nl)/(token total) from abstract
-        #     token_nl_vs_tot_abstract = abstract_token_nr / float(total_token_abstract)
-        #     # ratio calc (token nl)/(token total) from abstract
-        #     token_nl_vs_tot_full = full_document_token_nr / float(total_token_full)
-        #     # ratio-(token nl mentions/total tokens) in abstract ratio full documents
-        #     if token_nl_vs_tot_full > 0:
-        #         ratio_nl_men = token_nl_vs_tot_abstract / token_nl_vs_tot_full
-        #         report_array.append(ratio_nl_men)
-        #     else:
-        #         report_array.append("None")
-        # else:
-        #     report_array.append("None")
-        # print("nl mentions", nl_nr, "total mentions", mentions_nr, nl_nr/mentions_nr)
 
         return report_dict

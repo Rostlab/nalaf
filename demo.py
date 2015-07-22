@@ -2,17 +2,19 @@ import argparse
 import configparser
 import sys
 
-from nala.utils.readers import HTMLReader
+from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.utils.annotation_readers import AnnJsonAnnotationReader
-from nala.preprocessing.labelers import BIOLabeler
+from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader, VerspoorAnnotationReader
+from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import TmVarNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.utils.writers import StatsWriter
 from nala.features.simple import SimpleFeatureGenerator
+from nala.features.tmvar import TmVarFeatureGenerator
+from nala.features.window import WindowFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
 
 import nala.utils.db_validation as dbcheck
@@ -58,13 +60,13 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = HTMLReader(html_path).read()
+        dataset = VerspoorReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+        VerspoorAnnotationReader(ann_path).annotate(dataset)
 
         if args.stats_demo:
             extra_methods = 3
@@ -76,7 +78,28 @@ if __name__ == "__main__":
 
             # tmvar regex
             TmVarRegexNLDefiner().define(dataset)
-            tmvarstats = dataset.stats()
+
+            # TODO add param
+            if False:
+                tmvarstats = dataset.stats()
+                fullnr = tmvarstats['full_nr']
+                abstractnr = tmvarstats['abstract_nr']
+                totnr = fullnr + abstractnr
+                full_token = tmvarstats['full_tot_token_nr']
+                abstract_token = tmvarstats['abstract_tot_token_nr']
+                tot_token = full_token + abstract_token
+                average_abstract_token = abstract_token / abstractnr
+                hypothetical_abstracts_nr = tot_token / average_abstract_token
+
+                print("|Property | Stat |\n|-------|-------|")
+                print("|Full documents|", fullnr, "|")
+                print("|Abstract documents|", abstractnr, "|")
+                print("|Full doc tokens|", full_token, "|")
+                print("|Abstract doc tokens|", abstract_token, "|")
+                print("|All tokens|", full_token + abstract_token, "|")
+                print("|Average tokens per abstract|", "{:.2f}".format(average_abstract_token), "|")
+                print("|Hypothetical abstract nr|", "{:.2f}".format(hypothetical_abstracts_nr), "|")
+
             tmvarmentions = tmvarstats['nl_mention_array']
             stats.addrow(tmvarstats, 'tmVarRegex')
             dataset.cleannldefinitions()
@@ -108,10 +131,15 @@ if __name__ == "__main__":
         TmVarRegexNLDefiner().define(dataset)
 
         if not args.quick_nl:
-            BIOLabeler().label(dataset)
-            SimpleFeatureGenerator().generate(dataset)
+            print("Labeling")
+            TmVarLabeler().label(dataset)
+            print("Feature Generation")
+            TmVarFeatureGenerator().generate(dataset)
+            # print("Window Feature Generation")
+            # WindowFeatureGenerator().generate(dataset)
 
             crf = CRFSuite(crf_path)
+            print("CRFstart")
             crf.create_input_file(dataset, 'train')
             crf.train()
             crf.create_input_file(dataset, 'test')

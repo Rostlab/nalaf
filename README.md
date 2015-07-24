@@ -29,7 +29,7 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 1. Study significance of NL mentions in mutation mention recognition
   * ratio of standard vs NL in abstracts & full text
   * % of novel mutations not present in SwissProt (would require manual annotation of protein relations)
-  * dataset of NLs (size depends on significance of NLs)
+  * define/extend corpus of NLs (size depends on significance of NLs)
 2. Method for mutation mention extraction grounded to their genes/proteins
   * Mutation mention recognizer better than tmVar for standard mentions
   * If NLs are relevant, prove good F1 performance (> 70-80)

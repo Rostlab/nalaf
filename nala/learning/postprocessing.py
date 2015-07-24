@@ -7,7 +7,7 @@ from nala.structures.data import Annotation
 
 class PostProcessing:
     def __init__(self):
-        self.at_least_one = re.compile('(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+')
+        self.at_least_one_letter_n_number_letter_n_number = re.compile('(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+')
         self.short = re.compile('^[A-Z][0-9][A-Z]$')
 
     def process(self, dataset):
@@ -40,7 +40,7 @@ class PostProcessing:
 
                         if not is_overlapping(offset, existing_predictions):
                             if not self.short.search(matched_text) and space_before and space_after \
-                                    and self.at_least_one.search(matched_text):
+                                    and self.at_least_one_letter_n_number.search(matched_text):
                                 existing_predictions.append(offset)
                                 part.predicted_annotations.append(Annotation('e_2', match.start(), matched_text))
                         else:
@@ -66,7 +66,7 @@ class PostProcessing:
             if re.search(' *(/) *', ann.text):
                 split = re.split(' *(/) *', ann.text)
 
-                if self.at_least_one.search(split[0]) and self.at_least_one.search(split[2]):
+                if self.at_least_one_letter_n_number.search(split[0]) and self.at_least_one_letter_n_number.search(split[2]):
                     to_be_removed.append(index)
                     part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
                     part.predicted_annotations.append(

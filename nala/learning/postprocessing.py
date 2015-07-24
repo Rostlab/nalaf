@@ -86,12 +86,12 @@ class PostProcessing:
                 ann.text = part.text[start - 1] + ann.text
 
             # fix boundary delete (
-            if ann.text[0] == '(' and ')' in ann.text:
+            if ann.text[0] == '(' and ')' not in ann.text:
                 ann.offset += 1
                 ann.text = ann.text[1:]
 
             # fix boundary delete )
-            if ann.text[-1] == ')' and '(' in ann.text:
+            if ann.text[-1] == ')' and '(' not in ann.text:
                 ann.text = ann.text[:-1]
 
             # fix boundary add missing (

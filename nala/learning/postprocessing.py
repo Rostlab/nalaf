@@ -121,7 +121,7 @@ def construct_regex_patterns_from_predictions(dataset):
     for ann in dataset.predicted_annotations():
         item = ann.text
         # escape special regex characters
-        item = item.replace('.', '\.').replace('+', '\+').replace(')', '\)').replace('(', '\(')
+        item = item.replace('.', '\.').replace('+', '\+').replace(')', '\)').replace('(', '\(').replace('*', '\*')
 
         # numbers pattern
         item = re.sub('[0-9]+', '[0-9]+', item)

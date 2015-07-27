@@ -79,9 +79,11 @@ class PostProcessing:
             if re.search(' *(and|,|or) *', ann.text):
                 to_be_removed.append(index)
                 split = re.split(' *(and|,|or) *', ann.text)
-                part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
-                part.predicted_annotations.append(
-                    Annotation(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
+                if split[0]:
+                    part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
+                if split[2]:
+                    part.predicted_annotations.append(
+                        Annotation(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
 
             # fix boundary #17000021	251	258	1858C>T --> +1858C>T
             if re.search('^[0-9]', ann.text) and re.search('([\-\+])', part.text[start - 1]):

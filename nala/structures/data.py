@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
-
+# TODO Change from top level to bottom level; Dataset first
+# TODO change e_2 to constant and make it called mutation
 class Label:
     """
     Represents the label associated with each Token.

@@ -29,6 +29,7 @@ class PostProcessing:
                         offset = (match.start(), match.end(), part_id, 'e_2', doc_id)
                         matched_text = part.text[match.start():match.end()]
 
+                        # TODO Refactor into regex instead of check
                         try:
                             space_before = part.text[match.start() - 1] == ' '
                         except IndexError:
@@ -44,6 +45,7 @@ class PostProcessing:
                                 existing_predictions.append(offset)
                                 part.predicted_annotations.append(Annotation('e_2', match.start(), matched_text))
                         else:
+                            # TODO Refactor to return an object
                             # our custom part (needs to be optimized) adds 1% to the f_measure (eg. 87 to 88)
                             for offset_b in existing_predictions:
                                 # if there is a partial overlap with a regex match

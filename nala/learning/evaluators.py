@@ -20,7 +20,7 @@ class Evaluator:
         """
         return
 
-
+# TODO Rename implementation class to include Impl in the name
 class MentionLevelEvaluator(Evaluator):
     """
     Implements mention level performance evaluation. That means it compares if the predicted text spans match
@@ -123,6 +123,7 @@ def is_overlapping(offset_a, offset_list):
             which translates to (StartA <= EndB)  and  (EndA >= StartB)
 
     """
+    # TODO Clean up this; separate function
     for offset_b in offset_list:
         # class_id and part_id and doc_id are equal and (StartA <= EndB) and (EndA >= StartB)
         if offset_a[2:5] == offset_b[2:5] and offset_a[0] <= offset_b[1] and offset_a[1] >= offset_b[0]:

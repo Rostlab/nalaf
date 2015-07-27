@@ -59,6 +59,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         self.reg_shape_chars_plus = re.compile('[A-Za-z]+')
         # TODO re.search instead of re.match and exclude ".*" for regexs'
 
+    # TODO remove the comments and make the name more clear
     def generate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset

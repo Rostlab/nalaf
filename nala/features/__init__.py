@@ -9,7 +9,7 @@ class FeatureGenerator:
     * Implement the abstract method generate
     * Append new items to the dictionary field "features" of each Token in the dataset
     """
-
+    # TODO decorator that checks features
     @abc.abstractmethod
     def generate(self, dataset):
         """

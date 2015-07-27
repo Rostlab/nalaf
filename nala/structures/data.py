@@ -281,7 +281,8 @@ class Dataset:
 
                     if token.predicted_labels[0].value is not 'O':
                         start = so_far
-                        while index + 1 < len(sentence) and sentence[index + 1].predicted_labels[0].value is not 'O':
+                        while index + 1 < len(sentence) \
+                                and sentence[index + 1].predicted_labels[0].value not in ('O', 'B', 'A'):
                             token = sentence[index + 1]
                             so_far = part.text.find(token.word, so_far)
                             index += 1

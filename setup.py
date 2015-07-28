@@ -26,9 +26,9 @@ setup(
     install_requires=[
         'nltk',
         'beautifulsoup4',
-        'requests',
-        'matplotlib' # TODO Figure out if we need this, since we might not want this huge dependency
-    ],
+        'requests'],
+    #    'matplotlib' # TODO Figure out if we need this, since we might not want this huge dependency
+    #],
     include_package_data=True,
     zip_safe=False,
     test_suite='nose.collector',

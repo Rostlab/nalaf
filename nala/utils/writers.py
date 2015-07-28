@@ -186,7 +186,7 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            with(open(self.location + "export/" + pubmedid, 'w', encoding='utf-8')) as f:
+            with(open(self.location + "export/" + pubmedid + ".html", 'wb')) as f:
 
                 # "tag" or "tag_attr" for their attributes
 
@@ -216,17 +216,15 @@ class TagTogFormat:
 
                 # TODO "s#p# naming convention" for id
                 # OPTIONAL id to identify abstract?
-                for i, part in enumerate(doc):
+                for id, part in doc.parts.items():
                     section = ET.SubElement(article, 'section', { 'data-type' : '' } )
-                    h2 = ET.SubElement(section, 'h2', { 'id' : "{:03d}".format(i) } )
+                    h2 = ET.SubElement(section, 'h2', { 'id' : id } )
                     div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                    p = ET.SubElement(div, 'p', { 'id' : "{:03d}".format(i) } )
+                    p = ET.SubElement(div, 'p', { 'id' : id } )
                     p.text = part.text
 
                 # print(ET.dump(html))
+                # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
                 # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
-
-            # for debugging purposes
-            break

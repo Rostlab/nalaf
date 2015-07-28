@@ -18,6 +18,7 @@ from nala.features.window import WindowFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
 
 import nala.utils.db_validation as dbcheck
+from utils.writers import TagTogFormat
 
 if __name__ == "__main__":
     config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \
@@ -60,13 +61,16 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = VerspoorReader(html_path).read()
+        dataset = HTMLReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        VerspoorAnnotationReader(ann_path).annotate(dataset)
+        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+
+        ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset)
+        ttformat.export_html()
 
         if args.stats_demo:
             extra_methods = 3

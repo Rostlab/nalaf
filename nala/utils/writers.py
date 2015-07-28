@@ -2,6 +2,7 @@ import csv
 import re
 import matplotlib.pyplot as plt
 import math
+import elementtree.ElementTree as ET
 
 
 class StatsWriter:
@@ -163,3 +164,28 @@ class StatsWriter:
             plt.ylim(0, 3)
 
         plt.show()
+
+
+class TagTogFormat:
+    """
+    Ability to Export the dataset as Html + Ann.json database.
+    """
+    def __init__(self, to_save_to, dataset):
+        """
+        :param to_save_to:
+        :type dataset: nala.structures.data.Dataset
+        :return:
+        """
+        self.location = to_save_to
+        self.data = dataset
+        """ dataset param """
+    def export_html(self):
+        """
+        Exporting Html files into folder with each html file being a document itself.
+        Html files have sections and everything as if document was exported from tagtog.net itself.
+        :return:
+        """
+        for pubmedid, doc in self.data.documents.items():
+            # with(open(self.location + "export/" + pubmedid, 'w', encoding='utf-8')) as f:
+            for id, part in doc:
+                print(id)

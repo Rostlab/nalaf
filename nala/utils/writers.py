@@ -2,7 +2,7 @@ import csv
 import re
 import matplotlib.pyplot as plt
 import math
-import elementtree.ElementTree as ET
+import xml.etree.ElementTree as ET
 
 
 class StatsWriter:
@@ -186,6 +186,47 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            # with(open(self.location + "export/" + pubmedid, 'w', encoding='utf-8')) as f:
-            for id, part in doc:
-                print(id)
+            with(open(self.location + "export/" + pubmedid, 'w', encoding='utf-8')) as f:
+
+                # "tag" or "tag_attr" for their attributes
+
+                html_attr = {
+                    'id' : pubmedid,
+                    'data-origid' : pubmedid,
+                    'class' : 'anndoc',
+                    'data-anndoc-version' : '2.0',
+                    'lang' : '',
+                    'xml:lang' : '',
+                    'xmlns' : 'http://www.w3.org/1999/xhtml'
+                }
+                html = ET.Element('html', html_attr)
+
+                head = ET.SubElement(html, 'head')
+
+                meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
+                meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nala.utils.writers.TagTogFormat'} )
+                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + pubmedid } )  # deprecated maybe different sources
+
+                title = ET.SubElement(head, 'title')
+                title.text = pubmedid
+
+                body = ET.SubElement(html, 'body')
+
+                article = ET.SubElement(body, 'article')
+
+                # TODO "s#p# naming convention" for id
+                # OPTIONAL id to identify abstract?
+                for i, part in enumerate(doc):
+                    section = ET.SubElement(article, 'section', { 'data-type' : '' } )
+                    h2 = ET.SubElement(section, 'h2', { 'id' : "{:03d}".format(i) } )
+                    div = ET.SubElement(section, 'div', { 'class' : 'content' } )
+                    p = ET.SubElement(div, 'p', { 'id' : "{:03d}".format(i) } )
+                    p.text = part.text
+
+                # print(ET.dump(html))
+                f.write(ET.tostring(html, encoding='utf-8', method='html'))
+
+                # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
+
+            # for debugging purposes
+            break

@@ -74,7 +74,9 @@ class MentionLevelEvaluator(Evaluator):
 
         f_measure = 2 * (precision * recall) / (precision + recall)
 
-        print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '.format(precision, recall, f_measure, self.strictness))
+        import sys
+        sys.stdout.write('{:.4f} {:.4f} {:.4f} '.format(precision, recall, f_measure))
+        #print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '.format(precision, recall, f_measure, self.strictness))
         return precision, recall, f_measure
 
 

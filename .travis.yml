@@ -3,5 +3,6 @@ python:
   - "3.4"
 install:
   - "pip install ."
-script:
+before_script:
   - "python -m nala.download_corpora"
+script: nosetests

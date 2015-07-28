@@ -1,0 +1,7 @@
+language: python
+python:
+  - "3.4"
+install:
+  - "pytnon setup.py install"
+script:
+  - "python -m nala.download_corpora"

@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+install:
+  - "pip install ."
+before_script:
+  - "python -m nala.download_corpora"
+script: nosetests

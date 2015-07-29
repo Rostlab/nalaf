@@ -69,10 +69,10 @@ if __name__ == "__main__":
 
         AnnJsonAnnotationReader(ann_path).annotate(dataset)
 
-        ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset)
-        ttformat.export_ann_json()
+        # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset)
+        # ttformat.export_ann_json()
 
-        exit()
+        # exit()
 
         if args.stats_demo:
             extra_methods = 3

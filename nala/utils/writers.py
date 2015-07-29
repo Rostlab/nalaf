@@ -3,6 +3,7 @@ import re
 import matplotlib.pyplot as plt
 import math
 import xml.etree.ElementTree as ET
+import json
 
 
 class StatsWriter:
@@ -228,3 +229,56 @@ class TagTogFormat:
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
                 # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
+
+    def export_ann_json(self):
+        """
+        Creates all Annotation files in the corresponding ann.json format.
+        Description of ann.json-format: "https://github.com/jmcejuela/tagtog-doc/wiki/ann.json"
+        :return:
+        """
+        for pubmedid, doc in self.data.documents.items():
+            with(open(self.location + "export/" + pubmedid + ".ann.json", 'w', encoding='utf-8')) as f:
+
+                # init empty json-object
+                json_obj = {
+                    "annotatable": {
+                        # annotations go here
+                    },
+                    "anncomplete": False,
+                    "sources": [
+                        {
+                            "name": "ORIG",
+                            "id": pubmedid,
+                            "url": ""
+                        }
+                        # each entry is a dict with "name", "id", "url"
+                    ],
+                    "metas": {
+                        # nothing important -->  # OPTIONAL add meta information from project
+                    },
+                    "entities": [
+                        # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
+                    ],
+                    "relations": [
+                        # not important for here  # OPTIONAL get relations as well
+                    ]
+                }
+
+                for partid, part in doc.parts.items():
+                    for ann in part.annotations:
+                        ent = {
+                            "classId": ann.class_id,
+                            "part": partid,
+                            "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
+                            "confidence": {
+                                "state": "",
+                                "who": [
+                                    "ml:nala-the-transgender-lion-annotator"
+                                ],
+                                "prob": 1  # OPTIONAL include different probabilies as well
+                            }
+                        }
+
+                        json_obj['entities'].append(ent)
+
+                json.dump(json_obj, f)

@@ -116,6 +116,7 @@ class Document:
     """
 
     def __init__(self):
+        # NOTE are the parts generally ordered? concerning their true ordering from the original document?
         self.parts = OrderedDict()
         """
         parts the document consists of, encoded as a dictionary

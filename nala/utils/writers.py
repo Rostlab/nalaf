@@ -2,6 +2,8 @@ import csv
 import re
 import matplotlib.pyplot as plt
 import math
+import xml.etree.ElementTree as ET
+import json
 
 
 class StatsWriter:
@@ -163,3 +165,120 @@ class StatsWriter:
             plt.ylim(0, 3)
 
         plt.show()
+
+
+class TagTogFormat:
+    """
+    Ability to Export the dataset as Html + Ann.json database.
+    """
+    def __init__(self, to_save_to, dataset):
+        """
+        :param to_save_to:
+        :type dataset: nala.structures.data.Dataset
+        :return:
+        """
+        self.location = to_save_to
+        self.data = dataset
+        """ dataset param """
+    def export_html(self):
+        """
+        Exporting Html files into folder with each html file being a document itself.
+        Html files have sections and everything as if document was exported from tagtog.net itself.
+        :return:
+        """
+        for pubmedid, doc in self.data.documents.items():
+            with(open(self.location + "export/" + pubmedid + ".html", 'wb')) as f:
+
+                # "tag" or "tag_attr" for their attributes
+
+                html_attr = {
+                    'id' : pubmedid,
+                    'data-origid' : pubmedid,
+                    'class' : 'anndoc',
+                    'data-anndoc-version' : '2.0',
+                    'lang' : '',
+                    'xml:lang' : '',
+                    'xmlns' : 'http://www.w3.org/1999/xhtml'
+                }
+                html = ET.Element('html', html_attr)
+
+                head = ET.SubElement(html, 'head')
+
+                meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
+                meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nala.utils.writers.TagTogFormat'} )
+                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + pubmedid } )  # deprecated maybe different sources
+
+                title = ET.SubElement(head, 'title')
+                title.text = pubmedid
+
+                body = ET.SubElement(html, 'body')
+
+                article = ET.SubElement(body, 'article')
+
+                # TODO "s#p# naming convention" for id
+                # OPTIONAL id to identify abstract?
+                for id, part in doc.parts.items():
+                    section = ET.SubElement(article, 'section', { 'data-type' : '' } )
+                    h2 = ET.SubElement(section, 'h2', { 'id' : id } )
+                    div = ET.SubElement(section, 'div', { 'class' : 'content' } )
+                    p = ET.SubElement(div, 'p', { 'id' : id } )
+                    p.text = part.text
+
+                # print(ET.dump(html))
+                # output = ET.tostring(html, encoding='UTF-8')
+                f.write(ET.tostring(html, encoding='utf-8', method='html'))
+
+                # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
+
+    def export_ann_json(self):
+        """
+        Creates all Annotation files in the corresponding ann.json format.
+        Description of ann.json-format: "https://github.com/jmcejuela/tagtog-doc/wiki/ann.json"
+        :return:
+        """
+        for pubmedid, doc in self.data.documents.items():
+            with(open(self.location + "export/" + pubmedid + ".ann.json", 'w', encoding='utf-8')) as f:
+
+                # init empty json-object
+                json_obj = {
+                    "annotatable": {
+                        # annotations go here
+                    },
+                    "anncomplete": False,
+                    "sources": [
+                        {
+                            "name": "ORIG",
+                            "id": pubmedid,
+                            "url": ""
+                        }
+                        # each entry is a dict with "name", "id", "url"
+                    ],
+                    "metas": {
+                        # nothing important -->  # OPTIONAL add meta information from project
+                    },
+                    "entities": [
+                        # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
+                    ],
+                    "relations": [
+                        # not important for here  # OPTIONAL get relations as well
+                    ]
+                }
+
+                for partid, part in doc.parts.items():
+                    for ann in part.annotations:
+                        ent = {
+                            "classId": ann.class_id,
+                            "part": partid,
+                            "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
+                            "confidence": {
+                                "state": "",
+                                "who": [
+                                    "ml:nala-the-transgender-lion-annotator"
+                                ],
+                                "prob": 1  # OPTIONAL include different probabilies as well
+                            }
+                        }
+
+                        json_obj['entities'].append(ent)
+
+                json.dump(json_obj, f)

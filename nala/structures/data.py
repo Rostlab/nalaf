@@ -1,7 +1,11 @@
 from collections import OrderedDict
+import math
 
 # TODO Change from top level to bottom level; Dataset first
 # TODO change e_2 to constant and make it called mutation
+import random
+
+
 class Label:
     """
     Represents the label associated with each Token.
@@ -73,6 +77,9 @@ class Annotation:
         self.is_nl = False
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
+    def __repr__(self):
+        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
+
 
 class Part:
     """
@@ -124,6 +131,12 @@ class Document:
         and the value is an instance of Part
         """
 
+    def __eq__(self, other):
+        return self.get_size() == other.get_size()
+
+    def __lt__(self, other):
+        return (self.get_size() - other.get_size() < 0)
+
     def __iter__(self):
         """
         when iterating through the document iterate through each part
@@ -135,6 +148,26 @@ class Document:
         """yields iterator for partids"""
         for part_id, part in self.parts.items():
             yield part_id, part
+
+    def get_unique_mentions(self):
+        """:return: set of all mentions (standard + natural language)"""
+        mentions = []
+        for part in self:
+            for ann in part.annotations:
+                mentions.append(ann.text)
+
+        return set(mentions)
+
+    def get_size(self):
+        """give back rough size log(lettres)*parts"""
+        lettres = 0
+        parts = 0
+        for part in self:
+            lettres += len(part.text)
+            parts += 1
+
+        return math.log2(lettres)*parts
+
 
 
 class Dataset:

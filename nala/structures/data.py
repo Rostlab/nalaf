@@ -66,7 +66,6 @@ class Annotation:
     :type text: str
     :type is_nl: bool
     """
-
     def __init__(self, class_id, offset, text):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
@@ -77,8 +76,23 @@ class Annotation:
         self.is_nl = False
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
+    strictness = 'exact'
+
     def __repr__(self):
         return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
+
+    def __eq__(self, other):
+        if self.class_id == other.class_id:
+            match = self.offset == other.offset and self.text == other.text
+            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            if self.strictness == 'exact':
+                return match
+            elif self.strictness == 'overlapping':
+                return not match and overlap
+            else:
+                return overlap
+        else:
+            return False
 
 
 class Part:

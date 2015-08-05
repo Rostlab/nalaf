@@ -110,7 +110,6 @@ class TmVarFeatureGenerator(FeatureGenerator):
             token.features['rs_code[0]'] = self.rscode(token.word)
 
             # patterns
-            # TODO patterns
             token.features['shape1[0]'] = self.rscode(token.word)
 
             # prefix patterns
@@ -160,7 +159,6 @@ class TmVarFeatureGenerator(FeatureGenerator):
     def mutation_type(self, str):
         lc_tmp = str.lower()
 
-        # NOTE 2x if in code which makes no sense because first if gets always overwritten
         if self.reg_frameshift_type.match(lc_tmp):
             return "FrameShiftType"
         elif self.reg_mutat_type.match(lc_tmp):
@@ -274,8 +272,8 @@ class TmVarFeatureGenerator(FeatureGenerator):
                 suffix_array.append(None)
         return suffix_array
 
-    # TODO as array or as string with spaces?
-    # OPTIONAL discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data)
+    # NOTE as array
+    # NOTE discussion: should it be visible? P1:[pattern] or just [pattern] --> i would prefer visibility to actually be able to debug the results (but more data) --> still not decided but unimportant right now
 
 
 class TmVarDictionaryFeatureGenerator(FeatureGenerator):

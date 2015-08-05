@@ -172,7 +172,7 @@ class StatsWriter:
         if set(abstract_full_ratio_array) != {0}:
             fig2 = plt.figure()
             fig2.add_axes([0.1, 0.24, 0.88, 0.72])
-            plt.bar(x_pos, abstract_full_ratio_array, color=bar_color)
+            plt.bar(x_pos, abstract_full_ratio_array, color=bar_color, yerr=error_nl_ratio_array)
             xticks_pos = list(map(lambda x: x + 0.4, x_pos))
             plt.xticks(xticks_pos, label, rotation=90)
             plt.ylabel("Abstract vs Full documents")

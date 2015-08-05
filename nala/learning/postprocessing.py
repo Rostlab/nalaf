@@ -23,17 +23,16 @@ class PostProcessing:
                         matched_text = part.text[start:end]
                         ann = Annotation('e_2', start, matched_text)
 
-                        Annotation.strictness = 'both'
+                        Annotation.equality_operator = 'exact_or_overlapping'
                         if ann not in part.predicted_annotations:
                             if not self.short.search(matched_text) \
                                     and self.at_least_one_letter_n_number_letter_n_number.search(matched_text):
                                 part.predicted_annotations.append(Annotation('e_2', start, matched_text))
-                        else:
-                            Annotation.strictness = 'overlapping'
-                            if ' ' not in matched_text:
-                                for index, ann_b in enumerate(part.predicted_annotations):
-                                    if ann == ann_b and len(matched_text) > len(ann_b.text):
-                                        part.predicted_annotations[index] = ann
+                        elif ' ' not in matched_text:
+                            Annotation.equality_operator = 'overlapping'
+                            for index, ann_b in enumerate(part.predicted_annotations):
+                                if ann == ann_b and len(matched_text) > len(ann_b.text):
+                                    part.predicted_annotations[index] = ann
 
     def __fix_issues(self, part):
         to_be_removed = []

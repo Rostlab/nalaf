@@ -62,11 +62,11 @@ class MentionLevelEvaluator(Evaluator):
         tp, fp, fn, tp_overlapping = 0, 0, 0, 0
         for doc in dataset:
             for part in doc:
-                Annotation.strictness = 'exact'
+                Annotation.equality_operator = 'exact'
                 tp += sum(1 for ann in part.predicted_annotations if ann in part.annotations)
                 fp += sum(1 for ann in part.predicted_annotations if ann not in part.annotations)
                 fn += sum(1 for ann in part.annotations if ann not in part.predicted_annotations)
-                Annotation.strictness = 'overlapping'
+                Annotation.equality_operator = 'overlapping'
                 for ann_a in part.annotations:
                     for ann_b in part.predicted_annotations:
                         if ann_a == ann_b:

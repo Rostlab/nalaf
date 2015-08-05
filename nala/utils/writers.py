@@ -177,7 +177,6 @@ class StatsWriter:
             plt.xticks(xticks_pos, label, rotation=90)
             plt.ylabel("Abstract vs Full documents")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
-            # plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
             plt.ylim(0, 3)
 
         plt.show()
@@ -189,8 +188,6 @@ class StatsWriter:
         for _ in range(1,1000):
             sample = random.sample(total_set, sample_size)
             sample_results.append(sample.count(True)/sample_size)
-
-        # expected_val = sum(liste)/len(liste) if using E(x)
 
         expected_val = total_set.count(True)/len(total_set)
         standard_deviation = sum((x - expected_val)**2 for x in sample_results)/len(sample_results)**(1/2)

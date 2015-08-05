@@ -76,21 +76,21 @@ class Annotation:
         self.is_nl = False
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
-    strictness = 'exact'
+    equality_operator = 'exact'
 
     def __repr__(self):
         return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
         if self.class_id == other.class_id:
-            match = self.offset == other.offset and self.text == other.text
-            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
-            if self.strictness == 'exact':
-                return match
-            elif self.strictness == 'overlapping':
-                return not match and overlap
-            else:
-                return overlap
+            exact = self.offset == other.offset and self.text == other.text
+            exact_or_overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            if self.equality_operator == 'exact':
+                return exact
+            elif self.equality_operator == 'overlapping':
+                return not exact and exact_or_overlap
+            elif self.equality_operator == 'exact_or_overlapping':
+                return exact_or_overlap
         else:
             return False
 

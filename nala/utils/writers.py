@@ -1,4 +1,5 @@
 import csv
+import random
 import re
 import matplotlib.pyplot as plt
 import math
@@ -26,6 +27,16 @@ class StatsWriter:
         adds one dataset stats object as dictionary into the data-array
         """
         dictstats['mode'] = mode
+
+        # generate stub array for representing the True, False nls
+        stub_arr = [True] * dictstats['nl_mention_nr'] + [False] * (dictstats['tot_mention_nr'] - dictstats['nl_mention_nr'])
+        # stub_arr.extend([False] * (dictstats['tot_mention_nr'] - dictstats['nl_mention_nr']))
+
+        # add xerror
+        stv, err = self.calc_dev_error(stub_arr)
+        dictstats['error'] = err
+
+        # append to stats-data
         self.data.append(dictstats)
 
     def writecsv(self):
@@ -71,6 +82,9 @@ class StatsWriter:
         full_token_ratio_array = []  # full_nl_token / full_tot_token
         abstract_full_ratio_array = []  # abstract_token_ratio / full_token_ratio
 
+        # error
+        error_nl_ratio_array = []
+
         # helping vars
         re_compiled_param = re.compile(r'_(\d+)$')
         simple_counter = self.init_counter
@@ -78,7 +92,9 @@ class StatsWriter:
 
         for row in self.data:
             total_counter += 1
-            # TODO add standard error
+
+            error_nl_ratio_array.append(row['error'] * 4)  # NOTE 4 might be too few
+
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
             # full = full_tokens/tokens in full
@@ -106,11 +122,11 @@ class StatsWriter:
                 label.append(row['mode'])
                 simple_counter += 1
 
-            # TODO make interesting bars as param not hard coded
+            # OPTIONAL could make this param not hardcoded
             if row['mode'] == "Carsten" or row['mode'] == "Inclusive_18":
                 bar_color.append('orange')
             else:
-                bar_color.append('blue')
+                bar_color.append('green')
 
             # print(nl_total_ratio)
             # nl total ratio
@@ -144,7 +160,7 @@ class StatsWriter:
         # plot for nl total ratio array
         fig1 = plt.figure()
         fig1.add_axes([0.1, 0.24, 0.88, 0.72])
-        plt.bar(x_pos, nl_total_ratio_array, color=bar_color)
+        plt.bar(x_pos, nl_total_ratio_array, color=bar_color, yerr=error_nl_ratio_array)
         plt.xticks([x + 0.3 for x in x_pos], label, rotation=90)
         plt.ylabel("NL vs Total mentions")
         plt.xlim(min(x_pos), max(x_pos) * 1.05)
@@ -156,15 +172,27 @@ class StatsWriter:
         if set(abstract_full_ratio_array) != {0}:
             fig2 = plt.figure()
             fig2.add_axes([0.1, 0.24, 0.88, 0.72])
-            plt.bar(x_pos, abstract_full_ratio_array, color=bar_color)
+            plt.bar(x_pos, abstract_full_ratio_array, color=bar_color, yerr=error_nl_ratio_array)
             xticks_pos = list(map(lambda x: x + 0.4, x_pos))
             plt.xticks(xticks_pos, label, rotation=90)
             plt.ylabel("Abstract vs Full documents")
             plt.xlim(min(x_pos) * 0.95, max(x_pos) * 1.05)
-            # plt.ylim(min([x for x in abstract_full_ratio_array if x > 0]) * 0.95, max(abstract_full_ratio_array) * 1.05)
             plt.ylim(0, 3)
 
         plt.show()
+
+    def calc_dev_error(self, total_set):
+        sample_size = int(len(total_set)*0.15)
+        sample_results = []
+
+        for _ in range(1,1000):
+            sample = random.sample(total_set, sample_size)
+            sample_results.append(sample.count(True)/sample_size)
+
+        expected_val = total_set.count(True)/len(total_set)
+        standard_deviation = sum((x - expected_val)**2 for x in sample_results)/len(sample_results)**(1/2)
+        standard_error = standard_deviation/(len(sample_results)-1)**(1/2)
+        return standard_deviation, standard_error
 
 
 class TagTogFormat:
@@ -218,8 +246,6 @@ class TagTogFormat:
 
                 article = ET.SubElement(body, 'article')
 
-                # TODO "s#p# naming convention" for id
-                # OPTIONAL id to identify abstract?
                 for id, part in doc.parts.items():
                     section = ET.SubElement(article, 'section', { 'data-type' : '' } )
                     h2 = ET.SubElement(section, 'h2', { 'id' : id } )
@@ -231,7 +257,7 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
-                # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
+                # OPTIONAL use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
 
     def export_ann_json(self):
         """
@@ -278,7 +304,7 @@ class TagTogFormat:
                                 "who": [
                                     self.who
                                 ],
-                                "prob": 1  # OPTIONAL include different probabilies as well
+                                "prob": 1  # OPTIONAL include different probabilities as well --> for later
                             }
                         }
 

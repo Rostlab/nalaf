@@ -1,7 +1,6 @@
 import pkg_resources
 import csv
 import re
-from nala.learning.evaluators import is_overlapping
 from nala.structures.data import Annotation
 
 
@@ -11,52 +10,28 @@ class PostProcessing:
         self.short = re.compile('^[A-Z][0-9][A-Z]$')
 
     def process(self, dataset):
-        existing_predictions = []
-
-        for doc_id, doc in dataset.documents.items():
-            for part_id, part in doc.parts.items():
-                self.__fix_issues(part)
-
-                for index, ann in enumerate(part.predicted_annotations):
-                    existing_predictions.append((ann.offset, ann.offset + len(ann.text), part_id, ann.class_id, doc_id, index))
-
         regex_patterns = construct_regex_patterns_from_predictions(dataset)
 
         for doc_id, doc in dataset.documents.items():
             for part_id, part in doc.parts.items():
+                self.__fix_issues(part)
                 for regex in regex_patterns:
                     for match in regex.finditer(part.text):
-                        offset = (match.start(), match.end(), part_id, 'e_2', doc_id)
-                        matched_text = part.text[match.start():match.end()]
+                        start = match.start(1)
+                        end = match.end(1)
+                        matched_text = part.text[start:end]
+                        ann = Annotation('e_2', start, matched_text)
 
-                        # TODO Refactor into regex instead of check
-                        try:
-                            space_before = part.text[match.start() - 1] == ' '
-                        except IndexError:
-                            space_before = True
-                        try:
-                            space_after = part.text[match.end()] == ' '
-                        except IndexError:
-                            space_after = True
-
-                        if not is_overlapping(offset, existing_predictions):
-                            if not self.short.search(matched_text) and space_before and space_after \
+                        Annotation.equality_operator = 'exact_or_overlapping'
+                        if ann not in part.predicted_annotations:
+                            if not self.short.search(matched_text) \
                                     and self.at_least_one_letter_n_number_letter_n_number.search(matched_text):
-                                existing_predictions.append(offset)
-                                part.predicted_annotations.append(Annotation('e_2', match.start(), matched_text))
-                        else:
-                            # TODO Refactor to return an object
-                            # our custom part (needs to be optimized) adds 1% to the f_measure (eg. 87 to 88)
-                            for offset_b in existing_predictions:
-                                # if there is a partial overlap with a regex match
-                                if offset[2:5] == offset_b[2:5] and offset[0] <= offset_b[1] and offset[1] >= offset_b[0]:
-                                    # but that overlap does not contain spaces and cover text span bigger in length
-                                    if (offset[1] - offset[0]) > (offset_b[1]-offset_b[0]) and ' ' not in matched_text:
-                                        # and additionally it's between two spaces
-                                        if re.search(' +{} +'.format(regex.pattern), part.text):
-                                            # replace the existing one by the one found one since it is probably better
-                                            dataset.documents[offset_b[-2]].parts[offset_b[-4]].predicted_annotations[offset_b[-1]] \
-                                                = Annotation('e_2', match.start(), matched_text)
+                                part.predicted_annotations.append(Annotation('e_2', start, matched_text))
+                        elif ' ' not in matched_text:
+                            Annotation.equality_operator = 'overlapping'
+                            for index, ann_b in enumerate(part.predicted_annotations):
+                                if ann == ann_b and len(matched_text) > len(ann_b.text):
+                                    part.predicted_annotations[index] = ann
 
     def __fix_issues(self, part):
         to_be_removed = []
@@ -113,6 +88,7 @@ class PostProcessing:
         part.predicted_annotations = [ann for index, ann in enumerate(part.predicted_annotations)
                                       if index not in to_be_removed]
 
+
 def construct_regex_patterns_from_predictions(dataset):
     """
     :type dataset: nala.structures.data.Dataset
@@ -138,21 +114,23 @@ def construct_regex_patterns_from_predictions(dataset):
         item = re.sub('@@@@', '(IVS|EX)', item)
         item = re.sub('@@@', '(rs|ss)', item)
 
-        regex_patterns.append(re.compile(item))
+        # append space before and after the constructed pattern
+        regex_patterns.append(re.compile(' ({}) '.format(item)))
 
     # include already prepared regex patterns
+    # modified by appending space before and after the original pattern
     with open(pkg_resources.resource_filename('nala.data', 'RegEx.NL')) as file:
         for regex in csv.reader(file, delimiter='\t'):
             if regex[0].startswith('(?-xism:'):
                 try:
-                    regex_patterns.append(re.compile(regex[0].replace('(?-xism:', ''),
+                    regex_patterns.append(re.compile(' ({}) '.format(regex[0].replace('(?-xism:', '')),
                                                      re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
                 except:
                     pass
             else:
-                regex_patterns.append(re.compile(regex[0]))
+                regex_patterns.append(re.compile(' ({}) '.format(regex[0])))
 
     # add our own custom regex
-    regex_patterns.append(re.compile('[ATCG][0-9]+[ATCG]/[ATCG]'))
+    regex_patterns.append(re.compile(' ([ATCG][0-9]+[ATCG]/[ATCG]) '))
 
     return regex_patterns

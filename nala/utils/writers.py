@@ -1,4 +1,5 @@
 import csv
+import random
 import re
 import matplotlib.pyplot as plt
 import math
@@ -26,6 +27,16 @@ class StatsWriter:
         adds one dataset stats object as dictionary into the data-array
         """
         dictstats['mode'] = mode
+
+        # generate stub array for representing the True, False nls
+        stub_arr = [True] * dictstats['nl_mention_nr'] + [False] * (dictstats['tot_mention_nr'] - dictstats['nl_mention_nr'])
+        # stub_arr.extend([False] * (dictstats['tot_mention_nr'] - dictstats['nl_mention_nr']))
+
+        # add xerror
+        stv, err = self.calc_dev_error(stub_arr)
+        dictstats['error'] = err
+
+        # append to stats-data
         self.data.append(dictstats)
 
     def writecsv(self):
@@ -71,6 +82,9 @@ class StatsWriter:
         full_token_ratio_array = []  # full_nl_token / full_tot_token
         abstract_full_ratio_array = []  # abstract_token_ratio / full_token_ratio
 
+        # error
+        error_nl_ratio_array = []
+
         # helping vars
         re_compiled_param = re.compile(r'_(\d+)$')
         simple_counter = self.init_counter
@@ -78,7 +92,9 @@ class StatsWriter:
 
         for row in self.data:
             total_counter += 1
-            # TODO add standard error
+
+            error_nl_ratio_array.append(row['error'])
+
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
             # full = full_tokens/tokens in full
@@ -106,11 +122,11 @@ class StatsWriter:
                 label.append(row['mode'])
                 simple_counter += 1
 
-            # TODO make interesting bars as param not hard coded
+            # OPTIONAL could make this param not hardcoded
             if row['mode'] == "Carsten" or row['mode'] == "Inclusive_18":
                 bar_color.append('orange')
             else:
-                bar_color.append('blue')
+                bar_color.append('green')
 
             # print(nl_total_ratio)
             # nl total ratio
@@ -144,7 +160,7 @@ class StatsWriter:
         # plot for nl total ratio array
         fig1 = plt.figure()
         fig1.add_axes([0.1, 0.24, 0.88, 0.72])
-        plt.bar(x_pos, nl_total_ratio_array, color=bar_color)
+        plt.bar(x_pos, nl_total_ratio_array, color=bar_color, yerr=error_nl_ratio_array)
         plt.xticks([x + 0.3 for x in x_pos], label, rotation=90)
         plt.ylabel("NL vs Total mentions")
         plt.xlim(min(x_pos), max(x_pos) * 1.05)
@@ -165,6 +181,22 @@ class StatsWriter:
             plt.ylim(0, 3)
 
         plt.show()
+
+    def calc_dev_error(self, arr):
+        absolut_nr = int(len(arr)*0.15)
+        liste = []
+
+        for _ in range(1,1000):
+            new_list = random.sample(arr, absolut_nr)
+            liste.append(new_list.count(True)/absolut_nr)
+
+        # expected_val = sum(liste)/len(liste) if using E(x)
+
+        expected_val = arr.count(True)/len(arr)
+        deviations = [(x - expected_val)**2 for x in liste]
+        dev_val = sum(deviations)/len(liste)**(1/2)
+        error = dev_val/(len(liste)-1)**(1/2)
+        return dev_val, error
 
 
 class TagTogFormat:

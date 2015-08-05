@@ -171,7 +171,7 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, to_save_to, dataset):
+    def __init__(self, to_save_to, dataset, who="ml:nala"):
         """
         :param to_save_to:
         :type dataset: nala.structures.data.Dataset
@@ -180,6 +180,9 @@ class TagTogFormat:
         self.location = to_save_to
         self.data = dataset
         """ dataset param """
+        self.who = who
+        """ who parameter """
+
     def export_html(self):
         """
         Exporting Html files into folder with each html file being a document itself.
@@ -273,7 +276,7 @@ class TagTogFormat:
                             "confidence": {
                                 "state": "",
                                 "who": [
-                                    "ml:nala-the-transgender-lion-annotator"
+                                    self.who
                                 ],
                                 "prob": 1  # OPTIONAL include different probabilies as well
                             }

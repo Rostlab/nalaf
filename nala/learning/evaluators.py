@@ -1,4 +1,5 @@
 import abc
+from nala.structures.data import Annotation
 
 
 class Evaluator:
@@ -58,22 +59,30 @@ class MentionLevelEvaluator(Evaluator):
         Also prints the value of the calculated precision, recall, F1 measure
         as well as the value of the parameter 'strictness'.
         """
-        real, predicted = find_offsets(dataset)
+        tp, fp, fn, tp_overlapping = 0, 0, 0, 0
+        for doc in dataset:
+            for part in doc:
+                Annotation.strictness = 'exact'
+                tp += sum(1 for ann in part.predicted_annotations if ann in part.annotations)
+                fp += sum(1 for ann in part.predicted_annotations if ann not in part.annotations)
+                fn += sum(1 for ann in part.annotations if ann not in part.predicted_annotations)
+                Annotation.strictness = 'overlapping'
+                for ann_a in part.annotations:
+                    for ann_b in part.predicted_annotations:
+                        if ann_a == ann_b:
+                            tp_overlapping += 1
 
-        if self.strictness is 'exact':
-            precision = sum(1 for item in predicted if item in real) / len(predicted)
-            recall = sum(1 for item in real if item in predicted) / len(real)
-        elif self.strictness is 'overlapping':
-            precision = sum(1 for item in predicted if is_overlapping(item, real)) / len(predicted)
-            recall = sum(1 for item in real if is_overlapping(item, predicted)) / len(real)
-        elif self.strictness is 'half_overlapping':
-            precision = sum(1 if item in real else 0.5 if is_overlapping(item, real) else 0
-                            for item in predicted) / len(predicted)
-            recall = sum(1 if item in predicted else 0.5 if is_overlapping(item, predicted) else 0
-                         for item in real) / len(real)
+        if self.strictness == 'exact':
+            precision = tp / (tp + fp)
+            recall = tp / (tp + fn)
+        elif self.strictness == 'overlapping':
+            precision = (tp + tp_overlapping) / (tp + fp + tp_overlapping/2)
+            recall = (tp + tp_overlapping) / (tp + fn + tp_overlapping/2)
+        elif self.strictness == 'half_overlapping':
+            precision = (tp + tp_overlapping/2) / (tp + fp + tp_overlapping/2)
+            recall = (tp + tp_overlapping/2) / (tp + fn + tp_overlapping/2)
 
         f_measure = 2 * (precision * recall) / (precision + recall)
-
         print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '.format(precision, recall, f_measure, self.strictness))
         return precision, recall, f_measure
 

@@ -34,7 +34,6 @@ class StatsWriter:
 
         # add xerror
         stv, err = self.calc_dev_error(stub_arr)
-        print(stv, err)
         dictstats['error'] = err
 
         # append to stats-data
@@ -123,7 +122,7 @@ class StatsWriter:
                 label.append(row['mode'])
                 simple_counter += 1
 
-            # TODO make interesting bars as param not hard coded
+            # OPTIONAL could make this param not hardcoded
             if row['mode'] == "Carsten" or row['mode'] == "Inclusive_18":
                 bar_color.append('orange')
             else:

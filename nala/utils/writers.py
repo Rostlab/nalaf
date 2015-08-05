@@ -93,7 +93,7 @@ class StatsWriter:
         for row in self.data:
             total_counter += 1
 
-            error_nl_ratio_array.append(row['error'])
+            error_nl_ratio_array.append(row['error'] * 4)  # NOTE 4 might be too few
 
             nl_total_ratio = row['nl_mention_nr'] / float(row['tot_mention_nr'])
             # abstract = abstract_tokens/tokens in abstract
@@ -250,8 +250,6 @@ class TagTogFormat:
 
                 article = ET.SubElement(body, 'article')
 
-                # TODO "s#p# naming convention" for id
-                # OPTIONAL id to identify abstract?
                 for id, part in doc.parts.items():
                     section = ET.SubElement(article, 'section', { 'data-type' : '' } )
                     h2 = ET.SubElement(section, 'h2', { 'id' : id } )
@@ -263,7 +261,7 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
-                # TODO use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
+                # OPTIONAL use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
 
     def export_ann_json(self):
         """
@@ -310,7 +308,7 @@ class TagTogFormat:
                                 "who": [
                                     self.who
                                 ],
-                                "prob": 1  # OPTIONAL include different probabilies as well
+                                "prob": 1  # OPTIONAL include different probabilities as well --> for later
                             }
                         }
 

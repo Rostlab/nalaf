@@ -110,23 +110,38 @@ class VerspoorReader:
             file_name = os.path.basename(file_path)
 
             pmid, serial, *_, paragraph, = file_name.replace('.txt', '').split('-')
-            # print(pmid, serial, paragraph)
+            # serial = first section
+            # paragrahp = second section
+            # divided by newlines = 3rd param which is p## or h##
+            # NOTE h## follows with p## so no seperate calculations
 
-            # for abstract stats generation
-            if serial == '01':
-                serial = 'abstract'
+            # print(pmid, serial, paragraph)
 
             with open(file_path, encoding='utf-8') as file:
                 text = file.read()
-            text = text.replace('** IGNORE LINE **', '')
+            text = text.replace('** IGNORE LINE **\n', '')
+            paragraph_list = text.split('\n\n')
+            for i, text_part in enumerate(paragraph_list):
+                # if text is empty (usually last text due to splitting of "\n\n")
+                if text_part != "":
+                    pass
+                    first_serial = "s" + serial
+                    second_serial = "s" + paragraph.replace("p","")
 
-            if pmid in dataset:
-                dataset.documents[pmid].parts[serial + paragraph] = Part(text)
-            else:
-                document = Document()
-                document.parts[serial + paragraph] = Part(text)
-                dataset.documents[pmid] = document
+                    # header when 10 >= words in text_part
+                    if len(text_part.split(" ")) < 10:
+                        paragraph_id = "h" + "{:02d}".format(i + 1)
+                    else:
+                        paragraph_id = "p" + "{:02d}".format(i + 1)
 
+                    partid = "id = {0}{1}{2}".format(first_serial, second_serial, paragraph_id)
+
+                    if pmid in dataset:
+                        dataset.documents[pmid].parts[partid] = Part(text_part)
+                    else:
+                        document = Document()
+                        document.parts[partid] = Part(text_part)
+                        dataset.documents[pmid] = document
         return dataset
 
 

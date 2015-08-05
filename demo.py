@@ -69,11 +69,11 @@ if __name__ == "__main__":
 
         # VerspoorAnnotationReader(ann_path).annotate(dataset)
 
-        ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset, who="user:verspoor")
-        ttformat.export_html()
-        ttformat.export_ann_json()
+        # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset, who="user:verspoor")
+        # ttformat.export_html()
+        # ttformat.export_ann_json()
 
-        exit()
+        # exit()
 
         if args.stats_demo:
             extra_methods = 3
@@ -85,10 +85,10 @@ if __name__ == "__main__":
 
             # tmvar regex
             TmVarRegexNLDefiner().define(dataset)
+            tmvarstats = dataset.stats()
 
             # TODO add param
             if False:
-                tmvarstats = dataset.stats()
                 fullnr = tmvarstats['full_nr']
                 abstractnr = tmvarstats['abstract_nr']
                 totnr = fullnr + abstractnr
@@ -97,6 +97,7 @@ if __name__ == "__main__":
                 tot_token = full_token + abstract_token
                 average_abstract_token = abstract_token / abstractnr
                 hypothetical_abstracts_nr = tot_token / average_abstract_token
+
 
                 print("|Property | Stat |\n|-------|-------|")
                 print("|Full documents|", fullnr, "|")
@@ -107,7 +108,9 @@ if __name__ == "__main__":
                 print("|Average tokens per abstract|", "{:.2f}".format(average_abstract_token), "|")
                 print("|Hypothetical abstract nr|", "{:.2f}".format(hypothetical_abstracts_nr), "|")
 
+            # for intersection calc
             tmvarmentions = tmvarstats['nl_mention_array']
+
             stats.addrow(tmvarstats, 'tmVarRegex')
             dataset.cleannldefinitions()
 

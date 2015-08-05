@@ -3,7 +3,6 @@ import math
 
 # TODO Change from top level to bottom level; Dataset first
 # TODO change e_2 to constant and make it called mutation
-import random
 
 
 class Label:
@@ -66,7 +65,6 @@ class Annotation:
     :type text: str
     :type is_nl: bool
     """
-
     def __init__(self, class_id, offset, text):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
@@ -77,8 +75,23 @@ class Annotation:
         self.is_nl = False
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
+    equality_operator = 'exact'
+
     def __repr__(self):
         return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
+
+    def __eq__(self, other):
+        if self.class_id == other.class_id:
+            exact = self.offset == other.offset and self.text == other.text
+            exact_or_overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            if self.equality_operator == 'exact':
+                return exact
+            elif self.equality_operator == 'overlapping':
+                return not exact and exact_or_overlap
+            elif self.equality_operator == 'exact_or_overlapping':
+                return exact_or_overlap
+        else:
+            return False
 
 
 class Part:
@@ -167,7 +180,6 @@ class Document:
             parts += 1
 
         return math.log2(lettres)*parts
-
 
 
 class Dataset:

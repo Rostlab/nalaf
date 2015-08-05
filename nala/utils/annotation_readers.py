@@ -133,8 +133,8 @@ class VerspoorAnnotationReader(AnnotationReader):
 
             pmid, serial, *_, paragraph, = file_name.replace('.ann', '').split('-')
 
-            if serial == '01':
-                serial = 'abstract'
+            # if serial == '01':
+            #     serial = 'abstract'
 
             with open(file_path, 'r', encoding='utf-8') as file:
                 reader = csv.reader(file, delimiter='\t')

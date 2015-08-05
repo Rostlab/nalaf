@@ -1,3 +1,4 @@
+import json
 from bs4 import BeautifulSoup
 from nala.structures.data import Dataset, Document, Part, Annotation
 import re
@@ -118,9 +119,15 @@ class VerspoorReader:
             # print(pmid, serial, paragraph)
 
             with open(file_path, encoding='utf-8') as file:
-                text = file.read()
-            text = text.replace('** IGNORE LINE **\n', '')
+                text_raw = file.read()
+
+            text = text_raw.replace('** IGNORE LINE **\n', '')
             paragraph_list = text.split('\n\n')
+
+            # inital offset for raw_text
+            tot_offset = text_raw.count('** IGNORE LINE **\n') * 18
+            offsets = [tot_offset]
+
             for i, text_part in enumerate(paragraph_list):
                 # if text is empty (usually last text due to splitting of "\n\n")
                 if text_part != "":
@@ -128,13 +135,14 @@ class VerspoorReader:
                     first_serial = "s" + serial
                     second_serial = "s" + paragraph.replace("p","")
 
+                    # OPTIONAL to activate but annotation reader has to modified as well
                     # header when 10 >= words in text_part
-                    if len(text_part.split(" ")) < 10:
-                        paragraph_id = "h" + "{:02d}".format(i + 1)
-                    else:
-                        paragraph_id = "p" + "{:02d}".format(i + 1)
+                    # if len(text_part.split(" ")) < 10:
+                    #     paragraph_id = "h" + "{:02d}".format(i + 1)
+                    # else:
+                    paragraph_id = "p" + "{:02d}".format(i + 1)
 
-                    partid = "id = {0}{1}{2}".format(first_serial, second_serial, paragraph_id)
+                    partid = "{0}{1}{2}".format(first_serial, second_serial, paragraph_id)
 
                     if pmid in dataset:
                         dataset.documents[pmid].parts[partid] = Part(text_part)
@@ -142,6 +150,63 @@ class VerspoorReader:
                         document = Document()
                         document.parts[partid] = Part(text_part)
                         dataset.documents[pmid] = document
+
+                    # add offset for next paragraph
+                    tot_offset += len(text_part) + 2
+                    offsets.append(tot_offset)
+
+            # to delete last element
+            del offsets[-1]
+            # print(pmid, serial, paragraph, offsets)
+
+            # annotations
+            with open(file_path.replace('.txt', '.ann'), encoding='utf-8') as f:
+                reader = csv.reader(f, delimiter='\t')
+                for row in reader:
+                        if row[0].startswith('T'):
+                            entity_type, start, end = row[1].split()
+                            # start = int(start)
+                            # calc of which part it belongs to
+                            id = "None"
+                            to_correct_off = 0
+
+                            last_off = 0
+
+                            for i, off in enumerate(offsets):
+                                if int(start) < off:
+                                    id = "p{:02d}".format(i)
+                                    to_correct_off = last_off
+                                    break
+                                last_off = off
+
+                            # if last element
+                            if id == "None":
+                                id = "p{:02d}".format(len(offsets))
+                                to_correct_off = offsets[-1]
+
+                            properid = "{0}{1}{2}".format(first_serial, second_serial, id)
+
+                            if id == "None":
+                                print("None???", pmid, serial, paragraph, start, offsets)
+
+                            if (first_serial + second_serial + id) not in dataset.documents[pmid].parts:
+                                print("NoKEY???", dataset.documents[pmid].parts)
+                                # print(json.dumps(document, indent=4))
+
+                            # print(document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])], "==", row[2])
+
+
+                            calc_ann_text = document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])]
+                            if calc_ann_text != row[2]:
+                                print(pmid, serial, paragraph, start, to_correct_off, id)
+
+                            if entity_type == 'mutation':
+                                ann = Annotation('e_2', int(start) - to_correct_off, row[2])
+                                dataset.documents[pmid].parts[properid].annotations.append(ann)
+                            elif entity_type == 'gene':
+                                ann = Annotation('e_1', int(start) - to_correct_off, row[2])
+                                dataset.documents[pmid].parts[properid].annotations.append(ann)
+
         return dataset
 
 

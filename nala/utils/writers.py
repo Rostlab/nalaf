@@ -182,21 +182,20 @@ class StatsWriter:
 
         plt.show()
 
-    def calc_dev_error(self, arr):
-        absolut_nr = int(len(arr)*0.15)
-        liste = []
+    def calc_dev_error(self, total_set):
+        sample_size = int(len(total_set)*0.15)
+        sample_results = []
 
         for _ in range(1,1000):
-            new_list = random.sample(arr, absolut_nr)
-            liste.append(new_list.count(True)/absolut_nr)
+            sample = random.sample(total_set, sample_size)
+            sample_results.append(sample.count(True)/sample_size)
 
         # expected_val = sum(liste)/len(liste) if using E(x)
 
-        expected_val = arr.count(True)/len(arr)
-        deviations = [(x - expected_val)**2 for x in liste]
-        dev_val = sum(deviations)/len(liste)**(1/2)
-        error = dev_val/(len(liste)-1)**(1/2)
-        return dev_val, error
+        expected_val = total_set.count(True)/len(total_set)
+        standard_deviation = sum((x - expected_val)**2 for x in sample_results)/len(sample_results)**(1/2)
+        standard_error = standard_deviation/(len(sample_results)-1)**(1/2)
+        return standard_deviation, standard_error
 
 
 class TagTogFormat:

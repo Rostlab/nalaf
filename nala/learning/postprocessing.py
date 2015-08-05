@@ -1,7 +1,6 @@
 import pkg_resources
 import csv
 import re
-from nala.learning.evaluators import is_overlapping
 from nala.structures.data import Annotation
 
 
@@ -88,6 +87,7 @@ class PostProcessing:
                 pass
         part.predicted_annotations = [ann for index, ann in enumerate(part.predicted_annotations)
                                       if index not in to_be_removed]
+
 
 def construct_regex_patterns_from_predictions(dataset):
     """

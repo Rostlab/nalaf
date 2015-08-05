@@ -3,7 +3,6 @@ import math
 
 # TODO Change from top level to bottom level; Dataset first
 # TODO change e_2 to constant and make it called mutation
-import random
 
 
 class Label:
@@ -181,7 +180,6 @@ class Document:
             parts += 1
 
         return math.log2(lettres)*parts
-
 
 
 class Dataset:

@@ -26,24 +26,16 @@ class PostProcessing:
             for part_id, part in doc.parts.items():
                 for regex in regex_patterns:
                     for match in regex.finditer(part.text):
-                        offset = (match.start(), match.end(), part_id, 'e_2', doc_id)
-                        matched_text = part.text[match.start():match.end()]
-
-                        # TODO Refactor into regex instead of check
-                        try:
-                            space_before = part.text[match.start() - 1] == ' '
-                        except IndexError:
-                            space_before = True
-                        try:
-                            space_after = part.text[match.end()] == ' '
-                        except IndexError:
-                            space_after = True
+                        start = match.start(1)
+                        end = match.end(1)
+                        offset = (start, end, part_id, 'e_2', doc_id)
+                        matched_text = part.text[start:end]
 
                         if not is_overlapping(offset, existing_predictions):
-                            if not self.short.search(matched_text) and space_before and space_after \
+                            if not self.short.search(matched_text) \
                                     and self.at_least_one_letter_n_number_letter_n_number.search(matched_text):
                                 existing_predictions.append(offset)
-                                part.predicted_annotations.append(Annotation('e_2', match.start(), matched_text))
+                                part.predicted_annotations.append(Annotation('e_2', start, matched_text))
                         else:
                             # TODO Refactor to return an object
                             # our custom part (needs to be optimized) adds 1% to the f_measure (eg. 87 to 88)
@@ -53,10 +45,8 @@ class PostProcessing:
                                     # but that overlap does not contain spaces and cover text span bigger in length
                                     if (offset[1] - offset[0]) > (offset_b[1]-offset_b[0]) and ' ' not in matched_text:
                                         # and additionally it's between two spaces
-                                        if re.search(' +{} +'.format(regex.pattern), part.text):
-                                            # replace the existing one by the one found one since it is probably better
-                                            dataset.documents[offset_b[-2]].parts[offset_b[-4]].predicted_annotations[offset_b[-1]] \
-                                                = Annotation('e_2', match.start(), matched_text)
+                                        dataset.documents[offset_b[-2]].parts[offset_b[-4]].predicted_annotations[offset_b[-1]] \
+                                            = Annotation('e_2', start, matched_text)
 
     def __fix_issues(self, part):
         to_be_removed = []
@@ -138,21 +128,23 @@ def construct_regex_patterns_from_predictions(dataset):
         item = re.sub('@@@@', '(IVS|EX)', item)
         item = re.sub('@@@', '(rs|ss)', item)
 
-        regex_patterns.append(re.compile(item))
+        # append space before and after the constructed pattern
+        regex_patterns.append(re.compile(' ({}) '.format(item)))
 
     # include already prepared regex patterns
+    # modified by appending space before and after the original pattern
     with open(pkg_resources.resource_filename('nala.data', 'RegEx.NL')) as file:
         for regex in csv.reader(file, delimiter='\t'):
             if regex[0].startswith('(?-xism:'):
                 try:
-                    regex_patterns.append(re.compile(regex[0].replace('(?-xism:', ''),
+                    regex_patterns.append(re.compile(' ({}) '.format(regex[0].replace('(?-xism:', '')),
                                                      re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
                 except:
                     pass
             else:
-                regex_patterns.append(re.compile(regex[0]))
+                regex_patterns.append(re.compile(' ({}) '.format(regex[0])))
 
     # add our own custom regex
-    regex_patterns.append(re.compile('[ATCG][0-9]+[ATCG]/[ATCG]'))
+    regex_patterns.append(re.compile(' ([ATCG][0-9]+[ATCG]/[ATCG]) '))
 
     return regex_patterns

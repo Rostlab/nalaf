@@ -61,13 +61,13 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = HTMLReader(html_path).read()
+        dataset = VerspoorReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+        # VerspoorAnnotationReader(ann_path).annotate(dataset)
 
         # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset)
         # ttformat.export_ann_json()

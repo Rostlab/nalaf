@@ -326,7 +326,8 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
                     token_end = so_far + len(token.word)
 
                     for match_index, match in matches.items():
-                        token.features['pattern{}[0]'.format(match_index)] = 'O'
+                        # TODO: Remove this when done implementing issue #65
+                        # token.features['pattern{}[0]'.format(match_index)] = 'O'
                         for start, end in match:
                             if start == so_far:
                                 token.features['pattern{}[0]'.format(match_index)] = 'B'

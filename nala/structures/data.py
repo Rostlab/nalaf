@@ -23,6 +23,25 @@ class Label:
         return self.value
 
 
+class UniqueKeyDictionary(dict):
+    """
+    Extension of the built in dictionary with the added constraint that
+    keys (feature names) should be unique.
+
+    Raises an exception when we try to add a key that is not unique.
+
+    Note:
+    In reality the constraint is stronger, meaning that once we set the value for a certain key
+    we are not allowed to updated it, unless we pop it first, that is unless we do:
+        token.features['key'] = token.features.pop('key') + some_value
+    """
+    def __setitem__(self, key, value):
+        if key in self:
+            raise KeyError('feature name already exists')
+        else:
+            dict.__setitem__(self, key, value)
+
+
 class Token:
     """
     Represent a token - the smallest unit on which we perform operations.
@@ -41,7 +60,7 @@ class Token:
         """the original labels for the token as assigned by some implementation of Labeler"""
         self.predicted_labels = None
         """the predicted labels for the token as assigned by some learning algorightm"""
-        self.features = {}
+        self.features = UniqueKeyDictionary()
         """
         a dictionary of features for the token
         each feature is represented as a key value pair:
@@ -76,20 +95,30 @@ class Annotation:
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
     equality_operator = 'exact'
+    """
+    determines when we consider two annotations to be equal
+    can be "exact" or "overlapping" or "exact_or_overlapping"
+    """
 
     def __repr__(self):
         return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
+        # consider them a match only if class_id matches
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
-            exact_or_overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+
             if self.equality_operator == 'exact':
                 return exact
             elif self.equality_operator == 'overlapping':
-                return not exact and exact_or_overlap
+                # overlapping means only the case where we have an actual overlap and not exact match
+                return not exact and overlap
             elif self.equality_operator == 'exact_or_overlapping':
-                return exact_or_overlap
+                # overlap includes the exact case so just return that
+                return overlap
+            else:
+                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
         else:
             return False
 

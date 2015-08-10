@@ -76,20 +76,27 @@ class Annotation:
         """boolean indicator if the annotation is a natural language (NL) mention."""
 
     equality_operator = 'exact'
+    """
+    determines when we consider two annotations to be equal
+    can be "exact" or "overlapping"
+    """
 
     def __repr__(self):
         return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
+        # consider them a match only if class_id matches
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
-            exact_or_overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+
             if self.equality_operator == 'exact':
                 return exact
             elif self.equality_operator == 'overlapping':
-                return not exact and exact_or_overlap
-            elif self.equality_operator == 'exact_or_overlapping':
-                return exact_or_overlap
+                overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+                # overlapping means only the case where we have an actual overlap and not exact match
+                return not exact and overlap
+            else:
+                raise ValueError('other must be "exact" or "overlapping"')
         else:
             return False
 

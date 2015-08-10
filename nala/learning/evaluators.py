@@ -49,13 +49,16 @@ class MentionLevelEvaluator(Evaluator):
     def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
-        :returns (precision, recall, f_measure): (float, float, float)
+        :returns (tp, fp, fn, tp_overlapping, precision, recall, f_measure): (int, int, int, int, float, float, float)
 
         Calculates precision, recall and subsequently F1 measure, defined as:
             * precision: number of correctly predicted items as a percentage of the total number of predicted items
                 len(predicted items that are also real)/len(predicted)
+                or in other words tp / tp + fp
             * recall: number of correctly predicted items as a percentage of the total number of correct items
                 len(real items that are also predicted)/len(real)
+                or in other words tp / tp + fn
+            * possibly considers overlapping matches as well
 
         Also prints the value of the calculated precision, recall, F1 measure
         as well as the value of the parameter 'strictness'.
@@ -77,12 +80,21 @@ class MentionLevelEvaluator(Evaluator):
             precision = tp / (tp + fp)
             recall = tp / (tp + fn)
         elif self.strictness == 'overlapping':
-            precision = (tp + tp_overlapping) / (tp + fp + tp_overlapping/2)
-            recall = (tp + tp_overlapping) / (tp + fn + tp_overlapping/2)
+            fp = fp - tp_overlapping
+            fn = fn - tp_overlapping
+
+            precision = (tp + tp_overlapping) / (tp + fp + tp_overlapping)
+            recall = (tp + tp_overlapping) / (tp + fn + tp_overlapping)
         elif self.strictness == 'half_overlapping':
-            precision = (tp + tp_overlapping/2) / (tp + fp + tp_overlapping/2)
-            recall = (tp + tp_overlapping/2) / (tp + fn + tp_overlapping/2)
+            fp = fp - tp_overlapping
+            fn = fn - tp_overlapping
+
+            precision = (tp + tp_overlapping / 2) / (tp + fp + tp_overlapping)
+            recall = (tp + tp_overlapping / 2) / (tp + fn + tp_overlapping)
+        else:
+            raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
 
         f_measure = 2 * (precision * recall) / (precision + recall)
+
         print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '.format(precision, recall, f_measure, self.strictness))
-        return precision, recall, f_measure
+        return tp, fp, fn, tp_overlapping, precision, recall, f_measure

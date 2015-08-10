@@ -37,7 +37,7 @@ class UniqueKeyDictionary(dict):
     """
     def __setitem__(self, key, value):
         if key in self:
-            raise KeyError('feature name already exists')
+            raise KeyError('feature name "{}" already exists'.format(key))
         else:
             dict.__setitem__(self, key, value)
 

@@ -49,5 +49,5 @@ class WindowFeatureGenerator(FeatureGenerator):
                     if feature_name.endswith('[0]'):
                         for template_index in self.template:
                             if -1 < index + template_index < len(sentence):
-                                token.features['{}[{}]'.format(feature_name.rstrip('[0]'), template_index)] = \
+                                token.features['{}[{}]'.format(feature_name[:-3], template_index)] = \
                                     sentence[index + template_index].features[feature_name]

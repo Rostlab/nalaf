@@ -78,7 +78,7 @@ class Annotation:
     equality_operator = 'exact'
     """
     determines when we consider two annotations to be equal
-    can be "exact" or "overlapping"
+    can be "exact" or "overlapping" or "exact_or_overlapping"
     """
 
     def __repr__(self):
@@ -88,15 +88,18 @@ class Annotation:
         # consider them a match only if class_id matches
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
+            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
 
             if self.equality_operator == 'exact':
                 return exact
             elif self.equality_operator == 'overlapping':
-                overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
                 # overlapping means only the case where we have an actual overlap and not exact match
                 return not exact and overlap
+            elif self.equality_operator == 'exact_or_overlapping':
+                # overlap includes the exact case so just return that
+                return overlap
             else:
-                raise ValueError('other must be "exact" or "overlapping"')
+                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
         else:
             return False
 

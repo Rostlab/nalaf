@@ -23,6 +23,25 @@ class Label:
         return self.value
 
 
+class UniqueKeyDictionary(dict):
+    """
+    Extension of the built in dictionary with the added constraint that
+    keys (feature names) should be unique.
+
+    Raises an exception when we try to add a key that is not unique.
+
+    Note:
+    In reality the constraint is stronger, meaning that once we set the value for a certain key
+    we are not allowed to updated it, unless we pop it first, that is unless we do:
+        token.features['key'] = token.features.pop('key') + some_value
+    """
+    def __setitem__(self, key, value):
+        if key in self:
+            raise KeyError('feature name already exists')
+        else:
+            dict.__setitem__(self, key, value)
+
+
 class Token:
     """
     Represent a token - the smallest unit on which we perform operations.
@@ -41,7 +60,7 @@ class Token:
         """the original labels for the token as assigned by some implementation of Labeler"""
         self.predicted_labels = None
         """the predicted labels for the token as assigned by some learning algorightm"""
-        self.features = {}
+        self.features = UniqueKeyDictionary()
         """
         a dictionary of features for the token
         each feature is represented as a key value pair:

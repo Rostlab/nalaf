@@ -11,4 +11,4 @@ before_script:
   - "tar -xvf /tmp/crfsuite.tar.gz"
 script:
   - "nosetests"
-  - "python demo_predict.py -c /tmp/crfsuite -s "This is an c.1003G  example""
+  - "python demo_predict.py -c /tmp/crfsuite -d example.txt

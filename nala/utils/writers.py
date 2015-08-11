@@ -343,7 +343,6 @@ class ConsoleWriter:
                 total_offset += 5
                 text = text[:ann.offset+len(ann.text)+total_offset] + self.end_color + text[ann.offset+len(ann.text)+total_offset:]
                 total_offset += 4
-                print(ann.text.upper())
             print(text)
             print()
         else:

@@ -9,9 +9,10 @@ before_script:
   - "python -m nala.download_corpora"
   - "curl -L https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -o crfsuite.tar.gz"
   - "tar -xvf crfsuite.tar.gz"
-  - "ls -l"
-  - "cd ./crfsuite-0.12/bin/"
-  - "ls -l"
 script:
   - "nosetests"
   - "python demo_predict.py -c ./crfsuite-0.12/bin/ -d example.txt"
+after_script:
+  - "ls -l"
+  - "cd ./crfsuite-0.12/bin/"
+  - "ls -l"

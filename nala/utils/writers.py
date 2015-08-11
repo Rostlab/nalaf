@@ -1,7 +1,6 @@
 import csv
 import random
 import re
-import matplotlib.pyplot as plt
 import math
 import xml.etree.ElementTree as ET
 import json
@@ -67,6 +66,7 @@ class StatsWriter:
                 w.writerow(row)
 
     def makegraph(self):
+        import matplotlib.pyplot as plt
         """
         make the graph
         """

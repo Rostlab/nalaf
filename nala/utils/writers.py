@@ -249,13 +249,14 @@ class TagTogFormat:
 
                 section = ET.SubElement(article, 'section', { 'data-type' : 'article' } )
 
-                for id, part in doc.parts.items():
-                    if id.startswith("s1h"):
-                        h2 = ET.SubElement(section, 'h2', { 'id' : id } )
+                for i, (id, part) in enumerate(doc.parts.items()):
+                    # i, id, part = tuple_i
+                    if id.count("h") > 0 or len(part.text.split(" ")) < 10:
+                        h2 = ET.SubElement(section, 'h2', { 'id' : "s1h{}".format(i + 1)} )
                         h2.text = part.text
                     else:
                         # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                        p = ET.SubElement(section, 'p', { 'id' : id } )
+                        p = ET.SubElement(section, 'p', { 'id' : "s1p{}".format(i + 1) } )
                         p.text = part.text
 
                 # print(ET.dump(html))
@@ -298,11 +299,15 @@ class TagTogFormat:
                     ]
                 }
 
-                for partid, part in doc.parts.items():
+                for i, (partid, part) in enumerate(doc.parts.items()):
                     for ann in part.annotations:
+                        if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
+                            tagtog_part_id = "s1h{}".format(i + 1)
+                        else:
+                            tagtog_part_id = "s1p{}".format(i + 1)
                         ent = {
                             "classId": ann.class_id,
-                            "part": partid,
+                            "part": tagtog_part_id,
                             "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
                             "confidence": {
                                 "state": "",

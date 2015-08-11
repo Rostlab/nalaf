@@ -247,12 +247,16 @@ class TagTogFormat:
 
                 article = ET.SubElement(body, 'article')
 
+                section = ET.SubElement(article, 'section', { 'data-type' : '' } )
+
                 for id, part in doc.parts.items():
-                    section = ET.SubElement(article, 'section', { 'data-type' : '' } )
-                    h2 = ET.SubElement(section, 'h2', { 'id' : id } )
-                    div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                    p = ET.SubElement(div, 'p', { 'id' : id } )
-                    p.text = part.text
+                    if id.startswith("s1h"):
+                        h2 = ET.SubElement(section, 'h2', { 'id' : id } )
+                        h2.text = part.text
+                    else:
+                        div = ET.SubElement(section, 'div', { 'class' : 'content' } )
+                        p = ET.SubElement(div, 'p', { 'id' : id } )
+                        p.text = part.text
 
                 # print(ET.dump(html))
                 # output = ET.tostring(html, encoding='UTF-8')

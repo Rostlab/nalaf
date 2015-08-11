@@ -7,9 +7,9 @@ install:
   - "pip install ."
 before_script:
   - "python -m nala.download_corpora"
-  - "curl http://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -o /tmp/crfsuite.tar.gz"
+  - "curls http://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -o crfsuite.tar.gz"
   - "ls -l"
-  - "tar -xvf /tmp/crfsuite.tar.gz"
+  - "tar -xvf crfsuite.tar.gz"
 script:
   - "nosetests"
   - "python demo_predict.py -c /tmp/crfsuite -d example.txt"

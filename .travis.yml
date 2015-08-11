@@ -12,8 +12,3 @@ before_script:
 script:
   - "nosetests"
   - "python demo_predict.py -c ./crfsuite-0.12/bin/ -d example.txt"
-after_script:
-  - "ls -l"
-  - "cd ./crfsuite-0.12/bin/"
-  - "ls -l"
-  - "cat output.txt"

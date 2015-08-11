@@ -9,7 +9,7 @@ class CRFSuite:
     """
 
     def __init__(self, directory):
-        self.directory = os.path.expanduser(directory)
+        self.directory = directory
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'default_model'
         """name to be used for saving the model"""

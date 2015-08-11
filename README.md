@@ -23,8 +23,8 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 # Examples
 Run either:
 * `demo_predict.py` for an example how to use NALA just for prediction with a pre-trained model
-    * `python demo.predict.py -c [PATH TO DIR WITH CRFSUITE] -s "This is c.A1003G an example"`
-    * `python demo.predict.py -c [PATH TO DIR WITH CRFSUITE] -d example.txt`
+    * `python demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -s "This is c.A1003G an example"`
+    * `python demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -d example.txt`
 * `demo.py` for an advanced example of the complete pipeline including training, testing and prediction 
 
 ##  Requirements

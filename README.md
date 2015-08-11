@@ -20,11 +20,16 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
  
     pip install nala
- 
+# Examples
+Run either:
+* `demo_predict.py` for example how to use NALA just for prediction with a pre-trained model
+* `demo.py` for an advanced example of the complete pipeline including training, testing and prediction 
+
 ##  Requirements
 
 * Requires Python 3
-
+* Requires a working installation of CRFsuite
+    * The easieast way to install it is to download compiled binaries from the [official website.](http://www.chokkan.org/software/crfsuite/) 
 
 ## Goals of 2 theses and this method:
 

@@ -1,4 +1,5 @@
 import os
+import sys
 from nala.structures.data import Label
 
 class CRFSuite:
@@ -13,6 +14,10 @@ class CRFSuite:
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'default_model'
         """name to be used for saving the model"""
+        if sys.platform.startswith('linux'):
+            self.crf_suite_call = './crfsuite'
+        else:
+            self.crf_suite_call = 'crfsuite'
 
     def create_input_file(self, dataset, mode):
         """
@@ -43,9 +48,9 @@ class CRFSuite:
         """
         os.chdir(self.directory)
         if options:
-            os.system('crfsuite learn {}'.format(options))
+            os.system('{} learn {}'.format(self.crf_suite_call, options))
         else:
-            os.system('crfsuite learn -m {} train'.format(self.model_filename))
+            os.system('{} learn -m {} train'.format(self.crf_suite_call, self.model_filename))
 
     def test(self, options=''):
         """
@@ -53,9 +58,9 @@ class CRFSuite:
         """
         os.chdir(self.directory)
         if options:
-            os.system('crfsuite tag {}'.format(options))
+            os.system('{} tag {}'.format(self.crf_suite_call, options))
         else:
-            os.system('crfsuite tag -qt -m {} test'.format(self.model_filename))
+            os.system('{} tag -qt -m {} test'.format(self.crf_suite_call, self.model_filename))
 
     def read_predictions(self, dataset, prediction_file='output.txt'):
         """
@@ -82,9 +87,6 @@ class CRFSuite:
         """
 
         os.chdir(self.directory)
-        with open(prediction_file) as file:
-            print(file.read())
-
         with open(prediction_file) as file:
             for sentence in dataset.sentences():
                 for token in sentence:

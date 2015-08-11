@@ -16,3 +16,4 @@ after_script:
   - "ls -l"
   - "cd ./crfsuite-0.12/bin/"
   - "ls -l"
+  - "cat output.txt"

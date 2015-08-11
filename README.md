@@ -31,7 +31,10 @@ Run either:
 
 * Requires Python 3
 * Requires a working installation of CRFsuite
-    * The easieast way to install it is to download compiled binaries from the [official website.](http://www.chokkan.org/software/crfsuite/) 
+    * The easieast way to install it is to download compiled binaries from the [official website.](http://www.chokkan.org/software/crfsuite/) For example for linux systems do the following:
+        * `wget https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz`
+        * `tar -xvf crfsuite-0.12-x86_64.tar.gz`
+        * then the working crf suite direcotry you need it under `/crfsuite-0.12/bin`
 
 ## Goals of 2 theses and this method:
 

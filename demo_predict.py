@@ -62,7 +62,7 @@ if __name__ == "__main__":
     crf = CRFSuite(args.crf_suite_dir)
     crf.create_input_file(dataset, 'predict')
     crf.test('-m {} -i predict > output.txt'.format(default_model_path))
-    crf.read_predictions(dataset)
+    # crf.read_predictions(dataset)
 
-    PostProcessing().process(dataset)
-    ConsoleWriter().write(dataset)
+    # PostProcessing().process(dataset)
+    # ConsoleWriter().write(dataset)

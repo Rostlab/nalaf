@@ -125,8 +125,15 @@ def construct_regex_patterns_from_predictions(dataset):
                 try:
                     regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0].replace('(?-xism:', '')),
                                                      re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
-                except:
-                    pass
+                except Exception as e:
+                    if e.args[0] == 'sorry, but this version only supports 100 named groups':
+                        # if the exception is due to too many named groups
+                        # make the groups unnamed since we don't need them to be named in the frist place
+                        fixed = regex[0].replace('(?-xism:', '')
+                        fixed = re.sub('\((?!\?:)', '(?:', fixed)
+                        regex_patterns.append(re.compile('( |rt)({}) '.format(fixed)))
+
+
             else:
                 regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0])))
 

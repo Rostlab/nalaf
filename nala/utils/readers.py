@@ -1,4 +1,4 @@
-import json
+import abc
 from bs4 import BeautifulSoup
 from nala.structures.data import Dataset, Document, Part, Annotation
 import re
@@ -7,7 +7,23 @@ import csv
 import os
 
 
-class HTMLReader:
+class Reader:
+    """
+    Abstract class for reading in a dataset in some format.
+    Subclasses that inherit this class should:
+    * Be named [Name]Reader
+    * Implement the abstract method read that returns an object of type Dataset
+    """
+
+    @abc.abstractmethod
+    def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
+        return
+
+
+class HTMLReader(Reader):
     def __init__(self, directory):
         self.directory = directory
         """the directory containing the .html files"""
@@ -33,7 +49,7 @@ class HTMLReader:
         return dataset
 
 
-class SETHReader:
+class SETHReader(Reader):
     """
     Reader for the SETH-corpus (http://rockt.github.io/SETH/)
     Format: PMID\tabstract (tab separated PMID and abstract)
@@ -60,7 +76,8 @@ class SETHReader:
 
         return dataset
 
-class MutationFinderReader:
+
+class MutationFinderReader(Reader):
     """
     Reader for the MutationFinder-corpus (http://mutationfinder.sourceforge.net/)
     Format: PMID\tabstract (tab separated PMID and abstract) in 5 files
@@ -88,7 +105,7 @@ class MutationFinderReader:
         return dataset
 
 
-class VerspoorReader:
+class VerspoorReader(Reader):
     """
     Reader for the Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
     Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
@@ -133,7 +150,7 @@ class VerspoorReader:
                 if text_part != "":
                     pass
                     first_serial = "s" + serial
-                    second_serial = "s" + paragraph.replace("p","")
+                    second_serial = "s" + paragraph.replace("p", "")
 
                     # OPTIONAL to activate but annotation reader has to modified as well
                     # header when 10 >= words in text_part
@@ -163,54 +180,54 @@ class VerspoorReader:
             with open(file_path.replace('.txt', '.ann'), encoding='utf-8') as f:
                 reader = csv.reader(f, delimiter='\t')
                 for row in reader:
-                        if row[0].startswith('T'):
-                            entity_type, start, end = row[1].split()
-                            # start = int(start)
-                            # calc of which part it belongs to
-                            id = "None"
-                            to_correct_off = 0
+                    if row[0].startswith('T'):
+                        entity_type, start, end = row[1].split()
+                        # start = int(start)
+                        # calc of which part it belongs to
+                        id = "None"
+                        to_correct_off = 0
 
-                            last_off = 0
+                        last_off = 0
 
-                            for i, off in enumerate(offsets):
-                                if int(start) < off:
-                                    id = "p{:02d}".format(i)
-                                    to_correct_off = last_off
-                                    break
-                                last_off = off
+                        for i, off in enumerate(offsets):
+                            if int(start) < off:
+                                id = "p{:02d}".format(i)
+                                to_correct_off = last_off
+                                break
+                            last_off = off
 
-                            # if last element
-                            if id == "None":
-                                id = "p{:02d}".format(len(offsets))
-                                to_correct_off = offsets[-1]
+                        # if last element
+                        if id == "None":
+                            id = "p{:02d}".format(len(offsets))
+                            to_correct_off = offsets[-1]
 
-                            properid = "{0}{1}{2}".format(first_serial, second_serial, id)
+                        properid = "{0}{1}{2}".format(first_serial, second_serial, id)
 
-                            if id == "None":
-                                print("None???", pmid, serial, paragraph, start, offsets)
+                        if id == "None":
+                            print("None???", pmid, serial, paragraph, start, offsets)
 
-                            if (first_serial + second_serial + id) not in dataset.documents[pmid].parts:
-                                print("NoKEY???", dataset.documents[pmid].parts)
-                                # print(json.dumps(document, indent=4))
+                        if (first_serial + second_serial + id) not in dataset.documents[pmid].parts:
+                            print("NoKEY???", dataset.documents[pmid].parts)
+                            # print(json.dumps(document, indent=4))
 
-                            # print(document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])], "==", row[2])
+                        # print(document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])], "==", row[2])
 
 
-                            calc_ann_text = document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])]
-                            if calc_ann_text != row[2]:
-                                print(pmid, serial, paragraph, start, to_correct_off, id)
+                        calc_ann_text = document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])]
+                        if calc_ann_text != row[2]:
+                            print(pmid, serial, paragraph, start, to_correct_off, id)
 
-                            if entity_type == 'mutation':
-                                ann = Annotation('e_2', int(start) - to_correct_off, row[2])
-                                dataset.documents[pmid].parts[properid].annotations.append(ann)
-                            elif entity_type == 'gene':
-                                ann = Annotation('e_1', int(start) - to_correct_off, row[2])
-                                dataset.documents[pmid].parts[properid].annotations.append(ann)
+                        if entity_type == 'mutation':
+                            ann = Annotation('e_2', int(start) - to_correct_off, row[2])
+                            dataset.documents[pmid].parts[properid].annotations.append(ann)
+                        elif entity_type == 'gene':
+                            ann = Annotation('e_1', int(start) - to_correct_off, row[2])
+                            dataset.documents[pmid].parts[properid].annotations.append(ann)
 
         return dataset
 
 
-class TmVarReader:
+class TmVarReader(Reader):
     """
     Reader for the tmVar-corpus (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
 
@@ -236,6 +253,9 @@ class TmVarReader:
         """the directory containing the .html files"""
 
     def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
         dataset = Dataset()
         with open(self.corpus_file, encoding='utf-8') as file:
 
@@ -253,5 +273,77 @@ class TmVarReader:
                     line = next(file)
 
                 dataset.documents[pmid] = document
+
+        return dataset
+
+
+class StringReader(Reader):
+    """
+    Reads in a simple string and creates a dataset out of it.
+    Useful for quick testing of model capabilities.
+
+    The dataset contains a single Document with a single Part
+    which contains the text given by the string.
+    """
+
+    def __init__(self, string):
+        self.string = string
+        """the string from which we form the dataset"""
+
+    def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
+        part = Part(self.string)
+        document = Document()
+        dataset = Dataset()
+
+        dataset.documents['doc_1'] = document
+        document.parts['part_1'] = part
+
+        return dataset
+
+
+class TextFilesReader(Reader):
+    """
+    Reads in one or more file and creates a dataset out of them.
+        * If the input is a path to a single file we create a dataset with one document
+        * If the input is a path to a directory we create a dataset where each file is one document
+    The name of the file is the document ID.
+    Reads in only files with .txt extension.
+    When reading in each file we separate into parts by blank lines if there are any.
+    """
+
+    def __init__(self, path):
+        self.path = path
+        """path to a single file or a directory containing input files"""
+
+    @staticmethod
+    def __process_file(filename):
+        document = Document()
+        with open(filename) as file:
+            part_id = 1
+            for part in re.split('\n\n', file.read()):
+                if part.strip():
+                    document.parts['{}'.format(part_id)] = Part(part)
+                    part_id += 1
+
+        return os.path.split(filename)[-1], document
+
+    def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
+        dataset = Dataset()
+        if os.path.isdir(self.path):
+            for filename in glob.glob(self.path + '/*.txt'):
+                doc_id, doc = self.__process_file(filename)
+                dataset.documents[doc_id] = doc
+        else:
+            if os.path.splitext(self.path)[-1] == '.txt':
+                doc_id, doc = self.__process_file(self.path)
+                dataset.documents[doc_id] = doc
+            else:
+                raise Exception('not a .txt file extension')
 
         return dataset

@@ -7,4 +7,8 @@ install:
   - "pip install ."
 before_script:
   - "python -m nala.download_corpora"
-script: nosetests
+  - "wget https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -O /tmp/crfsuite.tar.gz"
+  - "tar -xvf /tmp/crfsuite.tar.gz"
+script:
+  - "nosetests"
+  - "python demo_predict.py -c /tmp/crfsuite -s "This is an c.1003G  example""

@@ -5,6 +5,7 @@ python:
   - "3.4"
 install:
   - "pip install ."
+  - "pip install matplotlib"
 before_script:
   - "python -m nala.download_corpora"
   - "curl -L https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -o crfsuite.tar.gz"

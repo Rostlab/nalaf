@@ -18,7 +18,8 @@ from nala.features.window import WindowFeatureGenerator
 from nala.learning.crfsuite import CRFSuite
 
 import nala.utils.db_validation as dbcheck
-from utils.writers import TagTogFormat
+from nala.utils.writers import TagTogFormat
+
 
 if __name__ == "__main__":
     config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \

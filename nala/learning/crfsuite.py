@@ -83,6 +83,9 @@ class CRFSuite:
 
         os.chdir(self.directory)
         with open(prediction_file) as file:
+            print(file.read())
+
+        with open(prediction_file) as file:
             for sentence in dataset.sentences():
                 for token in sentence:
                     label, probability = file.readline().split(':')

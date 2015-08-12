@@ -21,7 +21,7 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 
     git clone https://github.com/carstenuhlig/thesis-alex-carsten.git
     cd thesis-alex-carsten
-    pytnon setup.py install
+    python setup.py install
     python -m nala.download_corpora
 
  If you want to run the unit tests do:

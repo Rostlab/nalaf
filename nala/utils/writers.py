@@ -327,8 +327,9 @@ class ConsoleWriter:
     """
     Writes the predicted annotations onto the console.
     """
-    def __init__(self):
-        self.color = self.__supports_color()
+    def __init__(self, color=False):
+        if color:
+            self.color = self.__supports_color()
         self.which_color = '\033[42m'
         self.end_color = '\033[0m'
         pass

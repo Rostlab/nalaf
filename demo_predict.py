@@ -65,4 +65,4 @@ if __name__ == "__main__":
     crf.read_predictions(dataset)
 
     PostProcessing().process(dataset)
-    ConsoleWriter().write(dataset)
+    ConsoleWriter(args.color).write(dataset)

@@ -31,6 +31,3 @@ class TestMentionLevel(unittest.TestCase):
 
         self.assertEqual(part.predicted_annotations[1].text, 'p.V100Q')
         self.assertEqual(part.predicted_annotations[1].offset, 18)
-
-
-

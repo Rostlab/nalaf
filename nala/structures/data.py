@@ -1,8 +1,8 @@
 from collections import OrderedDict
 import math
+from nala.utils import MUT_CLASS_ID
 
 # TODO Change from top level to bottom level; Dataset first
-# TODO change e_2 to constant and make it called mutation
 
 
 class Label:
@@ -362,7 +362,7 @@ class Dataset:
                             so_far = part.text.find(token.word, so_far)
                             index += 1
                         end = so_far + len(token.word)
-                        part.predicted_annotations.append(Annotation('e_2', start, part.text[start:end]))
+                        part.predicted_annotations.append(Annotation(MUT_CLASS_ID, start, part.text[start:end]))
                     index += 1
 
     def cleannldefinitions(self):
@@ -421,7 +421,7 @@ class Dataset:
             else:
                 is_abstract = False
 
-            if ann.class_id == 'e_2':
+            if ann.class_id == MUT_CLASS_ID:
                 # preprocessing
                 token_nr = len(ann.text.split(" "))
                 mentions_nr += 1

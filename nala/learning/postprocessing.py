@@ -2,6 +2,7 @@ import pkg_resources
 import csv
 import re
 from nala.structures.data import Annotation
+from nala.utils import MUT_CLASS_ID
 
 
 class PostProcessing:
@@ -20,13 +21,13 @@ class PostProcessing:
                         start = match.start(2)
                         end = match.end(2)
                         matched_text = part.text[start:end]
-                        ann = Annotation('e_2', start, matched_text)
+                        ann = Annotation(MUT_CLASS_ID, start, matched_text)
 
                         Annotation.equality_operator = 'exact_or_overlapping'
                         if ann not in part.predicted_annotations:
                             if not self.short.search(matched_text) \
                                     and self.at_least_one_letter_n_number_letter_n_number.search(matched_text):
-                                part.predicted_annotations.append(Annotation('e_2', start, matched_text))
+                                part.predicted_annotations.append(Annotation(MUT_CLASS_ID, start, matched_text))
                         elif ' ' not in matched_text:
                             Annotation.equality_operator = 'overlapping'
                             for index, ann_b in enumerate(part.predicted_annotations):

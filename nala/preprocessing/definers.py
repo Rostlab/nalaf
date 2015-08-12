@@ -5,6 +5,8 @@ import re
 import os
 import requests
 import pkg_resources
+from nala.utils import MUT_CLASS_ID
+
 
 class NLDefiner:
     """
@@ -30,7 +32,7 @@ class InclusiveNLDefiner(NLDefiner):
 
     def define(self, dataset):
         for ann in dataset.annotations():
-            if ann.class_id == 'e_2' \
+            if ann.class_id == MUT_CLASS_ID \
                     and len(ann.text) >= self.min_length \
                     and len(ann.text.split(" ")) > self.min_spaces:
                 ann.is_nl = True
@@ -46,7 +48,7 @@ class AnkitNLDefiner(NLDefiner):
 
     def define(self, dataset):
         for ann in dataset.annotations():
-            if ann.class_id == 'e_2' \
+            if ann.class_id == MUT_CLASS_ID \
                     and len(ann.text) >= self.min_length \
                     and len(ann.text.split(" ")) > self.min_spaces:
                 ann.is_nl = True
@@ -76,9 +78,9 @@ class ExclusiveNLDefiner(NLDefiner):
 
     def define(self, dataset):
         for ann in dataset.annotations():
-            # if ann.class_id == 'e_2':
+            # if ann.class_id == MUT_CLASS_ID:
             #     print(ann.class_id, ann.text)
-            if ann.class_id == 'e_2' \
+            if ann.class_id == MUT_CLASS_ID \
                     and not(len(ann.text.split(" ")) <= self.max_spaces):
                 matches_tmvar = [regex.match(ann.text) for regex in self.compiled_regexps]
                 matches_custom = [regex.match(ann.text) for regex in self.compiled_regexps_custom]
@@ -113,7 +115,7 @@ class TmVarRegexNLDefiner(NLDefiner):
                 compiled_regexps.append(re.compile(regex[0]))
 
         for ann in dataset.annotations():
-            if ann.class_id == 'e_2':
+            if ann.class_id == MUT_CLASS_ID:
                 matches = [regex.match(ann.text) for regex in compiled_regexps]
                 if not any(matches):
                     ann.is_nl = True
@@ -165,5 +167,5 @@ class TmVarNLDefiner(NLDefiner):
 
                 for part_id, part in doc.parts.items():
                     for ann in part.annotations:
-                        if ann.class_id == 'e_2' and ann.text not in denotations:
+                        if ann.class_id == MUT_CLASS_ID and ann.text not in denotations:
                             ann.is_nl = True

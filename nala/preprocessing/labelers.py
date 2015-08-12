@@ -1,6 +1,7 @@
 import abc
 from nala.structures.data import Label
 import re
+from nala.utils import MUT_CLASS_ID
 
 
 class Labeler:
@@ -140,7 +141,7 @@ class TmVarLabeler(Labeler):
                         start = ann.offset
                         end = ann.offset + len(ann.text)
                         if start == so_far or start < so_far < end:
-                            if ann.class_id == 'e_2':
+                            if ann.class_id == MUT_CLASS_ID:
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
                                 break

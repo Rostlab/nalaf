@@ -5,6 +5,7 @@ import re
 import glob
 import csv
 import os
+from nala.utils import MUT_CLASS_ID
 
 
 class Reader:
@@ -252,7 +253,7 @@ class VerspoorReader(Reader):
                             print(pmid, serial, paragraph, start, to_correct_off, id)
 
                         if entity_type == 'mutation':
-                            ann = Annotation('e_2', int(start) - to_correct_off, row[2])
+                            ann = Annotation(MUT_CLASS_ID, int(start) - to_correct_off, row[2])
                             # try:
                             dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
                             # except KeyError:
@@ -310,7 +311,7 @@ class TmVarReader(Reader):
                 line = next(file)
                 while line != '\n':
                     _, start, end, text, *_ = line.split('\t')
-                    document.parts['abstract'].annotations.append(Annotation('e_2', int(start), text))
+                    document.parts['abstract'].annotations.append(Annotation(MUT_CLASS_ID, int(start), text))
                     line = next(file)
 
                 dataset.documents[pmid] = document

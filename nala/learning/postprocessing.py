@@ -115,15 +115,16 @@ def construct_regex_patterns_from_predictions(dataset):
         item = re.sub('@@@', '(rs|ss)', item)
 
         # append space before and after the constructed pattern
-        regex_patterns.append(re.compile('( |rt)({}) '.format(item)))
+        regex_patterns.append(re.compile(r'( |rt)({}) '.format(item)))
 
+    base_regex = r'\b(rt)?({})\b'
     # include already prepared regex patterns
     # modified by appending space before and after the original pattern
     with open(pkg_resources.resource_filename('nala.data', 'RegEx.NL')) as file:
         for regex in csv.reader(file, delimiter='\t'):
             if regex[0].startswith('(?-xism:'):
                 try:
-                    regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0].replace('(?-xism:', '')),
+                    regex_patterns.append(re.compile(base_regex.format(regex[0].replace('(?-xism:', '')),
                                                      re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
                 except Exception as e:
                     if e.args[0] == 'sorry, but this version only supports 100 named groups':
@@ -131,13 +132,13 @@ def construct_regex_patterns_from_predictions(dataset):
                         # make the groups unnamed since we don't need them to be named in the frist place
                         fixed = regex[0].replace('(?-xism:', '')
                         fixed = re.sub('\((?!\?:)', '(?:', fixed)
-                        regex_patterns.append(re.compile('( |rt)({}) '.format(fixed)))
+                        regex_patterns.append(re.compile(base_regex.format(fixed)))
 
 
             else:
-                regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0])))
+                regex_patterns.append(re.compile(base_regex.format(regex[0])))
 
     # add our own custom regex
-    regex_patterns.append(re.compile('( |rt)([ATCG][0-9]+[ATCG]/[ATCG]) '))
+    regex_patterns.append(re.compile(base_regex.format('[ATCG][0-9]+[ATCG]/[ATCG]')))
 
     return regex_patterns

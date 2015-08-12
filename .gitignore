@@ -26,6 +26,8 @@ node_modules/
 
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
+.eggs/
+*.egg*
 
 # Setuptools distribution folder.
 /dist/
@@ -43,4 +45,3 @@ config.ini
 
 # Cache files
 *cache.json
-

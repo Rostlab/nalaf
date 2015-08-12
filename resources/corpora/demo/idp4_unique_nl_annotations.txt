@@ -18,7 +18,6 @@
     "His-16 either to Cys or to Val",
     "histidine 267 to alanine",
     "in-frame 3 nt deletion removes codon 581-(or 582)",
-    "in-frame 3 nt loss deletes Arg614",
     "Killer of prune",
     "lacks the ZFs from C-terminus",
     "Lys 578 with Arg",

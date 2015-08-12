@@ -22,7 +22,6 @@ class Evaluator:
         return
 
 
-# TODO Rename implementation class to include Impl in the name
 class MentionLevelEvaluator(Evaluator):
     """
     Implements mention level performance evaluation. That means it compares if the predicted text spans match
@@ -32,6 +31,7 @@ class MentionLevelEvaluator(Evaluator):
     by the value of the parameter 'strictness'.
     """
 
+    # TODO put verbose (and or debug) flags in Config object
     def __init__(self, strictness='exact', verbose=False):
         self.verbose = verbose
         """

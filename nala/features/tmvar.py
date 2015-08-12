@@ -18,32 +18,32 @@ class TmVarFeatureGenerator(FeatureGenerator):
         """
         Contains all regular expressions.
         """
-        self.reg_spec_chars = re.compile('.*[-;:,.>+_].*')
-        self.reg_chr_keys = re.compile('.*(q|p|q[0-9]+|p[0-9]+|qter|pter|XY|t).*')
-        self.reg_char_simple_bracket = re.compile('.*[\(\)].*')
-        self.reg_char_square_bracket = re.compile('.*[\[\]].*')
-        self.reg_char_curly_bracket = re.compile('.*[\{\}].*')
-        self.reg_char_slashes = re.compile('.*[\/\\\].*')
-        self.reg_mutat_type = re.compile('.*(del|ins|dup|tri|qua|con|delins|indel).*')
-        self.reg_frameshift_type = re.compile('.*(fs|fsX|fsx).*')
+        self.reg_spec_chars = re.compile('[-;:,.>+_]')
+        self.reg_chr_keys = re.compile('(q|p|q[0-9]+|p[0-9]+|qter|pter|XY|t)')
+        self.reg_char_simple_bracket = re.compile('[\(\)]')
+        self.reg_char_square_bracket = re.compile('[\[\]]')
+        self.reg_char_curly_bracket = re.compile('[\{\}]')
+        self.reg_char_slashes = re.compile('[\/\\\]')
+        self.reg_mutat_type = re.compile('(del|ins|dup|tri|qua|con|delins|indel)')
+        self.reg_frameshift_type = re.compile('(fs|fsX|fsx)')
         self.reg_mutat_word = re.compile(
-            '^(deletion|delta|elta|insertion|repeat|inversion|deletions|insertions|repeats|inversions).*')
+            '(deletion|delta|elta|insertion|repeat|inversion|deletions|insertions|repeats|inversions)')
         self.reg_mutat_article = re.compile(
-            '^(single|a|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+|[0-9]+\.[0-9]+).*')
-        self.reg_mutat_byte = re.compile('.*(kb|mb).*')
+            '(single|a|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+|[0-9]+\.[0-9]+)')
+        self.reg_mutat_byte = re.compile('(kb|mb)')
         self.reg_mutat_basepair = re.compile(
-            '.*(base|bases|pair|amino|acid|acids|codon|postion|postions|bp|nucleotide|nucleotides).*')
-        self.reg_type1 = re.compile('^[cgrm]$')
-        self.reg_type12 = re.compile('^(ivs|ex|orf)$')
-        self.reg_dna_symbols = re.compile('^[ATCGUatcgu]$')
+            '(base|bases|pair|amino|acid|acids|codon|postion|postions|bp|nucleotide|nucleotides)')
+        self.reg_type1 = re.compile('[cgrm]$')
+        self.reg_type12 = re.compile('(ivs|ex|orf)$')
+        self.reg_dna_symbols = re.compile('[ATCGUatcgu]$')
         self.reg_prot_symbols1 = re.compile(
-            '.*(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|tyrosine|stop|frameshift).*')
+            '(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|tyrosine|stop|frameshift)')
         self.reg_prot_symbols2 = re.compile(
-            '^(cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$')
-        self.reg_prot_symbols3 = re.compile('^(ys|le|er|ln|et|sn|ro|ys|sp|hr|he|la|ly|is|eu|rg|rp|al|lu|yr)$')
-        self.reg_prot_symbols4 = re.compile('^[CISQMNPKDTFAGHLRWVEYX]$')
-        self.reg_rs_code1 = re.compile('^(rs|RS|Rs)[0-9].*')
-        self.reg_rs_code2 = re.compile('^(rs|RS|Rs)$')
+            '(cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$')
+        self.reg_prot_symbols3 = re.compile('(ys|le|er|ln|et|sn|ro|ys|sp|hr|he|la|ly|is|eu|rg|rp|al|lu|yr)$')
+        self.reg_prot_symbols4 = re.compile('[CISQMNPKDTFAGHLRWVEYX]$')
+        self.reg_rs_code1 = re.compile('(rs|RS|Rs)[0-9]')
+        self.reg_rs_code2 = re.compile('(rs|RS|Rs)$')
 
         # patterns
         self.reg_shape_uc = re.compile('[A-Z]')
@@ -57,9 +57,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
         self.reg_shape_chars = re.compile('[A-Za-z]')
         self.reg_shape_chars_plus = re.compile('[A-Za-z]+')
-        # TODO re.search instead of re.match and exclude ".*" for regexs'
 
-    # TODO remove the comments and make the name more clear
     def generate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
@@ -67,50 +65,38 @@ class TmVarFeatureGenerator(FeatureGenerator):
         last_token_str = ""
         for token in dataset.tokens():
 
-            # nr of digits
-            token.features['num_nr[0]'] = self.n_nr_chars(token.word)
+            token.features['num_nr[0]'] = self.num_digits_chars(token.word)
 
-            # nr of upper case
-            token.features['num_up[0]'] = self.n_upper_chars(token.word)
+            token.features['num_up[0]'] = self.num_capital_chars(token.word)
 
-            # nr of lower case
-            token.features['num_lo[0]'] = self.n_lower_chars(token.word)
+            token.features['num_lo[0]'] = self.num_lower_chars(token.word)
 
-            # nr of letters
-            token.features['num_alpha[0]'] = self.n_chars(token.word)
+            token.features['num_alpha[0]'] = self.num_chars(token.word)
 
-            # nr of specific chars: ";:,.->+_"
-            token.features['num_spec_chars[0]'] = self.spec_chars(token.word)
+            token.features['num_spec_chars[0]'] = self.num_spec_chars(token.word)
 
-            # chromosomal keytokens
-            token.features['num_has_chr_key[0]'] = self.is_chr_key(token.word)
+            token.features['num_has_chr_key[0]'] = self.has_chromosomal_keytokens(token.word)
 
-            # mutation type
             token.features['mutat_type[0]'] = self.mutation_type(token.word)
 
-            # mutation word
             token.features['mutat_word[0]'] = self.mutation_word(token.word)
 
-            # mutation article and basepair
             token.features['mutat_article_bp[0]'] = self.mutation_article_bp(token.word)
 
-            # type 1
-            token.features['type1[0]'] = self.type1(token.word)
+            token.features['type1[0]'] = self.is_special_type_1(token.word)
 
-            # type 2
-            token.features['type2[0]'] = self.type2(token.word)
+            token.features['type2[0]'] = self.is_special_type_2(token.word)
 
-            # dna symbols
-            token.features['dna_symbols[0]'] = self.dna_symbols(token.word)
+            token.features['dna_symbols[0]'] = self.has_dna_symbols(token.word)
 
-            # protein symbols
-            token.features['protein_symbols[0]'] = self.protein_symbols(token.word, last_token_str)
+            token.features['protein_symbols[0]'] = self.has_protein_symbols(token.word, last_token_str)
 
-            # RScode
-            token.features['rs_code[0]'] = self.rscode(token.word)
+            token.features['rs_code[0]'] = self.has_rscode(token.word)
 
-            # patterns
-            token.features['shape1[0]'] = self.rscode(token.word)
+            token.features['shape1[0]'] = self.word_shape_1(token.word)
+            token.features['shape2[0]'] = self.word_shape_2(token.word)
+            token.features['shape3[0]'] = self.word_shape_3(token.word)
+            token.features['shape4[0]'] = self.word_shape_4(token.word)
 
             # prefix patterns
             for index, value in enumerate(self.prefix_pattern(token.word)):
@@ -123,45 +109,45 @@ class TmVarFeatureGenerator(FeatureGenerator):
             # last token
             last_token_str = token.word
 
-    def n_lower_chars(self, str):
+    def num_lower_chars(self, str):
         result = sum(1 for c in str if c.islower())
         return "L4+" if result > 4 else result
 
-    def n_upper_chars(self, str):
+    def num_capital_chars(self, str):
         result = sum(1 for c in str if c.isupper())
         return "U4+" if result > 4 else result
 
-    def n_nr_chars(self, str):
+    def num_digits_chars(self, str):
         result = sum(1 for c in str if c.isnumeric())
         return "N4+" if result > 4 else result
 
-    def n_chars(self, str):
+    def num_chars(self, str):
         result = sum(1 for c in str if c.isalpha())
         return "A4+" if result > 4 else result
 
-    def spec_chars(self, str):
-        if self.reg_spec_chars.match(str):
+    def num_spec_chars(self, str):
+        if self.reg_spec_chars.search(str):
             return "SpecC1"
-        elif self.reg_char_simple_bracket.match(str):
+        elif self.reg_char_simple_bracket.search(str):
             return "SpecC2"
-        elif self.reg_char_curly_bracket.match(str):
+        elif self.reg_char_curly_bracket.search(str):
             return "SpecC3"
-        elif self.reg_char_square_bracket.match(str):
+        elif self.reg_char_square_bracket.search(str):
             return "SpecC4"
-        elif self.reg_char_slashes.match(str):
+        elif self.reg_char_slashes.search(str):
             return "SpecC5"
         else:
             return None
 
-    def is_chr_key(self, str):
-        return "ChroKey" if self.reg_chr_keys.match(str) else None
+    def has_chromosomal_keytokens(self, str):
+        return "ChroKey" if self.reg_chr_keys.search(str) else None
 
     def mutation_type(self, str):
         lc_tmp = str.lower()
 
-        if self.reg_frameshift_type.match(lc_tmp):
+        if self.reg_frameshift_type.search(lc_tmp):
             return "FrameShiftType"
-        elif self.reg_mutat_type.match(lc_tmp):
+        elif self.reg_mutat_type.search(lc_tmp):
             return "MutatType"
         else:
             return None
@@ -177,16 +163,16 @@ class TmVarFeatureGenerator(FeatureGenerator):
         # NOTE was if -> base | if -> byte | elif -> bp | else -> None
         if self.reg_mutat_article.match(lc_tmp):
             mutat_article = "Base"
-        elif self.reg_mutat_byte.match(lc_tmp):
+        elif self.reg_mutat_byte.search(lc_tmp):
             mutat_article = "Byte"
-        elif self.reg_mutat_basepair.match(lc_tmp):
+        elif self.reg_mutat_basepair.search(lc_tmp):
             mutat_article = "bp"
         else:
             mutat_article = None
 
         return mutat_article
 
-    def type1(self, str):
+    def is_special_type_1(self, str):
         if self.reg_type1.match(str):
             return "Type1"
         elif self.reg_type12.match(str):
@@ -194,17 +180,17 @@ class TmVarFeatureGenerator(FeatureGenerator):
         else:
             return None
 
-    def type2(self, str):
+    def is_special_type_2(self, str):
         return "Type2" if str == "p" else None
 
-    def dna_symbols(self, str):
+    def has_dna_symbols(self, str):
         return "DNASym" if self.reg_dna_symbols.match(str) else None
 
-    def protein_symbols(self, str, last_str):
+    def has_protein_symbols(self, str, last_str):
         uc_tmp = str  # upper case
         lc_tmp = str.lower()  # lower case
 
-        if self.reg_prot_symbols1.match(lc_tmp):
+        if self.reg_prot_symbols1.search(lc_tmp):
             return "ProteinSymFull"
         elif self.reg_prot_symbols2.match(lc_tmp):
             return "ProteinSymTri"
@@ -215,7 +201,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         else:
             return None
 
-    def rscode(self, str):
+    def has_rscode(self, str):
         if self.reg_rs_code1.match(str):
             return "RSCode"
         elif self.reg_rs_code2.match(str):
@@ -223,7 +209,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         else:
             return None
 
-    def shape1(self, str):
+    def word_shape_1(self, str):
         if not self.reg_spec_chars.match(str):
             pattern = self.reg_shape_uc.sub('A', str)
             pattern = self.reg_shape_lc.sub('a', pattern)
@@ -231,14 +217,14 @@ class TmVarFeatureGenerator(FeatureGenerator):
             return pattern
         return None
 
-    def shape2(self, str):
+    def word_shape_2(self, str):
         if not self.reg_spec_chars.match(str):
             pattern = self.reg_shape_chars.sub('a', str)
             pattern = self.reg_shape_nr.sub('0', pattern)
             return pattern
         return None
 
-    def shape3(self, str):
+    def word_shape_3(self, str):
         if not self.reg_spec_chars.match(str):
             pattern = self.reg_shape_uc_plus.sub('A', str)
             pattern = self.reg_shape_lc_plus.sub('a', pattern)
@@ -246,7 +232,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
             return pattern
         return None
 
-    def shape4(self, str):
+    def word_shape_4(self, str):
         if not self.reg_spec_chars.match(str):
             pattern = self.reg_shape_chars_plus.sub('a', str)
             pattern = self.reg_shape_nr_plus.sub('0', pattern)

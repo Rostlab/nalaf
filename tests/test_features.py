@@ -66,41 +66,41 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.mutation_article_bp("the"), None)
 
     def test_type1(self):
-        self.assertEqual(self.feature.type1("g"), "Type1")
-        self.assertEqual(self.feature.type1("orf"), "Type1_2")
-        self.assertEqual(self.feature.type1("blaaa"), None)
+        self.assertEqual(self.feature.is_special_type_1("g"), "Type1")
+        self.assertEqual(self.feature.is_special_type_1("orf"), "Type1_2")
+        self.assertEqual(self.feature.is_special_type_1("blaaa"), None)
 
     def test_type2(self):
-        self.assertEqual(self.feature.type2("p"), "Type2")
-        self.assertEqual(self.feature.type2("as"), None)
+        self.assertEqual(self.feature.is_special_type_2("p"), "Type2")
+        self.assertEqual(self.feature.is_special_type_2("as"), None)
 
     def test_dna_symbols(self):
-        self.assertEqual(self.feature.dna_symbols("A"), "DNASym")
-        self.assertEqual(self.feature.dna_symbols("asd"), None)
+        self.assertEqual(self.feature.has_dna_symbols("A"), "DNASym")
+        self.assertEqual(self.feature.has_dna_symbols("asd"), None)
 
     def test_protein_symbols(self):
-        self.assertEqual(self.feature.protein_symbols("glutamine", "bla"), "ProteinSymFull")
-        self.assertEqual(self.feature.protein_symbols("asn", "bla"), "ProteinSymTri")
-        self.assertEqual(self.feature.protein_symbols("eu", "X"), "ProteinSymTriSub")
-        self.assertEqual(self.feature.protein_symbols("X", "X"), "ProteinSymChar")
-        self.assertEqual(self.feature.protein_symbols("flowerpower", "AAA"), None)
+        self.assertEqual(self.feature.has_protein_symbols("glutamine", "bla"), "ProteinSymFull")
+        self.assertEqual(self.feature.has_protein_symbols("asn", "bla"), "ProteinSymTri")
+        self.assertEqual(self.feature.has_protein_symbols("eu", "X"), "ProteinSymTriSub")
+        self.assertEqual(self.feature.has_protein_symbols("X", "X"), "ProteinSymChar")
+        self.assertEqual(self.feature.has_protein_symbols("flowerpower", "AAA"), None)
 
     def test_rscode(self):
-        self.assertEqual(self.feature.rscode("rs0"), "RSCode")
-        self.assertEqual(self.feature.rscode("rs"), "RSCode")
-        self.assertEqual(self.feature.rscode("rsssss"), None)
+        self.assertEqual(self.feature.has_rscode("rs0"), "RSCode")
+        self.assertEqual(self.feature.has_rscode("rs"), "RSCode")
+        self.assertEqual(self.feature.has_rscode("rsssss"), None)
 
     def test_shape1(self):
-        self.assertEqual(self.feature.shape1("Bs0ssaDB2"), "Aa0aaaAA0")
+        self.assertEqual(self.feature.word_shape_1("Bs0ssaDB2"), "Aa0aaaAA0")
 
     def test_shape2(self):
-        self.assertEqual(self.feature.shape2("Bs0ssaDB2"), "aa0aaaaa0")
+        self.assertEqual(self.feature.word_shape_2("Bs0ssaDB2"), "aa0aaaaa0")
 
     def test_shape3(self):
-        self.assertEqual(self.feature.shape3("Bs0ssaDB2"), "Aa0aA0")
+        self.assertEqual(self.feature.word_shape_3("Bs0ssaDB2"), "Aa0aA0")
 
     def test_shape4(self):
-        self.assertEqual(self.feature.shape4("Bs0ssaDB2"), "a0a0")
+        self.assertEqual(self.feature.word_shape_4("Bs0ssaDB2"), "a0a0")
 
     def test_prefix_pattern(self):
         self.assertEqual(self.feature.prefix_pattern("A"), ["A", None, None, None, None])

@@ -4,6 +4,7 @@ import json
 from nala.structures.data import Annotation
 import csv
 import os
+from nala.utils import MUT_CLASS_ID
 
 
 class AnnotationReader:
@@ -90,7 +91,7 @@ class SETHAnnotationReader(AnnotationReader):
                         entity_type, start, end = row[1].split()
 
                         if entity_type == 'SNP' or entity_type == 'RS':
-                            ann = Annotation('e_2', start, row[2])
+                            ann = Annotation(MUT_CLASS_ID, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
                         elif entity_type == 'Gene':
                             ann = Annotation('e_1', start, row[2])
@@ -144,7 +145,7 @@ class VerspoorAnnotationReader(AnnotationReader):
                         entity_type, start, end = row[1].split()
 
                         if entity_type == 'mutation':
-                            ann = Annotation('e_2', start, row[2])
+                            ann = Annotation(MUT_CLASS_ID, start, row[2])
                             dataset.documents[pmid].parts[serial + paragraph].annotations.append(ann)
                         elif entity_type == 'gene':
                             ann = Annotation('e_1', start, row[2])

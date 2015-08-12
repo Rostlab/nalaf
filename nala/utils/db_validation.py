@@ -3,7 +3,7 @@ import json
 import glob
 import re
 from bs4 import BeautifulSoup
-from configparser import ConfigParser
+from nala.utils import MUT_CLASS_ID
 
 
 def main(html_path='', ann_path=''):
@@ -57,7 +57,7 @@ def import_json_to_db(documents, jsonlist):
             doc = documents[pubmedid]
             entities = json_object['entities']
             for entity in entities:
-                if entity['classId'] == 'e_2':
+                if entity['classId'] == MUT_CLASS_ID:
                     an_array = doc[entity['part']]['annotations']
                     if an_array is None:
                         print("entity"['part'])

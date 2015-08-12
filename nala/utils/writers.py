@@ -251,13 +251,13 @@ class TagTogFormat:
 
                 for i, (id, part) in enumerate(doc.parts.items()):
                     # i, id, part = tuple_i
-                    if id.count("h") > 0 or len(part.text.split(" ")) < 10:
-                        h2 = ET.SubElement(section, 'h2', { 'id' : "s1h{}".format(i + 1)} )
-                        h2.text = part.text
-                    else:
+                    # if id.count("h") > 0 or len(part.text.split(" ")) < 10:
+                    #     h2 = ET.SubElement(section, 'h2', { 'id' : "s1h{}".format(i + 1)} )
+                    #     h2.text = part.text
+                    # else:
                         # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                        p = ET.SubElement(section, 'p', { 'id' : "s1p{}".format(i + 1) } )
-                        p.text = part.text
+                    p = ET.SubElement(section, 'p', { 'id' : "s1p{}".format(i + 1) } )
+                    p.text = part.text
 
                 # print(ET.dump(html))
                 # output = ET.tostring(html, encoding='UTF-8')

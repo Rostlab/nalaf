@@ -32,7 +32,12 @@ class MentionLevelEvaluator(Evaluator):
     by the value of the parameter 'strictness'.
     """
 
-    def __init__(self, strictness='exact'):
+    def __init__(self, strictness='exact', verbose=False):
+        self.verbose = verbose
+        """
+        Enables printing of extra information used for debugging such as
+        the real and prediction annotations for each part in a separate line
+        """
         self.strictness = strictness
         """
         Determines whether a text spans matches and how we count that match, 3 possible values:
@@ -66,6 +71,11 @@ class MentionLevelEvaluator(Evaluator):
         tp, fp, fn, tp_overlapping = 0, 0, 0, 0
         for doc in dataset:
             for part in doc:
+                if self.verbose:
+                    print(' || '.join(ann.text for ann in part.annotations))
+                    print(' || '.join(ann.text for ann in part.predicted_annotations))
+                    print()
+
                 Annotation.equality_operator = 'exact'
                 tp += sum(1 for ann in part.predicted_annotations if ann in part.annotations)
                 fp += sum(1 for ann in part.predicted_annotations if ann not in part.annotations)

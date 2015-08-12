@@ -344,7 +344,6 @@ class Dataset:
 
         Requires predicted_label[0].value for each token to be set.
         """
-        # TODO figure out how to best set class_id independent from Labeler used
         for part_id, part in self.partids_with_parts():
             so_far = 0
             for sentence in part.sentences:
@@ -415,7 +414,8 @@ class Dataset:
 
         for pubmedid, partid, ann in self.all_annotations_with_ids():
             # abstract?
-            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):  # TODO check for len(partid) > 7 and ... is enough for the out of index error handling
+            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
+                # TODO #23 check for len(partid) > 7 and ... is enough for the out of index error handling
                 is_abstract = True
             else:
                 is_abstract = False

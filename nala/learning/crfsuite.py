@@ -1,6 +1,7 @@
 import os
 import sys
 from nala.structures.data import Label
+from nala.utils import MUT_CLASS_ID
 
 class CRFSuite:
     """

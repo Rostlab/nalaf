@@ -1,6 +1,5 @@
 from collections import OrderedDict
 import math
-from nala.utils import MUT_CLASS_ID
 
 # TODO Reorder from top level to bottom level; Dataset first
 

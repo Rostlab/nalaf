@@ -65,34 +65,20 @@ class TmVarFeatureGenerator(FeatureGenerator):
         last_token_str = ""
         for token in dataset.tokens():
 
-            token.features['num_nr[0]'] = self.num_digits_chars(token.word)
-
+            token.features['num_nr[0]'] = self.num_digits(token.word)
             token.features['num_up[0]'] = self.num_capital_chars(token.word)
-
             token.features['num_lo[0]'] = self.num_lower_chars(token.word)
-
-            token.features['num_alpha[0]'] = self.num_chars(token.word)
-
+            token.features['num_alpha[0]'] = self.num_alpha(token.word)
             token.features['num_spec_chars[0]'] = self.num_spec_chars(token.word)
-
             token.features['num_has_chr_key[0]'] = self.has_chromosomal_keytokens(token.word)
-
             token.features['mutat_type[0]'] = self.mutation_type(token.word)
-
             token.features['mutat_word[0]'] = self.mutation_word(token.word)
-
             token.features['mutat_article_bp[0]'] = self.mutation_article_bp(token.word)
-
             token.features['type1[0]'] = self.is_special_type_1(token.word)
-
             token.features['type2[0]'] = self.is_special_type_2(token.word)
-
             token.features['dna_symbols[0]'] = self.has_dna_symbols(token.word)
-
             token.features['protein_symbols[0]'] = self.has_protein_symbols(token.word, last_token_str)
-
             token.features['rs_code[0]'] = self.has_rscode(token.word)
-
             token.features['shape1[0]'] = self.word_shape_1(token.word)
             token.features['shape2[0]'] = self.word_shape_2(token.word)
             token.features['shape3[0]'] = self.word_shape_3(token.word)
@@ -111,19 +97,19 @@ class TmVarFeatureGenerator(FeatureGenerator):
 
     def num_lower_chars(self, str):
         result = sum(1 for c in str if c.islower())
-        return "L4+" if result > 4 else result
+        return "4+" if result > 4 else result
 
     def num_capital_chars(self, str):
         result = sum(1 for c in str if c.isupper())
-        return "U4+" if result > 4 else result
+        return "4+" if result > 4 else result
 
-    def num_digits_chars(self, str):
+    def num_digits(self, str):
         result = sum(1 for c in str if c.isnumeric())
-        return "N4+" if result > 4 else result
+        return "4+" if result > 4 else result
 
-    def num_chars(self, str):
+    def num_alpha(self, str):
         result = sum(1 for c in str if c.isalpha())
-        return "A4+" if result > 4 else result
+        return "4+" if result > 4 else result
 
     def num_spec_chars(self, str):
         if self.reg_spec_chars.search(str):
@@ -329,4 +315,3 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
                                 token.features.pop(name)
                                 token.features[name] = 'E'
                                 break
-

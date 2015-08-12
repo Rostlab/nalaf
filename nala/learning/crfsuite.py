@@ -5,9 +5,8 @@ from nala.structures.data import Label
 class CRFSuite:
     """
     Basic class for interaction with CRFSuite
-
-    TODO: Make the class a bit more generic or replace with an existing package such as python-crfsuite
     """
+    #NOTE: Make the class a bit more generic or replace with an existing package such as python-crfsuite (as for the binding)
 
     def __init__(self, directory):
         self.directory = os.path.abspath(directory)
@@ -52,6 +51,7 @@ class CRFSuite:
         else:
             os.system('{} learn -m {} train'.format(self.crf_suite_call, self.model_filename))
 
+    #TODO rename to run / tag
     def test(self, options=''):
         """
         Test a CRF model with the latest model and test file.
@@ -62,7 +62,7 @@ class CRFSuite:
         else:
             os.system('{} tag -qt -m {} test'.format(self.crf_suite_call, self.model_filename))
 
-    def read_predictions(self, dataset, prediction_file='output.txt'):
+    def read_predictions(self, dataset, prediction_file='output.txt', class_id = MUT_CLASS_ID):
         """
         :type dataset: nala.structures.data.Dataset
 
@@ -96,4 +96,4 @@ class CRFSuite:
                 file.readline()  # skip the empty line signifying new sentence
 
         # call form_predicted_annotations() to populate the mention level predictions
-        dataset.form_predicted_annotations()
+        dataset.form_predicted_annotations(class_id)

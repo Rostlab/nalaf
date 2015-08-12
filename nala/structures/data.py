@@ -2,7 +2,7 @@ from collections import OrderedDict
 import math
 from nala.utils import MUT_CLASS_ID
 
-# TODO Change from top level to bottom level; Dataset first
+# TODO Reorder from top level to bottom level; Dataset first
 
 
 class Label:
@@ -330,7 +330,7 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
-    def form_predicted_annotations(self):
+    def form_predicted_annotations(self, class_id):
         """
         Populates part.predicted_annotations with a list of Annotation objects
         based on the values of the field predicted_label for each token.
@@ -362,7 +362,7 @@ class Dataset:
                             so_far = part.text.find(token.word, so_far)
                             index += 1
                         end = so_far + len(token.word)
-                        part.predicted_annotations.append(Annotation(MUT_CLASS_ID, start, part.text[start:end]))
+                        part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end]))
                     index += 1
 
     def cleannldefinitions(self):

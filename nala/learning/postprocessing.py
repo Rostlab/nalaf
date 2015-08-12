@@ -17,8 +17,8 @@ class PostProcessing:
                 self.__fix_issues(part)
                 for regex in regex_patterns:
                     for match in regex.finditer(part.text):
-                        start = match.start(1)
-                        end = match.end(1)
+                        start = match.start(2)
+                        end = match.end(2)
                         matched_text = part.text[start:end]
                         ann = Annotation('e_2', start, matched_text)
 
@@ -115,7 +115,7 @@ def construct_regex_patterns_from_predictions(dataset):
         item = re.sub('@@@', '(rs|ss)', item)
 
         # append space before and after the constructed pattern
-        regex_patterns.append(re.compile(' ({}) '.format(item)))
+        regex_patterns.append(re.compile('( |rt)({}) '.format(item)))
 
     # include already prepared regex patterns
     # modified by appending space before and after the original pattern
@@ -123,14 +123,21 @@ def construct_regex_patterns_from_predictions(dataset):
         for regex in csv.reader(file, delimiter='\t'):
             if regex[0].startswith('(?-xism:'):
                 try:
-                    regex_patterns.append(re.compile(' ({}) '.format(regex[0].replace('(?-xism:', '')),
+                    regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0].replace('(?-xism:', '')),
                                                      re.VERBOSE | re.IGNORECASE | re.DOTALL | re.MULTILINE))
-                except:
-                    pass
+                except Exception as e:
+                    if e.args[0] == 'sorry, but this version only supports 100 named groups':
+                        # if the exception is due to too many named groups
+                        # make the groups unnamed since we don't need them to be named in the frist place
+                        fixed = regex[0].replace('(?-xism:', '')
+                        fixed = re.sub('\((?!\?:)', '(?:', fixed)
+                        regex_patterns.append(re.compile('( |rt)({}) '.format(fixed)))
+
+
             else:
-                regex_patterns.append(re.compile(' ({}) '.format(regex[0])))
+                regex_patterns.append(re.compile('( |rt)({}) '.format(regex[0])))
 
     # add our own custom regex
-    regex_patterns.append(re.compile(' ([ATCG][0-9]+[ATCG]/[ATCG]) '))
+    regex_patterns.append(re.compile('( |rt)([ATCG][0-9]+[ATCG]/[ATCG]) '))
 
     return regex_patterns

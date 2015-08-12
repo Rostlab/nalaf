@@ -25,14 +25,9 @@ class Label:
 class UniqueKeyDictionary(dict):
     """
     Extension of the built in dictionary with the added constraint that
-    keys (feature names) should be unique.
+    keys (feature names) cannot be updated.
 
-    Raises an exception when we try to add a key that is not unique.
-
-    # Note:
-    In reality the constraint is stronger, meaning that once we set the value for a certain key
-    we are not allowed to updated it, unless we pop it first, that is unless we do:
-        token.features['key'] = token.features.pop('key') + some_value
+    Raises an exception when we try to add a key that exists already.
     """
     def __setitem__(self, key, value):
         if key in self:

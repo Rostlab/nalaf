@@ -30,7 +30,8 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
 
-    pip install nala
+    pip3 install nala
+
 # Examples
 Run either:
 * `demo_predict.py` for a simple example how to use NALA just for prediction with a pre-trained model

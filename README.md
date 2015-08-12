@@ -21,12 +21,12 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 
     git clone https://github.com/carstenuhlig/thesis-alex-carsten.git
     cd thesis-alex-carsten
-    python setup.py install
-    python -m nala.download_corpora
+    python3 setup.py install
+    python3 -m nala.download_corpora
 
  If you want to run the unit tests do:
 
-    python setup.py test
+    python3 setup.py test
 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
 
@@ -34,8 +34,8 @@ The method uses Conditional Random Fields (CRF), which are currently state-of-th
 # Examples
 Run either:
 * `demo_predict.py` for a simple example how to use NALA just for prediction with a pre-trained model
-    * `python demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -s "This is c.A1003G an example"`
-    * `python demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -d example.txt`
+    * `python3 demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -s "This is c.A1003G an example"`
+    * `python3 demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -d example.txt`
 * `demo.py` for an advanced example of the complete pipeline including training, testing and prediction. For options see:
 
 ```python3 demo.py --help```

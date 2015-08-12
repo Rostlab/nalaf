@@ -29,7 +29,7 @@ class UniqueKeyDictionary(dict):
 
     Raises an exception when we try to add a key that is not unique.
 
-    Note:
+    # Note:
     In reality the constraint is stronger, meaning that once we set the value for a certain key
     we are not allowed to updated it, unless we pop it first, that is unless we do:
         token.features['key'] = token.features.pop('key') + some_value

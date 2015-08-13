@@ -1,5 +1,6 @@
 import unittest
 from nala.structures.data import Dataset, Document, Part, Token, Label
+from nala.utils import MUT_CLASS_ID
 
 
 class TestMentionLevel(unittest.TestCase):
@@ -20,7 +21,7 @@ class TestMentionLevel(unittest.TestCase):
         cls.dataset.documents['doc_1'].parts['p1'] = part
 
     def test_form_predicted_annotations(self):
-        self.dataset.form_predicted_annotations()
+        self.dataset.form_predicted_annotations(MUT_CLASS_ID)
 
         part = self.dataset.documents['doc_1'].parts['p1']
 

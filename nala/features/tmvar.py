@@ -65,32 +65,32 @@ class TmVarFeatureGenerator(FeatureGenerator):
         last_token_str = ""
         for token in dataset.tokens():
 
-            token.features['num_nr[0]'] = self.num_digits(token.word)
-            token.features['num_up[0]'] = self.num_capital_chars(token.word)
-            token.features['num_lo[0]'] = self.num_lower_chars(token.word)
-            token.features['num_alpha[0]'] = self.num_alpha(token.word)
-            token.features['num_spec_chars[0]'] = self.num_spec_chars(token.word)
-            token.features['num_has_chr_key[0]'] = self.has_chromosomal_keytokens(token.word)
-            token.features['mutat_type[0]'] = self.mutation_type(token.word)
-            token.features['mutat_word[0]'] = self.mutation_word(token.word)
-            token.features['mutat_article_bp[0]'] = self.mutation_article_bp(token.word)
-            token.features['type1[0]'] = self.is_special_type_1(token.word)
-            token.features['type2[0]'] = self.is_special_type_2(token.word)
-            token.features['dna_symbols[0]'] = self.has_dna_symbols(token.word)
-            token.features['protein_symbols[0]'] = self.has_protein_symbols(token.word, last_token_str)
-            token.features['rs_code[0]'] = self.has_rscode(token.word)
-            token.features['shape1[0]'] = self.word_shape_1(token.word)
-            token.features['shape2[0]'] = self.word_shape_2(token.word)
-            token.features['shape3[0]'] = self.word_shape_3(token.word)
-            token.features['shape4[0]'] = self.word_shape_4(token.word)
+            token.features['num_nr'] = self.num_digits(token.word)
+            token.features['num_up'] = self.num_capital_chars(token.word)
+            token.features['num_lo'] = self.num_lower_chars(token.word)
+            token.features['num_alpha'] = self.num_alpha(token.word)
+            token.features['num_spec_chars'] = self.num_spec_chars(token.word)
+            token.features['num_has_chr_key'] = self.has_chromosomal_keytokens(token.word)
+            token.features['mutat_type'] = self.mutation_type(token.word)
+            token.features['mutat_word'] = self.mutation_word(token.word)
+            token.features['mutat_article_bp'] = self.mutation_article_bp(token.word)
+            token.features['type1'] = self.is_special_type_1(token.word)
+            token.features['type2'] = self.is_special_type_2(token.word)
+            token.features['dna_symbols'] = self.has_dna_symbols(token.word)
+            token.features['protein_symbols'] = self.has_protein_symbols(token.word, last_token_str)
+            token.features['rs_code'] = self.has_rscode(token.word)
+            token.features['shape1'] = self.word_shape_1(token.word)
+            token.features['shape2'] = self.word_shape_2(token.word)
+            token.features['shape3'] = self.word_shape_3(token.word)
+            token.features['shape4'] = self.word_shape_4(token.word)
 
             # prefix patterns
             for index, value in enumerate(self.prefix_pattern(token.word)):
-                token.features['prefix{}[0]'.format(index+1)] = value
+                token.features['prefix{}'.format(index+1)] = value
 
             # suffix patterns
             for index, value in enumerate(self.suffix_pattern(token.word)):
-                token.features['suffix{}[0]'.format(index+1)] = value
+                token.features['suffix{}'.format(index+1)] = value
 
             # last token
             last_token_str = token.word
@@ -298,7 +298,7 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
                     token_end = so_far + len(token.word)
 
                     for match_index, match in matches.items():
-                        name = 'pattern{}[0]'.format(match_index)
+                        name = 'pattern{}'.format(match_index)
                         value = 'O'
                         for start, end in match:
                             if start == so_far:

@@ -6,6 +6,7 @@ import os
 import requests
 import pkg_resources
 from nala.utils import MUT_CLASS_ID
+from itertools import chain
 
 
 class NLDefiner:
@@ -31,13 +32,13 @@ class InclusiveNLDefiner(NLDefiner):
         self.min_length = min_length
 
     def define(self, dataset):
-        for ann in dataset.annotations():
+        for ann in chain(dataset.annotations(), dataset.predicted_annotations()):
             if ann.class_id == MUT_CLASS_ID \
                     and len(ann.text) >= self.min_length \
                     and len(ann.text.split(" ")) > self.min_spaces:
-                ann.is_nl = True
+                ann.subclass = True
             else:
-                ann.is_nl = False
+                ann.subclass = False
 
 
 class AnkitNLDefiner(NLDefiner):
@@ -47,13 +48,13 @@ class AnkitNLDefiner(NLDefiner):
         self.min_length = min_length
 
     def define(self, dataset):
-        for ann in dataset.annotations():
+        for ann in chain(dataset.annotations(), dataset.predicted_annotations()):
             if ann.class_id == MUT_CLASS_ID \
                     and len(ann.text) >= self.min_length \
                     and len(ann.text.split(" ")) > self.min_spaces:
-                ann.is_nl = True
+                ann.subclass = True
             else:
-                ann.is_nl = False
+                ann.subclass = False
 
 
 class ExclusiveNLDefiner(NLDefiner):
@@ -77,7 +78,7 @@ class ExclusiveNLDefiner(NLDefiner):
         self.compiled_regexps = [ re.compile(x) for x in regexps]
 
     def define(self, dataset):
-        for ann in dataset.annotations():
+        for ann in chain(dataset.annotations(), dataset.predicted_annotations()):
             # if ann.class_id == MUT_CLASS_ID:
             #     print(ann.class_id, ann.text)
             if ann.class_id == MUT_CLASS_ID \
@@ -85,7 +86,7 @@ class ExclusiveNLDefiner(NLDefiner):
                 matches_tmvar = [regex.match(ann.text) for regex in self.compiled_regexps]
                 matches_custom = [regex.match(ann.text) for regex in self.compiled_regexps_custom]
                 if not any(matches_custom) and not any(matches_tmvar):
-                    ann.is_nl = True
+                    ann.subclass = True
 
 
 class TmVarRegexNLDefiner(NLDefiner):
@@ -114,11 +115,11 @@ class TmVarRegexNLDefiner(NLDefiner):
             else:
                 compiled_regexps.append(re.compile(regex[0]))
 
-        for ann in dataset.annotations():
+        for ann in chain(dataset.annotations(), dataset.predicted_annotations()):
             if ann.class_id == MUT_CLASS_ID:
                 matches = [regex.match(ann.text) for regex in compiled_regexps]
                 if not any(matches):
-                    ann.is_nl = True
+                    ann.subclass = True
 
 
 class TmVarNLDefiner(NLDefiner):
@@ -166,6 +167,6 @@ class TmVarNLDefiner(NLDefiner):
                 denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
 
                 for part_id, part in doc.parts.items():
-                    for ann in part.annotations:
+                    for ann in chain(part.annotations, part.predicted_annotations):
                         if ann.class_id == MUT_CLASS_ID and ann.text not in denotations:
-                            ann.is_nl = True
+                            ann.subclass = True

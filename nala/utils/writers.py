@@ -347,7 +347,7 @@ class ConsoleWriter:
         if self.color:
             text = part.text
             total_offset = 0
-            for ann in part.predicted_annotations:
+            for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
                 text = text[:ann.offset+total_offset] + self.which_color + text[ann.offset+total_offset:]
                 total_offset += 5
                 text = text[:ann.offset+len(ann.text)+total_offset] + self.end_color + text[ann.offset+len(ann.text)+total_offset:]
@@ -358,7 +358,7 @@ class ConsoleWriter:
             padding = len(str(len(part.text)))
             print(part.text)
             print('ANNOTATIONS')
-            for ann in part.predicted_annotations:
+            for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
                 print('{0: <{pad}} {1: <{pad}} {2}'.format(ann.offset, ann.offset+len(ann.text), ann.text, pad=padding))
             print()
 

@@ -84,7 +84,7 @@ class Annotation:
     :type class_id: str
     :type offset: int
     :type text: str
-    :type is_nl: bool
+    :type subclass: int
     """
     def __init__(self, class_id, offset, text):
         self.class_id = class_id
@@ -93,8 +93,11 @@ class Annotation:
         """the offset marking the beginning of the annotation in regards to the Part this annotation is attached to."""
         self.text = text
         """the text span of the annotation"""
-        self.is_nl = False
-        """boolean indicator if the annotation is a natural language (NL) mention."""
+        self.subclass = False
+        """
+        int flag used to further subdivide classes based on some criteria
+        for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
+        """
 
     equality_operator = 'exact'
     """
@@ -103,7 +106,7 @@ class Annotation:
     """
 
     def __repr__(self):
-        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.is_nl}")'.format(Annotation.__name__, self=self)
+        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}")'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
         # consider them a match only if class_id matches
@@ -368,10 +371,10 @@ class Dataset:
 
     def cleannldefinitions(self):
         """
-        cleans all is_nl = True to = False
+        cleans all subclass = True to = False
         """
         for ann in self.annotations():
-            ann.is_nl = False
+            ann.subclass = False
 
     def stats(self):
         """
@@ -429,7 +432,7 @@ class Dataset:
                 mentions_nr += 1
                 mentions_token_nr += token_nr
 
-                if ann.is_nl:
+                if ann.subclass:
                     # total nr increase
                     nl_nr += 1
                     nl_token_nr += token_nr

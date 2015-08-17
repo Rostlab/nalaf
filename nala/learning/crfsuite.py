@@ -9,7 +9,7 @@ class CRFSuite:
     """
     #NOTE: Make the class a bit more generic or replace with an existing package such as python-crfsuite (as for the binding)
 
-    def __init__(self, directory):
+    def __init__(self, directory, minify=False):
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'default_model'
@@ -18,6 +18,8 @@ class CRFSuite:
             self.crf_suite_call = './crfsuite'
         else:
             self.crf_suite_call = 'crfsuite'
+        self.minify = minify
+        """controls whether to replace feature names with an index in order to minimize input file length"""
 
     def create_input_file(self, dataset, mode):
         """
@@ -28,12 +30,19 @@ class CRFSuite:
         :param mode: one of the following 'train' or 'test' or 'predict'
         :type mode: str
         """
-        with open('%s/%s' % (self.directory, mode), 'w', encoding='utf-8') as file:
+        if self.minify:
+            key_map = {key: index for index, key in
+                       enumerate(set(key for token in dataset.tokens() for key in token.features.keys()))}
+            key_string = lambda key: key_map[key]
+        else:
+            key_string = lambda key: key
 
+        with open('%s/%s' % (self.directory, mode), 'w', encoding='utf-8') as file:
             for sentence in dataset.sentences():
                 for token in sentence:
-                    features = '\t'.join(['{}={}'.format(key, str(value).replace(':', '_COLON_')) if 'embedding' not in key
-                                          else '{}:{}'.format(key, value)
+                    features = '\t'.join(['{}={}'.format(key_string(key), str(value).replace(':', '_COLON_'))
+                                          if 'embedding' not in key
+                                          else '{}:{}'.format(key_string(key), value)
                                           for key, value in token.features.items()])
 
                     if mode in ('train', 'test'):

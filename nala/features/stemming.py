@@ -1,6 +1,7 @@
 from nala.features import FeatureGenerator
 from nltk.stem import PorterStemmer
 
+
 class PorterStemFeatureGenerator(FeatureGenerator):
     """
     Generates stem features based on the values of the tokens themselves.
@@ -20,4 +21,4 @@ class PorterStemFeatureGenerator(FeatureGenerator):
         :type dataset: nala.structures.data.Dataset
         """
         for token in dataset.tokens():
-            token.features['stem[0]'] = self.stemmer.stem(token.word)
+            token.features['stem'] = self.stemmer.stem(token.word)

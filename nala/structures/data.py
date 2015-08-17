@@ -1,5 +1,7 @@
 from collections import OrderedDict
+from nala.utils import MUT_CLASS_ID
 import math
+import re
 
 # TODO Reorder from top level to bottom level; Dataset first
 
@@ -22,17 +24,23 @@ class Label:
         return self.value
 
 
-class UniqueKeyDictionary(dict):
+class FeatureDictionary(dict):
     """
     Extension of the built in dictionary with the added constraint that
     keys (feature names) cannot be updated.
 
+    If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
+    This is used to identify the position in the window for the feature.
+
     Raises an exception when we try to add a key that exists already.
     """
+
     def __setitem__(self, key, value):
         if key in self:
             raise KeyError('feature name "{}" already exists'.format(key))
         else:
+            if not re.search('\[-?[0-9]+\]$', key):
+                key += '[0]'
             dict.__setitem__(self, key, value)
 
 
@@ -54,7 +62,7 @@ class Token:
         """the original labels for the token as assigned by some implementation of Labeler"""
         self.predicted_labels = None
         """the predicted labels for the token as assigned by some learning algorightm"""
-        self.features = UniqueKeyDictionary()
+        self.features = FeatureDictionary()
         """
         a dictionary of features for the token
         each feature is represented as a key value pair:

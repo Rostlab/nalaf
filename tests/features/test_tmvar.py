@@ -2,6 +2,7 @@ import unittest
 from nala.structures.data import Dataset, Document, Part, Token
 from nala.features.tmvar import TmVarFeatureGenerator
 from nala.features import FeatureGenerator
+import re
 
 
 class TmVarDefaultTest(unittest.TestCase):
@@ -108,6 +109,23 @@ class TmVarDefaultTest(unittest.TestCase):
 
     def test_suffix_pattern(self):
         self.assertEqual(self.feature.suffix_pattern("ABC"), ["C", "BC", "ABC", None, None])
+
+
+class TestTmVarDictionaryFeatureGenerator(unittest.TestCase):
+    def test_init(self):
+        self.fail()
+
+    def test_generate(self):
+        self.fail()
+
+
+class TestWindowFeatureGenerator(unittest.TestCase):
+    def test_init(self):
+        self.fail()
+
+    def test_generate(self):
+        self.fail()
+
 
 if __name__ == '__main__':
     unittest.main()

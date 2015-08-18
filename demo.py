@@ -113,17 +113,17 @@ if __name__ == "__main__":
             tmvarmentions = tmvarstats['nl_mention_array']
 
             stats.addrow(tmvarstats, 'tmVarRegex')
-            dataset.cleannldefinitions()
+            dataset.clean_nl_definitions()
 
             # exclusive
             ExclusiveNLDefiner().define(dataset)
             stats.addrow(dataset.stats(), 'Carsten')
-            dataset.cleannldefinitions()
+            dataset.clean_nl_definitions()
 
             # tmvar nl
             TmVarNLDefiner().define(dataset)
             stats.addrow(dataset.stats(), 'tmVarComplete')
-            dataset.cleannldefinitions()
+            dataset.clean_nl_definitions()
 
             # inclusive
             for i in range(start_min_length, end_min_length + 1):
@@ -134,7 +134,7 @@ if __name__ == "__main__":
                 intersectionset = [ x for x in inclusivementions if x not in tmvarmentions]
                 print(intersectionset)
                 stats.addrow(dataset.stats(), 'Inclusive_' + str(i))
-                dataset.cleannldefinitions()
+                dataset.clean_nl_definitions()
 
             # finally generation of graph itself
             stats.makegraph()

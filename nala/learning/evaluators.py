@@ -1,5 +1,6 @@
 import abc
 from nala.structures.data import Annotation
+from nala import v_print, d_print
 
 
 class Evaluator:
@@ -30,12 +31,8 @@ class MentionLevelEvaluator(Evaluator):
     Whether a text spans matches and how we count that match is determined
     by the value of the parameter 'strictness'.
     """
-    def __init__(self, strictness='exact', subclass_analysis=False, verbose=False):
-        self.verbose = verbose
-        """
-        Enables printing of extra information used for debugging such as
-        the real and prediction annotations for each part in a separate line
-        """
+
+    def __init__(self, strictness='exact', subclass_analysis=False):
         self.strictness = strictness
         """
         Determines whether a text spans matches and how we count that match, 3 possible values:
@@ -76,10 +73,9 @@ class MentionLevelEvaluator(Evaluator):
 
         for doc in dataset:
             for part in doc:
-                if self.verbose:
-                    print(' || '.join(ann.text for ann in part.annotations))
-                    print(' || '.join(ann.text for ann in part.predicted_annotations))
-                    print()
+                d_print(' || '.join(ann.text for ann in part.annotations))
+                d_print(' || '.join(ann.text for ann in part.predicted_annotations))
+                d_print()
 
                 Annotation.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
@@ -140,9 +136,9 @@ class MentionLevelEvaluator(Evaluator):
 
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
-        if self.verbose:
-            print('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
-                  .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
-        else:
-            print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '.format(precision, recall, f_measure, self.strictness))
+        v_print('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} '
+                .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
+
+        print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
+              .format(precision, recall, f_measure, self.strictness))
         return tp, fp, fn, tp_overlapping, precision, recall, f_measure

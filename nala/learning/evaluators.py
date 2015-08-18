@@ -30,7 +30,6 @@ class MentionLevelEvaluator(Evaluator):
     Whether a text spans matches and how we count that match is determined
     by the value of the parameter 'strictness'.
     """
-    # TODO put verbose (and or debug) flags in Config object
     def __init__(self, strictness='exact', subclass_analysis=False, verbose=False):
         self.verbose = verbose
         """

@@ -152,9 +152,9 @@ if __name__ == "__main__":
             crf = CRFSuite(crf_path)
             print("CRFstart")
             crf.create_input_file(dataset, 'train')
-            crf.train()
+            crf.learn()
             crf.create_input_file(dataset, 'test')
-            crf.test()
+            crf.tag()
 
     except (configparser.MissingSectionHeaderError, configparser.NoSectionError, configparser.NoOptionError):
         print(config_ini_error, file=sys.stderr)

@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # get the predictions
     crf = CRFSuite(args.crf_suite_dir)
     crf.create_input_file(dataset, 'predict')
-    crf.test('-m {} -i predict > output.txt'.format(default_model_path))
+    crf.tag('-m {} -i predict > output.txt'.format(default_model_path))
     crf.read_predictions(dataset)
 
     PostProcessing().process(dataset)

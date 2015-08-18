@@ -51,7 +51,7 @@ class CRFSuite:
                         file.write('%s\n' % features)
                 file.write('\n')
 
-    def train(self, options=''):
+    def learn(self, options=''):
         """
         Train and save a CRF model with the latest train file.
         """
@@ -61,8 +61,7 @@ class CRFSuite:
         else:
             os.system('{} learn -m {} train'.format(self.crf_suite_call, self.model_filename))
 
-    #TODO rename to run / tag
-    def test(self, options=''):
+    def tag(self, options=''):
         """
         Test a CRF model with the latest model and test file.
         """

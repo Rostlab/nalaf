@@ -3,14 +3,8 @@ import os
 from nala.utils.readers import TextFilesReader
 from nala.utils.readers import StringReader
 from nala.utils.writers import ConsoleWriter
+from nala.structures.pipelines import PrepareDatasetPipeline
 from nala.learning.crfsuite import CRFSuite
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import TmVarTokenizer
-from nala.features.simple import SimpleFeatureGenerator
-from nala.features.stemming import PorterStemFeatureGenerator
-from nala.features.tmvar import TmVarFeatureGenerator
-from nala.features.tmvar import TmVarDictionaryFeatureGenerator
-from nala.features.window import WindowFeatureGenerator
 import pkg_resources
 
 
@@ -41,21 +35,7 @@ if __name__ == "__main__":
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))
 
-    # split and tokenize
-    NLTKSplitter().split(dataset)
-    TmVarTokenizer().tokenize(dataset)
-
-    # generate features
-    SimpleFeatureGenerator().generate(dataset)
-    PorterStemFeatureGenerator().generate(dataset)
-    TmVarFeatureGenerator().generate(dataset)
-    TmVarDictionaryFeatureGenerator().generate(dataset)
-
-    window_include_list = ['pattern0[0]', 'pattern1[0]', 'pattern2[0]', 'pattern3[0]', 'pattern4[0]', 'pattern5[0]',
-    'pattern6[0]', 'pattern7[0]', 'pattern8[0]', 'pattern9[0]', 'pattern10[0]', 'word[0]', 'stem[0]']
-
-    # generate features in a window
-    WindowFeatureGenerator(template=(-3, -2, -1, 1, 2, 3), include_list=window_include_list).generate(dataset)
+    PrepareDatasetPipeline().execute(dataset)
 
     # get the predictions
     crf = CRFSuite(args.crf_suite_dir)

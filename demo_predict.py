@@ -43,8 +43,6 @@ if __name__ == "__main__":
     if not os.path.exists(default_model_path):
         raise FileNotFoundError('default_model is missing')
 
-    #TODO refactor to create pipeline (object) which accepts sentenceSplitter, tokenizer, labeler, list of feature generators, and other options such as usePreprocessing, ...
-    #TODO 2 pipelines, `PrepareDataset` & `UseDataset`
     #TODO if possible, change parts & sentences & tokens from List to Tuple
 
     # split and tokenize

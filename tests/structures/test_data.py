@@ -1,9 +1,9 @@
-from unittest import TestCase
+import unittest
 from nala.structures.data import Dataset, Document, Part, Token, Label
 from nala.utils import MUT_CLASS_ID
 
 
-class TestDataset(TestCase):
+class TestDataset(unittest.TestCase):
     def test_parts(self):
         self.fail()  # TODO
 
@@ -38,7 +38,7 @@ class TestDataset(TestCase):
         self.fail()  # TODO
 
 
-class TestDocument(TestCase):
+class TestDocument(unittest.TestCase):
     def test_key_value_parts(self):
         self.fail()  # TODO
 
@@ -49,7 +49,7 @@ class TestDocument(TestCase):
         self.fail()  # TODO
 
 
-class TestToken(TestCase):
+class TestToken(unittest.TestCase):
     def test_init(self):
         self.fail()  # TODO
 
@@ -57,12 +57,12 @@ class TestToken(TestCase):
         self.fail()  # TODO
 
 
-class TestFeatureDictionary(TestCase):
+class TestFeatureDictionary(unittest.TestCase):
     def test_setitem(self):
         self.fail()  # TODO
 
 
-class TestAnnotation(TestCase):
+class TestAnnotation(unittest.TestCase):
     def test_init(self):
         self.fail()  # TODO
 
@@ -73,7 +73,7 @@ class TestAnnotation(TestCase):
         self.fail()  # TODO
 
 
-class TestLabel(TestCase):
+class TestLabel(unittest.TestCase):
     def test_repr(self):
         self.fail()  # TODO
 
@@ -81,7 +81,7 @@ class TestLabel(TestCase):
         self.fail()  # TODO
 
 
-class TestPart(TestCase):
+class TestPart(unittest.TestCase):
     def test_init(self):
         self.fail()  # TODO
 
@@ -89,7 +89,7 @@ class TestPart(TestCase):
         self.fail()  # TODO
 
 
-class TestMentionLevel(TestCase):
+class TestMentionLevel(unittest.TestCase):
     @classmethod
     def setup_class(cls):
         # create a sample dataset to test
@@ -118,3 +118,7 @@ class TestMentionLevel(TestCase):
 
         self.assertEqual(part.predicted_annotations[1].text, 'p.V100Q')
         self.assertEqual(part.predicted_annotations[1].offset, 18)
+
+
+if __name__ == '__main__':
+    unittest.main()

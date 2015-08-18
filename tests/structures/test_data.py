@@ -5,88 +5,88 @@ from nala.utils import MUT_CLASS_ID
 
 class TestDataset(TestCase):
     def test_parts(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_annotations(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_predicted_annotations(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_sentences(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_tokens(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_partids_with_parts(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_annotations_with_partids(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_all_annotations_with_ids(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_form_predicted_annotations(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_clean_nl_definitions(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_stats(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestDocument(TestCase):
     def test_key_value_parts(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_get_unique_mentions(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_get_size(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestToken(TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_repr(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestFeatureDictionary(TestCase):
     def test_setitem(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestAnnotation(TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_repr(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_eq(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestLabel(TestCase):
     def test_repr(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestPart(TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_iter(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestMentionLevel(TestCase):

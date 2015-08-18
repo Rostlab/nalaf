@@ -113,18 +113,18 @@ class TmVarDefaultTest(unittest.TestCase):
 
 class TestTmVarDictionaryFeatureGenerator(unittest.TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_generate(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestWindowFeatureGenerator(unittest.TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_generate(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 if __name__ == '__main__':

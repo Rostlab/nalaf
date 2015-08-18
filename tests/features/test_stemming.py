@@ -1,8 +1,10 @@
-from unittest import TestCase
-
-__author__ = 'carsten'
+import unittest
 
 
-class TestPorterStemFeatureGenerator(TestCase):
-  def test_generate(self):
-    self.fail()  # TODO
+class TestPorterStemFeatureGenerator(unittest.TestCase):
+    def test_generate(self):
+        self.fail()  # TODO
+
+
+if __name__ == '__main__':
+    unittest.main()

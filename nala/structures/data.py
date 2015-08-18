@@ -3,218 +3,6 @@ from nala.utils import MUT_CLASS_ID
 import math
 import re
 
-# TODO Reorder from top level to bottom level; Dataset first
-
-
-class Label:
-    """
-    Represents the label associated with each Token.
-
-    :type value: str
-    :type confidence: float
-    """
-
-    def __init__(self, value, confidence=None):
-        self.value = value
-        """string value of the label"""
-        self.confidence = confidence
-        """probability of being correct if the label is predicted"""
-
-    def __repr__(self):
-        return self.value
-
-
-class FeatureDictionary(dict):
-    """
-    Extension of the built in dictionary with the added constraint that
-    keys (feature names) cannot be updated.
-
-    If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
-    This is used to identify the position in the window for the feature.
-
-    Raises an exception when we try to add a key that exists already.
-    """
-
-    def __setitem__(self, key, value):
-        if key in self:
-            raise KeyError('feature name "{}" already exists'.format(key))
-        else:
-            if not re.search('\[-?[0-9]+\]$', key):
-                key += '[0]'
-            dict.__setitem__(self, key, value)
-
-
-class Token:
-    """
-    Represent a token - the smallest unit on which we perform operations.
-    Usually one token represent one word from the document.
-
-    :type word: str
-    :type original_labels: list[Label]
-    :type predicted_labels: list[Label]
-    :type features: dict
-    """
-
-    def __init__(self, word):
-        self.word = word
-        """string value of the token, usually a single word"""
-        self.original_labels = None
-        """the original labels for the token as assigned by some implementation of Labeler"""
-        self.predicted_labels = None
-        """the predicted labels for the token as assigned by some learning algorightm"""
-        self.features = FeatureDictionary()
-        """
-        a dictionary of features for the token
-        each feature is represented as a key value pair:
-        * [string], [string] pair denotes the feature "[string]=[string]"
-        * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
-        """
-
-    def __repr__(self):
-        """
-        print calls to the class Token will print out the string contents of the word
-        """
-        return self.word
-
-
-class Annotation:
-    """
-    Represent a single annotation, that is denotes a span of text which represents some entitity.
-
-    :type class_id: str
-    :type offset: int
-    :type text: str
-    :type subclass: int
-    """
-    def __init__(self, class_id, offset, text):
-        self.class_id = class_id
-        """the id of the class or entity that is annotated"""
-        self.offset = offset
-        """the offset marking the beginning of the annotation in regards to the Part this annotation is attached to."""
-        self.text = text
-        """the text span of the annotation"""
-        self.subclass = False
-        """
-        int flag used to further subdivide classes based on some criteria
-        for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
-        """
-
-    equality_operator = 'exact'
-    """
-    determines when we consider two annotations to be equal
-    can be "exact" or "overlapping" or "exact_or_overlapping"
-    """
-
-    def __repr__(self):
-        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}")'.format(Annotation.__name__, self=self)
-
-    def __eq__(self, other):
-        # consider them a match only if class_id matches
-        if self.class_id == other.class_id:
-            exact = self.offset == other.offset and self.text == other.text
-            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
-
-            if self.equality_operator == 'exact':
-                return exact
-            elif self.equality_operator == 'overlapping':
-                # overlapping means only the case where we have an actual overlap and not exact match
-                return not exact and overlap
-            elif self.equality_operator == 'exact_or_overlapping':
-                # overlap includes the exact case so just return that
-                return overlap
-            else:
-                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
-        else:
-            return False
-
-
-class Part:
-    """
-    Represent chunks of text grouped in the document that for some reason belong together.
-    Each part hold a reference to the annotations for that chunk of text.
-
-    :type text: str
-    :type sentences: list[list[Token]]
-    :type annotations: list[Annotation]
-    :type predicted_annotations: list[Annotation]
-    """
-
-    def __init__(self, text):
-        self.text = text
-        """the original raw text that the part is consisted of"""
-        self.sentences = [[]]
-        """
-        a list sentences where each sentence is a list of tokens
-        derived from text by calling Splitter and Tokenizer
-        """
-        self.annotations = []
-        """the annotations of the chunk of text as populated by a call to Annotator"""
-        self.predicted_annotations = []
-        """
-        a list of predicted annotations as populated by a call to form_predicted_annotations()
-        this represent the prediction on a mention label rather then on a token level
-        """
-
-    def __iter__(self):
-        """
-        when iterating through the part iterate through each sentence
-        """
-        return iter(self.sentences)
-
-
-class Document:
-    """
-    Class representing a single document, for example an article from PubMed.
-
-    :type parts: dict
-    """
-
-    def __init__(self):
-        # NOTE are the parts generally ordered? concerning their true ordering from the original document?
-        self.parts = OrderedDict()
-        """
-        parts the document consists of, encoded as a dictionary
-        where the key (string) is the id of the part
-        and the value is an instance of Part
-        """
-
-    def __eq__(self, other):
-        return self.get_size() == other.get_size()
-
-    def __lt__(self, other):
-        return (self.get_size() - other.get_size() < 0)
-
-    def __iter__(self):
-        """
-        when iterating through the document iterate through each part
-        """
-        for part_id, part in self.parts.items():
-            yield part
-
-    def key_value_parts(self):
-        """yields iterator for partids"""
-        for part_id, part in self.parts.items():
-            yield part_id, part
-
-    def get_unique_mentions(self):
-        """:return: set of all mentions (standard + natural language)"""
-        mentions = []
-        for part in self:
-            for ann in part.annotations:
-                mentions.append(ann.text)
-
-        return set(mentions)
-
-    def get_size(self):
-        """give back rough size log(lettres)*parts"""
-        lettres = 0
-        parts = 0
-        for part in self:
-            lettres += len(part.text)
-            parts += 1
-
-        return math.log2(lettres)*parts
-
 
 class Dataset:
     """
@@ -369,7 +157,7 @@ class Dataset:
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end]))
                     index += 1
 
-    def cleannldefinitions(self):
+    def clean_nl_definitions(self):
         """
         cleans all subclass = True to = False
         """
@@ -489,3 +277,214 @@ class Dataset:
         }
 
         return report_dict
+
+
+class Document:
+    """
+    Class representing a single document, for example an article from PubMed.
+
+    :type parts: dict
+    """
+
+    def __init__(self):
+        # NOTE are the parts generally ordered? concerning their true ordering from the original document?
+        self.parts = OrderedDict()
+        """
+        parts the document consists of, encoded as a dictionary
+        where the key (string) is the id of the part
+        and the value is an instance of Part
+        """
+
+    def __eq__(self, other):
+        return self.get_size() == other.get_size()
+
+    def __lt__(self, other):
+        return self.get_size() - other.get_size() < 0
+
+    def __iter__(self):
+        """
+        when iterating through the document iterate through each part
+        """
+        for part_id, part in self.parts.items():
+            yield part
+
+    def key_value_parts(self):
+        """yields iterator for partids"""
+        for part_id, part in self.parts.items():
+            yield part_id, part
+
+    def get_unique_mentions(self):
+        """:return: set of all mentions (standard + natural language)"""
+        mentions = []
+        for part in self:
+            for ann in part.annotations:
+                mentions.append(ann.text)
+
+        return set(mentions)
+
+    def get_size(self):
+        """give back rough size log(lettres)*parts"""
+        lettres = 0
+        parts = 0
+        for part in self:
+            lettres += len(part.text)
+            parts += 1
+
+        return math.log2(lettres)*parts
+
+
+class Part:
+    """
+    Represent chunks of text grouped in the document that for some reason belong together.
+    Each part hold a reference to the annotations for that chunk of text.
+
+    :type text: str
+    :type sentences: list[list[Token]]
+    :type annotations: list[Annotation]
+    :type predicted_annotations: list[Annotation]
+    """
+
+    def __init__(self, text):
+        self.text = text
+        """the original raw text that the part is consisted of"""
+        self.sentences = [[]]
+        """
+        a list sentences where each sentence is a list of tokens
+        derived from text by calling Splitter and Tokenizer
+        """
+        self.annotations = []
+        """the annotations of the chunk of text as populated by a call to Annotator"""
+        self.predicted_annotations = []
+        """
+        a list of predicted annotations as populated by a call to form_predicted_annotations()
+        this represent the prediction on a mention label rather then on a token level
+        """
+
+    def __iter__(self):
+        """
+        when iterating through the part iterate through each sentence
+        """
+        return iter(self.sentences)
+
+
+class Token:
+    """
+    Represent a token - the smallest unit on which we perform operations.
+    Usually one token represent one word from the document.
+
+    :type word: str
+    :type original_labels: list[Label]
+    :type predicted_labels: list[Label]
+    :type features: dict
+    """
+
+    def __init__(self, word):
+        self.word = word
+        """string value of the token, usually a single word"""
+        self.original_labels = None
+        """the original labels for the token as assigned by some implementation of Labeler"""
+        self.predicted_labels = None
+        """the predicted labels for the token as assigned by some learning algorightm"""
+        self.features = FeatureDictionary()
+        """
+        a dictionary of features for the token
+        each feature is represented as a key value pair:
+        * [string], [string] pair denotes the feature "[string]=[string]"
+        * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
+        """
+
+    def __repr__(self):
+        """
+        print calls to the class Token will print out the string contents of the word
+        """
+        return self.word
+
+
+class FeatureDictionary(dict):
+    """
+    Extension of the built in dictionary with the added constraint that
+    keys (feature names) cannot be updated.
+
+    If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
+    This is used to identify the position in the window for the feature.
+
+    Raises an exception when we try to add a key that exists already.
+    """
+
+    def __setitem__(self, key, value):
+        if key in self:
+            raise KeyError('feature name "{}" already exists'.format(key))
+        else:
+            if not re.search('\[-?[0-9]+\]$', key):
+                key += '[0]'
+            dict.__setitem__(self, key, value)
+
+
+class Annotation:
+    """
+    Represent a single annotation, that is denotes a span of text which represents some entitity.
+
+    :type class_id: str
+    :type offset: int
+    :type text: str
+    :type subclass: int
+    """
+    def __init__(self, class_id, offset, text):
+        self.class_id = class_id
+        """the id of the class or entity that is annotated"""
+        self.offset = offset
+        """the offset marking the beginning of the annotation in regards to the Part this annotation is attached to."""
+        self.text = text
+        """the text span of the annotation"""
+        self.subclass = False
+        """
+        int flag used to further subdivide classes based on some criteria
+        for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
+        """
+
+    equality_operator = 'exact'
+    """
+    determines when we consider two annotations to be equal
+    can be "exact" or "overlapping" or "exact_or_overlapping"
+    """
+
+    def __repr__(self):
+        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}")'.format(Annotation.__name__, self=self)
+
+    def __eq__(self, other):
+        # consider them a match only if class_id matches
+        if self.class_id == other.class_id:
+            exact = self.offset == other.offset and self.text == other.text
+            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+
+            if self.equality_operator == 'exact':
+                return exact
+            elif self.equality_operator == 'overlapping':
+                # overlapping means only the case where we have an actual overlap and not exact match
+                return not exact and overlap
+            elif self.equality_operator == 'exact_or_overlapping':
+                # overlap includes the exact case so just return that
+                return overlap
+            else:
+                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
+        else:
+            return False
+
+
+class Label:
+    """
+    Represents the label associated with each Token.
+
+    :type value: str
+    :type confidence: float
+    """
+
+    def __init__(self, value, confidence=None):
+        self.value = value
+        """string value of the label"""
+        self.confidence = confidence
+        """probability of being correct if the label is predicted"""
+
+    def __repr__(self):
+        return self.value
+

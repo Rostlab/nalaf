@@ -5,4 +5,4 @@ __author__ = 'carsten'
 
 class TestPorterStemFeatureGenerator(TestCase):
   def test_generate(self):
-    self.fail()
+    self.fail()  # TODO

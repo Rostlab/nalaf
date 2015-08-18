@@ -11,6 +11,9 @@ from nala.features.stemming import PorterStemFeatureGenerator
 from nala.features.tmvar import TmVarFeatureGenerator
 from nala.features.tmvar import TmVarDictionaryFeatureGenerator
 from nala.features.window import WindowFeatureGenerator
+import pkg_resources
+
+
 from nala.learning.postprocessing import PostProcessing
 
 if __name__ == "__main__":
@@ -38,13 +41,6 @@ if __name__ == "__main__":
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))
 
-    #TODO include default_model & example.txt under resources/
-    default_model_path = os.path.join(os.getcwd(), 'default_model')
-    if not os.path.exists(default_model_path):
-        raise FileNotFoundError('default_model is missing')
-
-    #TODO if possible, change parts & sentences & tokens from List to Tuple
-
     # split and tokenize
     NLTKSplitter().split(dataset)
     TmVarTokenizer().tokenize(dataset)
@@ -64,7 +60,7 @@ if __name__ == "__main__":
     # get the predictions
     crf = CRFSuite(args.crf_suite_dir)
     crf.create_input_file(dataset, 'predict')
-    crf.tag('-m {} -i predict > output.txt'.format(default_model_path))
+    crf.tag('-m {} -i predict > output.txt'.format(pkg_resources.resource_filename('nala.data', 'default_model')))
     crf.read_predictions(dataset)
 
     PostProcessing().process(dataset)

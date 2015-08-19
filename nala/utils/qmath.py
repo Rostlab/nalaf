@@ -4,6 +4,8 @@ which does have those functions implemented.
 """
 
 # todo implement test functions
+
+
 def mean(arr_of_nr):
     """
     :param arr_of_nr: array of real numbers

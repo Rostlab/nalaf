@@ -6,21 +6,21 @@ from nala.utils import MUT_CLASS_ID
 
 class TestEvaluator(unittest.TestCase):
     def test_evaluate(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TestMentionLevelEvaluator(unittest.TestCase):
     def test_init(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_evaluate(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_safe_division(self):
-        self.fail()
+        self.fail()  # TODO
 
     def test_calc_measures(self):
-        self.fail()
+        self.fail()  # TODO
 
 
 class TmVarDefaultTest(unittest.TestCase):

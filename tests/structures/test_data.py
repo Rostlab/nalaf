@@ -28,9 +28,6 @@ class TestDataset(unittest.TestCase):
     def test_all_annotations_with_ids(self):
         self.fail()  # TODO
 
-    def test_form_predicted_annotations(self):
-        self.fail()  # TODO
-
     def test_clean_nl_definitions(self):
         self.fail()  # TODO
 

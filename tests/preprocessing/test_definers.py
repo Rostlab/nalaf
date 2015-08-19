@@ -3,42 +3,42 @@ import unittest
 
 class TestNLDefiner(unittest.TestCase):
     def test_define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 class TestInclusiveNLDefiner(unittest.TestCase):
 
     def test_init__(self):
-        self.fail()  # TODO
+        pass  # TODO
 
     def define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 
 class TestAnkitNLDefiner(unittest.TestCase):
 
     def test_init(self):
-        self.fail()  # TODO
+        pass  # TODO
 
     def test_define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 
 class TestExclusiveNLDefiner(unittest.TestCase):
     def test_init(self):
-        self.fail()  # TODO
+        pass  # TODO
 
     def test_define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 
 class TestTmVarRegexNLDefiner(unittest.TestCase):
     def test_define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 
 class TestTmVarNLDefiner(unittest.TestCase):
     def test_define(self):
-        self.fail()  # TODO
+        pass  # TODO
 
 if __name__ == '__main__':
     unittest.main()

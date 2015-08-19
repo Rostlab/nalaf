@@ -46,7 +46,13 @@ class MentionLevelEvaluator(Evaluator):
                 0.5 when we have overlapping match
         """
         self.subclass_analysis = subclass_analysis
-        """whether to report the performance for each subclass separately"""
+        """
+        Whether to report the performance for each subclass separately
+        Can be used only with strictness='exact'
+        """
+
+        if strictness in ('overlapping', 'half_overlapping') and subclass_analysis:
+            raise ValueError('subclass analysis with {} strictness is not defined'.format(strictness))
 
     def evaluate(self, dataset):
         """
@@ -98,7 +104,7 @@ class MentionLevelEvaluator(Evaluator):
             for subclass, counts in subclass_counts.items():
                 print('SUBCLASS {}'.format(subclass))
                 self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['tp_overlapping'])
-                print('TOTAL')
+            print('TOTAL')
 
         # sum the counts for each subclass before calculating the measures
         tp = sum(counts['tp'] for counts in subclass_counts.values())

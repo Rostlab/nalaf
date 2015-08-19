@@ -11,5 +11,5 @@ if os.path.exists('config.ini'):
 else:
     config.read(pkg_resources.resource_filename('nala.data', 'default_config.ini'))
 
-v_print = print if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
-d_print = print if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None
+print_verbose = print if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
+print_debug = print if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None

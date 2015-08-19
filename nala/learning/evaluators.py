@@ -1,6 +1,6 @@
 import abc
 from nala.structures.data import Annotation
-from nala import v_print, d_print
+from nala import print_verbose, print_debug
 
 
 class Evaluator:
@@ -79,9 +79,9 @@ class MentionLevelEvaluator(Evaluator):
 
         for doc in dataset:
             for part in doc:
-                d_print(' || '.join(ann.text for ann in part.annotations))
-                d_print(' || '.join(ann.text for ann in part.predicted_annotations))
-                d_print()
+                print_debug(' || '.join(ann.text for ann in part.annotations))
+                print_debug(' || '.join(ann.text for ann in part.predicted_annotations))
+                print_debug()
 
                 Annotation.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
@@ -142,7 +142,7 @@ class MentionLevelEvaluator(Evaluator):
 
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
-        v_print('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} '
+        print_verbose('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} '
                 .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
 
         print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '

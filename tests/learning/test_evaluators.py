@@ -4,6 +4,25 @@ from nala.learning.evaluators import Evaluator, MentionLevelEvaluator
 from nala.utils import MUT_CLASS_ID
 
 
+class TestEvaluator(unittest.TestCase):
+    def test_evaluate(self):
+        self.fail()  # TODO
+
+
+class TestMentionLevelEvaluator(unittest.TestCase):
+    def test_init(self):
+        self.fail()  # TODO
+
+    def test_evaluate(self):
+        self.fail()  # TODO
+
+    def test_safe_division(self):
+        self.fail()  # TODO
+
+    def test_calc_measures(self):
+        self.fail()  # TODO
+
+
 class TmVarDefaultTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -90,3 +109,7 @@ class TmVarDefaultTest(unittest.TestCase):
         evaluator = MentionLevelEvaluator(strictness='not valid')
 
         self.assertRaises(ValueError, evaluator.evaluate, self.dataset)
+
+
+if __name__ == '__main__':
+    unittest.main()

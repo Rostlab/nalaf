@@ -4,10 +4,16 @@ from nala.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
 from nala.structures.data import Dataset, Document, Part, Token
 
 
+class TestTokenizer(unittest.TestCase):
+    def test_tokenize(self):
+        self.fail()  # TODO
+
+
 class TestNLTKTokenizer(unittest.TestCase):
     """
     Test the NLTKTokenizer class and it's main method tokenize()
     """
+
     @classmethod
     def setup_class(cls):
         # create a sample dataset to test
@@ -44,6 +50,7 @@ class TestTmVarTokenizer(unittest.TestCase):
     """
     Test the TmVarTokenizer class and it's main method tokenize()
     """
+
     @classmethod
     def setup_class(cls):
         # create a sample dataset to test
@@ -74,3 +81,7 @@ class TestTmVarTokenizer(unittest.TestCase):
                          'it', 'contains', 'this', 'c', '.', '2708', '_', '2711', 'del', 'TTAG', 'mutation', '.'])
         for token in self.dataset.tokens():
             self.assertEqual(token.word, next(expected))
+
+
+if __name__ == '__main__':
+    unittest.main()

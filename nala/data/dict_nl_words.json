@@ -1,0 +1,15 @@
+[
+  "\\bto\\b",
+  "\\bfrom\\b",
+  "\\binto\\b",
+  "\\bat\\b",
+  "\\bof\\b",
+  "\\bwith\\b",
+  "\\bin\\b",
+  "\\bwas\\b",
+  "\\bdeleted\\b",
+  "\\bsubstitution\\b",
+  "\\bfor\\b",
+  "\\bmutated\\b",
+  "\\bmutations?\\b"
+]

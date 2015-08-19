@@ -2,6 +2,7 @@ from collections import OrderedDict
 from nala.utils import MUT_CLASS_ID
 import math
 import re
+import utils.qmath
 
 
 class Dataset:
@@ -123,7 +124,7 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
-    def form_predicted_annotations(self, class_id):
+    def form_predicted_annotations(self, class_id, aggregator_function=utils.qmath.mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
         based on the values of the field predicted_label for each token.
@@ -145,16 +146,19 @@ class Dataset:
                 while index < len(sentence):
                     token = sentence[index]
                     so_far = part.text.find(token.word, so_far)
-
+                    confidence_values = []
                     if token.predicted_labels[0].value is not 'O':
                         start = so_far
+                        confidence_values.append(token.predicted_labels[0].confidence)
                         while index + 1 < len(sentence) \
                                 and sentence[index + 1].predicted_labels[0].value not in ('O', 'B', 'A'):
                             token = sentence[index + 1]
+                            confidence_values.append(token.predicted_labels[0].confidence)
                             so_far = part.text.find(token.word, so_far)
                             index += 1
                         end = so_far + len(token.word)
-                        part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end]))
+                        confidence = aggregator_function(confidence_values)
+                        part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
                     index += 1
 
     def clean_nl_definitions(self):
@@ -429,7 +433,7 @@ class Annotation:
     :type text: str
     :type subclass: int
     """
-    def __init__(self, class_id, offset, text):
+    def __init__(self, class_id, offset, text, confidence=1):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
         self.offset = offset
@@ -441,6 +445,7 @@ class Annotation:
         int flag used to further subdivide classes based on some criteria
         for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
         """
+        self.confidence = confidence
 
     equality_operator = 'exact'
     """

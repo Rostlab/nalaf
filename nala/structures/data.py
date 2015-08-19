@@ -433,6 +433,7 @@ class Annotation:
     :type offset: int
     :type text: str
     :type subclass: int
+    :type confidence: float
     """
     def __init__(self, class_id, offset, text, confidence=1):
         self.class_id = class_id
@@ -447,6 +448,7 @@ class Annotation:
         for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
         """
         self.confidence = confidence
+        """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
 
     equality_operator = 'exact'
     """

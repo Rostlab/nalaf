@@ -1,7 +1,7 @@
 from nala.features import FeatureGenerator
 
 
-class SimpleFeatureGenerator(FeatureGenerator):
+class SimpleExtendedFeatureGenerator(FeatureGenerator):
     """
     Generates BOS and EOS features
         * BOS[0] = is it at the beginning of a sentence?

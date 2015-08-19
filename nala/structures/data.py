@@ -2,8 +2,8 @@ from collections import OrderedDict
 from nala.utils import MUT_CLASS_ID
 import math
 import re
-from nala.utils.qmath import mean as average_mean
-from nala.utils.qmath import hmean
+from nala.utils.qmath import arithmetic_mean
+from nala.utils.qmath import harmonic_mean
 
 
 class Dataset:
@@ -125,7 +125,7 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
-    def form_predicted_annotations(self, class_id, aggregator_function=average_mean):
+    def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
         based on the values of the field predicted_label for each token.
@@ -160,6 +160,7 @@ class Dataset:
                         end = so_far + len(token.word)
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
+                        print(confidence, confidence_values)
                     index += 1
 
     def clean_nl_definitions(self):

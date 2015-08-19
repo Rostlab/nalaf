@@ -2,7 +2,8 @@ from collections import OrderedDict
 from nala.utils import MUT_CLASS_ID
 import math
 import re
-import nala.utils.qmath
+from nala.utils.qmath import mean as average_mean
+from nala.utils.qmath import hmean
 
 
 class Dataset:
@@ -124,7 +125,7 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
-    def form_predicted_annotations(self, class_id, aggregator_function=utils.qmath.mean):
+    def form_predicted_annotations(self, class_id, aggregator_function=average_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
         based on the values of the field predicted_label for each token.

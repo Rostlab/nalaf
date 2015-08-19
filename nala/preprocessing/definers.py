@@ -57,10 +57,13 @@ class AnkitNLDefiner(NLDefiner):
 
 
 class ExclusiveNLDefiner(NLDefiner):
-    """docstring for ExclusiveNLDefiner"""
+    """NLDefiner that uses an mixed approach of max words, regexs',
+    min words and a dictionary of probable nl words."""
+
+    # TODO implement test class
 
     def __init__(self):
-        self.max_spaces = 4
+        self.max_words = 4
         self.conventions_file = pkg_resources.resource_filename('nala.data', 'regex_st.json')
         self.tmvarregex_file = pkg_resources.resource_filename('nala.data', 'RegEx.NL')
         self.dict_nl_words_file = pkg_resources.resource_filename('nala.data', 'dict_nl_words.json')
@@ -95,7 +98,7 @@ class ExclusiveNLDefiner(NLDefiner):
                 if any(matches_custom) or any(matches_tmvar):
                     ann.subclass = 0
                     counter[0] += 1
-                elif len(ann.text.split(" ")) > self.max_spaces:
+                elif len(ann.text.split(" ")) > self.max_words:
                     # division into nl or partly nl
                     ann.subclass = 1
                     counter[1] += 1
@@ -113,7 +116,7 @@ class ExclusiveNLDefiner(NLDefiner):
 
 class SimpleExclusiveNLDefiner(NLDefiner):
     """docstring for ExclusiveNLDefiner"""
-
+    # TODO correct test class for renamed function
     def __init__(self):
         self.max_spaces = 2
         self.conventions_file = pkg_resources.resource_filename('nala.data', 'regex_st.json')

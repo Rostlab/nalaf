@@ -102,16 +102,16 @@ class ExclusiveNLDefiner(NLDefiner):
                     # division into nl or partly nl
                     ann.subclass = 1
                     counter[1] += 1
-                    print(ann.text)
+                    # print(ann.text)
                 elif len(ann.text.split(" ")) > 1 and any(matches_dict):
                     ann.subclass = 2
                     counter[2] += 1
-                    print(ann.text)
+                    # print(ann.text)
                 else:
                     ann.subclass = 0
                     counter[0] += 1
         counter.append(counter[1] + counter[2])
-        print(counter)
+        # print(counter)
 
 
 class SimpleExclusiveNLDefiner(NLDefiner):
@@ -145,7 +145,7 @@ class SimpleExclusiveNLDefiner(NLDefiner):
                     if not any(matches_custom) and not any(matches_tmvar):
                         ann.subclass = 1
                         counter[1] += 1
-                        print(ann.text)
+                        # print(ann.text)
                     else:
                         ann.subclass = 0
                         counter[0] += 1
@@ -153,7 +153,7 @@ class SimpleExclusiveNLDefiner(NLDefiner):
                     ann.subclass = 0
                     counter[0] += 1
 
-        print(counter)
+        # print(counter)
 
 
 class TmVarRegexNLDefiner(NLDefiner):

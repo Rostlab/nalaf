@@ -8,7 +8,7 @@ from nala.preprocessing.tokenizers import NLTKTokenizer
 from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader, VerspoorAnnotationReader
 from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
-from nala.preprocessing.definers import ExclusiveNLDefiner
+from nala.preprocessing.definers import ExclusiveNLDefiner, SimpleExclusiveNLDefiner
 from nala.preprocessing.definers import TmVarNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.utils.writers import StatsWriter
@@ -63,6 +63,7 @@ if __name__ == "__main__":
             exit()
 
         dataset = VerspoorReader(html_path).read()
+        ExclusiveNLDefiner().define(dataset)
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
@@ -74,7 +75,7 @@ if __name__ == "__main__":
         # ttformat.export_html()
         # ttformat.export_ann_json()
 
-        # exit()
+        exit()
 
         if args.stats_demo:
             extra_methods = 3

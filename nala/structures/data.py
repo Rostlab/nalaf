@@ -2,7 +2,7 @@ from collections import OrderedDict
 from nala.utils import MUT_CLASS_ID
 import math
 import re
-import utils.qmath
+import nala.utils.qmath
 
 
 class Dataset:

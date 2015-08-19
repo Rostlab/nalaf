@@ -1,6 +1,3 @@
-import math
-
-
 """
 These are some quick math functions. NOTE: not requiring an external package like SciPy,
 which does have those functions implemented.

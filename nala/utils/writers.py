@@ -309,10 +309,10 @@ class TagTogFormat:
 
                 for i, (partid, part) in enumerate(doc.parts.items()):
                     for ann in part.annotations:
-                        if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
-                            tagtog_part_id = "s1h{}".format(i + 1)
-                        else:
-                            tagtog_part_id = "s1p{}".format(i + 1)
+                        # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
+                        #     tagtog_part_id = "s1h{}".format(i + 1)
+                        # else:
+                        tagtog_part_id = "s1p{}".format(i + 1)
                         ent = {
                             "classId": ann.class_id,
                             "part": tagtog_part_id,

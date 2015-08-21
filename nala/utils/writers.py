@@ -207,6 +207,7 @@ class TagTogFormat:
         :return:
         """
         self.location = to_save_to
+        """ root folder, that documents are saved into """
         self.data = dataset
         """ dataset param """
         self.who = who
@@ -248,6 +249,7 @@ class TagTogFormat:
                 article = ET.SubElement(body, 'article')
 
                 section = ET.SubElement(article, 'section', { 'data-type' : 'article' } )
+                div = ET.SubElement(section, 'div', { 'class' : 'content' } )
 
                 for i, (id, part) in enumerate(doc.parts.items()):
                     # i, id, part = tuple_i
@@ -256,7 +258,7 @@ class TagTogFormat:
                     #     h2.text = part.text
                     # else:
                         # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                    p = ET.SubElement(section, 'p', { 'id' : "s1p{}".format(i + 1) } )
+                    p = ET.SubElement(div, 'p', { 'id' : "s1p{}".format(i + 1) } )
                     p.text = part.text
 
                 # print(ET.dump(html))
@@ -274,10 +276,16 @@ class TagTogFormat:
         for pubmedid, doc in self.data.documents.items():
             with(open(self.location + "export/" + pubmedid + ".ann.json", 'w', encoding='utf-8')) as f:
 
+                # conversion keys partids into normalised tagtog-compatible format
+                part_ids_raw = list(doc.parts.keys())
+                part_ids_normalised = []
+                for i, partid in enumerate(part_ids_raw):
+                    part_ids_normalised.append("s1p{}".format(i + 1))
+
                 # init empty json-object
                 json_obj = {
                     "annotatable": {
-                        # annotations go here
+                        "parts" : part_ids_normalised
                     },
                     "anncomplete": False,
                     "sources": [

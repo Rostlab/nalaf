@@ -160,7 +160,7 @@ class Dataset:
                         end = so_far + len(token.word)
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
-                        print(confidence, confidence_values)
+                        # print(confidence, confidence_values)  TODO print debug
                     index += 1
 
     def clean_nl_definitions(self):

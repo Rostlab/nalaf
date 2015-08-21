@@ -15,7 +15,5 @@ class SimpleExtendedFeatureGenerator(FeatureGenerator):
         :type dataset: nala.structures.data.Dataset
         """
         for sentence in dataset.sentences():
-            sentence[0].features['BOS'] = True
-            sentence[-1].features['EOS'] = True
-
-        # QUESTION is it ok if the rest of tokens are not defined?
+            sentence[0].features['BOS'] = 1
+            sentence[-1].features['EOS'] = 1

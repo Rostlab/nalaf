@@ -214,8 +214,9 @@ class Dataset:
 
         for pubmedid, partid, ann in self.all_annotations_with_ids():
             # abstract?
-            if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
-                # TODO #23 check for len(partid) > 7 and ... is enough for the out of index error handling
+            if regex_abstract_id.match(partid) or partid == 'abstract':
+                # NOTE added issue #80 for this
+                print(partid)
                 is_abstract = True
             else:
                 is_abstract = False

@@ -200,10 +200,14 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, to_save_to, dataset, who="ml:nala"):
+    def __init__(self, dataset, to_save_to="export", who="ml:nala", _annjson_folder="annjson", _html_folder="html"):
         """
+        init function that does prepare annjson folder and html folder
         :param to_save_to:
         :type dataset: nala.structures.data.Dataset
+        :param who:
+        :param _annjson_folder:
+        :param _html_folder:
         :return:
         """
         self.location = to_save_to
@@ -213,6 +217,22 @@ class TagTogFormat:
         self.who = who
         """ who parameter """
 
+        # check for root folder for files to save to
+        if not os.path.isdir(self.location):
+            os.mkdir(self.location)
+
+        # create subfolders if not existent
+        # annjson folder
+        self.annjson_path = os.path.join(self.location, _annjson_folder)
+        """ subfolder where ann.json files are saved into """
+        if not os.path.isdir(self.annjson_path):
+            os.mkdir(self.annjson_path)
+        # html folder
+        self.html_folder = os.path.join(self.location, _html_folder)
+        """ subfolder where html files are saved into """
+        if not os.path.isdir(self.html_folder):
+            os.mkdir(self.html_folder)
+
     def export_html(self):
         """
         Exporting Html files into folder with each html file being a document itself.
@@ -220,7 +240,9 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            with(open(self.location + "export/" + pubmedid + ".html", 'wb')) as f:
+            fname = os.path.join(self.html_folder, pubmedid + ".html")
+            print(fname)
+            with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes
 
@@ -274,7 +296,9 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            with(open(self.location + "export/" + pubmedid + ".ann.json", 'w', encoding='utf-8')) as f:
+            fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
+            print(fname)
+            with open(fname, 'w', encoding='utf-8') as f:
 
                 # conversion keys partids into normalised tagtog-compatible format
                 part_ids_raw = list(doc.parts.keys())

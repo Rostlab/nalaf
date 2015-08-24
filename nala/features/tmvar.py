@@ -1,4 +1,5 @@
 from nala.features import FeatureGenerator
+from nala.features import eval_binary_feature
 import re
 
 
@@ -70,19 +71,21 @@ class TmVarFeatureGenerator(FeatureGenerator):
             token.features['num_lo'] = self.num_lower_chars(token.word)
             token.features['num_alpha'] = self.num_alpha(token.word)
             token.features['num_spec_chars'] = self.num_spec_chars(token.word)
-            token.features['num_has_chr_key'] = self.has_chromosomal_keytokens(token.word)
             token.features['mutat_type'] = self.mutation_type(token.word)
-            token.features['mutat_word'] = self.mutation_word(token.word)
             token.features['mutat_article_bp'] = self.mutation_article_bp(token.word)
             token.features['type1'] = self.is_special_type_1(token.word)
-            token.features['type2'] = self.is_special_type_2(token.word)
-            token.features['dna_symbols'] = self.has_dna_symbols(token.word)
             token.features['protein_symbols'] = self.has_protein_symbols(token.word, last_token_str)
             token.features['rs_code'] = self.has_rscode(token.word)
             token.features['shape1'] = self.word_shape_1(token.word)
             token.features['shape2'] = self.word_shape_2(token.word)
             token.features['shape3'] = self.word_shape_3(token.word)
             token.features['shape4'] = self.word_shape_4(token.word)
+
+            # binary features
+            eval_binary_feature(token.features, 'mutat_word', self.reg_mutat_word.match, token.word.lower())
+            eval_binary_feature(token.features, 'num_has_chr_key', self.reg_chr_keys.search, token.word)
+            eval_binary_feature(token.features, 'type2', lambda x: x == 'p', token.word)
+            eval_binary_feature(token.features, 'dna_symbols', self.reg_dna_symbols.match, token.word)
 
             # prefix patterns
             for index, value in enumerate(self.prefix_pattern(token.word)):
@@ -125,9 +128,6 @@ class TmVarFeatureGenerator(FeatureGenerator):
         else:
             return None
 
-    def has_chromosomal_keytokens(self, str):
-        return "ChroKey" if self.reg_chr_keys.search(str) else None
-
     def mutation_type(self, str):
         lc_tmp = str.lower()
 
@@ -137,10 +137,6 @@ class TmVarFeatureGenerator(FeatureGenerator):
             return "MutatType"
         else:
             return None
-
-    def mutation_word(self, str):
-        lc_tmp = str.lower()
-        return "MutatWord" if self.reg_mutat_word.match(lc_tmp) else None
 
     def mutation_article_bp(self, str):
         mutat_article = ""  # NOTE is this programming ok?
@@ -165,12 +161,6 @@ class TmVarFeatureGenerator(FeatureGenerator):
             return "Type1_2"
         else:
             return None
-
-    def is_special_type_2(self, str):
-        return "Type2" if str == "p" else None
-
-    def has_dna_symbols(self, str):
-        return "DNASym" if self.reg_dna_symbols.match(str) else None
 
     def has_protein_symbols(self, str, last_str):
         uc_tmp = str  # upper case

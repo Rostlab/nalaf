@@ -380,7 +380,7 @@ class Token:
     :type word: str
     :type original_labels: list[Label]
     :type predicted_labels: list[Label]
-    :type features: dict
+    :type features: FeatureDictionary
     """
 
     def __init__(self, word):

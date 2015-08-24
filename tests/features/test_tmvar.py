@@ -1,7 +1,8 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token
+from nala.structures.data import Dataset, Document, Part, Token, FeatureDictionary
 from nala.features.tmvar import TmVarFeatureGenerator
 from nala.features import FeatureGenerator
+from nala.features import eval_binary_feature
 import re
 
 
@@ -37,7 +38,6 @@ class TmVarDefaultTest(unittest.TestCase):
         expected_nr_lo = iter(["4+", 3])
         expected_nr_alpha = iter(["4+", 3])
         expected_nr_spec_chars = iter([None, "SpecC1"])
-        expected_chr_key = iter(["ChroKey", "ChroKey"])
         # NOTE implemented as extra features
 
         for token in self.dataset.tokens():
@@ -47,7 +47,6 @@ class TmVarDefaultTest(unittest.TestCase):
             self.assertEqual(token.features['num_alpha[0]'], next(expected_nr_alpha))
             self.assertEqual(token.features['num_spec_chars[0]'], next(expected_nr_spec_chars),
                              msg="word={} | feature={}".format(token.word, token.features['num_spec_chars[0]']))
-            self.assertEqual(token.features['num_has_chr_key[0]'], next(expected_chr_key))
 
     # OPTIONAL implement separate test functions for each feature that is already implemented in test_generate
 
@@ -57,8 +56,14 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.mutation_type("der"), None)
 
     def test_mutation_word(self):
-        self.assertEqual(self.feature.mutation_word("repeats"), "MutatWord")
-        self.assertEqual(self.feature.mutation_word("repessts"), None)
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'mutat_word', self.feature.reg_mutat_word.match, 'repeats')
+        self.assertEqual(feature_dic.get('mutat_word[0]'), 1)
+
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'mutat_word', self.feature.reg_mutat_word.match, 'repssts')
+        self.assertEqual(feature_dic.get('mutat_word[0]'), None)
+
 
     def test_mutation_article_bp(self):
         self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
@@ -72,12 +77,22 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.is_special_type_1("blaaa"), None)
 
     def test_type2(self):
-        self.assertEqual(self.feature.is_special_type_2("p"), "Type2")
-        self.assertEqual(self.feature.is_special_type_2("as"), None)
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'type2', lambda x: x == 'p', 'p')
+        self.assertEqual(feature_dic.get('type2[0]'), 1)
+
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'type2', lambda x: x == 'p', 'as')
+        self.assertEqual(feature_dic.get('type2[0'), None)
 
     def test_dna_symbols(self):
-        self.assertEqual(self.feature.has_dna_symbols("A"), "DNASym")
-        self.assertEqual(self.feature.has_dna_symbols("asd"), None)
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'dna_symbols', self.feature.reg_dna_symbols.match, 'A')
+        self.assertEqual(feature_dic.get('dna_symbols[0]'), 1)
+
+        feature_dic = FeatureDictionary()
+        eval_binary_feature(feature_dic, 'dna_symbols', self.feature.reg_dna_symbols.match, 'asd')
+        self.assertEqual(feature_dic.get('dna_symbols[0]'), None)
 
     def test_protein_symbols(self):
         self.assertEqual(self.feature.has_protein_symbols("glutamine", "bla"), "ProteinSymFull")

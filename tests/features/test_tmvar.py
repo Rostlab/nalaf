@@ -37,7 +37,7 @@ class TmVarDefaultTest(unittest.TestCase):
         expected_nr_up = iter([1, 0])
         expected_nr_lo = iter(["4+", 3])
         expected_nr_alpha = iter(["4+", 3])
-        expected_nr_spec_chars = iter([None, "SpecC1"])
+        expected_nr_spec_chars = iter(["NoSpecC", "SpecC1"])
         # NOTE implemented as extra features
 
         for token in self.dataset.tokens():
@@ -69,12 +69,12 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
         self.assertEqual(self.feature.mutation_article_bp("BLUSDmb"), "Byte")
         self.assertEqual(self.feature.mutation_article_bp("Flowerpowerbp"), "bp")
-        self.assertEqual(self.feature.mutation_article_bp("the"), None)
+        self.assertEqual(self.feature.mutation_article_bp("the"), "NoMutArticle")
 
     def test_type1(self):
         self.assertEqual(self.feature.is_special_type_1("g"), "Type1")
         self.assertEqual(self.feature.is_special_type_1("orf"), "Type1_2")
-        self.assertEqual(self.feature.is_special_type_1("blaaa"), None)
+        self.assertEqual(self.feature.is_special_type_1("blaaa"), "NotSpecType1")
 
     def test_type2(self):
         feature_dic = FeatureDictionary()
@@ -99,12 +99,12 @@ class TmVarDefaultTest(unittest.TestCase):
         self.assertEqual(self.feature.has_protein_symbols("asn", "bla"), "ProteinSymTri")
         self.assertEqual(self.feature.has_protein_symbols("eu", "X"), "ProteinSymTriSub")
         self.assertEqual(self.feature.has_protein_symbols("X", "X"), "ProteinSymChar")
-        self.assertEqual(self.feature.has_protein_symbols("flowerpower", "AAA"), None)
+        self.assertEqual(self.feature.has_protein_symbols("flowerpower", "AAA"), "NoProteinSymbol")
 
     def test_rscode(self):
         self.assertEqual(self.feature.has_rscode("rs0"), "RSCode")
         self.assertEqual(self.feature.has_rscode("rs"), "RSCode")
-        self.assertEqual(self.feature.has_rscode("rsssss"), None)
+        self.assertEqual(self.feature.has_rscode("rsssss"), "NoRSCode")
 
     def test_shape1(self):
         self.assertEqual(self.feature.word_shape_1("Bs0ssaDB2"), "Aa0aaaAA0")

@@ -62,20 +62,19 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = VerspoorReader(html_path).read()
-        ExclusiveNLDefiner().define(dataset)
+        dataset = HTMLReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        # VerspoorAnnotationReader(ann_path).annotate(dataset)
+        AnnJsonAnnotationReader(ann_path).annotate(dataset)
 
         # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset, who="user:verspoor")
         # ttformat.export_html()
         # ttformat.export_ann_json()
 
-        exit()
+        # exit()
 
         if args.stats_demo:
             extra_methods = 3

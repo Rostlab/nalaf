@@ -200,17 +200,38 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, to_save_to, dataset, who="ml:nala"):
+    def __init__(self, dataset, to_save_to="export", who="ml:nala", _annjson_folder="annjson", _html_folder="html"):
         """
+        init function that does prepare annjson folder and html folder
         :param to_save_to:
         :type dataset: nala.structures.data.Dataset
+        :param who:
+        :param _annjson_folder:
+        :param _html_folder:
         :return:
         """
         self.location = to_save_to
+        """ root folder, that documents are saved into """
         self.data = dataset
         """ dataset param """
         self.who = who
         """ who parameter """
+
+        # check for root folder for files to save to
+        if not os.path.isdir(self.location):
+            os.mkdir(self.location)
+
+        # create subfolders if not existent
+        # annjson folder
+        self.annjson_path = os.path.join(self.location, _annjson_folder)
+        """ subfolder where ann.json files are saved into """
+        if not os.path.isdir(self.annjson_path):
+            os.mkdir(self.annjson_path)
+        # html folder
+        self.html_folder = os.path.join(self.location, _html_folder)
+        """ subfolder where html files are saved into """
+        if not os.path.isdir(self.html_folder):
+            os.mkdir(self.html_folder)
 
     def export_html(self):
         """
@@ -219,7 +240,9 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            with(open(self.location + "export/" + pubmedid + ".html", 'wb')) as f:
+            fname = os.path.join(self.html_folder, pubmedid + ".html")
+            print(fname)
+            with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes
 
@@ -248,6 +271,7 @@ class TagTogFormat:
                 article = ET.SubElement(body, 'article')
 
                 section = ET.SubElement(article, 'section', { 'data-type' : 'article' } )
+                div = ET.SubElement(section, 'div', { 'class' : 'content' } )
 
                 for i, (id, part) in enumerate(doc.parts.items()):
                     # i, id, part = tuple_i
@@ -256,7 +280,7 @@ class TagTogFormat:
                     #     h2.text = part.text
                     # else:
                         # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                    p = ET.SubElement(section, 'p', { 'id' : "s1p{}".format(i + 1) } )
+                    p = ET.SubElement(div, 'p', { 'id' : "s1p{}".format(i + 1) } )
                     p.text = part.text
 
                 # print(ET.dump(html))
@@ -272,12 +296,20 @@ class TagTogFormat:
         :return:
         """
         for pubmedid, doc in self.data.documents.items():
-            with(open(self.location + "export/" + pubmedid + ".ann.json", 'w', encoding='utf-8')) as f:
+            fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
+            print(fname)
+            with open(fname, 'w', encoding='utf-8') as f:
+
+                # conversion keys partids into normalised tagtog-compatible format
+                part_ids_raw = list(doc.parts.keys())
+                part_ids_normalised = []
+                for i, partid in enumerate(part_ids_raw):
+                    part_ids_normalised.append("s1p{}".format(i + 1))
 
                 # init empty json-object
                 json_obj = {
                     "annotatable": {
-                        # annotations go here
+                        "parts" : part_ids_normalised
                     },
                     "anncomplete": False,
                     "sources": [
@@ -301,10 +333,10 @@ class TagTogFormat:
 
                 for i, (partid, part) in enumerate(doc.parts.items()):
                     for ann in part.annotations:
-                        if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
-                            tagtog_part_id = "s1h{}".format(i + 1)
-                        else:
-                            tagtog_part_id = "s1p{}".format(i + 1)
+                        # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
+                        #     tagtog_part_id = "s1h{}".format(i + 1)
+                        # else:
+                        tagtog_part_id = "s1p{}".format(i + 1)
                         ent = {
                             "classId": ann.class_id,
                             "part": tagtog_part_id,

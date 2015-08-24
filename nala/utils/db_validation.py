@@ -3,6 +3,7 @@ import json
 import glob
 import re
 from bs4 import BeautifulSoup
+import sys
 from nala.utils import MUT_CLASS_ID
 
 
@@ -73,6 +74,7 @@ def check_db_integrity(documents):
     Check documents-object for offsets annotations.
     Logs some information if Errors exist.
     """
+    counter = 0
     wrong_pmid_list = []
     for pubmedid, doc in documents.items():
         if has_annotations(doc):
@@ -97,6 +99,7 @@ def check_db_integrity(documents):
                         if orig_string != cut_string:
                             if pubmedid not in wrong_pmid_list:
                                 wrong_pmid_list.append(pubmedid)
+                            counter += 1
                             print("ID:", pubmedid, ", part_id:", part_id)
                             print("org_string:", orig_string)
                             print("cut_string:", cut_string)
@@ -106,12 +109,15 @@ def check_db_integrity(documents):
                             print("TEXT\n", part['text'])
                             print("------\n")
 
-    print("\n\n")
-    print("WHOLE DOCUMENTS:")
-    for pubmedid in wrong_pmid_list:
-        print("PubMed-ID:", pubmedid + "\n")
-        print(json.dumps(documents[pubmedid], indent=4, sort_keys=True))
-        print("\n")
+    if counter > 0:
+        print("\n\n")
+        print("WHOLE DOCUMENTS:")
+        for pubmedid in wrong_pmid_list:
+            print("PubMed-ID:", pubmedid + "\n")
+            print(json.dumps(documents[pubmedid], indent=4, sort_keys=True))
+            print("\n")
+    else:
+        print("Integrity at 100 % !")
 
 
 def has_annotations(doc):
@@ -123,4 +129,4 @@ def has_annotations(doc):
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1], sys.argv[2])

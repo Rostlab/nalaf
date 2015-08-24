@@ -126,7 +126,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         elif self.reg_char_slashes.search(str):
             return "SpecC5"
         else:
-            return None
+            return "NoSpecC"
 
     def mutation_type(self, str):
         lc_tmp = str.lower()
@@ -150,7 +150,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         elif self.reg_mutat_basepair.search(lc_tmp):
             mutat_article = "bp"
         else:
-            mutat_article = None
+            mutat_article = "NoMutArticle"
 
         return mutat_article
 
@@ -160,7 +160,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         elif self.reg_type12.match(str):
             return "Type1_2"
         else:
-            return None
+            return "NotSpecType1"
 
     def has_protein_symbols(self, str, last_str):
         uc_tmp = str  # upper case
@@ -175,7 +175,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         elif self.reg_prot_symbols4.match(uc_tmp):
             return "ProteinSymChar"
         else:
-            return None
+            return "NoProteinSymbol"
 
     def has_rscode(self, str):
         if self.reg_rs_code1.match(str):
@@ -183,7 +183,7 @@ class TmVarFeatureGenerator(FeatureGenerator):
         elif self.reg_rs_code2.match(str):
             return "RSCode"
         else:
-            return None
+            return "NoRSCode"
 
     def word_shape_1(self, str):
         if not self.reg_spec_chars.match(str):

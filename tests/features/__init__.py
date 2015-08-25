@@ -20,7 +20,7 @@ class TestBinaryFeatureWrapper(unittest.TestCase):
         self.assertEqual(feature_dict.get('name[0]'), None)
         self.assertEqual(len(feature_dict), 0)
 
-    def test_labmda_evaluator(self):
+    def test_lambda_evaluator(self):
         feature_dict = FeatureDictionary()
         eval_binary_feature(feature_dict, 'name', lambda x: x == 'ABC', 'ABC')
         self.assertEqual(feature_dict.get('name[0]'), 1)

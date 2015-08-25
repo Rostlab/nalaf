@@ -41,5 +41,6 @@ class TestBinaryFeatureWrapper(unittest.TestCase):
         self.assertEqual(feature_dict.get('name[0]'), None)
         self.assertEqual(len(feature_dict), 0)
 
+
 if __name__ == '__main__':
     unittest.main()

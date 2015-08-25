@@ -37,22 +37,34 @@ class TmVarDefaultTest(unittest.TestCase):
         doc_1.parts['part_1'] = part_1
 
         exact_1 = Annotation(MUT_CLASS_ID, 5, 'aaaa')
+        exact_1.subclass = 1
         exact_2 = Annotation(MUT_CLASS_ID, 55, 'ffff')
+        exact_2.subclass = 2
         exact_3 = Annotation(MUT_CLASS_ID, 75, 'hhhh')
+        exact_3.subclass = 2
 
         overlap_1_1 = Annotation(MUT_CLASS_ID, 25, 'cccc')
+        overlap_1_1.subclass = 1
         overlap_1_2 = Annotation(MUT_CLASS_ID, 26, 'cc')
+        overlap_1_2.subclass = 1
 
         overlap_2_1 = Annotation(MUT_CLASS_ID, 32, '.. ddd')
+        overlap_2_1.subclass = 2
         overlap_2_2 = Annotation(MUT_CLASS_ID, 36, 'ddd ...')
+        overlap_2_2.subclass = 2
 
         overlap_3_1 = Annotation(MUT_CLASS_ID, 65, 'gggg')
+        overlap_3_1.subclass = 1
         overlap_3_2 = Annotation(MUT_CLASS_ID, 62, '.. gggg ..')
+        overlap_3_2.subclass = 2
 
         missing_1 = Annotation('e2', 45, 'eeee')
+        missing_1.subclass = 1
         missing_2 = Annotation('e2', 84, 'jjjj')
+        missing_2.subclass = 1
 
         spurios = Annotation('e2', 15, 'bbbb')
+        spurios.subclass = 1
 
         part_1.annotations = [exact_1, exact_2, exact_3, overlap_1_1, overlap_2_1, overlap_3_1, missing_1, missing_2]
         part_1.predicted_annotations = [exact_1, exact_2, exact_3, overlap_1_2, overlap_2_2, overlap_3_2, spurios]
@@ -109,6 +121,21 @@ class TmVarDefaultTest(unittest.TestCase):
         evaluator = MentionLevelEvaluator(strictness='not valid')
 
         self.assertRaises(ValueError, evaluator.evaluate, self.dataset)
+
+    def test_subclass_analysis(self):
+        evaluator = MentionLevelEvaluator(strictness='exact', subclass_analysis=True)
+        subclass_counts, *_ = evaluator.evaluate(self.dataset)
+        self.assertEqual(subclass_counts[1]['tp'], 1)
+        self.assertEqual(subclass_counts[2]['tp'], 2)
+
+        self.assertEqual(subclass_counts[1]['fp'], 2)
+        self.assertEqual(subclass_counts[2]['fp'], 2)
+
+        self.assertEqual(subclass_counts[1]['fn'], 4)
+        self.assertEqual(subclass_counts[2]['fn'], 1)
+
+        self.assertEqual(subclass_counts[1]['tp_overlapping'], 1)
+        self.assertEqual(subclass_counts[2]['tp_overlapping'], 1)
 
 
 if __name__ == '__main__':

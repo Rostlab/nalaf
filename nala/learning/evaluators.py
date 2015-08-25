@@ -115,7 +115,10 @@ class MentionLevelEvaluator(Evaluator):
                 self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['tp_overlapping'])
             print('TOTAL'.ljust(14), end='\t')
 
-        return self.__calc_measures(tp, fp, fn, tp_overlapping)
+        if self.subclass_analysis:
+            return subclass_counts, self.__calc_measures(tp, fp, fn, tp_overlapping)
+        else:
+            return self.__calc_measures(tp, fp, fn, tp_overlapping)
 
     @staticmethod
     def __safe_division(nominator, denominator):

@@ -51,9 +51,6 @@ class MentionLevelEvaluator(Evaluator):
         Can be used only with strictness='exact'
         """
 
-        if strictness in ('overlapping', 'half_overlapping') and subclass_analysis:
-            raise ValueError('subclass analysis with {} strictness is not defined'.format(strictness))
-
     def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
@@ -71,11 +68,15 @@ class MentionLevelEvaluator(Evaluator):
         Also prints the value of the calculated precision, recall, F1 measure
         as well as the value of the parameter 'strictness'.
         """
-        # find all possible subclasses
-        subclasses = set(ann.subclass for ann in dataset.annotations())
-        subclasses.update(ann.subclass for ann in dataset.predicted_annotations())
-        # initialize counts to zero for each subclass
-        subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'tp_overlapping'], 0) for subclass in subclasses}
+        tp, fp, fn, tp_overlapping = 0, 0, 0, 0
+
+        if self.subclass_analysis:
+            # find all possible subclasses
+            subclasses = set(ann.subclass for ann in dataset.annotations())
+            subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations()))
+            # initialize counts to zero for each subclass
+            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'tp_overlapping'], 0)
+                               for subclass in subclasses}
 
         for doc in dataset:
             for part in doc:
@@ -86,31 +87,33 @@ class MentionLevelEvaluator(Evaluator):
                 Annotation.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
                     if ann in part.annotations:
-                        subclass_counts[ann.subclass]['tp'] += 1
+                        tp += 1
+                        if self.subclass_analysis:
+                            subclass_counts[ann.subclass]['tp'] += 1
                     else:
-                        subclass_counts[ann.subclass]['fp'] += 1
+                        fp += 1
+                        if self.subclass_analysis:
+                            subclass_counts[ann.subclass]['fp'] += 1
 
                 for ann in part.annotations:
                     if ann not in part.predicted_annotations:
-                        subclass_counts[ann.subclass]['fn'] += 1
+                        fn += 1
+                        if self.subclass_analysis:
+                            subclass_counts[ann.subclass]['fn'] += 1
 
                 Annotation.equality_operator = 'overlapping'
                 for ann_a in part.annotations:
                     for ann_b in part.predicted_annotations:
                         if ann_a == ann_b:
-                            subclass_counts[ann_a.subclass]['tp_overlapping'] += 1
+                            tp_overlapping += 1
+                            if self.subclass_analysis and ann_a.subclass == ann_b.subclass:
+                                subclass_counts[ann_a.subclass]['tp_overlapping'] += 1
 
         if self.subclass_analysis:
             for subclass, counts in subclass_counts.items():
-                print('SUBCLASS {}'.format(subclass))
+                print('SUBCLASS {:4}'.format(subclass), end='\t')
                 self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['tp_overlapping'])
-            print('TOTAL')
-
-        # sum the counts for each subclass before calculating the measures
-        tp = sum(counts['tp'] for counts in subclass_counts.values())
-        fp = sum(counts['fp'] for counts in subclass_counts.values())
-        fn = sum(counts['fn'] for counts in subclass_counts.values())
-        tp_overlapping = sum(counts['tp_overlapping'] for counts in subclass_counts.values())
+            print('TOTAL'.ljust(14), end='\t')
 
         return self.__calc_measures(tp, fp, fn, tp_overlapping)
 
@@ -143,7 +146,7 @@ class MentionLevelEvaluator(Evaluator):
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
         print_verbose('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} '
-                .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
+                      .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
 
         print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
               .format(precision, recall, f_measure, self.strictness))

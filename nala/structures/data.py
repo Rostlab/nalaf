@@ -162,6 +162,25 @@ class Dataset:
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
                     index += 1
 
+    def generate_top_stats_array(self, top_nr=10):
+        """
+        An array for most occuring words.
+        :param top_nr: how many top words are shown
+        """
+        # NOTE ambiguos words?
+        # TODO lowercase
+        raw_dict = {}
+        for token in self.tokens():
+            lc_word = token.word.lower()
+            if lc_word not in raw_dict:
+                raw_dict[lc_word] = 1
+            else:
+                raw_dict[lc_word] += 1
+
+        # sort by highest number
+        sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1]))
+        print(sort_dict)
+
     def clean_nl_definitions(self):
         """
         cleans all subclass = True to = False

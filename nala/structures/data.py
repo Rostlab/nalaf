@@ -365,6 +365,12 @@ class Document:
 
         return math.log2(lettres)*parts
 
+    def get_text(self):
+        text = ""
+        for _, part in self.parts.items():
+            text += part.text.rstrip().replace("\n", " ")
+        return text
+
 
 class Part:
     """

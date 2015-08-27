@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import json
 from nala.utils import MUT_CLASS_ID
 import math
 import re
@@ -162,24 +163,27 @@ class Dataset:
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
                     index += 1
 
-    def generate_top_stats_array(self, top_nr=10):
+    def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
         """
         An array for most occuring words.
         :param top_nr: how many top words are shown
         """
         # NOTE ambiguos words?
-        # TODO lowercase
+
         raw_dict = {}
-        for token in self.tokens():
-            lc_word = token.word.lower()
-            if lc_word not in raw_dict:
-                raw_dict[lc_word] = 1
-            else:
-                raw_dict[lc_word] += 1
+
+        for ann in self.annotations():
+            for word in ann.text.split(" "):
+                lc_word = word.lower()
+                if lc_word.isalpha() and ann.class_id == class_id:
+                    if lc_word not in raw_dict:
+                        raw_dict[lc_word] = 1
+                    else:
+                        raw_dict[lc_word] += 1
 
         # sort by highest number
-        sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1]))
-        print(sort_dict)
+        sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True ))
+        print(json.dumps(sort_dict, indent=4))
 
     def clean_nl_definitions(self):
         """
@@ -187,6 +191,10 @@ class Dataset:
         """
         for ann in self.annotations():
             ann.subclass = False
+
+    def __repr__(self):
+        # TODO properly implement repr of dataset (need to implement dependent types as well)
+        return "Dataset({0} documents and {1} annotations)".format(len(self.documents), sum(1 for _ in self.annotations()))
 
     def stats(self):
         """

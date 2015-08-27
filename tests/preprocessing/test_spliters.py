@@ -1,13 +1,23 @@
 import unittest
-
-class TestSplitter(unittest.TestCase):
-    def test_split(self):
-        pass  # TODO
+from nala.structures.data import Dataset, Document, Part
+from nala.preprocessing.spliters import NLTKSplitter
 
 
 class TestNLTKSplitter(unittest.TestCase):
+    @classmethod
+    def set_up_class(cls):
+        cls.dataset = Dataset()
+        doc = Document()
+        part = Part('This is one sentence. This is another one.\n This is the third one; here continues.')
+        cls.dataset.documents['doc_1'] = doc
+        doc.parts['part_1'] = part
+
     def test_split(self):
-        pass  # TODO
+        NLTKSplitter().split(self.dataset)
+        sentences = list(self.dataset.sentences())
+        expected = [['This is one sentence.'], ['This is another one.'], ['This is the third one; here continues.']]
+        self.assertEqual(sentences, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

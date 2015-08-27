@@ -19,7 +19,7 @@ from nala.learning.crfsuite import CRFSuite
 
 import nala.utils.db_validation as dbcheck
 from nala.utils.writers import TagTogFormat
-
+from utils.dataset_selection import RegexSelector, TmVarRegexCombinedSelector
 
 if __name__ == "__main__":
     config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \
@@ -62,19 +62,19 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = HTMLReader(html_path).read()
+        dataset = TmVarReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+        # AnnJsonAnnotationReader(ann_path).annotate(dataset)
 
         # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset, who="user:verspoor")
         # ttformat.export_html()
         # ttformat.export_ann_json()
-
-        # exit()
+        TmVarRegexCombinedSelector().define(dataset)
+        exit()
 
         if args.stats_demo:
             extra_methods = 3

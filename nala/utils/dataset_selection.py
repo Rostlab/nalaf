@@ -139,25 +139,23 @@ class TmVarRegexCombinedSelector(NLMentionSelector):
             if doc_id in tm_var:
                 text = tm_var[doc_id]['text']
                 denotations = tm_var[doc_id]['denotations']
+                regex_text = doc.get_text()
 
                 # if text not the same as in dataset so offsets would be faulty
                 if len(text) != len(doc.get_text()):
                     # FIXME what to do with non-comparable text?
                     continue
 
-                # denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
-
                 char_counter = 0
-                for part_id, part in doc.parts.items():
-                    print(part_id)
-                    print(part.text)
-                    print("===")
-                    results = [one.finditer(part.text) for one in regex_dict]
-                    if any(results):
-                        for results_word in results:
-                            for result in results_word:
-                                # print(result.start(), result.end())
-                                if not any((int(d['span']['begin']) >= result.start() and int(d['span']['begin']) <= result.end()) for d in denotations):
-                                    print(result)
-                    print("======")
-                    char_counter += len(part.text)
+
+                results = [one.finditer(regex_text) for one in regex_dict]
+                if any(results):
+                    for results_word in results:
+                        for result in results_word:
+                            print([d['span']['begin'] for d in denotations])
+                            if not any((int(d['span']['begin']) >= result.start() and int(d['span']['begin']) <= result.end()) for d in denotations):
+                                # print("Y")
+                                pass
+                            else:
+                                print("N")
+                print("======")

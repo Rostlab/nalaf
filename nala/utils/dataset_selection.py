@@ -105,6 +105,10 @@ class TmVarRegexCombinedSelector(NLMentionSelector):
     if not tmvar and found by regex, then nl mention.
     """
     def define(self, dataset):
+        with open(pkg_resources.resource_filename('nala.data', 'nl_regex_words.json'), 'r', encoding='utf-8') as f:
+            regex_list = json.load(f)
+            regex_dict = [re.compile(x, re.IGNORECASE) for x in regex_list]
+
         if os.path.isfile('cache.json'):
             tm_var = json.load(open('cache.json'))
         else:
@@ -127,23 +131,33 @@ class TmVarRegexCombinedSelector(NLMentionSelector):
             with open('cache.json', 'w') as file:
                 file.write(json.dumps(tm_var, indent=4))
 
+        counter = 0
         for doc_id, doc in dataset.documents.items():
+            counter += 1
+            if counter > 10:
+                break
             if doc_id in tm_var:
-                denotations = tm_var[doc_id]['denotations']
                 text = tm_var[doc_id]['text']
-                print("===TMVAR===")
-                print(text)
-                print("===DATA===")
-                print(doc.get_text())
-                denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
-                #
-                # for part_id, part in doc.parts.items():
-                #     print(part_id)
-                #     print(part.text)
-                #     print("===")
-                #     results = [one.finditer(part.text) for one in regex_dict]
-                #     if any(results):
-                #         for results_word in results:
-                #             for result in results_word:
-                #                 print(result.start(), result.end())
-                #     print("======")
+                denotations = tm_var[doc_id]['denotations']
+
+                # if text not the same as in dataset so offsets would be faulty
+                if len(text) != len(doc.get_text()):
+                    # FIXME what to do with non-comparable text?
+                    continue
+
+                # denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
+
+                char_counter = 0
+                for part_id, part in doc.parts.items():
+                    print(part_id)
+                    print(part.text)
+                    print("===")
+                    results = [one.finditer(part.text) for one in regex_dict]
+                    if any(results):
+                        for results_word in results:
+                            for result in results_word:
+                                # print(result.start(), result.end())
+                                if not any((int(d['span']['begin']) >= result.start() and int(d['span']['begin']) <= result.end()) for d in denotations):
+                                    print(result)
+                    print("======")
+                    char_counter += len(part.text)

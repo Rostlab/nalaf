@@ -86,38 +86,39 @@ class TmVarLabeler(Labeler):
         # T
         self.label_type = re.compile('(del|ins|dup|tri|qua|con|delins|indel)')
         # F
-        self.label_frameshift = re.compile('(fs|fsX|fsx)')
+        self.label_frameshift = re.compile('^(fs|fsX|fsx)$')
         # R
-        self.label_snip = re.compile('^(rs|RS|Rs)')
+        self.label_snip = re.compile('^(rs|RS|Rs)$')
 
         # W or M (wild type or mutant)
-        self.dna_symbols = re.compile('^[ATCGUatcgu]$')
+        self.dna_symbols = re.compile('^[ATCGUatcgu]+$')
         self.protein_symbols = re.compile('(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|'
                                           'aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|'
                                           'asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|'
                                           'tyrosine|stop|frameshift)|(^(cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|'
-                                          'ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$)|(^[CISQMNPKDTFAGHLRWVEYX]$)')
+                                          'ala|gly|his|leu|arg|trp|val|glu|tyr|fs|fsx)$)|(^[cisqmnpkdtfaghlrwveyx]$)')
 
         # P or S (mutation_position or frameshift_position)
-        self.position = re.compile('[0-9]+')
+        self.position = re.compile('^[0-9]+$')
 
     def _match_regex_label(self, previous_token, token):
-        if self.label_reference_sequence.match(token.word):
+        if self.label_reference_sequence.search(token.word):
             token.original_labels[0].value = 'A'  # Reference sequence
-        elif self.label_type.match(token.word):
+        elif self.label_type.search(token.word):
             token.original_labels[0].value = 'T'  # Mutation type
-        elif self.label_frameshift.match(token.word):
+        elif self.label_frameshift.search(token.word):
             token.original_labels[0].value = 'F'  # Frame shift
         elif previous_token is not None and previous_token.original_labels[0].value is 'F' and token.word is 'X':
             token.original_labels[0].value = 'F'  # Frame shift
-        elif self.label_snip.match(token.word):
+        elif self.label_snip.search(token.word):
             token.original_labels[0].value = 'R'  # SNP
-        elif self.dna_symbols.match(token.word) or self.protein_symbols.match(token.word):
-            if previous_token is not None and self.position.match(previous_token.word):
+        elif self.dna_symbols.search(token.word) or self.protein_symbols.search(token.word.lower()):
+            if previous_token is not None \
+                    and (self.position.search(previous_token.word) or self.label_type.search(previous_token.word)):
                 token.original_labels[0].value = 'M'  # Mutant
             else:
                 token.original_labels[0].value = 'W'  # Wild type
-        elif self.position.match(token.word):
+        elif self.position.search(token.word):
             if previous_token is not None and previous_token.original_labels[0].value == 'F':
                 token.original_labels[0].value = 'S'  # Frame shift position
             else:

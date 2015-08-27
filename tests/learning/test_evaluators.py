@@ -4,26 +4,7 @@ from nala.learning.evaluators import Evaluator, MentionLevelEvaluator
 from nala.utils import MUT_CLASS_ID
 
 
-class TestEvaluator(unittest.TestCase):
-    def test_evaluate(self):
-        pass  # TODO
-
-
 class TestMentionLevelEvaluator(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
-
-    def test_evaluate(self):
-        pass  # TODO
-
-    def test_safe_division(self):
-        pass  # TODO
-
-    def test_calc_measures(self):
-        pass  # TODO
-
-
-class TmVarDefaultTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # create a sample dataset to test
@@ -136,7 +117,6 @@ class TmVarDefaultTest(unittest.TestCase):
 
         self.assertEqual(subclass_counts[1]['tp_overlapping'], 1)
         self.assertEqual(subclass_counts[2]['tp_overlapping'], 1)
-
 
 if __name__ == '__main__':
     unittest.main()

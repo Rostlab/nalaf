@@ -5,7 +5,7 @@ import sys
 from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader, VerspoorAnnotationReader
+from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader
 from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
 from nala.preprocessing.definers import TmVarRegexNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner, SimpleExclusiveNLDefiner

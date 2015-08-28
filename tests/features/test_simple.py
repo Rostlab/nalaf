@@ -6,8 +6,8 @@ from nala.features.simple import SimpleFeatureGenerator, SentenceMarkerFeatureGe
 class TestSimpleFeatureGenerator(unittest.TestCase):
     def setUp(self):
         part = Part('Word1 word2 word3. Word4 word5 word6.')
-        part.sentences = [[Token('Word1'), Token('word2'), Token('word3')],
-                          [Token('Word4'), Token('word5'), Token('word6')]]
+        part.sentences = [[Token('Word1', 0), Token('word2', 6), Token('word3', 12)],
+                          [Token('Word4', 19), Token('word5', 25), Token('word6', 31)]]
 
         self.dataset = Dataset()
         self.dataset.documents['doc_1'] = Document()

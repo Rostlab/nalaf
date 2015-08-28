@@ -92,8 +92,9 @@ class TestMentionLevel(unittest.TestCase):
         # create a sample dataset to test
         cls.dataset = Dataset()
         part = Part('some text c.A100G p.V100Q some text')
-        part.sentences = [[Token('some'), Token('text'), Token('c'), Token('.'), Token('A'), Token('100'), Token('G'),
-                           Token('p'), Token('.'), Token('V'), Token('100'), Token('Q'), Token('some'), Token('text')]]
+        part.sentences = [[Token('some', 0), Token('text', 5), Token('c', 10), Token('.', 11), Token('A', 12),
+                           Token('100', 13), Token('G', 16), Token('p', 18), Token('.', 19), Token('V', 20),
+                           Token('100', 21), Token('Q', 24), Token('some', 26), Token('text', 31)]]
 
         predicted_labels = ['O', 'O', 'B', 'I', 'I', 'I', 'E', 'A', 'I', 'I', 'I', 'E', 'O', 'O']
 
@@ -104,8 +105,8 @@ class TestMentionLevel(unittest.TestCase):
         cls.dataset.documents['doc_1'].parts['p1'] = part
 
         part = Part('test edge case DNA A927B test')
-        part.sentences = [[Token('test'), Token('edge'), Token('case'), Token('DNA'),
-                           Token('A'), Token('927'), Token('B'), Token('test')]]
+        part.sentences = [[Token('test', 0), Token('edge', 5), Token('case', 10), Token('DNA', 15),
+                           Token('A', 19), Token('927', 20), Token('B', 23), Token('test', 25)]]
 
         predicted_labels = ['O', 'O', 'O', 'O', 'M', 'P', 'M', 'O']
 

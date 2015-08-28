@@ -18,8 +18,8 @@ class TmVarDefaultTest(unittest.TestCase):
 
         doc_id1 = Document()
         # 15 tokens in 2 sentences
-        doc_id1.parts['p1'] = Part('one ')
-        doc_id1.parts['p1'].sentences = [[Token('insertionefsA'), Token('dup23.23')]]
+        doc_id1.parts['p1'] = Part('insertionefsA dup23.23')
+        doc_id1.parts['p1'].sentences = [[Token('insertionefsA', 0), Token('dup23.23', 14)]]
         cls.dataset.documents['doc_id1'] = doc_id1
 
         cls.feature = TmVarFeatureGenerator()

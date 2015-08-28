@@ -274,7 +274,6 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            so_far = 0
             matches = {}
 
             for index, pattern in enumerate(self.patterns):
@@ -284,9 +283,8 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
 
             for sentence in part.sentences:
                 for token in sentence:
-                    token_start = part.text.find(token.word, so_far)
+                    token_start = token.start
                     token_end = token_start + len(token.word)
-                    so_far = token_end
 
                     for match_index, match in matches.items():
                         name = 'pattern{}'.format(match_index)

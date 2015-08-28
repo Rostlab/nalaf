@@ -39,20 +39,17 @@ class BIOLabeler(Labeler):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            so_far = 0
             for sentence in part.sentences:
                 for token in sentence:
-                    token_start = part.text.find(token.word, so_far)
-                    so_far = token_start + len(token.word)
                     token.original_labels = [Label('O')]
 
                     for ann in part.annotations:
                         start = ann.offset
                         end = ann.offset + len(ann.text)
-                        if start == token_start:
+                        if start == token.start:
                             token.original_labels[0].value = 'B-{}'.format(ann.class_id)
                             break
-                        elif start < token_start < end:
+                        elif start < token.start < end:
                             token.original_labels[0].value = 'I-{}'.format(ann.class_id)
                             break
 
@@ -132,18 +129,15 @@ class TmVarLabeler(Labeler):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            so_far = 0
             previous_token = None
             for sentence in part.sentences:
                 for token in sentence:
-                    token_start = part.text.find(token.word, so_far)
-                    so_far = token_start + len(token.word)
                     token.original_labels = [Label('O')]
 
                     for ann in part.annotations:
                         start = ann.offset
                         end = ann.offset + len(ann.text)
-                        if start == token_start or start < token_start < end:
+                        if start == token.start or start < token.start < end:
                             if ann.class_id == MUT_CLASS_ID:
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
@@ -169,22 +163,19 @@ class BIEOLabeler(Labeler):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            so_far = 0
             previous_token = None
             for sentence in part.sentences:
                 for token in sentence:
-                    token_start = part.text.find(token.word, so_far)
-                    so_far = token_start + len(token.word)
                     token.original_labels = [Label('O')]
 
                     for ann in part.annotations:
                         start = ann.offset
                         end = ann.offset + len(ann.text)
-                        if start == token_start:
+                        if start == token.start:
                             token.original_labels[0].value = 'B-{}'.format(ann.class_id)
                             previous_token = token
                             break
-                        elif start < token_start < end:
+                        elif start < token.start < end:
                             token.original_labels[0].value = 'I-{}'.format(ann.class_id)
                             previous_token = token
                             break

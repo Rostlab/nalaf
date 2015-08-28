@@ -142,25 +142,20 @@ class Dataset:
         Requires predicted_label[0].value for each token to be set.
         """
         for part_id, part in self.partids_with_parts():
-            so_far = 0
             for sentence in part.sentences:
                 index = 0
                 while index < len(sentence):
                     token = sentence[index]
-                    token_start = part.text.find(token.word, so_far)
-                    so_far = token_start + len(token.word)
                     confidence_values = []
                     if token.predicted_labels[0].value is not 'O':
-                        start = token_start
+                        start = token.start
                         confidence_values.append(token.predicted_labels[0].confidence)
                         while index + 1 < len(sentence) \
                                 and sentence[index + 1].predicted_labels[0].value not in ('O', 'B', 'A'):
                             token = sentence[index + 1]
                             confidence_values.append(token.predicted_labels[0].confidence)
-                            token_start = part.text.find(token.word, so_far)
-                            so_far = token_start + len(token.word)
                             index += 1
-                        end = token_start + len(token.word)
+                        end = token.start + len(token.word)
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
                     index += 1
@@ -419,9 +414,11 @@ class Token:
     :type features: FeatureDictionary
     """
 
-    def __init__(self, word):
+    def __init__(self, word, start):
         self.word = word
         """string value of the token, usually a single word"""
+        self.start = start
+        """start offset of the token in the original text"""
         self.original_labels = None
         """the original labels for the token as assigned by some implementation of Labeler"""
         self.predicted_labels = None

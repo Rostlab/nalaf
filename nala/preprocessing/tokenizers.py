@@ -28,7 +28,13 @@ class NLTKTokenizer(Tokenizer):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            part.sentences = [[Token(word) for word in word_tokenize(sentence)] for sentence in part.sentences]
+            so_far = 0
+            for index, sentence in enumerate(part.sentences):
+                part.sentences[index] = []
+                for token_word in word_tokenize(sentence):
+                    token_start = part.text.find(token_word, so_far)
+                    so_far = token_start + len(token_word)
+                    part.sentences[index].append(Token(token_word, token_start))
 
 
 class TmVarTokenizer(Tokenizer):
@@ -41,6 +47,7 @@ class TmVarTokenizer(Tokenizer):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
+            so_far = 0
             for index, sentence in enumerate(part.sentences):
                 sentence = re.sub('([0-9])([A-Za-z])', r'\1 \2', sentence)
                 sentence = re.sub('([A-Z])([a-z])', r'\1 \2', sentence)
@@ -49,4 +56,8 @@ class TmVarTokenizer(Tokenizer):
                 sentence = re.sub('([a-z])(fs)', r'\1 \2', sentence)
                 sentence = re.sub('([\W\-_])', r' \1 ', sentence)
 
-                part.sentences[index] = [Token(token) for token in sentence.split()]#18
+                part.sentences[index] = []
+                for token_word in sentence.split():
+                    token_start = part.text.find(token_word, so_far)
+                    so_far = token_start + len(token_word)
+                    part.sentences[index].append(Token(token_word, token_start))

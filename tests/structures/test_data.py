@@ -95,13 +95,24 @@ class TestMentionLevel(unittest.TestCase):
         part.sentences = [[Token('some'), Token('text'), Token('c'), Token('.'), Token('A'), Token('100'), Token('G'),
                            Token('p'), Token('.'), Token('V'), Token('100'), Token('Q'), Token('some'), Token('text')]]
 
-        predicted_labels = ['O', 'O', 'B', 'I', 'I', 'I', 'E', 'B', 'I', 'I', 'I', 'E', 'O', 'O']
+        predicted_labels = ['O', 'O', 'B', 'I', 'I', 'I', 'E', 'A', 'I', 'I', 'I', 'E', 'O', 'O']
 
         for index, label in enumerate(predicted_labels):
             part.sentences[0][index].predicted_labels = [Label(label)]
 
         cls.dataset.documents['doc_1'] = Document()
         cls.dataset.documents['doc_1'].parts['p1'] = part
+
+        part = Part('test edge case DNA A927B test')
+        part.sentences = [[Token('test'), Token('edge'), Token('case'), Token('DNA'),
+                           Token('A'), Token('927'), Token('B'), Token('test')]]
+
+        predicted_labels = ['O', 'O', 'O', 'O', 'M', 'P', 'M', 'O']
+
+        for index, label in enumerate(predicted_labels):
+            part.sentences[0][index].predicted_labels = [Label(label)]
+
+        cls.dataset.documents['doc_1'].parts['p2'] = part
 
     def test_form_predicted_annotations(self):
         self.dataset.form_predicted_annotations(MUT_CLASS_ID)
@@ -115,6 +126,13 @@ class TestMentionLevel(unittest.TestCase):
 
         self.assertEqual(part.predicted_annotations[1].text, 'p.V100Q')
         self.assertEqual(part.predicted_annotations[1].offset, 18)
+
+        part = self.dataset.documents['doc_1'].parts['p2']
+
+        self.assertEqual(len(part.predicted_annotations), 1)
+
+        self.assertEqual(part.predicted_annotations[0].text, 'A927B')
+        self.assertEqual(part.predicted_annotations[0].offset, 19)
 
 
 if __name__ == '__main__':

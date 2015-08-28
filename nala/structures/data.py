@@ -147,18 +147,20 @@ class Dataset:
                 index = 0
                 while index < len(sentence):
                     token = sentence[index]
-                    so_far = part.text.find(token.word, so_far)
+                    token_start = part.text.find(token.word, so_far)
+                    so_far = token_start + len(token.word)
                     confidence_values = []
                     if token.predicted_labels[0].value is not 'O':
-                        start = so_far
+                        start = token_start
                         confidence_values.append(token.predicted_labels[0].confidence)
                         while index + 1 < len(sentence) \
                                 and sentence[index + 1].predicted_labels[0].value not in ('O', 'B', 'A'):
                             token = sentence[index + 1]
                             confidence_values.append(token.predicted_labels[0].confidence)
-                            so_far = part.text.find(token.word, so_far)
+                            token_start = part.text.find(token.word, so_far)
+                            so_far = token_start + len(token.word)
                             index += 1
-                        end = so_far + len(token.word)
+                        end = token_start + len(token.word)
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
                     index += 1

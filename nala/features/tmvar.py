@@ -284,17 +284,18 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
 
             for sentence in part.sentences:
                 for token in sentence:
-                    so_far = part.text.find(token.word, so_far)  # so_far = token_start
-                    token_end = so_far + len(token.word)
+                    token_start = part.text.find(token.word, so_far)
+                    token_end = token_start + len(token.word)
+                    so_far = token_end
 
                     for match_index, match in matches.items():
                         name = 'pattern{}'.format(match_index)
                         value = 'O'
                         for start, end in match:
-                            if start == so_far:
+                            if start == token_start:
                                 value = 'B'
                                 break
-                            elif start < so_far < token_end < end:
+                            elif start < token_start < token_end < end:
                                 value = 'I'
                                 break
                             elif token_end == end:

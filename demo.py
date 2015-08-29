@@ -19,7 +19,7 @@ from nala.learning.crfsuite import CRFSuite
 
 import nala.utils.db_validation as dbcheck
 from nala.utils.writers import TagTogFormat
-from utils.dataset_selection import RegexSelector, TmVarRegexCombinedSelector
+from nala.utils.dataset_selection import RegexSelector, TmVarRegexCombinedSelector
 
 if __name__ == "__main__":
     config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \

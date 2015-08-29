@@ -5,7 +5,7 @@ import os
 import re
 import pkg_resources
 import requests
-from utils import MUT_CLASS_ID
+from nala.utils import MUT_CLASS_ID
 
 
 class NLMentionSelector:

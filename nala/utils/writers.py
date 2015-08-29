@@ -200,7 +200,7 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, dataset, to_save_to="results", who="ml:nala", _annjson_folder="annjson", _html_folder="html"):
+    def __init__(self, dataset, to_save_to="resources/corpora/sample", who="ml:nala", _annjson_folder="annjson", _html_folder="html"):
         """
         init function that does prepare annjson folder and html folder
         :param to_save_to:

@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 class FilterByKeywords:
     def __init__(self):
         self.pubmed_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
-        self.keywords = ('mutation', 'variation', 'substitution', 'insertion', 'deletion', 'SNP')
+        self.keywords = ('mutation', 'variation', 'substitution', 'insertion', 'deletion', 'snp')
 
     def filter(self, pubmed_ids):
         for pubmed_id in pubmed_ids:

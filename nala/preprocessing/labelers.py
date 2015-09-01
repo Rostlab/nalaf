@@ -111,11 +111,7 @@ class TmVarLabeler(Labeler):
         elif self.label_snip.search(token.word):
             token.original_labels[0].value = 'R'  # SNP
         elif self.dna_symbols.search(token.word) or self.protein_symbols.search(token.word.lower()):
-            if previous_token is not None \
-                    and (self.position.search(previous_token.word) or self.label_type.search(previous_token.word)):
-                token.original_labels[0].value = 'M'  # Mutant
-            else:
-                token.original_labels[0].value = 'W'  # Wild type
+           token.original_labels[0].value = '*'   # temporary for W or M (wild type or mutant)
         elif self.position.search(token.word):
             if previous_token is not None and previous_token.original_labels[0].value == 'F':
                 token.original_labels[0].value = 'S'  # Frame shift position
@@ -131,6 +127,7 @@ class TmVarLabeler(Labeler):
         for part in dataset.parts():
             previous_token = None
             for sentence in part.sentences:
+                alternate = 'W'
                 for token in sentence:
                     token.original_labels = [Label('O')]
 
@@ -141,6 +138,14 @@ class TmVarLabeler(Labeler):
                             if ann.class_id == MUT_CLASS_ID:
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
+
+                                # replace temporary label with W or M
+                                if token.original_labels[0].value == '*':
+                                    token.original_labels[0].value = alternate
+                                    alternate = 'W' if alternate == 'M' else 'M'
+                                # reset the alternation to W since we reached end
+                                if token.start + len(token.word) == end:
+                                    alternate = 'W'
                                 break
 
 

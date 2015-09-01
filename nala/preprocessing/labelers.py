@@ -80,7 +80,7 @@ class TmVarLabeler(Labeler):
 
     def __init__(self):
         # A
-        self.label_reference_sequence = re.compile('(^[cgrm]$)|(^(ivs|ex|orf)$)')
+        self.label_reference_sequence = re.compile('(^[cgrmp]$)|(^(ivs|ex|orf)$)')
         # T
         self.label_type = re.compile('(del|ins|dup|tri|qua|con|delins|indel)')
         # F

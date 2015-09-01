@@ -148,6 +148,13 @@ class TmVarLabeler(Labeler):
                                     alternate = 'W'
                                 break
 
+                # iterate a sliding window of 3
+                # when you find 'P I P' labels replace them with 'P P P'
+                for previous, current, next in zip(sentence, sentence[1:], sentence[2:]):
+                    if previous.original_labels[0].value == 'P' and next.original_labels[0].value == 'P':
+                        if current.original_labels[0].value == 'I':
+                            current.original_labels[0].value = 'P'
+
 
 class BIEOLabeler(Labeler):
     """

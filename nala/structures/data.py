@@ -419,6 +419,8 @@ class Token:
         """string value of the token, usually a single word"""
         self.start = start
         """start offset of the token in the original text"""
+        self.end = self.start + len(self.word)
+        """end offset of the token in the original text"""
         self.original_labels = None
         """the original labels for the token as assigned by some implementation of Labeler"""
         self.predicted_labels = None

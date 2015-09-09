@@ -203,7 +203,7 @@ class TagTogFormat:
     def __init__(self, dataset, to_save_to="resources/corpora/sample/anndoc", who="ml:nala", _annjson_folder="annjson", _html_folder="html"):
         """
         init function that does prepare annjson folder and html folder
-        :param to_save_to:
+        :param to_save_to: usually resources/corpora/[name of corpus]/anndoc/
         :type dataset: nala.structures.data.Dataset
         :param who:
         :param _annjson_folder:

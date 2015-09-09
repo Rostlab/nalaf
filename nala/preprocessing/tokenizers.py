@@ -50,7 +50,9 @@ class TmVarTokenizer(Tokenizer):
             so_far = 0
             for index, sentence in enumerate(part.sentences):
                 sentence = re.sub('([0-9])([A-Za-z])', r'\1 \2', sentence)
-                sentence = re.sub('([A-Z])([a-z])', r'\1 \2', sentence)
+                # removing for now split from Capital to Lower
+                # no noticeable difference in performance but we keep whole words
+                # sentence = re.sub('([A-Z])([a-z])', r'\1 \2', sentence)
                 sentence = re.sub('([a-z])([A-Z])', r'\1 \2', sentence)
                 sentence = re.sub('([A-Za-z])([0-9])', r'\1 \2', sentence)
                 sentence = re.sub('([a-z])(fs)', r'\1 \2', sentence)

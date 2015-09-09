@@ -190,3 +190,4 @@ class BIEOLabeler(Labeler):
                             break
                         elif token.end == end:
                             token.original_labels[0].value = 'E-{}'.format(ann.class_id)
+                            break

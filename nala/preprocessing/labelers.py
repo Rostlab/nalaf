@@ -175,7 +175,6 @@ class BIEOLabeler(Labeler):
         :type dataset: nala.structures.data.Dataset
         """
         for part in dataset.parts():
-            previous_token = None
             for sentence in part.sentences:
                 for token in sentence:
                     token.original_labels = [Label('O')]
@@ -185,11 +184,9 @@ class BIEOLabeler(Labeler):
                         end = ann.offset + len(ann.text)
                         if start == token.start:
                             token.original_labels[0].value = 'B-{}'.format(ann.class_id)
-                            previous_token = token
                             break
-                        elif start < token.start < end:
+                        elif start < token.start < token.end < end:
                             token.original_labels[0].value = 'I-{}'.format(ann.class_id)
-                            previous_token = token
                             break
-                    if previous_token is not None and token.original_labels[0].value is 'O':
-                        previous_token.original_labels[0].value = 'E-{}'.format(ann.class_id)
+                        elif token.end == end:
+                            token.original_labels[0].value = 'E-{}'.format(ann.class_id)

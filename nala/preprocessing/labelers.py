@@ -144,7 +144,7 @@ class TmVarLabeler(Labeler):
                                     token.original_labels[0].value = alternate
                                     alternate = 'W' if alternate == 'M' else 'M'
                                 # reset the alternation to W since we reached end
-                                if token.start + len(token.word) == end:
+                                if token.end == end:
                                     alternate = 'W'
                                 break
 

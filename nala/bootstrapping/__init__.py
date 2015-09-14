@@ -71,7 +71,7 @@ class DownloadArticle:
 
             # yield the document but only if you found anything
             if len(doc.parts) > 0:
-                yield doc
+                yield pmid, doc
 
 
 def generate_documents(n):
@@ -80,6 +80,7 @@ def generate_documents(n):
 
     :param n: how many documents do you want
     :type n: int
+    :returns: nala.structures.data.Dataset
     """
     from nala.bootstrapping import SwissProtDocumentSelector
     from nala.bootstrapping.document_filters import KeywordsDocumentFilter
@@ -88,18 +89,22 @@ def generate_documents(n):
     from itertools import count
     c = count(1)
 
-    for document in \
+    dataset = Dataset()
+
+    for pmid, document in \
         KeywordsDocumentFilter().filter(
             DownloadArticle().download(
                 AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
                     SwissProtDocumentSelector().get_pubmed_ids()))):
-        yield document
+        dataset.documents[pmid] = document
 
         # if we have generated enough documents stop
         if next(c) == n:
             break
+    return dataset
 
 if __name__ == '__main__':
     # example usage
     # TODO document this better and move it to a more appropriate place
-    list(generate_documents(2))
+    test_dataset = generate_documents(2)
+    print(len(test_dataset))

@@ -34,13 +34,13 @@ class KeywordsDocumentFilter(DocumentFilter):
 
     def filter(self, documents):
         """
-        :type documents: collections.Iterable[nala.structures.data.Document]
+        :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
-        for doc in documents:
+        for pmid, doc in documents:
             # if any part of the document contains any of the keywords
             # yield that document
             if any(any(keyword in part.text.lower() for keyword in self.keywords)
                    for part in doc.parts.values()):
-                yield doc
+                yield pmid, doc
 
 

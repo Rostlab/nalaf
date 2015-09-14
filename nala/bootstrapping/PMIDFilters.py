@@ -1,4 +1,6 @@
 import abc
+import os
+import re
 
 
 class PMIDFilter:
@@ -15,6 +17,8 @@ class PMIDFilter:
     * Be named [Name]PMIDFilter
     * Implement the abstract method filter as a generator
     meaning that if some criterion is fulfilled then [yield] that pmid
+
+    When implementing filter first iterate for each PMID then apply logic to allow chaining of filters.
     """
     @abc.abstractmethod
     def filter(self, pmids):
@@ -35,9 +39,6 @@ class AlreadyConsideredPMIDFilter(PMIDFilter):
         """the number of the current iteration"""
 
     def filter(self, pmids):
-        import os
-        import re
-
         considered_pmids = set()
         # find all previously considered PMIDs
         for root, sub_folders, files in os.walk(self.bootstrapping_root):

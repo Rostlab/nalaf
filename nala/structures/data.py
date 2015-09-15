@@ -402,6 +402,10 @@ class Part:
         """
         return iter(self.sentences)
 
+    def __repr__(self):
+        return "Part(len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
+            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
+
 
 class Token:
     """

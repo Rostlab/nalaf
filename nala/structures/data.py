@@ -492,7 +492,7 @@ class Annotation:
     """
 
     def __repr__(self):
-        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}")'.format(Annotation.__name__, self=self)
+        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}", Confidence: "{self.confidence})'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
         # consider them a match only if class_id matches

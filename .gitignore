@@ -39,6 +39,7 @@ node_modules/
 # PyCharm related files
 .idea/
 __pycache__/
+/*.iml
 
 # Config file with the paths
 config.ini

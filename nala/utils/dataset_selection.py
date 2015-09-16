@@ -6,7 +6,7 @@ import re
 import pkg_resources
 import requests
 from nala.utils import MUT_CLASS_ID
-
+# TODO consolidate with bootstrapping section
 
 class NLMentionSelector:
     """

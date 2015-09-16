@@ -196,6 +196,24 @@ class StatsWriter:
         return standard_deviation, standard_error
 
 
+class PubTatorFormat:
+    """
+    Export into PubTatorFormat with or without annotations
+    """
+    def __init__(self, dataset, location="resources/corpora/idp4/pubtator.txt", no_annotations=True):
+        self.location = location
+        self.dataset = dataset
+        self.no_annotations = no_annotations
+
+    def export(self):
+        with open(self.location, 'w', encoding='utf-8') as f:
+            for pid, doc in self.dataset.documents.items():
+                f.write("{0}|t|{title}\n".format(pid, title=doc.get_title()))
+                f.write("{0}|a|{text}\n".format(pid, text=doc.get_body()))
+                # TODO export annotations as well
+                f.write("\n")
+
+
 class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.

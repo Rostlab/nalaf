@@ -362,10 +362,21 @@ class Document:
 
         return math.log2(lettres)*parts
 
+    def get_title(self):
+        """:returns title of document as str"""
+        return list(self.parts.values())[0].text
+
     def get_text(self):
         text = ""
         for _, part in self.parts.items():
-            text += part.text.rstrip().replace("\n", " ")
+            text += part.text.strip + " "
+        return text
+
+    def get_body(self):
+        text = ""
+        for i, (_, part) in enumerate(self.parts.items()):
+            if i > 0:
+                text += part.text.strip() + " "
         return text
 
 

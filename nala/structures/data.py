@@ -367,12 +367,14 @@ class Document:
         return list(self.parts.values())[0].text
 
     def get_text(self):
+        # TODO docset + test function
         text = ""
         for _, part in self.parts.items():
             text += part.text.strip + " "
         return text
 
     def get_body(self):
+        # TODO docset + test function
         text = ""
         for i, (_, part) in enumerate(self.parts.items()):
             if i > 0:
@@ -380,6 +382,7 @@ class Document:
         return text
 
     def overlaps_with_mention(self, charpos):
+        # TODO docset + test function
         offset = 0
         for pid, part in self.parts.items():
             for ann in part.annotations:

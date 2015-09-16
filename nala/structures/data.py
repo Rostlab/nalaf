@@ -362,11 +362,32 @@ class Document:
 
         return math.log2(lettres)*parts
 
+    def get_title(self):
+        """:returns title of document as str"""
+        return list(self.parts.values())[0].text
+
     def get_text(self):
         text = ""
         for _, part in self.parts.items():
-            text += part.text.rstrip().replace("\n", " ")
+            text += part.text.strip + " "
         return text
+
+    def get_body(self):
+        text = ""
+        for i, (_, part) in enumerate(self.parts.items()):
+            if i > 0:
+                text += part.text.strip() + " "
+        return text
+
+    def overlaps_with_mention(self, charpos):
+        offset = 0
+        for pid, part in self.parts.items():
+            for ann in part.annotations:
+                if ann.offset + offset <= charpos and charpos <= ann.offset + offset + len(ann.text):
+                    return True
+                else:
+                    return False
+            offset += len(part.text)
 
 
 class Part:
@@ -401,6 +422,10 @@ class Part:
         when iterating through the part iterate through each sentence
         """
         return iter(self.sentences)
+
+    def __repr__(self):
+        return "Part(len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
+            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
 
 
 class Token:
@@ -492,7 +517,7 @@ class Annotation:
     """
 
     def __repr__(self):
-        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}")'.format(Annotation.__name__, self=self)
+        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}", Confidence: "{self.confidence})'.format(Annotation.__name__, self=self)
 
     def __eq__(self, other):
         # consider them a match only if class_id matches

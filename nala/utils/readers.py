@@ -303,16 +303,24 @@ class TmVarReader(Reader):
 
             for line in file:
                 title = line.split('|t|')[-1]
-                pmid, abstract = next(file).split('|a|')
+                splitted = next(file).split(('|a|'))
+
+                pmid = splitted[0]
+                abstract = "".join([xs + " " for xs in splitted[1:]]).strip()
 
                 document = Document()
                 document.parts['abstract'] = Part(title + abstract)
 
                 line = next(file)
-                while line != '\n':
+                while line != '\n' and line != '':
                     _, start, end, text, *_ = line.split('\t')
                     document.parts['abstract'].annotations.append(Annotation(MUT_CLASS_ID, int(start), text))
-                    line = next(file)
+                    try:
+                        oldline = line
+                        line = next(file)
+                    except StopIteration:
+                        print('StopIteration Error, Line before:', oldline)
+                        line = '\n'
 
                 dataset.documents[pmid] = document
 

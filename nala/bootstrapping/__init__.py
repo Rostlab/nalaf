@@ -65,6 +65,7 @@ class DownloadArticle:
     A utility generator that for a given iterable of PMIDs generates Document objects
     created by downloading the articles associated with the pmid.
     """
+
     def __init__(self):
         self.pubmed_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
@@ -106,14 +107,16 @@ def generate_documents(n):
 
     dataset = Dataset()
 
-    for pmid, document in \
-        KeywordsDocumentFilter().filter(
-            DownloadArticle().download(
-                AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
-                    UniprotDocumentSelector().get_pubmed_ids()))):
-        dataset.documents[pmid] = document
+    # use in context manager to enable caching
+    with UniprotDocumentSelector() as uds:
+        for pmid, document in \
+                KeywordsDocumentFilter().filter(
+                    DownloadArticle().download(
+                        AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
+                            uds.get_pubmed_ids()))):
+            dataset.documents[pmid] = document
 
-        # if we have generated enough documents stop
-        if next(c) == n:
-            break
+            # if we have generated enough documents stop
+            if next(c) == n:
+                break
     return dataset

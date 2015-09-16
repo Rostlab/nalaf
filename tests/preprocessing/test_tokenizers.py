@@ -4,11 +4,6 @@ from nala.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
 from nala.structures.data import Dataset, Document, Part, Token
 
 
-class TestTokenizer(unittest.TestCase):
-    def test_tokenize(self):
-        pass  # TODO
-
-
 class TestNLTKTokenizer(unittest.TestCase):
     """
     Test the NLTKTokenizer class and it's main method tokenize()

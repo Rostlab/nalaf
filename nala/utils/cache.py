@@ -1,5 +1,6 @@
 import os
 import json
+from nala import print_verbose
 
 
 class Cacheable:
@@ -14,21 +15,34 @@ class Cacheable:
     2. Any manipulation of self.cache is allowed
     3. Cache gets rewritten into a json file on disk
 
-    Separate files (caches) will be create for each subclass
+    Separate files (caches) will be created for each subclass
     with the format [Subclass Name]_cache.json
 
-    If subclass implement their own __init__ or __del__ functions then they have to call first
-    super().__init__()
-    super().__del__()
+    If you want to manipulate the cache:
+        You have to use the subclass with a context manager like so:
+        with SomeSubclass() as instance:
+            instance.do_something()
+    Otherwise for a regular call like so:
+        instance = SomeSubclass()
+        instance.do_something()
+    the cache will not be read/written.
+
+    Subclasses that implement __init__ have to call super().__init__() first.
     """
     def __init__(self):
+        self.cache = {}
+
+    def __enter__(self):
         self.cache_filename = '{}_cache.json'.format(self.__class__.__name__)
+        print_verbose('reading from cache {}'.format(self.cache_filename))
         if os.path.exists(self.cache_filename):
             self.cache = json.load(open(self.cache_filename))
         else:
             self.cache = {}
+        return self
 
-    def __del__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         if self.cache:
+            print_verbose('writing the cache {}'.format(self.cache_filename))
             with open(self.cache_filename, 'w') as file:
                 json.dump(self.cache, file)

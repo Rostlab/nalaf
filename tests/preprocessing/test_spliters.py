@@ -5,7 +5,7 @@ from nala.preprocessing.spliters import NLTKSplitter
 
 class TestNLTKSplitter(unittest.TestCase):
     @classmethod
-    def set_up_class(cls):
+    def setUpClass(cls):
         cls.dataset = Dataset()
         doc = Document()
         part = Part('This is one sentence. This is another one.\n This is the third one; here continues.')
@@ -15,7 +15,7 @@ class TestNLTKSplitter(unittest.TestCase):
     def test_split(self):
         NLTKSplitter().split(self.dataset)
         sentences = list(self.dataset.sentences())
-        expected = [['This is one sentence.'], ['This is another one.'], ['This is the third one; here continues.']]
+        expected = ['This is one sentence.', 'This is another one.', 'This is the third one; here continues.']
         self.assertEqual(sentences, expected)
 
 

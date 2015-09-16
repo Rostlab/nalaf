@@ -257,17 +257,17 @@ class TmVarDictionaryFeatureGenerator(FeatureGenerator):
     """
     def __init__(self):
         self.patterns = [
-            re.compile('([cgrm]\.[ATCGatcgu \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9\_\.\:]*)'),
-            re.compile('(IVS[ATCGatcgu \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9\_\.\:]*)'),
-            re.compile('([cgrm]\.[ATCGatcgu \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
-            re.compile('(IVS[ATCGatcgu \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
+            re.compile('([cgrm]\.[ATCGatcgu /><\?\(\)\[\];:\*_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9_\.:]*)'),
+            re.compile('(IVS[ATCGatcgu /><\?\(\)\[\];:\*_\-\+0-9]+(del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu0-9_\.:]*)'),
+            re.compile('([cgrm]\.[ATCGatcgu />\?\(\)\[\];:\*_\-\+0-9]+)'),
+            re.compile('(IVS[ATCGatcgu />\?\(\)\[\];:\*_\-\+0-9]+)'),
             re.compile('([cgrm]\.[ATCGatcgu][0-9]+[ATCGatcgu])'),
             re.compile('([ATCGatcgu][0-9]+[ATCGatcgu])'),
             re.compile('([0-9]+(del|ins|dup|tri|qua|con|delins|indel)[ATCGatcgu]*)'),
-            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel|fsX|fsx|fsx|fs)[CISQMNPKDTFAGHLRWVEYX \/\>\<\?\(\)\[\]\;\:\*\_\-\+0-9]*)'),
-            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX \/\>\?\(\)\[\]\;\:\*\_\-\+0-9]+)'),
+            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX /><\?\(\)\[\];:\*_\-\+0-9]+(inv|del|ins|dup|tri|qua|con|delins|indel|fsX|fsx|fsx|fs)[CISQMNPKDTFAGHLRWVEYX /><\?\(\)\[\];:\*_\-\+0-9]*)'),
+            re.compile('([p]\.[CISQMNPKDTFAGHLRWVEYX />\?\(\)\[\];:\*_\-\+0-9]+)'),
             re.compile('([p]\.[A-Z][a-z]{0,2}[\W\-]{0,1}[0-9]+[\W\-]{0,1}[A-Z][a-z]{0,2})'),
-            re.compile('([p]\.[A-Z][a-z]{0,2}[\W\-]{0,1}[0-9]+[\W\-]{0,1}(fs|fsx|fsX))')]
+            re.compile('([p]\.[A-Z][a-z]{0,2}[\W\-]?[0-9]+[\W\-]?(fs|fsx|fsX))')]
 
     def generate(self, dataset):
         """

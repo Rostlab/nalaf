@@ -3,7 +3,10 @@ from nala.structures.data import Dataset, Document, Part, Token, FeatureDictiona
 from nala.features.tmvar import TmVarFeatureGenerator
 from nala.features import FeatureGenerator
 from nala.features import eval_binary_feature
-import re
+from nala.features.tmvar import TmVarDictionaryFeatureGenerator
+from nala.utils.readers import StringReader
+from nala.preprocessing.spliters import NLTKSplitter
+from nala.preprocessing.tokenizers import TmVarTokenizer
 
 
 class TmVarDefaultTest(unittest.TestCase):
@@ -63,7 +66,6 @@ class TmVarDefaultTest(unittest.TestCase):
         feature_dic = FeatureDictionary()
         eval_binary_feature(feature_dic, 'mutat_word', self.feature.reg_mutat_word.match, 'repssts')
         self.assertEqual(feature_dic.get('mutat_word[0]'), None)
-
 
     def test_mutation_article_bp(self):
         self.assertEqual(self.feature.mutation_article_bp("three"), "Base")
@@ -127,11 +129,26 @@ class TmVarDefaultTest(unittest.TestCase):
 
 
 class TestTmVarDictionaryFeatureGenerator(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
-
     def test_generate(self):
+        dataset = StringReader('token c.2708_2711delTTAG token').read()
+        NLTKSplitter().split(dataset)
+        TmVarTokenizer().tokenize(dataset)
+        TmVarDictionaryFeatureGenerator().generate(dataset)
+        print()
         pass  # TODO
 
+    def test_patterns(self):
+        fg = TmVarDictionaryFeatureGenerator()
+        self.assertTrue(fg.patterns[0].match('c.2708_2711delTTAG'))
+        self.assertTrue(fg.patterns[1].match('IVS2-58_55insT'))
+        self.assertTrue(fg.patterns[2].match('c.467C>A'))
+        self.assertTrue(fg.patterns[3].match('IVS3+18C>T '))
+        self.assertTrue(fg.patterns[4].match('c.A436C'))
+        self.assertTrue(fg.patterns[5].match('A436C'))
+        self.assertTrue(fg.patterns[6].match('912delTA'))
+        self.assertTrue(fg.patterns[7].match('p.G204VfsX28'))
+        self.assertTrue(fg.patterns[8].match('p.G204V'))
+        self.assertTrue(fg.patterns[9].match('p.Ser157Ser'))
+        self.assertTrue(fg.patterns[10].match('p.Ser119fsX'))
 if __name__ == '__main__':
     unittest.main()

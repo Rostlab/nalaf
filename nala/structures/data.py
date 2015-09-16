@@ -379,6 +379,16 @@ class Document:
                 text += part.text.strip() + " "
         return text
 
+    def overlaps_with_mention(self, charpos):
+        offset = 0
+        for pid, part in self.parts.items():
+            for ann in part.annotations:
+                if ann.offset + offset <= charpos and charpos <= ann.offset + offset + len(ann.text):
+                    return True
+                else:
+                    return False
+            offset += len(part.text)
+
 
 class Part:
     """

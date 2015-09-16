@@ -1,11 +1,10 @@
 import requests
-import json
 import xml.etree.ElementTree as ET
 from nala.structures.data import Dataset, Document, Part
-import os
+from nala.utils.cache import Cacheable
 
 
-class UniprotDocumentSelector:
+class UniprotDocumentSelector(Cacheable):
     """
     Selects a list of pubmed IDs (articles) that are likely to have mutation mentions.
 
@@ -14,18 +13,11 @@ class UniprotDocumentSelector:
     2. For each protein search for articles showing evidence of sequence variant of mutagenesis
     3. Return pubmed IDs (articles) associated with the evidence
     """
+
     def __init__(self):
+        super().__init__()
         self.processed = set()
         self.uniprot_url = 'http://www.uniprot.org/uniprot/'
-        if os.path.exists('ups_cache.json'):
-            self.cache = json.load(open('ups_cache.json'))
-        else:
-            self.cache = {}
-
-    def __del__(self):
-        if self.cache:
-            with open('ups_cache.json', 'w') as file:
-                json.dump(self.cache, file)
 
     def _get_uniprot_ids(self, query=None):
         if not query:
@@ -42,7 +34,7 @@ class UniprotDocumentSelector:
             lines = req.text.splitlines()
             self.cache[query] = lines
 
-        for uniprot_id in lines[1:]: # skip first line
+        for uniprot_id in lines[1:]:  # skip first line
             yield uniprot_id
 
     def _get_pubmed_ids_for_protein(self, uniprot_id):

@@ -16,8 +16,9 @@ class GNormPlus:
             self.cache = {}
 
     def __del__(self):
-        with open('gnp_cache.json', 'w') as file:
-            json.dump(self.cache, file)
+        if self.cache:
+            with open('gnp_cache.json', 'w') as file:
+                json.dump(self.cache, file)
 
     def get_genes_for_pmid(self, pmid):
         if pmid in self.cache:

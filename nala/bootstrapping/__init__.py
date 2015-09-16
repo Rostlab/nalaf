@@ -1,6 +1,8 @@
 import requests
+import json
 import xml.etree.ElementTree as ET
 from nala.structures.data import Dataset, Document, Part
+import os
 
 
 class UniprotDocumentSelector:
@@ -15,6 +17,15 @@ class UniprotDocumentSelector:
     def __init__(self):
         self.processed = set()
         self.uniprot_url = 'http://www.uniprot.org/uniprot/'
+        if os.path.exists('ups_cache.json'):
+            self.cache = json.load(open('ups_cache.json'))
+        else:
+            self.cache = {}
+
+    def __del__(self):
+        if self.cache:
+            with open('ups_cache.json', 'w') as file:
+                json.dump(self.cache, file)
 
     def _get_uniprot_ids(self, query=None):
         if not query:
@@ -24,11 +35,14 @@ class UniprotDocumentSelector:
                   'columns': 'id',
                   'format': 'tab'}
 
-        req = requests.get(self.uniprot_url, params)
-        line_iterator = req.iter_lines(decode_unicode=True)
-        next(line_iterator)  # skip first line
+        if query in self.cache:
+            lines = self.cache[query]
+        else:
+            req = requests.get(self.uniprot_url, params)
+            lines = req.text.splitlines()
+            self.cache[query] = lines
 
-        for uniprot_id in line_iterator:
+        for uniprot_id in lines[1:]: # skip first line
             yield uniprot_id
 
     def _get_pubmed_ids_for_protein(self, uniprot_id):

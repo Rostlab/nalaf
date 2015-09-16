@@ -3,15 +3,24 @@ import xml.etree.ElementTree as ET
 from nala.structures.data import Dataset, Document, Part
 
 
-class SwissProtDocumentSelector:
-    # TODO Add docstring
+class UniprotDocumentSelector:
+    """
+    Selects a list of pubmed IDs (articles) that are likely to have mutation mentions.
+
+    Outline of the selection procedure:
+    1. Select proteins given a uniprot query (by default Swiss-Prot human proteins)
+    2. For each protein search for articles showing evidence of sequence variant of mutagenesis
+    3. Return pubmed IDs (articles) associated with the evidence
+    """
     def __init__(self):
         self.processed = set()
         self.uniprot_url = 'http://www.uniprot.org/uniprot/'
 
-    def get_uniprot_ids(self):
-        params = {'query': '(annotation:(type:natural_variations) OR annotation:(type:mutagen))'
-                           ' AND reviewed:yes AND organism:"Homo sapiens (Human) [9606]"',
+    def _get_uniprot_ids(self, query=None):
+        if not query:
+            query = '(annotation:(type:natural_variations) OR annotation:(type:mutagen))' \
+                    ' AND reviewed:yes AND organism:"Homo sapiens (Human) [9606]"'
+        params = {'query': query,
                   'columns': 'id',
                   'format': 'tab'}
 
@@ -22,7 +31,7 @@ class SwissProtDocumentSelector:
         for uniprot_id in line_iterator:
             yield uniprot_id
 
-    def get_pubmed_ids_for_protein(self, uniprot_id):
+    def _get_pubmed_ids_for_protein(self, uniprot_id):
         req = requests.get(self.uniprot_url + '{}.xml'.format(uniprot_id))
         xml = ET.fromstring(req.content)
         ns = {'u': 'http://uniprot.org/uniprot'}  # namespace
@@ -40,8 +49,8 @@ class SwissProtDocumentSelector:
                 yield pubmed_id
 
     def get_pubmed_ids(self):
-        for uniprot_id in self.get_uniprot_ids():
-            for pubmed_id in self.get_pubmed_ids_for_protein(uniprot_id):
+        for uniprot_id in self._get_uniprot_ids():
+            for pubmed_id in self._get_pubmed_ids_for_protein(uniprot_id):
                 yield pubmed_id
 
 
@@ -82,7 +91,7 @@ def generate_documents(n):
     :type n: int
     :returns: nala.structures.data.Dataset
     """
-    from nala.bootstrapping import SwissProtDocumentSelector
+    from nala.bootstrapping import UniprotDocumentSelector
     from nala.bootstrapping.document_filters import KeywordsDocumentFilter
     from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
     from nala.bootstrapping import DownloadArticle
@@ -95,16 +104,10 @@ def generate_documents(n):
         KeywordsDocumentFilter().filter(
             DownloadArticle().download(
                 AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
-                    SwissProtDocumentSelector().get_pubmed_ids()))):
+                    UniprotDocumentSelector().get_pubmed_ids()))):
         dataset.documents[pmid] = document
 
         # if we have generated enough documents stop
         if next(c) == n:
             break
     return dataset
-
-if __name__ == '__main__':
-    # example usage
-    # TODO document this better and move it to a more appropriate place
-    test_dataset = generate_documents(2)
-    print(len(test_dataset))

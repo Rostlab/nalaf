@@ -129,13 +129,76 @@ class TmVarDefaultTest(unittest.TestCase):
 
 
 class TestTmVarDictionaryFeatureGenerator(unittest.TestCase):
-    def test_generate(self):
+    def test_generate_patterns_026(self):
         dataset = StringReader('token c.2708_2711delTTAG token').read()
         NLTKSplitter().split(dataset)
         TmVarTokenizer().tokenize(dataset)
         TmVarDictionaryFeatureGenerator().generate(dataset)
-        print()
-        pass  # TODO
+
+        token_features = [{key: value for key, value in token.features.items() if value is not 'O'}
+                          for token in dataset.tokens()]
+        self.assertEqual(token_features[0], {})
+        self.assertEqual(token_features[1], {'pattern2[0]': 'B', 'pattern0[0]': 'B'})
+        self.assertEqual(token_features[2], {'pattern2[0]': 'I', 'pattern0[0]': 'I'})
+        self.assertEqual(token_features[3], {'pattern2[0]': 'I', 'pattern0[0]': 'I'})
+        self.assertEqual(token_features[4], {'pattern2[0]': 'I', 'pattern0[0]': 'I'})
+        self.assertEqual(token_features[5], {'pattern2[0]': 'E', 'pattern6[0]': 'B', 'pattern0[0]': 'I'})
+        self.assertEqual(token_features[6], {'pattern6[0]': 'I', 'pattern0[0]': 'I'})
+        self.assertEqual(token_features[7], {'pattern6[0]': 'E', 'pattern0[0]': 'E'})
+        self.assertEqual(token_features[8], {})
+
+    def test_generate_patterns_136(self):
+        dataset = StringReader('token IVS2-58_55insT token').read()
+        NLTKSplitter().split(dataset)
+        TmVarTokenizer().tokenize(dataset)
+        TmVarDictionaryFeatureGenerator().generate(dataset)
+
+        token_features = [{key: value for key, value in token.features.items() if value is not 'O'}
+                          for token in dataset.tokens()]
+        self.assertEqual(token_features[0], {})
+        self.assertEqual(token_features[1], {'pattern3[0]': 'B', 'pattern1[0]': 'B'})
+        self.assertEqual(token_features[2], {'pattern3[0]': 'I', 'pattern1[0]': 'I'})
+        self.assertEqual(token_features[3], {'pattern3[0]': 'I', 'pattern1[0]': 'I'})
+        self.assertEqual(token_features[4], {'pattern3[0]': 'I', 'pattern1[0]': 'I'})
+        self.assertEqual(token_features[5], {'pattern3[0]': 'I', 'pattern1[0]': 'I'})
+        self.assertEqual(token_features[6], {'pattern3[0]': 'E', 'pattern1[0]': 'I', 'pattern6[0]': 'B'})
+        self.assertEqual(token_features[7], {'pattern1[0]': 'I', 'pattern6[0]': 'I'})
+        self.assertEqual(token_features[8], {'pattern1[0]': 'E', 'pattern6[0]': 'E'})
+        self.assertEqual(token_features[9], {})
+
+    def test_generate_patterns_245(self):
+        dataset = StringReader('token c.A436C token').read()
+        NLTKSplitter().split(dataset)
+        TmVarTokenizer().tokenize(dataset)
+        TmVarDictionaryFeatureGenerator().generate(dataset)
+
+        token_features = [{key: value for key, value in token.features.items() if value is not 'O'}
+                          for token in dataset.tokens()]
+        self.assertEqual(token_features[0], {})
+        self.assertEqual(token_features[1], {'pattern4[0]': 'B', 'pattern2[0]': 'B'})
+        self.assertEqual(token_features[2], {'pattern4[0]': 'I', 'pattern2[0]': 'I'})
+        self.assertEqual(token_features[3], {'pattern4[0]': 'I', 'pattern2[0]': 'I', 'pattern5[0]': 'B'})
+        self.assertEqual(token_features[4], {'pattern4[0]': 'I', 'pattern2[0]': 'I', 'pattern5[0]': 'I'})
+        self.assertEqual(token_features[5], {'pattern4[0]': 'E', 'pattern2[0]': 'I', 'pattern5[0]': 'E'})
+        self.assertEqual(token_features[6], {})
+
+    def test_generate_patterns_789(self):
+        dataset = StringReader('token p.G204VfsX28 token').read()
+        NLTKSplitter().split(dataset)
+        TmVarTokenizer().tokenize(dataset)
+        TmVarDictionaryFeatureGenerator().generate(dataset)
+
+        token_features = [{key: value for key, value in token.features.items() if value is not 'O'}
+                          for token in dataset.tokens()]
+        self.assertEqual(token_features[0], {})
+        self.assertEqual(token_features[1], {'pattern7[0]': 'B', 'pattern9[0]': 'B', 'pattern8[0]': 'B'})
+        self.assertEqual(token_features[2], {'pattern7[0]': 'I', 'pattern9[0]': 'I', 'pattern8[0]': 'I'})
+        self.assertEqual(token_features[3], {'pattern7[0]': 'I', 'pattern9[0]': 'I', 'pattern8[0]': 'I'})
+        self.assertEqual(token_features[4], {'pattern7[0]': 'I', 'pattern9[0]': 'I', 'pattern8[0]': 'I'})
+        self.assertEqual(token_features[5], {'pattern7[0]': 'I', 'pattern9[0]': 'E'})
+        self.assertEqual(token_features[6], {'pattern7[0]': 'I'})
+        self.assertEqual(token_features[7], {'pattern7[0]': 'I'})
+        self.assertEqual(token_features[8], {})
 
     def test_patterns(self):
         fg = TmVarDictionaryFeatureGenerator()

@@ -1,6 +1,7 @@
 import os
 import json
 from nala import print_verbose
+import time
 
 
 class Cacheable:
@@ -28,15 +29,25 @@ class Cacheable:
     the cache will not be read/written.
 
     Subclasses that implement __init__ have to call super().__init__() first.
+    They can also set the max time for the cache to live.
     """
-    def __init__(self):
+    # 604800 = 7 days in seconds
+    def __init__(self, max_time_in_seconds=604800):
         self.cache = {}
+        self.max_time_in_seconds = max_time_in_seconds
 
     def __enter__(self):
         self.cache_filename = '{}_cache.json'.format(self.__class__.__name__)
-        print_verbose('reading from cache {}'.format(self.cache_filename))
         if os.path.exists(self.cache_filename):
-            self.cache = json.load(open(self.cache_filename))
+
+            # if the file is too old reset the cache
+            if time.time() - os.path.getctime(self.cache_filename) > self.max_time_in_seconds:
+                print_verbose('resetting the cache {}'.format(self.cache_filename))
+                os.remove(self.cache_filename)
+                self.cache = {}
+            else:
+                print_verbose('reading from cache {}'.format(self.cache_filename))
+                self.cache = json.load(open(self.cache_filename))
         else:
             self.cache = {}
         return self

@@ -208,9 +208,15 @@ class PubTatorFormat:
     def export(self):
         with open(self.location, 'w', encoding='utf-8') as f:
             for pid, doc in self.dataset.documents.items():
+                offset = 0
                 f.write("{0}|t|{title}\n".format(pid, title=doc.get_title()))
                 f.write("{0}|a|{text}\n".format(pid, text=doc.get_body()))
-                # TODO export annotations as well
+                for part in doc:
+                    for ann in part.annotations:
+                        f.write("{0}\t{start}\t{end}\t{text}\t{classid}\n".format(pid, start=ann.offset,
+                                                                                  end=ann.offset + len(ann.text),
+                                                                                  text=ann.text, classid=ann.class_id))
+                    offset += len(part.text)
                 f.write("\n")
 
 

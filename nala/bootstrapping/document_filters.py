@@ -24,6 +24,7 @@ class DocumentFilter:
 
 class KeywordsDocumentFilter(DocumentFilter):
     """
+    TODO document that this doesn't mean PubMed XML filters
     Filters our documents that do not contain any of the given keywords in any of their parts.
     """
     def __init__(self, keywords=None):

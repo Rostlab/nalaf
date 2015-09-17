@@ -372,18 +372,35 @@ class Document:
         return list(self.parts.values())[0].text
 
     def get_text(self):
-        # TODO docset + test function
+        """
+        Gives the whole text concatenated with spaces in between.
+        :return: string
+        """
         text = ""
-        for _, part in self.parts.items():
-            text += part.text.strip + " "
+
+        # init: inside-variable, that defines: (i < n) part
+        inside = True
+        if len(self.parts) == 1:
+            inside = True
+
+        while inside:
+            text += next(self).text + " "
+
+        text += next(self.text + " ")
         return text
 
     def get_body(self):
-        # TODO docset + test function
+        """
+        :return: Text without title. No '\n' and spaces between parts.
+        """
         text = ""
+        size = len(self.parts)
         for i, (_, part) in enumerate(self.parts.items()):
             if i > 0:
-                text += part.text.strip() + " "
+                if i < size - 1:
+                    text += part.text.strip() + " "
+                else:
+                    text += part.text.strip()
         return text
 
     def overlaps_with_mention2(self, start, end):

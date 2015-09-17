@@ -359,13 +359,7 @@ class Document:
 
     def get_size(self):
         """give back rough size log(lettres)*parts"""
-        lettres = 0
-        parts = 0
-        for part in self:
-            lettres += len(part.text)
-            parts += 1
-
-        return math.log2(lettres)*parts
+        return sum(len(x.text) + 1 for x in self.parts.values()) - 1
 
     def get_title(self):
         """:returns title of document as str"""
@@ -449,9 +443,19 @@ class Document:
         for pid, part in self.parts.items():
             for ann in part.annotations:
                 # TODO check for + 1 character for \n for parts
-                if start < ann.offset + offset + len(ann.offset) and ann.offset + offset <= end:
+                if start < ann.offset + offset + len(ann.text) and ann.offset + offset <= end:
+                    print_verbose('Found:')
+                    print_verbose("TEXT:".ljust(10) + part.text)
+                    print_verbose("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                        len(part.text) - end + offset - 1))
+                    print_verbose("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                        ann.offset + len(ann.text) - 1))
                     return True
             offset += len(part.text)
+        print_verbose('Not Found:')
+        print_verbose(
+            "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (len(self.get_text()) - end - 1))
+        print_verbose("TEXT:".ljust(10) + self.get_text())
         return False
 
     def mention_overlaps_with_mention(self, start, end):

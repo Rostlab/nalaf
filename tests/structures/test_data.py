@@ -21,8 +21,9 @@ class TestDataset(unittest.TestCase):
         cls.doc.parts['s2p1'] = part2
     
     def test_overlaps_with_mention(self):
+        print(self.doc.get_text())
         # part1
-        self.assertTrue(self.doc.overlaps_with_mention(1, 2))
+        self.assertTrue(self.doc.overlaps_with_mention(4, 4))
         # self.assertTrue(self.doc.overlaps_with_mention(6))
         # self.assertFalse(self.doc.overlaps_with_mention(5))
 
@@ -43,6 +44,9 @@ class TestDataset(unittest.TestCase):
 
     def test_get_body(self):
         self.assertEquals(self.doc.get_body(), '45678')
+
+    def test_get_size(self):
+        self.assertEquals(self.doc.get_size(), 9)
 
 
 class TestDocument(unittest.TestCase):

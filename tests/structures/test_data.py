@@ -22,7 +22,7 @@ class TestDataset(unittest.TestCase):
     
     def test_overlaps_with_mention(self):
         # part1
-        self.assertTrue(self.doc.overlaps_with_mention(7))
+        self.assertTrue(self.doc.overlaps_with_mention(1, 2))
         # self.assertTrue(self.doc.overlaps_with_mention(6))
         # self.assertFalse(self.doc.overlaps_with_mention(5))
 
@@ -35,35 +35,14 @@ class TestDataset(unittest.TestCase):
         # self.assertFalse(self.doc.overlaps_with_mention2(3, 3))
         # self.assertTrue(self.doc.overlaps_with_mention2(3, 4))
 
-    def test_parts(self):
-        pass  # TODO
+    def test_get_title(self):
+        self.assertEquals(self.doc.get_title(), '123')
 
-    def test_annotations(self):
-        pass  # TODO
+    def test_get_text(self):
+        self.assertEquals(self.doc.get_text(), '123 45678')
 
-    def test_predicted_annotations(self):
-        pass  # TODO
-
-    def test_sentences(self):
-        pass  # TODO
-
-    def test_tokens(self):
-        pass  # TODO
-
-    def test_partids_with_parts(self):
-        pass  # TODO
-
-    def test_annotations_with_partids(self):
-        pass  # TODO
-
-    def test_all_annotations_with_ids(self):
-        pass  # TODO
-
-    def test_clean_nl_definitions(self):
-        pass  # TODO
-
-    def test_stats(self):
-        pass  # TODO
+    def test_get_body(self):
+        self.assertEquals(self.doc.get_body(), '45678')
 
 
 class TestDocument(unittest.TestCase):

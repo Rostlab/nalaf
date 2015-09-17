@@ -5,6 +5,7 @@ import math
 import re
 from nala.utils.qmath import arithmetic_mean
 from nala.utils.qmath import harmonic_mean
+from nala import print_debug, print_verbose
 
 
 class Dataset:
@@ -239,7 +240,7 @@ class Dataset:
             # abstract?
             if regex_abstract_id.match(partid) or partid == 'abstract':
                 # NOTE added issue #80 for this
-                print(partid)
+                # print(partid)
                 is_abstract = True
             else:
                 is_abstract = False
@@ -381,17 +382,62 @@ class Document:
                 text += part.text.strip() + " "
         return text
 
+    def overlaps_with_mention2(self, start, end):
+        """
+        Checks for overlap with given 2 nrs that represent start and end position of any corresponding string.
+        :param start: index of first char (offset of first char in whole document)
+        :param end: index of last char (offset of last char in whole document)
+        """
+        print_verbose('Searching for overlap with a mention.')
+        Annotation.equality_operator = 'exact_or_overlapping'
+        query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
+        print_debug(query_ann)
+        offset = 0
+        for part in self.parts.values():
+            # TODO fix bug in equality_operator calculations @aleksandar (have to speak about that on skype, etc.)
+            print_debug('Query: Offset =', offset, 'start char =', query_ann.offset, 'start char + len(ann.text) =',
+                        query_ann.offset + len(query_ann.text), 'params(start, end) =',
+                        "({0}, {1})".format(start, end))
+            for ann in part.annotations:
+                offset_corrected_ann = Annotation(class_id='', offset=ann.offset + offset, text=ann.text)
+                if offset_corrected_ann == query_ann:
+                    print_verbose('Found annotation:', ann)
+                    return True
+                else:
+                    print_debug(
+                        "Current(offset: {0}, offset+len(text): {1}, text: {2})".format(offset_corrected_ann.offset,
+                                                                                 offset_corrected_ann.offset + len(
+                                                                                     offset_corrected_ann.text),
+                                                                                 offset_corrected_ann.text))
+            offset += len(part.text)
+        return False
+
     def overlaps_with_mention(self, charpos):
-        # TODO docset + test function
+        """
+        Checks for overlap at position charpos with another mention.
+        """
         offset = 0
         for pid, part in self.parts.items():
             for ann in part.annotations:
                 if ann.offset + offset <= charpos and charpos <= ann.offset + offset + len(ann.text):
                     return True
-                else:
-                    return False
+            if charpos < offset:
+                print_debug(lasttext[charpos - lastoffset])
+            lasttext = part.text
+            lastoffset = offset
             offset += len(part.text)
+        if charpos <= offset and charpos >= lastoffset:
+            print_debug(lasttext[charpos - lastoffset])
+        print(lasttext[charpos - lastoffset:])
+        # print(offset, lasttext)
+        return False
 
+    def mention_overlaps_with_mention(self, start, end):
+        # TODO optimise using doubled loops
+        if self.overlaps_with_mention(start) or self.overlaps_with_mention(end):
+            return True
+        else:
+            return False
 
 class Part:
     """
@@ -527,6 +573,7 @@ class Annotation:
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
             overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            # FIXME should be x1.offset < (y.offset + len(y.text)) or x1.offset <= (y.offset + len(y.text) - 1) same for the other condition
 
             if self.equality_operator == 'exact':
                 return exact

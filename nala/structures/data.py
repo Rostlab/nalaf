@@ -339,6 +339,9 @@ class Document:
         for part_id, part in self.parts.items():
             yield part
 
+    def __repr__(self):
+
+
     def key_value_parts(self):
         """yields iterator for partids"""
         for part_id, part in self.parts.items():
@@ -388,6 +391,7 @@ class Document:
         :param start: index of first char (offset of first char in whole document)
         :param end: index of last char (offset of last char in whole document)
         """
+        # NOTE this method does not work as of now, since there is a bug in the equality_operator calculation
         print_verbose('Searching for overlap with a mention.')
         Annotation.equality_operator = 'exact_or_overlapping'
         query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
@@ -412,24 +416,17 @@ class Document:
             offset += len(part.text)
         return False
 
-    def overlaps_with_mention(self, charpos):
+    def overlaps_with_mention(self, start, end):
         """
         Checks for overlap at position charpos with another mention.
         """
         offset = 0
         for pid, part in self.parts.items():
             for ann in part.annotations:
-                if ann.offset + offset <= charpos and charpos <= ann.offset + offset + len(ann.text):
+                # TODO check for + 1 character for \n for parts
+                if start < ann.offset + offset + len(ann.offset) and ann.offset + offset <= end:
                     return True
-            if charpos < offset:
-                print_debug(lasttext[charpos - lastoffset])
-            lasttext = part.text
-            lastoffset = offset
             offset += len(part.text)
-        if charpos <= offset and charpos >= lastoffset:
-            print_debug(lasttext[charpos - lastoffset])
-        print(lasttext[charpos - lastoffset:])
-        # print(offset, lasttext)
         return False
 
     def mention_overlaps_with_mention(self, start, end):

@@ -1,9 +1,40 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, Label
+from nala.structures.data import Dataset, Document, Part, Token, Label, Annotation
 from nala.utils import MUT_CLASS_ID
 
 
 class TestDataset(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.dataset = Dataset()
+        cls.doc = Document()
+        cls.dataset.documents['testid'] = cls.doc
+        part1 = Part('123')
+        part2 = Part('45678')
+        ann1 = Annotation(class_id='e_2', offset=1, text='2', confidence=0)
+        ann2 = Annotation(class_id='e_2', offset=4, text='567', confidence=1)
+        ann1.subclass = 0
+        ann2.subclass = 2
+        part1.annotations.append(ann1)
+        part2.annotations.append(ann2)
+        cls.doc.parts['s1h1'] = part1
+        cls.doc.parts['s2p1'] = part2
+    
+    def test_overlaps_with_mention(self):
+        # part1
+        self.assertTrue(self.doc.overlaps_with_mention(7))
+        # self.assertTrue(self.doc.overlaps_with_mention(6))
+        # self.assertFalse(self.doc.overlaps_with_mention(5))
+
+        # part2 with offsets
+        # 16 is len('Start test text.')
+        # self.assertTrue(self.doc.overlaps_with_mention(5 + 16))
+        # self.assertTrue(self.doc.overlaps_with_mention(6 + 16))
+        # self.assertFalse(self.doc.overlaps_with_mention(4 + 16))
+        # self.assertFalse(self.doc.overlaps_with_mention(7 + 16))
+        # self.assertFalse(self.doc.overlaps_with_mention2(3, 3))
+        # self.assertTrue(self.doc.overlaps_with_mention2(3, 4))
+
     def test_parts(self):
         pass  # TODO
 

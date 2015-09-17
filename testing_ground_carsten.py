@@ -72,7 +72,7 @@ for ann in dataset.annotations():
         new_text = aa_short_regex.sub('_AA_', new_text)
         new_text = aa_long_regex.sub('_AA_', new_text)
         new_text = bp_code.sub('_TT_', new_text)
-        # new_text = re.sub('\\W', ' ', new_text)
+        new_text = re.sub('\\W', ' ', new_text)
         # new_text = re.sub('\\b(\\w{1,3})\\b', '_TT_', new_text)
 
         wordlist.extend(new_text.split(' '))
@@ -108,6 +108,7 @@ for did, doc in dataset.documents.items():
         new_text = cur_part.text.lower()
         new_text = re.sub('\s+', ' ', new_text)
         sentences = new_text.split('. ')
+        # TODO use the nltk splitter instead of '. '
         for sent in sentences:
             part_length = len(sent)
             new_text = re.sub('\W+', ' ', sent)
@@ -115,6 +116,8 @@ for did, doc in dataset.documents.items():
                 # print(reg.pattern)
                 lasttime = time.time()
                 match = reg.search(new_text)
+                from nala.structures.data import Annotation
+                Annotation.equality_operator = 'exact_or_overlapping'
                 if match:
                     if did in dataset_high_recall.documents:
                         other_doc = dataset_high_recall.documents.get(did)

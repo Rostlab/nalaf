@@ -378,15 +378,22 @@ class Document:
         """
         text = ""
 
+        it = iter(self)
+
         # init: inside-variable, that defines: (i < n) part
         inside = True
         if len(self.parts) == 1:
             inside = True
-
+        counter = 0
         while inside:
-            text += next(self).text + " "
+            text += next(it).text + " "
+            if counter == len(self.parts) - 2:
+                inside = False
+            counter += 1
 
-        text += next(self.text + " ")
+        # TODO rewrite to make look nicer. this is horrible
+
+        text += next(it).text
         return text
 
     def get_body(self):

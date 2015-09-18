@@ -6,6 +6,7 @@ import json
 import re
 import timeit
 import time
+from nala import print_verbose
 
 from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
 from nala.preprocessing.spliters import NLTKSplitter
@@ -99,6 +100,9 @@ patterns = [re.compile(x) for x in regexs]
 dataset_high_recall = TmVarReader('resources/corpora/idp4/pubtator_tmvar.txt').read()
 TP = 0
 FP = 0
+_length = len(dataset.documents.values())
+_progress = 0
+_timestart = time.time()
 for did, doc in dataset.documents.items():
     part_offset = 0
     for i, x in enumerate(doc.parts):
@@ -120,16 +124,23 @@ for did, doc in dataset.documents.items():
                 Annotation.equality_operator = 'exact_or_overlapping'
                 if match:
                     if did in dataset_high_recall.documents:
-                        other_doc = dataset_high_recall.documents.get(did)
-                        if not other_doc.overlaps_with_mention(match.span()):
-                            print(sent, match, reg.pattern)
+                        anti_doc = dataset_high_recall.documents.get(did)
+                        if not anti_doc.overlaps_with_mention(match.span()):
                             if doc.overlaps_with_mention(match.span()):
                                 TP += 1
+                                print("TP:", sent, match, reg.pattern)
                             else:
                                 FP += 1
+                                print("FP:", sent, match, reg.pattern)
                             break
                 if lasttime - time.time() > 1:
                     print(i)
             sent_offset += 2 + part_length
         part_offset += sent_offset
-    print('TP:{0}, FP:{1}, %containingNLmentions:{2}'.format(TP, FP, TP/(TP + FP)))
+    _progress += 1
+    _time_progressed = time.time() - _timestart
+    _time_per_doc = _time_progressed / _progress
+    _time_req_time = _time_per_doc * _length
+    _time_eta = _time_req_time - _time_progressed
+    print("PROGRESS: {0:.4%} ETA: {1:.2f} secs".format(_progress/_length, _time_eta))
+    print('STATS: TP:{0}, FP:{1}, %containingNLmentions:{2}'.format(TP, FP, TP/(TP + FP)))

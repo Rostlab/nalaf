@@ -116,6 +116,11 @@ _time_max_pattern = 0
 _low_performant_pattern = ""
 _avg_chars_per_doc = dataset.get_size_chars() / len(dataset.documents.keys())
 
+# NLDefiners init
+exclusive_definer = ExclusiveNLDefiner()
+_e_array = [0, 0, 0]
+inclusive_definer = InclusiveNLDefiner()
+_i_array = [0, 0]
 
 with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
     for did, doc in dataset.documents.items():
@@ -164,13 +169,17 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                         if did in dataset_high_recall.documents:
                             anti_doc = dataset_high_recall.documents.get(did)
                             if not anti_doc.overlaps_with_mention(match.span()):
+                                _e_result = exclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
+                                _e_array[_e_result] += 1
+                                _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
+                                _i_array[_i_result] += 1
                                 if doc.overlaps_with_mention(match.span()):
                                     TP += 1
-                                    f.write("TP:\t{}\t{}\t{}\n".format(sent, match, reg.pattern))
+                                    f.write("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
                                     _perf_patterns[reg.pattern][0] += 1
                                 else:
                                     FP += 1
-                                    f.write("FP:\t{}\t{}\t{}\n".format(sent, match, reg.pattern))
+                                    f.write("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
                                     _perf_patterns[reg.pattern][1] += 1
 
                                 if _perf_patterns[reg.pattern][1] > 0:
@@ -188,6 +197,9 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
         print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/_length, _time_progressed, _time_eta))
         if TP + FP > 0:
             print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
+
+print("Exclusive Definer:", _e_array)
+print("Inclusive Definer:", _i_array)
 
 for key, value in _perf_patterns.items():
     if value[2] != -1:

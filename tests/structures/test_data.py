@@ -1,38 +1,56 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, Label
+from nala.structures.data import Dataset, Document, Part, Token, Label, Annotation
 from nala.utils import MUT_CLASS_ID
 
 
 class TestDataset(unittest.TestCase):
-    def test_parts(self):
-        pass  # TODO
+    @classmethod
+    def setUpClass(cls):
+        cls.dataset = Dataset()
+        cls.doc = Document()
+        cls.dataset.documents['testid'] = cls.doc
 
-    def test_annotations(self):
-        pass  # TODO
+        # TEXT = "123 45678"
+        # POS  = "012345678"
+        # ANN1 = " X       "
+        # ANN2 = "     XXX "
+        # PAR1 = "XXX      "
+        # PAR1 = "    XXXXX"
 
-    def test_predicted_annotations(self):
-        pass  # TODO
+        part1 = Part('123')
+        part2 = Part('45678')
+        ann1 = Annotation(class_id='e_2', offset=1, text='2', confidence=0)
+        ann2 = Annotation(class_id='e_2', offset=1, text='567', confidence=1)
+        ann1.subclass = 0
+        ann2.subclass = 2
+        part1.annotations.append(ann1)
+        part2.annotations.append(ann2)
+        cls.doc.parts['s1h1'] = part1
+        cls.doc.parts['s2p1'] = part2
+    
+    def test_overlaps_with_mention(self):
+        # True states
+        self.assertTrue(self.doc.overlaps_with_mention(5, 5))
+        self.assertTrue(self.doc.overlaps_with_mention(6, 8))
+        self.assertTrue(self.doc.overlaps_with_mention(4, 5))
+        self.assertTrue(self.doc.overlaps_with_mention(1, 7))
 
-    def test_sentences(self):
-        pass  # TODO
+        # False states
+        self.assertFalse(self.doc.overlaps_with_mention(3, 4))
+        self.assertFalse(self.doc.overlaps_with_mention(0, 0))
+        self.assertFalse(self.doc.overlaps_with_mention(2, 4))
 
-    def test_tokens(self):
-        pass  # TODO
+    def test_get_title(self):
+        self.assertEquals(self.doc.get_title(), '123')
 
-    def test_partids_with_parts(self):
-        pass  # TODO
+    def test_get_text(self):
+        self.assertEquals(self.doc.get_text(), '123 45678')
 
-    def test_annotations_with_partids(self):
-        pass  # TODO
+    def test_get_body(self):
+        self.assertEquals(self.doc.get_body(), '45678')
 
-    def test_all_annotations_with_ids(self):
-        pass  # TODO
-
-    def test_clean_nl_definitions(self):
-        pass  # TODO
-
-    def test_stats(self):
-        pass  # TODO
+    def test_get_size(self):
+        self.assertEquals(self.doc.get_size(), 9)
 
 
 class TestDocument(unittest.TestCase):

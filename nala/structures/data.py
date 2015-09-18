@@ -5,6 +5,7 @@ import math
 import re
 from nala.utils.qmath import arithmetic_mean
 from nala.utils.qmath import harmonic_mean
+from nala import print_debug, print_verbose
 
 
 class Dataset:
@@ -239,7 +240,7 @@ class Dataset:
             # abstract?
             if regex_abstract_id.match(partid) or partid == 'abstract':
                 # NOTE added issue #80 for this
-                print(partid)
+                # print(partid)
                 is_abstract = True
             else:
                 is_abstract = False
@@ -338,6 +339,10 @@ class Document:
         for part_id, part in self.parts.items():
             yield part
 
+    def __repr__(self):
+        return 'Document(Size: {0}, Title: "{1}", Text: "{2}")'.format(len(self.parts), self.get_title(),
+                                                                       self.get_text())
+
     def key_value_parts(self):
         """yields iterator for partids"""
         for part_id, part in self.parts.items():
@@ -354,44 +359,124 @@ class Document:
 
     def get_size(self):
         """give back rough size log(lettres)*parts"""
-        lettres = 0
-        parts = 0
-        for part in self:
-            lettres += len(part.text)
-            parts += 1
-
-        return math.log2(lettres)*parts
+        return sum(len(x.text) + 1 for x in self.parts.values()) - 1
 
     def get_title(self):
         """:returns title of document as str"""
         return list(self.parts.values())[0].text
 
     def get_text(self):
-        # TODO docset + test function
+        """
+        Gives the whole text concatenated with spaces in between.
+        :return: string
+        """
         text = ""
-        for _, part in self.parts.items():
-            text += part.text.strip + " "
+
+        it = iter(self)
+
+        # init: inside-variable, that defines: (i < n) part
+        inside = True
+        if len(self.parts) == 1:
+            inside = True
+        counter = 0
+        while inside:
+            text += next(it).text + " "
+            if counter == len(self.parts) - 2:
+                inside = False
+            counter += 1
+
+        # TODO rewrite to make look nicer. this is horrible
+
+        text += next(it).text
         return text
 
     def get_body(self):
-        # TODO docset + test function
+        """
+        :return: Text without title. No '\n' and spaces between parts.
+        """
         text = ""
+        size = len(self.parts)
         for i, (_, part) in enumerate(self.parts.items()):
             if i > 0:
-                text += part.text.strip() + " "
+                if i < size - 1:
+                    text += part.text.strip() + " "
+                else:
+                    text += part.text.strip()
         return text
 
-    def overlaps_with_mention(self, charpos):
-        # TODO docset + test function
+    def overlaps_with_mention2(self, start, end):
+        """
+        Checks for overlap with given 2 nrs that represent start and end position of any corresponding string.
+        :param start: index of first char (offset of first char in whole document)
+        :param end: index of last char (offset of last char in whole document)
+        """
+        # NOTE this method does not work as of now, since there is a bug in the equality_operator calculation
+        print_verbose('Searching for overlap with a mention.')
+        Annotation.equality_operator = 'exact_or_overlapping'
+        query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
+        print_debug(query_ann)
         offset = 0
-        for pid, part in self.parts.items():
+        for part in self.parts.values():
+            # TODO fix bug in equality_operator calculations @aleksandar (have to speak about that on skype, etc.)
+            print_debug('Query: Offset =', offset, 'start char =', query_ann.offset, 'start char + len(ann.text) =',
+                        query_ann.offset + len(query_ann.text), 'params(start, end) =',
+                        "({0}, {1})".format(start, end))
             for ann in part.annotations:
-                if ann.offset + offset <= charpos and charpos <= ann.offset + offset + len(ann.text):
+                offset_corrected_ann = Annotation(class_id='', offset=ann.offset + offset, text=ann.text)
+                if offset_corrected_ann == query_ann:
+                    print_verbose('Found annotation:', ann)
                     return True
                 else:
-                    return False
+                    print_debug(
+                        "Current(offset: {0}, offset+len(text): {1}, text: {2})".format(offset_corrected_ann.offset,
+                                                                                        offset_corrected_ann.offset + len(
+                                                                                            offset_corrected_ann.text),
+                                                                                        offset_corrected_ann.text))
             offset += len(part.text)
+        return False
 
+    def overlaps_with_mention(self, start, end):
+        """
+        Checks for overlap at position charpos with another mention.
+        """
+        offset = 0
+
+        # TODO *args instead of fixed 2 or 1 element
+
+        print_debug("===TEXT===\n{0}\n".format(self.get_text()))
+
+        for pid, part in self.parts.items():
+            print_debug("Part {0}: {1}".format(pid, part))
+            for ann in part.annotations:
+                # TODO check for + 1 character for \n for parts
+                print_debug(ann)
+                print_debug("TEXT:".ljust(10) + part.text)
+                print_debug("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                    len(part.text) - end + offset - 1))
+                print_debug("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                        len(part.text) - ann.offset + len(ann.text) - 2))
+                if start < ann.offset + offset + len(ann.text) and ann.offset + offset <= end:
+                    print_verbose('=====\nFOUND\n=====')
+                    print_verbose("TEXT:".ljust(10) + part.text)
+                    print_verbose("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                        len(part.text) - end + offset - 1))
+                    print_verbose("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                        ann.offset + len(ann.text) - 1))
+                    return True
+            offset += len(part.text) + 1
+        print_verbose('=========\nNOT FOUND\n=========')
+        print_verbose(
+            "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (offset - end - 2))
+        print_verbose("TEXT:".ljust(10) + self.get_text())
+        print_debug()
+        return False
+
+    def mention_overlaps_with_mention(self, start, end):
+        # TODO optimise using doubled loops
+        if self.overlaps_with_mention(start) or self.overlaps_with_mention(end):
+            return True
+        else:
+            return False
 
 class Part:
     """
@@ -527,6 +612,7 @@ class Annotation:
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
             overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
+            # FIXME should be x1.offset < (y.offset + len(y.text)) or x1.offset <= (y.offset + len(y.text) - 1) same for the other condition
 
             if self.equality_operator == 'exact':
                 return exact

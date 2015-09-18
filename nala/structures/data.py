@@ -372,22 +372,30 @@ class Document:
         """
         text = ""
 
-        it = iter(self)
+        _length = self.get_size()
 
-        # init: inside-variable, that defines: (i < n) part
-        inside = True
-        if len(self.parts) == 1:
-            inside = True
-        counter = 0
-        while inside:
-            text += next(it).text + " "
-            if counter == len(self.parts) - 2:
-                inside = False
-            counter += 1
+        for i, p in enumerate(self.parts.values()):
+            if _length - 1 == i:
+                text += p.text
+                break
+            text += "{0} ".format(p.text)
 
-        # TODO rewrite to make look nicer. this is horrible
-
-        text += next(it).text
+        # it = iter(self)
+        #
+        # # init: inside-variable, that defines: (i < n) part
+        # inside = True
+        # if len(self.parts) == 1:
+        #     inside = True
+        # counter = 0
+        # while inside:
+        #     text += next(it).text + " "
+        #     if counter == len(self.parts) - 2:
+        #         inside = False
+        #     counter += 1
+        #
+        # # TODO rewrite to make look nicer. this is horrible
+        #
+        # text += next(it).text
         return text
 
     def get_body(self):

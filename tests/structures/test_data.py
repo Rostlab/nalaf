@@ -9,10 +9,18 @@ class TestDataset(unittest.TestCase):
         cls.dataset = Dataset()
         cls.doc = Document()
         cls.dataset.documents['testid'] = cls.doc
+
+        # TEXT = "123 45678"
+        # POS  = "012345678"
+        # ANN1 = " X       "
+        # ANN2 = "     XXX "
+        # PAR1 = "XXX      "
+        # PAR1 = "    XXXXX"
+
         part1 = Part('123')
         part2 = Part('45678')
         ann1 = Annotation(class_id='e_2', offset=1, text='2', confidence=0)
-        ann2 = Annotation(class_id='e_2', offset=4, text='567', confidence=1)
+        ann2 = Annotation(class_id='e_2', offset=1, text='567', confidence=1)
         ann1.subclass = 0
         ann2.subclass = 2
         part1.annotations.append(ann1)
@@ -21,20 +29,16 @@ class TestDataset(unittest.TestCase):
         cls.doc.parts['s2p1'] = part2
     
     def test_overlaps_with_mention(self):
-        print(self.doc.get_text())
-        # part1
-        self.assertTrue(self.doc.overlaps_with_mention(4, 4))
-        # self.assertTrue(self.doc.overlaps_with_mention(6))
-        # self.assertFalse(self.doc.overlaps_with_mention(5))
+        # True states
+        self.assertTrue(self.doc.overlaps_with_mention(5, 5))
+        self.assertTrue(self.doc.overlaps_with_mention(6, 8))
+        self.assertTrue(self.doc.overlaps_with_mention(4, 5))
+        self.assertTrue(self.doc.overlaps_with_mention(1, 7))
 
-        # part2 with offsets
-        # 16 is len('Start test text.')
-        # self.assertTrue(self.doc.overlaps_with_mention(5 + 16))
-        # self.assertTrue(self.doc.overlaps_with_mention(6 + 16))
-        # self.assertFalse(self.doc.overlaps_with_mention(4 + 16))
-        # self.assertFalse(self.doc.overlaps_with_mention(7 + 16))
-        # self.assertFalse(self.doc.overlaps_with_mention2(3, 3))
-        # self.assertTrue(self.doc.overlaps_with_mention2(3, 4))
+        # False states
+        self.assertFalse(self.doc.overlaps_with_mention(3, 4))
+        self.assertFalse(self.doc.overlaps_with_mention(0, 0))
+        self.assertFalse(self.doc.overlaps_with_mention(2, 4))
 
     def test_get_title(self):
         self.assertEquals(self.doc.get_title(), '123')

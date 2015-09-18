@@ -190,6 +190,12 @@ class Dataset:
         for ann in self.annotations():
             ann.subclass = False
 
+    def get_size_chars(self):
+        """
+        :return: total number of chars in this dataset
+        """
+        return sum(doc.get_size() for doc in self.documents.values())
+
     def __repr__(self):
         # TODO properly implement repr of dataset (need to implement dependent types as well)
         return "Dataset({0} documents and {1} annotations)".format(len(self.documents), sum(1 for _ in self.annotations()))
@@ -358,7 +364,7 @@ class Document:
         return set(mentions)
 
     def get_size(self):
-        """give back rough size log(lettres)*parts"""
+        """returns nr of chars including spaces between parts"""
         return sum(len(x.text) + 1 for x in self.parts.values()) - 1
 
     def get_title(self):

@@ -91,6 +91,11 @@ with open('nala/data/nl_patterns.json', 'r') as f:
 
 patterns = [re.compile(x) for x in regexs]
 
+# f-measure pattern-based
+_perf_patterns = {}
+for reg in patterns:
+    _perf_patterns[reg.pattern] = [0, 0, -1]
+
 # check for annotations
 
 # for part in dataset.parts():
@@ -100,7 +105,7 @@ patterns = [re.compile(x) for x in regexs]
 dataset_high_recall = TmVarReader('resources/corpora/idp4/pubtator_tmvar.txt').read()
 TP = 0
 FP = 0
-_length = len(dataset.documents.values())
+_length = len(dataset.documents.keys())
 _progress = 0
 _timestart = time.time()
 
@@ -109,6 +114,8 @@ _pattern_calls = 0
 _time_reg_pattern_total = 0
 _time_max_pattern = 0
 _low_performant_pattern = ""
+_avg_chars_per_doc = dataset.get_size_chars() / len(dataset.documents.keys())
+
 
 with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
     for did, doc in dataset.documents.items():
@@ -123,7 +130,8 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
             # TODO use the nltk splitter instead of '. '
             for sent in sentences:
                 part_length = len(sent)
-                new_text = re.sub('\W+', ' ', sent)
+                new_text = re.sub('[\./\\-(){}\[\],%]', '', sent)
+                new_text = re.sub('\W+', ' ', new_text)
                 for i, reg in enumerate(patterns):
 
                     _lasttime = time.time()  # time start var
@@ -136,16 +144,16 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                     if _time_reg_pattern_total > 0:
                         _time_avg_per_pattern = _time_reg_pattern_total / _pattern_calls  # avg spent time per pattern call
 
-                    if _pattern_calls > len(patterns) * 20 and _time_avg_per_pattern * 10000 < _time_current_reg:
-                        print("BAD_PATTERN_PERFORMANCE:", _time_avg_per_pattern, _time_current_reg, reg.pattern)
-                    if _time_max_pattern < _time_current_reg:
-                        _time_max_pattern = _time_current_reg
-                        _low_performant_pattern = reg.pattern
-                        print(_time_avg_per_pattern, _low_performant_pattern, _time_max_pattern)
+                    # if _pattern_calls > len(patterns) * 20 and _time_avg_per_pattern * 10000 < _time_current_reg:
+                    #     print("BAD_PATTERN_PERFORMANCE:", _time_avg_per_pattern, _time_current_reg, reg.pattern)
+                    # if _time_max_pattern < _time_current_reg:
+                    #     _time_max_pattern = _time_current_reg
+                    #     _low_performant_pattern = reg.pattern
+                    #     print(_time_avg_per_pattern, _low_performant_pattern, _time_max_pattern)
 
                     if reg.pattern == r'(\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (deletion|deleting|deleted)':
-                        if _time_current_reg > _time_avg_per_pattern * 100:
-                            print(_time_avg_per_pattern, _time_current_reg)
+                        if _time_current_reg > _time_avg_per_pattern * 10:
+                            # print(_time_avg_per_pattern, _time_current_reg)
                             f.write("BAD_PATTERN\n")
                             f.write(sent + "\n")
                             f.write(new_text + "\n")
@@ -158,19 +166,30 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                             if not anti_doc.overlaps_with_mention(match.span()):
                                 if doc.overlaps_with_mention(match.span()):
                                     TP += 1
-                                    f.write("TP: {} {} {}\n".format(sent, match, reg.pattern))
+                                    f.write("TP:\t{}\t{}\t{}\n".format(sent, match, reg.pattern))
+                                    _perf_patterns[reg.pattern][0] += 1
                                 else:
                                     FP += 1
-                                    f.write("FP: {} {} {}\n".format(sent, match, reg.pattern))
+                                    f.write("FP:\t{}\t{}\t{}\n".format(sent, match, reg.pattern))
+                                    _perf_patterns[reg.pattern][1] += 1
+
+                                if _perf_patterns[reg.pattern][1] > 0:
+                                        _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
                                 break
                     if _lasttime - time.time() > 1:
                         print(i)
                 sent_offset += 2 + part_length
             part_offset += sent_offset
-        _progress += 1
+        _progress += doc.get_size() / _avg_chars_per_doc
         _time_progressed = time.time() - _timestart
         _time_per_doc = _time_progressed / _progress
         _time_req_time = _time_per_doc * _length
         _time_eta = _time_req_time - _time_progressed
-        print("PROGRESS: {0:.4%} ETA: {1:.2f} secs".format(_progress/_length, _time_eta))
-        print('STATS: TP:{}, FP:{}, %containingNLmentions:{:.4%}'.format(TP, FP, TP/(TP + FP)))
+        print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/_length, _time_progressed, _time_eta))
+        if TP + FP > 0:
+            print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
+
+for key, value in _perf_patterns.items():
+    if value[2] != -1:
+        print(value, key)
+# print(json.dumps(_perf_patterns, indent=3, sort_keys=True))

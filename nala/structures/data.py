@@ -429,9 +429,9 @@ class Document:
                 else:
                     print_debug(
                         "Current(offset: {0}, offset+len(text): {1}, text: {2})".format(offset_corrected_ann.offset,
-                                                                                 offset_corrected_ann.offset + len(
-                                                                                     offset_corrected_ann.text),
-                                                                                 offset_corrected_ann.text))
+                                                                                        offset_corrected_ann.offset + len(
+                                                                                            offset_corrected_ann.text),
+                                                                                        offset_corrected_ann.text))
             offset += len(part.text)
         return False
 
@@ -440,22 +440,35 @@ class Document:
         Checks for overlap at position charpos with another mention.
         """
         offset = 0
+
+        # TODO *args instead of fixed 2 or 1 element
+
+        print_debug("===TEXT===\n{0}\n".format(self.get_text()))
+
         for pid, part in self.parts.items():
+            print_debug("Part {0}: {1}".format(pid, part))
             for ann in part.annotations:
                 # TODO check for + 1 character for \n for parts
+                print_debug(ann)
+                print_debug("TEXT:".ljust(10) + part.text)
+                print_debug("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                    len(part.text) - end + offset - 1))
+                print_debug("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                        len(part.text) - ann.offset + len(ann.text) - 2))
                 if start < ann.offset + offset + len(ann.text) and ann.offset + offset <= end:
-                    print_verbose('Found:')
+                    print_verbose('=====\nFOUND\n=====')
                     print_verbose("TEXT:".ljust(10) + part.text)
                     print_verbose("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
                         len(part.text) - end + offset - 1))
-                    print_verbose("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                    print_verbose("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         ann.offset + len(ann.text) - 1))
                     return True
-            offset += len(part.text)
-        print_verbose('Not Found:')
+            offset += len(part.text) + 1
+        print_verbose('=========\nNOT FOUND\n=========')
         print_verbose(
-            "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (len(self.get_text()) - end - 1))
+            "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (offset - end - 2))
         print_verbose("TEXT:".ljust(10) + self.get_text())
+        print_debug()
         return False
 
     def mention_overlaps_with_mention(self, start, end):

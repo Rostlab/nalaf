@@ -121,11 +121,9 @@ for did, doc in dataset.documents.items():
                 if match:
                     if did in dataset_high_recall.documents:
                         other_doc = dataset_high_recall.documents.get(did)
-                        if not other_doc.overlaps_with_mention(match.span()[0]) and not other_doc.overlaps_with_mention(
-                                match.span()[1]):
+                        if not other_doc.overlaps_with_mention(match.span()):
                             print(sent, match, reg.pattern)
-                            if doc.overlaps_with_mention(match.span()[0]) and doc.overlaps_with_mention(
-                                    match.span()[1]):
+                            if doc.overlaps_with_mention(match.span()):
                                 TP += 1
                             else:
                                 FP += 1

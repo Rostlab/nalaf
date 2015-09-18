@@ -435,13 +435,17 @@ class Document:
             offset += len(part.text)
         return False
 
-    def overlaps_with_mention(self, start, end):
+    def overlaps_with_mention(self, *args):
         """
         Checks for overlap at position charpos with another mention.
         """
         offset = 0
 
         # TODO *args instead of fixed 2 or 1 element
+        if len(args) > 1:
+            start, end, _ = args
+        else:
+            start, end = args[0]
 
         print_debug("===TEXT===\n{0}\n".format(self.get_text()))
 

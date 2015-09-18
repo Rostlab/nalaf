@@ -197,7 +197,6 @@ class Dataset:
         return sum(doc.get_size() for doc in self.documents.values())
 
     def __repr__(self):
-        # TODO properly implement repr of dataset (need to implement dependent types as well)
         return "Dataset({0} documents and {1} annotations)".format(len(self.documents), sum(1 for _ in self.annotations()))
 
     def stats(self):
@@ -385,23 +384,6 @@ class Document:
                 text += p.text
                 break
             text += "{0} ".format(p.text)
-
-        # it = iter(self)
-        #
-        # # init: inside-variable, that defines: (i < n) part
-        # inside = True
-        # if len(self.parts) == 1:
-        #     inside = True
-        # counter = 0
-        # while inside:
-        #     text += next(it).text + " "
-        #     if counter == len(self.parts) - 2:
-        #         inside = False
-        #     counter += 1
-        #
-        # # TODO rewrite to make look nicer. this is horrible
-        #
-        # text += next(it).text
         return text
 
     def get_body(self):
@@ -455,7 +437,6 @@ class Document:
         """
         offset = 0
 
-        # TODO *args instead of fixed 2 or 1 element
         if len(args) > 1:
             start, end, _ = args
         else:
@@ -466,7 +447,6 @@ class Document:
         for pid, part in self.parts.items():
             print_debug("Part {0}: {1}".format(pid, part))
             for ann in part.annotations:
-                # TODO check for + 1 character for \n for parts
                 print_debug(ann)
                 print_debug("TEXT:".ljust(10) + part.text)
                 print_debug("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
@@ -489,12 +469,6 @@ class Document:
         print_debug()
         return False
 
-    def mention_overlaps_with_mention(self, start, end):
-        # TODO optimise using doubled loops
-        if self.overlaps_with_mention(start) or self.overlaps_with_mention(end):
-            return True
-        else:
-            return False
 
 class Part:
     """

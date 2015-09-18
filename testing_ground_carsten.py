@@ -1,32 +1,11 @@
-import argparse
-import configparser
-import functools
-import sys
 import json
 import re
-import timeit
 import time
-from nala import print_verbose
 
-from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader
-from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
-from nala.preprocessing.definers import TmVarRegexNLDefiner
-from nala.preprocessing.definers import ExclusiveNLDefiner, SimpleExclusiveNLDefiner
-from nala.preprocessing.definers import TmVarNLDefiner
+from nala.utils.readers import HTMLReader, TmVarReader
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
-from nala.utils.writers import StatsWriter
-from nala.features.simple import SimpleFeatureGenerator
-from nala.features.tmvar import TmVarFeatureGenerator
-from nala.features.window import WindowFeatureGenerator
-from nala.learning.crfsuite import CRFSuite
-
-import nala.utils.db_validation as dbcheck
-from nala.utils.writers import TagTogFormat
-from nala.utils.dataset_selection import RegexSelector, TmVarRegexCombinedSelector
-from nala.utils.writers import PubTatorFormat
 
 html_path = "resources/corpora/idp4/html"
 ann_path = "resources/corpora/idp4/annjson"

@@ -103,44 +103,74 @@ FP = 0
 _length = len(dataset.documents.values())
 _progress = 0
 _timestart = time.time()
-for did, doc in dataset.documents.items():
-    part_offset = 0
-    for i, x in enumerate(doc.parts):
-        # print("Part", i)
-        sent_offset = 0
-        cur_part = doc.parts.get(x)
-        new_text = cur_part.text.lower()
-        new_text = re.sub('\s+', ' ', new_text)
-        sentences = new_text.split('. ')
-        # TODO use the nltk splitter instead of '. '
-        for sent in sentences:
-            part_length = len(sent)
-            new_text = re.sub('\W+', ' ', sent)
-            for i, reg in enumerate(patterns):
-                # print(reg.pattern)
-                lasttime = time.time()
-                match = reg.search(new_text)
-                from nala.structures.data import Annotation
-                Annotation.equality_operator = 'exact_or_overlapping'
-                if match:
-                    if did in dataset_high_recall.documents:
-                        anti_doc = dataset_high_recall.documents.get(did)
-                        if not anti_doc.overlaps_with_mention(match.span()):
-                            if doc.overlaps_with_mention(match.span()):
-                                TP += 1
-                                print("TP:", sent, match, reg.pattern)
-                            else:
-                                FP += 1
-                                print("FP:", sent, match, reg.pattern)
-                            break
-                if lasttime - time.time() > 1:
-                    print(i)
-            sent_offset += 2 + part_length
-        part_offset += sent_offset
-    _progress += 1
-    _time_progressed = time.time() - _timestart
-    _time_per_doc = _time_progressed / _progress
-    _time_req_time = _time_per_doc * _length
-    _time_eta = _time_req_time - _time_progressed
-    print("PROGRESS: {0:.4%} ETA: {1:.2f} secs".format(_progress/_length, _time_eta))
-    print('STATS: TP:{0}, FP:{1}, %containingNLmentions:{2}'.format(TP, FP, TP/(TP + FP)))
+
+_time_avg_per_pattern = 0
+_pattern_calls = 0
+_time_reg_pattern_total = 0
+_time_max_pattern = 0
+_low_performant_pattern = ""
+
+with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
+    for did, doc in dataset.documents.items():
+        part_offset = 0
+        for i, x in enumerate(doc.parts):
+            # print("Part", i)
+            sent_offset = 0
+            cur_part = doc.parts.get(x)
+            new_text = cur_part.text.lower()
+            new_text = re.sub('\s+', ' ', new_text)
+            sentences = new_text.split('. ')
+            # TODO use the nltk splitter instead of '. '
+            for sent in sentences:
+                part_length = len(sent)
+                new_text = re.sub('\W+', ' ', sent)
+                for i, reg in enumerate(patterns):
+
+                    _lasttime = time.time()  # time start var
+                    match = reg.search(new_text)
+
+                    # debug bottleneck patterns
+                    _time_current_reg = time.time() - _lasttime  # time end var
+                    _pattern_calls += 1  # pattern calls already occured
+                    _time_reg_pattern_total += _time_current_reg  # total time spent on searching with patterns
+                    if _time_reg_pattern_total > 0:
+                        _time_avg_per_pattern = _time_reg_pattern_total / _pattern_calls  # avg spent time per pattern call
+
+                    if _pattern_calls > len(patterns) * 20 and _time_avg_per_pattern * 10000 < _time_current_reg:
+                        print("BAD_PATTERN_PERFORMANCE:", _time_avg_per_pattern, _time_current_reg, reg.pattern)
+                    if _time_max_pattern < _time_current_reg:
+                        _time_max_pattern = _time_current_reg
+                        _low_performant_pattern = reg.pattern
+                        print(_time_avg_per_pattern, _low_performant_pattern, _time_max_pattern)
+
+                    if reg.pattern == r'(\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (deletion|deleting|deleted)':
+                        if _time_current_reg > _time_avg_per_pattern * 100:
+                            print(_time_avg_per_pattern, _time_current_reg)
+                            f.write("BAD_PATTERN\n")
+                            f.write(sent + "\n")
+                            f.write(new_text + "\n")
+
+                    from nala.structures.data import Annotation
+                    Annotation.equality_operator = 'exact_or_overlapping'
+                    if match:
+                        if did in dataset_high_recall.documents:
+                            anti_doc = dataset_high_recall.documents.get(did)
+                            if not anti_doc.overlaps_with_mention(match.span()):
+                                if doc.overlaps_with_mention(match.span()):
+                                    TP += 1
+                                    f.write("TP: {} {} {}\n".format(sent, match, reg.pattern))
+                                else:
+                                    FP += 1
+                                    f.write("FP: {} {} {}\n".format(sent, match, reg.pattern))
+                                break
+                    if _lasttime - time.time() > 1:
+                        print(i)
+                sent_offset += 2 + part_length
+            part_offset += sent_offset
+        _progress += 1
+        _time_progressed = time.time() - _timestart
+        _time_per_doc = _time_progressed / _progress
+        _time_req_time = _time_per_doc * _length
+        _time_eta = _time_req_time - _time_progressed
+        print("PROGRESS: {0:.4%} ETA: {1:.2f} secs".format(_progress/_length, _time_eta))
+        print('STATS: TP:{}, FP:{}, %containingNLmentions:{:.4%}'.format(TP, FP, TP/(TP + FP)))

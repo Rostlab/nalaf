@@ -1,6 +1,8 @@
 import unittest
 from nala.structures.data import Dataset, Document, Part, Token, Label, Annotation
 from nala.utils import MUT_CLASS_ID
+from preprocessing.spliters import NLTKSplitter
+from preprocessing.tokenizers import TmVarTokenizer
 
 
 class TestDataset(unittest.TestCase):
@@ -54,14 +56,28 @@ class TestDataset(unittest.TestCase):
 
 
 class TestDocument(unittest.TestCase):
-    def test_key_value_parts(self):
-        pass  # TODO
+    @classmethod
+    def setUpClass(cls):
+        text1 = "Flowers in the Rain. Are absolutely marvellous. Though i would say this text is stupid. Cheers!"
 
-    def test_get_unique_mentions(self):
-        pass  # TODO
+        part1 = Part(text1)
+        doc = Document()
+        doc.parts['firstpart'] = part1
+        dataset = Dataset()
+        dataset.documents['firstdocument'] = doc
+
+        NLTKSplitter().split(dataset)
+        # TmVarTokenizer().tokenize(dataset)
+        cls.data = dataset
+        cls.testpart = dataset.documents['firstdocument'].parts['firstpart']
 
     def test_get_size(self):
-        pass  # TODO
+        self.assertEqual(self.testpart.get_size(), 95)
+
+    def test_get_sentence_string_array(self):
+        self.assertEqual(self.testpart.get_sentence_string_array(),
+                         ["Flowers in the Rain.", "Are absolutely marvellous.",
+                          "Though i would say this text is stupid.", "Cheers!"])
 
 
 class TestToken(unittest.TestCase):

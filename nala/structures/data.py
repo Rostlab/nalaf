@@ -497,6 +497,20 @@ class Part:
         this represent the prediction on a mention label rather then on a token level
         """
 
+    def get_sentence_string_array(self):
+        """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
+        return_array = []
+        for sentence_array in self.sentences:
+            new_sentence = ""
+            for token in sentence_array:
+                if isinstance(token, Token):
+                    new_sentence += token.word + " "
+                else:
+                    return self.sentences
+            return_array.append(new_sentence.rstrip())  # to delete last space
+        print(return_array)
+        return return_array
+
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
@@ -506,6 +520,11 @@ class Part:
     def __repr__(self):
         return "Part(len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
             self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
+
+    def get_size(self):
+        """ just returns number of chars that this part contains """
+        # OPTIONAL might be updated in order to represent annotations and such as well
+        return len(self.text)
 
 
 class Token:
@@ -601,10 +620,10 @@ class Annotation:
 
     def __eq__(self, other):
         # consider them a match only if class_id matches
+        # TODO implement test case for edge cases in overlap and exact
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
-            overlap = self.offset <= (other.offset + len(other.text)) and (self.offset + len(self.text)) >= other.offset
-            # FIXME should be x1.offset < (y.offset + len(y.text)) or x1.offset <= (y.offset + len(y.text) - 1) same for the other condition
+            overlap = self.offset < (other.offset + len(other.text)) and (self.offset + len(self.text)) > other.offset
 
             if self.equality_operator == 'exact':
                 return exact

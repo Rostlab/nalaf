@@ -6,12 +6,14 @@ from nala.utils.readers import HTMLReader, TmVarReader
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
+from preprocessing.spliters import NLTKSplitter
 
 html_path = "resources/corpora/idp4/html"
 ann_path = "resources/corpora/idp4/annjson"
 crf_path = "/usr/local/Cellar/crfsuite/0.12"
 
 dataset = HTMLReader(html_path).read()
+NLTKSplitter().split(dataset)
 
 AnnJsonAnnotationReader(ann_path).annotate(dataset)
 
@@ -41,26 +43,26 @@ bp_code = re.compile('\\b\\w\\b')
 
 wordlist = []
 
-for ann in dataset.annotations():
-    if ann.subclass == 1 or ann.subclass == 2:
-        new_text = ann.text.lower()
-        for reg in compiled_regexs:
-            new_text = reg.sub('_TT_', new_text)
-        # re.sub('\\b\\d+\\b]', '_NR_', new_text)
-        new_text = re.sub('\\b\\w*\\d+\\w*\\b', '_CODE_', new_text)
-        new_text = nr_word_regex.sub('_TT_', new_text)
-        new_text = aa_short_regex.sub('_AA_', new_text)
-        new_text = aa_long_regex.sub('_AA_', new_text)
-        new_text = bp_code.sub('_TT_', new_text)
-        new_text = re.sub('\\W', ' ', new_text)
-        # new_text = re.sub('\\b(\\w{1,3})\\b', '_TT_', new_text)
-
-        wordlist.extend(new_text.split(' '))
-        # print(new_text)
-        nl_annotations.append(new_text)
-
-wordset = set(wordlist)
-wordlist = sorted(list(wordset))
+# for ann in dataset.annotations():
+#     if ann.subclass == 1 or ann.subclass == 2:
+#         new_text = ann.text.lower()
+#         for reg in compiled_regexs:
+#             new_text = reg.sub('_TT_', new_text)
+#         # re.sub('\\b\\d+\\b]', '_NR_', new_text)
+#         new_text = re.sub('\\b\\w*\\d+\\w*\\b', '_CODE_', new_text)
+#         new_text = nr_word_regex.sub('_TT_', new_text)
+#         new_text = aa_short_regex.sub('_AA_', new_text)
+#         new_text = aa_long_regex.sub('_AA_', new_text)
+#         new_text = bp_code.sub('_TT_', new_text)
+#         new_text = re.sub('\\W', ' ', new_text)
+#         # new_text = re.sub('\\b(\\w{1,3})\\b', '_TT_', new_text)
+#
+#         wordlist.extend(new_text.split(' '))
+#         # print(new_text)
+#         nl_annotations.append(new_text)
+#
+# wordset = set(wordlist)
+# wordlist = sorted(list(wordset))
 # print(json.dumps(wordlist, indent=2, sort_keys=True))
 # print(json.dumps(nl_annotations, indent=2, sort_keys=True))
 
@@ -108,13 +110,14 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
             # print("Part", i)
             sent_offset = 0
             cur_part = doc.parts.get(x)
-            new_text = cur_part.text.lower()
-            new_text = re.sub('\s+', ' ', new_text)
-            sentences = new_text.split('. ')
-            # TODO use the nltk splitter instead of '. '
+            sentences = cur_part.sentences
+            # new_text = cur_part.text.lower()
+            # new_text = re.sub('\s+', ' ', new_text)
+            # sentences = new_text.split('. ')
             for sent in sentences:
                 part_length = len(sent)
-                new_text = re.sub('[\./\\-(){}\[\],%]', '', sent)
+                new_text = sent.lower()
+                new_text = re.sub('[\./\\-(){}\[\],%]', '', new_text)
                 new_text = re.sub('\W+', ' ', new_text)
                 for i, reg in enumerate(patterns):
 
@@ -135,12 +138,12 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                     #     _low_performant_pattern = reg.pattern
                     #     print(_time_avg_per_pattern, _low_performant_pattern, _time_max_pattern)
 
-                    if reg.pattern == r'(\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (deletion|deleting|deleted)':
-                        if _time_current_reg > _time_avg_per_pattern * 10:
-                            # print(_time_avg_per_pattern, _time_current_reg)
-                            f.write("BAD_PATTERN\n")
-                            f.write(sent + "\n")
-                            f.write(new_text + "\n")
+                    # if reg.pattern == r'(\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (\b\w*\d+\w*\b\s?){1,3} (\b\w+\b\s?){1,4} (deletion|deleting|deleted)':
+                    #     if _time_current_reg > _time_avg_per_pattern * 10:
+                    #         # print(_time_avg_per_pattern, _time_current_reg)
+                    #         f.write("BAD_PATTERN\n")
+                    #         f.write(sent + "\n")
+                    #         f.write(new_text + "\n")
 
                     from nala.structures.data import Annotation
                     Annotation.equality_operator = 'exact_or_overlapping'

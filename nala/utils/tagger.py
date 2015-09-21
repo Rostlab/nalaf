@@ -75,18 +75,19 @@ class TmVarTagger(Tagger):
             print(json.dumps(tm_var[key], indent=4))
 
         dataset = Dataset()
-        for doc_id in tm_var:
-            doc = Document()
-            text = tm_var[doc_id]['text']
-            part = Part(text)
-            denotations = tm_var[doc_id]['denotations']
-            annotations = []
-            for deno in denotations:
-                ann = Annotation(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])  # todo check whether right offsets (especially the last one)
-                annotations.append(ann)
-                # discussion should the annotations from tmvar go to predicted_annotations or annotations?
-            part.annotations = annotations
-            doc.parts['abstract'] = part
-            dataset.documents[doc_id] = doc
+        for doc_id in list_of_pmids:
+            if doc_id in tm_var:
+                doc = Document()
+                text = tm_var[doc_id]['text']
+                part = Part(text)
+                denotations = tm_var[doc_id]['denotations']
+                annotations = []
+                for deno in denotations:
+                    ann = Annotation(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
+                    annotations.append(ann)
+                    # discussion should the annotations from tmvar go to predicted_annotations or annotations?
+                part.annotations = annotations
+                doc.parts['abstract'] = part
+                dataset.documents[doc_id] = doc
 
         return dataset

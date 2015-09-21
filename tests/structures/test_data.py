@@ -29,7 +29,10 @@ class TestDataset(unittest.TestCase):
         part2.annotations.append(ann2)
         cls.doc.parts['s1h1'] = part1
         cls.doc.parts['s2p1'] = part2
-    
+
+    def test_repr_full(self):
+        print(str(self.dataset))
+
     def test_overlaps_with_mention(self):
         # True states
         self.assertTrue(self.doc.overlaps_with_mention(5, 5))

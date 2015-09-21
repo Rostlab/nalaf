@@ -60,19 +60,25 @@ class UniprotDocumentSelector(Cacheable):
                 yield pubmed_id
 
 
-class DownloadArticle:
+class DownloadArticle(Cacheable):
     """
     A utility generator that for a given iterable of PMIDs generates Document objects
     created by downloading the articles associated with the pmid.
     """
 
     def __init__(self):
+        super().__init__()
         self.pubmed_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
     def download(self, pmids):
         for pmid in pmids:
-            req = requests.get(self.pubmed_url, {'db': 'pubmed', 'retmode': 'xml', 'id': pmid})
-            xml = ET.fromstring(req.content)
+            if pmid in self.cache:
+                xml = ET.fromstring(self.cache[pmid])
+            else:
+                req = requests.get(self.pubmed_url, {'db': 'pubmed', 'retmode': 'xml', 'id': pmid})
+                text = req.text
+                xml = ET.fromstring(text)
+                self.cache[pmid] = text
 
             doc = Document()
             counter = 0
@@ -109,14 +115,15 @@ def generate_documents(n):
 
     # use in context manager to enable caching
     with UniprotDocumentSelector() as uds:
-        for pmid, document in \
-                KeywordsDocumentFilter().filter(
-                    DownloadArticle().download(
-                        AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
-                            uds.get_pubmed_ids()))):
-            dataset.documents[pmid] = document
-
+        with DownloadArticle() as da:
+            for pmid, document in \
+                    KeywordsDocumentFilter().filter(
+                        da.download(
+                            AlreadyConsideredPMIDFilter(r'C:\Users\Aleksandar\Desktop\root', 4).filter(
+                                uds.get_pubmed_ids()))):
+                dataset.documents[pmid] = document
             # if we have generated enough documents stop
-            if next(c) == n:
-                break
+                if next(c) == n:
+                    break
+
     return dataset

@@ -3,6 +3,7 @@ import json
 import requests
 import os
 from nala import print_debug
+from structures.data import Dataset, Document, Part, Annotation
 
 
 class Tagger():
@@ -68,21 +69,24 @@ class TmVarTagger(Tagger):
                     pass
         # cache the tmVar annotations so we don't pull them every time
         with open('cache.json', 'w') as file:
-            json.dump(tm_var, indent=4)
+            json.dump(tm_var, file, indent=4)
 
         for key in tm_var:
-            print_debug(tm_var[key])
-            break
+            print(json.dumps(tm_var[key], indent=4))
 
-        exit()
+        dataset = Dataset()
+        for doc_id in tm_var:
+            doc = Document()
+            text = tm_var[doc_id]['text']
+            part = Part(text)
+            denotations = tm_var[doc_id]['denotations']
+            annotations = []
+            for deno in denotations:
+                ann = Annotation(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])  # todo check whether right offsets (especially the last one)
+                annotations.append(ann)
+                # discussion should the annotations from tmvar go to predicted_annotations or annotations?
+            part.annotations = annotations
+            doc.parts['abstract'] = part
+            dataset.documents[doc_id] = doc
 
-        for doc_id, doc in dataset.documents.items():
-            if doc_id in tm_var:
-                denotations = tm_var[doc_id]['denotations']
-                text = tm_var[doc_id]['text']
-                denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
-
-                for part_id, part in doc.parts.items():
-                    for ann in chain(part.annotations, part.predicted_annotations):
-                        if ann.class_id == MUT_CLASS_ID and ann.text not in denotations:
-                            ann.subclass = True
+        return dataset

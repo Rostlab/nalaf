@@ -345,8 +345,8 @@ class Document:
             yield part
 
     def __repr__(self):
-        return 'Document(Size: {0}, Title: "{1}", Text: "{2}")'.format(len(self.parts), self.get_title(),
-                                                                       self.get_text())
+        return 'Document(Size: {0}, Title: "{1}", Text: "{2}", Annotations: "{3}")'.format(len(self.parts), self.get_title(),
+                                                                       self.get_text(), self.get_unique_mentions())
 
     def key_value_parts(self):
         """yields iterator for partids"""

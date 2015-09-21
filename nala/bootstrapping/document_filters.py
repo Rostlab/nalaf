@@ -160,7 +160,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                 anti_doc = data_tmvar.documents.get(pmid)
                                 start = part_offset + sent_offset + match.span()[0]
                                 end = part_offset + sent_offset + match.span()[1]
-                                # FIXME huge bug.... -.- regex on sentence lvl but overlap search on document lvl
                                 if not anti_doc.overlaps_with_mention(start, end):
                                     _e_result = exclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _e_array[_e_result] += 1

@@ -115,7 +115,7 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
             # new_text = re.sub('\s+', ' ', new_text)
             # sentences = new_text.split('. ')
             for sent in sentences:
-                part_length = len(sent)
+                sent_len = len(sent)
                 new_text = sent.lower()
                 new_text = re.sub('[\./\\-(){}\[\],%]', '', new_text)
                 new_text = re.sub('\W+', ' ', new_text)
@@ -145,17 +145,17 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                     #         f.write(sent + "\n")
                     #         f.write(new_text + "\n")
 
-                    from nala.structures.data import Annotation
-                    Annotation.equality_operator = 'exact_or_overlapping'
                     if match:
                         if did in dataset_high_recall.documents:
                             anti_doc = dataset_high_recall.documents.get(did)
-                            if not anti_doc.overlaps_with_mention(match.span()):
+                            start = part_offset + sent_offset + match.span()[0]
+                            end = part_offset + sent_offset + match.span()[1]
+                            if not anti_doc.overlaps_with_mention(start, end):
                                 _e_result = exclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                 _e_array[_e_result] += 1
                                 _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                 _i_array[_i_result] += 1
-                                if doc.overlaps_with_mention(match.span()):
+                                if doc.overlaps_with_mention(start, end):
                                     TP += 1
                                     f.write("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
                                     _perf_patterns[reg.pattern][0] += 1
@@ -169,7 +169,7 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                                 break
                     if _lasttime - time.time() > 1:
                         print(i)
-                sent_offset += 2 + part_length
+                sent_offset += 2 + sent_len
             part_offset += sent_offset
         _progress += doc.get_size() / _avg_chars_per_doc
         _time_progressed = time.time() - _timestart

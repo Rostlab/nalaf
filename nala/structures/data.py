@@ -442,8 +442,8 @@ class Document:
         """
         offset = 0
 
-        if len(args) > 1:
-            start, end, _ = args
+        if len(args) == 2:
+            start, end = args
         else:
             start, end = args[0]
 

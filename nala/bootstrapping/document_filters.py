@@ -86,20 +86,8 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
 
-        dataset = Dataset()
-        _list_of_pmids = []
-        for pmid, doc in documents:
-            dataset.documents[pmid] = doc
-            _list_of_pmids.append(pmid)
-
-        return_documents = []
-
-        # dataset with tmVar
-        # note atm just abstracts since full text interface not implemented
-        data_tmvar = TmVarTagger().generate_abstracts(_list_of_pmids)
         TP = 0
         FP = 0
-        _length = len(list(dataset.documents.keys()))
         _progress = 0
         _timestart = time.time()
 
@@ -108,7 +96,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _time_reg_pattern_total = 0
         _time_max_pattern = 0
         _low_performant_pattern = ""
-        _avg_chars_per_doc = dataset.get_size_chars() / len(list(dataset.documents.keys()))
 
         # NLDefiners init
         exclusive_definer = ExclusiveNLDefiner()
@@ -116,11 +103,13 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         inclusive_definer = InclusiveNLDefiner()
         _i_array = [0, 0]
 
-        NLTKSplitter().split(dataset)
-        for pmid, doc in dataset.documents.items():
+        for pmid, doc in documents:
             # if any part of the document contains any of the keywords
             # yield that document
             part_offset = 0
+            data_tmp = Dataset()
+            data_tmp.documents[pmid] = doc
+            NLTKSplitter().split(data_tmp)
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
                 sent_offset = 0
@@ -156,7 +145,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         #         f.write("BAD_PATTERN\n")
                         #         f.write(sent + "\n")
                         #         f.write(new_text + "\n")
-
+                        data_tmvar = TmVarTagger().generate_abstracts([pmid])
                         if match:
                             if pmid in data_tmvar.documents:
                                 anti_doc = data_tmvar.documents.get(pmid)
@@ -167,27 +156,18 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                     _e_array[_e_result] += 1
                                     _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _i_array[_i_result] += 1
-                                    if doc.overlaps_with_mention(match.span()):
-                                        TP += 1
-                                        print("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
-                                        # _perf_patterns[reg.pattern][0] += 1
-                                    else:
-                                        FP += 1
-                                        print("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
-                                        # _perf_patterns[reg.pattern][1] += 1
-                                    yield (pmid, doc)
-                                    # if _perf_patterns[reg.pattern][1] > 0:
-                                    #         _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
-                                    break
+                                    print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+
                         if _lasttime - time.time() > 1:
                             print(i)
                     sent_offset += 2 + sent_length  # note why + 2 ?
                 part_offset += sent_offset
-            _progress += doc.get_size() / _avg_chars_per_doc
+            _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
-            _time_req_time = _time_per_doc * _length
+            _time_req_time = _time_per_doc * 200
             _time_eta = _time_req_time - _time_progressed
-            print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/_length, _time_progressed, _time_eta))
+            print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/200, _time_progressed, _time_eta))
             if TP + FP > 0:
                 print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
+            yield pmid, doc

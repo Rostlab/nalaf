@@ -21,16 +21,15 @@ class TestHighRecallRegexFilter(unittest.TestCase):
         # use in context manager to enable caching
         with UniprotDocumentSelector() as uds:
             for pmid, document in \
-                    HighRecallRegexDocumentFilter.filter(KeywordsDocumentFilter().filter(
+                    HighRecallRegexDocumentFilter().filter(KeywordsDocumentFilter().filter(
                         DownloadArticle().download(
-                            AlreadyConsideredPMIDFilter('idp4_pmid_list.txt', 4).filter(
+                            AlreadyConsideredPMIDFilter('resources/bootstrapping', 4).filter(
                                 uds.get_pubmed_ids())))):
                 dataset.documents[pmid] = document
-
+                print(pmid)
                 # if we have generated enough documents stop
-                if next(c) == 5:
+                if next(c) == 200:
                     break
-        print(str(dataset))
 
 if __name__ == '__main__':
     unittest.main()

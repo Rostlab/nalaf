@@ -66,7 +66,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
     tmVar will be used in early stages and discarded as soon as there are no more results, thus gets a parameter.
     """
-    def __init__(self, binary_model="", override_cache=False, expected_max_results=5, pattern_file='nala/data/nl_patterns.json'):
+    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file='nala/data/nl_patterns.json'):
         self.location_binary_model = binary_model
         """ location where binary model for nala (crfsuite) is saved """
         self.override_cache=override_cache

@@ -197,7 +197,14 @@ class Dataset:
         return sum(doc.get_size() for doc in self.documents.values())
 
     def __repr__(self):
-        return "Dataset({0} documents and {1} annotations)".format(len(self.documents), sum(1 for _ in self.annotations()))
+        return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
+                                                                   sum(1 for _ in self.annotations()))
+
+    def __str__(self):
+        second_part = "\n" + "".join(
+            ["Document ID: " + pmid + "\n" + str(doc) for pmid, doc in self.documents.items()])
+        return "Dataset(Size: " + str(self.get_size_chars()) + ", Documents: " + str(
+            len(list(self.documents.keys()))) + second_part
 
     def stats(self):
         """
@@ -352,6 +359,11 @@ class Document:
             return 'Document(Size: {}, Title: "{}", Text: "{}", Annotations: "{}")'.format(len(self.parts),
                                                                                                self.get_title(),
                                                                        self.get_text(), self.get_unique_mentions())
+
+    def __str__(self):
+        partslist = ['Part ID: ' + partid + '\n' + str(part) + "\n" for partid, part in self.parts.items()]
+        second_part = "\n" + "".join(partslist)
+        return 'Document(Size: ' + str(self.get_size()) + ", Title: " + self.get_title() + second_part
 
     def key_value_parts(self):
         """yields iterator for partids"""
@@ -525,6 +537,10 @@ class Part:
     def __repr__(self):
         return "Part(len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
             self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
+
+    def __str__(self):
+        return 'Part:\nText:\t"{text}",\n{annotations},\n{pred_annotations}'.format(text=self.text, annotations=self.annotations,
+                                                                          pred_annotations=self.predicted_annotations)
 
     def get_size(self):
         """ just returns number of chars that this part contains """

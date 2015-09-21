@@ -92,12 +92,14 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             dataset.documents[pmid] = doc
             _list_of_pmids.append(pmid)
 
+        return_documents = []
+
         # dataset with tmVar
         # note atm just abstracts since full text interface not implemented
         data_tmvar = TmVarTagger().generate_abstracts(_list_of_pmids)
         TP = 0
         FP = 0
-        _length = len(dataset.documents.keys())
+        _length = len(list(dataset.documents.keys()))
         _progress = 0
         _timestart = time.time()
 
@@ -106,7 +108,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _time_reg_pattern_total = 0
         _time_max_pattern = 0
         _low_performant_pattern = ""
-        _avg_chars_per_doc = dataset.get_size_chars() / len(dataset.documents.keys())
+        _avg_chars_per_doc = dataset.get_size_chars() / len(list(dataset.documents.keys()))
 
         # NLDefiners init
         exclusive_definer = ExclusiveNLDefiner()
@@ -173,7 +175,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                         FP += 1
                                         print("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
                                         # _perf_patterns[reg.pattern][1] += 1
-
+                                    yield (pmid, doc)
                                     # if _perf_patterns[reg.pattern][1] > 0:
                                     #         _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
                                     break

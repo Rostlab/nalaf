@@ -1,4 +1,8 @@
 import abc
+import json
+import requests
+import os
+from nala import print_debug
 
 
 class Tagger():
@@ -34,3 +38,51 @@ class TmVarTagger(Tagger):
         # receive new pubtator object
 
         # parse to dataset object using TmVarReader
+
+    def generate_abstracts(self, list_of_pmids):
+        """
+        Generates list of documents using pmids and the restapi interface from tmtools.
+        Source: "http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/"
+        :param list_of_pmids: strings
+        :return nala.structures.Dataset: dataset
+        """
+        # if os.path.isfile('cache.json'):
+        #     tm_var = json.load(open('cache.json'))
+        # else:
+        url_tmvar = 'http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/Mutation/{0}/JSON/'
+        url_converter = 'http://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/'
+
+        # load cache.json if exists
+        if os.path.exists('cache.json'):
+            with open('cache.json', 'r', encoding='utf-8') as f:
+                tm_var = json.load(f)
+        else:
+            tm_var = {}
+
+        for pmid in list_of_pmids:
+            if pmid not in tm_var:  # if pmid was not already downloaded from tmTools
+                req = requests.get(url_tmvar.format(pmid))
+                try:
+                    tm_var[pmid] = req.json()
+                except ValueError:
+                    pass
+        # cache the tmVar annotations so we don't pull them every time
+        with open('cache.json', 'w') as file:
+            json.dump(tm_var, indent=4)
+
+        for key in tm_var:
+            print_debug(tm_var[key])
+            break
+
+        exit()
+
+        for doc_id, doc in dataset.documents.items():
+            if doc_id in tm_var:
+                denotations = tm_var[doc_id]['denotations']
+                text = tm_var[doc_id]['text']
+                denotations = [text[d['span']['begin']:d['span']['end']] for d in denotations]
+
+                for part_id, part in doc.parts.items():
+                    for ann in chain(part.annotations, part.predicted_annotations):
+                        if ann.class_id == MUT_CLASS_ID and ann.text not in denotations:
+                            ann.subclass = True

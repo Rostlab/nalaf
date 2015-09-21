@@ -1,10 +1,13 @@
 import abc
+import json
 import re
 import time
 from preprocessing.definers import InclusiveNLDefiner
 from preprocessing.definers import ExclusiveNLDefiner
+from preprocessing.spliters import NLTKSplitter
 from structures.data import Dataset
 from utils.readers import TmVarReader
+from utils.tagger import TmVarTagger
 
 
 class DocumentFilter:
@@ -63,7 +66,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
     tmVar will be used in early stages and discarded as soon as there are no more results, thus gets a parameter.
     """
-    def __init__(self, binary_model="", override_cache=False, expected_max_results=5):
+    def __init__(self, binary_model="", override_cache=False, expected_max_results=5, pattern_file='nala/data/nl_patterns.json'):
         self.location_binary_model = binary_model
         """ location where binary model for nala (crfsuite) is saved """
         self.override_cache=override_cache
@@ -71,6 +74,12 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         this option allows to force requesting results from tmVar online """
         self.expected_maximum_results=expected_max_results
         """ :returns maximum of [x] documents (can be less if not found) """
+        # read in nl_patterns
+        with open(pattern_file, 'r') as f:
+            regexs = json.load(f)
+            self.patterns = [re.compile(x) for x in regexs]
+            """ compiled regex patterns from pattern_file param to specify custom json file,
+             containing regexs for high recall finding of nl mentions. (or sth else) """
 
     def filter(self, documents):
         """
@@ -78,11 +87,14 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         """
 
         dataset = Dataset()
+        _list_of_pmids = []
         for pmid, doc in documents:
             dataset.documents[pmid] = doc
+            _list_of_pmids.append(pmid)
 
         # dataset with tmVar
-        data_tmvar = TmVarReader('resources/corpora/idp4/pubtator_tmvar.txt').read()
+        # note atm just abstracts since full text interface not implemented
+        data_tmvar = TmVarTagger().generate_abstracts(_list_of_pmids)
         TP = 0
         FP = 0
         _length = len(dataset.documents.keys())
@@ -101,25 +113,23 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _e_array = [0, 0, 0]
         inclusive_definer = InclusiveNLDefiner()
         _i_array = [0, 0]
-        for pmid, doc in documents:
+
+        NLTKSplitter().split(dataset)
+        for pmid, doc in dataset.documents.items():
             # if any part of the document contains any of the keywords
             # yield that document
-            # TODO nltk include for each sentence
             part_offset = 0
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
                 sent_offset = 0
                 cur_part = doc.parts.get(x)
                 sentences = cur_part.sentences
-                # new_text = cur_part.text.lower()
-                # new_text = re.sub('\s+', ' ', new_text)
-                # sentences = new_text.split('. ')
                 for sent in sentences:
-                    part_length = len(sent)
+                    sent_length = len(sent)
                     new_text = sent.lower()
                     new_text = re.sub('[\./\\-(){}\[\],%]', '', new_text)
                     new_text = re.sub('\W+', ' ', new_text)
-                    for i, reg in enumerate(patterns):
+                    for i, reg in enumerate(self.patterns):
 
                         _lasttime = time.time()  # time start var
                         match = reg.search(new_text)
@@ -145,31 +155,32 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         #         f.write(sent + "\n")
                         #         f.write(new_text + "\n")
 
-                        from nala.structures.data import Annotation
-                        Annotation.equality_operator = 'exact_or_overlapping'
                         if match:
-                            if did in data_tmvar.documents:
-                                anti_doc = data_tmvar.documents.get(did)
-                                if not anti_doc.overlaps_with_mention(match.span()):
+                            if pmid in data_tmvar.documents:
+                                anti_doc = data_tmvar.documents.get(pmid)
+                                start = part_offset + sent_offset + match.span()[0]
+                                end = part_offset + sent_offset + match.span()[1]
+                                # FIXME huge bug.... -.- regex on sentence lvl but overlap search on document lvl
+                                if not anti_doc.overlaps_with_mention(start, end):
                                     _e_result = exclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _e_array[_e_result] += 1
                                     _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _i_array[_i_result] += 1
                                     if doc.overlaps_with_mention(match.span()):
                                         TP += 1
-                                        f.write("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
-                                        _perf_patterns[reg.pattern][0] += 1
+                                        print("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                        # _perf_patterns[reg.pattern][0] += 1
                                     else:
                                         FP += 1
-                                        f.write("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
-                                        _perf_patterns[reg.pattern][1] += 1
+                                        print("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                        # _perf_patterns[reg.pattern][1] += 1
 
-                                    if _perf_patterns[reg.pattern][1] > 0:
-                                            _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
+                                    # if _perf_patterns[reg.pattern][1] > 0:
+                                    #         _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
                                     break
                         if _lasttime - time.time() > 1:
                             print(i)
-                    sent_offset += 2 + part_length
+                    sent_offset += 2 + sent_length  # note why + 2 ?
                 part_offset += sent_offset
             _progress += doc.get_size() / _avg_chars_per_doc
             _time_progressed = time.time() - _timestart

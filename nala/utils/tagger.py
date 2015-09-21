@@ -31,6 +31,7 @@ class TmVarTagger(Tagger):
         :return:
         """
         # todo docset
+        # todo textfile tagger @major
         # generate pubtator object using PubtatorWriter
         _tmp_pubtator_send = "temp_pubtator_file.txt"
 
@@ -71,8 +72,8 @@ class TmVarTagger(Tagger):
         with open('cache.json', 'w') as file:
             json.dump(tm_var, file, indent=4)
 
-        for key in tm_var:
-            print(json.dumps(tm_var[key], indent=4))
+        # for key in tm_var:
+        #     print(json.dumps(tm_var[key], indent=4))
 
         dataset = Dataset()
         for doc_id in list_of_pmids:

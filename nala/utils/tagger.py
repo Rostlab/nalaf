@@ -86,7 +86,7 @@ class TmVarTagger(Tagger):
                 for deno in denotations:
                     ann = Annotation(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
                     annotations.append(ann)
-                    # discussion should the annotations from tmvar go to predicted_annotations or annotations?
+                    # note should the annotations from tmvar go to predicted_annotations or annotations?
                 part.annotations = annotations
                 doc.parts['abstract'] = part
                 dataset.documents[doc_id] = doc

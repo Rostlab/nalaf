@@ -5,6 +5,13 @@ from nala.features.simple import SimpleFeatureGenerator
 from nala.features.stemming import PorterStemFeatureGenerator
 from nala.features.tmvar import TmVarFeatureGenerator, TmVarDictionaryFeatureGenerator
 from nala.features.window import WindowFeatureGenerator
+from nala.utils.cache import Cacheable
+from nala.bootstrapping.document_filters import DocumentFilter
+from nala.bootstrapping.document_filters import KeywordsDocumentFilter
+from nala.bootstrapping.pmid_filters import PMIDFilter
+from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
+from nala.bootstrapping import DownloadArticle
+from nala.bootstrapping import UniprotDocumentSelector
 
 
 class PrepareDatasetPipeline:
@@ -62,3 +69,59 @@ class PrepareDatasetPipeline:
         self.tokenizer.tokenize(dataset)
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset)
+
+
+class DocumentSelectorPipeline:
+    """
+
+    """
+    def __init__(self, initial_document_selector=None, pmid_filters=None, document_filters=None):
+        if not initial_document_selector:
+            self.initial_document_selector = UniprotDocumentSelector()
+        if not pmid_filters:
+            self.pmid_filters = [AlreadyConsideredPMIDFilter('resources/bootstrapping', 4)]
+        if not document_filters:
+            self.document_filters = [KeywordsDocumentFilter()]
+        self.article_downloader = DownloadArticle()
+
+    def __enter__(self):
+        if isinstance(self.initial_document_selector, Cacheable):
+            self.initial_document_selector.__enter__()
+        if isinstance(self.article_downloader, Cacheable):
+            self.article_downloader.__enter__()
+        for pmid_filter in self.pmid_filters:
+            if isinstance(pmid_filter, Cacheable):
+                pmid_filter.__enter__()
+        for document_filer in self.document_filters:
+            if isinstance(document_filer, Cacheable):
+                document_filer.__enter__()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if isinstance(self.initial_document_selector, Cacheable):
+            self.initial_document_selector.__exit__(exc_type, exc_val, exc_tb)
+        if isinstance(self.article_downloader, Cacheable):
+            self.article_downloader.__exit__(exc_type, exc_val, exc_tb)
+        for pmid_filter in self.pmid_filters:
+            if isinstance(pmid_filter, Cacheable):
+                pmid_filter.__exit__(exc_type, exc_val, exc_tb)
+        for document_filer in self.document_filters:
+            if isinstance(document_filer, Cacheable):
+                document_filer.__exit__(exc_type, exc_val, exc_tb)
+
+    def execute(self):
+        # initialized the pipeline
+        pipeline = self.initial_document_selector.get_pubmed_ids()
+
+        # chain all the pmid filters
+        for pmid_filter in self.pmid_filters:
+            pipeline = pmid_filter.filter(pipeline)
+
+        # convert pmids to documents
+        pipeline = self.article_downloader.download(pipeline)
+
+        # chain all the document filters
+        for document_filter in self.document_filters:
+            pipeline = document_filter.filter(pipeline)
+
+        return pipeline

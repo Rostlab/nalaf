@@ -73,12 +73,22 @@ class PrepareDatasetPipeline:
 
 class DocumentSelectorPipeline:
     """
+    A document selection pipeline used for the purposes of bootstrapping that executes
+    a series of generator modules in specific fixed order:
+        * First executes the initial document selector
+        * Next applies a series of pmid filters
+        * Then it transforms the stream of pmids into a stream of documents
+        * Finally applies a series of document filters
 
+    :type initial_document_selector: nala.bootstrapping.UniprotDocumentSelector
+    :type article_downloader: nala.bootstrapping.DownloadArticle
+    :type pmid_filters: collections.Iterable[nala.bootstrapping.document_filters.DocumentFilter]
+    :param pmid_filters: one or more generator modules responsible for filtering pmids
+    :type document_filters: collections.Iterable[nala.bootstrapping.pmid_filters.PMIDFilter]
+    :param document_filters: one or more generator modules responsible for filtering documents
     """
-    def __init__(self, initial_document_selector=None, pmid_filters=None, document_filters=None):
-        if not initial_document_selector:
-            self.initial_document_selector = UniprotDocumentSelector()
-
+    def __init__(self, pmid_filters=None, document_filters=None):
+        self.initial_document_selector = UniprotDocumentSelector()
         self.article_downloader = DownloadArticle()
 
         if pmid_filters:

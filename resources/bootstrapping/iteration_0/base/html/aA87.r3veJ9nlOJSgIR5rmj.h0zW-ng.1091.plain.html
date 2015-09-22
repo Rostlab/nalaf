@@ -1,0 +1,101 @@
+<!DOCTYPE html >
+<html id="aA87.r3veJ9nlOJSgIR5rmj.h0zW-ng.1091" data-origid="ng.1091" class="anndoc" data-anndoc-version="2.0" lang="" xml:lang="" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="generator" content="com.jmcejuela.anndoc.v2.bio.NcbiJournalArticleParser_v0_2$"/>
+    <meta name="dcterms.source" content="http://doi.org/10.1038/ng.1091"/>
+    <title>aA87.r3veJ9nlOJSgIR5rmj.h0zW-ng.1091</title>
+  </head>
+  <body>
+    <article>
+      <section data-type="title">
+        <h2 id="s1h1">De novo mutations in the actin genes ACTB and ACTG1 cause Baraitser-Winter syndrome</h2>
+      </section>
+      <section data-type="abstract">
+        <h2 id="s2h1">Abstract</h2>
+        <div class="content">
+          <p id="s2p1">Brain malformations are individually rare but collectively common causes of developmental disabilities1–3. Many forms occur sporadically and have reduced reproductive fitness, pointing towards a causative role for de novo mutations4,5. Here we report our studies of Baraitser-Winter syndrome, a well-defined syndrome characterized by distinct craniofacial features, ocular colobomata and a neuronal migration defect6,7. By using whole-exome sequencing in three proband-parent trios, we identified de novo missense changes in the cytoplasmic actin genes ACTB and ACTG1 in one and two probands, respectively. Sequencing of both genes in fifteen additional patients revealed disease-causing mutations in all probands, including two recurrent de novo mutations (ACTB p.Arg196His and ACTG1 p.Ser155Phe). Our results confirm that trio-based exome sequencing is a powerful approach to discover the genes causing sporadic developmental disorders, emphasize the overlapping roles of cytoplasmic actins in development, and suggest that Baraitser-Winter syndrome is the predominant phenotype associated with mutations of these two genes.</p>
+        </div>
+      </section>
+      <section data-origid="S1" data-type="methods">
+        <h2 id="s3h1">METHODS</h2>
+        <div class="subsections">
+          <section data-origid="S2" data-type="subjects">
+            <h3 id="s3s1h1">Subjects</h3>
+            <div class="content">
+              <p id="s3s1p1">Written, informed consent was obtained from all subjects prior to enrollment in the study. Experiments on human subjects were approved by institutional review boards at all participating institutions. The study included 18 unrelated patients; the diagnosis of Baraitser-Winter syndrome was based on previously reported clinical features6,7,17,18, and review of MRI brain scans when available. Genomic DNA was extracted from whole-blood or saliva using standard methods. When parental DNA was available, paternity-maternity testing was performed by genotyping a panel of polymorphic short tandem repeats.</p>
+            </div>
+          </section>
+          <section data-origid="S3" data-type="">
+            <h3 id="s3s2h1">Exome sequencing</h3>
+            <div class="subsections">
+              <section data-origid="S4" data-type="">
+                <h4 id="s3s2s1h1">Trio 1</h4>
+                <div class="content">
+                  <p id="s3s2s1p1">Five micrograms of whole-blood genomic DNA from the affected proband and his parents were sent to the University of Washington Genome Sciences Genomic Resource Center for exome capture and sequencing. Whole-exome sequence capture was performed using the SeqCap EZ Exome Library v2.0 liquid phase sequence capture kit (Roche). Libraries were then sequenced on an Illumina Genome Analyzer IIx according to the manufacturer’s recommendations for paired-end 76-bp reads. On average, we generated 81 million total reads (68 million mapped reads) and 5.2 gigabases (Gb) of mappable sequence per individual. We aligned reads to the human reference genome (hg19) with the Burrows-Wheeler Aligner (BWA)42 and removed potential duplicate paired-end reads. The Genome Analysis Toolkit (GATK)43,44 was used for base quality score recalibration and indel realignment as well as for single nucleotide variant and indel discovery and genotyping using standard hard filtering parameters43. Variants with quality scores &lt; 30, allele balance &gt; 0.75, sequencing depth &lt; 4, quality/depth ratio &lt; 5.0, length of homopolymer run &gt; 5.0, and strand bias &gt; −0.10 were flagged and excluded from subsequent analyses. Coverage was assessed with the GATK Depth of Coverage tool by ignoring reads with mapping quality &lt; 20 and bases with base quality &lt; 30. 92% of the primary target was covered ≥ 4 times in all three individuals.</p>
+                </div>
+              </section>
+            </div>
+          </section>
+          <section data-origid="S5" data-type="">
+            <h3 id="s3s3h1">Trios 2 and 3</h3>
+            <div class="content">
+              <p id="s3s3p1">Massively parallel sequencing of genomic DNA from two patient-parent trios was performed at the Radboud University Nijmegen Medical Center by using the ABI SOLiD™ 4 platform (Life Technologies). Enrichment of exonic sequences was achieved by using the 50 Mb human SureSelect set (Agilent), which targets ~21,000 human genes. On average, we obtained &gt; 120 million mappable sequencing reads and 4.6 Gb of mappable sequence data per individual after multiplex sequencing, using 4 exomes per sequencing slide. Colour space reads were mapped to the hg19 reference genome with the SOLiD bioscope software version 1.3, which utilizes an iterative mapping approach. On average, 81% of bases originated from the targeted exome, resulting in a mean coverage of 88-fold (median 66-fold). 88% of the targeted exons were covered more than 10 times. Single nucleotides variants were subsequently called by the DiBayes algorithm using high stringency calling settings and small insertions and deletions were detected using the SOLiD Small Indel Tool.</p>
+            </div>
+          </section>
+          <section data-origid="S6" data-type="">
+            <h3 id="s3s4h1">Discovery of de novo candidate variants</h3>
+            <div class="subsections">
+              <section data-origid="S7" data-type="">
+                <h4 id="s3s4s1h1">Trio 1</h4>
+                <div class="content">
+                  <p id="s3s4s1p1">The 22,591 variants identified in the patient were annotated with SeattleSeq SNP annotation (http://snp.gs.washington.edu/SeattleSeqAnnotation131/). We focused on protein-altering variants (missense, nonsense, splice-site variants, and coding indels) absent from dbSNP (build 132), 1000 Genomes Project data19, and 101 other exomes. From this list of rare variants, we identified potential de novo events using the following parameters: presence of ≥ 2 variant reads in the proband, sequencing depth at the variant position ≥ 4 in both parents, and parental allelic balance &gt; 0.90. Evolutionary conservation at the nucleotide level and impact of amino acid substitutions were assessed using the Genomic Evolutionary Rate Profiling (GERP)45 and Grantham matrix scores46, respectively. Candidate de novo events were then inspected using IGV47 and validated in all three individuals by standard PCR reactions using custom primers designed with Primer3 (http://frodo.wi.mit.edu/primer3/) and Sanger sequencing.</p>
+                </div>
+              </section>
+              <section data-origid="S8" data-type="">
+                <h4 id="s3s4s2h1">Trios 2 and 3</h4>
+                <div class="content">
+                  <p id="s3s4s2p1">A total of 28,497 and 29,685 variants were identified in probands of trio 2 (58248) and trio 3 (58431), respectively. All variants were annotated using an in-house annotation pipeline built in Nijmegen, as previously reported4,8,9,48. These variants were filtered and analyzed for potential de novo occurrence using an automated prioritization scheme4 involving an automated check of all private non-synonymous variants identified in the patients for occurrence in the respective parental bam files. Candidate de novo events were then verified using conventional Sanger sequencing.</p>
+                </div>
+              </section>
+            </div>
+          </section>
+          <section data-origid="S9" data-type="">
+            <h3 id="s3s5h1">Control exomes</h3>
+            <div class="content">
+              <p id="s3s5p1">For trio 1, variants were compared against 101 other exomes sequenced at the University of Washington, including 88 exomes from the NIEHS SNPs project (http://snp.gs.washington.edu/niehsExome/), and 13 exomes sequenced in the same batch as the trio and consisting of healthy individuals and patients with unrelated disorders. For trios 2 and 3, we used 332 other exomes sequenced at the Radboud University Nijmegen Medical Center to remove systematic artifacts and low-frequency variants.</p>
+              <p id="s3s5p2">We also analyzed the coding exons (+/− 2 bp) of ACTB and ACTG1 in exome sequence data from 244 unrelated healthy individuals of European descent, which consist of parents of children with sporadic autism. These samples were sequenced at the University of Washington Genome Sciences using SeqCap EZ Exome Library v2.0 (Roche) and the Illumina sequencing platform. For all control samples combined, 89% of the bases of ACTB and ACTG1 were covered ≥ 8x. The average per-base coverage was 23x and 31x for ACTB and ACTG1, respectively. The first coding exon of ACTB had a low read depth, with an average coverage of 4x; all other exons had sufficient coverage to call variants in the majority of samples. Variants were filtered to 8x coverage and consensus or variant quality of 30 using SAMtools49, as previously described13.</p>
+            </div>
+          </section>
+          <section data-origid="S10" data-type="">
+            <h3 id="s3s6h1">Identification of copy number variations (CNV) in control individuals</h3>
+            <div class="content">
+              <p id="s3s6p1">Genomic DNA samples from 2,349 control individuals (including 1,953 of European ancestry) were genotyped using the InfiniumII HumanHap610 Quad BeadChip array (Illumina) at the Center for Applied Genomics at Children’s Hospital of Philadelphia. Control subjects consisted of 0–18 years of age healthy children that were primarily recruited from the Philadelphia region through the Hospital’s Health Care Network. Copy number variations were identified using the PennCNV algorithm50 and further filtered using a threshold of 10 consecutive single nucleotide variants, a length of 30 kilobase pairs, and a PennCNV confidence score of 10.</p>
+            </div>
+          </section>
+          <section data-origid="S11" data-type="">
+            <h3 id="s3s7h1">Sanger sequencing</h3>
+            <div class="content">
+              <p id="s3s7p1">We amplified the coding and flanking intronic regions of the ACTG1 (NM_001614.2) and ACTB (NM_001101.2) genes in genomic DNA from 18 probands. PCR products were sequenced at the University of Washington High-Throughput Genomics Unit or the Radboud University Nijmegen Medical Centre. All mutations were confirmed by reamplification of the fragment and resequencing of the proband and his or her available relatives. Primer sequences and PCR conditions are available on request.</p>
+            </div>
+          </section>
+          <section data-origid="S12" data-type="">
+            <h3 id="s3s8h1">SDS-PAGE, Coomassie staining and Western Blot</h3>
+            <div class="content">
+              <p id="s3s8p1">Epstein-Barr virus immortalized lymphoblastoid cell lines were established from peripheral blood samples of six affected individuals (LR04-173, LP98-096, LR09-079, LP98-085, LR04-298 and LR06-241) and two control individuals (09.1359 and 07.0841) using standard procedures. Cells were collected from suspension culture by centrifugation at 1,000 g for 10 min. Cell pellets were rinsed once with PBS and lysed in M-PER lysis buffer (Pierce) supplemented with protease and phosphatase inhibitor cocktail (Sigma). Protein concentration of the lysates cleared of insoluble cell debris were determined using 660 nm Protein Assay reagent (Pierce) and more concentrated samples were diluted to the concentration of the least concentrated sample with the lysis buffer. For SDS-PAGE equal volumes of concentration-adjusted lysates were mixed with LDS electrophoresis loading buffer (Life Technologies), then reduced and denatured for 10 min at +70°C. For 1D electrophoresis equal volumes of reduced denatured samples were separated on two 4–12% polyacrylamide gels (Life Technologies). One of the gels was processed for Coomassie staining (Bio-Rad), as per manufacturer’s recommendations. The other gel was transferred onto 0.2 μm nitrocellulose membrane (Pall) and processed for Western Blotting. Primary antibodies for Western Blotting were used at the following dilutions: mouse anti-ACTB (clone AC-15, Sigma, 1:32,000), mouse anti-ACTG1 (clone 2–2.1.14.17, Sigma, 1:16,000), and goat anti-GAPDH (Santa-Cruz biotechnology, 1:1,000). Appropriate secondary HRP-conjugated antibodies (Bio-Rad) were used at 1:40,000. Proteins were detected by incubation with chemiluminescent substrate SuperSignal Pico (Pierce), as per manufacturer’s protocol. Appropriate secondary HRP-conjugated antibodies (Bio-Rad) were used at 1:40,000. Proteins were detected by incubation with chemiluminescent substrate SuperSignal Pico (Pierce), as per manufacturer’s protocol.</p>
+            </div>
+          </section>
+          <section data-origid="S13" data-type="">
+            <h3 id="s3s9h1">Immunofluorescent staining of actin in cultured cells</h3>
+            <div class="content">
+              <p id="s3s9p1">Lymphoblastoid cells grown in suspension were placed on fibronectin (Millipore, 100 μg/ml) and laminin (Invitrogen, 25 μg/ml) coated glass cover slips for 2 hr. After cells attached, experimental cultures were treated with Latrunculin A (Cayman Chemical Company, 0.6 μM) for 2 hr. Immediately after treatment, cells were fixed with 0.25% glutaraldehyde and permeabilized with 0.1% triton x100. Mouse anti-α-tubulin primary antibody (Sigma, 1:5,000) was applied for overnight at +4°C. Secondary AlexaFluor-conjugated antibody (Life Technologies, 1:1,000) along with AlexaFluor-conjugated phalloidin to visualize F-actin (Life Technologies, 1:100) were applied for 1 hr at room temperature. Cover glasses were mounted in ProLong anti-fade media (Life Technologies) and visualized with 100x oil objective on inverted microscope (Zeiss) fitted with spinning disc confocal scanner (Perkin-Elmer). All imaging analysis was performed using ImageJ software as follows. Confocal stacks were projected into a single plane (Z-project, Maximal Intensity). Images were thresholded, perimeter was measured as object perimeter and fluorescence intensity measured as a mean gray value.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section data-origid="S14" data-type="supplementary-material">
+        <h2 id="s4h1">Supplementary Material</h2>
+      </section>
+    </article>
+  </body>
+</html>

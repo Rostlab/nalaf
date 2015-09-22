@@ -1,0 +1,253 @@
+<!DOCTYPE html >
+<html id="aoT46GOcCz_wGNtce6x.cNsir84G-PMC2977978" data-origid="PMC2977978" class="anndoc" data-anndoc-version="2.0" lang="" xml:lang="" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="generator" content="com.jmcejuela.anndoc.v2.bio.NcbiJournalArticleParser_v0_4$"/>
+    <meta name="dcterms.source" content="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/"/>
+    <title>aoT46GOcCz_wGNtce6x.cNsir84G-PMC2977978</title>
+  </head>
+  <body>
+    <article>
+      <section data-type="title">
+        <h2 id="s1h1">High-throughput, pooled sequencing identifies mutations in NUBPL and FOXRED1 in human complex I deficiency</h2>
+      </section>
+      <section data-type="abstract">
+        <h2 id="s2h1">Abstract</h2>
+        <div class="content">
+          <p id="s2p1">Discovering the molecular basis of mitochondrial respiratory chain disease is challenging given the large number of both mitochondrial and nuclear genes involved. We report a strategy of focused candidate gene prediction, high-throughput sequencing, and experimental validation to uncover the molecular basis of mitochondrial complex I (CI) disorders. We created five pools of DNA from a cohort of 103 patients and then performed deep sequencing of 103 candidate genes to spotlight 151 rare variants predicted to impact protein function. We used confirmatory experiments to establish genetic diagnoses in 22% of previously unsolved cases, and discovered that defects in NUBPL and FOXRED1 can cause CI deficiency. Our study illustrates how large-scale sequencing, coupled with functional prediction and experimental validation, can reveal novel disease-causing mutations in individual patients.</p>
+        </div>
+      </section>
+      <section data-origid="S1" data-type="results">
+        <h2 id="s3h1">RESULTS</h2>
+        <div class="subsections">
+          <section data-origid="S2" data-type="subjects">
+            <h3 id="s3s1h1">Discovery of new variants in CI patients using pooled sequencing</h3>
+            <div class="content">
+              <p id="s3s1p1">Our cohort of 103 patients had “definite”, isolated CI deficiency based on biochemical assessment. The cohort included 60 patients who lacked a previous molecular diagnosis as well as 43 patient controls with established molecular diagnoses (Table 1 and Supplementary Table 2). We also sequenced 42 healthy controls from the European HapMap collection. We combined DNA from these individuals into 5 pools of CI patients and 2 pools of HapMap controls, with each pool containing DNA from 20 or 21 individuals. For each pool, we performed PCR amplification to capture the 145 Kb of target sequence, which included 653 nuclear-encoded exons (138 Kb) and two mtDNA regions (7 Kb). PCR reactions successfully captured 97% of targeted bases. The 952 successful PCR amplicons were combined in equimolar amounts, concatenated, and then sheared to construct libraries. The 7 libraries were sequenced using a single Illumina Genome Analyzer flow cell, with one pool per lane (see Methods).</p>
+              <p id="s3s1p2">High-throughput sequencing yielded large amounts of high quality data for each pool (Supplementary Table 3). We captured 90% of our nuclear target regions at ≥100X coverage and achieved 3,359X median coverage per pool, corresponding to an average of 168X per individual (Supplementary Fig. 1). Approximately 10% of nuclear target regions were poorly covered, largely due to skewed GC content (Supplementary Fig. 1). The mtDNA target regions showed substantially higher coverage (10,144X median coverage). However the mtDNA in the pooled samples was not uniformly distributed across patients, primarily due to biases introduced by whole genome amplification (Supplementary Fig. 2). In one pool, for example, 96% of the mtDNA came from a single patient. Nonetheless, the deep coverage of mtDNA permitted variant discovery even in some poorly represented samples.</p>
+              <p id="s3s1p3">We next aimed to identify low frequency single nucleotide variants (SNVs) and small insertion/deletion variants (indels) in the pooled samples. Given the estimated 1% error rate of individual Illumina reads, detecting alleles present in 1:40 chromosomes is intrinsically challenging. Therefore, we developed a method called Syzygy to empirically estimate error rates at each base in order to confidently identify rare variants (Rivas et al., manuscript in preparation, and Supplementary Note). Using this method, we detected 652 high-confidence variants within the patient pools (Table 2). To improve sensitivity, we additionally applied an ad hoc approach to identify 246 low-confidence variants supported by at least 3 reads on each strand (Table 2). We identified a total of 898 high and low confidence variants.</p>
+              <p id="s3s1p4">Next, we assessed accuracy of these 898 variants using known genotypes available from our patient controls and HapMap controls21. Overall, we achieved 92% sensitivity and 99.6% specificity for control SNVs present at nuclear DNA sites with ≥100 reads (see Methods and Supplementary Table 3). We note that this high sensitivity is due to the deep sequence coverage and to the relatively high allele frequency for many HapMap control variants (Supplementary Fig. 3). However, as expected, we observed lower sensitivity for rare nuclear variants: 86% for doubletons and 66% for singletons in a pool. For mtDNA variants, we achieved high sensitivity and specificity in genomic DNA of HapMap controls (96% and 100%, respectively) but much lower sensitivity for patient controls (32%) due to the non-uniform distribution of mtDNA within each pool. The minor allele frequencies estimated from read counts correlated strongly with expected frequencies in HapMap pools (R2=0.96), indicating high fidelity of the pooled sequencing protocol (Supplementary Fig. 3).</p>
+              <p id="s3s1p5">Next we prioritized the 898 discovered variants to focus our attention on those that are likely to underlie a rare and devastating phenotype (Figure 2a). Briefly, we filtered out: (i) variants that were present in healthy individuals, based on HapMap controls, dbSNP22, mtDB23, and pilot data from the 1000 genomes project, (ii) synonymous variants, and (iii) non-coding variants, unless they corresponded to tRNA or splice sites. 8 splice sites positions were selected using training data of 8189 disease-associated splice variants within the Human Gene Mutation Database (HGMD)24 (Figure 2b). In addition, we filtered out missense variants at sites with low evolutionary conservation, as these sites had a reduced frequency of pathogenic mutations based on training data (Figure 2c). See Methods for details. Using these filters, we prioritized for genotyping 109 high-confidence variants and 107 low-confidence variants that were deemed ‘likely deleterious’.</p>
+              <p id="s3s1p6">Together, the discovery screen and stringent definition of ‘likely deleterious’ variants captured 18/23 (78%) of the causal nuclear variants and 7/25 (28%) of causal mtDNA variants within our CI patient controls. The approach missed 4 nuclear and 17 mtDNA variants in the discovery screen, and filtered out 1 nuclear splice variant located 4bp into an intron and 1 mtDNA missense variant at a poorly conserved site (Supplementary Table 2).</p>
+            </div>
+          </section>
+          <section data-origid="S3" data-type="subjects">
+            <h3 id="s3s2h1">Genotyping previously known and newly discovered variants in CI patients</h3>
+            <div class="content">
+              <p id="s3s2p1">Our next goal was to genotype the discovered ‘likely deleterious’ variants, as well as previously known disease variants, in each patient sample (Supplementary Table 4 and Methods). The genotyping served multiple purposes. First, it was necessary to validate novel variants from the pooled discovery screen. Second, it enabled us to search for previously known mutations underlying CI deficiency, which were not detected in our discovery screen due to a lack of power (e.g., mtDNA variants). Third, it allowed us to assign the variants to individual patients.</p>
+              <p id="s3s2p2">Of the newly discovered ‘likely deleterious’ variants, we validated 84% of high-confidence variants, and as expected, only 11% of low-confidence variants (Supplementary Table 4). ‘Less likely deleterious’ variants had a higher 96% validation rate, based on 101 additional high-confidence variants genotyped (Supplementary Table 4). We further validated SNVs of particular interest using Sanger sequencing, since Sequenom genotypes showed an estimated 11% false positive rate for extremely rare variants (Supplementary Note). In a subset of instances where we identified heterozygous variants of interest, we used Sanger sequencing to fully resequence the gene.</p>
+              <p id="s3s2p3">In total, we validated 151 ‘likely deleterious’ patient variants corresponding to 115 unique loci (91 high-confidence, 12 low-confidence, and 12 pathogenic variants missed in the discovery screen). Detailed data are provided in Supplementary Table 2. We detected a higher frequency of ‘likely deleterious’ variants in our patient cohort compared to European controls, although this enrichment might be due to differences in ancestry (Supplementary Note).</p>
+            </div>
+          </section>
+          <section data-origid="S4" data-type="subjects">
+            <h3 id="s3s3h1">Newly discovered mutant alleles in CI patients</h3>
+            <div class="content">
+              <p id="s3s3p1">With the Mito10K sequence data in hand, we next looked for homozygous, compound heterozygous and pathogenic mtDNA variants within our cohort of 60 undiagnosed patients (Figure 3). We expected that many patients would have homozygous or two heterozygous variants in known disease-related genes, consistent with recessive inheritance. We refer to these variants as ‘recessive-type’.</p>
+              <p id="s3s3p2">Only 3 patients had previously reported pathogenic mtDNA mutations and only 8 patients had recessive-type mutations in known disease genes, including 5 novel and 2 previously reported mutations (Table 3). Of interest, 2 patients had recessive-type mutations in candidate disease genes (NUBPL, FOXRED1) (Table 3). The remaining patients included 3 with mtDNA ‘likely deleterious’ variants of unknown clinical significance, 17 with heterozygous ‘likely deleterious’ nuclear variants of unknown clinical significance, and 27 with no ‘likely deleterious’ variants (Supplementary Table 2).</p>
+            </div>
+          </section>
+          <section data-origid="S5" data-type="">
+            <h3 id="s3s4h1">Establishing 11 patient diagnoses in known disease genes</h3>
+            <div class="content">
+              <p id="s3s4p1">We next assessed the pathogenicity of variants detected within the 3 patients with causal mtDNA mutations (in ND325, ND526, and MT-TW26) and the 8 patients with recessive-type variants in previously reported CI disease genes: NDUFS410,27–31, NDUFAF217, NDUFV132, and NDUFS833 (Table 3). The discovered patient mutations were absent from all other patient and HapMap samples sequenced, except as noted below.</p>
+              <p id="s3s4p2">We identified one novel and two previously reported NDUFS4 mutations in 3 patients with Leigh Syndrome (Table 3 and Supplementary Fig. 4). Siblings, DT37 and DT38, were compound heterozygous for the reported mutations c.462delA (p.K154NfsX34)30 and c.99-1G&gt;A (p.S34IfsX4)10. The unrelated patient DT107 was compound heterozygous for the same c.99-1G&gt;A mutation and a novel mutation c.351-2A&gt;G, inherited from his father and mother, respectively. In silico and RT-PCR analyses indicated that both the c.99-1G&gt;A and c.351-2A&gt;G mutations alter NDUFS4 splicing. The heterozygous c.351-2A&gt;G mutation was detected in DT107 genomic DNA, however it was undetectable in cDNA +/−cycloheximide (CHX) suggesting a high level of mRNA instability. Western blot analysis on fibroblasts from patients DT38 and DT107 showed no detectable NDUFS4 protein. This is the second report of the c.99-1G&gt;A mutation10 and the third of the c.462delA mutation28,30 suggesting not only that NDUFS4 shows recurrent mutations underlying Leigh Syndrome but also that several previously unrecognized founder mutations may exist in this gene.</p>
+              <p id="s3s4p3">We also identified novel homozygous mutations in NDUFAF2 in 3 patients presenting with Leigh Syndrome (Table 3 and Supplementary Fig. 5). A consanguineous patient, DT16, harbored a homozygous c.221G&gt;A mutation (p.W74X) within a 6.3Mb region of homozygosity (determined by Affymetrix 250K Nsp SNP chip). Siblings, DT67 and DT68, harbored a homozygous c.103delA mutation (p.I35SfsX17). Analysis of cDNA from patient fibroblasts demonstrated that NDUFAF2 transcripts containing these mutations were stable. Additionally, the c.221G&gt;A nonsense mutation in DT16 (located 4bp into exon 3) resulted in occasional exon 3 skipping, which generates a transcript also encoding a truncated protein (p.A73GfsX5). All three patients lacked any detectable NDUFAF2 protein by western blot analysis indicating that the truncated protein products are unstable.</p>
+              <p id="s3s4p4">A novel homozygous NDUFV1 mutation (c.1129G&gt;A, p.E377K) was identified in a 2.1Mb region of homozygosity (determined by Affymetrix 250K Nsp SNP chip) in a consanguineous Lebanese patient, DT3, who presented with lethal infantile mitochondrial disease (LIMD) (Table 3 and Supplementary Fig. 6). Both unaffected parents were heterozygous carriers. This mutation introduces a positively charged residue within the consensus motif for the iron sulfur binding site (pfam10589) which is highly conserved across eukaryotic species.</p>
+              <p id="s3s4p5">We identified a novel homozygous NDUFS8 mutation (c.460G&gt;A, p.G154S) in a Sudanese patient, DT61, presenting with mitochondrial encephalopathy (Table 3 and Supplementary Fig. 7). This mutation affects a highly conserved amino acid and alters polarity within the highly conserved Fer4 4Fe-4S iron-sulfur cluster binding domain (pfam00037). This mutation segregated with disease in this family, with an affected sibling also homozygous while both unaffected parents were heterozygous carriers.</p>
+            </div>
+          </section>
+          <section data-origid="S6" data-type="">
+            <h3 id="s3s5h1">Novel genes underlying CI deficiency: NUBPL and FOXRED1</h3>
+            <div class="content">
+              <p id="s3s5p1">Within our 60 patients, we also discovered recessive-type mutations in two genes not previously linked to CI deficiency: NUBPL and FOXRED1.</p>
+              <p id="s3s5p2">Patient DT35 presented with mitochondrial encephalomyopathy and was found to contain an apparent homozygous NUBPL:c.166G&gt;A mutation (Supplementary Fig. 8). We did not detect this mutation in the 204 other patient chromosomes or 84 HapMap control chromosomes sequenced. This mutation is predicted to cause substitution of a highly conserved glycine residue with arginine (p.G56R), 18 amino acids from the mitochondrial targeting sequence cleavage site predicted by TargetP (Supplementary Fig. 8). Although the patient’s father was heterozygous for this mutation, the mother did not carry the mutation (Supplementary Fig. 8). In order to determine whether the mother may have transmitted a deletion involving this portion of exon 2, we performed Affymetrix array-based cytogenetic analysis on DNA from DT35. We detected a complex chromosomal rearrangement including a ~240Kb deletion spanning exons 1–4 of NUBPL and a ~130Kb duplication involving exon 7 of NUBPL as shown in Supplementary Fig. 8. Next, we assessed NUBPL mRNA species present in DT35. RT-PCR showed very low expression of the full-length transcript, while the predominant mRNA species was a shorter fragment (Supplementary Fig. 8). Sequencing revealed that the shorter fragment resulted from exon 10 skipping, and that it contained the c.166G&gt;A mutation, suggesting it was the paternal allele. There was no evidence of expression of the maternal allele. To determine the cause of exon 10 skipping, we performed Sanger sequencing of exon 10 and the flanking intronic regions (an area of previous poor high throughput sequence coverage). A c.815-27T&gt;C mutation was identified that is predicted to ablate a consensus branch sequence. This mutation was present in 2/232 Caucasian control chromosomes. Thus, DT35 contains one NUBPL allele harboring a deletion spanning exons 1–4 and a second allele that harbors both a p.G56R missense mutation and a c.815-27T&gt;C mutation that likely causes exon 10 skipping.</p>
+              <p id="s3s5p3">We performed a complementation experiment to assess whether the introduction of wildtype cDNA into patient fibroblasts rescued the defect in CI activity. Fibroblasts from this patient exhibit a strong CI defect, with only 19% residual CI activity when assayed by spectrophometric enzyme assay and 40% residual CI activity when assayed by dipstick enzyme assay. Using a lentiviral expression system, we transduced patient fibroblasts with wildtype cDNA. Expression of wild-type NUBPL rescued CI activity in the patient with NUBPL mutations but did not alter CI activity of the control fibroblasts or patient fibroblasts with FOXRED1 mutations (Figure 4a), establishing NUBPL as the causal gene in this case.</p>
+              <p id="s3s5p4">Although we have proven that NUBPL underlies complex I deficiency in this patient, we have not established the pathogenicity of individual mutations. Due to its prevalence in controls, the c.815-27T&gt;C branch site mutation may be a pseudo-deficiency allele, that if homozygous generates sufficient full-length NUBPL transcript for NUBPL functionality. However, this mutation may be pathogenic when inherited with a null allele such as in DT35. Alternatively, the p.G56R missense mutation may abolish NUBPL function or may act in synergy with the branch-site mutation to cause disease.</p>
+              <p id="s3s5p5">Patient DT22 presented with Leigh Syndrome and was found to be compound heterozygous for two mutations in FOXRED1, c.694C&gt;T (p.Q232X) and c.1289A&gt;G (p.N430S) (Supplementary Fig. 9). The c.694C&gt;T mutation was detected in the discovery screen and was not detected in 204 other patient chromosomes or 84 HapMap control chromosomes. The c.1289A&gt;G mutation was in an area of low coverage but was subsequently identified by Sanger sequencing of FOXRED1 and was not present in 102 control chromosomes of European ancestry screened by RFLP analysis. Analysis of cDNA from fibroblasts treated with CHX to inhibit nonsense mediated decay demonstrated the presence of both mutations. In the absence of CHX, however, the transcript containing the c.694C&gt;T (p.Q232X) was undetectable leaving the transcript containing the c.1289A&gt;G mutation as the predominant species, consistent with compound heterozygosity (Supplementary Fig. 9). The c.1289A&gt;G mutation was inherited from the patient’s mother, and is predicted to cause the substitution of a highly conserved asparagine residue with a serine (p.N430S) (Supplementary Fig. 9). Paternal DNA was not available for genotyping. RT-PCR analysis of patient cDNA also shows occasional skipping of exon 6 (containing c.694C&gt;T), which results in a transcript predicted to lack 40 internal residues (Supplementary Fig. 9).</p>
+              <p id="s3s5p6">As above, we performed a complementation experiment in patient fibroblasts to assess the role of FOXRED1 in CI activity. Fibroblasts from this patient exhibit a striking CI defect, with only 9% residual CI activity when assayed by spectrophometric enzyme assay and 15% residual CI activity when assayed by dipstick enzyme assay. We were able to rescue the defect in these fibroblasts using lentiviral-mediated cDNA rescue with the wild-type FOXRED1 cDNA, and this rescue was specific to this cell line (Figure 4b).</p>
+              <p id="s3s5p7">Together, the mutation data and complementation experiments support NUBPL and FOXRED1 as bona fide CI disease-related genes in individuals DT35 and DT22, respectively.</p>
+            </div>
+          </section>
+          <section data-origid="S7" data-type="">
+            <h3 id="s3s6h1">The mutational spectrum of CI deficiency</h3>
+            <div class="content">
+              <p id="s3s6p1">The large-scale discovery and validation studies for 60 patients reported here, in addition to the previous molecular diagnosis of all 43 other patients with definite isolated CI deficiency seen at our diagnostic laboratory, provide the largest systematic sequencing study of CI deficiency to date. Our cohort of 103 patients includes 94 unrelated individuals; 52% of them now have firm genetic diagnoses, including diagnoses due to mtDNA mutations (29%), recessive-type mutations (22%), and X-linked mutations (1%) (Figure 5). These represent 33% with mutations in CI structural subunits, 6% with mutations in established CI assembly factors (including NUBPL), 7% with tRNA mutations required for mtDNA translation, 4% with mutations in other auxiliary factors (mtDNA replication proteins POLG and C10orf2, and the TAZ protein required for CI stability via the maintenance of cardiolipin pools within the mitochondrial inner membrane)34, and 1% with mutations in an uncharacterized gene (FOXRED1).</p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section data-origid="S8" data-type="discussion">
+        <h2 id="s4h1">DISCUSSION</h2>
+        <div class="content">
+          <p id="s4p1">Advances in genome sequencing technology offer a new opportunity to solve the genetic basis of disease even beginning with individual cases. Perhaps the major challenge of human genetics moving forward will be distinguishing pathogenic alleles from the plethora of benign sequence differences between individuals. Even within the protein coding portion of the genome, each person carries an estimated 400–500 protein-modifying rare variants35,36. Several recent whole-exome sequencing projects have detected causal variants for Mendelian disease by using multiple affected individuals to hone in on regions of interest, and established pathogenicity by identifying different mutations in unrelated individuals with the same phenotype36,37. While this approach has broad utility, it may not be readily applicable to individual, sporadic cases of disease.</p>
+          <p id="s4p2">In the current Mito10K project, we have demonstrated an alternate approach. We prioritized candidate genes based on functional clues, performed pooled DNA sequencing of a patient cohort, and identified novel variants that we predict to be deleterious. Key to success of our approach was the availability of cellular models of disease, with which we could establish pathogenicity of novel mutations in single patients. This strategy can be applied in principle to any disorder for which a cellular phenotype exists.</p>
+          <p id="s4p3">Our approach successfully discovered novel pathogenic roles for NUBPL and FOXRED1. NUBPL (nucleotide binding protein-like), also known as IND1, was recently shown to be an assembly factor for CI38. Similar to its role in the yeast Y. lipolytica, human NUBPL is essential for the incorporation of Fe/S clusters into CI subunits, and its knockdown causes improper assembly of the peripheral arm of CI, reduced CI activity, and abnormal mitochondrial morphology38,39. We now report the first NUBPL mutations in a patient with CI deficiency, a male who presented at 2 years of age with developmental delay, leukodystrophy and elevated CSF lactate (see Supplementary Note for complete clinical description). Marked CI deficiency was observed in muscle biopsy and skin fibroblasts (37% and 19% normalized activity relative to controls). Sequencing of DNA from this patient revealed an apparent homozygous</p>
+          <p id="s4p4">NUBPL:p.G56R missense mutation in an amino acid that has been conserved across all 36 aligned vertebrate species. However, further analysis indicated that this patient was actually compound heterozygous: one allele contained both the p.G56R missense mutation and a branch site mutation that caused skipping of exon 10, and the other allele contained a complex chromosomal rearrangement involving deletion of exons 1–4 and duplication of exon 7 of NUBPL. This patient highlights the limitations of 2nd generation sequencing. Large deletions are not detected and variants such as branch site mutations may be missed or overlooked. Nevertheless, the CI defect in patient fibroblasts was rescued by expression of a wildtype allele of NUBPL, thus establishing a pathogenic role for NUBPL mutations in CI deficiency.</p>
+          <p id="s4p5">We also discovered pathogenic mutations in FOXRED1, which is an uncharacterized protein that derives its name from a FAD dependent oxidoreductase protein domain. This gene was selected as a candidate solely based on its mitochondrial localization40 and shared phylogenetic profile with CI subunits14. We detected FOXRED1 mutations in a male infant who presented at birth with congenital lactic acidosis and was diagnosed with Leigh Syndrome at 6 years of age (see Supplementary Note for complete clinical description). Severe CI deficiency was observed in muscle biopsy and fibroblasts (9% of normal control mean in both samples relative to citrate synthase). Sequencing this patient revealed compound heterozygous FOXRED1 mutations: a p.Q232X nonsense mutation and a p.N430S missense mutation in a conserved amino acid. As with NUBPL above, cDNA rescue established FOXRED1 as a novel disease-related gene. At present the function of FOXRED1 is not clear, though its four human homologs (DMGDH, SARDH, PIPOX, PDPR) perform redox reactions in amino acid catabolism, suggesting a potential link between amino acid metabolism and CI.</p>
+          <p id="s4p6">While the Mito10K project successfully identified or confirmed pathogenic mutations in half of the 103 patients with CI deficiency (Figure 5), it is notable that we were unable to identify “smoking gun” mutations for the remaining half. Our results are comparable to a recent sequencing study of X-linked mental retardation41. While in some of the undiagnosed CI patients we detected ‘likely deleterious’ variants that may contribute to pathogenesis, most contain no such variants. It is likely that the true causal variants in the unsolved cases (i) reside in a non-targeted gene, (ii) reside in a non-targeted region, such as a regulatory region or un-annotated exon, (iii) were not detected due to lack of sensitivity, especially within the mtDNA, (iv) contain full exon or gene deletions, which our approach cannot detect, or (v) were present in our discovery screen but filtered out by our stringent criteria. Additionally, it is possible that in some patients the disease is caused by complex inheritance or epigenetic mechanisms. Broader sequencing, combined with functional validation, will be required to fully elucidate the molecular basis of these remaining cases.</p>
+        </div>
+      </section>
+      <section data-origid="S9" data-type="methods">
+        <h2 id="s5h1">ONLINE METHODS</h2>
+        <div class="subsections">
+          <section data-origid="S10" data-type="subjects">
+            <h3 id="s5s1h1">CI patients and controls</h3>
+            <div class="content">
+              <p id="s5s1p1">The 60 patients plus 43 patient controls had a definite diagnosis of isolated CI deficiency, based on spectrophotometric enzyme assays interpreted by previously described criteria5,42. Briefly, the ratio of CI activity to citrate synthase or relative to Complex II, was required to be ≤25% of normal, and the normalized activity of complexes II, III, and IV were required to be at least twofold higher than CI activity (Supplementary Fig. 10). The cohort includes all such patients diagnosed in Melbourne from 1992 to 2007, with the exception of 9 patients from whom no suitable DNA was available for sequencing.</p>
+            </div>
+          </section>
+          <section data-origid="S11" data-type="">
+            <h3 id="s5s2h1">DNA preparation and pooling</h3>
+            <div class="content">
+              <p id="s5s2p1">DNA was isolated from cultured cells using a Nucleon DNA Extraction kit or from patient tissues (skeletal or cardiac muscle and liver) by proteinase K digestion followed by salting-out. Each patient sample was whole-genome amplified using a QIAGEN REPLI-g™ Kit with 100ng input DNA. HapMap samples were not whole-genome amplified. DNA concentration was measured by Quant-iT™ PicoGreen® dsDNA reagent detected on a Thermo Scientific Varioskan Flash. DNA concentration was normalized to 20ng/μL based on two rounds of quantification and dilution, yielding mean 19.2ng/μl concentration (1.56 standard deviation). We allowed for 10% variance as that is the accuracy limit of PicoGreen® quantitation. The normalization steps were automated using the Packard Multiprobe II HT EX. The same robotic automation was used across the entire set and in all steps in order to guarantee a uniform pipetting error. 20 or 21 samples where then pooled in equimolar amounts. Each patient pool contained patients with unknown diagnoses, known mtDNA mutations, and known nuclear mutations, with the following counts: Pool1=12, 5, 4; Pool2=13, 5, 3; Pool3=12, 5, 4; Pool4=12, 5, 3; Pool5=11, 5, 4. See Supplementary Note for HapMap sample identifiers.</p>
+            </div>
+          </section>
+          <section data-origid="S12" data-type="">
+            <h3 id="s5s3h1">Target selection</h3>
+            <div class="content">
+              <p id="s5s3p1">Targets included 2 mtDNA regions and coding and UTR exons of 111 RefSeq transcripts (release 29) from 103 gene loci (Supplementary Table 1). Primers were iteratively designed using PRIMER3 software on the hg17 reference sequence (150–600bp amplicon length, no buffer) and validated on 3 HapMap CEU samples, using three design iterations. NotI tails were added to provide a recognition site for downstream concatenation. Target regions were PCR-amplified using 20 ng of whole-genome-amplified DNA, 1× HotStar buffer, 0.8 mM dNTPs, 2.5 mM MgCl2, 0.2 units of HotStar Enzyme (Qiagen), and 0.25 μM forward and reverse primers in a 10-μl reaction volume. PCR cycling parameters were: one cycle of 95°C for 15 min; 35 cycles of 95°C for 20 s, 60°C for 30 s, and 72°C for 1 min; followed by one cycle of 72°C for 3 min. The PCR products were separately quantified, normalized and pooled as described above. Secondary confirmation was ascertained by testing one column of PCR product per plate on 2% agarose E-gel against a 1kb DNA ladder to visualize PCR product size. The PCR products were then pooled by DNA sample pool using Packard Multiprobe II HT EX.</p>
+            </div>
+          </section>
+          <section data-origid="S13" data-type="">
+            <h3 id="s5s4h1">Sequencing</h3>
+            <div class="content">
+              <p id="s5s4p1">The PCR products for each pooled sample were concatenated using NotI adapters and sheared into fragments as previously described43. Libraries were constructed by a modified Illumina single-end library protocol, with 225–275bp gel size selection and PCR enrichment using 14 cycles of PCR, and then single-end sequenced with 76 cycles on an Illumina Genome Analyzer. 76bp reads were aligned to the genome using MAQ algorithm44 within the Picard analysis pipeline, and further processed using the SAMtools software45 and custom scripts.</p>
+            </div>
+          </section>
+          <section data-origid="S14" data-type="">
+            <h3 id="s5s5h1">Variant discovery</h3>
+            <div class="content">
+              <p id="s5s5p1">High-confidence SNVs were detected within each pooled sample using the Syzygy algorithm on targeted bases with a minimum of 100 high-quality aligned reads (base quality ≥20, mapping quality &gt;0, ≥30 reads on each strand). High confidence SNVs had log odds (LOD) scores ≥3, with the strand-specific LOD&gt;-1.5 or a Fisher’s exact test of strand bias &gt;0.1 (see Supplementary Note). Low-confidence SNVs were supported by at least 3 reads on each strand (base quality ≥20, mapping quality &gt;0, ≥200 reads on each strand). Indels were identified from within unaligned reads, and were supported by ≥10 unaligned reads on each strand that contained an insertion/deletion preceding an exact 20bp match to a targeted exon, excluding indels adjacent to homopolymer runs (see Supplementary Note).</p>
+              <p id="s5s5p2">Discovery screen sensitivity was estimated from genotype data using sites where ≥1 individual in the pool contained a variant compared to hg18, whereas specificity was calculated at sites where all individuals contained the hg18 reference allele.</p>
+              <p id="s5s5p3">Variants were annotated as ‘likely deleterious’ based on any of the following criteria: i) previously reported as a disease variant, based on manual curation and the Human Gene Mutation Database (HGMD) professional version 2009.124; ii) present in a mitochondrial tRNA gene; iii) present in 5′ UTR and altering the presence of an upstream ORF46; iii) present at a splice site (splice acceptor sites −1, −2, −3, and splice donor sites −1,1,2,3,5 selected based on training data consisting of all 8189 HGMD disease-associated splice variants); iv) coding indel; v) nonsense variant; vi) missense variant at an amino acid conserved in ≥10 aligned vertebrate species, based on the multiz44way genome alignments downloaded from UCSC genome browser47 (see Supplementary Note), or predicted as ‘damaging’ by PolyPhen-2.0 (HumVar training data)48 (see Supplementary Note). Variants that were not previously associated with disease were excluded if present in 42 HapMap controls, dbSNP22, 1000 genomes pilot 1, or present at &gt;0.005 minor allele frequency in mtDB23 based on the frequency of asymptomatic carriers of pathogenic mtDNA mutations49. Conservation thresholds were selected from training data: all disease-associated missense variants in HGMD version 2009.1, and all dbSNP128 sites annotated as nonsynonymous, excluding those present in HGMD.</p>
+            </div>
+          </section>
+          <section data-origid="S15" data-type="">
+            <h3 id="s5s6h1">Genotyping</h3>
+            <div class="content">
+              <p id="s5s6p1">SNVs were assayed within whole-genome-amplified DNA from the 103 CI patients using Sequenom MassARRAY® iPLEX™ GOLD chemistry50. Oligos were synthesized and mass-spec QCed at Integrated DNA Techologies, Inc. All SNVs were genotyped in multiplexed pools of 20–38 assays, designed by AssayDesigner v.3.1 software, starting with 10ng of DNA per pool. ~7 nl of reaction was loaded onto each position of a 384-well SpectroCHIP preloaded with 7 nl of matrix (3-hydroxypicolinic acid). SpectroCHIPs were analyzed in automated mode by a MassArray MALDI-TOF Compact system with a solid phase laser mass spectrometer (Bruker Daltonics Inc., 2005). We obtained high quality data (&gt;95% genotype call rate, HWE P-value &gt;0.001 and MAF &gt;1%) in all samples that had at least one SNV. Variants were called by real-time SpectroCaller algorithm, analyzed by SpectroTyper v.4.0 software and manually reviewed for rare variants.</p>
+              <p id="s5s6p2">Deletions and selected SNVs were validated by Sanger resequencing, performed on genomic DNA, using ABI 3130XL and BigDye v3.1 Terminators (Applied Biosystems) as per manufacturer’s protocols.</p>
+            </div>
+          </section>
+          <section data-origid="S16" data-type="">
+            <h3 id="s5s7h1">Cloning</h3>
+            <div class="content">
+              <p id="s5s7p1">The FOXRED1 open reading frame (ORF) was purchased in a pDONR223 vector (Clone ID: 3956972, Open Biosystems) and cloned into pLEX TRC970 (V5 C-terminal tag) via Gateway cloning (Invitrogen). Initial experiments using this vector did not rescue CI activity so site-directed mutagenesis was performed to change codon 343 from CCA (proline) (dbSNP rs17855445) to the hg18 reference codon GCA (alanine) using QuikChange II XL site-directed mutagenesis kit (Stratagene) according to manufacturer’s instructions (primers listed in Supplementary Table 5) to generate the RefSeq FOXRED1-V5 pDest vector. Full-length NUBPL ORF was amplified from MCH58 cells by RT-PCR incorporating Gateway adaptors, then was cloned into into pLEX TRC970 (V5 C-terminal tag) via Gateway cloning to generate the NUBPL-V5 pDest vector.</p>
+            </div>
+          </section>
+          <section data-origid="S17" data-type="">
+            <h3 id="s5s8h1">Viral particle production and transduction</h3>
+            <div class="content">
+              <p id="s5s8p1">HEK-293T cells were grown on 10cm plates to 60% confluence and cotransfected with a packaging plasmid (pCMV-δ8.91), a pseudotyping plasmid (pMD2-VSVg) and either NUBPL-V5-pDest or FOXRED1-V5-pDest. Transfection was performed using Effectene reagents (Qiagen) according to the manufacturer’s protocol. Fresh media was applied to the cells 16 hours post-transfection and, following 24 hours incubation, supernatants containing packaged virus were harvested and filtered through a 0.45 μM membrane filter.</p>
+              <p id="s5s8p2">Patient fibroblasts were grown to 80% confluence in 6 well plates before addition of 62.5 μL of NUBPL-V5 or 125 μL FOXRED1-V5 viral particles and polybrene at final concentration of 5 μg/ml in 8.75mL total media. Plates were spun at 2500rpm for 90 minutes and incubated for 24 hours at 37°C before replacing media. Cells were grown in antibiotic-free media for 30 hours before applying selection media containing 1 μg/mL puromycin. Following 12–20 days of selection, cells were harvested for dipstick assays.</p>
+            </div>
+          </section>
+          <section data-origid="S18" data-type="">
+            <h3 id="s5s9h1">Dipstick enzyme activity assays</h3>
+            <div class="content">
+              <p id="s5s9p1">CI and Complex IV (CIV) dipstick activity assays were performed on 10 μg and 15 μg, respectively, of cleared cell lysates according to the manufacturer’s protocol (Mitosciences). A Hamamatsu ICA-1000 immunochromatographic dipstick reader was used for densitometry. Two-way Repeated Measures Analysis of Variance (ANOVA) was used for comparisons of groups followed by post hoc analysis using the Bonferroni method to determine statistically significant differences.</p>
+            </div>
+          </section>
+          <section data-origid="S19" data-type="">
+            <h3 id="s5s10h1">Homozygosity mapping</h3>
+            <div class="content">
+              <p id="s5s10p1">Homozygosity was determined using SNP Mapping GeneChip Nsp 250 k Array (Affymetrix), performed by the Australian Genome Research Facility. Data were analyzed using the Loss of Heterozygosity (LOH) Analysis Tool of GCOS Client software (Affymetrix).</p>
+            </div>
+          </section>
+          <section data-origid="S20" data-type="">
+            <h3 id="s5s11h1">RT-PCR</h3>
+            <div class="content">
+              <p id="s5s11p1">RNA was extracted from cultured patient fibroblasts using the RNAspin Mini Kit (Illustra) and cDNA was generated using the SuperScript III First strand synthesis kit (Invitrogen) as per manufacturers’ protocols. For analysis of nonsense mediated decay and mRNA splicing, fibroblasts were cultured in media containing 100ng/μL CHX for 24 hours prior to RNA preparation51. PCR primers (Supplementary Table 5) were designed to amplify the entire cDNA in either one PCR product or in overlapping segments. PCR products were either directly sequenced using ABI 3130XL and BigDye v3.1 Terminators (Applied Biosystems) as per manufacturer’s protocols or following gel-purification using the MinElute Gel Extraction kit (Qiagen).</p>
+            </div>
+          </section>
+          <section data-origid="S21" data-type="">
+            <h3 id="s5s12h1">SDS-PAGE and western blot</h3>
+            <div class="content">
+              <p id="s5s12p1">Primary control and patient fibroblasts were lyzed in RIPA buffer (50mM Tris pH 8.0, 150mM NaCl, 1% NP-40, 0.5% sodium deoxycholate and 0.1% SDS) containing protease inhibitor cocktail (Roche). 25–50 μg of cleared lysate were run per lane on 10% NuPAGE Bis-Tris gels (Invitrogen), proteins were transferred to PVDF membranes (Millipore), blocked (PBS containing 5% skim milk powder, 0.05% Tween-20) and incubated with primary antibodies overnight at 4 °C (for primary antibody details and concentrations see Supplementary methods). After washing, membranes were incubated in anti-mouse or rabbitHRP secondary antibodies (DakoCytomation used at 1:10000) at room temperature for 1 hour and developed using ECL or ECL Plus detection reagents (Amersham Bioscience).</p>
+            </div>
+          </section>
+          <section data-origid="S22" data-type="">
+            <h3 id="s5s13h1">RFLP Screen (FOXRED1:c.1289A&gt;G and NUBPL:c.815-27T&gt;C)</h3>
+            <div class="content">
+              <p id="s5s13p1">Exon 11 of FOXRED1 or exon 10 of NUBPL was PCR-amplified (Supplementary Table 5) from 100ng of patient gDNA, the products were checked by gel electrophoresis, digested overnight with AflIII or NlaIV respectively (New England Biolabs) as per manufacturer’s protocol, then resolved on 1% agarose gels.</p>
+            </div>
+          </section>
+          <section data-origid="S23" data-type="">
+            <h3 id="s5s14h1">Antibodies for western blotting</h3>
+            <div class="content">
+              <p id="s5s14p1">Antibodies included NDUFS4 (MS104, Mitosciences) at 1:1000, Porin (529534, Calbiochem) at 1:10000, Complex II 70kD subunit (A-1142. Molecular Probes) at 1:1000, and NDUFAF2 (kind gift from Dr. Mat McKenzie and Prof. Michael Ryan, La Trobe University, Bundoora, Victoria) at 1:5000.</p>
+            </div>
+          </section>
+          <section data-origid="S24" data-type="">
+            <h3 id="s5s15h1">Microarray DNA Copy Number Analysis</h3>
+            <div class="content">
+              <p id="s5s15p1">Genome-wide microarray analysis was conducted using the Affymetrix GeneChip 2.7M array, according to the manufacturer’s instructions. Data analysis was performed using Chromosome Analysis Suite (ChAS) software v1.2 (Affymetrix).</p>
+            </div>
+          </section>
+          <section data-origid="S25" data-type="">
+            <h3 id="s5s16h1">Data availability</h3>
+            <div class="content">
+              <p id="s5s16p1">Supplementary Table 2 provides detailed data on all validated patient variants, and the 7 pooled sequence data files (BAM format) are available upon request.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section data-origid="S26" data-type="supplementary-material">
+        <h2 id="s6h1">Supplementary Material</h2>
+      </section>
+      <section data-type="resources">
+        <h2 id="s7h1">Resources</h2>
+        <div class="content">
+          <figure data-origid="F1">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#F1">Figure 1</a>
+            <figcaption>
+              <p id="s7f1p1">Schematic overview of the Mito10K project.</p>
+            </figcaption>
+          </figure>
+          <figure data-origid="F2">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#F2">Figure 2</a>
+            <figcaption>
+              <p id="s7f2p1">Definition of ‘likely deleterious’ variants detected in pooled sequencing discovery screen. (a) Barplot of high-confidence and low-confidence variants, categorized by predicted deleterious consequences. (b) Histogram of known disease-associated splice variants, annotated in HGMD24, by position relative to nearest splice donor and splice acceptor exons (black rectangles). Dashed line indicates frequency threshold and asterisk indicates splice positions considered ‘likely deleterious’. (c) Histogram of amino acid conservation score (# species with identical amino acid, out of 44 aligned vertebrate exons) shown for training data: missense variants annotated as disease-associated in HGMD (red curve) or present in dbSNP128 (blue curve). Dashed line indicates minimum conservation required for ‘likely deleterious’ variants.</p>
+            </figcaption>
+          </figure>
+          <figure data-origid="F3">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#F3">Figure 3</a>
+            <figcaption>
+              <p id="s7f3p1">60 patients with CI deficiency without a prior genetic diagnosis, categorized by type of ‘likely deleterious’ variants detected per gene. Red indicates patients with likely pathogenic variants, blue indicates patients with variants of uncertain significance (VUS), and gray indicates patients without ‘likely deleterious’ variants. Boxes list genes containing ‘likely deleterious’ variants in each patient. Black triangles indicate new experimentally established genetic diagnoses. a,b indicate pairs of affected siblings.</p>
+            </figcaption>
+          </figure>
+          <figure data-origid="F4">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#F4">Figure 4</a>
+            <figcaption>
+              <p id="s7f4p1">NUBPL and FOXRED1 cDNA rescue of CI defects in patient fibroblasts. Barplots show CI activity, normalized by CIV activity, measured in control and patient fibroblasts, before and after transduction with wild-type NUBPL-V5 mRNA (a) or wild-type FOXRED1-V5 mRNA (b). Bars show mean of 3 biological replicates, and error bars indicate ±1 s.e.m. Asterisks indicate p&lt;0.01. Representative dipstick assays shown below.</p>
+            </figcaption>
+          </figure>
+          <figure data-origid="F5">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#F5">Figure 5</a>
+            <figcaption>
+              <p id="s7f5p1">Genetic diagnosis of 94 unrelated patients with definite, isolated complex I deficiency grouped by function of underlying gene. Red indicates patients with confirmed genetic diagnosis, and gray indicates absence of genetic diagnosis. Patients are representative cohort, selected as all unrelated individuals within the 103 patients sequenced.</p>
+            </figcaption>
+          </figure>
+          <figure class="table" data-origid="T1">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#T1">Table 1</a>
+            <figcaption>
+              <p id="s7f6p1">Clinical and other features of patient cohort</p>
+            </figcaption>
+          </figure>
+          <figure class="table" data-origid="T2">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#T2">Table 2</a>
+            <figcaption>
+              <p id="s7f7p1">Number of variants detected in pooled sequencing discovery screen.</p>
+            </figcaption>
+          </figure>
+          <figure class="table" data-origid="T3">
+            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2977978/#T3">Table 3</a>
+            <figcaption>
+              <p id="s7f8p1">New genetic diagnoses for 13 patients with CI deficiency</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </article>
+  </body>
+</html>

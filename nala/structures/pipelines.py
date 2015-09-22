@@ -78,11 +78,36 @@ class DocumentSelectorPipeline:
     def __init__(self, initial_document_selector=None, pmid_filters=None, document_filters=None):
         if not initial_document_selector:
             self.initial_document_selector = UniprotDocumentSelector()
-        if not pmid_filters:
-            self.pmid_filters = [AlreadyConsideredPMIDFilter('resources/bootstrapping', 4)]
-        if not document_filters:
-            self.document_filters = [KeywordsDocumentFilter()]
+
         self.article_downloader = DownloadArticle()
+
+        if pmid_filters:
+            # check the type of the provided pmid filter
+            if hasattr(pmid_filters, '__iter__'):
+                for index, pmid_filter in enumerate(pmid_filters):
+                    if not isinstance(pmid_filter, PMIDFilter):
+                        raise TypeError('not an instance that implements PMIDFilter at index {}'.format(index))
+                self.pmid_filters = pmid_filters
+            elif isinstance(pmid_filters, PMIDFilter):
+                self.pmid_filters = [pmid_filters]
+            else:
+                raise TypeError('not an instance that implements PMIDFilter')
+        else:
+            self.pmid_filters = [AlreadyConsideredPMIDFilter('resources/bootstrapping', 4)]
+
+        if document_filters:
+            # check the type of the provided document filters
+            if hasattr(document_filters, '__iter__'):
+                for index, document_filter in enumerate(document_filters):
+                    if not isinstance(document_filter, DocumentFilter):
+                        raise TypeError('not an instance that implements DocumentFilter at index {}'.format(index))
+                self.document_filters = document_filters
+            elif isinstance(document_filters, DocumentFilter):
+                self.document_filters = [document_filters]
+            else:
+                raise TypeError('not an instance that implements DocumentFilter')
+        else:
+            self.document_filters = [KeywordsDocumentFilter()]
 
     def __enter__(self):
         if isinstance(self.initial_document_selector, Cacheable):

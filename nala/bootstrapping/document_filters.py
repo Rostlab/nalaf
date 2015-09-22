@@ -81,7 +81,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents):
+    def filter(self, documents, log_nr=5):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
@@ -165,9 +165,9 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
-            _time_req_time = _time_per_doc * 200
+            _time_req_time = _time_per_doc * log_nr
             _time_eta = _time_req_time - _time_progressed
-            print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/200, _time_progressed, _time_eta))
+            print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/log_nr, _time_progressed, _time_eta))
             if TP + FP > 0:
                 print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
             yield pmid, doc

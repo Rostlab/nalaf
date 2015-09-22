@@ -31,22 +31,26 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, read_just_mutations=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
+        self.read_just_mutations = read_just_mutations
+        """whether to read in only mutation entities"""
 
     def annotate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         """
+        from nala.utils import MUT_CLASS_ID
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
                     document = dataset.documents[filename.split('-')[-1].replace('.ann.json', '')]
                     ann_json = json.load(file)
                     for entity in ann_json['entities']:
-                        ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                        document.parts[entity['part']].annotations.append(ann)
+                        if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                            ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                            document.parts[entity['part']].annotations.append(ann)
                 except KeyError:
                     pass
 

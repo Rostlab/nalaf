@@ -110,6 +110,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             data_tmp = Dataset()
             data_tmp.documents[pmid] = doc
             NLTKSplitter().split(data_tmp)
+            data_tmvar = TmVarTagger().generate_abstracts([pmid])
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
                 sent_offset = 0
@@ -145,7 +146,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         #         f.write("BAD_PATTERN\n")
                         #         f.write(sent + "\n")
                         #         f.write(new_text + "\n")
-                        data_tmvar = TmVarTagger().generate_abstracts([pmid])
                         if match:
                             if pmid in data_tmvar.documents:
                                 anti_doc = data_tmvar.documents.get(pmid)

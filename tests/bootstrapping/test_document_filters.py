@@ -18,7 +18,7 @@ class TestHighRecallRegexFilter(unittest.TestCase):
 
         dataset = Dataset()
 
-        max_docs = 5
+        max_docs = 200
 
         # use in context manager to enable caching
         with UniprotDocumentSelector() as uds:

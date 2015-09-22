@@ -10,5 +10,5 @@ before_script:
   - "curl -L https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz -o crfsuite.tar.gz"
   - "tar -xvf crfsuite.tar.gz"
 script:
-  - "nosetests"
+  - "nosetests -a '!slow'"
   - "python demo_predict.py -c ./crfsuite-0.12/bin/ -d ./resources/example.txt"

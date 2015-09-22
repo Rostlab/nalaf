@@ -38,8 +38,14 @@ class UniprotDocumentSelector(Cacheable):
             yield uniprot_id
 
     def _get_pubmed_ids_for_protein(self, uniprot_id):
-        req = requests.get(self.uniprot_url + '{}.xml'.format(uniprot_id))
-        xml = ET.fromstring(req.content)
+        if uniprot_id in self.cache:
+            text = self.cache[uniprot_id]
+        else:
+            req = requests.get(self.uniprot_url + '{}.xml'.format(uniprot_id))
+            text = req.text
+            self.cache[uniprot_id] = text
+
+        xml = ET.fromstring(text)
         ns = {'u': 'http://uniprot.org/uniprot'}  # namespace
 
         evidence_ids = []

@@ -2,12 +2,12 @@ import abc
 import json
 import re
 import time
-from preprocessing.definers import InclusiveNLDefiner
-from preprocessing.definers import ExclusiveNLDefiner
-from preprocessing.spliters import NLTKSplitter
-from structures.data import Dataset
-from utils.readers import TmVarReader
-from utils.tagger import TmVarTagger
+from nala.preprocessing.definers import InclusiveNLDefiner
+from nala.preprocessing.definers import ExclusiveNLDefiner
+from nala.preprocessing.spliters import NLTKSplitter
+from nala.structures.data import Dataset
+from nala.utils.readers import TmVarReader
+from nala.utils.tagger import TmVarTagger
 
 
 class DocumentFilter:

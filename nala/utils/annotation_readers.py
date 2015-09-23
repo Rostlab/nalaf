@@ -31,11 +31,13 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=False):
+    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
+        self.delete_incomplete_docs = delete_incomplete_docs
+        """whether to delete documents from the dataset that are not marked as 'anncomplete'"""
 
     def annotate(self, dataset):
         """
@@ -45,12 +47,16 @@ class AnnJsonAnnotationReader(AnnotationReader):
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
-                    document = dataset.documents[filename.split('-')[-1].replace('.ann.json', '')]
+                    doc_id = filename.split('-')[-1].replace('.ann.json', '')
                     ann_json = json.load(file)
-                    for entity in ann_json['entities']:
-                        if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                            ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                            document.parts[entity['part']].annotations.append(ann)
+                    if ann_json['anncomplete']:
+                        document = dataset.documents[doc_id]
+                        for entity in ann_json['entities']:
+                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                                document.parts[entity['part']].annotations.append(ann)
+                    elif self.delete_incomplete_docs:
+                        del dataset.documents[doc_id]
                 except KeyError:
                     pass
 

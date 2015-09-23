@@ -1,8 +1,8 @@
 import unittest
 from nala.structures.data import Dataset, Document, Part, Token, Label, Annotation
 from nala.utils import MUT_CLASS_ID
-from preprocessing.spliters import NLTKSplitter
-from preprocessing.tokenizers import TmVarTokenizer
+from nala.preprocessing.spliters import NLTKSplitter
+# from preprocessing.tokenizers import TmVarTokenizer
 
 
 class TestDataset(unittest.TestCase):

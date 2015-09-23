@@ -1,6 +1,6 @@
 import unittest
-from bootstrapping.document_filters import HighRecallRegexDocumentFilter
-from structures.data import Dataset
+from nala.bootstrapping.document_filters import HighRecallRegexDocumentFilter
+from nala.structures.data import Dataset
 
 
 class TestHighRecallRegexFilter(unittest.TestCase):

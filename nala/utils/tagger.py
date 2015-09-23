@@ -3,7 +3,7 @@ import json
 import requests
 import os
 from nala import print_debug
-from structures.data import Dataset, Document, Part, Annotation
+from nala.structures.data import Dataset, Document, Part, Annotation
 
 
 class Tagger():

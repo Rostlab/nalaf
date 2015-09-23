@@ -6,7 +6,7 @@ from nala.utils.readers import HTMLReader, TmVarReader
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.definers import InclusiveNLDefiner
-from preprocessing.spliters import NLTKSplitter
+from nala.preprocessing.spliters import NLTKSplitter
 
 html_path = "resources/corpora/idp4/html"
 ann_path = "resources/corpora/idp4/annjson"

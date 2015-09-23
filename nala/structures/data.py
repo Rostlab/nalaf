@@ -401,7 +401,7 @@ class Document:
                 text += p.text
                 break
             text += "{0} ".format(p.text)
-        return text
+        return text.strip()
 
     def get_body(self):
         """

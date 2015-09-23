@@ -157,16 +157,15 @@ with open('results/testing_ground_carsten.txt', 'w', encoding='utf-8') as f:
                                 _i_array[_i_result] += 1
                                 if doc.overlaps_with_mention(start, end):
                                     TP += 1
-                                    f.write("TP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                    f.write("{}\tTP\te{}\ti{}\t{}\t{}\t{}\n".format(did, _e_result, _i_result, sent, match, reg.pattern))
                                     _perf_patterns[reg.pattern][0] += 1
                                 else:
                                     FP += 1
-                                    f.write("FP\te{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                    f.write("{}\tFP\te{}\ti{}\t{}\t{}\t{}\n".format(did, _e_result, _i_result, sent, match, reg.pattern))
                                     _perf_patterns[reg.pattern][1] += 1
 
                                 if _perf_patterns[reg.pattern][1] > 0:
                                         _perf_patterns[reg.pattern][2] = _perf_patterns[reg.pattern][0] / _perf_patterns[reg.pattern][1]
-                                break
                     if _lasttime - time.time() > 1:
                         print(i)
                 sent_offset += 2 + sent_len

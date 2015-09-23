@@ -1,8 +1,10 @@
 import unittest
+from nose.plugins.attrib import attr
 from nala.bootstrapping.document_filters import HighRecallRegexDocumentFilter
 from nala.structures.data import Dataset
 
 
+@attr('slow')
 class TestHighRecallRegexFilter(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

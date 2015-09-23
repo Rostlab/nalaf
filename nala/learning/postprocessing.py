@@ -9,6 +9,7 @@ class PostProcessing:
     def __init__(self):
         self.at_least_one_letter_n_number_letter_n_number = re.compile('(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+')
         self.short = re.compile('^[A-Z][0-9][A-Z]$')
+        self.protein_symbol_and_position = re.compile('^(glutamine|glutamic|leucine|valine|isoleucine|lysine|alanine|glycine|aspartate|methionine|threonine|histidine|aspartic|asparticacid|arginine|asparagine|tryptophan|proline|phenylalanine|cysteine|serine|glutamate|tyrosine|cys|ile|ser|gln|met|asn|pro|lys|asp|thr|phe|ala|gly|his|leu|arg|trp|val|glu|tyr|[CISQMNPKDTFAGHLRWVEYX])[0-9]+$')
 
     def process(self, dataset):
         regex_patterns = construct_regex_patterns_from_predictions(dataset)
@@ -33,6 +34,13 @@ class PostProcessing:
                             for index, ann_b in enumerate(part.predicted_annotations):
                                 if ann == ann_b and len(matched_text) > len(ann_b.text):
                                     part.predicted_annotations[index] = ann
+
+                to_be_removed = []
+                for index, ann in enumerate(part.predicted_annotations):
+                    if self.protein_symbol_and_position.search(ann.text.lower()):
+                        to_be_removed.append(index)
+                part.predicted_annotations = [ann for index, ann in enumerate(part.predicted_annotations)
+                                              if index not in to_be_removed]
 
     def __fix_issues(self, part):
         to_be_removed = []

@@ -323,6 +323,8 @@ class Dataset:
 
     def extend_dataset(self, other):
         """
+        Does run on self and returns nothing. Extends the self-dataset with other-dataset.
+        Each Document-ID that already exists in self-dataset gets skipped to add.
         :type other: nala.structures.data.Dataset
         """
         for key in other.documents:

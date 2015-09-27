@@ -47,7 +47,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
-                    doc_id = filename.split('-')[-1].replace('.ann.json', '')
+                    basename = os.path.basename(filename)
+                    if '-' in basename:
+                        doc_id = filename.split('-')[-1].replace('.ann.json', '')
+                    else:
+                        doc_id = basename.replace('.ann.json', '')
+
                     ann_json = json.load(file)
                     if ann_json['anncomplete']:
                         document = dataset.documents[doc_id]
@@ -57,6 +62,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 document.parts[entity['part']].annotations.append(ann)
                     elif self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
+                    else:
+                        document = dataset.documents[doc_id]
+                        for entity in ann_json['entities']:
+                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'], entity['confidence']['prob'])
+                                document.parts[entity['part']].predicted_annotations.append(ann)
                 except KeyError:
                     pass
 

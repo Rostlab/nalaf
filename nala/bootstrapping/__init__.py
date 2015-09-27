@@ -1,3 +1,5 @@
+import glob
+import os
 import requests
 import xml.etree.ElementTree as ET
 from nala.structures.data import Dataset, Document, Part
@@ -133,3 +135,30 @@ def generate_documents(n):
                     break
 
     return dataset
+
+
+class Iteration(Cacheable):
+    def __init__(self, folder):
+        super().__init__()
+
+        if folder is not None:
+            self.bootstrapping_folder = folder
+        else:
+            self.bootstrapping_folder = "resources/bootstrapping"
+
+        # represents the iteration
+        self.number = -1
+
+        # discussion config file in bootstrapping root or iteration_n check for n
+        for fn in glob.iglob(self.bootstrapping_folder + "/iteration_*/"):
+            print(fn)
+
+        # learning
+
+        # docselection
+
+        # tagging
+
+        # manual review
+
+        # automatic evaluation

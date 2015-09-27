@@ -172,16 +172,15 @@ class Iteration(Cacheable):
         annjson_base_folder = base_folder + "annjson/"
         learning_data = HTMLReader(html_base_folder).read()
         AnnJsonAnnotationReader(annjson_base_folder).annotate(learning_data)
-        print(learning_data.get_size_chars())
 
         # extend for each next iteration
         if self.number > 0:
             for i in range(1, self.number + 1):
                 # get new dataset
-                path_to_read = os.path.join(self.bootstrapping_folder, "/iteration_" + str(i), "/reviewed/")
-                print(path_to_read)
-                # fixme path to read is only "/reviewed/"
-                tmp_data = HTMLReader(path_to_read)
+                path_to_read = os.path.join(self.bootstrapping_folder, "iteration_{}".format(i), "reviewed/")
+                tmp_data = HTMLReader(path_to_read + "html/").read()
+                AnnJsonAnnotationReader(path_to_read + "annjson/").annotate(tmp_data)
+
                 # extend learnin_data
                 # todo has to be tested
                 learning_data.extend_dataset(tmp_data)

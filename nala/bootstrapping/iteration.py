@@ -10,16 +10,17 @@ from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
 from nala.bootstrapping.utils import generate_documents
+from utils.writers import TagTogFormat
 
 
 class Iteration(Cacheable):
-    def __init__(self, folder=None):
+    def __init__(self, folder=None, iteration_nr=None):
         super().__init__()
 
         if folder is not None:
-            self.bootstrapping_folder = folder
+            self.bootstrapping_folder = os.path.abspath(folder)
         else:
-            self.bootstrapping_folder = "resources/bootstrapping"
+            self.bootstrapping_folder = os.path.abspath("resources/bootstrapping")
 
         # represents the iteration
         self.number = -1
@@ -32,13 +33,28 @@ class Iteration(Cacheable):
 
         # todo discussion on config file in bootstrapping root or iteration_n check for n
 
-        # find iteration number
-        _iteration_name = self.bootstrapping_folder + "/iteration_*/"
-        for fn in glob.glob(_iteration_name):
-            match = re.search(r'/iteration_(\d+)/$', fn)
-            found_iteration = int(match.group(1))
-            if found_iteration > self.number:
-                self.number = found_iteration
+        if iteration_nr is None:
+            # find iteration number
+            _iteration_name = self.bootstrapping_folder + "/iteration_*/"
+            for fn in glob.glob(_iteration_name):
+                match = re.search(r'/iteration_(\d+)/$', fn)
+                found_iteration = int(match.group(1))
+                if found_iteration > self.number:
+                    self.number = found_iteration
+
+            self.number = self.number + 1  # NOTE before last iteration now current iteration
+        else:
+            self.number = iteration_nr
+        # current folders
+        self.current_folder = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number))
+        self.candidates_folder = os.path.join(self.current_folder, 'candidates')
+        self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
+
+    # def get_previous_ids(self):
+    #     for dpath, dname, fname in os.walk(self.bootstrapping_folder):
+    #         if fname:
+    # todo this method get previous ids
+    #             pass
 
     def learning(self):
         """
@@ -56,7 +72,7 @@ class Iteration(Cacheable):
 
         # extend for each next iteration
         if self.number > 0:
-            for i in range(1, self.number + 1):
+            for i in range(1, self.number):
                 # get new dataset
                 path_to_read = os.path.join(self.bootstrapping_folder, "iteration_{}".format(i), "reviewed/")
                 tmp_data = HTMLReader(path_to_read + "html/").read()
@@ -87,6 +103,25 @@ class Iteration(Cacheable):
         self.crf.tag('-m default_model -i predict > output.txt')
         self.crf.read_predictions(self.candidates)
 
-        # manual review
+        # export candidates to candidates folder
+        os.mkdir(self.current_folder)
+
+        ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
+        ttf_candidates.export_html()
+        ttf_candidates.export_ann_json(0.99)  # 0.99 for beginning
+
+    def manual_review_import(self):
+        """
+        Parse from iteration_n/reviewed folder in anndoc format.
+        :return:
+        """
+        # pmids_list = glob.glob(self.candidates_folder + "/html/*.html")
+        # print(pmids_list)
+        # pmids = list(self.candidates.documents)  # to skip already existing pmids (since tagtog includes old files as well)
+        self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
+        AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
+        # print(self.reviewed)
+        for ann in self.reviewed.annotations():
+            print(ann)
 
         # automatic evaluation

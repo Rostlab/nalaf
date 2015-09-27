@@ -31,7 +31,8 @@ class Iteration(Cacheable):
         self.predicted = None  # predicted docselected
         self.crf = CRFSuite("/usr/local/Cellar/crfsuite/0.12")
 
-        # todo discussion on config file in bootstrapping root or iteration_n check for n
+        # discussion on config file in bootstrapping root or iteration_n check for n
+        # note currently using parameter .. i think that s the most suitable
 
         if iteration_nr is None:
             # find iteration number
@@ -49,12 +50,6 @@ class Iteration(Cacheable):
         self.current_folder = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number))
         self.candidates_folder = os.path.join(self.current_folder, 'candidates')
         self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
-
-    # def get_previous_ids(self):
-    #     for dpath, dname, fname in os.walk(self.bootstrapping_folder):
-    #         if fname:
-    # todo this method get previous ids
-    #             pass
 
     def learning(self):
         """
@@ -110,12 +105,13 @@ class Iteration(Cacheable):
         ttf_candidates.export_html()
         ttf_candidates.export_ann_json(0.99)  # 0.99 for beginning
 
+    # todo divide into 2 parts with 1st being learning, docselection, tagging and the 2nd being manual import and evaluation
+
     def manual_review_import(self):
         """
         Parse from iteration_n/reviewed folder in anndoc format.
         :return:
         """
-        # todo consolidate into one dataset
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
         AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), delete_incomplete_docs=False).annotate(
             self.reviewed)
@@ -135,4 +131,4 @@ class Iteration(Cacheable):
         When Candidates and Reviewed are existing do automatic evaluation and calculate performances
         :return:
         """
-        pass
+        print(MentionLevelEvaluator().evaluate(self.reviewed))

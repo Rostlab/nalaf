@@ -1,5 +1,6 @@
 import unittest
-from nala.bootstrapping import generate_documents, Iteration
+from nala.bootstrapping import generate_documents
+from bootstrapping.iteration import Iteration
 from nose.plugins.attrib import attr
 
 
@@ -10,12 +11,6 @@ class TestBootstrapping(unittest.TestCase):
         test_dataset = generate_documents(2)
         self.assertEqual(len(test_dataset), 2)
         pass
-
-
-class TestIteration(unittest.TestCase):
-    def test_init(self):
-        iteration = Iteration()
-        iteration.learning()
 
 
 if __name__ == '__main__':

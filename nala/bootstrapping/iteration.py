@@ -45,7 +45,7 @@ class Iteration(Cacheable):
         Learning: base + iterations 1..n-1
         :return:
         """
-        print_verbose("Learning")
+        print_verbose("\n\n\n======Learning======\n\n\n")
         # parse base + reviewed files
         # base
         base_folder = os.path.join(self.bootstrapping_folder, "iteration_0/base/")
@@ -76,12 +76,12 @@ class Iteration(Cacheable):
 
     def docselection(self, nr=2):
         # docselection
-        print_verbose("DocSelection")
+        print_verbose("\n\n\n======DocSelection======\n\n\n")
         self.candidates = generate_documents(nr)
 
     def tagging(self):
         # tagging
-        print_verbose("Tagging")
+        print_verbose("\n\n\n======Tagging======\n\n\n")
         PrepareDatasetPipeline().execute(self.candidates)
         self.crf.create_input_file(self.candidates, 'predict')
         self.crf.tag('-m default_model -i predict > output.txt')

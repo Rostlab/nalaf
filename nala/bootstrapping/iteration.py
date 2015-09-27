@@ -115,10 +115,18 @@ class Iteration(Cacheable):
         Parse from iteration_n/reviewed folder in anndoc format.
         :return:
         """
+        # todo consolidate into one dataset
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
+        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), delete_incomplete_docs=False).annotate(
+            self.reviewed)
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
-        # for ann in self.reviewed.annotations():
-        #     print(ann)
+        for ann in self.reviewed.annotations():
+            print(ann)
+
+        print("now predicted annotations")
+
+        for ann in self.reviewed.predicted_annotations():
+            print(ann)
 
         # automatic evaluation
 

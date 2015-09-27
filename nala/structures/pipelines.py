@@ -10,8 +10,8 @@ from nala.bootstrapping.document_filters import DocumentFilter
 from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter
 from nala.bootstrapping.pmid_filters import PMIDFilter
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
-from nala.bootstrapping import DownloadArticle
-from nala.bootstrapping import UniprotDocumentSelector
+from nala.bootstrapping.utils import DownloadArticle
+from nala.bootstrapping.utils import UniprotDocumentSelector, DownloadArticle
 
 
 class PrepareDatasetPipeline:
@@ -80,8 +80,8 @@ class DocumentSelectorPipeline:
         * Then it transforms the stream of pmids into a stream of documents
         * Finally applies a series of document filters
 
-    :type initial_document_selector: nala.bootstrapping.UniprotDocumentSelector
-    :type article_downloader: nala.bootstrapping.DownloadArticle
+    :type initial_document_selector: nala.bootstrapping.utils.UniprotDocumentSelector
+    :type article_downloader: nala.bootstrapping.utils.DownloadArticle
     :type pmid_filters: collections.Iterable[nala.bootstrapping.document_filters.DocumentFilter]
     :param pmid_filters: one or more generator modules responsible for filtering pmids
     :type document_filters: collections.Iterable[nala.bootstrapping.pmid_filters.PMIDFilter]

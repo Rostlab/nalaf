@@ -46,7 +46,11 @@ class HTMLReader(Reader):
                 for part in soup.find_all(id=re.compile('^s')):
                     document.parts[part['id']] = Part(str(part.string))
 
-                dataset.documents[filename.split('-')[-1].replace('.plain.html', '')] = document
+                basename = os.path.basename(filename)
+                if '-' in basename:
+                    dataset.documents[filename.split('-')[-1].replace('.plain.html', '')] = document
+                else:
+                    dataset.documents[basename.replace('.html', '')] = document
         return dataset
 
 

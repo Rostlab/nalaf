@@ -86,8 +86,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
 
-        TP = 0
-        FP = 0
         _progress = 0
         _timestart = time.time()
 
@@ -164,7 +162,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
                         if _lasttime - time.time() > 1:
                             print(i)
-                    sent_offset += 2 + sent_length  # note why + 2 ?
+                    sent_offset += 2 + sent_length
                 part_offset += sent_offset
             if last_found:
                 _progress += 1
@@ -173,8 +171,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             _time_req_time = _time_per_doc * log_nr
             _time_eta = _time_req_time - _time_progressed
             print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/log_nr, _time_progressed, _time_eta))
-            if TP + FP > 0:
-                print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
 
             if last_found:
                 last_found = False

@@ -7,7 +7,7 @@ from nala.features.tmvar import TmVarFeatureGenerator, TmVarDictionaryFeatureGen
 from nala.features.window import WindowFeatureGenerator
 from nala.utils.cache import Cacheable
 from nala.bootstrapping.document_filters import DocumentFilter
-from nala.bootstrapping.document_filters import KeywordsDocumentFilter
+from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter
 from nala.bootstrapping.pmid_filters import PMIDFilter
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.bootstrapping import DownloadArticle
@@ -117,7 +117,7 @@ class DocumentSelectorPipeline:
             else:
                 raise TypeError('not an instance that implements DocumentFilter')
         else:
-            self.document_filters = [KeywordsDocumentFilter()]
+            self.document_filters = [KeywordsDocumentFilter(), HighRecallRegexDocumentFilter()]
 
     def __enter__(self):
         if isinstance(self.initial_document_selector, Cacheable):

@@ -119,7 +119,7 @@ def generate_documents(n):
 
     dataset = Dataset()
     with DocumentSelectorPipeline() as dsp:
-        for pmid, document in dsp:
+        for pmid, document in dsp.execute():
             dataset.documents[pmid] = document
             # if we have generated enough documents stop
             if next(c) == n:

@@ -321,6 +321,14 @@ class Dataset:
 
         return report_dict
 
+    def extend_dataset(self, other):
+        """
+        :type other: nala.structures.data.Dataset
+        """
+        for key in other.documents:
+            if key not in self.documents:
+                self.documents[key] = other.documents[key]
+
 
 class Document:
     """
@@ -385,7 +393,10 @@ class Document:
 
     def get_title(self):
         """:returns title of document as str"""
-        return list(self.parts.values())[0].text
+        if len(self.parts.keys()) == 0:
+            return ""
+        else:
+            return list(self.parts.values())[0].text
 
     def get_text(self):
         """

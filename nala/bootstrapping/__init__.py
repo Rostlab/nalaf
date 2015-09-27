@@ -3,8 +3,12 @@ import os
 import re
 import requests
 import xml.etree.ElementTree as ET
+from nala.learning.crfsuite import CRFSuite
 from nala.structures.data import Dataset, Document, Part
 from nala.utils.cache import Cacheable
+from nala.utils.readers import HTMLReader
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.utils.writers import TagTogFormat
 
 
 class UniprotDocumentSelector(Cacheable):
@@ -161,6 +165,10 @@ class Iteration(Cacheable):
                 self.number = found_iteration
 
     def learning(self):
+        # parse base + reviewed files
+        learning_data = HTMLReader(self.bootstrapping_folder + "iteration_")
+
+        crf = CRFSuite("crfsuite")  # todo check for ability to use crfsuite command instead of abspath
         pass
         # todo learning
         # learning

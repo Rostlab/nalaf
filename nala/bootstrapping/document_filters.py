@@ -2,6 +2,7 @@ import abc
 import json
 import re
 import time
+import pkg_resources
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.spliters import NLTKSplitter
@@ -66,7 +67,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
     tmVar will be used in early stages and discarded as soon as there are no more results, thus gets a parameter.
     """
-    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file='nala/data/nl_patterns.json'):
+    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file_name=None):
         self.location_binary_model = binary_model
         """ location where binary model for nala (crfsuite) is saved """
         self.override_cache=override_cache
@@ -75,7 +76,10 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         self.expected_maximum_results=expected_max_results
         """ :returns maximum of [x] documents (can be less if not found) """
         # read in nl_patterns
-        with open(pattern_file, 'r') as f:
+        if not pattern_file_name:
+            pattern_file_name = pkg_resources.resource_filename('nala.data', 'dict_nl_words.json')
+
+        with open(pattern_file_name, 'r') as f:
             regexs = json.load(f)
             self.patterns = [re.compile(x) for x in regexs]
             """ compiled regex patterns from pattern_file param to specify custom json file,
@@ -86,7 +90,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
 
-        _progress = 0
+        _progress = 1
         _timestart = time.time()
 
         _time_avg_per_pattern = 0

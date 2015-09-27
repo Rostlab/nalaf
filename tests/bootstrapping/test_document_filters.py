@@ -11,10 +11,10 @@ class TestHighRecallRegexFilter(unittest.TestCase):
         pass
 
     def test_filter(self):
-        from nala.bootstrapping import UniprotDocumentSelector
+        from nala.bootstrapping.utils import UniprotDocumentSelector
         from nala.bootstrapping.document_filters import KeywordsDocumentFilter
         from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
-        from nala.bootstrapping import DownloadArticle
+        from nala.bootstrapping.utils import DownloadArticle
         from itertools import count
         c = count(1)
 

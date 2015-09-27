@@ -9,7 +9,7 @@ from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
-from nala.bootstrapping import generate_documents
+from nala.bootstrapping.utils import generate_documents
 
 
 class Iteration(Cacheable):

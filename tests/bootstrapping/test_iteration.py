@@ -6,5 +6,5 @@ __author__ = 'carsten'
 
 class TestIteration(TestCase):
     def test_learning(self):
-        iteration = Iteration()
+        iteration = Iteration('tmpbootstrapping')
         iteration.learning()

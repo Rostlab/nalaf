@@ -6,6 +6,8 @@ from nala.structures.pipelines import PrepareDatasetPipeline
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
+from nala.preprocessing.labelers import BIEOLabeler
+from nala.learning.evaluators import MentionLevelEvaluator
 
 
 class Iteration(Cacheable):
@@ -31,6 +33,10 @@ class Iteration(Cacheable):
                 self.number = found_iteration
 
     def learning(self):
+        """
+        Learning: base + iterations 1..n-1
+        :return:
+        """
         # parse base + reviewed files
         # base
         base_folder = os.path.join(self.bootstrapping_folder, "iteration_0/base/")
@@ -53,16 +59,12 @@ class Iteration(Cacheable):
 
         # generate features etc.
         PrepareDatasetPipeline().execute(learning_data)
+        BIEOLabeler().label(learning_data)
 
         # crfsuite part
         crf = CRFSuite("/usr/local/Cellar/crfsuite/0.12")
         crf.create_input_file(learning_data, 'train')
         crf.learn()
-        # crf.create_input_file(learning_data, 'test')
-        # crf.tag()
-        pass
-        # todo learning
-        # learning
 
         # docselection
 

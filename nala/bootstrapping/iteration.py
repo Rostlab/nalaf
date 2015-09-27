@@ -10,7 +10,7 @@ from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
 from nala.bootstrapping.utils import generate_documents
-from utils.writers import TagTogFormat
+from nala.utils.writers import TagTogFormat
 
 
 class Iteration(Cacheable):

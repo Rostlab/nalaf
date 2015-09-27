@@ -86,7 +86,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents, log_nr=5):
+    def filter(self, documents, min_found=20):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
@@ -106,7 +106,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         inclusive_definer = InclusiveNLDefiner()
         _i_array = [0, 0]
 
-        last_found = False
+        last_found = 0
 
         for pmid, doc in documents:
             # if any part of the document contains any of the keywords
@@ -161,24 +161,25 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                     _e_array[_e_result] += 1
                                     _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _i_array[_i_result] += 1
+                                    # todo write to file param + saving to manually annotate and find tp + fp for performance eval on each pattern
                                     # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
 
-                                    last_found = True
+                                    last_found += 1
 
                         if _lasttime - time.time() > 1:
                             print(i)
                     sent_offset += 2 + sent_length
                 part_offset += sent_offset
-            if last_found:
+            if last_found > min_found:
                 _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
-            _time_req_time = _time_per_doc * log_nr
-            _time_eta = _time_req_time - _time_progressed
             print_verbose("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
 
-            if last_found:
-                last_found = False
+            if last_found > min_found:
+                last_found = 0
+                # print('YEP')
                 yield pmid, doc
             else:
-                print_verbose(pmid, "contains no suitable annotations")
+                print_verbose(pmid, "contains either no or only a few suitable annotations")
+                # print('NOPE')

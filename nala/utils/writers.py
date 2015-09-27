@@ -243,6 +243,7 @@ class TagTogFormat:
 
         # check for root folder for files to save to
         if not os.path.isdir(self.location):
+            print(os.path.abspath(self.location))
             os.mkdir(self.location)
 
         # create subfolders if not existent
@@ -378,7 +379,7 @@ class TagTogFormat:
 
                 # note change that to chain() to make it nicer looking
                 for i, (partid, part) in enumerate(doc.parts.items()):
-                    for ann in part.predicted_annotations():
+                    for ann in part.predicted_annotations:
                         # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
                         #     tagtog_part_id = "s1h{}".format(i + 1)
                         # else:
@@ -387,7 +388,7 @@ class TagTogFormat:
                             if ann.confidence > threshhold_value:
                                 state = 'selected'
                             else:
-                                state = 'pre_selected'
+                                state = 'pre-selected'
                         else:
                             state = ''
 
@@ -400,7 +401,7 @@ class TagTogFormat:
                                 "who": [
                                     self.who
                                 ],
-                                "prob": 1  # OPTIONAL include different probabilities as well --> for later
+                                "prob": ann.confidence  # OPTIONAL include different probabilities as well --> for later
                             }
                         }
 

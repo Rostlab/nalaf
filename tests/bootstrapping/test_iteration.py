@@ -23,3 +23,4 @@ class TestIteration(TestCase):
         # ttf.export_ann_json(0.7)
 
         iteration.manual_review_import()
+        iteration.evaluation()

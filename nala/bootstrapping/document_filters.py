@@ -3,6 +3,7 @@ import json
 import re
 import time
 import pkg_resources
+from nala import print_verbose
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.spliters import NLTKSplitter
@@ -160,7 +161,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                     _e_array[_e_result] += 1
                                     _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
                                     _i_array[_i_result] += 1
-                                    print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                    # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
 
                                     last_found = True
 
@@ -174,8 +175,10 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             _time_per_doc = _time_progressed / _progress
             _time_req_time = _time_per_doc * log_nr
             _time_eta = _time_req_time - _time_progressed
-            print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/log_nr, _time_progressed, _time_eta))
+            print_verbose("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
 
             if last_found:
                 last_found = False
                 yield pmid, doc
+            else:
+                print_verbose(pmid, "contains no suitable annotations")

@@ -30,6 +30,12 @@ class TestDataset(unittest.TestCase):
         cls.doc.parts['s1h1'] = part1
         cls.doc.parts['s2p1'] = part2
 
+        doc2 = Document()
+        doc3 = Document().parts['someid'] = Part('marmor stein und eisen')
+        cls.dataset2 = Dataset()
+        cls.dataset2.documents['newid'] = doc3
+        cls.dataset2.documents['testid'] = doc2
+
     def test_repr_full(self):
         print(str(self.dataset))
 
@@ -56,6 +62,12 @@ class TestDataset(unittest.TestCase):
 
     def test_get_size(self):
         self.assertEquals(self.doc.get_size(), 9)
+
+    def test_extend_dataset(self):
+        print(self.dataset)
+        print("\n\n\n")
+        self.dataset.extend_dataset(self.dataset2)
+        print(self.dataset)
 
 
 class TestDocument(unittest.TestCase):

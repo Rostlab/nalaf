@@ -1,11 +1,11 @@
 import glob
 import os
 import re
-from learning.crfsuite import CRFSuite
-from structures.pipelines import PrepareDatasetPipeline
-from utils.annotation_readers import AnnJsonAnnotationReader
-from utils.cache import Cacheable
-from utils.readers import HTMLReader
+from nala.learning.crfsuite import CRFSuite
+from nala.structures.pipelines import PrepareDatasetPipeline
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.utils.cache import Cacheable
+from nala.utils.readers import HTMLReader
 
 
 class Iteration(Cacheable):

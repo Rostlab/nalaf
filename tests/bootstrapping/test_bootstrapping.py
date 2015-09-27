@@ -15,6 +15,7 @@ class TestBootstrapping(unittest.TestCase):
 class TestIteration(unittest.TestCase):
     def test_init(self):
         iteration = Iteration()
+        iteration.learning()
 
 
 if __name__ == '__main__':

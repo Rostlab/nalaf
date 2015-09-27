@@ -1,6 +1,7 @@
 import glob
 import os
 import re
+from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
 from nala.structures.pipelines import PrepareDatasetPipeline
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
@@ -8,6 +9,7 @@ from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
+from nala.bootstrapping import generate_documents
 
 
 class Iteration(Cacheable):
@@ -21,6 +23,12 @@ class Iteration(Cacheable):
 
         # represents the iteration
         self.number = -1
+
+        # empty init variables
+        self.train = None  # first
+        self.candidates = None  # non predicted docselected
+        self.predicted = None  # predicted docselected
+        self.crf = CRFSuite("/usr/local/Cellar/crfsuite/0.12")
 
         # todo discussion on config file in bootstrapping root or iteration_n check for n
 
@@ -37,13 +45,14 @@ class Iteration(Cacheable):
         Learning: base + iterations 1..n-1
         :return:
         """
+        print_verbose("Learning")
         # parse base + reviewed files
         # base
         base_folder = os.path.join(self.bootstrapping_folder, "iteration_0/base/")
         html_base_folder = base_folder + "html/"
         annjson_base_folder = base_folder + "annjson/"
-        learning_data = HTMLReader(html_base_folder).read()
-        AnnJsonAnnotationReader(annjson_base_folder).annotate(learning_data)
+        self.train = HTMLReader(html_base_folder).read()
+        AnnJsonAnnotationReader(annjson_base_folder).annotate(self.train)
 
         # extend for each next iteration
         if self.number > 0:
@@ -55,20 +64,28 @@ class Iteration(Cacheable):
 
                 # extend learning_data
                 # todo has to be tested
-                learning_data.extend_dataset(tmp_data)
+                self.train.extend_dataset(tmp_data)
 
         # generate features etc.
-        PrepareDatasetPipeline().execute(learning_data)
-        BIEOLabeler().label(learning_data)
+        PrepareDatasetPipeline().execute(self.train)
+        BIEOLabeler().label(self.train)
 
         # crfsuite part
-        crf = CRFSuite("/usr/local/Cellar/crfsuite/0.12")
-        crf.create_input_file(learning_data, 'train')
-        crf.learn()
+        self.crf.create_input_file(self.train, 'train')
+        self.crf.learn()
 
+    def docselection(self, nr=2):
         # docselection
+        print_verbose("DocSelection")
+        self.candidates = generate_documents(nr)
 
+    def tagging(self):
         # tagging
+        print_verbose("Tagging")
+        PrepareDatasetPipeline().execute(self.candidates)
+        self.crf.create_input_file(self.candidates, 'predict')
+        self.crf.tag('-m default_model -i predict > output.txt')
+        self.crf.read_predictions(self.candidates)
 
         # manual review
 

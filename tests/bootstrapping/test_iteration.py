@@ -7,4 +7,10 @@ __author__ = 'carsten'
 class TestIteration(TestCase):
     def test_learning(self):
         iteration = Iteration('tmpbootstrapping')
-        iteration.learning()
+        # iteration.learning()
+        iteration.docselection(nr=10)
+        print(len(iteration.candidates.documents))
+        # iteration.tagging()
+        # print("run again")
+        # for ann in iteration.candidates.predicted_annotations():
+        #     print(ann)

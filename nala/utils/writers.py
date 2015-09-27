@@ -313,7 +313,7 @@ class TagTogFormat:
 
                 # OPTIONAL use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
 
-    def export_ann_json(self):
+    def export_ann_json(self, threshhold_value=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
         Description of ann.json-format: "https://github.com/jmcejuela/tagtog-doc/wiki/ann.json"
@@ -367,6 +367,36 @@ class TagTogFormat:
                             "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
                             "confidence": {
                                 "state": "",
+                                "who": [
+                                    self.who
+                                ],
+                                "prob": 1  # OPTIONAL include different probabilities as well --> for later
+                            }
+                        }
+
+                        json_obj['entities'].append(ent)
+
+                # note change that to chain() to make it nicer looking
+                for i, (partid, part) in enumerate(doc.parts.items()):
+                    for ann in part.predicted_annotations():
+                        # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
+                        #     tagtog_part_id = "s1h{}".format(i + 1)
+                        # else:
+                        tagtog_part_id = "s1p{}".format(i + 1)
+                        if threshhold_value:
+                            if ann.confidence > threshhold_value:
+                                state = 'selected'
+                            else:
+                                state = 'pre_selected'
+                        else:
+                            state = ''
+
+                        ent = {
+                            "classId": ann.class_id,
+                            "part": tagtog_part_id,
+                            "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
+                            "confidence": {
+                                "state": state,
                                 "who": [
                                     self.who
                                 ],

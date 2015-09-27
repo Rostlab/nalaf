@@ -115,13 +115,16 @@ class Iteration(Cacheable):
         Parse from iteration_n/reviewed folder in anndoc format.
         :return:
         """
-        # pmids_list = glob.glob(self.candidates_folder + "/html/*.html")
-        # print(pmids_list)
-        # pmids = list(self.candidates.documents)  # to skip already existing pmids (since tagtog includes old files as well)
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
-        # print(self.reviewed)
-        for ann in self.reviewed.annotations():
-            print(ann)
+        # for ann in self.reviewed.annotations():
+        #     print(ann)
 
         # automatic evaluation
+
+    def evaluation(self):
+        """
+        When Candidates and Reviewed are existing do automatic evaluation and calculate performances
+        :return:
+        """
+        pass

@@ -3,6 +3,7 @@ from nala.bootstrapping.iteration import Iteration
 from nose.plugins.attrib import attr
 from nala.utils.writers import TagTogFormat
 import os
+from utils.readers import HTMLReader
 
 
 @attr('slow')

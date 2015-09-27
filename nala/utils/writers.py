@@ -284,8 +284,8 @@ class TagTogFormat:
 
                 head = ET.SubElement(html, 'head')
 
-                meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
-                meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nala.utils.writers.TagTogFormat'} )
+                # meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
+                # meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nala.utils.writers.TagTogFormat'} )
                 # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + pubmedid } )  # deprecated maybe different sources
 
                 title = ET.SubElement(head, 'title')

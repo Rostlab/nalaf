@@ -1,5 +1,6 @@
 import glob
 import os
+import re
 import requests
 import xml.etree.ElementTree as ET
 from nala.structures.data import Dataset, Document, Part
@@ -138,7 +139,7 @@ def generate_documents(n):
 
 
 class Iteration(Cacheable):
-    def __init__(self, folder):
+    def __init__(self, folder=None):
         super().__init__()
 
         if folder is not None:
@@ -149,10 +150,19 @@ class Iteration(Cacheable):
         # represents the iteration
         self.number = -1
 
-        # discussion config file in bootstrapping root or iteration_n check for n
-        for fn in glob.iglob(self.bootstrapping_folder + "/iteration_*/"):
-            print(fn)
+        # todo discussion on config file in bootstrapping root or iteration_n check for n
 
+        # find iteration number
+        _iteration_name = self.bootstrapping_folder + "/iteration_*/"
+        for fn in glob.glob(_iteration_name):
+            match = re.search(r'/iteration_(\d+)/$', fn)
+            found_iteration = int(match.group(1))
+            if found_iteration > self.number:
+                self.number = found_iteration
+
+    def learning(self):
+        pass
+        # todo learning
         # learning
 
         # docselection

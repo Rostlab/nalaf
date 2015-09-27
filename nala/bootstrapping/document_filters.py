@@ -86,8 +86,6 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
 
-        TP = 0
-        FP = 0
         _progress = 0
         _timestart = time.time()
 
@@ -102,6 +100,8 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _e_array = [0, 0, 0]
         inclusive_definer = InclusiveNLDefiner()
         _i_array = [0, 0]
+
+        last_found = False
 
         for pmid, doc in documents:
             # if any part of the document contains any of the keywords
@@ -158,16 +158,20 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                     _i_array[_i_result] += 1
                                     print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
 
+                                    last_found = True
+
                         if _lasttime - time.time() > 1:
                             print(i)
-                    sent_offset += 2 + sent_length  # note why + 2 ?
+                    sent_offset += 2 + sent_length
                 part_offset += sent_offset
-            _progress += 1
+            if last_found:
+                _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
             _time_req_time = _time_per_doc * log_nr
             _time_eta = _time_req_time - _time_progressed
             print("PROGRESS: {:.3%} PROGRESS: {:.2f} secs ETA: {:.2f} secs".format(_progress/log_nr, _time_progressed, _time_eta))
-            if TP + FP > 0:
-                print('STATS: TP:{}, FP:{}, TP+FP:{} %containingNLmentions:{:.4%}'.format(TP, FP, TP+FP, TP/(TP + FP)))
-            yield pmid, doc
+
+            if last_found:
+                last_found = False
+                yield pmid, doc

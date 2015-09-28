@@ -354,8 +354,8 @@ class Dataset:
         :rtype: (list[nala.structures.data.Dataset], list[nala.structures.data.Dataset])
         """
         keys = list(sorted(self.documents.keys()))
+        random.seed(2727)
         random.shuffle(keys)
-        random.seed = 2727
 
         len_part = int(len(keys) / n)
 
@@ -387,8 +387,8 @@ class Dataset:
         :rtype: (nala.structures.data.Dataset, nala.structures.data.Dataset)
         """
         keys = list(sorted(self.documents.keys()))
+        random.seed(2727)
         random.shuffle(keys)
-        random.seed = 2727
 
         len_train = int(len(keys) * percentage)
         train_keys = keys[:len_train]

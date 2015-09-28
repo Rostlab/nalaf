@@ -60,9 +60,9 @@ class PostProcessing:
                         Annotation(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
 
             # split multiple mentions
-            if re.search(' *(and|,|or) *', ann.text):
+            if re.search(r' *(\band\b|,|\bor\b) *', ann.text):
                 to_be_removed.append(index)
-                split = re.split(' *(and|,|or) *', ann.text)
+                split = re.split(r' *(\band|,|or\b) *', ann.text)
                 if split[0]:
                     part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
                 if split[2]:

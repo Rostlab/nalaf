@@ -7,9 +7,9 @@ import os
 @attr('slow')
 class TestIteration(TestCase):
     def test_learning(self):
-        iteration = Iteration('tmpbootstrapping', iteration_nr=2)
-        iteration.before_annotation(nr_new_docs=5)
-        # iteration.after_annotation()
+        iteration = Iteration(iteration_nr=1)
+        # iteration.before_annotation(nr_new_docs=10)
+        iteration.after_annotation()
 
         # iteration.learning()
         # iteration.docselection(nr=10)

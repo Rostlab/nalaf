@@ -183,6 +183,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                 _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
+            # fixme print to print_verbose
             print("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
 
             if positive_sentences > min_found:

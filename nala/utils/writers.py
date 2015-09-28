@@ -388,7 +388,7 @@ class TagTogFormat:
                             if ann.confidence > threshhold_value:
                                 state = 'selected'
                             else:
-                                state = 'pre-selected'
+                                state = 'pre-added'
                         else:
                             state = ''
 

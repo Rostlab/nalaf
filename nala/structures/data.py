@@ -331,6 +331,15 @@ class Dataset:
             if key not in self.documents:
                 self.documents[key] = other.documents[key]
 
+    def prune(self):
+        """
+        deletes all the parts that contain no annotations at all
+        """
+        for doc_id, doc in self.documents.items():
+            for part_id, part in doc.parts.items():
+                if len(part.annotations) == 0:
+                    del doc.parts[part_id]
+
 
 class Document:
     """

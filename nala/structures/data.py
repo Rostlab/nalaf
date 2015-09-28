@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import json
+import random
 from nala.utils import MUT_CLASS_ID
 import math
 import re
@@ -339,6 +340,69 @@ class Dataset:
             for part_id, part in doc.parts.items():
                 if len(part.annotations) == 0:
                     del doc.parts[part_id]
+
+    def n_fold_split(self, n=5):
+        """
+        Returns N train, test random splits
+        according to the standard N-fold cross validation scheme.
+
+
+        :param n: number of folds
+        :type n: int
+
+        :return: a list of N train datasets and N test datasets
+        :rtype: (list[nala.structures.data.Dataset], list[nala.structures.data.Dataset])
+        """
+        keys = list(sorted(self.documents.keys()))
+        random.shuffle(keys)
+        random.seed = 2727
+
+        len_part = int(len(keys) / n)
+
+        train = []
+        test = []
+
+        for fold in range(n):
+            test_keys = keys[fold*len_part:fold*len_part+len_part]
+            train_keys = [key for key in keys if key not in test_keys]
+
+            test.append(Dataset())
+            for key in test_keys:
+                test[-1].documents[key] = self.documents[key]
+
+            train.append(Dataset())
+            for key in train_keys:
+                train[-1].documents[key] = self.documents[key]
+        return train, test
+
+    def percentage_split(self, percentage=0.66):
+        """
+        Splits the dataset randomly into train and test dataset
+        given the size of the train dataset in percentage.
+
+        :param percentage: the size of the train dataset between 0.0 and 1.0
+        :type percentage: float
+
+        :return train dataset, test dataset
+        :rtype: (nala.structures.data.Dataset, nala.structures.data.Dataset)
+        """
+        keys = list(sorted(self.documents.keys()))
+        random.shuffle(keys)
+        random.seed = 2727
+
+        len_train = int(len(keys) * percentage)
+        train_keys = keys[:len_train]
+        test_keys = keys[len_train:]
+
+        train = Dataset()
+        test = Dataset()
+
+        for key in test_keys:
+            test.documents[key] = self.documents[key]
+        for key in train_keys:
+            train.documents[key] = self.documents[key]
+
+        return train, test
 
 
 class Document:

@@ -43,6 +43,7 @@ class PostProcessing:
                                               if index not in to_be_removed]
 
     def __fix_issues(self, part):
+        # TODO when creating new prediction which confidence should we add
         to_be_removed = []
         for index, ann in enumerate(part.predicted_annotations):
             start = ann.offset

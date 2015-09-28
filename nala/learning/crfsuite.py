@@ -46,9 +46,10 @@ class CRFSuite:
                                           for key, value in token.features.items()])
 
                     if mode in ('train', 'test'):
-                        file.write('%s\t%s\n' % (token.original_labels[0], features))
-                    else:  # mode=predict
-                        file.write('%s\n' % features)
+                        label = token.original_labels[0].value
+                    else:
+                        label = '?'
+                    file.write('{}\t{}\n'.format(label, features))
                 file.write('\n')
 
     def learn(self, options=''):

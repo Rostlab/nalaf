@@ -7,7 +7,10 @@ import os
 @attr('slow')
 class TestIteration(TestCase):
     def test_learning(self):
-        iteration = Iteration('tmpbootstrapping', iteration_nr=1)
+        iteration = Iteration('tmpbootstrapping', iteration_nr=2)
+        iteration.before_annotation(nr_new_docs=5)
+        # iteration.after_annotation()
+
         # iteration.learning()
         # iteration.docselection(nr=10)
         # print(len(iteration.candidates.documents))
@@ -15,7 +18,6 @@ class TestIteration(TestCase):
         # print("\n\n\n\n\n\nPREDICTION\n\n\n\n\n")
         # for ann in iteration.candidates.predicted_annotations():
         #     print(ann)
-        # note current working directory changes after crfsuite to crfsuite-folder
 
-        iteration.manual_review_import()
-        iteration.evaluation()
+        # iteration.manual_review_import()
+        # iteration.evaluation()

@@ -1,6 +1,7 @@
 import glob
 import os
 import re
+from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
 from nala.structures.pipelines import PrepareDatasetPipeline
@@ -11,10 +12,10 @@ from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
 from nala.bootstrapping.utils import generate_documents
 from nala.utils.writers import TagTogFormat
-from preprocessing.definers import ExclusiveNLDefiner
+from nala.preprocessing.definers import ExclusiveNLDefiner
 
 
-class Iteration(Cacheable):
+class Iteration():
     def __init__(self, folder=None, iteration_nr=None):
         super().__init__()
 
@@ -47,13 +48,28 @@ class Iteration(Cacheable):
                 if found_iteration > self.number:
                     self.number = found_iteration
 
-            self.number = self.number + 1  # NOTE before last iteration now current iteration
+            # check for candidates and reviewed
+            if os.path.isdir(os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number), 'candidates')):
+                if os.path.isdir(os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number), 'reviewed')):
+                    # todo check for evaluation done (writing in csv file)
+                    self.number += 1
+            if self.number == 0:
+                self.number += 1
         else:
             self.number = iteration_nr
         # current folders
         self.current_folder = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number))
         self.candidates_folder = os.path.join(self.current_folder, 'candidates')
         self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
+
+    def before_annotation(self, nr_new_docs=10):
+        self.learning()
+        self.docselection(nr=nr_new_docs)
+        self.tagging()
+
+    def after_annotation(self):
+        self.manual_review_import()
+        self.evaluation()
 
     def learning(self):
         """
@@ -68,9 +84,9 @@ class Iteration(Cacheable):
         annjson_base_folder = base_folder + "annjson/"
         self.train = HTMLReader(html_base_folder).read()
         AnnJsonAnnotationReader(annjson_base_folder).annotate(self.train)
-
+        print(len(self.train.documents))
         # extend for each next iteration
-        if self.number > 0:
+        if self.number > 1:
             for i in range(1, self.number):
                 # get new dataset
                 path_to_read = os.path.join(self.bootstrapping_folder, "iteration_{}".format(i), "reviewed/")
@@ -84,10 +100,11 @@ class Iteration(Cacheable):
         # generate features etc.
         PrepareDatasetPipeline().execute(self.train)
         BIEOLabeler().label(self.train)
-
+        print(len(self.train.documents))
         # crfsuite part
         self.crf.create_input_file(self.train, 'train')
         self.crf.learn()
+        # todo save model to iteration_0 folder as bin_model
 
     def docselection(self, nr=2):
         # docselection
@@ -101,6 +118,7 @@ class Iteration(Cacheable):
         self.crf.create_input_file(self.candidates, 'predict')
         self.crf.tag('-m default_model -i predict > output.txt')
         self.crf.read_predictions(self.candidates)
+        PostProcessing().process(self.candidates)
 
         # export candidates to candidates folder
         os.mkdir(self.current_folder)

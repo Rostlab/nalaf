@@ -1,6 +1,7 @@
 import glob
 import os
 import re
+from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
@@ -109,7 +110,20 @@ class Iteration():
     def docselection(self, nr=2):
         # docselection
         print_verbose("\n\n\n======DocSelection======\n\n\n")
-        self.candidates = generate_documents(nr)
+        from nala.structures.data import Dataset
+        from nala.structures.pipelines import DocumentSelectorPipeline
+        from itertools import count
+        c = count(1)
+
+        dataset = Dataset()
+
+        with DocumentSelectorPipeline(pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)]) as dsp:
+            for pmid, document in dsp.execute():
+                dataset.documents[pmid] = document
+                # if we have generated enough documents stop
+                if next(c) == nr:
+                    break
+        self.candidates = dataset
 
     def tagging(self):
         # tagging

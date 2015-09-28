@@ -35,7 +35,7 @@ class Iteration():
         self.train = None  # first
         self.candidates = None  # non predicted docselected
         self.predicted = None  # predicted docselected
-        self.crf = CRFSuite("/usr/local/Cellar/crfsuite/0.12")
+        self.crf = CRFSuite(r'C:\Users\carst\Documents\git\thesis-alex-carsten\crfsuite')
 
         # discussion on config file in bootstrapping root or iteration_n check for n
         # note currently using parameter .. i think that s the most suitable
@@ -97,6 +97,8 @@ class Iteration():
                 # extend learning_data
                 # todo has to be tested
                 self.train.extend_dataset(tmp_data)
+        # prune parts without annotations
+        self.train.prune()
 
         # generate features etc.
         PrepareDatasetPipeline().execute(self.train)

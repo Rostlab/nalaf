@@ -23,6 +23,7 @@ project/plugins/project/
 # idp-4 resources
 IDP4_*/
 node_modules/
+/crfsuite
 
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info

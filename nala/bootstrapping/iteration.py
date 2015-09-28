@@ -108,7 +108,10 @@ class Iteration():
         # todo save model to iteration_0 folder as bin_model
 
     def docselection(self, nr=2):
-        # docselection
+        """
+        Does the same as generate_documents(n) but the bootstrapping folder is specified in here.
+        :param nr: amount of new documents wanted
+        """
         print_verbose("\n\n\n======DocSelection======\n\n\n")
         from nala.structures.data import Dataset
         from nala.structures.pipelines import DocumentSelectorPipeline
@@ -116,7 +119,6 @@ class Iteration():
         c = count(1)
 
         dataset = Dataset()
-
         with DocumentSelectorPipeline(pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)]) as dsp:
             for pmid, document in dsp.execute():
                 dataset.documents[pmid] = document
@@ -125,7 +127,7 @@ class Iteration():
                     break
         self.candidates = dataset
 
-    def tagging(self):
+    def tagging(self, threshold_val=0.99):
         # tagging
         print_verbose("\n\n\n======Tagging======\n\n\n")
         PrepareDatasetPipeline().execute(self.candidates)
@@ -139,7 +141,7 @@ class Iteration():
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()
-        ttf_candidates.export_ann_json(0.99)  # 0.99 for beginning
+        ttf_candidates.export_ann_json(threshold_val)  # 0.99 for beginning
 
     # todo divide into 2 parts with 1st being learning, docselection, tagging and the 2nd being manual import and evaluation
 

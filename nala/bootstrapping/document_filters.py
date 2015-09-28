@@ -86,7 +86,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents, min_found=20):
+    def filter(self, documents, min_found=10):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
@@ -116,6 +116,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             data_tmp.documents[pmid] = doc
             NLTKSplitter().split(data_tmp)
             data_tmvar = TmVarTagger().generate_abstracts([pmid])
+            positive_sentences = 0
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
                 sent_offset = 0
@@ -126,8 +127,10 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                     new_text = sent.lower()
                     new_text = re.sub('[\./\\-(){}\[\],%]', '', new_text)
                     new_text = re.sub('\W+', ' ', new_text)
-                    for i, reg in enumerate(self.patterns):
 
+                    found_in_sentence = False
+
+                    for i, reg in enumerate(self.patterns):
                         _lasttime = time.time()  # time start var
                         match = reg.search(new_text)
 
@@ -137,7 +140,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         _time_reg_pattern_total += _time_current_reg  # total time spent on searching with patterns
                         if _time_reg_pattern_total > 0:
                             _time_avg_per_pattern = _time_reg_pattern_total / _pattern_calls  # avg spent time per pattern call
-
+                        # todo create pattern performance eval for descending amount of recognized patterns
                         # if _pattern_calls > len(patterns) * 20 and _time_avg_per_pattern * 10000 < _time_current_reg:
                         #     print("BAD_PATTERN_PERFORMANCE:", _time_avg_per_pattern, _time_current_reg, reg.pattern)
                         # if _time_max_pattern < _time_current_reg:
@@ -165,21 +168,27 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                                     # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
 
                                     last_found += 1
+                                    found_in_sentence = True
 
                         if _lasttime - time.time() > 1:
                             print(i)
                     sent_offset += 2 + sent_length
+
+                    # for per sentence positives
+                    if found_in_sentence:
+                        positive_sentences += 1
+
                 part_offset += sent_offset
-            if last_found > min_found:
+            if positive_sentences > min_found:
                 _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
-            print_verbose("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
+            print("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
 
-            if last_found > min_found:
+            if positive_sentences > min_found:
                 last_found = 0
-                # print('YEP')
+                print('YEP')
                 yield pmid, doc
             else:
                 print_verbose(pmid, "contains either no or only a few suitable annotations")
-                # print('NOPE')
+                print('NOPE')

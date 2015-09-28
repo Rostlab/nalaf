@@ -11,6 +11,7 @@ from nala.preprocessing.labelers import BIEOLabeler
 from nala.learning.evaluators import MentionLevelEvaluator
 from nala.bootstrapping.utils import generate_documents
 from nala.utils.writers import TagTogFormat
+from preprocessing.definers import ExclusiveNLDefiner
 
 
 class Iteration(Cacheable):
@@ -24,6 +25,9 @@ class Iteration(Cacheable):
 
         # represents the iteration
         self.number = -1
+
+        # stats file
+        self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
 
         # empty init variables
         self.train = None  # first
@@ -131,4 +135,8 @@ class Iteration(Cacheable):
         When Candidates and Reviewed are existing do automatic evaluation and calculate performances
         :return:
         """
-        print(MentionLevelEvaluator().evaluate(self.reviewed))
+        ExclusiveNLDefiner().define(self.reviewed)
+        results = MentionLevelEvaluator().evaluate(self.reviewed)
+        # print(results)
+        with open(self.stats_file, 'a') as f:
+            f.write("{}\t{}\n".format(self.number, "\t".join(list(str(r) for r in results))))

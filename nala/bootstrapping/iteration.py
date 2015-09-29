@@ -73,6 +73,7 @@ class Iteration():
         # note currently using parameter .. i think that s the most suitable
 
         print_verbose('Check for Iteration Number....')
+        # fixme print verbose not executed.... why? just highrecallregex filter.... no idea
 
         if iteration_nr is None:
             # find iteration number

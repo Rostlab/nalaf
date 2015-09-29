@@ -14,16 +14,22 @@ from nala.learning.evaluators import MentionLevelEvaluator
 from nala.bootstrapping.utils import generate_documents
 from nala.utils.writers import TagTogFormat
 from nala.preprocessing.definers import ExclusiveNLDefiner
+import pkg_resources
 
 
 class Iteration():
-    def __init__(self, folder=None, iteration_nr=None):
+    def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None):
         super().__init__()
 
         if folder is not None:
             self.bootstrapping_folder = os.path.abspath(folder)
         else:
             self.bootstrapping_folder = os.path.abspath("resources/bootstrapping")
+
+        if crfsuite_path is None:
+            crfsuite_path = os.path.abspath(r'crfsuite')
+        else:
+            crfsuite_path = os.path.abspath(crfsuite_path)
 
         # represents the iteration
         self.number = -1
@@ -35,7 +41,7 @@ class Iteration():
         self.train = None  # first
         self.candidates = None  # non predicted docselected
         self.predicted = None  # predicted docselected
-        self.crf = CRFSuite(r'C:\Users\carst\Documents\git\thesis-alex-carsten\crfsuite')
+        self.crf = CRFSuite(crfsuite_path)
 
         # discussion on config file in bootstrapping root or iteration_n check for n
         # note currently using parameter .. i think that s the most suitable

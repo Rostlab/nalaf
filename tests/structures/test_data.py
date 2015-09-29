@@ -69,6 +69,10 @@ class TestDataset(unittest.TestCase):
         self.dataset.extend_dataset(self.dataset2)
         print(self.dataset)
 
+    def test_delete_subclass_annotations(self):
+        self.dataset.delete_subclass_annotations(0)
+        self.assertEqual(len(list(self.dataset.annotations())), 1)
+
 
 class TestDocument(unittest.TestCase):
     @classmethod

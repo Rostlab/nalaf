@@ -90,9 +90,9 @@ class Iteration():
         if self.number > 1:
             for i in range(1, self.number):
                 # get new dataset
-                path_to_read = os.path.join(self.bootstrapping_folder, "iteration_{}".format(i), "reviewed/")
-                tmp_data = HTMLReader(path_to_read + "html/").read()
-                AnnJsonAnnotationReader(path_to_read + "annjson/").annotate(tmp_data)
+                path_to_read = os.path.join(self.bootstrapping_folder, "iteration_{}".format(i))
+                tmp_data = HTMLReader(path_to_read + "/candidates/html/").read()
+                AnnJsonAnnotationReader(path_to_read + "/reviewed/").annotate(tmp_data)
 
                 # extend learning_data
                 # todo has to be tested

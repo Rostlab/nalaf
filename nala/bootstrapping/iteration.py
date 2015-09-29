@@ -1,6 +1,7 @@
 import glob
 import os
 import re
+import shutil
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
@@ -18,7 +19,7 @@ import pkg_resources
 
 
 class Iteration():
-    def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None):
+    def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None, threshold_val=1):
         super().__init__()
 
         if folder is not None:
@@ -27,12 +28,15 @@ class Iteration():
             self.bootstrapping_folder = os.path.abspath("resources/bootstrapping")
 
         if crfsuite_path is None:
-            crfsuite_path = os.path.abspath(r'crfsuite')
+            self.crfsuite_path = os.path.abspath(r'crfsuite')
         else:
-            crfsuite_path = os.path.abspath(crfsuite_path)
+            self.crfsuite_path = os.path.abspath(crfsuite_path)
 
         # represents the iteration
         self.number = -1
+
+        # threshold class-wide variable to save in stats.csv file
+        self.threshold_val = threshold_val
 
         # stats file
         self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
@@ -72,7 +76,7 @@ class Iteration():
     def before_annotation(self, nr_new_docs=10):
         self.learning()
         self.docselection(nr=nr_new_docs)
-        self.tagging()
+        self.tagging(threshold_val=self.threshold_val)
 
     def after_annotation(self):
         self.manual_review_import()
@@ -91,7 +95,7 @@ class Iteration():
         annjson_base_folder = base_folder + "annjson/"
         self.train = HTMLReader(html_base_folder).read()
         AnnJsonAnnotationReader(annjson_base_folder).annotate(self.train)
-        print(len(self.train.documents))
+        print_verbose(len(self.train.documents), "documents are used in the training dataset.")
         # extend for each next iteration
         if self.number > 1:
             for i in range(1, self.number):
@@ -109,10 +113,13 @@ class Iteration():
         # generate features etc.
         PrepareDatasetPipeline().execute(self.train)
         BIEOLabeler().label(self.train)
-        print(len(self.train.documents))
+        print_verbose(len(self.train.documents), "documents are prepared for training dataset.")
+
         # crfsuite part
         self.crf.create_input_file(self.train, 'train')
         self.crf.learn()
+        shutil.copyfile(os.path.join(self.crfsuite_path, 'default_model'),
+                        os.path.join(self.current_folder, 'bin_model'))
         # todo save model to iteration_0 folder as bin_model
 
     def docselection(self, nr=2):
@@ -181,4 +188,5 @@ class Iteration():
         results = MentionLevelEvaluator().evaluate(self.reviewed)
         # print(results)
         with open(self.stats_file, 'a') as f:
-            f.write("{}\t{}\n".format(self.number, "\t".join(list(str(r) for r in results))))
+            f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
+                list(str(r) for r in results))))

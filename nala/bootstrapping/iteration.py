@@ -19,7 +19,18 @@ import pkg_resources
 
 
 class Iteration():
+    """
+    This is the class to perform one iteration of bootstrapping. There are various options.
+    """
+    # todo finish docset of Iteration Class
     def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None, threshold_val=1):
+        """
+        Init function of iteration. Has to be called with proper folder and crfsuite path if not default.
+        :param folder: Bootstrapping folder (has to be created before including base folder with html + annjson folder and corpus)
+        :param iteration_nr: In which iteration the bootstrapping process is currently. Effects self.current_folder
+        :param crfsuite_path: Folder of CRFSuite installation as full path or relative path to working dir. (gets converted to abspath)
+        :param threshold_val: The threshold value to select annotations to pre-added or selected to semi-supervise.
+        """
         super().__init__()
 
         if folder is not None:
@@ -27,10 +38,21 @@ class Iteration():
         else:
             self.bootstrapping_folder = os.path.abspath("resources/bootstrapping")
 
+        if not os.path.isdir(self.bootstrapping_folder):
+            raise FileNotFoundError('''
+            The bootstrapping folder does not exist.
+            And needs to be created including with the annotated starting corpus.
+            ''', self.bootstrapping_folder)
+
         if crfsuite_path is None:
             self.crfsuite_path = os.path.abspath(r'crfsuite')
         else:
             self.crfsuite_path = os.path.abspath(crfsuite_path)
+
+        if not os.path.isdir(self.crfsuite_path):
+            raise FileNotFoundError('''
+            The CRFsuite folder does not exist.
+            ''', self.crfsuite_path)
 
         # represents the iteration
         self.number = -1
@@ -50,6 +72,8 @@ class Iteration():
         # discussion on config file in bootstrapping root or iteration_n check for n
         # note currently using parameter .. i think that s the most suitable
 
+        print_verbose('Check for Iteration Number....')
+
         if iteration_nr is None:
             # find iteration number
             _iteration_name = self.bootstrapping_folder + "/iteration_*/"
@@ -62,7 +86,6 @@ class Iteration():
             # check for candidates and reviewed
             if os.path.isdir(os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number), 'candidates')):
                 if os.path.isdir(os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number), 'reviewed')):
-                    # todo check for evaluation done (writing in csv file)
                     self.number += 1
             if self.number == 0:
                 self.number += 1
@@ -72,6 +95,8 @@ class Iteration():
         self.current_folder = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number))
         self.candidates_folder = os.path.join(self.current_folder, 'candidates')
         self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
+
+        print_verbose('Initialisation of Iteration instance finished.')
 
     def before_annotation(self, nr_new_docs=10):
         self.learning()
@@ -120,7 +145,6 @@ class Iteration():
         self.crf.learn()
         shutil.copyfile(os.path.join(self.crfsuite_path, 'default_model'),
                         os.path.join(self.current_folder, 'bin_model'))
-        # todo save model to iteration_0 folder as bin_model
 
     def docselection(self, nr=2):
         """
@@ -152,13 +176,12 @@ class Iteration():
         PostProcessing().process(self.candidates)
 
         # export candidates to candidates folder
-        os.mkdir(self.current_folder)
+        if not os.path.exists(self.current_folder):
+            os.mkdir(self.current_folder)
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()
         ttf_candidates.export_ann_json(threshold_val)  # 0.99 for beginning
-
-    # todo divide into 2 parts with 1st being learning, docselection, tagging and the 2nd being manual import and evaluation
 
     def manual_review_import(self):
         """

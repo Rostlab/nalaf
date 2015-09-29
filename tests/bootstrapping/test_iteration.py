@@ -7,7 +7,7 @@ import os
 @attr('slow')
 class TestIteration(TestCase):
     def test_learning(self):
-        iteration = Iteration(iteration_nr=1)
+        iteration = Iteration(iteration_nr=1, crfsuite_path=r'crfsuite')
         iteration.before_annotation(nr_new_docs=2)
         # iteration.after_annotation()
 

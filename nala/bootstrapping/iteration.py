@@ -41,7 +41,7 @@ class Iteration():
         self.train = None  # first
         self.candidates = None  # non predicted docselected
         self.predicted = None  # predicted docselected
-        self.crf = CRFSuite(crfsuite_path)
+        self.crf = CRFSuite(crfsuite_path, minify=True)
 
         # discussion on config file in bootstrapping root or iteration_n check for n
         # note currently using parameter .. i think that s the most suitable

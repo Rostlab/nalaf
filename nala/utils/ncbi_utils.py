@@ -22,6 +22,10 @@ class GNormPlus(Cacheable):
 
         genes = []
         for line in text.splitlines()[2:-1]:  # skip title and abstract
-            _, start, end, text, _, gene_id = line.split('\t')
-            genes.append((int(start), int(end), text, gene_id))
+            try:
+                _, start, end, text, _, gene_id = line.split('\t')
+                genes.append((int(start), int(end), text, gene_id))
+            # the provided pmid was not a valid one
+            except ValueError:
+                pass
         return genes

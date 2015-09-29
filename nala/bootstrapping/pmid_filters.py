@@ -50,6 +50,7 @@ class AlreadyConsideredPMIDFilter(PMIDFilter):
             if which_iteration < self.iteration_n and files:
                 for file in files:
                     # try to find the pmid based on file name convention
+                    # fixme pmids not only in form asdjkasdjlja-pmid.plain.html or dasdas-pmid.ann.json but also in pmid.html or pmid.ann.json
                     file_match = re.search('-([0-9]+)\.(ann|plain)\.(json|html)', file)
                     # extract the pmid if you found it
                     if file_match:

@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from itertools import chain
 import json
 import random
 from nala.utils import MUT_CLASS_ID
@@ -341,11 +342,22 @@ class Dataset:
                 if len(part.annotations) == 0:
                     del doc.parts[part_id]
 
+    def delete_subclass_annotations(self, subclass, predicted=True):
+        """
+        Method does delete all annotations that have subclass.
+        Will not delete anything if not specified that particular subclass.
+        :param subclass: annotation type to delete.
+        :param no_predicted: if True it will only consider Part.annotations array and not Part.pred_annotations
+        """
+        for part in self.parts():
+            part.annotations = [ann for ann in part.annotations if ann.subclass != subclass]
+            if predicted:
+                part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subclass]
+
     def n_fold_split(self, n=5):
         """
         Returns N train, test random splits
         according to the standard N-fold cross validation scheme.
-
 
         :param n: number of folds
         :type n: int

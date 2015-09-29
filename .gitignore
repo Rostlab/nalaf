@@ -24,6 +24,7 @@ project/plugins/project/
 IDP4_*/
 node_modules/
 /crfsuite
+bin_model
 
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info

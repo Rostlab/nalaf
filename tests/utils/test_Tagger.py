@@ -1,5 +1,8 @@
 from unittest import TestCase
 from nala.utils.tagger import TmVarTagger
+from nala.utils.ncbi_utils import GNormPlus
+from utils.annotation_readers import AnnJsonAnnotationReader
+from utils.readers import HTMLReader
 
 __author__ = 'carst'
 
@@ -13,3 +16,25 @@ class TestTmVarTagger(TestCase):
         print(data)
         for docid in data.documents:
             print(data.documents[docid])
+
+
+class TestGNormPlus(TestCase):
+    def test_get_genes_for_pmid(self):
+        pmid = '22457529'
+        dataset = HTMLReader('resources/corpora/idp4/html').read()
+        # AnnJsonAnnotationReader('resources/corpora/idp4/annjson').annotate(dataset)
+        gnorm = GNormPlus()
+        all_genes = []
+        counter = 0
+        for docid in dataset.documents:
+            results = gnorm.get_genes_for_pmid(docid)
+            print(counter)
+            counter += 1
+            if len(results) > 0:
+                genes = set([elem for sublist in results for elem in sublist[3].split(',')])
+                all_genes.extend(genes)
+        unique_gene_set = set(all_genes)
+        # "GeneID:114548"
+        # "140859"
+        # "GeneID:43829/PSSMID:210065"
+        print(unique_gene_set)

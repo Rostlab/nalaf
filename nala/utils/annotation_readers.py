@@ -83,9 +83,9 @@ class AnnJsonMerger:
 
     There are several available strategies for merging:
     1. Union or intersection
-    2. Shortest or longest entity
+    2. Shortest entity, longest entity or priority
     """
-    def __init__(self, directory, strategy='union', entity_strategy='longest', read_just_mutations=True):
+    def __init__(self, directory, strategy='union', entity_strategy='shortest', read_just_mutations=True):
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -102,7 +102,10 @@ class AnnJsonMerger:
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
         * shortest: takes the shortest overlapping entity
+        * priority: take the entity from the annotator with higher priority in the following order:
+            (abojchevski, Ectelion, sanjeevkrn, Shpendi, jmcejuela, cuhlig, ANKIT)
         """
+        self.priority = ['abojchevski', 'Ectelion', 'sanjeevkrn', 'Shpendi']
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
 
@@ -110,11 +113,14 @@ class AnnJsonMerger:
         """
         :type dataset: nala.structures.data.Dataset
         """
-        annotators = os.listdir(self.directory)
+        if self.entity_strategy == 'priority':
+            annotators = self.priority
+        else:
+            annotators = os.listdir(self.directory)
         AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0])).annotate(dataset)
 
         for annotator in annotators[1:]:
-            self.merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
+            self.__merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
 
         # remove duplicates that might have been added
         # in the case when one ann spans across several others
@@ -130,7 +136,7 @@ class AnnJsonMerger:
                         parsed.append(ann)
                 part.annotations = [ann for index, ann in enumerate(part.annotations) if index not in to_be_removed]
 
-    def merge_annotations_into_dataset(self, dataset, annotations_directory):
+    def __merge_annotations_into_dataset(self, dataset, annotations_directory):
         for doc_id, document in dataset.documents.items():
             # either once or zero times
             for filename in glob.glob(os.path.join(annotations_directory, '*{}*.ann.json'.format(doc_id))):
@@ -150,8 +156,8 @@ class AnnJsonMerger:
                                             elif self.entity_strategy == 'longest':
                                                 if len(ann.text) > len(existing_ann.text):
                                                     document.parts[entity['part']].annotations[index] = ann
-                                            else:
-                                                raise ValueError('entity_strategy must be "shortest" or "longest"')
+                                            elif self.entity_strategy != 'priority':
+                                                raise ValueError('entity_strategy must be "shortest", "longest" or "priority"')
 
                                     # annotations not in original dataset
                                     # include only if the strategy is union

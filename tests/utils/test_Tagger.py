@@ -1,8 +1,9 @@
 from unittest import TestCase
 from nala.utils.tagger import TmVarTagger
 from nala.utils.ncbi_utils import GNormPlus
-from utils.annotation_readers import AnnJsonAnnotationReader
-from utils.readers import HTMLReader
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.utils.readers import HTMLReader
+from nala.utils.uniprot_utils import Uniprot
 
 __author__ = 'carst'
 
@@ -38,3 +39,9 @@ class TestGNormPlus(TestCase):
         # "140859"
         # "GeneID:43829/PSSMID:210065"
         print(unique_gene_set)
+
+
+class TestUniprot(TestCase):
+    def test_get_uniprotid_for_entrez_geneid(self):
+        uprot = Uniprot()
+        uprot.get_uniprotid_for_entrez_geneid(4535, 155807)

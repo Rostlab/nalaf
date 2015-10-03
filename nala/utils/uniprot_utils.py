@@ -13,21 +13,21 @@ class Uniprot(Cacheable):
         self.url = 'http://www.uniprot.org/mapping/'
 
     def get_uniprotid_for_entrez_geneid(self, *list_geneids):
-        already_found_geneids = []
+        return_dict = {}
         not_found_geneids = []
 
         for geneid in list_geneids:
             if geneid in self.cache:
-                already_found_geneids.append((geneid, self.cache[geneid]))
+                return_dict[geneid] = self.cache[geneid]
             else:
                 not_found_geneids.append(geneid)
 
         for k, v in self.cache.items():
             print(k, v)
 
-        print(not_found_geneids, already_found_geneids)
+        print(not_found_geneids, return_dict)
         if len(not_found_geneids) == 0:
-            return already_found_geneids
+            return return_dict
 
         params = {
             'from': 'P_ENTREZGENEID',
@@ -39,7 +39,7 @@ class Uniprot(Cacheable):
         r = requests.get(self.url, params)
         results = r.text.splitlines()[1:]
         if not results:
-            return already_found_geneids
+            return return_dict
 
         found_genes = {}
 
@@ -57,5 +57,4 @@ class Uniprot(Cacheable):
         for k, v in self.cache.items():
             print(k, v)
 
-
-        return chain(found_genes, already_found_geneids)
+        return return_dict.update(found_genes)

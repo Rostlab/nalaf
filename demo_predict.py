@@ -6,6 +6,8 @@ from nala.utils.writers import ConsoleWriter
 from nala.structures.pipelines import PrepareDatasetPipeline
 from nala.learning.crfsuite import CRFSuite
 import pkg_resources
+from nala.learning.taggers import CRFSuiteMutationTagger
+from nala.utils import MUT_CLASS_ID
 
 
 from nala.learning.postprocessing import PostProcessing
@@ -39,9 +41,8 @@ if __name__ == "__main__":
 
     # get the predictions
     crf = CRFSuite(args.crf_suite_dir)
-    crf.create_input_file(dataset, 'predict')
-    crf.tag('-m {} -i predict > output.txt'.format(pkg_resources.resource_filename('nala.data', 'default_model')))
-    crf.read_predictions(dataset)
+    tagger = CRFSuiteMutationTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nala.data', 'default_model'))
+    tagger.tag(dataset)
 
     PostProcessing().process(dataset)
     ConsoleWriter(args.color).write(dataset)

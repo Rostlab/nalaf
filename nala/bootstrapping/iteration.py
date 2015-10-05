@@ -16,6 +16,8 @@ from nala.bootstrapping.utils import generate_documents
 from nala.utils.writers import TagTogFormat
 from nala.preprocessing.definers import ExclusiveNLDefiner
 import pkg_resources
+from nala.learning.taggers import CRFSuiteMutationTagger
+from nala.utils import MUT_CLASS_ID
 
 
 class Iteration():
@@ -171,9 +173,7 @@ class Iteration():
         # tagging
         print_verbose("\n\n\n======Tagging======\n\n\n")
         PrepareDatasetPipeline().execute(self.candidates)
-        self.crf.create_input_file(self.candidates, 'predict')
-        self.crf.tag('-m default_model -i predict > output.txt')
-        self.crf.read_predictions(self.candidates)
+        CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
 
         # export candidates to candidates folder
@@ -190,7 +190,7 @@ class Iteration():
         :return:
         """
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
-        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), delete_incomplete_docs=False).annotate(
+        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), is_predicted=True).annotate(
             self.reviewed)
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
         for ann in self.reviewed.annotations():

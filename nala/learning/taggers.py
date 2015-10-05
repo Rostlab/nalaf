@@ -48,15 +48,17 @@ class CRFSuiteMutationTagger(Tagger):
     :type crf_suite: nala.learning.crfsuite.CRFSuite
     """
 
-    def __init__(self, predicts_classes, crf_suite):
+    def __init__(self, predicts_classes, crf_suite, model_file='default_model'):
         super().__init__(predicts_classes)
         self.crf_suite = crf_suite
         """an instance of CRFSuite used to actually generate predictions"""
+        self.model_file = model_file
+        """path to the binary model used for generating predictions"""
 
     def tag(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         """
         self.crf_suite.create_input_file(dataset, 'predict')
-        self.crf_suite.tag('-m default_model -i predict > output.txt')
+        self.crf_suite.tag('-m {} -i predict > output.txt'.format(self.model_file))
         self.crf_suite.read_predictions(dataset)

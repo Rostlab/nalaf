@@ -35,6 +35,7 @@ class GNormPlus(Cacheable):
     def get_genes_for_text(self, doc):
         """
         Retrieval via RESTful API with full documents.
+        Attention!: one call can take a very long time. (no idea why, but sometimes it takes years and might not even finish)
         :param doc: Document that is supplied
         :type doc: nala.structures.data.Document
         :return: list of GeneIDs in EntrezGene-Format (Number)

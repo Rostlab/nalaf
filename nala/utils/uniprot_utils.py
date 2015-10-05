@@ -13,6 +13,12 @@ class Uniprot(Cacheable):
         self.url = 'http://www.uniprot.org/mapping/'
 
     def get_uniprotid_for_entrez_geneid(self, *list_geneids):
+        """
+        Get dictionary mapping from { EntrezGeneID : [ UniprotID, ... ]
+        :param list_geneids:
+        :type list_geneids: [int] or [str] or int or str
+        :return: dictionary geneid --> uniprotid-list
+        """
         return_dict = {}
         to_be_downloaded = []
 

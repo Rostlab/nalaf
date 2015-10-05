@@ -81,7 +81,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                  if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
 
-class AnnJsonMerger:
+class AnnJsonMergerAnnotationReader(AnnotationReader):
     """
     Merges annotations from several annotators.
 
@@ -117,7 +117,7 @@ class AnnJsonMerger:
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
 
-    def merge(self, dataset):
+    def annotate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         """

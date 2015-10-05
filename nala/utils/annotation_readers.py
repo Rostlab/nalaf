@@ -31,13 +31,15 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True):
+    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
         """whether to delete documents from the dataset that are not marked as 'anncomplete'"""
+        self.is_predicted = is_predicted
+        """whether the annotation is predicted or real, which determines where it will be saved"""
 
     def annotate(self, dataset):
         """
@@ -58,16 +60,17 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         document = dataset.documents[doc_id]
                         for entity in ann_json['entities']:
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                                document.parts[entity['part']].annotations.append(ann)
+                                # if it is predicted put it in predicted_annotations else in annotations
+                                if self.is_predicted:
+                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                                     entity['offsets'][0]['text'], entity['confidence']['prob'])
+                                    document.parts[entity['part']].predicted_annotations.append(ann)
+                                else:
+                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                                     entity['offsets'][0]['text'])
+                                    document.parts[entity['part']].annotations.append(ann)
                     elif self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
-                    else:
-                        document = dataset.documents[doc_id]
-                        for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'], entity['confidence']['prob'])
-                                document.parts[entity['part']].predicted_annotations.append(ann)
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass

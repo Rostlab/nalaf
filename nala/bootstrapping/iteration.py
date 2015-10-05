@@ -190,7 +190,7 @@ class Iteration():
         :return:
         """
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
-        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), delete_incomplete_docs=False).annotate(
+        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), is_predicted=True).annotate(
             self.reviewed)
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
         for ann in self.reviewed.annotations():

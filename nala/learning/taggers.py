@@ -39,3 +39,24 @@ class Tagger:
         :type dataset: nala.structures.data.Dataset
         """
         pass
+
+
+class CRFSuiteMutationTagger(Tagger):
+    """
+    Performs tagging with a binary model using CRFSuite
+
+    :type crf_suite: nala.learning.crfsuite.CRFSuite
+    """
+
+    def __init__(self, predicts_classes, crf_suite):
+        super().__init__(predicts_classes)
+        self.crf_suite = crf_suite
+        """an instance of CRFSuite used to actually generate predictions"""
+
+    def tag(self, dataset):
+        """
+        :type dataset: nala.structures.data.Dataset
+        """
+        self.crf_suite.create_input_file(dataset, 'predict')
+        self.crf_suite.tag('-m default_model -i predict > output.txt')
+        self.crf_suite.read_predictions(dataset)

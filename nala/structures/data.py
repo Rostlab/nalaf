@@ -712,6 +712,8 @@ class Annotation:
     :type text: str
     :type subclass: int
     :type confidence: float
+    :type normalized_id: str
+    :type normalized_text: str
     """
     def __init__(self, class_id, offset, text, confidence=1):
         self.class_id = class_id
@@ -727,6 +729,10 @@ class Annotation:
         """
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
+        self.normalized_id = ''
+        """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
+        self.normalized_text = ''
+        """the normalized text for the annotation if normalization was performed"""
 
     equality_operator = 'exact'
     """

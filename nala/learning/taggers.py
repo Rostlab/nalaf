@@ -81,32 +81,47 @@ class GNormPlusGeneTagger(Tagger):
         super().__init__(predicts_classes)
         self.uniprot=normalise_uniprot
 
-    def tag(self, dataset):
+    def tag(self, dataset, annotated=True):
         """
         :type dataset: nala.structures.data.Dataset
+        :param annotated: if True then saved into annotations otherwise into predicted_annotations
         """
         with GNormPlus() as gnorm:
             for docid, doc in dataset.documents.items():
-                if doc.get_text().contains('Conclusion'):
+                if doc.get_text().contains('Conclusion'):  # todo check whether this is enough for finding out if full document or not
                     genes = gnorm.get_genes_for_text(doc, docid, postproc=True)
                 else:
                     genes = gnorm.get_genes_for_pmid(docid, postproc=True)
 
                 # genes
                 # if uniprot normalisation as well then:
-                genes_mapping = None
+                genes_mapping = {}
                 if self.uniprot:
                     with Uniprot() as uprot:
                         list_of_ids = gnorm.uniquify_genes(genes)
                         genes_mapping = uprot.get_uniprotid_for_entrez_geneid(list_of_ids)
 
                 part_index = 0
-                last_part_index = -1
                 for partid, part in doc.parts.items():
                     for gene in genes:
                         if gene[2] in part.text:
                             start = gene[0] - part_index
                             # todo discussion which confidence value for gnormplus because there is no value supplied
                             ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
-                    last_part_index = part_index
+                            try:
+                                norm_dict = {
+                                    'EntrezGeneID': gene[3],
+                                    'UniprotID': genes_mapping[gene[3]]
+                                }
+                            except KeyError:
+                                norm_dict = {'EntrezGeneID': gene[3]}
+
+                            norm_string = ''  # todo normalized_text (stemming ... ?)
+                            ann.normalisation_dict = norm_dict
+                            ann.normalized_text = norm_string
+                            if annotated:
+                                part.annotations += ann
+                            else:
+                                part.predicted_annotations += ann
+
                     part_index += part.get_size() + 1

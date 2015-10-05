@@ -31,13 +31,15 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True):
+    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
         """whether to delete documents from the dataset that are not marked as 'anncomplete'"""
+        self.is_predicted = is_predicted
+        """whether the annotation is predicted or real, which determines where it will be saved"""
 
     def annotate(self, dataset):
         """
@@ -58,22 +60,28 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         document = dataset.documents[doc_id]
                         for entity in ann_json['entities']:
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                                document.parts[entity['part']].annotations.append(ann)
+                                # if it is predicted put it in predicted_annotations else in annotations
+                                if self.is_predicted:
+                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                                     entity['offsets'][0]['text'], entity['confidence']['prob'])
+                                    document.parts[entity['part']].predicted_annotations.append(ann)
+                                else:
+                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                                     entity['offsets'][0]['text'])
+                                    document.parts[entity['part']].annotations.append(ann)
                     elif self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
-                    else:
-                        document = dataset.documents[doc_id]
-                        for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'], entity['confidence']['prob'])
-                                document.parts[entity['part']].predicted_annotations.append(ann)
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
+        # some docs may not even have a corresponding .ann.json file
+        # delete those as well
+        if self.delete_incomplete_docs:
+            dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
+                                 if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
 
-class AnnJsonMerger:
+class AnnJsonMergerAnnotationReader(AnnotationReader):
     """
     Merges annotations from several annotators.
 
@@ -109,7 +117,7 @@ class AnnJsonMerger:
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
 
-    def merge(self, dataset):
+    def annotate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         """
@@ -117,7 +125,7 @@ class AnnJsonMerger:
             annotators = self.priority
         else:
             annotators = os.listdir(self.directory)
-        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0])).annotate(dataset)
+        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0]), delete_incomplete_docs=False).annotate(dataset)
 
         for annotator in annotators[1:]:
             self.__merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
@@ -135,6 +143,10 @@ class AnnJsonMerger:
                     else:
                         parsed.append(ann)
                 part.annotations = [ann for index, ann in enumerate(part.annotations) if index not in to_be_removed]
+
+        # delete documents that after the merging have no annotations at all
+        dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
+                             if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
     def __merge_annotations_into_dataset(self, dataset, annotations_directory):
         for doc_id, document in dataset.documents.items():

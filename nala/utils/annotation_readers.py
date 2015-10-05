@@ -80,6 +80,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
             dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
                                  if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
+
 class AnnJsonMerger:
     """
     Merges annotations from several annotators.
@@ -124,7 +125,7 @@ class AnnJsonMerger:
             annotators = self.priority
         else:
             annotators = os.listdir(self.directory)
-        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0])).annotate(dataset)
+        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0]), delete_incomplete_docs=False).annotate(dataset)
 
         for annotator in annotators[1:]:
             self.__merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
@@ -142,6 +143,10 @@ class AnnJsonMerger:
                     else:
                         parsed.append(ann)
                 part.annotations = [ann for index, ann in enumerate(part.annotations) if index not in to_be_removed]
+
+        # delete documents that after the merging have no annotations at all
+        dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
+                             if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
     def __merge_annotations_into_dataset(self, dataset, annotations_directory):
         for doc_id, document in dataset.documents.items():

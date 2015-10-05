@@ -1,7 +1,9 @@
 import abc
 import re
-from utils.ncbi_utils import GNormPlus
-from utils.uniprot_utils import Uniprot
+from nala.utils.ncbi_utils import GNormPlus
+from nala.utils.uniprot_utils import Uniprot
+from nala.structures.data import Annotation
+from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
 
 
 class Tagger:
@@ -100,3 +102,11 @@ class GNormPlusGeneTagger(Tagger):
 
                 part_index = 0
                 last_part_index = -1
+                for partid, part in doc.parts.items():
+                    for gene in genes:
+                        if gene[2] in part.text:
+                            start = gene[0] - part_index
+                            # todo discussion which confidence value for gnormplus because there is no value supplied
+                            ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
+                    last_part_index = part_index
+                    part_index += part.get_size() + 1

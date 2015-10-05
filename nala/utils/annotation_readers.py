@@ -74,7 +74,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
-
+        # some docs may not even have a corresponding .ann.json file
+        # delete those as well
+        if self.delete_incomplete_docs:
+            dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
+                                 if sum(len(part.annotations) for part in doc.parts.values()) > 0}
 
 class AnnJsonMerger:
     """

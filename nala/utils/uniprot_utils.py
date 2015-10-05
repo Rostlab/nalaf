@@ -14,26 +14,23 @@ class Uniprot(Cacheable):
 
     def get_uniprotid_for_entrez_geneid(self, *list_geneids):
         return_dict = {}
-        not_found_geneids = []
+        to_be_downloaded = []
 
         for geneid in list_geneids:
+            geneid = str(geneid)
             if geneid in self.cache:
                 return_dict[geneid] = self.cache[geneid]
             else:
-                not_found_geneids.append(geneid)
+                to_be_downloaded.append(geneid)
 
-        for k, v in self.cache.items():
-            print(k, v)
-
-        print(not_found_geneids, return_dict)
-        if len(not_found_geneids) == 0:
+        if len(to_be_downloaded) == 0:
             return return_dict
 
         params = {
             'from': 'P_ENTREZGENEID',
             'to': 'ACC',
             'format': 'tab',
-            'query': ' '.join([str(x) for x in not_found_geneids])
+            'query': ' '.join([str(x) for x in to_be_downloaded])
         }
 
         r = requests.get(self.url, params)
@@ -51,10 +48,6 @@ class Uniprot(Cacheable):
                 found_genes[geneid] = [uniprotid]
 
         for key, value in found_genes.items():
-            # print(key, value)
             self.cache[key] = value
-
-        for k, v in self.cache.items():
-            print(k, v)
 
         return return_dict.update(found_genes)

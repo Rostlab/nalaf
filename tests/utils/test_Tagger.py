@@ -24,16 +24,16 @@ class TestGNormPlus(TestCase):
         pmid = '22457529'
         dataset = HTMLReader('resources/corpora/idp4/html').read()
         # AnnJsonAnnotationReader('resources/corpora/idp4/annjson').annotate(dataset)
-        gnorm = GNormPlus()
         all_genes = []
-        counter = 0
-        for docid in dataset.documents:
-            results = gnorm.get_genes_for_pmid(docid)
-            print(counter)
-            counter += 1
-            if len(results) > 0:
-                genes = set([elem for sublist in results for elem in sublist[3].split(',')])
-                all_genes.extend(genes)
+        with GNormPlus() as gnorm:
+            counter = 0
+            for docid in dataset.documents:
+                results = gnorm.get_genes_for_pmid(docid)
+                print(counter)
+                counter += 1
+                if len(results) > 0:
+                    genes = set([elem for sublist in results for elem in sublist[3].split(',')])
+                    all_genes.extend(genes)
         unique_gene_set = set(all_genes)
         # "GeneID:114548"
         # "140859"
@@ -43,5 +43,5 @@ class TestGNormPlus(TestCase):
 
 class TestUniprot(TestCase):
     def test_get_uniprotid_for_entrez_geneid(self):
-        uprot = Uniprot()
-        uprot.get_uniprotid_for_entrez_geneid(4535, 155807)
+        with Uniprot() as uprot:
+            uprot.get_uniprotid_for_entrez_geneid(4535, 155807)

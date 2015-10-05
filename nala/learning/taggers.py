@@ -30,6 +30,7 @@ class Tagger:
     :type predicts_classes: list[str]
     """
 
+    # todo change normalizazion_database to normalise option
     def __init__(self, predicts_classes):
         self.performs_normalization = False
         """whether this tagger also performs normalization"""
@@ -77,18 +78,17 @@ class GNormPlusGeneTagger(Tagger):
     :type crf_suite: nala.learning.crfsuite.CRFSuite
     """
 
-    def __init__(self, predicts_classes, normalise_uniprot=False):
+    def __init__(self, predicts_classes):
         super().__init__(predicts_classes)
-        self.uniprot=normalise_uniprot
 
-    def tag(self, dataset, annotated=True):
+    def tag(self, dataset, annotated=True, uniprot=False):
         """
         :type dataset: nala.structures.data.Dataset
         :param annotated: if True then saved into annotations otherwise into predicted_annotations
         """
         with GNormPlus() as gnorm:
             for docid, doc in dataset.documents.items():
-                if doc.get_text().contains('Conclusion'):  # todo check whether this is enough for finding out if full document or not
+                if 'Conclusion' in doc.get_text():  # todo check whether this is enough for finding out if full document or not
                     genes = gnorm.get_genes_for_text(doc, docid, postproc=True)
                 else:
                     genes = gnorm.get_genes_for_pmid(docid, postproc=True)
@@ -96,7 +96,7 @@ class GNormPlusGeneTagger(Tagger):
                 # genes
                 # if uniprot normalisation as well then:
                 genes_mapping = {}
-                if self.uniprot:
+                if uniprot:
                     with Uniprot() as uprot:
                         list_of_ids = gnorm.uniquify_genes(genes)
                         genes_mapping = uprot.get_uniprotid_for_entrez_geneid(list_of_ids)
@@ -120,8 +120,8 @@ class GNormPlusGeneTagger(Tagger):
                             ann.normalisation_dict = norm_dict
                             ann.normalized_text = norm_string
                             if annotated:
-                                part.annotations += ann
+                                part.annotations.append(ann)
                             else:
-                                part.predicted_annotations += ann
+                                part.predicted_annotations.append(ann)
 
                     part_index += part.get_size() + 1

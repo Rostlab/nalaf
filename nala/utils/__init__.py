@@ -1,1 +1,3 @@
 MUT_CLASS_ID = 'e_2'
+PRO_CLASS_ID = 'e_1'
+ORG_CLASS_ID = 'e_3'

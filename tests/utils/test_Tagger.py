@@ -44,4 +44,4 @@ class TestGNormPlus(TestCase):
 class TestUniprot(TestCase):
     def test_get_uniprotid_for_entrez_geneid(self):
         with Uniprot() as uprot:
-            uprot.get_uniprotid_for_entrez_geneid(4535, 155807)
+            uprot.get_uniprotid_for_entrez_geneid([4535, 1558079])

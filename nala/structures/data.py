@@ -661,39 +661,6 @@ class Part:
                 if start <= token.start < token.end <= end:
                     return index
 
-    def return_sentence_nr(self, offset):
-        """
-        Does return the index of the sentence the offset queried is inside.
-        :type offset: int
-        :return: int
-        """
-        # if empty
-        if self.sentences == [[]]:
-            raise IndexError('sentences are empty. please run any kind of sentence splitter so the sentences'
-                             ' or tokens got generated')
-        # todo test method
-        # sentences are strings
-        if isinstance(self.sentences[0], str):
-            low_index = -1
-            high_index = 0
-            for i, sent in enumerate(self.sentences):
-                low_index = high_index
-                high_index += len(sent) + 1
-                if low_index <= offset < high_index:
-                    return i
-
-        # sentences are tokens
-        low_index = -1
-        high_index = 0
-        for i, sent in enumerate(self.sentences):
-            low_index = high_index
-            for token in sent:
-                high_index += len(token.word) + 1
-                if low_index <= offset < high_index:
-                    return i
-
-        raise IndexError('inconsistent. offset was not found in this part [OFFSET:', offset, ']')
-
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
@@ -825,7 +792,7 @@ class Annotation:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
         return 'Annotation(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
                'Text: "{self.text}", SubClass: {self.subclass}, ' \
-               'Confidence: "{self.confidence}{norm})'.format(self=self, norm=norm_string)
+               'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
 
     def __eq__(self, other):
         # consider them a match only if class_id matches

@@ -212,10 +212,10 @@ class Dataset:
                                                                    sum(1 for _ in self.annotations()))
 
     def __str__(self):
-        second_part = "\n" + "".join(
-            ["Document ID: " + pmid + "\n" + str(doc) for pmid, doc in self.documents.items()])
-        return "Dataset(Size: " + str(self.get_size_chars()) + ", Documents: " + str(
-            len(list(self.documents.keys()))) + second_part
+        second_part = "\n".join(
+            ["---DOCUMENT---\nDocument ID: '" + pmid + "'\n" + str(doc) for pmid, doc in self.documents.items()])
+        return "----DATASET----\nNr of documents: " + str(len(self.documents)) + ' Nr of chars: ' + str(
+            self.get_size_chars()) + '\n' + second_part
 
     def stats(self):
         """
@@ -456,7 +456,7 @@ class Document:
             yield part
 
     def __repr__(self):
-        if self.get_text() == self.get_text():
+        if self.get_text() == self.get_body():
             return 'Document(Size: {}, Text: "{}", Annotations: "{}")'.format(len(self.parts), self.get_text(),
                                                                                  self.get_unique_mentions())
         else:
@@ -465,9 +465,9 @@ class Document:
                                                                        self.get_text(), self.get_unique_mentions())
 
     def __str__(self):
-        partslist = ['Part ID: ' + partid + '\n' + str(part) + "\n" for partid, part in self.parts.items()]
-        second_part = "\n" + "".join(partslist)
-        return 'Document(Size: ' + str(self.get_size()) + ", Title: " + self.get_title() + second_part
+        partslist = ['--PART--\nPart ID: "' + partid + '"\n' + str(part) + "\n" for partid, part in self.parts.items()]
+        second_part = "\n".join(partslist)
+        return 'Size: ' + str(self.get_size()) + ", Title: " + self.get_title() + '\n' + second_part
 
     def key_value_parts(self):
         """yields iterator for partids"""
@@ -693,8 +693,19 @@ class Part:
             self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
 
     def __str__(self):
-        return 'Part:\nText:\t"{text}",\n{annotations},\n{pred_annotations}'.format(text=self.text, annotations=self.annotations,
-                                                                          pred_annotations=self.predicted_annotations)
+        annotations_string = "\n".join([str(x) for x in self.annotations])
+        pred_annotations_string = "\n".join([str(x) for x in self.predicted_annotations])
+        relations_string = "\n".join([str(x) for x in self.relations])
+        if not annotations_string:
+            annotations_string = "[]"
+        if not pred_annotations_string:
+            pred_annotations_string = "[]"
+        if not relations_string:
+            relations_string = "[]"
+        return '-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
+               '-Predicted annotations-\n{pred_annotations}\n' \
+               '-Relations-\n{relations}\n'.format(text=self.text, annotations=annotations_string,
+                                      pred_annotations=pred_annotations_string, relations=relations_string)
 
     def get_size(self):
         """ just returns number of chars that this part contains """
@@ -797,7 +808,12 @@ class Annotation:
     """
 
     def __repr__(self):
-        return '{0}(ClassID: "{self.class_id}", Offset: "{self.offset}", Text: "{self.text}", IsNL: "{self.subclass}", Confidence: "{self.confidence})'.format(Annotation.__name__, self=self)
+        norm_string = ''
+        if self.normalisation_dict:
+            norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
+        return 'Annotation(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
+               'Text: "{self.text}", SubClass: {self.subclass}, ' \
+               'Confidence: "{self.confidence}{norm})'.format(self=self, norm=norm_string)
 
     def __eq__(self, other):
         # consider them a match only if class_id matches
@@ -854,6 +870,10 @@ class Relation:
         self.text1 = text1
         self.text2 = text2
         self.type = type_of_relation
+
+    def __repr__(self):
+        return 'Relation(Type:{type}, Start1:{start1}, Text1:{text1}, ' \
+               'Start2:{start2}, Text2:{text2})'.format(self=self)
 
     def validate_itself(self, part):
         """

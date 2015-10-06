@@ -1,11 +1,9 @@
 import unittest
 from nose.plugins.attrib import attr
-from nala.learning import crfsuite
 from nala.learning.crfsuite import CRFSuite
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
-from nala.utils.tagger import TmVarTagger
 
 
 @attr('slow')
@@ -29,7 +27,6 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
         CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
         for ann in self.data.annotations():
             self.assertTrue(0 < ann.offset)
-            print(ann.normalisation_dict)
         print(self.data)
 
 if __name__ == '__main__':

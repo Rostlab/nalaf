@@ -133,22 +133,6 @@ class RelationshipExtractionGeneMutation(Tagger):
         super().__init__(predicts_classes)
 
     def tag(self, dataset):
-        for docid, doc in dataset.documents.items():
-            for partid, part in doc.parts.items():
-                for ann in part.annotations:
-                    if ann.class_id == MUT_CLASS_ID:
-                        for ann2 in part.annotations:
-                            if ann2.class_id == PRO_CLASS_ID:
-                                try:
-                                    # here happens the magic
-                                    # atm: if in same sentence is the only condition
-                                    if part.return_sentence_nr(ann.offset) == part.return_sentence_nr(ann2.offset):
-                                        part.relations.append(
-                                            Relation(ann.offset, ann2.offset, ann.text, ann2.text, PRO_REL_MUT_CLASS_ID))
-                                except IndexError:
-                                    pass
-
-    def tag_2(self, dataset):
         from itertools import product
         for part in dataset.parts():
             for ann_1, ann_2 in product(

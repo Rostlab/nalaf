@@ -97,6 +97,15 @@ class Dataset:
             for token in sentence:
                 yield token
 
+    def purge_false_relationships(self):
+        """
+        cleans false relationships by validating them
+        :return:
+        """
+        for part in self.parts():
+            part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
+        # todo test method
+
     def partids_with_parts(self):
         """
         helper function that yields part id with part
@@ -473,6 +482,15 @@ class Document:
                 mentions.append(ann.text)
 
         return set(mentions)
+
+    def purge_false_relationships(self):
+        """
+        purging false relationships (that do not return true if validating themselves)
+        :return:
+        """
+        # todo testing
+        for part in self.parts:
+            part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
 
     def get_size(self):
         """returns nr of chars including spaces between parts"""

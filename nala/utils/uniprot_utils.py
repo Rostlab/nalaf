@@ -12,7 +12,7 @@ class Uniprot(Cacheable):
         super().__init__()
         self.url = 'http://www.uniprot.org/mapping/'
 
-    def get_uniprotid_for_entrez_geneid(self, *list_geneids):
+    def get_uniprotid_for_entrez_geneid(self, list_geneids):
         """
         Get dictionary mapping from { EntrezGeneID : [ UniprotID, ... ]
         :param list_geneids:
@@ -44,16 +44,14 @@ class Uniprot(Cacheable):
         if not results:
             return return_dict
 
-        found_genes = {}
-
+        # todo test this part again
         for line in results:
             geneid, uniprotid = line.split('\t')
-            if geneid in found_genes:
-                found_genes[geneid].append(uniprotid)
+            if geneid in return_dict:
+                return_dict[geneid].append(uniprotid)
+                self.cache[geneid].append(uniprotid)
             else:
-                found_genes[geneid] = [uniprotid]
+                return_dict[geneid] = [uniprotid]
+                self.cache[geneid] = [uniprotid]
 
-        for key, value in found_genes.items():
-            self.cache[key] = value
-
-        return return_dict.update(found_genes)
+        return return_dict

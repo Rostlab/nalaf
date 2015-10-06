@@ -63,7 +63,7 @@ class GNormPlus(Cacheable):
             id = req.text
 
             # receive
-            status = 'Not yet'  # todo test whether really working...
+            status = 'Not yet'  # todo test whether really working... because it s never finishing (all time 'Not yet')
             while status.startswith('Not yet'):
                 req = requests.get(self.baseurl + id + '/Receive/')
                 status = req.text

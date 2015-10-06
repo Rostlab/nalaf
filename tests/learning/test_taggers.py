@@ -20,6 +20,7 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
     def test_tag(self):
         # todo question is that the proper way? with predicts_classes
         GNormPlusGeneTagger(['Gene', 'Protein']).tag(self.data, uniprot=True)
+        print(self.data)
 
 if __name__ == '__main__':
     unittest.main()

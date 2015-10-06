@@ -100,12 +100,14 @@ class GNormPlusGeneTagger(Tagger):
                     with Uniprot() as uprot:
                         list_of_ids = gnorm.uniquify_genes(genes)
                         genes_mapping = uprot.get_uniprotid_for_entrez_geneid(list_of_ids)
-
+                last_index = -1
                 part_index = 0
                 for partid, part in doc.parts.items():
+                    last_index = part_index
+                    part_index += part.get_size() + 1
                     for gene in genes:
-                        if gene[2] in part.text:
-                            start = gene[0] - part_index
+                        if gene[2] in part.text and last_index < gene[0] < part_index:
+                            start = gene[0] - last_index
                             # todo discussion which confidence value for gnormplus because there is no value supplied
                             ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
                             try:
@@ -124,4 +126,3 @@ class GNormPlusGeneTagger(Tagger):
                             else:
                                 part.predicted_annotations.append(ann)
 
-                    part_index += part.get_size() + 1

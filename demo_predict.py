@@ -3,7 +3,7 @@ import os
 from nala.utils.readers import TextFilesReader
 from nala.utils.readers import StringReader
 from nala.utils.writers import ConsoleWriter
-from nala.structures.pipelines import PrepareDatasetPipeline
+from nala.structures.dataset_pipelines import PrepareDatasetPipeline
 from nala.learning.crfsuite import CRFSuite
 import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger

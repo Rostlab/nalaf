@@ -6,7 +6,7 @@ from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
-from nala.structures.pipelines import PrepareDatasetPipeline
+from nala.structures.dataset_pipelines import PrepareDatasetPipeline
 from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
@@ -156,7 +156,7 @@ class Iteration():
         """
         print_verbose("\n\n\n======DocSelection======\n\n\n")
         from nala.structures.data import Dataset
-        from nala.structures.pipelines import DocumentSelectorPipeline
+        from nala.structures.selection_pipelines import DocumentSelectorPipeline
         from itertools import count
         c = count(1)
 

@@ -68,14 +68,14 @@ class MentionLevelEvaluator(Evaluator):
         Also prints the value of the calculated precision, recall, F1 measure
         as well as the value of the parameter 'strictness'.
         """
-        tp, fp, fn, tp_overlapping = 0, 0, 0, 0
+        tp, fp, fn, fp_overlap, fn_overlap = 0, 0, 0, 0, 0
 
         if self.subclass_analysis:
             # find all possible subclasses
             subclasses = set(ann.subclass for ann in dataset.annotations())
             subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations()))
             # initialize counts to zero for each subclass
-            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'tp_overlapping'], 0)
+            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap'], 0)
                                for subclass in subclasses}
 
         for doc in dataset:
@@ -83,6 +83,13 @@ class MentionLevelEvaluator(Evaluator):
                 print_debug(' || '.join(ann.text for ann in part.annotations))
                 print_debug(' || '.join(ann.text for ann in part.predicted_annotations))
                 print_debug()
+
+                overlap_real = []
+                overlap_predicted = []
+
+                if self.subclass_analysis:
+                    overlap_subclass_real = {subclass: [] for subclass in subclasses}
+                    overlap_subclass_predicted = {subclass: [] for subclass in subclasses}
 
                 Annotation.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
@@ -105,20 +112,36 @@ class MentionLevelEvaluator(Evaluator):
                 for ann_a in part.annotations:
                     for ann_b in part.predicted_annotations:
                         if ann_a == ann_b:
-                            tp_overlapping += 1
+                            overlap_real.append(ann_a)
+                            overlap_predicted.append(ann_b)
+
                             if self.subclass_analysis and ann_a.subclass == ann_b.subclass:
-                                subclass_counts[ann_a.subclass]['tp_overlapping'] += 1
+                                overlap_subclass_real[ann_a.subclass].append(ann_a)
+                                overlap_subclass_predicted[ann_b.subclass].append(ann_b)
+
+                Annotation.equality_operator = 'exact'
+                fp_overlap += sum(1 for ann in part.predicted_annotations if ann in overlap_predicted)
+                fn_overlap += sum(1 for ann in part.annotations if ann in overlap_real)
+
+                if self.subclass_analysis:
+                    for subclass in subclasses:
+                        subclass_counts[subclass]['fp_overlap'] += sum(1 for ann in part.predicted_annotations
+                                                                       if ann in overlap_subclass_predicted[subclass]
+                                                                       and ann.subclass == subclass)
+                        subclass_counts[subclass]['fn_overlap'] += sum(1 for ann in part.annotations
+                                                                       if ann in overlap_subclass_real[subclass]
+                                                                       and ann.subclass == subclass)
 
         if self.subclass_analysis:
             for subclass, counts in subclass_counts.items():
                 print('SUBCLASS {:4}'.format(subclass), end='\t')
-                self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['tp_overlapping'])
+                self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap'])
             print('TOTAL'.ljust(14), end='\t')
 
         if self.subclass_analysis:
-            return subclass_counts, self.__calc_measures(tp, fp, fn, tp_overlapping)
+            return subclass_counts, self.__calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
         else:
-            return self.__calc_measures(tp, fp, fn, tp_overlapping)
+            return self.__calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
 
     @staticmethod
     def __safe_division(nominator, denominator):
@@ -127,30 +150,30 @@ class MentionLevelEvaluator(Evaluator):
         except ZeroDivisionError:
             return float('NaN')
 
-    def __calc_measures(self, tp, fp, fn, tp_overlapping):
+    def __calc_measures(self, tp, fp, fn, fp_overlap, fn_overlap):
         if self.strictness == 'exact':
             precision = self.__safe_division(tp, tp + fp)
             recall = self.__safe_division(tp, tp + fn)
         elif self.strictness == 'overlapping':
-            fp = fp - tp_overlapping
-            fn = fn - tp_overlapping
+            fp = fp - fp_overlap
+            fn = fn - fn_overlap
 
-            precision = self.__safe_division(tp + tp_overlapping, tp + fp + tp_overlapping)
-            recall = self.__safe_division(tp + tp_overlapping, tp + fn + tp_overlapping)
+            precision = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fp + fp_overlap + fn_overlap)
+            recall = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fn + fp_overlap + fn_overlap)
         elif self.strictness == 'half_overlapping':
-            fp = fp - tp_overlapping
-            fn = fn - tp_overlapping
+            fp = fp - fp_overlap
+            fn = fn - fn_overlap
 
-            precision = self.__safe_division(tp + tp_overlapping / 2, tp + fp + tp_overlapping)
-            recall = self.__safe_division(tp + tp_overlapping / 2, tp + fn + tp_overlapping)
+            precision = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fp + fp_overlap + fn_overlap)
+            recall = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fn + fp_overlap + fn_overlap)
         else:
             raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
 
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
-        print_verbose('tp:{:4} fp:{:4} fn:{:4} tp_overlapping:{:4} '
-                      .format(tp, fp, fn, tp_overlapping, precision, recall, f_measure, self.strictness))
+        print_verbose('tp:{:4} fp:{:4} fn:{:4} fp_overlap:{:4} fn_overlap:{:4} '
+                      .format(tp, fp, fn, fp_overlap, fn_overlap))
 
         print('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
               .format(precision, recall, f_measure, self.strictness))
-        return tp, fp, fn, tp_overlapping, precision, recall, f_measure
+        return tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure

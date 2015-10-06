@@ -6,6 +6,7 @@ from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
 from nala.preprocessing.spliters import NLTKSplitter
+from nala.preprocessing.tokenizers import TmVarTokenizer
 from nala.utils import PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID
 
 
@@ -35,7 +36,8 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
         # crfsuite = CRFSuite('crfsuite')
         # CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
         NLTKSplitter().split(self.data)
-        RelationshipExtractionGeneMutation(['GeneRelMutation', 'ProteinRelMutation']).tag(self.data)
+        TmVarTokenizer().tokenize(self.data)
+        RelationshipExtractionGeneMutation(['GeneRelMutation', 'ProteinRelMutation']).tag_2(self.data)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == PRO_CLASS_ID]), 7)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 2)
         self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 3)

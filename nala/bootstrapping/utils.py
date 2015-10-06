@@ -113,7 +113,7 @@ def generate_documents(n):
     :returns: nala.structures.data.Dataset
     """
     from nala.structures.data import Dataset
-    from nala.structures.pipelines import DocumentSelectorPipeline
+    from nala.structures.selection_pipelines import DocumentSelectorPipeline
     from itertools import count
     c = count(1)
 

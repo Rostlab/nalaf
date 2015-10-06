@@ -75,6 +75,15 @@ class Dataset:
             for annotation in part.predicted_annotations:
                 yield annotation
 
+    def relations(self):
+        """
+        helper function that iterates through all relations
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts():
+            for rel in part.relations:
+                yield rel
+
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -861,7 +870,7 @@ class Relation:
     :type start2: int
     :type text1: str
     :type text2: str
-    :type type: str
+    :type class_id: str
     """
 
     def __init__(self, start1, start2, text1, text2, type_of_relation):
@@ -869,11 +878,11 @@ class Relation:
         self.start2 = start2
         self.text1 = text1
         self.text2 = text2
-        self.type = type_of_relation
+        self.class_id = type_of_relation
 
     def __repr__(self):
-        return 'Relation(Type:{type}, Start1:{start1}, Text1:{text1}, ' \
-               'Start2:{start2}, Text2:{text2})'.format(self=self)
+        return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
+               'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
 
     def validate_itself(self, part):
         """

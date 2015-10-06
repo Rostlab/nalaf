@@ -611,6 +611,11 @@ class Part:
         a list of predicted annotations as populated by a call to form_predicted_annotations()
         this represent the prediction on a mention label rather then on a token level
         """
+        self.relations = []
+        """
+        a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
+        where the mutation occurs inside
+        """
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
@@ -625,6 +630,39 @@ class Part:
             return_array.append(new_sentence.rstrip())  # to delete last space
         print(return_array)
         return return_array
+
+    def return_sentence_nr(self, offset):
+        """
+        Does return the index of the sentence the offset queried is inside.
+        :type offset: int
+        :return: int
+        """
+        # if empty
+        if self.sentences == [[]]:
+            raise IndexError('sentences are empty. please run any kind of sentence splitter so the sentences'
+                             ' or tokens got generated')
+        # todo test method
+        # sentences are strings
+        if isinstance(self.sentences[0], str):
+            low_index = -1
+            high_index = 0
+            for i, sent in enumerate(self.sentences):
+                low_index = high_index
+                high_index += len(sent) + 1
+                if low_index <= offset < high_index:
+                    return i
+
+        # sentences are tokens
+        low_index = -1
+        high_index = 0
+        for i, sent in enumerate(self.sentences):
+            low_index = high_index
+            for token in sent:
+                high_index += len(token.word) + 1
+                if low_index <= offset < high_index:
+                    return i
+
+        raise IndexError('inconsistent. offset was not found in this part [OFFSET:', offset, ']')
 
     def __iter__(self):
         """
@@ -781,3 +819,36 @@ class Label:
     def __repr__(self):
         return self.value
 
+
+class Relation:
+    """
+    Represents a relationship between 2 annotations.
+    :type start1: int
+    :type start2: int
+    :type text1: str
+    :type text2: str
+    """
+
+    def __init__(self, start1, start2, text1, text2):
+        self.start1 = start1
+        self.start2 = start2
+        self.text1 = text1
+        self.text2 = text2
+
+    def validate_itself(self, part):
+        """
+        validation of itself with annotations and the text
+        :param part: the part where this relation is saved inside
+        :type part: nala.structures.data.Part
+        :return: bool
+        """
+        first = False
+        second = False
+        for ann in chain(part.annotations, part.predicted_annotations):
+            if ann.offset == self.start1 and ann.text == self.text1:
+                first = True
+            if ann.offset == self.start2 and ann.text == self.text2:
+                second = True
+            if first and second:
+                return True
+        return False

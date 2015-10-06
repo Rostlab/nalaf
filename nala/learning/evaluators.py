@@ -75,7 +75,7 @@ class MentionLevelEvaluator(Evaluator):
             subclasses = set(ann.subclass for ann in dataset.annotations())
             subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations()))
             # initialize counts to zero for each subclass
-            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'tp_overlapping'], 0)
+            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap'], 0)
                                for subclass in subclasses}
 
         for doc in dataset:
@@ -86,6 +86,10 @@ class MentionLevelEvaluator(Evaluator):
 
                 overlap_real = []
                 overlap_predicted = []
+
+                if self.subclass_analysis:
+                    overlap_subclass_real = {subclass: [] for subclass in subclasses}
+                    overlap_subclass_predicted = {subclass: [] for subclass in subclasses}
 
                 Annotation.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
@@ -112,20 +116,30 @@ class MentionLevelEvaluator(Evaluator):
                             overlap_predicted.append(ann_b)
 
                             if self.subclass_analysis and ann_a.subclass == ann_b.subclass:
-                                subclass_counts[ann_a.subclass]['tp_overlapping'] += 1
+                                overlap_subclass_real[ann_a.subclass].append(ann_a)
+                                overlap_subclass_predicted[ann_b.subclass].append(ann_b)
 
                 Annotation.equality_operator = 'exact'
                 fp_overlap += sum(1 for ann in part.predicted_annotations if ann in overlap_predicted)
                 fn_overlap += sum(1 for ann in part.annotations if ann in overlap_real)
 
+                if self.subclass_analysis:
+                    for subclass in subclasses:
+                        subclass_counts[subclass]['fp_overlap'] += sum(1 for ann in part.predicted_annotations
+                                                                       if ann in overlap_subclass_predicted[subclass]
+                                                                       and ann.subclass == subclass)
+                        subclass_counts[subclass]['fn_overlap'] += sum(1 for ann in part.annotations
+                                                                       if ann in overlap_subclass_real[subclass]
+                                                                       and ann.subclass == subclass)
+
         if self.subclass_analysis:
             for subclass, counts in subclass_counts.items():
                 print('SUBCLASS {:4}'.format(subclass), end='\t')
-                self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['tp_overlapping'])
+                self.__calc_measures(counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap'])
             print('TOTAL'.ljust(14), end='\t')
 
         if self.subclass_analysis:
-            return subclass_counts, self.__calc_measures(tp, fp, fn, tp_overlapping)
+            return subclass_counts, self.__calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
         else:
             return self.__calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
 

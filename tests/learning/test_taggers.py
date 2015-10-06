@@ -1,7 +1,11 @@
 import unittest
 from nose.plugins.attrib import attr
+from learning import crfsuite
+from learning.crfsuite import CRFSuite
+from learning.taggers import CRFSuiteMutationTagger
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
+from utils.tagger import TmVarTagger
 
 
 @attr('slow')
@@ -20,6 +24,9 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
     def test_tag(self):
         # todo question is that the proper way? with predicts_classes
         GNormPlusGeneTagger(['Gene', 'Protein']).tag(self.data, uniprot=True)
+        crfsuite = CRFSuite('crfsuite')
+        # todo ist noch falsch...
+        CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
         for ann in self.data.annotations():
             self.assertTrue(0 < ann.offset)
             print(ann.normalisation_dict)

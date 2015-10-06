@@ -12,3 +12,7 @@ before_script:
 script:
   - "nosetests -a \"!slow\""
   - "python demo_predict.py -c ./crfsuite-0.12/bin/ -d ./resources/example.txt"
+branches:
+  only:
+    - master
+    - develop

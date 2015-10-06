@@ -214,7 +214,7 @@ class Dataset:
     def __str__(self):
         second_part = "\n".join(
             ["---DOCUMENT---\nDocument ID: '" + pmid + "'\n" + str(doc) for pmid, doc in self.documents.items()])
-        return "----DATASET----\nNr of documents: " + str(len(self.documents)) + ' Nr of chars: ' + str(
+        return "----DATASET----\nNr of documents: " + str(len(self.documents)) + ', Nr of chars: ' + str(
             self.get_size_chars()) + '\n' + second_part
 
     def stats(self):

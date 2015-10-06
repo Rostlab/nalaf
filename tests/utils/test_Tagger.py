@@ -7,7 +7,7 @@ from nala.utils.uniprot_utils import Uniprot
 
 __author__ = 'carst'
 
-
+# todo major merge into tests/learning/test_taggers.py
 class TestTmVarTagger(TestCase):
     def test_generate_abstracts(self):
         pmids = ['12559908']

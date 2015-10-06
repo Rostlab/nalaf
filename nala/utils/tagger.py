@@ -5,7 +5,7 @@ import os
 from nala import print_debug
 from nala.structures.data import Dataset, Document, Part, Annotation
 
-
+# todo major refactor to learning/taggers class
 class Tagger():
     """
     Abstract class for external tagger, like tmVar.

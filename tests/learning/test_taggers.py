@@ -1,8 +1,6 @@
 import unittest
 from nose.plugins.attrib import attr
 from nala.learning.taggers import RelationshipExtractionGeneMutation
-from nala.learning.crfsuite import CRFSuite
-from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
 from nala.preprocessing.spliters import NLTKSplitter

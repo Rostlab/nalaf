@@ -653,6 +653,14 @@ class Part:
         print(return_array)
         return return_array
 
+    def get_sentence_index_for_annotation(self, annotation):
+        start = annotation.offset
+        end = annotation.offset + len(annotation.text)
+        for index, sentence in enumerate(self.sentences):
+            for token in sentence:
+                if start <= token.start < token.end <= end:
+                    return index
+
     def return_sentence_nr(self, offset):
         """
         Does return the index of the sentence the offset queried is inside.

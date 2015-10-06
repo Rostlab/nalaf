@@ -1,11 +1,11 @@
 import unittest
 from nose.plugins.attrib import attr
-from learning import crfsuite
-from learning.crfsuite import CRFSuite
-from learning.taggers import CRFSuiteMutationTagger
+from nala.learning import crfsuite
+from nala.learning.crfsuite import CRFSuite
+from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
-from utils.tagger import TmVarTagger
+from nala.utils.tagger import TmVarTagger
 
 
 @attr('slow')

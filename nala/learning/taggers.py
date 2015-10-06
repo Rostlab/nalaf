@@ -4,7 +4,7 @@ from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
 from nala.structures.data import Annotation, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
-from nala.utils import PRO_MUT_REL_ID
+from nala.utils import PRO_REL_MUT_CLASS_ID
 
 
 class Tagger:
@@ -144,6 +144,6 @@ class RelationshipExtractionGeneMutation(Tagger):
                                     # atm: if in same sentence is the only condition
                                     if part.return_sentence_nr(ann.offset) == part.return_sentence_nr(ann2.offset):
                                         part.relations.append(
-                                            Relation(ann.offset, ann2.offset, ann.text, ann2.text, PRO_MUT_REL_ID))
+                                            Relation(ann.offset, ann2.offset, ann.text, ann2.text, PRO_REL_MUT_CLASS_ID))
                                 except IndexError:
                                     pass

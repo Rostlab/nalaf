@@ -126,3 +126,16 @@ class GNormPlusGeneTagger(Tagger):
                             else:
                                 part.predicted_annotations.append(ann)
 
+
+class RelationshipExtractionGeneMutation(Tagger):
+    def __init__(self, predicts_classes):
+        super().__init__(predicts_classes)
+
+    def tag(self, dataset):
+        for docid, doc in dataset.documents.items():
+            for partid, part in doc.parts.items():
+                for ann in part.annotations:
+                    if ann.class_id == MUT_CLASS_ID:
+                        for ann2 in part.annotations:
+                            if ann2.class_id == PRO_CLASS_ID:
+                                pass

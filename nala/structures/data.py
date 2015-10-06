@@ -113,7 +113,6 @@ class Dataset:
         """
         for part in self.parts():
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
-        # todo test method
 
     def partids_with_parts(self):
         """
@@ -443,7 +442,6 @@ class Document:
     """
 
     def __init__(self):
-        # NOTE are the parts generally ordered? concerning their true ordering from the original document?
         self.parts = OrderedDict()
         """
         parts the document consists of, encoded as a dictionary
@@ -497,7 +495,6 @@ class Document:
         purging false relationships (that do not return true if validating themselves)
         :return:
         """
-        # todo testing
         for part in self.parts:
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
 
@@ -548,14 +545,12 @@ class Document:
         :param start: index of first char (offset of first char in whole document)
         :param end: index of last char (offset of last char in whole document)
         """
-        # NOTE this method does not work as of now, since there is a bug in the equality_operator calculation
         print_verbose('Searching for overlap with a mention.')
         Annotation.equality_operator = 'exact_or_overlapping'
         query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
         print_debug(query_ann)
         offset = 0
         for part in self.parts.values():
-            # TODO fix bug in equality_operator calculations @aleksandar (have to speak about that on skype, etc.)
             print_debug('Query: Offset =', offset, 'start char =', query_ann.offset, 'start char + len(ann.text) =',
                         query_ann.offset + len(query_ann.text), 'params(start, end) =',
                         "({0}, {1})".format(start, end))

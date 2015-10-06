@@ -147,3 +147,13 @@ class RelationshipExtractionGeneMutation(Tagger):
                                             Relation(ann.offset, ann2.offset, ann.text, ann2.text, PRO_REL_MUT_CLASS_ID))
                                 except IndexError:
                                     pass
+
+    def tag_2(self, dataset):
+        from itertools import product
+        for part in dataset.parts():
+            for ann_1, ann_2 in product(
+                    (ann for ann in part.annotations if ann.class_id == MUT_CLASS_ID),
+                    (ann for ann in part.annotations if ann.class_id == PRO_CLASS_ID)):
+                if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
+                    part.relations.append(
+                        Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))

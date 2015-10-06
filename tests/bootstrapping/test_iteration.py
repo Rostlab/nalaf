@@ -8,11 +8,11 @@ import os
 class TestIteration(TestCase):
     def test_learning(self):
         iteration = Iteration(iteration_nr=1, crfsuite_path=r'crfsuite')
-        iteration.before_annotation(nr_new_docs=2)
+        # iteration.before_annotation(nr_new_docs=2)
         # iteration.after_annotation()
 
         # iteration.learning()
-        # iteration.docselection(nr=10)
+        iteration.docselection(nr=1)
         # print(len(iteration.candidates.documents))
         # iteration.tagging()
         # print("\n\n\n\n\n\nPREDICTION\n\n\n\n\n")

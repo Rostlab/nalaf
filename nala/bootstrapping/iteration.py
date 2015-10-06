@@ -2,6 +2,7 @@ import glob
 import os
 import re
 import shutil
+from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
@@ -17,7 +18,7 @@ from nala.utils.writers import TagTogFormat
 from nala.preprocessing.definers import ExclusiveNLDefiner
 import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
-from nala.utils import MUT_CLASS_ID
+from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
 
 
 class Iteration():
@@ -25,7 +26,7 @@ class Iteration():
     This is the class to perform one iteration of bootstrapping. There are various options.
     """
     # todo finish docset of Iteration Class
-    def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None, threshold_val=1):
+    def __init__(self, folder=None, iteration_nr=None, crfsuite_path=None, threshold_val=THRESHOLD_VALUE):
         """
         Init function of iteration. Has to be called with proper folder and crfsuite path if not default.
         :param folder: Bootstrapping folder (has to be created before including base folder with html + annjson folder and corpus)
@@ -75,7 +76,6 @@ class Iteration():
         # note currently using parameter .. i think that s the most suitable
 
         print_verbose('Check for Iteration Number....')
-        # fixme print verbose not executed.... why? just highrecallregex filter.... no idea
 
         if iteration_nr is None:
             # find iteration number
@@ -161,7 +161,11 @@ class Iteration():
         c = count(1)
 
         dataset = Dataset()
-        with DocumentSelectorPipeline(pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)]) as dsp:
+        with DocumentSelectorPipeline(
+                pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)],
+                                      document_filters=[KeywordsDocumentFilter(), HighRecallRegexDocumentFilter(
+                                          binary_model=os.path.join(self.current_folder, 'bin_model'),
+                                      expected_max_results=nr)]) as dsp:
             for pmid, document in dsp.execute():
                 dataset.documents[pmid] = document
                 # if we have generated enough documents stop
@@ -169,20 +173,20 @@ class Iteration():
                     break
         self.candidates = dataset
 
-    def tagging(self, threshold_val=0.99):
+    def tagging(self, threshold_val=THRESHOLD_VALUE):
         # tagging
         print_verbose("\n\n\n======Tagging======\n\n\n")
         PrepareDatasetPipeline().execute(self.candidates)
         CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
 
-        # export candidates to candidates folder
+        # export candidates to candidates folder'
         if not os.path.exists(self.current_folder):
             os.mkdir(self.current_folder)
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()
-        ttf_candidates.export_ann_json(threshold_val)  # 0.99 for beginning
+        ttf_candidates.export_ann_json(threshold_val)
 
     def manual_review_import(self):
         """
@@ -193,14 +197,6 @@ class Iteration():
         AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), is_predicted=True).annotate(
             self.reviewed)
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
-        for ann in self.reviewed.annotations():
-            print(ann)
-
-        print("now predicted annotations")
-
-        for ann in self.reviewed.predicted_annotations():
-            print(ann)
-
         # automatic evaluation
 
     def evaluation(self):

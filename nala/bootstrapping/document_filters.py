@@ -1,8 +1,12 @@
 import abc
+from copy import deepcopy
 import json
 import re
 import time
 import pkg_resources
+from nala.learning.crfsuite import CRFSuite
+from nala.learning.postprocessing import PostProcessing
+from nala.learning.taggers import CRFSuiteMutationTagger
 from nala import print_verbose
 from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
@@ -10,6 +14,7 @@ from nala.preprocessing.spliters import NLTKSplitter
 from nala.structures.data import Dataset
 from nala.utils.readers import TmVarReader
 from nala.utils.tagger import TmVarTagger
+from nala.structures.dataset_pipelines import PrepareDatasetPipeline
 
 
 class DocumentFilter:
@@ -107,15 +112,20 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _i_array = [0, 0]
 
         last_found = 0
-
+        crfsuite = CRFSuite(r'crfsuite')
+        crfsuitetagger = CRFSuiteMutationTagger(['e_2'], crf_suite=crfsuite, model_file=self.location_binary_model)
         for pmid, doc in documents:
             # if any part of the document contains any of the keywords
             # yield that document
             part_offset = 0
             data_tmp = Dataset()
             data_tmp.documents[pmid] = doc
+            data_nala = deepcopy(data_tmp)
             NLTKSplitter().split(data_tmp)
             data_tmvar = TmVarTagger().generate_abstracts([pmid])
+            PrepareDatasetPipeline().execute(data_nala)
+            crfsuitetagger.tag(data_nala)
+            PostProcessing().process(data_nala)
             positive_sentences = 0
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
@@ -157,12 +167,20 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         if match:
                             if pmid in data_tmvar.documents:
                                 anti_doc = data_tmvar.documents.get(pmid)
+                                nala_doc = data_nala.documents.get(pmid)
                                 start = part_offset + sent_offset + match.span()[0]
                                 end = part_offset + sent_offset + match.span()[1]
-                                if not anti_doc.overlaps_with_mention(start, end):
-                                    _e_result = exclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
+                                print("sweeet")
+                                print(not anti_doc.overlaps_with_mention(start, end))
+                                print(not nala_doc.overlaps_with_mention(start, end, annotated=False))
+                                if not anti_doc.overlaps_with_mention(start,
+                                                                      end) \
+                                        and not nala_doc.overlaps_with_mention(start, end, annotated=False):
+                                    _e_result = exclusive_definer.define_string(
+                                        new_text[match.span()[0]:match.span()[1]])
                                     _e_array[_e_result] += 1
-                                    _i_result = inclusive_definer.define_string(new_text[match.span()[0]:match.span()[1]])
+                                    _i_result = inclusive_definer.define_string(
+                                        new_text[match.span()[0]:match.span()[1]])
                                     _i_array[_i_result] += 1
                                     # todo write to file param + saving to manually annotate and find tp + fp for performance eval on each pattern
                                     # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
@@ -183,13 +201,12 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                 _progress += 1
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
-            # fixme print to print_verbose
-            print("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
+            print_verbose("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
 
             if positive_sentences > min_found:
                 last_found = 0
-                print('YEP')
+                print_verbose('YEP')
                 yield pmid, doc
             else:
                 print_verbose(pmid, "contains either no or only a few suitable annotations")
-                print('NOPE')
+                print_verbose('NOPE')

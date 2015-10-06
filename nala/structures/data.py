@@ -568,22 +568,27 @@ class Document:
             offset += len(part.text)
         return False
 
-    def overlaps_with_mention(self, *args):
+    def overlaps_with_mention(self, *span, annotated=True):
         """
         Checks for overlap at position charpos with another mention.
         """
         offset = 0
 
-        if len(args) == 2:
-            start, end = args
+        if len(span) == 2:
+            start, end = span
         else:
-            start, end = args[0]
+            start, end = span[0]
+        # todo check again with *span and unpacking
 
         print_debug("===TEXT===\n{0}\n".format(self.get_text()))
 
         for pid, part in self.parts.items():
             print_debug("Part {0}: {1}".format(pid, part))
-            for ann in part.annotations:
+            if annotated:
+                annotations = part.annotations
+            else:
+                annotations = part.predicted_annotations
+            for ann in annotations:
                 print_debug(ann)
                 print_debug("TEXT:".ljust(10) + part.text)
                 print_debug("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
@@ -591,18 +596,18 @@ class Document:
                 print_debug("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         len(part.text) - ann.offset + len(ann.text) - 2))
                 if start < ann.offset + offset + len(ann.text) and ann.offset + offset <= end:
-                    print_verbose('=====\nFOUND\n=====')
-                    print_verbose("TEXT:".ljust(10) + part.text)
-                    print_verbose("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                    print('=====\nFOUND\n=====')
+                    print("TEXT:".ljust(10) + part.text)
+                    print("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
                         len(part.text) - end + offset - 1))
-                    print_verbose("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                    print("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         ann.offset + len(ann.text) - 1))
                     return True
             offset += len(part.text) + 1
-        print_verbose('=========\nNOT FOUND\n=========')
-        print_verbose(
+        print('=========\nNOT FOUND\n=========')
+        print(
             "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (offset - end - 2))
-        print_verbose("TEXT:".ljust(10) + self.get_text())
+        print("TEXT:".ljust(10) + self.get_text())
         print_debug()
         return False
 

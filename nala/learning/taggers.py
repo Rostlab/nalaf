@@ -4,7 +4,7 @@ from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
 from nala.structures.data import Annotation, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
-from utils import PRO_MUT_REL_ID
+from nala.utils import PRO_MUT_REL_ID
 
 
 class Tagger:

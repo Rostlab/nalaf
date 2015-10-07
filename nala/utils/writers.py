@@ -6,6 +6,8 @@ import xml.etree.ElementTree as ET
 import json
 import sys
 import os
+from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
+
 
 class StatsWriter:
     """ Is able to be populated by stats and then be exported into various formats.
@@ -416,7 +418,8 @@ class ConsoleWriter:
     """
     def __init__(self, color=True):
         self.color = self.__supports_color() if color else color
-        self.which_color = '\033[42m'
+        self.protein_color_start = '\033[42m'
+        self.mutation_color_start = '\033[41m'
         self.end_color = '\033[0m'
         pass
 
@@ -435,7 +438,8 @@ class ConsoleWriter:
             text = part.text
             total_offset = 0
             for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
-                text = text[:ann.offset+total_offset] + self.which_color + text[ann.offset+total_offset:]
+                color = self.mutation_color_start if ann.class_id == MUT_CLASS_ID else self.protein_color_start
+                text = text[:ann.offset+total_offset] + color + text[ann.offset+total_offset:]
                 total_offset += 5
                 text = text[:ann.offset+len(ann.text)+total_offset] + self.end_color + text[ann.offset+len(ann.text)+total_offset:]
                 total_offset += 4
@@ -446,7 +450,12 @@ class ConsoleWriter:
             print(part.text)
             print('ANNOTATIONS')
             for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
-                print('{0: <{pad}} {1: <{pad}} {2}'.format(ann.offset, ann.offset+len(ann.text), ann.text, pad=padding))
+                if ann.class_id == MUT_CLASS_ID:
+                    print('Mutation     {0: <{pad}} {1: <{pad}} {2}'
+                          .format(ann.offset, ann.offset+len(ann.text), ann.text, pad=padding))
+                elif ann.class_id == PRO_CLASS_ID:
+                    print('Gene/Protein {0: <{pad}} {1: <{pad}} {2} {3}'
+                          .format(ann.offset, ann.offset+len(ann.text), ann.text, ann.normalisation_dict, pad=padding))
             print()
 
     @staticmethod

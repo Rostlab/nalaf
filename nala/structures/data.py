@@ -366,10 +366,17 @@ class Dataset:
         :param subclass: annotation type to delete.
         :param no_predicted: if True it will only consider Part.annotations array and not Part.pred_annotations
         """
-        for part in self.parts():
-            part.annotations = [ann for ann in part.annotations if ann.subclass != subclass]
-            if predicted:
-                part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subclass]
+        if isinstance(subclass, int) or isinstance(subclass, str) or isinstance(subclass, bool):
+            for part in self.parts():
+                part.annotations = [ann for ann in part.annotations if ann.subclass != subclass]
+                if predicted:
+                    part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subclass]
+        else:
+            for subcl in subclass:
+                for part in self.parts():
+                    part.annotations = [ann for ann in part.annotations if ann.subclass != subcl]
+                    if predicted:
+                        part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subcl]
 
     def n_fold_split(self, n=5):
         """

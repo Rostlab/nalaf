@@ -38,7 +38,7 @@ class Iteration():
         :param threshold_val: The threshold value to select annotations to pre-added or selected to semi-supervise.
         """
         super().__init__()
-
+        # todo major sophisticated automatic execution (check what is missing e.g. bin_model)
         if folder is not None:
             self.bootstrapping_folder = os.path.abspath(folder)
         else:

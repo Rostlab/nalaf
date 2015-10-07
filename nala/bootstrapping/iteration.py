@@ -102,6 +102,7 @@ class Iteration():
         # stats file
         self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
         self.results_file = os.path.join(self.current_folder, 'results.txt')
+        self.debug_file = os.path.join(self.current_folder, 'debug.txt')
 
         print_verbose('Initialisation of Iteration instance finished.')
 
@@ -144,7 +145,10 @@ class Iteration():
         self.train.prune()
 
         # generate features etc.
-        PrepareDatasetPipeline().execute(self.train)
+        pipeline = PrepareDatasetPipeline()
+        pipeline.execute(self.train)
+        pipeline.serialize(self.train, to_file=self.debug_file)
+
         BIEOLabeler().label(self.train)
         print_verbose(len(self.train.documents), "documents are prepared for training dataset.")
 

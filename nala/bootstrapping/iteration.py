@@ -81,7 +81,7 @@ class Iteration():
             # find iteration number
             _iteration_name = self.bootstrapping_folder + "/iteration_*/"
             for fn in glob.glob(_iteration_name):
-                match = re.search(r'/iteration_(\d+)/$', fn)
+                match = re.search('iteration_([0-9]+)', fn)
                 found_iteration = int(match.group(1))
                 if found_iteration > self.number:
                     self.number = found_iteration

@@ -596,18 +596,18 @@ class Document:
                 print_debug("CURRENT:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         len(part.text) - ann.offset + len(ann.text) - 2))
                 if start < ann.offset + offset + len(ann.text) and ann.offset + offset <= end:
-                    print('=====\nFOUND\n=====')
-                    print("TEXT:".ljust(10) + part.text)
-                    print("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
+                    print_verbose('=====\nFOUND\n=====')
+                    print_verbose("TEXT:".ljust(10) + part.text)
+                    print_verbose("QUERY:".ljust(10) + "o" * (start - offset) + "X" * (end - start + 1) + "o" * (
                         len(part.text) - end + offset - 1))
-                    print("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
+                    print_verbose("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         ann.offset + len(ann.text) - 1))
                     return True
             offset += len(part.text) + 1
-        print('=========\nNOT FOUND\n=========')
-        print(
+        print_verbose('=========\nNOT FOUND\n=========')
+        print_verbose(
             "QUERY:".ljust(10) + "o" * start + "X" * (end - start + 1) + "o" * (offset - end - 2))
-        print("TEXT:".ljust(10) + self.get_text())
+        print_verbose("TEXT:".ljust(10) + self.get_text())
         print_debug()
         return False
 

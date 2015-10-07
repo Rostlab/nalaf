@@ -64,3 +64,28 @@ class PrepareDatasetPipeline:
         self.tokenizer.tokenize(dataset)
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset)
+
+    def serialize(self, dataset, to_file=None):
+        """
+        :type dataset: nala.structures.data.Dataset()
+        """
+        types = [(type(self.splitter), self.splitter.__dict__),
+                 (type(self.tokenizer), self.tokenizer.__dict__)]
+
+        for feature_generator in self.feature_generators:
+            types.append((type(feature_generator), feature_generator.__dict__))
+
+        features = sorted(set(feature_name for token in dataset.tokens() for feature_name in token.features.keys()))
+
+        from nala.utils.helpers import find_current_git_ref
+        current_ref = find_current_git_ref()
+
+        if to_file:
+            with open(to_file, 'w') as file:
+                file.write('git ref:{}'.format(current_ref))
+                file.write('\nINSTANCES USED\n')
+                file.writelines('\n'.join(repr(x) for x in types))
+                file.write('\nFEATURES USED\n')
+                file.writelines('\n'.join(repr(x) for x in features))
+
+        return types, features, find_current_git_ref()

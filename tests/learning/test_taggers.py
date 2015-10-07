@@ -6,7 +6,6 @@ from nala.learning.taggers import GNormPlusGeneTagger
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import TmVarTokenizer
 from nala.utils import PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID
-from nala.utils import ENTREZ_GENE_ID, UNIPROT_ID
 
 
 @attr('slow')

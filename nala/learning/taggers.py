@@ -3,8 +3,7 @@ import re
 from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
 from nala.structures.data import Annotation, Relation
-from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
-from nala.utils import PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
+from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
 class Tagger:
@@ -80,7 +79,7 @@ class GNormPlusGeneTagger(Tagger):
     """
 
     def __init__(self):
-        super().__init__(['Gene', 'Protein'])
+        super().__init__([ENTREZ_GENE_ID, UNIPROT_ID])
 
     def tag(self, dataset, annotated=False, uniprot=False):
         """
@@ -130,7 +129,7 @@ class GNormPlusGeneTagger(Tagger):
 
 class RelationshipExtractionGeneMutation(Tagger):
     def __init__(self):
-        super().__init__(['GeneRelMutation', 'ProteinRelMutation'])
+        super().__init__([PRO_REL_MUT_CLASS_ID])
 
     def tag(self, dataset):
         from itertools import product

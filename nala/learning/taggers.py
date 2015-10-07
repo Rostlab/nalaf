@@ -79,8 +79,8 @@ class GNormPlusGeneTagger(Tagger):
     :type crf_suite: nala.learning.crfsuite.CRFSuite
     """
 
-    def __init__(self, predicts_classes):
-        super().__init__(predicts_classes)
+    def __init__(self):
+        super().__init__(['Gene', 'Protein'])
 
     def tag(self, dataset, annotated=True, uniprot=False):
         """
@@ -129,8 +129,8 @@ class GNormPlusGeneTagger(Tagger):
 
 
 class RelationshipExtractionGeneMutation(Tagger):
-    def __init__(self, predicts_classes):
-        super().__init__(predicts_classes)
+    def __init__(self):
+        super().__init__(['GeneRelMutation', 'ProteinRelMutation'])
 
     def tag(self, dataset):
         from itertools import product

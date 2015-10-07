@@ -30,12 +30,12 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
 
     def test_tag(self):
         # todo question is that the proper way? with predicts_classes
-        GNormPlusGeneTagger(['Gene', 'Protein']).tag(self.data, uniprot=True)
+        GNormPlusGeneTagger().tag(self.data, uniprot=True)
         # crfsuite = CRFSuite('crfsuite')
         # CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
         NLTKSplitter().split(self.data)
         TmVarTokenizer().tokenize(self.data)
-        RelationshipExtractionGeneMutation(['GeneRelMutation', 'ProteinRelMutation']).tag_2(self.data)
+        RelationshipExtractionGeneMutation().tag(self.data)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == PRO_CLASS_ID]), 7)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 2)
         self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 3)

@@ -4,7 +4,7 @@ from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
 from nala.structures.data import Annotation, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID
-from nala.utils import PRO_REL_MUT_CLASS_ID
+from nala.utils import PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
 class Tagger:
@@ -82,7 +82,7 @@ class GNormPlusGeneTagger(Tagger):
     def __init__(self, predicts_classes):
         super().__init__(predicts_classes)
 
-    def tag(self, dataset, annotated=True, uniprot=False):
+    def tag(self, dataset, annotated=False, uniprot=False):
         """
         :type dataset: nala.structures.data.Dataset
         :param annotated: if True then saved into annotations otherwise into predicted_annotations
@@ -113,8 +113,8 @@ class GNormPlusGeneTagger(Tagger):
                             ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
                             try:
                                 norm_dict = {
-                                    'EntrezGeneID': gene[3],
-                                    'UniprotID': genes_mapping[gene[3]]
+                                    ENTREZ_GENE_ID: gene[3],
+                                    UNIPROT_ID: genes_mapping[gene[3]]
                                 }
                             except KeyError:
                                 norm_dict = {'EntrezGeneID': gene[3]}

@@ -1,4 +1,5 @@
 import csv
+from itertools import chain
 import random
 import re
 import math
@@ -260,6 +261,10 @@ class TagTogFormat:
         if not os.path.isdir(self.html_folder):
             os.mkdir(self.html_folder)
 
+    def export(self, threshold_val):
+        self.export_html()
+        self.export_ann_json(threshhold_value=threshold_val)
+
     def export_html(self):
         """
         Exporting Html files into folder with each html file being a document itself.
@@ -314,8 +319,6 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
-                # OPTIONAL use: "ET.ElementTree.write(html, self.location + "export/" + pubmedid + ".html", encoding='utf-8', method='html')"
-
     def export_ann_json(self, threshhold_value=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
@@ -359,33 +362,7 @@ class TagTogFormat:
                 }
 
                 for i, (partid, part) in enumerate(doc.parts.items()):
-                    for ann in part.annotations:
-                        # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
-                        #     tagtog_part_id = "s1h{}".format(i + 1)
-                        # else:
-                        tagtog_part_id = "s1p{}".format(i + 1)
-                        ent = {
-                            "classId": ann.class_id,
-                            "part": tagtog_part_id,
-                            "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
-                            "confidence": {
-                                "state": "",
-                                "who": [
-                                    self.who
-                                ],
-                                "prob": 1  # OPTIONAL include different probabilities as well --> for later
-                            }
-                        }
-
-                        json_obj['entities'].append(ent)
-
-                # note change that to chain() to make it nicer looking
-                for i, (partid, part) in enumerate(doc.parts.items()):
-                    for ann in part.predicted_annotations:
-                        # if partid.count("h") > 0 or len(part.text.split(" ")) < 10:
-                        #     tagtog_part_id = "s1h{}".format(i + 1)
-                        # else:
-                        tagtog_part_id = "s1p{}".format(i + 1)
+                    for ann in chain(part.annotations, part.predicted_annotations):
                         if threshhold_value:
                             if ann.confidence > threshhold_value:
                                 state = 'selected'
@@ -394,20 +371,54 @@ class TagTogFormat:
                         else:
                             state = ''
 
+                        # fields generation
+                        fields = {}
+
+                        # normalizations generation
+                        normalizations = {}
+                        for key, value in ann.normalisation_dict.items():
+                            if isinstance(value, str):
+                                normalizations[key] = {
+                                    # "source": 'http://uniprot.org',
+                                    "recName": value,
+                                    # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                                }
+                            else:
+                                for substring in value:
+                                    normalizations[key + '_' + substring[0]] = {
+                                        # "source": 'http://uniprot.org',
+                                        "recName": substring,
+                                        # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                                    }
+
+                        tagtog_part_id = "s1p{}".format(i + 1)
                         ent = {
                             "classId": ann.class_id,
                             "part": tagtog_part_id,
-                            "offsets": [{"start": ann.offset, "text": ann.text}],  # NOTE check for offsets are the same
+                            "offsets": [{"start": ann.offset, "text": ann.text}],
                             "confidence": {
                                 "state": state,
                                 "who": [
                                     self.who
                                 ],
-                                "prob": ann.confidence  # OPTIONAL include different probabilities as well --> for later
-                            }
+                                "prob": ann.confidence
+                            },
+                            "fields": fields,
+                            "normalizations": normalizations
                         }
-
                         json_obj['entities'].append(ent)
+
+                    for rel in doc.relations():
+                        ent_string_format = '{}|{},{}'
+                        ent_string1 = ent_string_format.format(partid, rel.start1, rel.start1 + len(rel.text1))
+                        ent_string2 = ent_string_format.format(partid, rel.start2, rel.start2 + len(rel.text2))
+                        relation = {
+                            "classId": rel.class_id,
+                            "directed": False,
+                            "entities": [ent_string1, ent_string2],
+                            "confidence": 1
+                        }
+                        json_obj['relations'].append(relation)
 
                 json.dump(json_obj, f)
 

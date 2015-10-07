@@ -1,3 +1,4 @@
+from nose.plugins.attrib import attr
 from unittest import TestCase
 from nala.utils.tagger import TmVarTagger
 from nala.utils.ncbi_utils import GNormPlus
@@ -8,6 +9,7 @@ from nala.utils.uniprot_utils import Uniprot
 __author__ = 'carst'
 
 # todo major merge into tests/learning/test_taggers.py
+@attr('slow')
 class TestTmVarTagger(TestCase):
     def test_generate_abstracts(self):
         pmids = ['12559908']
@@ -19,6 +21,7 @@ class TestTmVarTagger(TestCase):
             print(data.documents[docid])
 
 
+@attr('slow')
 class TestGNormPlus(TestCase):
     def test_get_genes_for_pmid(self):
         pmid = '22457529'
@@ -41,6 +44,7 @@ class TestGNormPlus(TestCase):
         print(unique_gene_set)
 
 
+@attr('slow')
 class TestUniprot(TestCase):
     def test_get_uniprotid_for_entrez_geneid(self):
         with Uniprot() as uprot:

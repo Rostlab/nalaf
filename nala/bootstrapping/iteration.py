@@ -268,3 +268,46 @@ class Iteration():
         # optional containing sentence
         # optional containing document-id
         # optional group according to subclass (different sizes)
+
+    def cross_validation(self, split):
+        base_folder = os.path.join(os.path.join(self.bootstrapping_folder, 'iteration_0'), 'base')
+        data = HTMLReader(os.path.join(base_folder, 'html')).read()
+        AnnJsonAnnotationReader(os.path.join(base_folder, 'annjson')).annotate(data)
+
+        for fold in range(1, self.number):
+            iteration_base = os.path.join(self.bootstrapping_folder, "iteration_{}".format(fold))
+
+            tmp_data = HTMLReader(os.path.join(os.path.join(iteration_base, 'candidates'), 'html')).read()
+            AnnJsonAnnotationReader(os.path.join(iteration_base, 'reviewed')).annotate(tmp_data)
+            data.extend_dataset(tmp_data)
+
+        last_iteration = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number-1))
+        cv_file = os.path.join(last_iteration, 'cross_validation.txt')
+        with open(cv_file, 'w') as file:
+            file.write('CROSS VALIDATION {}\n'.format(split))
+
+        train_splits, test_splits = data.n_fold_split(split)
+        for fold in range(split):
+            train = train_splits[fold]
+            test = test_splits[fold]
+
+            train.prune()
+            PrepareDatasetPipeline().execute(train)
+            BIEOLabeler().label(train)
+            self.crf.create_input_file(train, 'train')
+            self.crf.learn()
+
+            PrepareDatasetPipeline().execute(test)
+            BIEOLabeler().label(test)
+            self.crf.create_input_file(test, 'test')
+            self.crf.tag('-m default_model -i test > output.txt')
+            self.crf.read_predictions(test)
+
+            results = MentionLevelEvaluator().evaluate(test)
+
+            with open(cv_file, 'a') as file:
+                file.write('fold {} '
+                           'tp:{:4} fp:{:4} fn:{:4} '
+                           'fp_overlap:{:4} fn_overlap:{:4} '
+                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
+

@@ -456,6 +456,9 @@ class ConsoleWriter:
                 elif ann.class_id == PRO_CLASS_ID:
                     print('Gene/Protein {0: <{pad}} {1: <{pad}} {2} {3}'
                           .format(ann.offset, ann.offset+len(ann.text), ann.text, ann.normalisation_dict, pad=padding))
+            print('RELATIONS')
+            for rel in part.relations:
+                print('{} ---> {}'.format(rel.text1, rel.text1))
             print()
 
     @staticmethod

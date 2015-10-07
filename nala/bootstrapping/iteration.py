@@ -212,10 +212,9 @@ class Iteration():
         """
         ExclusiveNLDefiner().define(self.reviewed)
         results = MentionLevelEvaluator().evaluate(self.reviewed)
-        # print(results)
-        # with open(self.stats_file, 'a') as f:
-        #     f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-        #         list(str(r) for r in results))))
+        with open(self.stats_file, 'a') as f:
+            f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
+                list(str(r) for r in results))))
 
         # debug results / annotations
         results = []

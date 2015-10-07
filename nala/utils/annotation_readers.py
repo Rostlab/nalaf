@@ -56,8 +56,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         doc_id = basename.replace('.ann.json', '')
 
                     ann_json = json.load(file)
+                    document = dataset.documents[doc_id]
                     if ann_json['anncomplete']:
-                        document = dataset.documents[doc_id]
                         for entity in ann_json['entities']:
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
                                 # if it is predicted put it in predicted_annotations else in annotations
@@ -71,6 +71,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                     document.parts[entity['part']].annotations.append(ann)
                     elif self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
+                    elif self.is_predicted:  # anncomplete=False, delete_incomplete_docs=False, is_predicted=True
+                        for entity in ann_json['entities']:
+                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                                 entity['offsets'][0]['text'], entity['confidence']['prob'])
+                                document.parts[entity['part']].predicted_annotations.append(ann)
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass

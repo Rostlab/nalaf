@@ -1,4 +1,6 @@
 import glob
+from itertools import product, chain
+import json
 import os
 import re
 import shutil
@@ -19,6 +21,7 @@ from nala.preprocessing.definers import ExclusiveNLDefiner
 import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
+from nala.structures.data import Annotation
 
 
 class Iteration():
@@ -63,9 +66,6 @@ class Iteration():
         # threshold class-wide variable to save in stats.csv file
         self.threshold_val = threshold_val
 
-        # stats file
-        self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
-
         # empty init variables
         self.train = None  # first
         self.candidates = None  # non predicted docselected
@@ -99,6 +99,10 @@ class Iteration():
         self.candidates_folder = os.path.join(self.current_folder, 'candidates')
         self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
 
+        # stats file
+        self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
+        self.results_file = os.path.join(self.current_folder, 'results.txt')
+
         print_verbose('Initialisation of Iteration instance finished.')
 
     def before_annotation(self, nr_new_docs=10):
@@ -124,6 +128,7 @@ class Iteration():
         self.train = HTMLReader(html_base_folder).read()
         AnnJsonAnnotationReader(annjson_base_folder).annotate(self.train)
         print_verbose(len(self.train.documents), "documents are used in the training dataset.")
+
         # extend for each next iteration
         if self.number > 1:
             for i in range(1, self.number):
@@ -133,8 +138,8 @@ class Iteration():
                 AnnJsonAnnotationReader(path_to_read + "/reviewed/").annotate(tmp_data)
 
                 # extend learning_data
-                # todo has to be tested
                 self.train.extend_dataset(tmp_data)
+
         # prune parts without annotations
         self.train.prune()
 
@@ -194,7 +199,8 @@ class Iteration():
         :return:
         """
         self.reviewed = HTMLReader(os.path.join(self.candidates_folder, 'html')).read()
-        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), is_predicted=True).annotate(
+        AnnJsonAnnotationReader(os.path.join(self.candidates_folder, 'annjson'), is_predicted=True,
+                                delete_incomplete_docs=False).annotate(
             self.reviewed)
         AnnJsonAnnotationReader(os.path.join(self.reviewed_folder)).annotate(self.reviewed)
         # automatic evaluation
@@ -207,6 +213,55 @@ class Iteration():
         ExclusiveNLDefiner().define(self.reviewed)
         results = MentionLevelEvaluator().evaluate(self.reviewed)
         # print(results)
-        with open(self.stats_file, 'a') as f:
-            f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-                list(str(r) for r in results))))
+        # with open(self.stats_file, 'a') as f:
+        #     f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
+        #         list(str(r) for r in results))))
+
+        # debug results / annotations
+        results = []
+        for part in self.reviewed.parts():
+            not_found_ann = part.annotations[:]
+            not_found_pred = part.predicted_annotations[:]
+            for ann, pred in product(part.annotations, part.predicted_annotations):
+                Annotation.equality_operator = 'exact_or_overlapping'
+                if ann == pred:
+                    results.append((ann, pred))
+
+                    # delete found elements
+                    if ann in not_found_ann:
+                        index = not_found_ann.index(ann)
+                        del not_found_ann[index]
+
+                    if pred in not_found_pred:
+                        index = not_found_pred.index(pred)
+                        del not_found_pred[index]
+            results += [(ann, Annotation(class_id='e_2', offset=-1, text='')) for ann in not_found_ann]
+            results += [(Annotation(class_id='e_2', offset=-1, text=''), pred) for pred in not_found_pred]
+
+        annotated_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.annotations()))) + "}"
+        predicted_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.predicted_annotations()))) + "}"
+        row_format = annotated_format + '\t|\t' + predicted_format + "\n"
+
+        with open(self.results_file, 'w') as f:
+            f.write(row_format.format('=====Annotated=====', '=====Predicted====='))
+            for tuple in ((x[0].text, x[1].text) for x in results):
+                f.write(row_format.format(*tuple))
+            f.write('-'*80)
+            f.write('\n\n=====Detailed Results=====\n')
+            f.write(
+                'Exact:            TP={}\tFP={}\tFN={}\tFP_OVERLAP={}\tFN_OVERLAP={}\tPREC={:.3%}\tRECALL={:.3%}\tF-MEAS={:.3%}\n'.format(
+                    *MentionLevelEvaluator().evaluate(self.reviewed)))
+            f.write(
+                'Overlapping:      TP={}\tFP={}\tFN={}\tFP_OVERLAP={}\tFN_OVERLAP={}\tPREC={:.3%}\tRECALL={:.3%}\tF-MEAS={:.3%}\n'.format(
+                    *MentionLevelEvaluator(strictness='overlapping').evaluate(self.reviewed)))
+            f.write(
+                'Half-Overlapping: TP={}\tFP={}\tFN={}\tFP_OVERLAP={}\tFN_OVERLAP={}\tPREC={:.3%}\tRECALL={:.3%}\tF-MEAS={:.3%}\n'.format(
+                    *MentionLevelEvaluator(strictness='half_overlapping').evaluate(self.reviewed)))
+            subclass_string = json.dumps(MentionLevelEvaluator(subclass_analysis=True).evaluate(self.reviewed)[0],
+                                         indent=4, sort_keys=True)
+            f.write('Raw-Data:\n{}'.format(subclass_string))
+
+        # optional iteration number
+        # optional containing sentence
+        # optional containing document-id
+        # optional group according to subclass (different sizes)

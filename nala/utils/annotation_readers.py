@@ -1,9 +1,12 @@
 import abc
 import glob
 import json
-from nala.structures.data import Annotation
 import csv
 import os
+from itertools import product, chain
+from functools import reduce
+
+from nala.structures.data import Annotation
 from nala.utils import MUT_CLASS_ID
 
 
@@ -45,7 +48,6 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         :type dataset: nala.structures.data.Dataset
         """
-        from nala.utils import MUT_CLASS_ID
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
@@ -131,59 +133,70 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             annotators = self.priority
         else:
             annotators = os.listdir(self.directory)
-        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0]), delete_incomplete_docs=False).annotate(dataset)
+        self.__merge(dataset, annotators)
 
-        for annotator in annotators[1:]:
-            self.__merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
+    def __merge_pair(self, entities_x, entities_y):
+        merged = []
+        for entity_x, entity_y in product(entities_x, entities_y):
+            # if they have the same part_id
+            if entity_x['part'] == entity_y['part']:
+                ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
 
-        # remove duplicates that might have been added
-        # in the case when one ann spans across several others
-        if self.entity_strategy == 'longest':
-            Annotation.equality_operator = 'exact'
-            for part in dataset.parts():
-                to_be_removed = []
-                parsed = []
-                for index, ann in enumerate(part.annotations):
-                    if ann in parsed:
-                        to_be_removed.append(index)
-                    else:
-                        parsed.append(ann)
-                part.annotations = [ann for index, ann in enumerate(part.annotations) if index not in to_be_removed]
+                # if they are the same or overlap
+                if ann_x == ann_y:
+                    if self.entity_strategy == 'shortest':
+                        if len(ann_x.text) < len(ann_y.text):
+                            merged.append(entity_x)
+                        else:
+                            merged.append(entity_y)
+                    elif self.entity_strategy == 'longest':
+                        if len(ann_x.text) > len(ann_y.text):
+                            merged.append(entity_x)
+                        else:
+                            merged.append(entity_y)
+                    elif self.entity_strategy == 'priority':
+                        merged.append(entity_x)
 
-        # delete documents that after the merging have no annotations at all
-        dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
-                             if sum(len(part.annotations) for part in doc.parts.values()) > 0}
+        # if the strategy is union
+        # append the once that were not overlapping
+        if self.strategy == 'union':
+            existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                        for entity in merged]
+            for entity in chain(entities_x, entities_y):
+                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                if ann not in existing:
+                    merged.append(entity)
+        return merged
 
-    def __merge_annotations_into_dataset(self, dataset, annotations_directory):
-        for doc_id, document in dataset.documents.items():
-            # either once or zero times
-            for filename in glob.glob(os.path.join(annotations_directory, '*{}*.ann.json'.format(doc_id))):
-                with open(filename, 'r', encoding='utf-8') as file:
-                    ann_json = json.load(file)
-                    if ann_json['anncomplete']:
-                        for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                                try:
-                                    for index, existing_ann in enumerate(document.parts[entity['part']].annotations):
-                                        Annotation.equality_operator = 'overlapping'
-                                        if ann == existing_ann:
-                                            if self.entity_strategy == 'shortest':
-                                                if len(ann.text) < len(existing_ann.text):
-                                                    document.parts[entity['part']].annotations[index] = ann
-                                            elif self.entity_strategy == 'longest':
-                                                if len(ann.text) > len(existing_ann.text):
-                                                    document.parts[entity['part']].annotations[index] = ann
-                                            elif self.entity_strategy != 'priority':
-                                                raise ValueError('entity_strategy must be "shortest", "longest" or "priority"')
+    def __merge(self, dataset, annotators):
+        for doc_id, doc in dataset.documents.items():
+            annotator_entities = {}
+            # find the annotations that are marked complete by any annotator
+            for annotator in annotators:
+                # either once or zero times
+                for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
+                    with open(filename, 'r', encoding='utf-8') as file:
+                        ann_json = json.load(file)
+                        if ann_json['anncomplete']:
+                            annotator_entities[annotator] = ann_json['entities']
 
-                                    # annotations not in original dataset
-                                    # include only if the strategy is union
-                                    Annotation.equality_operator = 'exact_or_overlapping'
-                                    if self.strategy == 'union' and ann not in document.parts[entity['part']].annotations:
-                                        document.parts[entity['part']].annotations.append(ann)
-                                except KeyError:
-                                    pass
+            # if there is at least once set of annotations
+            if len(annotator_entities) > 0:
+                Annotation.equality_operator = 'exact_or_overlapping'
+                merged = reduce(self.__merge_pair, annotator_entities.values())
+
+                for entity in merged:
+                    try:
+                        part = doc.parts[entity['part']]
+                    except KeyError:
+                        # TODO: Remove once the tagtog bug is fixed
+                        break
+                    part.annotations.append(
+                        Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+            # delete documents with no annotations
+            else:
+                del dataset.documents[doc_id]
 
 
 class SETHAnnotationReader(AnnotationReader):

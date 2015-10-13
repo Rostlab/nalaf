@@ -119,6 +119,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             self.operator = lt
         elif self.entity_strategy == 'longest':
             self.operator = gt
+        elif self.entity_strategy != 'priority':
+            raise ValueError('entity_strategy must be "shortest" or "longest" or "priority"')
         """
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
@@ -139,6 +141,39 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         else:
             annotators = os.listdir(self.directory)
         self.__merge(dataset, annotators)
+
+    def __append_union(self, merged, entities_x, entities_y):
+        # if the strategy is union
+        # append the ones that are not overlapping with the already merged ones
+        if self.strategy == 'union':
+            existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                        for entity in merged]
+            for entity in chain(entities_x, entities_y):
+                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                if ann not in existing:
+                    merged.append(entity)
+
+    def __merge_priority(self, entities_x, entities_y):
+        merged = []
+        merged_indices_x = []
+        merged_indices_y = []
+
+        for index_x, entity_x in enumerate(entities_x):
+            for index_y, entity_y in enumerate(entities_y):
+                if entity_x['part'] == entity_y['part']:
+                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+
+                    # if they are the same or overlap
+                    # use the first once since that one has higher priority
+                    if ann_x == ann_y:
+                        if index_x not in merged_indices_x and index_y not in merged_indices_y:
+                            merged_indices_x.append(index_x)
+                            merged_indices_y.append(index_y)
+                            merged.append(entity_x)
+
+        self.__append_union(merged, entities_x, entities_y)
+        return merged
 
     def __merge_pair(self, entities_x, entities_y):
         merged = []
@@ -178,15 +213,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                             if self.operator(len(ann_new.text), len(ann_existing.text)):
                                 merged[index-1] = entity_new
 
-        # if the strategy is union
-        # append the ones that are not overlapping with the already merged ones
-        if self.strategy == 'union':
-            existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                        for entity in merged]
-            for entity in chain(entities_x, entities_y):
-                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                if ann not in existing:
-                    merged.append(entity)
+        self.__append_union(merged, entities_x, entities_y)
         return merged
 
     def __merge(self, dataset, annotators):
@@ -204,7 +231,11 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             # if there is at least once set of annotations
             if len(annotator_entities) > 0:
                 Annotation.equality_operator = 'exact_or_overlapping'
-                merged = reduce(self.__merge_pair, annotator_entities.values())
+                if self.entity_strategy == 'priority':
+                    merged = reduce(self.__merge_priority, [annotator_entities[x] for x in self.priority
+                                                            if x in annotator_entities])
+                else:
+                    merged = reduce(self.__merge_pair, annotator_entities.values())
 
                 for entity in merged:
                     try:

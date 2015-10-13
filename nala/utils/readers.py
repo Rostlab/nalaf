@@ -44,7 +44,11 @@ class HTMLReader(Reader):
                 document = Document()
 
                 for part in soup.find_all(id=re.compile('^s')):
-                    document.parts[part['id']] = Part(str(part.string))
+                    if re.match(r'^s[2-9]', part['id']):
+                        is_abstract = False
+                    else:
+                        is_abstract = True
+                    document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
 
                 basename = os.path.basename(filename)
                 if '-' in basename:
@@ -138,13 +142,17 @@ class VerspoorReader(Reader):
         for file_path in file_list:
             file_name = os.path.basename(file_path)
 
-            pmid, serial, *_, paragraph, = file_name.replace('.txt', '').split('-')
+            pmid, serial, part_type, *_, paragraph, = file_name.replace('.txt', '').split('-')
             # serial = first section
             # paragrahp = second section
+            # partid = kind of part e.g. Abstract
             # divided by newlines = 3rd param which is p## or h##
             # NOTE h## follows with p## so no seperate calculations
 
-            # print(pmid, serial, paragraph)
+            if 'Abstract' in part_type:
+                is_abstract = True
+            else:
+                is_abstract = False
 
             with open(file_path, encoding='utf-8') as file:
                 text_raw = file.read()
@@ -185,10 +193,10 @@ class VerspoorReader(Reader):
                     partid = "{0}{1}{2}".format(first_serial, second_serial, paragraph_id)
 
                     if pmid in dataset:
-                        dataset.documents[pmid].parts[simple_id + partid] = Part(text_part)
+                        dataset.documents[pmid].parts[simple_id + partid] = Part(text_part, is_abstract=is_abstract)
                     else:
                         document = Document()
-                        document.parts[simple_id + partid] = Part(text_part)
+                        document.parts[simple_id + partid] = Part(text_part, is_abstract=is_abstract)
                         dataset.documents[pmid] = document
 
                     # add offset for next paragraph

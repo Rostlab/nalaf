@@ -125,13 +125,13 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = HTMLReader(html_path).read()
+        dataset = VerspoorReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+        # VerspoorReader(ann_path).annotate(dataset)
 
         if len(dataset.documents) == 0:
             raise IndexError('There are no documents in the dataset. Please check file paths.')
@@ -159,6 +159,7 @@ if __name__ == "__main__":
             # del data_stats2['nl_mention_array']
             # del data_stats2['full_nl_mention_array']
             # print(json.dumps(data_stats2, indent=4))
+            print(dataset)
 
             print_stats(data_stats)
             stats.addrow(data_stats, 'Exclusive')

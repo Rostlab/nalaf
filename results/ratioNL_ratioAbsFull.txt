@@ -1,0 +1,64 @@
+IDP4 corpus
+
+Exclusive
+|           Property           |      Stats     |
+|             DOCS             |                |
+| All documents                |      107       |
+| Abstract documents           |       78       |
+| Full documents               |       29       |
+| Hypothetical abstract nr     |      551.29648 |
+|            TOKENS            |                |
+| All tokens                   |   131046       |
+| Abstract doc tokens          |    18541       |
+| Full doc tokens              |   112505       |
+| Average tokens per abstract  |      237.70513 |
+|           RatioNL            |                |
+| RatioNL                      |        0.09581 |
+| Number of NL mentions        |      144       |
+| Number of all mentions       |     1503       |
+|      RatioAbstractFull       |                |
+| RatioAbstractFull            |        4.62544 |
+| Abstract tokens(NL / all)    |        0.02093 |
+| Full tokens(NL / all         |        0.00452 |
+
+Inclusive 18
+|           Property           |      Stats     |
+|             DOCS             |                |
+| All documents                |      107       |
+| Abstract documents           |       78       |
+| Full documents               |       29       |
+| Hypothetical abstract nr     |      551.29648 |
+|            TOKENS            |                |
+| All tokens                   |   131046       |
+| Abstract doc tokens          |    18541       |
+| Full doc tokens              |   112505       |
+| Average tokens per abstract  |      237.70513 |
+|           RatioNL            |                |
+| RatioNL                      |        0.07784 |
+| Number of NL mentions        |      117       |
+| Number of all mentions       |     1503       |
+|      RatioAbstractFull       |                |
+| RatioAbstractFull            |        4.92933 |
+| Abstract tokens(NL / all)    |        0.01985 |
+| Full tokens(NL / all         |        0.00403 |
+
+Inclusive 28
+|           Property           |      Stats     |
+|             DOCS             |                |
+| All documents                |      107       |
+| Abstract documents           |       78       |
+| Full documents               |       29       |
+| Hypothetical abstract nr     |      551.29648 |
+|            TOKENS            |                |
+| All tokens                   |   131046       |
+| Abstract doc tokens          |    18541       |
+| Full doc tokens              |   112505       |
+| Average tokens per abstract  |      237.70513 |
+|           RatioNL            |                |
+| RatioNL                      |        0.05722 |
+| Number of NL mentions        |       86       |
+| Number of all mentions       |     1503       |
+|      RatioAbstractFull       |                |
+| RatioAbstractFull            |        5.04303 |
+| Abstract tokens(NL / all)    |        0.01672 |
+| Full tokens(NL / all         |        0.00332 |

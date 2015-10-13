@@ -1,6 +1,8 @@
 import argparse
 import configparser
+import json
 import sys
+import math
 
 from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
 from nala.preprocessing.spliters import NLTKSplitter
@@ -23,28 +25,60 @@ from nala.utils.writers import TagTogFormat
 
 def print_stats(data_stats):
     try:
-        fullnr = data_stats['full_nr']
         abstractnr = data_stats['abstract_nr']
+        fullnr = data_stats['full_nr']
         totnr = fullnr + abstractnr
-        full_token = data_stats['full_tot_token_nr']
+
         abstract_token = data_stats['abstract_tot_token_nr']
+        full_token = data_stats['full_tot_token_nr']
         tot_token = full_token + abstract_token
+
         average_abstract_token = abstract_token / abstractnr
         hypothetical_abstracts_nr = tot_token / average_abstract_token
 
-        format_number_string = "| {:^27} | {:^11} |"
-        format_number_digit = "| {:27} | {:8d}    |"
-        format_number_float = "| {:27} | {:11.2f} |"
+        nl_mention_nr = data_stats['nl_mention_nr']
+        tot_mention_nr = data_stats['tot_mention_nr']
+        rationl = nl_mention_nr / tot_mention_nr
+
+        abstract_nl_mention_nr = data_stats['abstract_nl_token_nr']
+        nl_norm_abstract = abstract_nl_mention_nr / abstract_token
+        try:
+            full_nl_mention_nr = data_stats['full_nl_token_nr']
+            nl_norm_full = full_nl_mention_nr / full_token
+            ratio_abstract_full = nl_norm_abstract / nl_norm_full
+        except ZeroDivisionError:
+            ratio_abstract_full = 0
+            nl_norm_full = 0
+
+        format_number_string = "| {:^28} | {:^14} |"
+        format_number_digit = "| {:28} | {:8d}       |"
+        format_number_float = "| {:28} | {:14.5f} |"
 
         print(format_number_string.format('Property', 'Stat'))
+
+        print(format_number_string.format('DOCS',''))
         print(format_number_digit.format('All documents', totnr))
-        print(format_number_digit.format('Full documents', fullnr))
         print(format_number_digit.format('Abstract documents', abstractnr))
-        print(format_number_digit.format('Full doc tokens', full_token))
-        print(format_number_digit.format('Abstract doc tokens', abstract_token))
-        print(format_number_digit.format('All tokens', tot_token))
-        print(format_number_float.format('Average tokens per abstract', average_abstract_token))
+        print(format_number_digit.format('Full documents', fullnr))
         print(format_number_float.format('Hypothetical abstract nr', hypothetical_abstracts_nr))
+
+        print(format_number_string.format('TOKENS',''))
+        print(format_number_digit.format('All tokens', tot_token))
+        print(format_number_digit.format('Abstract doc tokens', abstract_token))
+        print(format_number_digit.format('Full doc tokens', full_token))
+        print(format_number_float.format('Average tokens per abstract', average_abstract_token))
+
+        print(format_number_string.format('RatioNL',''))
+        print(format_number_float.format('RatioNL', rationl))
+        print(format_number_digit.format('Number of NL mentions', nl_mention_nr))
+        print(format_number_digit.format('Number of all mentions', tot_mention_nr))
+
+        print(format_number_string.format('RatioAbstractFull',''))
+        print(format_number_float.format('RatioAbstractFull', ratio_abstract_full))
+        print(format_number_float.format('Abstract tokens(NL / all)', nl_norm_abstract))
+        print(format_number_float.
+              format('Full tokens(NL / all', nl_norm_full))
+
         print()
     except ZeroDivisionError:
         raise ValueError('no data available')
@@ -109,7 +143,7 @@ if __name__ == "__main__":
         # exit()
 
         if args.stats_demo:
-            extra_methods = 2
+            # extra_methods = 2
             # start_min_length = 18
             # end_min_length = 36
             # start_counter = start_min_length - extra_methods
@@ -119,6 +153,13 @@ if __name__ == "__main__":
             # exclusive
             ExclusiveNLDefiner().define(dataset)
             data_stats = dataset.stats()
+
+            # data_stats2 = data_stats.copy()
+            # del data_stats2['abstract_nl_mention_array']
+            # del data_stats2['nl_mention_array']
+            # del data_stats2['full_nl_mention_array']
+            # print(json.dumps(data_stats2, indent=4))
+
             print_stats(data_stats)
             stats.addrow(data_stats, 'Exclusive')
             dataset.clean_nl_definitions()
@@ -140,25 +181,25 @@ if __name__ == "__main__":
             exit()
 
             # tmvar nl
-            TmVarNLDefiner().define(dataset)
-            stats.addrow(dataset.stats(), 'tmVarComplete')
-            dataset.clean_nl_definitions()
+            # TmVarNLDefiner().define(dataset)
+            # stats.addrow(dataset.stats(), 'tmVarComplete')
+            # dataset.clean_nl_definitions()
 
             # inclusive
-            for i in range(start_min_length, end_min_length + 1):
-                print('run', i)
-                InclusiveNLDefiner(min_length=i).define(dataset)
-                inclusivestats = dataset.stats()
-                inclusivementions = inclusivestats['nl_mention_array']
-                intersectionset = [ x for x in inclusivementions if x not in tmvarmentions]
-                print(intersectionset)
-                stats.addrow(dataset.stats(), 'Inclusive_' + str(i))
-                dataset.clean_nl_definitions()
+            # for i in range(start_min_length, end_min_length + 1):
+            #     print('run', i)
+            #     InclusiveNLDefiner(min_length=i).define(dataset)
+            #     inclusivestats = dataset.stats()
+            #     inclusivementions = inclusivestats['nl_mention_array']
+            #     intersectionset = [ x for x in inclusivementions if x not in tmvarmentions]
+            #     print(intersectionset)
+            #     stats.addrow(dataset.stats(), 'Inclusive_' + str(i))
+            #     dataset.clean_nl_definitions()
 
             # finally generation of graph itself
             stats.makegraph()
 
-        TmVarRegexNLDefiner().define(dataset)
+        # TmVarRegexNLDefiner().define(dataset)
 
         if not args.quick_nl:
             print("Labeling")

@@ -71,13 +71,13 @@ def print_stats(data_stats):
         print(format_number_string.format('RatioNL',''))
         print(format_number_float.format('RatioNL', rationl))
         print(format_number_digit.format('Number of NL mentions', nl_mention_nr))
-        print(format_number_digit.format('Number of all mentions', tot_mention_nr))
+        print(format_number_digit.format('Number of All mentions', tot_mention_nr))
 
         print(format_number_string.format('RatioAbstractFull',''))
         print(format_number_float.format('RatioAbstractFull', ratio_abstract_full))
-        print(format_number_float.format('Abstract tokens(NL / all)', nl_norm_abstract))
+        print(format_number_float.format('Abstract tokens(NL / All)', nl_norm_abstract))
         print(format_number_float.
-              format('Full tokens(NL / all', nl_norm_full))
+              format('Full tokens(NL / All)', nl_norm_full))
 
         print()
     except ZeroDivisionError:
@@ -159,7 +159,7 @@ if __name__ == "__main__":
             # del data_stats2['nl_mention_array']
             # del data_stats2['full_nl_mention_array']
             # print(json.dumps(data_stats2, indent=4))
-            print(dataset)
+            # print(dataset)
 
             print_stats(data_stats)
             stats.addrow(data_stats, 'Exclusive')

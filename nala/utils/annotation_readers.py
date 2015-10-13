@@ -137,26 +137,33 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
 
     def __merge_pair(self, entities_x, entities_y):
         merged = []
-        for entity_x, entity_y in product(entities_x, entities_y):
-            # if they have the same part_id
-            if entity_x['part'] == entity_y['part']:
-                ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
-                ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+        merged_indices_x = []
+        merged_indices_y = []
 
-                # if they are the same or overlap
-                if ann_x == ann_y:
-                    if self.entity_strategy == 'shortest':
-                        if len(ann_x.text) < len(ann_y.text):
+        for index_x, entity_x in enumerate(entities_x):
+            for index_y, entity_y in enumerate(entities_y):
+                # if they have the same part_id
+                if entity_x['part'] == entity_y['part']\
+                        and index_x not in merged_indices_x and index_y not in merged_indices_y:
+                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+
+                    # if they are the same or overlap
+                    if ann_x == ann_y:
+                        merged_indices_x.append(index_x)
+                        merged_indices_y.append(index_y)
+                        if self.entity_strategy == 'shortest':
+                            if len(ann_x.text) < len(ann_y.text):
+                                merged.append(entity_x)
+                            else:
+                                merged.append(entity_y)
+                        elif self.entity_strategy == 'longest':
+                            if len(ann_x.text) > len(ann_y.text):
+                                merged.append(entity_x)
+                            else:
+                                merged.append(entity_y)
+                        elif self.entity_strategy == 'priority':
                             merged.append(entity_x)
-                        else:
-                            merged.append(entity_y)
-                    elif self.entity_strategy == 'longest':
-                        if len(ann_x.text) > len(ann_y.text):
-                            merged.append(entity_x)
-                        else:
-                            merged.append(entity_y)
-                    elif self.entity_strategy == 'priority':
-                        merged.append(entity_x)
 
         # if the strategy is union
         # append the once that were not overlapping

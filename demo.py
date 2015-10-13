@@ -20,6 +20,36 @@ from nala.learning.crfsuite import CRFSuite
 import nala.utils.db_validation as dbcheck
 from nala.utils.writers import TagTogFormat
 
+
+def print_stats(data_stats):
+    try:
+        fullnr = data_stats['full_nr']
+        abstractnr = data_stats['abstract_nr']
+        totnr = fullnr + abstractnr
+        full_token = data_stats['full_tot_token_nr']
+        abstract_token = data_stats['abstract_tot_token_nr']
+        tot_token = full_token + abstract_token
+        average_abstract_token = abstract_token / abstractnr
+        hypothetical_abstracts_nr = tot_token / average_abstract_token
+
+        format_number_string = "| {:^27} | {:^11} |"
+        format_number_digit = "| {:27} | {:8d}    |"
+        format_number_float = "| {:27} | {:11.2f} |"
+
+        print(format_number_string.format('Property', 'Stat'))
+        print(format_number_digit.format('All documents', totnr))
+        print(format_number_digit.format('Full documents', fullnr))
+        print(format_number_digit.format('Abstract documents', abstractnr))
+        print(format_number_digit.format('Full doc tokens', full_token))
+        print(format_number_digit.format('Abstract doc tokens', abstract_token))
+        print(format_number_digit.format('All tokens', tot_token))
+        print(format_number_float.format('Average tokens per abstract', average_abstract_token))
+        print(format_number_float.format('Hypothetical abstract nr', hypothetical_abstracts_nr))
+        print()
+    except ZeroDivisionError:
+        raise ValueError('no data available')
+
+
 if __name__ == "__main__":
     config_ini_help = 'Configuration file containing the paths to the dataset, annotations and crfsuite executable. ' \
                       'Defaults to config.ini.'
@@ -61,63 +91,53 @@ if __name__ == "__main__":
             dbcheck.main(html_path=html_path, ann_path=ann_path)
             exit()
 
-        dataset = TmVarReader(html_path).read()
+        dataset = HTMLReader(html_path).read()
 
         if not args.quick_nl:
             NLTKSplitter().split(dataset)
             NLTKTokenizer().tokenize(dataset)
 
-        # AnnJsonAnnotationReader(ann_path).annotate(dataset)
+        AnnJsonAnnotationReader(ann_path).annotate(dataset)
+
+        if len(dataset.documents) == 0:
+            raise IndexError('There are no documents in the dataset. Please check file paths.')
 
         # ttformat = TagTogFormat(to_save_to="demo/output/", dataset=dataset, who="user:verspoor")
         # ttformat.export_html()
         # ttformat.export_ann_json()
-        TmVarRegexCombinedSelector().define(dataset)
-        exit()
+        # TmVarRegexCombinedSelector().define(dataset)
+        # exit()
 
         if args.stats_demo:
-            extra_methods = 3
-            start_min_length = 18
-            end_min_length = 36
-            start_counter = start_min_length - extra_methods
+            extra_methods = 2
+            # start_min_length = 18
+            # end_min_length = 36
+            # start_counter = start_min_length - extra_methods
 
-            stats = StatsWriter('csvfile.csv', 'graphfile', init_counter=start_counter)
-
-            # tmvar regex
-            TmVarRegexNLDefiner().define(dataset)
-            tmvarstats = dataset.stats()
-
-            # TODO add param
-            if False:
-                fullnr = tmvarstats['full_nr']
-                abstractnr = tmvarstats['abstract_nr']
-                totnr = fullnr + abstractnr
-                full_token = tmvarstats['full_tot_token_nr']
-                abstract_token = tmvarstats['abstract_tot_token_nr']
-                tot_token = full_token + abstract_token
-                average_abstract_token = abstract_token / abstractnr
-                hypothetical_abstracts_nr = tot_token / average_abstract_token
-
-
-                print("|Property | Stat |\n|-------|-------|")
-                print("|Full documents|", fullnr, "|")
-                print("|Abstract documents|", abstractnr, "|")
-                print("|Full doc tokens|", full_token, "|")
-                print("|Abstract doc tokens|", abstract_token, "|")
-                print("|All tokens|", full_token + abstract_token, "|")
-                print("|Average tokens per abstract|", "{:.2f}".format(average_abstract_token), "|")
-                print("|Hypothetical abstract nr|", "{:.2f}".format(hypothetical_abstracts_nr), "|")
-
-            # for intersection calc
-            tmvarmentions = tmvarstats['nl_mention_array']
-
-            stats.addrow(tmvarstats, 'tmVarRegex')
-            dataset.clean_nl_definitions()
+            stats = StatsWriter('csvfile.csv', 'graphfile', init_counter=0)
 
             # exclusive
             ExclusiveNLDefiner().define(dataset)
-            stats.addrow(dataset.stats(), 'Carsten')
+            data_stats = dataset.stats()
+            print_stats(data_stats)
+            stats.addrow(data_stats, 'Exclusive')
             dataset.clean_nl_definitions()
+
+            # inclusive 18
+            InclusiveNLDefiner().define(dataset)
+            data_stats = dataset.stats()
+            print_stats(data_stats)
+            stats.addrow(data_stats, 'Inclusive_18')
+            dataset.clean_nl_definitions()
+
+            # inclusive 28
+            InclusiveNLDefiner(min_length=28).define(dataset)
+            data_stats = dataset.stats()
+            print_stats(data_stats)
+            stats.addrow(data_stats, 'Inclusive_20')
+            dataset.clean_nl_definitions()
+
+            exit()
 
             # tmvar nl
             TmVarNLDefiner().define(dataset)

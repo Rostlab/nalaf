@@ -282,7 +282,8 @@ class Dataset:
                 mentions_nr += 1
                 mentions_token_nr += token_nr
 
-                if ann.subclass:
+                # TODO make parameterisable to just check for pure nl mentions
+                if ann.subclass == 1 or ann.subclass == 2:
                     # total nr increase
                     nl_nr += 1
                     nl_token_nr += token_nr

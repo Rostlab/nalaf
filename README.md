@@ -25,7 +25,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
     python3 setup.py install
     python3 -m nala.download_corpora
 
- If you want to run the unit tests do (excluing the slow ones):
+ If you want to run the unit tests (excluing the slow ones) do:
 
     python setup.py nosetests -a "!slow"
 

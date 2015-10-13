@@ -3,8 +3,9 @@ import glob
 import json
 import csv
 import os
-from itertools import product, chain
+from itertools import chain
 from functools import reduce
+from operator import lt, gt
 
 from nala.structures.data import Annotation
 from nala.utils import MUT_CLASS_ID
@@ -114,6 +115,10 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         * union: merge not existing entities as well
         """
         self.entity_strategy = entity_strategy
+        if self.entity_strategy == 'shortest':
+            self.operator = lt
+        elif self.entity_strategy == 'longest':
+            self.operator = gt
         """
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
@@ -137,36 +142,44 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
 
     def __merge_pair(self, entities_x, entities_y):
         merged = []
-        merged_indices_x = []
-        merged_indices_y = []
+        merged_indices_x = {}
+        merged_indices_y = {}
 
         for index_x, entity_x in enumerate(entities_x):
             for index_y, entity_y in enumerate(entities_y):
                 # if they have the same part_id
-                if entity_x['part'] == entity_y['part']\
-                        and index_x not in merged_indices_x and index_y not in merged_indices_y:
+                if entity_x['part'] == entity_y['part']:
                     ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
                     ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
 
                     # if they are the same or overlap
                     if ann_x == ann_y:
-                        merged_indices_x.append(index_x)
-                        merged_indices_y.append(index_y)
-                        if self.entity_strategy == 'shortest':
-                            if len(ann_x.text) < len(ann_y.text):
+                        # if neither of them haven't been matched before
+                        if index_x not in merged_indices_x and index_y not in merged_indices_y:
+                            if self.operator(len(ann_x.text), len(ann_y.text)):
                                 merged.append(entity_x)
+                                merged_indices_x[index_x] = len(merged), ann_x
+                                merged_indices_y[index_y] = len(merged), ann_x
                             else:
                                 merged.append(entity_y)
-                        elif self.entity_strategy == 'longest':
-                            if len(ann_x.text) > len(ann_y.text):
-                                merged.append(entity_x)
+                                merged_indices_x[index_x] = len(merged), ann_y
+                                merged_indices_y[index_y] = len(merged), ann_y
+                        # if we already matched them before
+                        else:
+                            # try to see if we have a more suitable match now
+                            if index_x in merged_indices_x:
+                                index, ann_existing = merged_indices_x[index_x]
                             else:
-                                merged.append(entity_y)
-                        elif self.entity_strategy == 'priority':
-                            merged.append(entity_x)
+                                index, ann_existing = merged_indices_y[index_y]
+                            if self.operator(len(ann_x.text), len(ann_y.text)):
+                                ann_new, entity_new = ann_x, entity_x
+                            else:
+                                ann_new, entity_new = ann_y, entity_y
+                            if self.operator(len(ann_new.text), len(ann_existing.text)):
+                                merged[index-1] = entity_new
 
         # if the strategy is union
-        # append the once that were not overlapping
+        # append the ones that are not overlapping with the already merged ones
         if self.strategy == 'union':
             existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
                         for entity in merged]

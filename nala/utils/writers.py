@@ -312,6 +312,7 @@ class TagTogFormat:
                     #     h2.text = part.text
                     # else:
                         # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
+                    # todo if not part.is_abstract with s2p{} instead of s1p{}
                     p = ET.SubElement(div, 'p', { 'id' : "s1p{}".format(i + 1) } )
                     p.text = part.text
 

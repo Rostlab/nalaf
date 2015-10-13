@@ -146,6 +146,17 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
+    def all_annotations_with_ids_and_is_abstract(self):
+        """
+        yields pubmedid, partid, is_abstract and ann through whole dataset
+
+        :rtype: collections.Iterable[(str, str, bool, Annotation)]
+        """
+        for pubmedid, doc in self.documents.items():
+            for partid, part in doc.key_value_parts():
+                for ann in part.annotations:
+                    yield pubmedid, partid, part.is_abstract, ann
+
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
@@ -267,9 +278,9 @@ class Dataset:
         # precompile abstract match
         regex_abstract_id = re.compile(r'^s[12][shp]')
 
-        for pubmedid, partid, ann in self.all_annotations_with_ids():
+        for pubmedid, partid, is_abs, ann in self.all_annotations_with_ids_and_is_abstract():
             # abstract?
-            if regex_abstract_id.match(partid) or partid == 'abstract':
+            if regex_abstract_id.match(partid) or partid == 'abstract' or is_abs:
                 # NOTE added issue #80 for this
                 # print(partid)
                 is_abstract = True
@@ -635,9 +646,10 @@ class Part:
     :type sentences: list[list[Token]]
     :type annotations: list[Annotation]
     :type predicted_annotations: list[Annotation]
+    :type is_abstract: bool
     """
 
-    def __init__(self, text):
+    def __init__(self, text, is_abstract=True):
         self.text = text
         """the original raw text that the part is consisted of"""
         self.sentences = [[]]
@@ -657,6 +669,7 @@ class Part:
         a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
         where the mutation occurs inside
         """
+        self.is_abstract = is_abstract
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
@@ -687,8 +700,8 @@ class Part:
         return iter(self.sentences)
 
     def __repr__(self):
-        return "Part(len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
-            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations))
+        return "Part(is abstract = {abs}, len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
+            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations), abs=self.is_abstract)
 
     def __str__(self):
         annotations_string = "\n".join([str(x) for x in self.annotations])
@@ -700,10 +713,10 @@ class Part:
             pred_annotations_string = "[]"
         if not relations_string:
             relations_string = "[]"
-        return '-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
+        return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
                '-Predicted annotations-\n{pred_annotations}\n' \
                '-Relations-\n{relations}\n'.format(text=self.text, annotations=annotations_string,
-                                      pred_annotations=pred_annotations_string, relations=relations_string)
+                                      pred_annotations=pred_annotations_string, relations=relations_string, abstract=self.is_abstract)
 
     def get_size(self):
         """ just returns number of chars that this part contains """

@@ -280,12 +280,15 @@ class Dataset:
 
         for pubmedid, partid, is_abs, ann in self.all_annotations_with_ids_and_is_abstract():
             # abstract?
-            if regex_abstract_id.match(partid) or partid == 'abstract' or is_abs:
-                # NOTE added issue #80 for this
-                # print(partid)
-                is_abstract = True
-            else:
+            if not is_abs:
                 is_abstract = False
+            else:
+                if regex_abstract_id.match(partid) or partid == 'abstract':
+                # NOTE added issue #80 for this
+                    is_abstract = True
+                else:
+                    is_abstract = False
+
 
             if ann.class_id == MUT_CLASS_ID:
                 # preprocessing
@@ -320,14 +323,38 @@ class Dataset:
         # post-processing for abstract vs full document tokens
         for doc_id, doc in self.documents.items():
             for partid, part in doc.parts.items():
-                if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
-                    # OPTIONAL use nltk or different tokenizer
-                    total_token_abstract += len(part.text.split(" "))
+                if not part.is_abstract:
+                    is_abs = False
+                else:
+                    if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
+                        is_abs = True
+                    else:
+                        is_abs = False
+
+                if len(part.sentences) > 0:
+                        tokens = sum(1 for sublist in part.sentences for _ in sublist)
+                        # print(tokens, len(part.text.split(" ")))
+                else:
+                    tokens = False
+
+                if is_abs:
+                    total_token_full += len(part.text.split(" "))
+                    if doc_id not in full_unique_list:
+                        full_doc_nr += 1
+                        full_unique_list.append(doc_id)
+
+                    if tokens:
+                        total_token_abstract += tokens
+                    else:
+                        total_token_abstract += len(part.text.split(" "))
                     if doc_id not in abstract_unique_list:
                         abstract_doc_nr += 1
                         abstract_unique_list.append(doc_id)
                 else:
-                    total_token_full += len(part.text.split(" "))
+                    if tokens:
+                        total_token_full += tokens
+                    else:
+                        total_token_full += len(part.text.split(" "))
                     if doc_id not in full_unique_list:
                         full_doc_nr += 1
                         full_unique_list.append(doc_id)

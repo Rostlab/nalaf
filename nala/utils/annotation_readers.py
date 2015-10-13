@@ -243,8 +243,9 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                     except KeyError:
                         # TODO: Remove once the tagtog bug is fixed
                         break
-                    part.annotations.append(
-                        Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+                    if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                        part.annotations.append(
+                            Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
             # delete documents with no annotations
             else:
                 del dataset.documents[doc_id]

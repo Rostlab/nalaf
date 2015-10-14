@@ -27,7 +27,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
 
  If you want to run the unit tests (excluding the slow ones) do:
 
-    python3 setup.py nosetests -a "!slow"
+    python3 setup.py nosetests -a '!slow'
 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
 

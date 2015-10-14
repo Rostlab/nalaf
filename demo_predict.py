@@ -50,7 +50,7 @@ if __name__ == "__main__":
     tagger = CRFSuiteMutationTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nala.data', 'default_model'))
     tagger.tag(dataset)
 
-    GNormPlusGeneTagger().tag(dataset)
+    GNormPlusGeneTagger().tag(dataset, uniprot=True)
     RelationshipExtractionGeneMutation().tag(dataset)
 
     PostProcessing().process(dataset)

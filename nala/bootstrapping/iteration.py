@@ -264,7 +264,6 @@ class Iteration():
                                          indent=4, sort_keys=True)
             f.write('Raw-Data:\n{}'.format(subclass_string))
 
-        # optional iteration number
         # optional containing sentence
         # optional containing document-id
         # optional group according to subclass (different sizes)

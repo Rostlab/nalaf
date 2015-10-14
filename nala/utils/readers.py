@@ -44,7 +44,7 @@ class HTMLReader(Reader):
                 document = Document()
 
                 for part in soup.find_all(id=re.compile('^s')):
-                    if re.match(r'^s[2-9]', part['id']):
+                    if re.match(r'^s[3-9]', part['id']):
                         is_abstract = False
                     else:
                         is_abstract = True

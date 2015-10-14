@@ -266,8 +266,8 @@ class Dataset:
         full_doc_nr = 0
 
         # helper lists with unique pubmed ids that were already found
-        abstract_unique_list = []
-        full_unique_list = []
+        abstract_unique_list = set([])
+        full_unique_list = set([])
 
         # nl-docid set
         nl_doc_id_set = { 'empty' }
@@ -326,10 +326,12 @@ class Dataset:
                 if not part.is_abstract:
                     is_abs = False
                 else:
-                    if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
-                        is_abs = True
-                    else:
-                        is_abs = False
+                    is_abs = True
+                    # if not regex_abstract_id.match(partid) and not 'abstract' in partid:
+                    # # if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
+                    #     is_abs = False
+                    # else:
+                    #     is_abs = True
 
                 if len(part.sentences) > 0:
                         tokens = sum(1 for sublist in part.sentences for _ in sublist)
@@ -337,27 +339,24 @@ class Dataset:
                 else:
                     tokens = False
 
-                if is_abs:
-                    total_token_full += len(part.text.split(" "))
-                    if doc_id not in full_unique_list:
-                        full_doc_nr += 1
-                        full_unique_list.append(doc_id)
+                if not is_abs:
+                    full_unique_list.add(doc_id)
+
+                    if tokens:
+                        total_token_full += tokens
+                    else:
+                        total_token_full += len(part.text.split(" "))
+                else:
+                    abstract_unique_list.add(doc_id)
 
                     if tokens:
                         total_token_abstract += tokens
                     else:
                         total_token_abstract += len(part.text.split(" "))
-                    if doc_id not in abstract_unique_list:
-                        abstract_doc_nr += 1
-                        abstract_unique_list.append(doc_id)
-                else:
-                    if tokens:
-                        total_token_full += tokens
-                    else:
-                        total_token_full += len(part.text.split(" "))
-                    if doc_id not in full_unique_list:
-                        full_doc_nr += 1
-                        full_unique_list.append(doc_id)
+
+        abstract_unique_list = abstract_unique_list.difference(full_unique_list)
+        abstract_doc_nr = len(abstract_unique_list)
+        full_doc_nr = len(full_unique_list)
 
         report_dict = {
             'nl_mention_nr': nl_nr,

@@ -1,3 +1,4 @@
+from itertools import chain
 from xml.etree import ElementTree as ET
 import requests
 from nala.structures.data import Document, Part
@@ -74,8 +75,10 @@ class DownloadArticle(Cacheable):
     created by downloading the articles associated with the pmid.
     """
 
-    def __init__(self):
+    def __init__(self, one_part=False):
         super().__init__()
+        self.one_part = one_part
+        """whether to put everything (title, abstract, etc.) under the same part joined with new line"""
         self.pubmed_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
     def download(self, pmids):
@@ -89,15 +92,20 @@ class DownloadArticle(Cacheable):
                 self.cache[pmid] = text
 
             doc = Document()
-            counter = 0
 
-            # for now only include title and abstract
-            for elem in xml.findall('.//ArticleTitle'):
-                doc.parts['part_{}'.format(counter)] = Part(elem.text)
-                counter += 1
-            for elem in xml.findall('.//AbstractText'):
-                doc.parts['part_{}'.format(counter)] = Part(elem.text)
-                counter += 1
+            if self.one_part:
+                joined_text = '\n'.join(element.text for element in
+                                        chain(xml.findall('.//ArticleTitle'), xml.findall('.//AbstractText')))
+                doc.parts['title_and_abstract'] = Part(joined_text)
+            else:
+                counter = 0
+                # for now only include title and abstract
+                for elem in xml.findall('.//ArticleTitle'):
+                    doc.parts['part_{}'.format(counter)] = Part(elem.text)
+                    counter += 1
+                for elem in xml.findall('.//AbstractText'):
+                    doc.parts['part_{}'.format(counter)] = Part(elem.text)
+                    counter += 1
 
             # yield the document but only if you found anything
             if len(doc.parts) > 0:

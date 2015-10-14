@@ -1,3 +1,4 @@
+import configparser
 from unittest import TestCase
 from nala.learning.taggers import GNormPlusGeneTagger, RelationshipExtractionGeneMutation
 from nala.bootstrapping.iteration import Iteration
@@ -5,19 +6,30 @@ from nose.plugins.attrib import attr
 import os
 from nala.utils import PRO_REL_MUT_CLASS_ID, UNIPROT_ID, ENTREZ_GENE_ID
 from nala.utils.writers import TagTogFormat
+import argparse
 
 
 @attr('slow')
 class TestIteration(TestCase):
     def test_learning(self):
-        iteration = Iteration(iteration_nr=1, crfsuite_path=r'crfsuite')
+        config = configparser.ConfigParser()
+
+        config.read_file(r'nala/config.ini')
+
+        html_path = config.get('paths', 'html_path')
+        ann_path = config.get('paths', 'ann_path')
+        crf_path = config.get('paths', 'crf_path')
+        bstrap_path = config.get('paths', 'bstrap_path')
+
+
+        iteration = Iteration(iteration_nr=1, crfsuite_path=r'/usr/local/')
         # iteration.before_annotation(nr_new_docs=5)
         # iteration.after_annotation()
 
         # iteration.learning()
-        # iteration.docselection(nr=5)
+        iteration.docselection(nr=5)
         # print(len(iteration.candidates.documents))
-        # iteration.tagging()
+        iteration.tagging()
         # print("\n\n\n\n\n\nPREDICTION\n\n\n\n\n")
         # for ann in iteration.candidates.predicted_annotations():
         #     print(ann)

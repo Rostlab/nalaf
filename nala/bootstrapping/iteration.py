@@ -176,9 +176,9 @@ class Iteration():
         dataset = Dataset()
         with DocumentSelectorPipeline(
                 pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)],
-                                      document_filters=[KeywordsDocumentFilter(), HighRecallRegexDocumentFilter(
+                                      document_filters=[KeywordsDocumentFilter(), HighRecallRegexDocumentFilter(crfsuite_path=self.crfsuite_path,
                                           binary_model=os.path.join(self.current_folder, 'bin_model'),
-                                      expected_max_results=nr)]) as dsp:
+                                          expected_max_results=nr)]) as dsp:
             for pmid, document in dsp.execute():
                 dataset.documents[pmid] = document
                 # if we have generated enough documents stop

@@ -12,24 +12,24 @@ import argparse
 @attr('slow')
 class TestIteration(TestCase):
     def test_learning(self):
-        config = configparser.ConfigParser()
+        # config = configparser.ConfigParser()
 
-        config.read_file(r'nala/config.ini')
+        # config.read_file('config.ini')
+        #
+        # html_path = config.get('paths', 'html_path')
+        # ann_path = config.get('paths', 'ann_path')
+        # crf_path = config.get('paths', 'crf_path')
+        # bstrap_path = config.get('paths', 'bstrap_path')
 
-        html_path = config.get('paths', 'html_path')
-        ann_path = config.get('paths', 'ann_path')
-        crf_path = config.get('paths', 'crf_path')
-        bstrap_path = config.get('paths', 'bstrap_path')
 
-
-        iteration = Iteration(iteration_nr=1, crfsuite_path=r'/usr/local/')
-        # iteration.before_annotation(nr_new_docs=5)
+        iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=1)
+        iteration.before_annotation(nr_new_docs=10)
         # iteration.after_annotation()
 
         # iteration.learning()
-        iteration.docselection(nr=5)
+        # iteration.docselection(nr=5)
         # print(len(iteration.candidates.documents))
-        iteration.tagging()
+        # iteration.tagging()
         # print("\n\n\n\n\n\nPREDICTION\n\n\n\n\n")
         # for ann in iteration.candidates.predicted_annotations():
         #     print(ann)

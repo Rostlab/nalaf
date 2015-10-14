@@ -73,7 +73,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
     tmVar will be used in early stages and discarded as soon as there are no more results, thus gets a parameter.
     """
-    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file_name=None):
+    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file_name=None, crfsuite_path=None):
         self.location_binary_model = binary_model
         """ location where binary model for nala (crfsuite) is saved """
         self.override_cache=override_cache
@@ -81,6 +81,8 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         this option allows to force requesting results from tmVar online """
         self.expected_maximum_results=expected_max_results
         """ :returns maximum of [x] documents (can be less if not found) """
+        self.crfsuite_path=crfsuite_path
+        """ crfsuite path"""
         # read in nl_patterns
         if not pattern_file_name:
             pattern_file_name = pkg_resources.resource_filename('nala.data', 'dict_nl_words.json')
@@ -91,7 +93,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents, min_found=10):
+    def filter(self, documents, min_found=3):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
@@ -112,8 +114,9 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
         _i_array = [0, 0]
 
         last_found = 0
-        crfsuite = CRFSuite(r'crfsuite')
-        crfsuitetagger = CRFSuiteMutationTagger(['e_2'], crf_suite=crfsuite, model_file=self.location_binary_model)
+        if self.crfsuite_path:
+            crfsuite = CRFSuite(self.crfsuite_path)
+            crfsuitetagger = CRFSuiteMutationTagger(['e_2'], crf_suite=crfsuite, model_file=self.location_binary_model)
         for pmid, doc in documents:
             # if any part of the document contains any of the keywords
             # yield that document
@@ -123,9 +126,10 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             data_nala = deepcopy(data_tmp)
             NLTKSplitter().split(data_tmp)
             data_tmvar = TmVarTagger().generate_abstracts([pmid])
-            PrepareDatasetPipeline().execute(data_nala)
-            crfsuitetagger.tag(data_nala)
-            PostProcessing().process(data_nala)
+            if self.crfsuite_path:
+                PrepareDatasetPipeline().execute(data_nala)
+                crfsuitetagger.tag(data_nala)
+                PostProcessing().process(data_nala)
             positive_sentences = 0
             for i, x in enumerate(doc.parts):
                 # print("Part", i)
@@ -167,26 +171,39 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
                         if match:
                             if pmid in data_tmvar.documents:
                                 anti_doc = data_tmvar.documents.get(pmid)
-                                nala_doc = data_nala.documents.get(pmid)
+                                if self.crfsuite_path:
+                                    nala_doc = data_nala.documents.get(pmid)
                                 start = part_offset + sent_offset + match.span()[0]
                                 end = part_offset + sent_offset + match.span()[1]
-                                print("sweeet")
-                                print(not anti_doc.overlaps_with_mention(start, end))
-                                print(not nala_doc.overlaps_with_mention(start, end, annotated=False))
-                                if not anti_doc.overlaps_with_mention(start,
-                                                                      end) \
-                                        and not nala_doc.overlaps_with_mention(start, end, annotated=False):
-                                    _e_result = exclusive_definer.define_string(
-                                        new_text[match.span()[0]:match.span()[1]])
-                                    _e_array[_e_result] += 1
-                                    _i_result = inclusive_definer.define_string(
-                                        new_text[match.span()[0]:match.span()[1]])
-                                    _i_array[_i_result] += 1
-                                    # todo write to file param + saving to manually annotate and find tp + fp for performance eval on each pattern
-                                    # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                # print("TmVar is not overlapping?:", not anti_doc.overlaps_with_mention(start, end))
+                                # print(not nala_doc.overlaps_with_mention(start, end, annotated=False))
+                                if self.crfsuite_path:
+                                    if not anti_doc.overlaps_with_mention(start,
+                                                                          end) \
+                                            and not nala_doc.overlaps_with_mention(start, end, annotated=False):
+                                        _e_result = exclusive_definer.define_string(
+                                            new_text[match.span()[0]:match.span()[1]])
+                                        _e_array[_e_result] += 1
+                                        _i_result = inclusive_definer.define_string(
+                                            new_text[match.span()[0]:match.span()[1]])
+                                        _i_array[_i_result] += 1
+                                        # todo write to file param + saving to manually annotate and find tp + fp for performance eval on each pattern
+                                        # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
 
-                                    last_found += 1
-                                    found_in_sentence = True
+                                        last_found += 1
+                                        found_in_sentence = True
+                                else:
+                                    if not anti_doc.overlaps_with_mention(start, end):
+                                        _e_result = exclusive_definer.define_string(
+                                            new_text[match.span()[0]:match.span()[1]])
+                                        _e_array[_e_result] += 1
+                                        _i_result = inclusive_definer.define_string(
+                                            new_text[match.span()[0]:match.span()[1]])
+                                        _i_array[_i_result] += 1
+                                        # todo write to file param + saving to manually annotate and find tp + fp for performance eval on each pattern
+                                        # print("e{}\ti{}\t{}\t{}\t{}\n".format(_e_result, _i_result, sent, match, reg.pattern))
+                                        last_found += 1
+                                        found_in_sentence = True
 
                         if _lasttime - time.time() > 1:
                             print(i)
@@ -202,11 +219,12 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             _time_progressed = time.time() - _timestart
             _time_per_doc = _time_progressed / _progress
             print_verbose("PROGRESS: {:.2f} secs ETA per one positive document: {:.2f} secs".format(_time_progressed, _time_per_doc))
-
             if positive_sentences > min_found:
                 last_found = 0
                 print_verbose('YEP')
+                print('Found')
                 yield pmid, doc
             else:
                 print_verbose(pmid, "contains either no or only a few suitable annotations")
                 print_verbose('NOPE')
+                print('Not Found')

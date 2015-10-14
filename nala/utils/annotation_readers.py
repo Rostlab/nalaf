@@ -1,9 +1,13 @@
 import abc
 import glob
 import json
-from nala.structures.data import Annotation
 import csv
 import os
+from itertools import chain
+from functools import reduce
+from operator import lt, gt
+
+from nala.structures.data import Annotation
 from nala.utils import MUT_CLASS_ID
 
 
@@ -45,7 +49,6 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         :type dataset: nala.structures.data.Dataset
         """
-        from nala.utils import MUT_CLASS_ID
         for filename in glob.glob(str(self.directory + "/*.ann.json")):
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
@@ -112,6 +115,12 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         * union: merge not existing entities as well
         """
         self.entity_strategy = entity_strategy
+        if self.entity_strategy == 'shortest':
+            self.operator = lt
+        elif self.entity_strategy == 'longest':
+            self.operator = gt
+        elif self.entity_strategy != 'priority':
+            raise ValueError('entity_strategy must be "shortest" or "longest" or "priority"')
         """
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
@@ -131,59 +140,115 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             annotators = self.priority
         else:
             annotators = os.listdir(self.directory)
-        AnnJsonAnnotationReader(os.path.join(self.directory, annotators[0]), delete_incomplete_docs=False).annotate(dataset)
+        self.__merge(dataset, annotators)
 
-        for annotator in annotators[1:]:
-            self.__merge_annotations_into_dataset(dataset, os.path.join(self.directory, annotator))
+    def __append_union(self, merged, entities_x, entities_y):
+        # if the strategy is union
+        # append the ones that are not overlapping with the already merged ones
+        if self.strategy == 'union':
+            existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                        for entity in merged]
+            for entity in chain(entities_x, entities_y):
+                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                if ann not in existing:
+                    merged.append(entity)
 
-        # remove duplicates that might have been added
-        # in the case when one ann spans across several others
-        if self.entity_strategy == 'longest':
-            Annotation.equality_operator = 'exact'
-            for part in dataset.parts():
-                to_be_removed = []
-                parsed = []
-                for index, ann in enumerate(part.annotations):
-                    if ann in parsed:
-                        to_be_removed.append(index)
-                    else:
-                        parsed.append(ann)
-                part.annotations = [ann for index, ann in enumerate(part.annotations) if index not in to_be_removed]
+    def __merge_priority(self, entities_x, entities_y):
+        merged = []
+        merged_indices_x = []
+        merged_indices_y = []
 
-        # delete documents that after the merging have no annotations at all
-        dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
-                             if sum(len(part.annotations) for part in doc.parts.values()) > 0}
+        for index_x, entity_x in enumerate(entities_x):
+            for index_y, entity_y in enumerate(entities_y):
+                if entity_x['part'] == entity_y['part']:
+                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
 
-    def __merge_annotations_into_dataset(self, dataset, annotations_directory):
-        for doc_id, document in dataset.documents.items():
-            # either once or zero times
-            for filename in glob.glob(os.path.join(annotations_directory, '*{}*.ann.json'.format(doc_id))):
-                with open(filename, 'r', encoding='utf-8') as file:
-                    ann_json = json.load(file)
-                    if ann_json['anncomplete']:
-                        for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
-                                try:
-                                    for index, existing_ann in enumerate(document.parts[entity['part']].annotations):
-                                        Annotation.equality_operator = 'overlapping'
-                                        if ann == existing_ann:
-                                            if self.entity_strategy == 'shortest':
-                                                if len(ann.text) < len(existing_ann.text):
-                                                    document.parts[entity['part']].annotations[index] = ann
-                                            elif self.entity_strategy == 'longest':
-                                                if len(ann.text) > len(existing_ann.text):
-                                                    document.parts[entity['part']].annotations[index] = ann
-                                            elif self.entity_strategy != 'priority':
-                                                raise ValueError('entity_strategy must be "shortest", "longest" or "priority"')
+                    # if they are the same or overlap
+                    # use the first once since that one has higher priority
+                    if ann_x == ann_y:
+                        if index_x not in merged_indices_x and index_y not in merged_indices_y:
+                            merged_indices_x.append(index_x)
+                            merged_indices_y.append(index_y)
+                            merged.append(entity_x)
 
-                                    # annotations not in original dataset
-                                    # include only if the strategy is union
-                                    Annotation.equality_operator = 'exact_or_overlapping'
-                                    if self.strategy == 'union' and ann not in document.parts[entity['part']].annotations:
-                                        document.parts[entity['part']].annotations.append(ann)
-                                except KeyError:
-                                    pass
+        self.__append_union(merged, entities_x, entities_y)
+        return merged
+
+    def __merge_pair(self, entities_x, entities_y):
+        merged = []
+        merged_indices_x = {}
+        merged_indices_y = {}
+
+        for index_x, entity_x in enumerate(entities_x):
+            for index_y, entity_y in enumerate(entities_y):
+                # if they have the same part_id
+                if entity_x['part'] == entity_y['part']:
+                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+
+                    # if they are the same or overlap
+                    if ann_x == ann_y:
+                        # if neither of them haven't been matched before
+                        if index_x not in merged_indices_x and index_y not in merged_indices_y:
+                            if self.operator(len(ann_x.text), len(ann_y.text)):
+                                merged.append(entity_x)
+                                merged_indices_x[index_x] = len(merged), ann_x
+                                merged_indices_y[index_y] = len(merged), ann_x
+                            else:
+                                merged.append(entity_y)
+                                merged_indices_x[index_x] = len(merged), ann_y
+                                merged_indices_y[index_y] = len(merged), ann_y
+                        # if we already matched them before
+                        else:
+                            # try to see if we have a more suitable match now
+                            if index_x in merged_indices_x:
+                                index, ann_existing = merged_indices_x[index_x]
+                            else:
+                                index, ann_existing = merged_indices_y[index_y]
+                            if self.operator(len(ann_x.text), len(ann_y.text)):
+                                ann_new, entity_new = ann_x, entity_x
+                            else:
+                                ann_new, entity_new = ann_y, entity_y
+                            if self.operator(len(ann_new.text), len(ann_existing.text)):
+                                merged[index-1] = entity_new
+
+        self.__append_union(merged, entities_x, entities_y)
+        return merged
+
+    def __merge(self, dataset, annotators):
+        for doc_id, doc in dataset.documents.items():
+            annotator_entities = {}
+            # find the annotations that are marked complete by any annotator
+            for annotator in annotators:
+                # either once or zero times
+                for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
+                    with open(filename, 'r', encoding='utf-8') as file:
+                        ann_json = json.load(file)
+                        if ann_json['anncomplete']:
+                            annotator_entities[annotator] = ann_json['entities']
+
+            # if there is at least once set of annotations
+            if len(annotator_entities) > 0:
+                Annotation.equality_operator = 'exact_or_overlapping'
+                if self.entity_strategy == 'priority':
+                    merged = reduce(self.__merge_priority, [annotator_entities[x] for x in self.priority
+                                                            if x in annotator_entities])
+                else:
+                    merged = reduce(self.__merge_pair, annotator_entities.values())
+
+                for entity in merged:
+                    try:
+                        part = doc.parts[entity['part']]
+                    except KeyError:
+                        # TODO: Remove once the tagtog bug is fixed
+                        break
+                    if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                        part.annotations.append(
+                            Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+            # delete documents with no annotations
+            else:
+                del dataset.documents[doc_id]
 
 
 class SETHAnnotationReader(AnnotationReader):

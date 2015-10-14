@@ -25,9 +25,9 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
     python3 setup.py install
     python3 -m nala.download_corpora
 
- If you want to run the unit tests do:
+ If you want to run the unit tests (excluing the slow ones) do:
 
-    python3 setup.py test
+    python setup.py nosetests -a "!slow"
 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
 
@@ -36,6 +36,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
 # Examples
 Run either:
 * `demo_predict.py` for a simple example how to use NALA just for prediction with a pre-trained model
+    * `python3 demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -p 15878741 12625412`
     * `python3 demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -s "This is c.A1003G an example"`
     * `python3 demo_predict.py -c [PATH TO DIR WITH CRFSUITE] -d example.txt`
 * `demo.py` for an advanced example of the complete pipeline including training, testing and prediction. For options see:

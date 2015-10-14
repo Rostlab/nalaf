@@ -73,7 +73,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
 
     tmVar will be used in early stages and discarded as soon as there are no more results, thus gets a parameter.
     """
-    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=5, pattern_file_name=None, crfsuite_path=None):
+    def __init__(self, binary_model="nala/data/default_model", override_cache=False, expected_max_results=10, pattern_file_name=None, crfsuite_path=None):
         self.location_binary_model = binary_model
         """ location where binary model for nala (crfsuite) is saved """
         self.override_cache=override_cache
@@ -93,7 +93,7 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents, min_found=3):
+    def filter(self, documents, min_found=10):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """

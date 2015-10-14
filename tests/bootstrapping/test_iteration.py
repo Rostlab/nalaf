@@ -23,8 +23,8 @@ class TestIteration(TestCase):
 
 
         iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=1)
-        iteration.before_annotation(nr_new_docs=10)
-        # iteration.after_annotation()
+        # iteration.before_annotation(nr_new_docs=10)
+        iteration.after_annotation()
 
         # iteration.learning()
         # iteration.docselection(nr=5)

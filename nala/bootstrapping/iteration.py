@@ -222,7 +222,7 @@ class Iteration():
         results = MentionLevelEvaluator().evaluate(self.reviewed)
         with open(self.stats_file, 'a') as f:
             f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-                list(str(r) for r in results))))
+                list(str(r) for r in results)), self.threshold_val))
 
         # debug results / annotations
         results = []

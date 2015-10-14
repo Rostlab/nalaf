@@ -70,7 +70,7 @@ class Iteration():
         self.train = None  # first
         self.candidates = None  # non predicted docselected
         self.predicted = None  # predicted docselected
-        self.crf = CRFSuite(crfsuite_path, minify=True)
+        self.crf = CRFSuite(self.crfsuite_path, minify=True)
 
         # discussion on config file in bootstrapping root or iteration_n check for n
         # note currently using parameter .. i think that s the most suitable
@@ -98,6 +98,9 @@ class Iteration():
         self.current_folder = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number))
         self.candidates_folder = os.path.join(self.current_folder, 'candidates')
         self.reviewed_folder = os.path.join(self.current_folder, 'reviewed')
+
+        if not os.path.exists(os.path.join(self.current_folder)):
+            os.mkdir(os.path.join(self.current_folder))
 
         # stats file
         self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
@@ -147,7 +150,7 @@ class Iteration():
         # generate features etc.
         pipeline = PrepareDatasetPipeline()
         pipeline.execute(self.train)
-        pipeline.serialize(self.train, to_file=self.debug_file)
+        # pipeline.serialize(self.train, to_file=self.debug_file)
 
         BIEOLabeler().label(self.train)
         print_verbose(len(self.train.documents), "documents are prepared for training dataset.")
@@ -155,6 +158,7 @@ class Iteration():
         # crfsuite part
         self.crf.create_input_file(self.train, 'train')
         self.crf.learn()
+
         shutil.copyfile(os.path.join(self.crfsuite_path, 'default_model'),
                         os.path.join(self.current_folder, 'bin_model'))
 
@@ -264,7 +268,6 @@ class Iteration():
                                          indent=4, sort_keys=True)
             f.write('Raw-Data:\n{}'.format(subclass_string))
 
-        # optional iteration number
         # optional containing sentence
         # optional containing document-id
         # optional group according to subclass (different sizes)

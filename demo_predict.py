@@ -1,18 +1,19 @@
 import argparse
 import os
-from nala.utils.readers import TextFilesReader
+
+import pkg_resources
+
+from nala.utils.readers import TextFilesReader, PMIDReader
 from nala.utils.readers import StringReader
 from nala.utils.writers import ConsoleWriter
 from nala.structures.dataset_pipelines import PrepareDatasetPipeline
 from nala.learning.crfsuite import CRFSuite
-import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID
 from nala.learning.taggers import GNormPlusGeneTagger
 from nala.learning.taggers import RelationshipExtractionGeneMutation
-
-
 from nala.learning.postprocessing import PostProcessing
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A simple demo for using the nala pipeline for prediction')
@@ -30,10 +31,13 @@ if __name__ == "__main__":
 
     group.add_argument('-s', '--string', help='string you want to predict for')
     group.add_argument('-d', '--dir_or_file', help='directory or file you want to predict for')
+    group.add_argument('-p', '--pmids', nargs='+', help='a single PMID or a list of PMIDs separated by space')
     args = parser.parse_args()
 
     if args.string:
         dataset = StringReader(args.string).read()
+    elif args.pmids:
+        dataset = PMIDReader(args.pmids).read()
     elif os.path.exists(args.dir_or_file):
         dataset = TextFilesReader(args.dir_or_file).read()
     else:
@@ -46,7 +50,7 @@ if __name__ == "__main__":
     tagger = CRFSuiteMutationTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nala.data', 'default_model'))
     tagger.tag(dataset)
 
-    GNormPlusGeneTagger().tag(dataset)
+    GNormPlusGeneTagger().tag(dataset, uniprot=True)
     RelationshipExtractionGeneMutation().tag(dataset)
 
     PostProcessing().process(dataset)

@@ -1,8 +1,10 @@
 import argparse
 import configparser
 import json
+import os
 import sys
 import math
+from nala.bootstrapping.iteration import Iteration
 
 from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
 from nala.preprocessing.spliters import NLTKSplitter
@@ -94,6 +96,7 @@ if __name__ == "__main__":
     html_path = [path to the directory containing the articles in html format]
     ann_path = [path to the directory containing the annotations of the articles in ann.json format]
     crf_path = [path to the directory containing the crfsuite executable]
+    bstrap_path = [path to the directory containing the bootstrapping]
     """
 
     config_checkdb_help = """
@@ -105,11 +108,22 @@ if __name__ == "__main__":
     Generate a graph for several NL Definitions.
     """
 
+    config_iteration_bool_help="""
+    Bootstrapping module running on default folder: [resources/bootstrapping] .
+    Otherwise the folder from the config files is used under "bstrap_path".
+    With Iteration Nr starting automatically. can be specified via -i or --iteration-number.
+    """
+
+    config_iteration_number_help= "Manual assignment of number of Iteration"
+
     parser = argparse.ArgumentParser(description='A simple demo of using the nala pipeline')
     parser.add_argument('-c', '--config', type=argparse.FileType('r'), help=config_ini_help, default='config.ini')
     parser.add_argument('-db', '--check-db', action='store_true', help=config_checkdb_help)
     parser.add_argument('--stats-demo', action='store_true', help=config_stats_demo_help)
     parser.add_argument('-qnl', '--quick-nl', action='store_true', help='Quick Run w/o tokenizer, labeler and crfsuite')
+    parser.add_argument('--iteration', action='store_true', help=config_iteration_bool_help)
+    parser.add_argument('-i', '--iteration-number', type=int, help=config_iteration_number_help)
+    parser.add_argument('--reviewed', action='store_true', help="Manual Annotation was done and saved into reviewed folder")
     args = parser.parse_args()
 
     config = configparser.ConfigParser()
@@ -119,10 +133,31 @@ if __name__ == "__main__":
         html_path = config.get('paths', 'html_path')
         ann_path = config.get('paths', 'ann_path')
         crf_path = config.get('paths', 'crf_path')
+        bstrap_path = config.get('paths', 'bstrap_path')
 
         # if only to check db then do that...
         if args.check_db:
             dbcheck.main(html_path=html_path, ann_path=ann_path)
+            exit()
+
+        if args.iteration:
+            if bstrap_path:
+                bootstrapping_path = bstrap_path
+            else:
+                bootstrapping_path = 'resources/bootstrapping'
+            bootstrapping_path = os.path.abspath(bootstrapping_path)
+
+            if args.iteration_number:
+                iteration = Iteration(folder=bootstrapping_path, iteration_nr=args.iteration_number,
+                                      crfsuite_path=crf_path)
+            else:
+                iteration = Iteration(folder=bootstrapping_path, crfsuite_path=crf_path)
+
+            if args.reviewed:
+                iteration.after_annotation()
+            else:
+                iteration.before_annotation()
+
             exit()
 
         dataset = HTMLReader(html_path).read()
@@ -199,8 +234,6 @@ if __name__ == "__main__":
 
             # finally generation of graph itself
             stats.makegraph()
-
-        # TmVarRegexNLDefiner().define(dataset)
 
         if not args.quick_nl:
             print("Labeling")

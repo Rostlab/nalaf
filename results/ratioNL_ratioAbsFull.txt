@@ -130,65 +130,65 @@ Verspoor corpus
 Exclusive
 |           Property           |      Stat      |
 |             DOCS             |                |
-| All documents                |       20       |
-| Abstract documents           |       10       |
+| All documents                |       10       |
+| Abstract documents           |        0       |
 | Full documents               |       10       |
-| Hypothetical abstract nr     |      151.40920 |
+| Hypothetical abstract nr     |      142.72995 |
 |            TOKENS            |                |
-| All tokens                   |    51358       |
+| All tokens                   |    48414       |
 | Abstract doc tokens          |     3392       |
-| Full doc tokens              |    47966       |
+| Full doc tokens              |    45022       |
 | Average tokens per abstract  |      339.20000 |
 |           RatioNL            |                |
 | RatioNL                      |        0.28595 |
 | Number of NL mentions        |      171       |
 | Number of All mentions       |      598       |
 |      RatioAbstractFull       |                |
-| RatioAbstractFull            |        1.85361 |
+| RatioAbstractFull            |        1.73984 |
 | Abstract tokens(NL / All)    |        0.02860 |
-| Full tokens(NL / All)        |        0.01543 |
+| Full tokens(NL / All)        |        0.01644 |
 
 Inclusive 18
 |           Property           |      Stat      |
 |             DOCS             |                |
-| All documents                |       20       |
-| Abstract documents           |       10       |
+| All documents                |       10       |
+| Abstract documents           |        0       |
 | Full documents               |       10       |
-| Hypothetical abstract nr     |      151.40920 |
+| Hypothetical abstract nr     |      142.72995 |
 |            TOKENS            |                |
-| All tokens                   |    51358       |
+| All tokens                   |    48414       |
 | Abstract doc tokens          |     3392       |
-| Full doc tokens              |    47966       |
+| Full doc tokens              |    45022       |
 | Average tokens per abstract  |      339.20000 |
 |           RatioNL            |                |
 | RatioNL                      |        0.12876 |
 | Number of NL mentions        |       77       |
 | Number of All mentions       |      598       |
 |      RatioAbstractFull       |                |
-| RatioAbstractFull            |        1.85455 |
+| RatioAbstractFull            |        1.74072 |
 | Abstract tokens(NL / All)    |        0.02123 |
-| Full tokens(NL / All)        |        0.01145 |
+| Full tokens(NL / All)        |        0.01219 |
 
 Inclusive 28
 |           Property           |      Stat      |
 |             DOCS             |                |
-| All documents                |       20       |
-| Abstract documents           |       10       |
+| All documents                |       10       |
+| Abstract documents           |        0       |
 | Full documents               |       10       |
-| Hypothetical abstract nr     |      151.40920 |
+| Hypothetical abstract nr     |      142.72995 |
 |            TOKENS            |                |
-| All tokens                   |    51358       |
+| All tokens                   |    48414       |
 | Abstract doc tokens          |     3392       |
-| Full doc tokens              |    47966       |
+| Full doc tokens              |    45022       |
 | Average tokens per abstract  |      339.20000 |
 |           RatioNL            |                |
 | RatioNL                      |        0.09532 |
 | Number of NL mentions        |       57       |
 | Number of All mentions       |      598       |
 |      RatioAbstractFull       |                |
-| RatioAbstractFull            |        2.19902 |
+| RatioAbstractFull            |        2.06405 |
 | Abstract tokens(NL / All)    |        0.02123 |
-| Full tokens(NL / All)        |        0.00965 |
+| Full tokens(NL / All)        |        0.01028 |
 
 tmVar corpus
 Exclusive

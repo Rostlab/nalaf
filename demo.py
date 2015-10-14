@@ -24,64 +24,64 @@ from nala.utils.writers import TagTogFormat
 
 
 def print_stats(data_stats):
-    try:
-        abstractnr = data_stats['abstract_nr']
-        fullnr = data_stats['full_nr']
-        totnr = fullnr + abstractnr
+    abstractnr = data_stats['abstract_nr']
+    fullnr = data_stats['full_nr']
+    totnr = fullnr + abstractnr
 
-        abstract_token = data_stats['abstract_tot_token_nr']
-        full_token = data_stats['full_tot_token_nr']
-        tot_token = full_token + abstract_token
+    abstract_token = data_stats['abstract_tot_token_nr']
+    full_token = data_stats['full_tot_token_nr']
+    tot_token = full_token + abstract_token
 
+    if abstractnr == 0:
+        average_abstract_token = abstract_token / totnr
+    else:
         average_abstract_token = abstract_token / abstractnr
-        hypothetical_abstracts_nr = tot_token / average_abstract_token
+    hypothetical_abstracts_nr = tot_token / average_abstract_token
 
-        nl_mention_nr = data_stats['nl_mention_nr']
-        tot_mention_nr = data_stats['tot_mention_nr']
-        rationl = nl_mention_nr / tot_mention_nr
+    nl_mention_nr = data_stats['nl_mention_nr']
+    tot_mention_nr = data_stats['tot_mention_nr']
+    rationl = nl_mention_nr / tot_mention_nr
 
-        abstract_nl_mention_nr = data_stats['abstract_nl_token_nr']
-        nl_norm_abstract = abstract_nl_mention_nr / abstract_token
-        try:
-            full_nl_mention_nr = data_stats['full_nl_token_nr']
-            nl_norm_full = full_nl_mention_nr / full_token
-            ratio_abstract_full = nl_norm_abstract / nl_norm_full
-        except ZeroDivisionError:
-            ratio_abstract_full = 0
-            nl_norm_full = 0
-
-        format_number_string = "| {:^28} | {:^14} |"
-        format_number_digit = "| {:28} | {:8d}       |"
-        format_number_float = "| {:28} | {:14.5f} |"
-
-        print(format_number_string.format('Property', 'Stat'))
-
-        print(format_number_string.format('DOCS',''))
-        print(format_number_digit.format('All documents', totnr))
-        print(format_number_digit.format('Abstract documents', abstractnr))
-        print(format_number_digit.format('Full documents', fullnr))
-        print(format_number_float.format('Hypothetical abstract nr', hypothetical_abstracts_nr))
-
-        print(format_number_string.format('TOKENS',''))
-        print(format_number_digit.format('All tokens', tot_token))
-        print(format_number_digit.format('Abstract doc tokens', abstract_token))
-        print(format_number_digit.format('Full doc tokens', full_token))
-        print(format_number_float.format('Average tokens per abstract', average_abstract_token))
-
-        print(format_number_string.format('RatioNL',''))
-        print(format_number_float.format('RatioNL', rationl))
-        print(format_number_digit.format('Number of NL mentions', nl_mention_nr))
-        print(format_number_digit.format('Number of All mentions', tot_mention_nr))
-
-        print(format_number_string.format('RatioAbstractFull',''))
-        print(format_number_float.format('RatioAbstractFull', ratio_abstract_full))
-        print(format_number_float.format('Abstract tokens(NL / All)', nl_norm_abstract))
-        print(format_number_float.
-              format('Full tokens(NL / All)', nl_norm_full))
-
-        print()
+    abstract_nl_mention_nr = data_stats['abstract_nl_token_nr']
+    nl_norm_abstract = abstract_nl_mention_nr / abstract_token
+    try:
+        full_nl_mention_nr = data_stats['full_nl_token_nr']
+        nl_norm_full = full_nl_mention_nr / full_token
+        ratio_abstract_full = nl_norm_abstract / nl_norm_full
     except ZeroDivisionError:
-        raise ValueError('no data available')
+        ratio_abstract_full = 0
+        nl_norm_full = 0
+
+    format_number_string = "| {:^28} | {:^14} |"
+    format_number_digit = "| {:28} | {:8d}       |"
+    format_number_float = "| {:28} | {:14.5f} |"
+
+    print(format_number_string.format('Property', 'Stat'))
+
+    print(format_number_string.format('DOCS',''))
+    print(format_number_digit.format('All documents', totnr))
+    print(format_number_digit.format('Abstract documents', abstractnr))
+    print(format_number_digit.format('Full documents', fullnr))
+    print(format_number_float.format('Hypothetical abstract nr', hypothetical_abstracts_nr))
+
+    print(format_number_string.format('TOKENS',''))
+    print(format_number_digit.format('All tokens', tot_token))
+    print(format_number_digit.format('Abstract doc tokens', abstract_token))
+    print(format_number_digit.format('Full doc tokens', full_token))
+    print(format_number_float.format('Average tokens per abstract', average_abstract_token))
+
+    print(format_number_string.format('RatioNL',''))
+    print(format_number_float.format('RatioNL', rationl))
+    print(format_number_digit.format('Number of NL mentions', nl_mention_nr))
+    print(format_number_digit.format('Number of All mentions', tot_mention_nr))
+
+    print(format_number_string.format('RatioAbstractFull',''))
+    print(format_number_float.format('RatioAbstractFull', ratio_abstract_full))
+    print(format_number_float.format('Abstract tokens(NL / All)', nl_norm_abstract))
+    print(format_number_float.
+          format('Full tokens(NL / All)', nl_norm_full))
+
+    print()
 
 
 if __name__ == "__main__":

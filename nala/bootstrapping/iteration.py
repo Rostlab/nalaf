@@ -150,7 +150,7 @@ class Iteration():
         # generate features etc.
         pipeline = PrepareDatasetPipeline()
         pipeline.execute(self.train)
-        # pipeline.serialize(self.train, to_file=self.debug_file)
+        pipeline.serialize(self.train, to_file=self.debug_file)
 
         BIEOLabeler().label(self.train)
         print_verbose(len(self.train.documents), "documents are prepared for training dataset.")
@@ -192,10 +192,6 @@ class Iteration():
         PrepareDatasetPipeline().execute(self.candidates)
         CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
-
-        # export candidates to candidates folder'
-        if not os.path.exists(self.current_folder):
-            os.mkdir(self.current_folder)
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()

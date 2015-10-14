@@ -37,7 +37,7 @@ class CRFSuite:
         else:
             key_string = lambda key: key
 
-        with open('%s/%s' % (self.directory, mode), 'w', encoding='utf-8') as file:
+        with open(os.path.join(self.directory, mode), 'w', encoding='utf-8') as file:
             for sentence in dataset.sentences():
                 for token in sentence:
                     features = '\t'.join(['{}={}'.format(key_string(key), str(value).replace(':', '_COLON_'))

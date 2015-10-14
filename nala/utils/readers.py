@@ -1,5 +1,6 @@
 import abc
 from bs4 import BeautifulSoup
+from nala.bootstrapping.utils import DownloadArticle
 from nala.structures.data import Dataset, Document, Part, Annotation
 import re
 import glob
@@ -400,4 +401,27 @@ class TextFilesReader(Reader):
             else:
                 raise Exception('not a .txt file extension')
 
+        return dataset
+
+
+class PMIDReader(Reader):
+    """
+    Reads in a single PMID or a list of PMIDs,
+    downloads the associated articles (including title and abstract)
+    and creates a dataset with one document per PMID.
+    """
+    def __init__(self, pmids):
+        if hasattr(pmids, '__iter__'):
+            self.pmids = pmids
+        else:
+            self.pmids = [pmids]
+
+    def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
+        dataset = Dataset()
+        with DownloadArticle(one_part=True) as da:
+            for pmid, doc in da.download(self.pmids):
+                dataset.documents[pmid] = doc
         return dataset

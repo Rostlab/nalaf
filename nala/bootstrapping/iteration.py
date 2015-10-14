@@ -302,9 +302,13 @@ class Iteration():
             self.crf.tag('-m default_model -i test > output.txt')
             self.crf.read_predictions(test)
 
-            results = MentionLevelEvaluator().evaluate(test)
-
             with open(cv_file, 'a') as file:
+                results = MentionLevelEvaluator(strictness='exact').evaluate(test)
+                file.write('fold {} '
+                           'tp:{:4} fp:{:4} fn:{:4} '
+                           'fp_overlap:{:4} fn_overlap:{:4} '
+                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
+                results = MentionLevelEvaluator(strictness='overlapping').evaluate(test)
                 file.write('fold {} '
                            'tp:{:4} fp:{:4} fn:{:4} '
                            'fp_overlap:{:4} fn_overlap:{:4} '

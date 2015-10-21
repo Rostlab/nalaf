@@ -34,11 +34,14 @@ if __name__ == "__main__":
     group.add_argument('-p', '--pmids', nargs='+', help='a single PMID or a list of PMIDs separated by space')
     args = parser.parse_args()
 
+    warning = 'Due to a dependence on GNormPlus, running nala with -s and -d switches might take a long time.'
     if args.string:
+        print(warning)
         dataset = StringReader(args.string).read()
     elif args.pmids:
         dataset = PMIDReader(args.pmids).read()
     elif os.path.exists(args.dir_or_file):
+        print(warning)
         dataset = TextFilesReader(args.dir_or_file).read()
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))

@@ -215,7 +215,7 @@ class PubTatorFormat:
                 f.write("{0}|t|{title}\n".format(pid, title=doc.get_title()))
                 f.write("{0}|a|{text}\n".format(pid, text=doc.get_body()))
                 for part in doc:
-                    for ann in part.annotations:
+                    for ann in chain(part.annotations, part.predicted_annotations):
                         f.write("{0}\t{start}\t{end}\t{text}\t{classid}\n".format(pid, start=ann.offset,
                                                                                   end=ann.offset + len(ann.text),
                                                                                   text=ann.text, classid=ann.class_id))

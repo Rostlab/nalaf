@@ -1,11 +1,12 @@
 import abc
 from bs4 import BeautifulSoup
 from nala.bootstrapping.utils import DownloadArticle
-from nala.structures.data import Dataset, Document, Part, Annotation
+from nala.structures.data import Dataset, Document, Part, Entity, Relation
 import re
 import glob
 import csv
 import os
+import json
 from nala.utils import MUT_CLASS_ID
 
 
@@ -266,14 +267,14 @@ class VerspoorReader(Reader):
                             print(pmid, serial, paragraph, start, to_correct_off, id)
 
                         if entity_type == 'mutation':
-                            ann = Annotation(MUT_CLASS_ID, int(start) - to_correct_off, row[2])
+                            ann = Entity(MUT_CLASS_ID, int(start) - to_correct_off, row[2])
                             # try:
                             dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
                             # except KeyError:
                             #     dataset.documents[pmid].parts[simple_id_h + properid_h].annotations.append(ann)
 
                         elif entity_type == 'gene':
-                            ann = Annotation('e_1', int(start) - to_correct_off, row[2])
+                            ann = Entity('e_1', int(start) - to_correct_off, row[2])
                             # try:
                             dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
                             # except KeyError:
@@ -327,7 +328,7 @@ class TmVarReader(Reader):
                 line = next(file)
                 while line != '\n' and line != '':
                     _, start, end, text, *_ = line.split('\t')
-                    document.parts['abstract'].annotations.append(Annotation(MUT_CLASS_ID, int(start), text))
+                    document.parts['abstract'].annotations.append(Entity(MUT_CLASS_ID, int(start), text))
                     try:
                         oldline = line
                         line = next(file)

@@ -2,7 +2,7 @@ import abc
 import re
 from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
-from nala.structures.data import Annotation, Relation
+from nala.structures.data import Entity, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
@@ -109,7 +109,7 @@ class GNormPlusGeneTagger(Tagger):
                         if gene[2] in part.text and last_index < gene[0] < part_index:
                             start = gene[0] - last_index
                             # todo discussion which confidence value for gnormplus because there is no value supplied
-                            ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
+                            ann = Entity(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
                             try:
                                 norm_dict = {
                                     ENTREZ_GENE_ID: gene[3],

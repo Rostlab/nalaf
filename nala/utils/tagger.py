@@ -3,7 +3,7 @@ import json
 import requests
 import os
 from nala import print_debug
-from nala.structures.data import Dataset, Document, Part, Annotation
+from nala.structures.data import Dataset, Document, Part, Entity
 
 # todo major refactor to learning/taggers class
 class Tagger():
@@ -84,7 +84,7 @@ class TmVarTagger(Tagger):
                 denotations = tm_var[doc_id]['denotations']
                 annotations = []
                 for deno in denotations:
-                    ann = Annotation(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
+                    ann = Entity(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
                     annotations.append(ann)
                     # note should the annotations from tmvar go to predicted_annotations or annotations?
                 part.annotations = annotations

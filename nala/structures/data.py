@@ -188,7 +188,7 @@ class Dataset:
                             index += 1
                         end = token.start + len(token.word)
                         confidence = aggregator_function(confidence_values)
-                        part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
+                        part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
 
     def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
@@ -597,8 +597,8 @@ class Document:
         :param end: index of last char (offset of last char in whole document)
         """
         print_verbose('Searching for overlap with a mention.')
-        Annotation.equality_operator = 'exact_or_overlapping'
-        query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
+        Entity.equality_operator = 'exact_or_overlapping'
+        query_ann = Entity(class_id='', offset=start, text=(end - start + 1) * 'X')
         print_debug(query_ann)
         offset = 0
         for part in self.parts.values():
@@ -606,7 +606,7 @@ class Document:
                         query_ann.offset + len(query_ann.text), 'params(start, end) =',
                         "({0}, {1})".format(start, end))
             for ann in part.annotations:
-                offset_corrected_ann = Annotation(class_id='', offset=ann.offset + offset, text=ann.text)
+                offset_corrected_ann = Entity(class_id='', offset=ann.offset + offset, text=ann.text)
                 if offset_corrected_ann == query_ann:
                     print_verbose('Found annotation:', ann)
                     return True
@@ -807,7 +807,7 @@ class FeatureDictionary(dict):
             dict.__setitem__(self, key, value)
 
 
-class Annotation:
+class Entity:
     """
     Represent a single annotation, that is denotes a span of text which represents some entitity.
 
@@ -848,7 +848,7 @@ class Annotation:
         norm_string = ''
         if self.normalisation_dict:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
-        return 'Annotation(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
+        return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
                'Text: "{self.text}", SubClass: {self.subclass}, ' \
                'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
 

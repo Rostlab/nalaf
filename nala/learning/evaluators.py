@@ -1,5 +1,5 @@
 import abc
-from nala.structures.data import Annotation
+from nala.structures.data import Entity
 from nala import print_verbose, print_debug
 
 
@@ -91,7 +91,7 @@ class MentionLevelEvaluator(Evaluator):
                     overlap_subclass_real = {subclass: [] for subclass in subclasses}
                     overlap_subclass_predicted = {subclass: [] for subclass in subclasses}
 
-                Annotation.equality_operator = 'exact'
+                Entity.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
                     if ann in part.annotations:
                         tp += 1
@@ -108,7 +108,7 @@ class MentionLevelEvaluator(Evaluator):
                         if self.subclass_analysis:
                             subclass_counts[ann.subclass]['fn'] += 1
 
-                Annotation.equality_operator = 'overlapping'
+                Entity.equality_operator = 'overlapping'
                 for ann_a in part.annotations:
                     for ann_b in part.predicted_annotations:
                         if ann_a == ann_b:
@@ -119,7 +119,7 @@ class MentionLevelEvaluator(Evaluator):
                                 overlap_subclass_real[ann_a.subclass].append(ann_a)
                                 overlap_subclass_predicted[ann_b.subclass].append(ann_b)
 
-                Annotation.equality_operator = 'exact'
+                Entity.equality_operator = 'exact'
                 fp_overlap += sum(1 for ann in part.predicted_annotations if ann in overlap_predicted)
                 fn_overlap += sum(1 for ann in part.annotations if ann in overlap_real)
 

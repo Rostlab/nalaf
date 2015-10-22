@@ -1,5 +1,5 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, Label, Annotation
+from nala.structures.data import Dataset, Document, Part, Token, Label, Entity
 from nala.utils import MUT_CLASS_ID
 from nala.preprocessing.spliters import NLTKSplitter
 # from preprocessing.tokenizers import TmVarTokenizer
@@ -21,8 +21,8 @@ class TestDataset(unittest.TestCase):
 
         part1 = Part('123')
         part2 = Part('45678')
-        ann1 = Annotation(class_id='e_2', offset=1, text='2', confidence=0)
-        ann2 = Annotation(class_id='e_2', offset=1, text='567', confidence=1)
+        ann1 = Entity(class_id='e_2', offset=1, text='2', confidence=0)
+        ann2 = Entity(class_id='e_2', offset=1, text='567', confidence=1)
         ann1.subclass = 0
         ann2.subclass = 2
         part1.annotations.append(ann1)
@@ -112,7 +112,7 @@ class TestFeatureDictionary(unittest.TestCase):
         pass  # TODO
 
 
-class TestAnnotation(unittest.TestCase):
+class TestEntity(unittest.TestCase):
     def test_init(self):
         pass  # TODO
 

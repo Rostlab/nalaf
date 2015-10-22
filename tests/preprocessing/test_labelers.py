@@ -1,5 +1,5 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, Annotation
+from nala.structures.data import Dataset, Document, Part, Token, Entity
 from nala.utils.readers import StringReader
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import TmVarTokenizer
@@ -13,8 +13,8 @@ class TestLabelers(unittest.TestCase):
         NLTKSplitter().split(self.dataset)
         TmVarTokenizer().tokenize(self.dataset)
         part = list(self.dataset.parts())[0]
-        part.annotations.append(Annotation(MUT_CLASS_ID, 15, 'c.2708_2711delTTAG'))
-        part.annotations.append(Annotation(MUT_CLASS_ID, 35, 'p.V903GfsX905'))
+        part.annotations.append(Entity(MUT_CLASS_ID, 15, 'c.2708_2711delTTAG'))
+        part.annotations.append(Entity(MUT_CLASS_ID, 35, 'p.V903GfsX905'))
 
     def test_bio_labeler(self):
         BIOLabeler().label(self.dataset)

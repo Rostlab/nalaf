@@ -21,7 +21,7 @@ from nala.preprocessing.definers import ExclusiveNLDefiner
 import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
-from nala.structures.data import Annotation
+from nala.structures.data import Entity
 
 
 class Iteration():
@@ -238,8 +238,8 @@ class Iteration():
                     if pred in not_found_pred:
                         index = not_found_pred.index(pred)
                         del not_found_pred[index]
-            results += [(ann, Annotation(class_id='e_2', offset=-1, text='')) for ann in not_found_ann]
-            results += [(Annotation(class_id='e_2', offset=-1, text=''), pred) for pred in not_found_pred]
+            results += [(ann, Entity(class_id='e_2', offset=-1, text='')) for ann in not_found_ann]
+            results += [(Entity(class_id='e_2', offset=-1, text=''), pred) for pred in not_found_pred]
 
         annotated_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.annotations()))) + "}"
         predicted_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.predicted_annotations()))) + "}"
@@ -313,4 +313,3 @@ class Iteration():
                            'tp:{:4} fp:{:4} fn:{:4} '
                            'fp_overlap:{:4} fn_overlap:{:4} '
                            'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
-

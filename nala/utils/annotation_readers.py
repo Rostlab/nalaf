@@ -7,7 +7,7 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
-from nala.structures.data import Annotation
+from nala.structures.data import Entity
 from nala.utils import MUT_CLASS_ID
 
 
@@ -65,11 +65,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
                                 # if it is predicted put it in predicted_annotations else in annotations
                                 if self.is_predicted:
-                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                    ann = Entity(entity['classId'], entity['offsets'][0]['start'],
                                                      entity['offsets'][0]['text'], entity['confidence']['prob'])
                                     document.parts[entity['part']].predicted_annotations.append(ann)
                                 else:
-                                    ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                    ann = Entity(entity['classId'], entity['offsets'][0]['start'],
                                                      entity['offsets'][0]['text'])
                                     document.parts[entity['part']].annotations.append(ann)
                     elif self.delete_incomplete_docs:
@@ -77,7 +77,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     elif self.is_predicted:  # anncomplete=False, delete_incomplete_docs=False, is_predicted=True
                         for entity in ann_json['entities']:
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Annotation(entity['classId'], entity['offsets'][0]['start'],
+                                ann = Entity(entity['classId'], entity['offsets'][0]['start'],
                                                  entity['offsets'][0]['text'], entity['confidence']['prob'])
                                 document.parts[entity['part']].predicted_annotations.append(ann)
                 except KeyError:
@@ -146,10 +146,10 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         # if the strategy is union
         # append the ones that are not overlapping with the already merged ones
         if self.strategy == 'union':
-            existing = [Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+            existing = [Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
                         for entity in merged]
             for entity in chain(entities_x, entities_y):
-                ann = Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
+                ann = Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text'])
                 if ann not in existing:
                     merged.append(entity)
 
@@ -161,8 +161,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         for index_x, entity_x in enumerate(entities_x):
             for index_y, entity_y in enumerate(entities_y):
                 if entity_x['part'] == entity_y['part']:
-                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
-                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+                    ann_x = Entity(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Entity(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
 
                     # if they are the same or overlap
                     # use the first once since that one has higher priority
@@ -184,8 +184,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             for index_y, entity_y in enumerate(entities_y):
                 # if they have the same part_id
                 if entity_x['part'] == entity_y['part']:
-                    ann_x = Annotation(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
-                    ann_y = Annotation(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
+                    ann_x = Entity(entity_x['classId'], entity_x['offsets'][0]['start'], entity_x['offsets'][0]['text'])
+                    ann_y = Entity(entity_y['classId'], entity_y['offsets'][0]['start'], entity_y['offsets'][0]['text'])
 
                     # if they are the same or overlap
                     if ann_x == ann_y:
@@ -230,7 +230,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
 
             # if there is at least once set of annotations
             if len(annotator_entities) > 0:
-                Annotation.equality_operator = 'exact_or_overlapping'
+                Entity.equality_operator = 'exact_or_overlapping'
                 if self.entity_strategy == 'priority':
                     merged = reduce(self.__merge_priority, [annotator_entities[x] for x in self.priority
                                                             if x in annotator_entities])
@@ -245,7 +245,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                         break
                     if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
                         part.annotations.append(
-                            Annotation(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+                            Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
             # delete documents with no annotations
             else:
                 del dataset.documents[doc_id]
@@ -291,8 +291,8 @@ class SETHAnnotationReader(AnnotationReader):
                         entity_type, start, end = row[1].split()
 
                         if entity_type == 'SNP' or entity_type == 'RS':
-                            ann = Annotation(MUT_CLASS_ID, start, row[2])
+                            ann = Entity(MUT_CLASS_ID, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
                         elif entity_type == 'Gene':
-                            ann = Annotation('e_1', start, row[2])
+                            ann = Entity('e_1', start, row[2])
                             document.parts['abstract'].annotations.append(ann)

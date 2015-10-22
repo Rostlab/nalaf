@@ -42,7 +42,7 @@ class HTMLReader(Reader):
         filelist = glob.glob(str(self.directory + "/*.html"))
         for filename in filelist:
             with open(filename, 'rb') as file:
-                soup = BeautifulSoup(file)
+                soup = BeautifulSoup(file, 'lxml')
                 document = Document()
 
                 for part in soup.find_all(id=re.compile('^s')):

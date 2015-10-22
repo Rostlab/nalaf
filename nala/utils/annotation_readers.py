@@ -7,7 +7,7 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
-from nala.structures.data import Entity
+from nala.structures.data import Entity, Relation
 from nala.utils import MUT_CLASS_ID
 
 
@@ -35,7 +35,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False):
+    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False, read_relations=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_just_mutations = read_just_mutations
@@ -44,6 +44,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """whether to delete documents from the dataset that are not marked as 'anncomplete'"""
         self.is_predicted = is_predicted
         """whether the annotation is predicted or real, which determines where it will be saved"""
+        self.read_relations = read_relations
+        """whether relations should be read as well"""
 
     def annotate(self, dataset):
         """
@@ -60,9 +62,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
-                    if ann_json['anncomplete']:
+                    if ann_json['anncomplete'] or not ann_json['anncomplete']:
                         for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                            # Removed 'entity['classId'] == MUT_CLASS_ID', so there is no restriction on entities
+                            # if read_just_mutations is False
+                            if not self.read_just_mutations:
                                 # if it is predicted put it in predicted_annotations else in annotations
                                 if self.is_predicted:
                                     ann = Entity(entity['classId'], entity['offsets'][0]['start'],
@@ -72,6 +76,16 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                     ann = Entity(entity['classId'], entity['offsets'][0]['start'],
                                                      entity['offsets'][0]['text'])
                                     document.parts[entity['part']].annotations.append(ann)
+                        if self.read_relations:
+                            for relation in ann_json['relations']:
+                                part = document.parts[relation['entities'][0].split('|')[0]]
+                                e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
+                                e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
+                                e1_end = int(relation['entities'][0].split('|')[1].split(',')[1])
+                                e2_end = int(relation['entities'][1].split('|')[1].split(',')[1])
+                                e1_text = part.text[e1_start:e1_end]
+                                e2_text = part.text[e2_start:e2_end]
+                                part.relations.append(Relation(e1_start, e2_start, e1_text, e2_text, relation['classId']))
                     elif self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
                     elif self.is_predicted:  # anncomplete=False, delete_incomplete_docs=False, is_predicted=True

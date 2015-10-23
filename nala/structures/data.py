@@ -535,6 +535,16 @@ class Document:
 
         return set(mentions)
 
+    def get_unique_relations(self):
+        """:return: set of all relations (ignoring the text offset and
+        considering only the relation text)"""
+        relations = []
+        for part in self:
+            for rel in part.relations:
+                relations.append(rel.get_relation_without_offset())
+
+        return set(relations)
+
     def relations(self):
         """  helper function for providing an iterator of relations on document level """
         for part in self.parts.values():
@@ -695,6 +705,8 @@ class Part:
         a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
         where the mutation occurs inside
         """
+        self.predicted_relations = []
+        """a list of predicted relations as populated by a call to form_predicted_relations()"""
         self.is_abstract = is_abstract
 
     def get_sentence_string_array(self):
@@ -726,23 +738,35 @@ class Part:
         return iter(self.sentences)
 
     def __repr__(self):
-        return "Part(is abstract = {abs}, len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
-            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations), abs=self.is_abstract)
+        return "Part(is abstract = {abs}, len(sentences) = {sl}, ' \
+        'len(anns) = {al}, len(pred anns) = {pl}, ' \
+        'len(rels) = {rl}, len(pred rels) = {prl}, ' \
+        'text = \"{self.text}\")".format(
+            self=self, sl=len(self.sentences),
+            al=len(self.annotations), pl=len(self.predicted_annotations),
+            rl=len(self.relations), prl=len(self.predicted_relations),
+            abs=self.is_abstract)
 
     def __str__(self):
         annotations_string = "\n".join([str(x) for x in self.annotations])
         pred_annotations_string = "\n".join([str(x) for x in self.predicted_annotations])
         relations_string = "\n".join([str(x) for x in self.relations])
+        pred_relations_string = "\n".join([str(x) for x in self.predicted_relations])
         if not annotations_string:
             annotations_string = "[]"
         if not pred_annotations_string:
             pred_annotations_string = "[]"
         if not relations_string:
             relations_string = "[]"
+        if not pred_relations_string:
+            pred_relations_string = "[]"
         return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
                '-Predicted annotations-\n{pred_annotations}\n' \
-               '-Relations-\n{relations}\n'.format(text=self.text, annotations=annotations_string,
-                                      pred_annotations=pred_annotations_string, relations=relations_string, abstract=self.is_abstract)
+               '-Relations-\n{relations}\n' \
+               '-Predicted relations-{pred_relations}'.format(
+                        text=self.text, annotations=annotations_string,
+                        pred_annotations=pred_annotations_string, relations=relations_string,
+                        pred_relations=pred_relations_string, abstract=self.is_abstract)
 
     def get_size(self):
         """ just returns number of chars that this part contains """
@@ -809,7 +833,7 @@ class FeatureDictionary(dict):
 
 class Entity:
     """
-    Represent a single annotation, that is denotes a span of text which represents some entitity.
+    Represent a single annotation, that is denotes a span of text which represents some entity.
 
     :type class_id: str
     :type offset: int
@@ -911,6 +935,10 @@ class Relation:
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
                'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
+
+    def get_relation_without_offset(self):
+        """:return string with entity1 and entity2 separated by relation type"""
+        return self.text1 + '--' + self.class_id + '--' + self.text2
 
     def validate_itself(self, part):
         """

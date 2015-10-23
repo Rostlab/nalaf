@@ -37,11 +37,11 @@ class Tagger(Annotator):
 
     Optionally the implementation may perform normalization of the predicted entities.
     In that case:
-    * set the meta attribute performs_normalization = True
+    * set the meta attribute does_normalization = True
     * set the meta attribute normalization_database
     * set the fields normalized_id and normalized text for each Annotation object you create
 
-    :type performs_normalization: bool
+    :type does_normalization: bool
     :type normalization_database: str
     :type predicts_classes: list[str]
     """
@@ -49,7 +49,7 @@ class Tagger(Annotator):
     # todo change normalizazion_database to normalise option
     def __init__(self, predicts_classes):
         super().__init__(predicts_classes)
-        self.performs_normalization = False
+        self.does_normalization = False
         """whether this tagger also performs normalization"""
         self.normalization_database = ''
         """additional info about the normalization database, e.g. URL"""
@@ -77,7 +77,7 @@ class RelationExtractor(Annotator):
     * Append new items to the list field "predicted_relations" of each Part in the dataset
     * Set the meta_attribute predicts_classes
 
-    :type performs_normalization: bool
+    :type does_normalization: bool
     :type normalization_database: str
     :type predicts_classes: list[str]
     """

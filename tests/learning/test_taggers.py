@@ -1,11 +1,11 @@
 import unittest
 from nose.plugins.attrib import attr
-from nala.learning.taggers import RelationshipExtractionGeneMutation
+from nala.learning.taggers import SameSentenceRelationExtractorStub
 from nala.structures.data import *
 from nala.learning.taggers import GNormPlusGeneTagger
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.preprocessing.tokenizers import TmVarTokenizer
-from nala.utils import PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID
+from nala.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
 
 
 @attr('slow')
@@ -35,7 +35,7 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
         # CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
         NLTKSplitter().split(self.data)
         TmVarTokenizer().tokenize(self.data)
-        RelationshipExtractionGeneMutation().tag(self.data)
+        SameSentenceRelationExtractorStub(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID).tag(self.data)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == PRO_CLASS_ID]), 7)
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 2)
         self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 3)

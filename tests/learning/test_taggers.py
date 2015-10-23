@@ -44,7 +44,7 @@ class TestGNormPlusGeneTagger(unittest.TestCase):
         del self.data.documents['15878741'].parts['abstract'].annotations[0]
         self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 1)
         self.data.purge_false_relationships()
-        self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 1)
+        self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 0)
 
 if __name__ == '__main__':
     unittest.main()

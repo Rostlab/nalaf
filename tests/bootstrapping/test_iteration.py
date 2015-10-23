@@ -22,11 +22,11 @@ class TestIteration(TestCase):
         # bstrap_path = config.get('paths', 'bstrap_path')
 
 
-        iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=2)
+        # iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=2)
         # iteration.before_annotation(nr_new_docs=10)
         # iteration.after_annotation()
 
-        iteration.cross_validation(5)
+        # iteration.cross_validation(5)
 
         # iteration.learning()
         # iteration.docselection(nr=5)
@@ -38,6 +38,7 @@ class TestIteration(TestCase):
 
         # iteration.manual_review_import()
         # iteration.evaluation()
+        pass
 
     def test_init(self):
         iteration = Iteration(iteration_nr=1, crfsuite_path=r'crfsuite')

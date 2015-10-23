@@ -6,7 +6,23 @@ from nala.structures.data import Entity, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
-class Tagger:
+class Annotator:
+    """
+    Abstract class for Entity tagging or Relationship tagging.
+    This forms a hierarchy, where Tagger and RelationExtractor are abstract
+    subclasses of Annotator
+
+    Any Named Entity Recognizer should inherit from the class Tagger, and
+    should:
+    * Be named [Name]Tagger
+    * Implement the abstract method tag
+    """
+    def __init__(self, predicts_classes):
+        self.predicts_classes = predicts_classes
+        """a list of class IDs that this tagger can predict"""
+
+
+class Tagger(Annotator):
     """
     Abstract class for tagging a dataset with predicted annotations.
 
@@ -32,12 +48,43 @@ class Tagger:
 
     # todo change normalizazion_database to normalise option
     def __init__(self, predicts_classes):
+        super().__init__(predicts_classes)
         self.performs_normalization = False
         """whether this tagger also performs normalization"""
         self.normalization_database = ''
         """additional info about the normalization database, e.g. URL"""
-        self.predicts_classes = predicts_classes
-        """a list of class IDs that this tagger can predict"""
+
+    @abc.abstractmethod
+    def tag(self, dataset):
+        """
+        :type dataset: nala.structures.data.Dataset
+        """
+        pass
+
+
+class RelationExtractor(Annotator):
+    """
+    Abstract class for tagging a dataset with predicted relations between
+    entities.
+
+    Subclasses that inherit this class should:
+    * Be named [Name]RelationExtractor
+    * Implement the abstract method annotate
+    * Use some sort of model or service to generate predictions
+        * If you only want to read in predictions already saved in ann.json
+          use AnnJsonAnnotationReader with _is_predicted = True
+        * This will not only read the entities, but also the relations
+    * Append new items to the list field "predicted_relations" of each Part in the dataset
+    * Set the meta_attribute predicts_classes
+
+    :type performs_normalization: bool
+    :type normalization_database: str
+    :type predicts_classes: list[str]
+    """
+    def __init__(self, predicts_classes, relation_type):
+        super().__init__(predicts_classes)
+        self.relation_type = relation_type
+        """the type of relation between the two entiies in predicts_classes"""
 
     @abc.abstractmethod
     def tag(self, dataset):
@@ -127,9 +174,9 @@ class GNormPlusGeneTagger(Tagger):
                                 part.predicted_annotations.append(ann)
 
 
-class RelationshipExtractionGeneMutation(Tagger):
+class RelationshipExtractionGeneMutation(RelationExtractor):
     def __init__(self):
-        super().__init__([PRO_REL_MUT_CLASS_ID])
+        super().__init__([PRO_CLASS_ID, MUT_CLASS_ID], PRO_REL_MUT_CLASS_ID)
 
     def tag(self, dataset):
         from itertools import product

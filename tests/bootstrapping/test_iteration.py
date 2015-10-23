@@ -44,6 +44,6 @@ class TestIteration(TestCase):
         # self.assertEqual(iteration.number, 2)
         iteration.manual_review_import()
         # print(iteration.reviewed)
-        GNormPlusGeneTagger([PRO_REL_MUT_CLASS_ID]).tag(iteration.reviewed, uniprot=True)
-        SameSentenceRelationExtractorStub(UNIPROT_ID, ENTREZ_GENE_ID, PRO_REL_MUT_CLASS_ID).tag(iteration.reviewed)
+        GNormPlusGeneTagger().tag(iteration.reviewed, uniprot=True)
+        SameSentenceRelationExtractorStub().tag(iteration.reviewed)
         TagTogFormat(iteration.reviewed, to_save_to='flowers').export(0.8)

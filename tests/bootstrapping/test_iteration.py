@@ -1,6 +1,6 @@
 import configparser
 from unittest import TestCase
-from nala.learning.taggers import GNormPlusGeneTagger, RelationshipExtractionGeneMutation
+from nala.learning.taggers import GNormPlusGeneTagger, SameSentenceRelationExtractorStub
 from nala.bootstrapping.iteration import Iteration
 from nose.plugins.attrib import attr
 import os
@@ -45,5 +45,5 @@ class TestIteration(TestCase):
         iteration.manual_review_import()
         # print(iteration.reviewed)
         GNormPlusGeneTagger([PRO_REL_MUT_CLASS_ID]).tag(iteration.reviewed, uniprot=True)
-        RelationshipExtractionGeneMutation([UNIPROT_ID, ENTREZ_GENE_ID]).tag(iteration.reviewed)
+        SameSentenceRelationExtractorStub(UNIPROT_ID, ENTREZ_GENE_ID, PRO_REL_MUT_CLASS_ID).tag(iteration.reviewed)
         TagTogFormat(iteration.reviewed, to_save_to='flowers').export(0.8)

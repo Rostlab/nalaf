@@ -62,7 +62,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
-                    if ann_json['anncomplete'] or not ann_json['anncomplete']:
+                    if ann_json['anncomplete']:
                         for entity in ann_json['entities']:
                             # Removed 'entity['classId'] == MUT_CLASS_ID', so there is no restriction on entities
                             # if read_just_mutations is False

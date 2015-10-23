@@ -81,8 +81,11 @@ class RelationExtractor(Annotator):
     :type normalization_database: str
     :type predicts_classes: list[str]
     """
-    def __init__(self, predicts_classes, relation_type):
-        super().__init__(predicts_classes)
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        self.entity1_class = entity1_class
+        """class id of the first entity"""
+        self.entity2_class = entity2_class
+        """class id of the second entity"""
         self.relation_type = relation_type
         """the type of relation between the two entiies in predicts_classes"""
 
@@ -174,16 +177,16 @@ class GNormPlusGeneTagger(Tagger):
                                 part.predicted_annotations.append(ann)
 
 
-class RelationshipExtractionGeneMutation(RelationExtractor):
+class SameSentenceRelationExtractorStub(RelationExtractor):
     def __init__(self):
-        super().__init__([PRO_CLASS_ID, MUT_CLASS_ID], PRO_REL_MUT_CLASS_ID)
+        super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
 
     def tag(self, dataset):
         from itertools import product
         for part in dataset.parts():
             for ann_1, ann_2 in product(
-                    (ann for ann in part.predicted_annotations if ann.class_id == MUT_CLASS_ID),
-                    (ann for ann in part.predicted_annotations if ann.class_id == PRO_CLASS_ID)):
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
                     part.relations.append(
                         Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))

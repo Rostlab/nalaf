@@ -22,6 +22,7 @@ import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
 from nala.structures.data import Annotation
+from nala.learning.taggers import GNormPlusGeneTagger
 
 
 class Iteration():
@@ -192,6 +193,8 @@ class Iteration():
         PrepareDatasetPipeline().execute(self.candidates)
         CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
+
+        GNormPlusGeneTagger().tag(self.candidates)
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()

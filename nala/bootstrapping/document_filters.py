@@ -12,6 +12,7 @@ from nala.preprocessing.definers import InclusiveNLDefiner
 from nala.preprocessing.definers import ExclusiveNLDefiner
 from nala.preprocessing.spliters import NLTKSplitter
 from nala.structures.data import Dataset
+from nala.utils.cache import Cacheable
 from nala.utils.readers import TmVarReader
 from nala.utils.tagger import TmVarTagger
 from nala.structures.dataset_pipelines import PrepareDatasetPipeline
@@ -61,7 +62,7 @@ class KeywordsDocumentFilter(DocumentFilter):
                 yield pmid, doc
 
 
-class ManualDocumentFilter(DocumentFilter):
+class ManualDocumentFilter(DocumentFilter, Cacheable):
     """
     Displays each document to the user on the standard console.
     The user inputs Yes/No as standard input to accept or reject the document.
@@ -71,9 +72,14 @@ class ManualDocumentFilter(DocumentFilter):
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
         for pmid, doc in documents:
-            answer = input('{}\nDo you accept this document?\n'.
-                           format('\n'.join(part.text for part in doc.parts.values())))
-            if answer.lower() in ['yes', 'y']:
+            # if we can't find it in the cache
+            # ask the user and save it to the cache
+            if pmid not in self.cache:
+                answer = input('{}\nDo you accept this document?\n'.
+                               format('\n'.join(part.text for part in doc.parts.values())))
+                self.cache[pmid] = answer.lower() in ['yes', 'y']
+
+            if self.cache[pmid]:
                 yield pmid, doc
 
 

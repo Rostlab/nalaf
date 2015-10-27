@@ -4,7 +4,7 @@ import json
 import os
 import re
 import shutil
-from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter
+from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter, ManualDocumentFilter
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
@@ -179,7 +179,7 @@ class Iteration():
                 pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)],
                                       document_filters=[KeywordsDocumentFilter(), HighRecallRegexDocumentFilter(crfsuite_path=self.crfsuite_path,
                                           binary_model=os.path.join(self.current_folder, 'bin_model'),
-                                          expected_max_results=nr)]) as dsp:
+                                          expected_max_results=nr), ManualDocumentFilter()]) as dsp:
             for pmid, document in dsp.execute():
                 dataset.documents[pmid] = document
                 # if we have generated enough documents stop

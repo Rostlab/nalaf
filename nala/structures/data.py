@@ -707,6 +707,8 @@ class Part:
         """
         self.predicted_relations = []
         """a list of predicted relations as populated by a call to form_predicted_relations()"""
+        self.edges = []
+        """a list of possible relations between any two entities in the part"""
         self.is_abstract = is_abstract
 
     def get_sentence_string_array(self):
@@ -720,7 +722,6 @@ class Part:
                 else:
                     return self.sentences
             return_array.append(new_sentence.rstrip())  # to delete last space
-        print(return_array)
         return return_array
 
     def get_sentence_index_for_annotation(self, annotation):
@@ -728,7 +729,7 @@ class Part:
         end = annotation.offset + len(annotation.text)
         for index, sentence in enumerate(self.sentences):
             for token in sentence:
-                if start <= token.start < token.end <= end:
+                if start <= token.start <= end:
                     return index
 
     def __iter__(self):
@@ -772,6 +773,38 @@ class Part:
         """ just returns number of chars that this part contains """
         # OPTIONAL might be updated in order to represent annotations and such as well
         return len(self.text)
+
+
+class Edge:
+    """
+    Represent an edge - a possible relation between two named entities.
+
+    :type entity1: nala.structures.data.Entity
+    :type entity2: nala.structures.data.Entity
+    :type relation_type: str
+    :type features: FeatureDictionary
+    """
+
+    def __init__(self, entity1, entity2, relation_type, sentence):
+        self.entity1 = entity1
+        """The first entity in the edge"""
+        self.entity2 = entity2
+        """The second entity in the edge"""
+        self.relation_type = relation_type
+        """The type of relationship between the two entities"""
+        self.sentence = sentence
+        """The sentence which contains the edge"""
+        self.features = FeatureDictionary()
+        """
+        a dictionary of features for the token
+        each feature is represented as a key value pair:
+        """
+
+    def __repr__(self):
+        """
+        print calls to the class Token will print out the string contents of the word
+        """
+        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
 
 
 class Token:

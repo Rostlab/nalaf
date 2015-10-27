@@ -106,6 +106,17 @@ class Dataset:
             for token in sentence:
                 yield token
 
+    def edges(self):
+        """
+        helper function that iterations through all edges
+        that is, each edge of each sentence of each part of each document in the dataset
+
+        :rtype: collections.Iterable[Edge]
+        """
+        for part in self.parts():
+            for edge in part.edges:
+                yield edge
+
     def purge_false_relationships(self):
         """
         cleans false relationships by validating them
@@ -732,6 +743,24 @@ class Part:
                 if start <= token.start <= end:
                     return index
 
+    def get_entities_in_sentence(self, sentence_id, entity_classId):
+        """
+        get entities of a particular type in a particular sentence
+
+        :param sentence_id: sentence number in the part
+        :type sentence_id: int
+        :param entity_classId: the classId of the entity
+        :type entity_classId: str
+        """
+        sentence = self.sentences[sentence_id]
+        start = sentence[0].start
+        end = sentence[-1].end
+        entities = []
+        for annotation in self.annotations:
+            if start <= annotation.offset < end and annotation.class_id == entity_classId:
+                entities.append(annotation)
+        return entities
+
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
@@ -782,10 +811,10 @@ class Edge:
     :type entity1: nala.structures.data.Entity
     :type entity2: nala.structures.data.Entity
     :type relation_type: str
-    :type features: FeatureDictionary
+    :type features: dict
     """
 
-    def __init__(self, entity1, entity2, relation_type, sentence):
+    def __init__(self, entity1, entity2, relation_type, sentence, sentence_id, part):
         self.entity1 = entity1
         """The first entity in the edge"""
         self.entity2 = entity2
@@ -794,9 +823,13 @@ class Edge:
         """The type of relationship between the two entities"""
         self.sentence = sentence
         """The sentence which contains the edge"""
-        self.features = FeatureDictionary()
+        self.sentence_id = sentence_id
+        """The index of the sentence mentioned in sentence"""
+        self.part = part
+        """The part in which the sentence is contained"""
+        self.features = {}
         """
-        a dictionary of features for the token
+        a dictionary of features for the edge
         each feature is represented as a key value pair:
         """
 

@@ -47,4 +47,4 @@ class SimpleEdgeGenerator(EdgeGenerator):
                 if index_1 == index_2 and index_1 != None:
                     part.edges.append(
                         Edge(ann_1, ann_2, self.relation_type,
-                        part.get_sentence_string_array()[index_1]))
+                        part.sentences[index_1], index_1, part))

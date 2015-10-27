@@ -44,12 +44,6 @@ class SimpleEdgeGenerator(EdgeGenerator):
                     (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
                 index_1 = part.get_sentence_index_for_annotation(ann_1)
                 index_2 = part.get_sentence_index_for_annotation(ann_2)
-                if index_1 == None:
-                    print (ann_1)
-                    x = input()
-                if index_2 == None:
-                    print (ann_2)
-                    x = input()
                 if index_1 == index_2 and index_1 != None:
                     part.edges.append(
                         Edge(ann_1, ann_2, self.relation_type,

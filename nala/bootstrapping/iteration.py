@@ -22,6 +22,7 @@ import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
 from nala.structures.data import Annotation
+from nala.learning.taggers import GNormPlusGeneTagger
 
 
 class Iteration():
@@ -193,6 +194,8 @@ class Iteration():
         CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
 
+        GNormPlusGeneTagger().tag(self.candidates)
+
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()
         ttf_candidates.export_ann_json(threshold_val)
@@ -286,6 +289,9 @@ class Iteration():
             file.write('CROSS VALIDATION {}\n'.format(split))
 
         train_splits, test_splits = data.n_fold_split(split)
+
+        folds_results_exact = []
+        folds_results_overlapping = []
         for fold in range(split):
             train = train_splits[fold]
             test = test_splits[fold]
@@ -304,13 +310,26 @@ class Iteration():
 
             with open(cv_file, 'a') as file:
                 results = MentionLevelEvaluator(strictness='exact').evaluate(test)
+                folds_results_exact.append(results)
                 file.write('fold {} '
                            'tp:{:4} fp:{:4} fn:{:4} '
                            'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
+                           'p:{:.4f} r:{:.4f} f:{:.4f} exact\n'.format(fold, *results))
                 results = MentionLevelEvaluator(strictness='overlapping').evaluate(test)
+                folds_results_overlapping.append(results)
                 file.write('fold {} '
                            'tp:{:4} fp:{:4} fn:{:4} '
                            'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
+                           'p:{:.4f} r:{:.4f} f:{:.4f} overlapping\n'.format(fold, *results))
 
+        # calculate and write average of folds
+        with open(cv_file, 'a') as file:
+            folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
+            folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
+            file.write('\naverage\n')
+            file.write('tp:{:4.4} fp:{:4.4} fn:{:4.4} '
+                       'fp_overlap:{:4.4} fn_overlap:{:4.4} '
+                       'p:{:.4f} r:{:.4f} f:{:.4f} exact\n'.format(*folds_results_exact))
+            file.write('tp:{:4.4} fp:{:4.4} fn:{:4.4} '
+                       'fp_overlap:{:4.4} fn_overlap:{:4.4} '
+                       'p:{:.4f} r:{:.4f} f:{:.4f} overlapping\n'.format(*folds_results_overlapping))

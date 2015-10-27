@@ -809,6 +809,7 @@ class FeatureDictionary(dict):
 
 class Annotation:
     """
+    TODO rename to 'Entity'
     Represent a single annotation, that is denotes a span of text which represents some entitity.
 
     :type class_id: str

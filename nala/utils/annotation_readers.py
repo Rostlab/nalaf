@@ -128,7 +128,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         * priority: take the entity from the annotator with higher priority in the following order:
             (abojchevski, Ectelion, sanjeevkrn, Shpendi, jmcejuela, cuhlig, ANKIT)
         """
-        self.priority = ['abojchevski', 'Ectelion', 'sanjeevkrn', 'Shpendi']
+        self.priority = ['Ectelion', 'abojchevski', 'sanjeevkrn', 'Shpendi']
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
 

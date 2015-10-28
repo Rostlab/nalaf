@@ -23,6 +23,7 @@ from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
 from nala.structures.data import Annotation
 from nala.learning.taggers import GNormPlusGeneTagger
+import csv
 
 
 class Iteration():
@@ -109,6 +110,12 @@ class Iteration():
         self.debug_file = os.path.join(self.current_folder, 'debug.txt')
 
         print_verbose('Initialisation of Iteration instance finished.')
+
+        if not os.path.exists(self.stats_file):
+            with open(self.stats_file, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['iteration_number', 'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap',
+                            'precision', 'recall', 'f1-score', 'threshold'])
 
     def before_annotation(self, nr_new_docs=10):
         self.learning()
@@ -219,9 +226,12 @@ class Iteration():
         """
         ExclusiveNLDefiner().define(self.reviewed)
         results = MentionLevelEvaluator().evaluate(self.reviewed)
-        with open(self.stats_file, 'a') as f:
-            f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-                list(str(r) for r in results)), self.threshold_val))
+        with open(self.stats_file, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(list(chain([self.number], results, [self.threshold_val])))
+            # file.write(','.join(chain([self.number], (str(r) for r in results), [self.threshold_val])))
+            # f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
+            #     list(str(r) for r in results)), self.threshold_val))
 
         # debug results / annotations
         results = []
@@ -248,7 +258,7 @@ class Iteration():
         predicted_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.predicted_annotations()))) + "}"
         row_format = annotated_format + '\t|\t' + predicted_format + "\n"
 
-        with open(self.results_file, 'w') as f:
+        with open(self.results_file, 'w', encoding='utf-8') as f:
             f.write(row_format.format('=====Annotated=====', '=====Predicted====='))
             for tuple in ((x[0].text, x[1].text) for x in results):
                 f.write(row_format.format(*tuple))

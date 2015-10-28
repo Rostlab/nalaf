@@ -294,9 +294,12 @@ class Iteration():
             data.extend_dataset(tmp_data)
 
         last_iteration = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number-1))
-        cv_file = os.path.join(last_iteration, 'cross_validation.txt')
-        with open(cv_file, 'w') as file:
-            file.write('CROSS VALIDATION {}\n'.format(split))
+        cv_file = os.path.join(last_iteration, 'cross_validation.csv')
+        with open(cv_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['fold', 'strictness', 'sublcass',
+                             'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap',
+                             'precision', 'recall', 'f1-score'])
 
         train_splits, test_splits = data.n_fold_split(split)
 
@@ -318,28 +321,28 @@ class Iteration():
             self.crf.tag('-m default_model -i test > output.txt')
             self.crf.read_predictions(test)
 
-            with open(cv_file, 'a') as file:
-                results = MentionLevelEvaluator(strictness='exact').evaluate(test)
+            ExclusiveNLDefiner().define(test)
+
+            with open(cv_file, 'a', newline='') as file:
+                writer = csv.writer(file)
+
+                subclass_counts, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
+                for subclass, counts in subclass_counts.items():
+                    writer.writerow(list(chain([fold, 'exact', int(subclass)], results)))
+                writer.writerow(list(chain([fold, 'exact', 'total'], results)))
                 folds_results_exact.append(results)
-                file.write('fold {} '
-                           'tp:{:4} fp:{:4} fn:{:4} '
-                           'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f} exact\n'.format(fold, *results))
-                results = MentionLevelEvaluator(strictness='overlapping').evaluate(test)
+
+                subclass_counts, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
+                for subclass, counts in subclass_counts.items():
+                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], results)))
+                writer.writerow(list(chain([fold, 'overlapping', 'total'], results)))
                 folds_results_overlapping.append(results)
-                file.write('fold {} '
-                           'tp:{:4} fp:{:4} fn:{:4} '
-                           'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f} overlapping\n'.format(fold, *results))
 
         # calculate and write average of folds
-        with open(cv_file, 'a') as file:
+        with open(cv_file, 'a', newline='') as file:
+            writer = csv.writer(file)
             folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
             folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
-            file.write('\naverage\n')
-            file.write('tp:{:4.4} fp:{:4.4} fn:{:4.4} '
-                       'fp_overlap:{:4.4} fn_overlap:{:4.4} '
-                       'p:{:.4f} r:{:.4f} f:{:.4f} exact\n'.format(*folds_results_exact))
-            file.write('tp:{:4.4} fp:{:4.4} fn:{:4.4} '
-                       'fp_overlap:{:4.4} fn_overlap:{:4.4} '
-                       'p:{:.4f} r:{:.4f} f:{:.4f} overlapping\n'.format(*folds_results_overlapping))
+
+            writer.writerow(list(chain(['average', 'exact', 'total'], folds_results_exact)))
+            writer.writerow(list(chain(['average', 'overlapping', 'total'], folds_results_overlapping)))

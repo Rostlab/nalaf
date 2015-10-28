@@ -4,13 +4,13 @@ import json
 import os
 import re
 import shutil
-from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter
+from nala.bootstrapping.document_filters import KeywordsDocumentFilter, HighRecallRegexDocumentFilter, ManualDocumentFilter
 from nala.bootstrapping.pmid_filters import AlreadyConsideredPMIDFilter
 from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
 from nala.structures.dataset_pipelines import PrepareDatasetPipeline
-from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.utils.annotation_readers import AnnJsonEntityReader
 from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
@@ -22,6 +22,8 @@ import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
 from nala.structures.data import Entity
+from nala.learning.taggers import GNormPlusGeneTagger
+import csv
 
 
 class Iteration():
@@ -104,10 +106,16 @@ class Iteration():
 
         # stats file
         self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
-        self.results_file = os.path.join(self.current_folder, 'results.txt')
+        self.results_file = os.path.join(self.current_folder, 'batch_results.txt')
         self.debug_file = os.path.join(self.current_folder, 'debug.txt')
 
         print_verbose('Initialisation of Iteration instance finished.')
+
+        if not os.path.exists(self.stats_file):
+            with open(self.stats_file, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['iteration_number', 'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap',
+                            'precision', 'recall', 'f1-score', 'threshold'])
 
     def before_annotation(self, nr_new_docs=10):
         self.learning()
@@ -178,7 +186,7 @@ class Iteration():
                 pmid_filters=[AlreadyConsideredPMIDFilter(self.bootstrapping_folder, self.number)],
                                       document_filters=[KeywordsDocumentFilter(), HighRecallRegexDocumentFilter(crfsuite_path=self.crfsuite_path,
                                           binary_model=os.path.join(self.current_folder, 'bin_model'),
-                                          expected_max_results=nr)]) as dsp:
+                                          expected_max_results=nr), ManualDocumentFilter()]) as dsp:
             for pmid, document in dsp.execute():
                 dataset.documents[pmid] = document
                 # if we have generated enough documents stop
@@ -192,6 +200,8 @@ class Iteration():
         PrepareDatasetPipeline().execute(self.candidates)
         CRFSuiteMutationTagger([MUT_CLASS_ID], self.crf).tag(self.candidates)
         PostProcessing().process(self.candidates)
+
+        GNormPlusGeneTagger().tag(self.candidates)
 
         ttf_candidates = TagTogFormat(self.candidates, self.candidates_folder)
         ttf_candidates.export_html()
@@ -216,9 +226,12 @@ class Iteration():
         """
         ExclusiveNLDefiner().define(self.reviewed)
         results = MentionLevelEvaluator().evaluate(self.reviewed)
-        with open(self.stats_file, 'a') as f:
-            f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-                list(str(r) for r in results)), self.threshold_val))
+        with open(self.stats_file, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(list(chain([self.number], results, [self.threshold_val])))
+            # file.write(','.join(chain([self.number], (str(r) for r in results), [self.threshold_val])))
+            # f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
+            #     list(str(r) for r in results)), self.threshold_val))
 
         # debug results / annotations
         results = []
@@ -226,7 +239,7 @@ class Iteration():
             not_found_ann = part.annotations[:]
             not_found_pred = part.predicted_annotations[:]
             for ann, pred in product(part.annotations, part.predicted_annotations):
-                Annotation.equality_operator = 'exact_or_overlapping'
+                Entity.equality_operator = 'exact_or_overlapping'
                 if ann == pred:
                     results.append((ann, pred))
 
@@ -245,7 +258,7 @@ class Iteration():
         predicted_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.predicted_annotations()))) + "}"
         row_format = annotated_format + '\t|\t' + predicted_format + "\n"
 
-        with open(self.results_file, 'w') as f:
+        with open(self.results_file, 'w', encoding='utf-8') as f:
             f.write(row_format.format('=====Annotated=====', '=====Predicted====='))
             for tuple in ((x[0].text, x[1].text) for x in results):
                 f.write(row_format.format(*tuple))
@@ -271,7 +284,7 @@ class Iteration():
     def cross_validation(self, split):
         base_folder = os.path.join(os.path.join(self.bootstrapping_folder, 'iteration_0'), 'base')
         data = HTMLReader(os.path.join(base_folder, 'html')).read()
-        AnnJsonAnnotationReader(os.path.join(base_folder, 'annjson')).annotate(data)
+        AnnJsonEntityReader(os.path.join(base_folder, 'annjson')).annotate(data)
 
         for fold in range(1, self.number):
             iteration_base = os.path.join(self.bootstrapping_folder, "iteration_{}".format(fold))
@@ -281,11 +294,17 @@ class Iteration():
             data.extend_dataset(tmp_data)
 
         last_iteration = os.path.join(self.bootstrapping_folder, "iteration_{}".format(self.number-1))
-        cv_file = os.path.join(last_iteration, 'cross_validation.txt')
-        with open(cv_file, 'w') as file:
-            file.write('CROSS VALIDATION {}\n'.format(split))
+        cv_file = os.path.join(last_iteration, 'cross_validation.csv')
+        with open(cv_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['fold', 'strictness', 'sublcass',
+                             'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap',
+                             'precision', 'recall', 'f1-score'])
 
         train_splits, test_splits = data.n_fold_split(split)
+
+        folds_results_exact = []
+        folds_results_overlapping = []
         for fold in range(split):
             train = train_splits[fold]
             test = test_splits[fold]
@@ -302,14 +321,28 @@ class Iteration():
             self.crf.tag('-m default_model -i test > output.txt')
             self.crf.read_predictions(test)
 
-            with open(cv_file, 'a') as file:
-                results = MentionLevelEvaluator(strictness='exact').evaluate(test)
-                file.write('fold {} '
-                           'tp:{:4} fp:{:4} fn:{:4} '
-                           'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
-                results = MentionLevelEvaluator(strictness='overlapping').evaluate(test)
-                file.write('fold {} '
-                           'tp:{:4} fp:{:4} fn:{:4} '
-                           'fp_overlap:{:4} fn_overlap:{:4} '
-                           'p:{:.4f} r:{:.4f} f:{:.4f}\n'.format(fold, *results))
+            ExclusiveNLDefiner().define(test)
+
+            with open(cv_file, 'a', newline='') as file:
+                writer = csv.writer(file)
+
+                subclass_counts, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
+                for subclass, counts in subclass_counts.items():
+                    writer.writerow(list(chain([fold, 'exact', int(subclass)], counts)))
+                writer.writerow(list(chain([fold, 'exact', 'total'], results)))
+                folds_results_exact.append(results)
+
+                subclass_counts, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
+                for subclass, counts in subclass_counts.items():
+                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], counts)))
+                writer.writerow(list(chain([fold, 'overlapping', 'total'], results)))
+                folds_results_overlapping.append(results)
+
+        # calculate and write average of folds
+        with open(cv_file, 'a', newline='') as file:
+            writer = csv.writer(file)
+            folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
+            folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
+
+            writer.writerow(list(chain(['average', 'exact', 'total'], folds_results_exact)))
+            writer.writerow(list(chain(['average', 'overlapping', 'total'], folds_results_overlapping)))

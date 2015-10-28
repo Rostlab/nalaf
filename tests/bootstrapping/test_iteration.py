@@ -23,6 +23,7 @@ class TestIteration(TestCase):
 
 
         # iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=2)
+        iteration = Iteration(crfsuite_path=os.path.abspath('crfsuite'), iteration_nr=3)
         # iteration.before_annotation(nr_new_docs=10)
         # iteration.after_annotation()
 

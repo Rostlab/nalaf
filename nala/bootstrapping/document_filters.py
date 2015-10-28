@@ -61,6 +61,22 @@ class KeywordsDocumentFilter(DocumentFilter):
                 yield pmid, doc
 
 
+class ManualDocumentFilter(DocumentFilter):
+    """
+    Displays each document to the user on the standard console.
+    The user inputs Yes/No as standard input to accept or reject the document.
+    """
+    def filter(self, documents):
+        """
+        :type documents: collections.Iterable[(str, nala.structures.data.Document)]
+        """
+        for pmid, doc in documents:
+            answer = input('{}\nDo you accept this document?\n'.
+                           format('\n'.join(part.text for part in doc.parts.values())))
+            if answer.lower() in ['yes', 'y']:
+                yield pmid, doc
+
+
 class HighRecallRegexDocumentFilter(DocumentFilter):
     """
     Filter that uses regular expression to first get possible natural language mentions in sentences.

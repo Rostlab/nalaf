@@ -328,13 +328,13 @@ class Iteration():
 
                 subclass_counts, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
                 for subclass, counts in subclass_counts.items():
-                    writer.writerow(list(chain([fold, 'exact', int(subclass)], results)))
+                    writer.writerow(list(chain([fold, 'exact', int(subclass)], counts)))
                 writer.writerow(list(chain([fold, 'exact', 'total'], results)))
                 folds_results_exact.append(results)
 
                 subclass_counts, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
                 for subclass, counts in subclass_counts.items():
-                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], results)))
+                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], counts)))
                 writer.writerow(list(chain([fold, 'overlapping', 'total'], results)))
                 folds_results_overlapping.append(results)
 

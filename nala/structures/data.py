@@ -925,12 +925,7 @@ class FeatureDictionary(dict):
 
 class Entity:
     """
-<<<<<<< HEAD
     Represent a single annotation, that is denotes a span of text which represents some entity.
-=======
-    TODO rename to 'Entity'
-    Represent a single annotation, that is denotes a span of text which represents some entitity.
->>>>>>> develop
 
     :type class_id: str
     :type offset: int
@@ -1054,12 +1049,9 @@ class Relation:
             if first and second:
                 return True
         return False
-<<<<<<< HEAD
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
     def __ne__(self, other):
         return not self.__dict__ == other.__dict__
-=======
->>>>>>> develop

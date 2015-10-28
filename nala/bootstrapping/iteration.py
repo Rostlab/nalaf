@@ -10,7 +10,7 @@ from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
 from nala.structures.dataset_pipelines import PrepareDatasetPipeline
-from nala.utils.annotation_readers import AnnJsonEntityReader
+from nala.utils.annotation_readers import AnnJsonAnnotationReader
 from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler

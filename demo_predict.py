@@ -11,7 +11,7 @@ from nala.learning.crfsuite import CRFSuite
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID
 from nala.learning.taggers import GNormPlusGeneTagger
-from nala.learning.taggers import SameSentenceRelationExtractorStub
+from nala.learning.taggers import StubSameSentenceRelationExtractor
 from nala.learning.postprocessing import PostProcessing
 
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     tagger.tag(dataset)
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)
-    SameSentenceRelationExtractorStub().tag(dataset)
+    StubSameSentenceRelationExtractor().tag(dataset)
 
     PostProcessing().process(dataset)
 

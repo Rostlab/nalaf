@@ -168,6 +168,16 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, part.is_abstract, ann
 
+    def label_edges(self):
+        """
+        label each edge with its target - whether it is indeed a relation or not
+        """
+        for edge in self.edges():
+            if edge.is_relation():
+                edge.target = 1
+            else:
+                edge.target = -1
+
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
@@ -832,6 +842,22 @@ class Edge:
         a dictionary of features for the edge
         each feature is represented as a key value pair:
         """
+        self.target = None
+        """class of the edge - True or False or any other float value"""
+
+    def is_relation(self):
+        """
+        check if the edge is present in part.relations.
+        :rtype: bool
+        """
+        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type)
+        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type)
+        for relation in self.part.relations:
+            if relation_1 == relation:
+                return True
+            if relation_2 == relation:
+                return True
+        return False
 
     def __repr__(self):
         """
@@ -1023,3 +1049,9 @@ class Relation:
             if first and second:
                 return True
         return False
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not self.__dict__ == other.__dict__

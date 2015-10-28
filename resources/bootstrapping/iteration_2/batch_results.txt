@@ -1,16 +1,5 @@
 =====Annotated=====                                                                                             	|	=====Predicted=====
-D123H                                                                                                           	|	D123H        
-codon 123 (GAC --> CAC)                                                                                         	|	             
-D123H                                                                                                           	|	D123H        
-D123H                                                                                                           	|	D123H        
-Pro3----Arg                                                                                                     	|	Pro3----Arg  
-Pro4----Arg                                                                                                     	|	Pro4----Arg  
-Pro165----Arg                                                                                                   	|	Pro165----Arg
-Pro165----Arg                                                                                                   	|	Pro165----Arg
-Pro165----Arg                                                                                                   	|	Pro165----Arg
-Pro165----Arg                                                                                                   	|	Pro165----Arg
-Pro3----Arg                                                                                                     	|	Pro3----Arg  
-Pro4----Arg                                                                                                     	|	Pro4----Arg  
+1267N                                                                                                           	|	             
 S65T                                                                                                            	|	S65T         
 D183S                                                                                                           	|	D183S        
 K213N                                                                                                           	|	K213N        
@@ -18,16 +7,27 @@ M267I                                                                           
 S65T                                                                                                            	|	S65T         
 S65T                                                                                                            	|	S65T         
 14 nucleotides downstream was activated and resulted in an insertion of 14 bp and a frameshift stop at codon 106	|	             
+D123H                                                                                                           	|	D123H        
+codon 123 (GAC --> CAC)                                                                                         	|	             
+D123H                                                                                                           	|	D123H        
+D123H                                                                                                           	|	D123H        
 codon 392 (Gly----Asp) mutation                                                                                 	|	             
 second base of codon 392 having a G----A substitution                                                           	|	             
-1267N                                                                                                           	|	             
+Pro3----Arg                                                                                                     	|	Pro3----Arg  
+Pro4----Arg                                                                                                     	|	Pro4----Arg  
+Pro165----Arg                                                                                                   	|	Pro165----Arg
+Pro165----Arg                                                                                                   	|	Pro165----Arg
+Pro165----Arg                                                                                                   	|	Pro165----Arg
+Pro165----Arg                                                                                                   	|	Pro165----Arg
+Pro3----Arg                                                                                                     	|	Pro3----Arg  
+Pro4----Arg                                                                                                     	|	Pro4----Arg  
+p.Ser262Phe                                                                                                     	|	p.Ser262Phe  
+p.Thr5Met                                                                                                       	|	p.Thr5Met    
 Glu480Lys                                                                                                       	|	Glu480Lys    
 GAG --> AAG mutation                                                                                            	|	             
 Glu480Lys                                                                                                       	|	Glu480Lys    
 R15C                                                                                                            	|	R15C         
 R15C                                                                                                            	|	R15C         
-p.Ser262Phe                                                                                                     	|	p.Ser262Phe  
-p.Thr5Met                                                                                                       	|	p.Thr5Met    
 --------------------------------------------------------------------------------
 
 =====Detailed Results=====

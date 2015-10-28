@@ -106,7 +106,7 @@ class Iteration():
 
         # stats file
         self.stats_file = os.path.join(self.bootstrapping_folder, 'stats.csv')
-        self.results_file = os.path.join(self.current_folder, 'results.txt')
+        self.results_file = os.path.join(self.current_folder, 'batch_results.txt')
         self.debug_file = os.path.join(self.current_folder, 'debug.txt')
 
         print_verbose('Initialisation of Iteration instance finished.')

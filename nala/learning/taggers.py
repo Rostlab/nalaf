@@ -2,11 +2,27 @@ import abc
 import re
 from nala.utils.ncbi_utils import GNormPlus
 from nala.utils.uniprot_utils import Uniprot
-from nala.structures.data import Annotation, Relation
+from nala.structures.data import Entity, Relation
 from nala.utils import MUT_CLASS_ID, PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
-class Tagger:
+class Annotator:
+    """
+    Abstract class for Entity tagging or Relationship tagging.
+    This forms a hierarchy, where Tagger and RelationExtractor are abstract
+    subclasses of Annotator
+
+    Any Named Entity Recognizer should inherit from the class Tagger, and
+    should:
+    * Be named [Name]Tagger
+    * Implement the abstract method tag
+    """
+    def __init__(self, predicts_classes):
+        self.predicts_classes = predicts_classes
+        """a list of class IDs that this tagger can predict"""
+
+
+class Tagger(Annotator):
     """
     Abstract class for tagging a dataset with predicted annotations.
 
@@ -21,23 +37,57 @@ class Tagger:
 
     Optionally the implementation may perform normalization of the predicted entities.
     In that case:
-    * set the meta attribute performs_normalization = True
+    * set the meta attribute does_normalization = True
     * set the meta attribute normalization_database
     * set the fields normalized_id and normalized text for each Annotation object you create
 
-    :type performs_normalization: bool
+    :type does_normalization: bool
     :type normalization_database: str
     :type predicts_classes: list[str]
     """
 
     # todo change normalizazion_database to normalise option
     def __init__(self, predicts_classes):
-        self.performs_normalization = False
+        super().__init__(predicts_classes)
+        self.does_normalization = False
         """whether this tagger also performs normalization"""
         self.normalization_database = ''
         """additional info about the normalization database, e.g. URL"""
-        self.predicts_classes = predicts_classes
-        """a list of class IDs that this tagger can predict"""
+
+    @abc.abstractmethod
+    def tag(self, dataset):
+        """
+        :type dataset: nala.structures.data.Dataset
+        """
+        pass
+
+
+class RelationExtractor(Annotator):
+    """
+    Abstract class for tagging a dataset with predicted relations between
+    entities.
+
+    Subclasses that inherit this class should:
+    * Be named [Name]RelationExtractor
+    * Implement the abstract method annotate
+    * Use some sort of model or service to generate predictions
+        * If you only want to read in predictions already saved in ann.json
+          use AnnJsonAnnotationReader with _is_predicted = True
+        * This will not only read the entities, but also the relations
+    * Append new items to the list field "predicted_relations" of each Part in the dataset
+    * Set the meta_attribute predicts_classes
+
+    :type does_normalization: bool
+    :type normalization_database: str
+    :type predicts_classes: list[str]
+    """
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        self.entity1_class = entity1_class
+        """class id of the first entity"""
+        self.entity2_class = entity2_class
+        """class id of the second entity"""
+        self.relation_type = relation_type
+        """the type of relation between the two entiies in predicts_classes"""
 
     @abc.abstractmethod
     def tag(self, dataset):
@@ -109,7 +159,7 @@ class GNormPlusGeneTagger(Tagger):
                         if gene[2] in part.text and last_index < gene[0] < part_index:
                             start = gene[0] - last_index
                             # todo discussion which confidence value for gnormplus because there is no value supplied
-                            ann = Annotation(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
+                            ann = Entity(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
                             try:
                                 norm_dict = {
                                     ENTREZ_GENE_ID: gene[3],
@@ -127,16 +177,16 @@ class GNormPlusGeneTagger(Tagger):
                                 part.predicted_annotations.append(ann)
 
 
-class RelationshipExtractionGeneMutation(Tagger):
+class StubSameSentenceRelationExtractor(RelationExtractor):
     def __init__(self):
-        super().__init__([PRO_REL_MUT_CLASS_ID])
+        super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
 
     def tag(self, dataset):
         from itertools import product
         for part in dataset.parts():
             for ann_1, ann_2 in product(
-                    (ann for ann in part.predicted_annotations if ann.class_id == MUT_CLASS_ID),
-                    (ann for ann in part.predicted_annotations if ann.class_id == PRO_CLASS_ID)):
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
-                    part.relations.append(
+                    part.predicted_relations.append(
                         Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))

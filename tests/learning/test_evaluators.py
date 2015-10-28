@@ -1,5 +1,5 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Annotation
+from nala.structures.data import Dataset, Document, Part, Entity
 from nala.learning.evaluators import Evaluator, MentionLevelEvaluator
 from nala.utils import MUT_CLASS_ID
 
@@ -17,34 +17,34 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         cls.dataset.documents['doc_1'] = doc_1
         doc_1.parts['part_1'] = part_1
 
-        exact_1 = Annotation(MUT_CLASS_ID, 5, 'aaaa')
+        exact_1 = Entity(MUT_CLASS_ID, 5, 'aaaa')
         exact_1.subclass = 1
-        exact_2 = Annotation(MUT_CLASS_ID, 55, 'ffff')
+        exact_2 = Entity(MUT_CLASS_ID, 55, 'ffff')
         exact_2.subclass = 2
-        exact_3 = Annotation(MUT_CLASS_ID, 75, 'hhhh')
+        exact_3 = Entity(MUT_CLASS_ID, 75, 'hhhh')
         exact_3.subclass = 2
 
-        overlap_1_1 = Annotation(MUT_CLASS_ID, 25, 'cccc')
+        overlap_1_1 = Entity(MUT_CLASS_ID, 25, 'cccc')
         overlap_1_1.subclass = 1
-        overlap_1_2 = Annotation(MUT_CLASS_ID, 26, 'cc')
+        overlap_1_2 = Entity(MUT_CLASS_ID, 26, 'cc')
         overlap_1_2.subclass = 1
 
-        overlap_2_1 = Annotation(MUT_CLASS_ID, 32, '.. ddd')
+        overlap_2_1 = Entity(MUT_CLASS_ID, 32, '.. ddd')
         overlap_2_1.subclass = 2
-        overlap_2_2 = Annotation(MUT_CLASS_ID, 36, 'ddd ...')
+        overlap_2_2 = Entity(MUT_CLASS_ID, 36, 'ddd ...')
         overlap_2_2.subclass = 2
 
-        overlap_3_1 = Annotation(MUT_CLASS_ID, 65, 'gggg')
+        overlap_3_1 = Entity(MUT_CLASS_ID, 65, 'gggg')
         overlap_3_1.subclass = 1
-        overlap_3_2 = Annotation(MUT_CLASS_ID, 62, '.. gggg ..')
+        overlap_3_2 = Entity(MUT_CLASS_ID, 62, '.. gggg ..')
         overlap_3_2.subclass = 2
 
-        missing_1 = Annotation('e2', 45, 'eeee')
+        missing_1 = Entity('e2', 45, 'eeee')
         missing_1.subclass = 1
-        missing_2 = Annotation('e2', 84, 'jjjj')
+        missing_2 = Entity('e2', 84, 'jjjj')
         missing_2.subclass = 1
 
-        spurios = Annotation('e2', 15, 'bbbb')
+        spurios = Entity('e2', 15, 'bbbb')
         spurios.subclass = 1
 
         part_1.annotations = [exact_1, exact_2, exact_3, overlap_1_1, overlap_2_1, overlap_3_1, missing_1, missing_2]
@@ -94,10 +94,10 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(f_measure, 2 * ((3 + 6 / 2) / 10 * (3 + 6 / 2) / 11) / ((3 + 6 / 2) / 10 + (3 + 6 / 2) / 11))
 
     def test_exception_on_equality_operator(self):
-        ann_1 = Annotation(MUT_CLASS_ID, 1, 'text_1')
-        ann_2 = Annotation(MUT_CLASS_ID, 2, 'text_2')
+        ann_1 = Entity(MUT_CLASS_ID, 1, 'text_1')
+        ann_2 = Entity(MUT_CLASS_ID, 2, 'text_2')
 
-        Annotation.equality_operator = 'not valid'
+        Entity.equality_operator = 'not valid'
         self.assertRaises(ValueError, lambda: ann_1 == ann_2)
 
     def test_exception_on_strictness(self):

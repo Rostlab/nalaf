@@ -10,7 +10,7 @@ from nala.learning.postprocessing import PostProcessing
 from nala import print_verbose
 from nala.learning.crfsuite import CRFSuite
 from nala.structures.dataset_pipelines import PrepareDatasetPipeline
-from nala.utils.annotation_readers import AnnJsonAnnotationReader
+from nala.utils.annotation_readers import AnnJsonEntityReader
 from nala.utils.cache import Cacheable
 from nala.utils.readers import HTMLReader
 from nala.preprocessing.labelers import BIEOLabeler
@@ -21,7 +21,7 @@ from nala.preprocessing.definers import ExclusiveNLDefiner
 import pkg_resources
 from nala.learning.taggers import CRFSuiteMutationTagger
 from nala.utils import MUT_CLASS_ID, THRESHOLD_VALUE
-from nala.structures.data import Annotation
+from nala.structures.data import Entity
 from nala.learning.taggers import GNormPlusGeneTagger
 import csv
 
@@ -239,7 +239,7 @@ class Iteration():
             not_found_ann = part.annotations[:]
             not_found_pred = part.predicted_annotations[:]
             for ann, pred in product(part.annotations, part.predicted_annotations):
-                Annotation.equality_operator = 'exact_or_overlapping'
+                Entity.equality_operator = 'exact_or_overlapping'
                 if ann == pred:
                     results.append((ann, pred))
 
@@ -251,8 +251,8 @@ class Iteration():
                     if pred in not_found_pred:
                         index = not_found_pred.index(pred)
                         del not_found_pred[index]
-            results += [(ann, Annotation(class_id='e_2', offset=-1, text='')) for ann in not_found_ann]
-            results += [(Annotation(class_id='e_2', offset=-1, text=''), pred) for pred in not_found_pred]
+            results += [(ann, Entity(class_id='e_2', offset=-1, text='')) for ann in not_found_ann]
+            results += [(Entity(class_id='e_2', offset=-1, text=''), pred) for pred in not_found_pred]
 
         annotated_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.annotations()))) + "}"
         predicted_format = "{:<" + str(max(chain(len(x.text) for x in self.reviewed.predicted_annotations()))) + "}"

@@ -1,7 +1,7 @@
 import pkg_resources
 import csv
 import re
-from nala.structures.data import Annotation
+from nala.structures.data import Entity
 from nala.utils import MUT_CLASS_ID
 
 
@@ -22,15 +22,15 @@ class PostProcessing:
                         start = match.start(2)
                         end = match.end(2)
                         matched_text = part.text[start:end]
-                        ann = Annotation(MUT_CLASS_ID, start, matched_text)
+                        ann = Entity(MUT_CLASS_ID, start, matched_text)
 
-                        Annotation.equality_operator = 'exact_or_overlapping'
+                        Entity.equality_operator = 'exact_or_overlapping'
                         if ann not in part.predicted_annotations:
                             if not self.short.search(matched_text) \
                                     and self.at_least_one_letter_n_number_letter_n_number.search(matched_text):
-                                part.predicted_annotations.append(Annotation(MUT_CLASS_ID, start, matched_text))
+                                part.predicted_annotations.append(Entity(MUT_CLASS_ID, start, matched_text))
                         elif ' ' not in matched_text:
-                            Annotation.equality_operator = 'overlapping'
+                            Entity.equality_operator = 'overlapping'
                             for index, ann_b in enumerate(part.predicted_annotations):
                                 if ann == ann_b and len(matched_text) > len(ann_b.text):
                                     part.predicted_annotations[index] = ann
@@ -56,19 +56,19 @@ class PostProcessing:
                 if self.at_least_one_letter_n_number_letter_n_number.search(split[0]) \
                         and self.at_least_one_letter_n_number_letter_n_number.search(split[2]):
                     to_be_removed.append(index)
-                    part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
+                    part.predicted_annotations.append(Entity(ann.class_id, ann.offset, split[0]))
                     part.predicted_annotations.append(
-                        Annotation(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
+                        Entity(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
 
             # split multiple mentions
             if re.search(r' *(\band\b|,|\bor\b) *', ann.text):
                 to_be_removed.append(index)
                 split = re.split(r' *(\band|,|or\b) *', ann.text)
                 if split[0]:
-                    part.predicted_annotations.append(Annotation(ann.class_id, ann.offset, split[0]))
+                    part.predicted_annotations.append(Entity(ann.class_id, ann.offset, split[0]))
                 if split[2]:
                     part.predicted_annotations.append(
-                        Annotation(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
+                        Entity(ann.class_id, part.text.find(split[2], ann.offset), split[2]))
 
             # fix boundary #17000021	251	258	1858C>T --> +1858C>T
             if re.search('^[0-9]', ann.text) and re.search('([\-\+])', part.text[start - 1]):

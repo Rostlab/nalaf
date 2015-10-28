@@ -1,11 +1,11 @@
 CROSS VALIDATION 5
-fold 0 tp: 135 fp:  35 fn: 142 fp_overlap:  25 fn_overlap:  41 p:0.7941 r:0.4874 f:0.6040
-fold 0 tp: 135 fp:  10 fn: 101 fp_overlap:  25 fn_overlap:  41 p:0.9526 r:0.6656 f:0.7836
-fold 1 tp: 296 fp:  21 fn: 165 fp_overlap:  20 fn_overlap:  21 p:0.9338 r:0.6421 f:0.7609
-fold 1 tp: 296 fp:   1 fn: 144 fp_overlap:  20 fn_overlap:  21 p:0.9970 r:0.7006 f:0.8230
-fold 2 tp: 110 fp:  14 fn:  44 fp_overlap:  11 fn_overlap:  15 p:0.8871 r:0.7143 f:0.7914
-fold 2 tp: 110 fp:   3 fn:  29 fp_overlap:  11 fn_overlap:  15 p:0.9784 r:0.8242 f:0.8947
-fold 3 tp: 255 fp:  19 fn: 119 fp_overlap:  15 fn_overlap:  16 p:0.9307 r:0.6818 f:0.7870
-fold 3 tp: 255 fp:   4 fn: 103 fp_overlap:  15 fn_overlap:  16 p:0.9862 r:0.7352 f:0.8424
-fold 4 tp: 135 fp:  35 fn:  83 fp_overlap:  13 fn_overlap:  18 p:0.7941 r:0.6193 f:0.6959
-fold 4 tp: 135 fp:  22 fn:  65 fp_overlap:  13 fn_overlap:  18 p:0.8830 r:0.7186 f:0.7924
+fold 0 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 0 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 1 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 1 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 2 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 2 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 3 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 3 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 4 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan
+fold 4 tp:   0 fp:   0 fn:   0 fp_overlap:   0 fn_overlap:   0 p:nan r:nan f:nan

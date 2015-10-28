@@ -106,6 +106,17 @@ class Dataset:
             for token in sentence:
                 yield token
 
+    def edges(self):
+        """
+        helper function that iterations through all edges
+        that is, each edge of each sentence of each part of each document in the dataset
+
+        :rtype: collections.Iterable[Edge]
+        """
+        for part in self.parts():
+            for edge in part.edges:
+                yield edge
+
     def purge_false_relationships(self):
         """
         cleans false relationships by validating them
@@ -157,6 +168,16 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, part.is_abstract, ann
 
+    def label_edges(self):
+        """
+        label each edge with its target - whether it is indeed a relation or not
+        """
+        for edge in self.edges():
+            if edge.is_relation():
+                edge.target = 1
+            else:
+                edge.target = -1
+
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
@@ -188,7 +209,7 @@ class Dataset:
                             index += 1
                         end = token.start + len(token.word)
                         confidence = aggregator_function(confidence_values)
-                        part.predicted_annotations.append(Annotation(class_id, start, part.text[start:end], confidence))
+                        part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
 
     def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
@@ -535,6 +556,16 @@ class Document:
 
         return set(mentions)
 
+    def get_unique_relations(self):
+        """:return: set of all relations (ignoring the text offset and
+        considering only the relation text)"""
+        relations = []
+        for part in self:
+            for rel in part.relations:
+                relations.append(rel.get_relation_without_offset())
+
+        return set(relations)
+
     def relations(self):
         """  helper function for providing an iterator of relations on document level """
         for part in self.parts.values():
@@ -597,8 +628,8 @@ class Document:
         :param end: index of last char (offset of last char in whole document)
         """
         print_verbose('Searching for overlap with a mention.')
-        Annotation.equality_operator = 'exact_or_overlapping'
-        query_ann = Annotation(class_id='', offset=start, text=(end - start + 1) * 'X')
+        Entity.equality_operator = 'exact_or_overlapping'
+        query_ann = Entity(class_id='', offset=start, text=(end - start + 1) * 'X')
         print_debug(query_ann)
         offset = 0
         for part in self.parts.values():
@@ -606,7 +637,7 @@ class Document:
                         query_ann.offset + len(query_ann.text), 'params(start, end) =',
                         "({0}, {1})".format(start, end))
             for ann in part.annotations:
-                offset_corrected_ann = Annotation(class_id='', offset=ann.offset + offset, text=ann.text)
+                offset_corrected_ann = Entity(class_id='', offset=ann.offset + offset, text=ann.text)
                 if offset_corrected_ann == query_ann:
                     print_verbose('Found annotation:', ann)
                     return True
@@ -695,6 +726,10 @@ class Part:
         a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
         where the mutation occurs inside
         """
+        self.predicted_relations = []
+        """a list of predicted relations as populated by a call to form_predicted_relations()"""
+        self.edges = []
+        """a list of possible relations between any two entities in the part"""
         self.is_abstract = is_abstract
 
     def get_sentence_string_array(self):
@@ -708,7 +743,6 @@ class Part:
                 else:
                     return self.sentences
             return_array.append(new_sentence.rstrip())  # to delete last space
-        print(return_array)
         return return_array
 
     def get_sentence_index_for_annotation(self, annotation):
@@ -716,8 +750,26 @@ class Part:
         end = annotation.offset + len(annotation.text)
         for index, sentence in enumerate(self.sentences):
             for token in sentence:
-                if start <= token.start < token.end <= end:
+                if start <= token.start <= end:
                     return index
+
+    def get_entities_in_sentence(self, sentence_id, entity_classId):
+        """
+        get entities of a particular type in a particular sentence
+
+        :param sentence_id: sentence number in the part
+        :type sentence_id: int
+        :param entity_classId: the classId of the entity
+        :type entity_classId: str
+        """
+        sentence = self.sentences[sentence_id]
+        start = sentence[0].start
+        end = sentence[-1].end
+        entities = []
+        for annotation in self.annotations:
+            if start <= annotation.offset < end and annotation.class_id == entity_classId:
+                entities.append(annotation)
+        return entities
 
     def __iter__(self):
         """
@@ -726,28 +778,92 @@ class Part:
         return iter(self.sentences)
 
     def __repr__(self):
-        return "Part(is abstract = {abs}, len(sentences) = {sl}, len(anns) = {al}, len(pred anns) = {pl}, text = \"{self.text}\")".format(
-            self=self, sl=len(self.sentences), al=len(self.annotations), pl=len(self.predicted_annotations), abs=self.is_abstract)
+        return "Part(is abstract = {abs}, len(sentences) = {sl}, ' \
+        'len(anns) = {al}, len(pred anns) = {pl}, ' \
+        'len(rels) = {rl}, len(pred rels) = {prl}, ' \
+        'text = \"{self.text}\")".format(
+            self=self, sl=len(self.sentences),
+            al=len(self.annotations), pl=len(self.predicted_annotations),
+            rl=len(self.relations), prl=len(self.predicted_relations),
+            abs=self.is_abstract)
 
     def __str__(self):
         annotations_string = "\n".join([str(x) for x in self.annotations])
         pred_annotations_string = "\n".join([str(x) for x in self.predicted_annotations])
         relations_string = "\n".join([str(x) for x in self.relations])
+        pred_relations_string = "\n".join([str(x) for x in self.predicted_relations])
         if not annotations_string:
             annotations_string = "[]"
         if not pred_annotations_string:
             pred_annotations_string = "[]"
         if not relations_string:
             relations_string = "[]"
+        if not pred_relations_string:
+            pred_relations_string = "[]"
         return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
                '-Predicted annotations-\n{pred_annotations}\n' \
-               '-Relations-\n{relations}\n'.format(text=self.text, annotations=annotations_string,
-                                      pred_annotations=pred_annotations_string, relations=relations_string, abstract=self.is_abstract)
+               '-Relations-\n{relations}\n' \
+               '-Predicted relations-{pred_relations}'.format(
+                        text=self.text, annotations=annotations_string,
+                        pred_annotations=pred_annotations_string, relations=relations_string,
+                        pred_relations=pred_relations_string, abstract=self.is_abstract)
 
     def get_size(self):
         """ just returns number of chars that this part contains """
         # OPTIONAL might be updated in order to represent annotations and such as well
         return len(self.text)
+
+
+class Edge:
+    """
+    Represent an edge - a possible relation between two named entities.
+
+    :type entity1: nala.structures.data.Entity
+    :type entity2: nala.structures.data.Entity
+    :type relation_type: str
+    :type features: dict
+    """
+
+    def __init__(self, entity1, entity2, relation_type, sentence, sentence_id, part):
+        self.entity1 = entity1
+        """The first entity in the edge"""
+        self.entity2 = entity2
+        """The second entity in the edge"""
+        self.relation_type = relation_type
+        """The type of relationship between the two entities"""
+        self.sentence = sentence
+        """The sentence which contains the edge"""
+        self.sentence_id = sentence_id
+        """The index of the sentence mentioned in sentence"""
+        self.part = part
+        """The part in which the sentence is contained"""
+        self.features = {}
+        """
+        a dictionary of features for the edge
+        each feature is represented as a key value pair:
+        """
+        self.target = None
+        """class of the edge - True or False or any other float value"""
+
+    def is_relation(self):
+        """
+        check if the edge is present in part.relations.
+        :rtype: bool
+        """
+        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type)
+        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type)
+        for relation in self.part.relations:
+            if relation_1 == relation:
+                return True
+            if relation_2 == relation:
+                return True
+        return False
+
+    def __repr__(self):
+        """
+        print calls to the class Token will print out the string contents of the word
+        """
+        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
 
 
 class Token:
@@ -807,10 +923,9 @@ class FeatureDictionary(dict):
             dict.__setitem__(self, key, value)
 
 
-class Annotation:
+class Entity:
     """
-    TODO rename to 'Entity'
-    Represent a single annotation, that is denotes a span of text which represents some entitity.
+    Represent a single annotation, that is denotes a span of text which represents some entity.
 
     :type class_id: str
     :type offset: int
@@ -849,7 +964,7 @@ class Annotation:
         norm_string = ''
         if self.normalisation_dict:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
-        return 'Annotation(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
+        return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
                'Text: "{self.text}", SubClass: {self.subclass}, ' \
                'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
 
@@ -913,6 +1028,10 @@ class Relation:
         return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
                'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
 
+    def get_relation_without_offset(self):
+        """:return string with entity1 and entity2 separated by relation type"""
+        return self.text1 + '--' + self.class_id + '--' + self.text2
+
     def validate_itself(self, part):
         """
         validation of itself with annotations and the text
@@ -930,3 +1049,9 @@ class Relation:
             if first and second:
                 return True
         return False
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not self.__dict__ == other.__dict__

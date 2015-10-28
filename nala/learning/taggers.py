@@ -177,7 +177,7 @@ class GNormPlusGeneTagger(Tagger):
                                 part.predicted_annotations.append(ann)
 
 
-class SameSentenceRelationExtractorStub(RelationExtractor):
+class StubSameSentenceRelationExtractor(RelationExtractor):
     def __init__(self):
         super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
 
@@ -188,5 +188,5 @@ class SameSentenceRelationExtractorStub(RelationExtractor):
                     (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
                     (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
-                    part.relations.append(
+                    part.predicted_relations.append(
                         Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))

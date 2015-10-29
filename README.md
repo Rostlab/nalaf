@@ -34,11 +34,8 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
     pip3 install nala
 
 # Examples
-Run either:
-* `demo_predict.py` for a simple example how to use NALA just for prediction with a pre-trained model
-    * `python3 demo_predict.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
-    * `python3 demo_predict.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
-    * `python3 demo_predict.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
-* `demo.py` for an advanced example of the complete pipeline including training, testing and prediction. For options see:
-
-```python3 demo.py --help```
+Run:
+* `nala.py` for a simple example how to use NALA just for prediction with a pre-trained model
+    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
+    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
+    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -d example.txt`

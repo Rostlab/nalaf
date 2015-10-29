@@ -8,7 +8,8 @@ import csv
 import os
 import json
 from nala.utils import MUT_CLASS_ID
-
+from lxml import etree
+# from xml.etree import ElementTree as etree
 
 class Reader:
     """
@@ -433,4 +434,43 @@ class PMIDReader(Reader):
         with DownloadArticle(one_part=True) as da:
             for pmid, doc in da.download(self.pmids):
                 dataset.documents[pmid] = doc
+        return dataset
+
+
+class MedlineReader(Reader):
+    """
+    Reads in Medline citation sets  and creates a dataset with one document per medline citation.
+    """
+    def __init__(self, path):
+        self.path = path
+        """path to a single file or a directory containing medline.*.xml files"""
+
+    def read(self):
+        """
+        :returns: nala.structures.data.Dataset
+        """
+        xmls = []
+        if os.path.isdir(self.path):
+            xmls = [os.path.join(root, file) for root, _, files in os.walk(self.path) for file in files
+                    if file.startswith('medline') and file.endswith('xml')]
+        elif self.path.startswith('medline') and self.path.endswith('xml'):
+            xmls = [self.path]
+
+        dataset = Dataset()
+
+        for xml in xmls:
+            for child in etree.parse(xml).getroot():
+                pmid = next(child.iter('PMID')).text
+
+                document = Document()
+                article = next(child.iter('Article'))
+                title = next(article.iter('ArticleTitle')).text
+                document.parts['title'] = Part(title, is_abstract=False)
+                try:
+                    abstract = next(article.iter('AbstractText')).text
+                    document.parts['abstract'] = Part(abstract)
+                except StopIteration:
+                    pass
+                dataset.documents[pmid] = document
+
         return dataset

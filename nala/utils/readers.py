@@ -8,8 +8,9 @@ import csv
 import os
 import json
 from nala.utils import MUT_CLASS_ID
-from lxml import etree
-# from xml.etree import ElementTree as etree
+# from lxml import etree
+from xml.etree import ElementTree as etree
+
 
 class Reader:
     """

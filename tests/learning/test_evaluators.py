@@ -108,19 +108,19 @@ class TestMentionLevelEvaluator(unittest.TestCase):
     def test_subclass_analysis(self):
         evaluator = MentionLevelEvaluator(strictness='exact', subclass_analysis=True)
         subclass_counts, *_ = evaluator.evaluate(self.dataset)
-        self.assertEqual(subclass_counts[1]['tp'], 1)
-        self.assertEqual(subclass_counts[2]['tp'], 2)
+        self.assertEqual(subclass_counts[1][0], 1)
+        self.assertEqual(subclass_counts[2][0], 2)
 
-        self.assertEqual(subclass_counts[1]['fp'], 2)
-        self.assertEqual(subclass_counts[2]['fp'], 2)
+        self.assertEqual(subclass_counts[1][1], 2)
+        self.assertEqual(subclass_counts[2][1], 2)
 
-        self.assertEqual(subclass_counts[1]['fn'], 4)
-        self.assertEqual(subclass_counts[2]['fn'], 1)
+        self.assertEqual(subclass_counts[1][2], 4)
+        self.assertEqual(subclass_counts[2][2], 1)
 
-        self.assertEqual(subclass_counts[1]['fp_overlap'], 1)
-        self.assertEqual(subclass_counts[1]['fn_overlap'], 1)
-        self.assertEqual(subclass_counts[2]['fp_overlap'], 1)
-        self.assertEqual(subclass_counts[2]['fn_overlap'], 1)
+        self.assertEqual(subclass_counts[1][3], 1)
+        self.assertEqual(subclass_counts[1][4], 1)
+        self.assertEqual(subclass_counts[2][3], 1)
+        self.assertEqual(subclass_counts[2][4], 1)
 
 if __name__ == '__main__':
     unittest.main()

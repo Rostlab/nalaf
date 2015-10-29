@@ -64,9 +64,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     document = dataset.documents[doc_id]
                     if ann_json['anncomplete']:
                         for entity in ann_json['entities']:
-                            # Removed 'entity['classId'] == MUT_CLASS_ID', so there is no restriction on entities
                             # if read_just_mutations is False
-                            if not self.read_just_mutations:
+                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
                                 # if it is predicted put it in predicted_annotations else in annotations
                                 if self.is_predicted:
                                     ann = Entity(entity['classId'], entity['offsets'][0]['start'],

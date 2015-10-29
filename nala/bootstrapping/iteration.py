@@ -326,15 +326,15 @@ class Iteration():
             with open(cv_file, 'a', newline='') as file:
                 writer = csv.writer(file)
 
-                subclass_counts, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
-                for subclass, counts in subclass_counts.items():
-                    writer.writerow(list(chain([fold, 'exact', int(subclass)], counts)))
+                subclass_measures, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
+                for subclass, measures in subclass_measures.items():
+                    writer.writerow(list(chain([fold, 'exact', int(subclass)], measures)))
                 writer.writerow(list(chain([fold, 'exact', 'total'], results)))
                 folds_results_exact.append(results)
 
-                subclass_counts, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
-                for subclass, counts in subclass_counts.items():
-                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], counts)))
+                subclass_measures, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
+                for subclass, measures in subclass_measures.items():
+                    writer.writerow(list(chain([fold, 'overlapping', int(subclass)], measures)))
                 writer.writerow(list(chain([fold, 'overlapping', 'total'], results)))
                 folds_results_overlapping.append(results)
 

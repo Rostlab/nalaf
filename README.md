@@ -39,5 +39,3 @@ Run:
     * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
     * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
     * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
-
-```python3 demo.py --help```

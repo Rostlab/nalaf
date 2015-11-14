@@ -40,9 +40,9 @@ class CRFSuite:
         with open(os.path.join(self.directory, mode), 'w', encoding='utf-8') as file:
             for sentence in dataset.sentences():
                 for token in sentence:
-                    features = '\t'.join(['{}={}'.format(key_string(key), str(value).replace(':', '_COLON_'))
-                                          if 'embedding' not in key
-                                          else '{}:{}'.format(key_string(key), value)
+                    features = '\t'.join(['{}:{}'.format(key_string(key), value)
+                                          if type(value) is float
+                                          else '{}={}'.format(key_string(key), str(value).replace(':', '_COLON_'))
                                           for key, value in token.features.items()])
 
                     if mode in ('train', 'test'):

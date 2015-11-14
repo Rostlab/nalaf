@@ -17,4 +17,6 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
         for token in dataset.tokens():
             if token.word in self.model:
                 for index, value in enumerate(self.model[token.word]):
-                    token.features['embedding_{}'.format(index)] = value
+                    # value.item() since value is a numpy float
+                    # and we want native python floats
+                    token.features['embedding_{}'.format(index)] = value.item()

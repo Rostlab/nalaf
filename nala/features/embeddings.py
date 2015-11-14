@@ -15,8 +15,8 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
         :type dataset: nala.structures.data.Dataset
         """
         for token in dataset.tokens():
-            if token.word in self.model:
-                for index, value in enumerate(self.model[token.word]):
+            if token.word.lower() in self.model:
+                for index, value in enumerate(self.model[token.word.lower()]):
                     # value.item() since value is a numpy float
                     # and we want native python floats
                     token.features['embedding_{}'.format(index)] = value.item()

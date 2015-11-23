@@ -191,3 +191,31 @@ class BIEOLabeler(Labeler):
                         elif token.end == end:
                             token.original_labels[0].value = 'E-{}'.format(ann.class_id)
                             break
+
+
+class IOLabeler(Labeler):
+    """
+    Implements a simple labeler using the annotations of the dataset
+    using the IO (inside, outside) format. Creates labels
+    based on the class_id value in the Annotation object. That is:
+    * I-[class_id]
+    * O
+
+    Requires the list field "annotations" to be previously set.
+    Implements the abstract class Labeler.
+    """
+
+    def label(self, dataset):
+        """
+        :type dataset: nala.structures.data.Dataset
+        """
+        for part in dataset.parts():
+            for sentence in part.sentences:
+                for token in sentence:
+                    token.original_labels = [Label('O')]
+
+                    for ann in part.annotations:
+                        start = ann.offset
+                        end = ann.offset + len(ann.text)
+                        if start <= token.start < token.end <= end:
+                            token.original_labels[0].value = 'I-{}'.format(ann.class_id)

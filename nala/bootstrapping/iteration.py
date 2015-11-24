@@ -1,4 +1,5 @@
 import glob
+from collections import defaultdict
 from itertools import product, chain
 import json
 import os
@@ -305,6 +306,9 @@ class Iteration():
 
         folds_results_exact = []
         folds_results_overlapping = []
+        subclass_averages_exact = defaultdict(list)
+        subclass_averages_overlapping = defaultdict(list)
+
         for fold in range(split):
             train = train_splits[fold]
             test = test_splits[fold]
@@ -329,18 +333,27 @@ class Iteration():
                 subclass_measures, results = MentionLevelEvaluator(strictness='exact', subclass_analysis=True).evaluate(test)
                 for subclass, measures in subclass_measures.items():
                     writer.writerow(list(chain([fold, 'exact', int(subclass)], measures)))
+                    subclass_averages_exact[subclass].append(measures)
                 writer.writerow(list(chain([fold, 'exact', 'total'], results)))
                 folds_results_exact.append(results)
 
                 subclass_measures, results = MentionLevelEvaluator(strictness='overlapping', subclass_analysis=True).evaluate(test)
                 for subclass, measures in subclass_measures.items():
                     writer.writerow(list(chain([fold, 'overlapping', int(subclass)], measures)))
+                    subclass_averages_overlapping[subclass].append(measures)
                 writer.writerow(list(chain([fold, 'overlapping', 'total'], results)))
                 folds_results_overlapping.append(results)
 
         # calculate and write average of folds
         with open(cv_file, 'a', newline='') as file:
             writer = csv.writer(file)
+            for subclass, averages in subclass_averages_exact.items():
+                writer.writerow(list(chain(['average', 'exact', subclass],
+                                           [sum(col)/len(col) for col in zip(*averages)])))
+            for subclass, averages in subclass_averages_overlapping.items():
+                writer.writerow(list(chain(['average', 'overlapping', subclass],
+                                           [sum(col)/len(col) for col in zip(*averages)])))
+
             folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
             folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
 

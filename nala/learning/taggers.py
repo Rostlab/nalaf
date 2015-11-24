@@ -131,50 +131,59 @@ class GNormPlusGeneTagger(Tagger):
     def __init__(self):
         super().__init__([ENTREZ_GENE_ID, UNIPROT_ID])
 
-    def tag(self, dataset, annotated=False, uniprot=False):
+    def tag(self, dataset, annotated=False, uniprot=False, process_only_abstract=True):
         """
         :type dataset: nala.structures.data.Dataset
         :param annotated: if True then saved into annotations otherwise into predicted_annotations
         """
         with GNormPlus() as gnorm:
-            for docid, doc in dataset.documents.items():
-                if 'Conclusion' in doc.get_text():  # todo check whether this is enough for finding out if full document or not
-                    genes = gnorm.get_genes_for_text(doc, docid, postproc=True)
+            for doc_id, doc in dataset.documents.items():
+                if process_only_abstract:
+                    genes = gnorm.get_genes_for_pmid(doc_id, postproc=True)
+                    if uniprot:
+                        with Uniprot() as uprot:
+                            list_of_ids = gnorm.uniquify_genes(genes)
+                            genes_mapping = uprot.get_uniprotid_for_entrez_geneid(list_of_ids)
+                    else:
+                        genes_mapping = {}
+
+                    # find the title and the abstract
+                    parts = iter(doc.parts.values())
+                    title = next(parts)
+                    abstract = next(parts)
+
+                    for start, end, text, gene_id in genes:
+                        if 0 <= start < end <= len(title.text):
+                            part = title
+                        else:
+                            part = abstract
+                            # we have to readjust the offset since GnormPlus provides
+                            # offsets for title and abstract together
+                            offset = len(title.text) + 1
+                            start -= offset
+                            end -= offset
+
+                        # todo discussion which confidence value for gnormplus because there is no value supplied
+                        ann = Entity(class_id=PRO_CLASS_ID, offset=start, text=text, confidence=0.5)
+                        try:
+                            norm_dict = {
+                                ENTREZ_GENE_ID: gene_id,
+                                UNIPROT_ID: genes_mapping[gene_id]
+                            }
+                        except KeyError:
+                            norm_dict = {ENTREZ_GENE_ID: gene_id}
+
+                        norm_string = ''  # todo normalized_text (stemming ... ?)
+                        ann.normalisation_dict = norm_dict
+                        ann.normalized_text = norm_string
+                        if annotated:
+                            part.annotations.append(ann)
+                        else:
+                            part.predicted_annotations.append(ann)
                 else:
-                    genes = gnorm.get_genes_for_pmid(docid, postproc=True)
-
-                # genes
-                # if uniprot normalisation as well then:
-                genes_mapping = {}
-                if uniprot:
-                    with Uniprot() as uprot:
-                        list_of_ids = gnorm.uniquify_genes(genes)
-                        genes_mapping = uprot.get_uniprotid_for_entrez_geneid(list_of_ids)
-                last_index = -1
-                part_index = 0
-                for partid, part in doc.parts.items():
-                    last_index = part_index
-                    part_index += part.get_size() + 1
-                    for gene in genes:
-                        if gene[2] in part.text and last_index < gene[0] < part_index:
-                            start = gene[0] - last_index
-                            # todo discussion which confidence value for gnormplus because there is no value supplied
-                            ann = Entity(class_id=PRO_CLASS_ID, offset=start, text=gene[2], confidence=0.5)
-                            try:
-                                norm_dict = {
-                                    ENTREZ_GENE_ID: gene[3],
-                                    UNIPROT_ID: genes_mapping[gene[3]]
-                                }
-                            except KeyError:
-                                norm_dict = {'EntrezGeneID': gene[3]}
-
-                            norm_string = ''  # todo normalized_text (stemming ... ?)
-                            ann.normalisation_dict = norm_dict
-                            ann.normalized_text = norm_string
-                            if annotated:
-                                part.annotations.append(ann)
-                            else:
-                                part.predicted_annotations.append(ann)
+                    # todo this is not used for now anywhere, might need to be re-worked or excluded
+                    # genes = gnorm.get_genes_for_text(part.text)
+                    pass
 
 
 class StubSameSentenceRelationExtractor(RelationExtractor):

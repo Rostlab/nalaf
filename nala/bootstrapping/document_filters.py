@@ -67,6 +67,10 @@ class ManualDocumentFilter(DocumentFilter, Cacheable):
     Displays each document to the user on the standard console.
     The user inputs Yes/No as standard input to accept or reject the document.
     """
+    def __init__(self):
+        super().__init__()
+        self.is_timed = False
+
     def filter(self, documents):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]

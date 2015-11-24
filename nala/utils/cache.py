@@ -35,13 +35,14 @@ class Cacheable:
     def __init__(self, max_time_in_seconds=604800):
         self.cache = {}
         self.max_time_in_seconds = max_time_in_seconds
+        self.is_timed = True
 
     def __enter__(self):
         self.cache_filename = '{}_cache.json'.format(self.__class__.__name__)
         if os.path.exists(self.cache_filename):
 
             # if the file is too old reset the cache
-            if time.time() - os.path.getctime(self.cache_filename) > self.max_time_in_seconds:
+            if self.is_timed and (time.time() - os.path.getctime(self.cache_filename)) > self.max_time_in_seconds:
                 print_verbose('resetting the cache {}'.format(self.cache_filename))
                 os.remove(self.cache_filename)
                 self.cache = {}

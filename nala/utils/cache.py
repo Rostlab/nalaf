@@ -38,7 +38,7 @@ class Cacheable:
         self.is_timed = True
 
     def __enter__(self):
-        self.cache_filename = '{}_cache.json'.format(self.__class__.__name__)
+        self.cache_filename = '{}_cache.json'.format(os.path.join(os.path.expanduser('~'), self.__class__.__name__))
         if os.path.exists(self.cache_filename):
 
             # if the file is too old reset the cache

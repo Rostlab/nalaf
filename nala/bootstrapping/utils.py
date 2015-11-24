@@ -80,6 +80,7 @@ class DownloadArticle(Cacheable):
         self.one_part = one_part
         """whether to put everything (title, abstract, etc.) under the same part joined with new line"""
         self.pubmed_url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
+        self.is_timed = False
 
     def download(self, pmids):
         for pmid in pmids:

@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import pkg_resources
 
 from nala.structures.data import Label
 from nala.utils import MUT_CLASS_ID
@@ -12,11 +13,11 @@ class SVMLightTreeKernels:
     Base class for interaction with Alessandro Moschitti's Tree Kernels in
     SVM Light
     """
-    def __init__(self, directory='resources/svmlight/', model='default_model', use_tree_kernel=True):
+    def __init__(self, directory, use_tree_kernel=True):
         self.directory = directory
         """the directory where the executables svm_classify and svm_learn are
         located"""
-        self.model = model
+        self.model = pkg_resources.resource_filename('relna.data', 'default_model')
         """the model to read from / write to"""
         self.use_tree_kernel = use_tree_kernel
         """whether to use tree kernels or not"""

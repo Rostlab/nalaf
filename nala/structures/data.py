@@ -58,7 +58,7 @@ class Dataset:
         helper functions that iterates through all parts
         that is each part of each document in the dataset
 
-        :rtype: collections.Iterable[Annotation]
+        :rtype: collections.Iterable[Entity]
         """
         for part in self.parts():
             for annotation in part.annotations:
@@ -69,7 +69,7 @@ class Dataset:
         helper functions that iterates through all parts
         that is each part of each document in the dataset
 
-        :rtype: collections.Iterable[Annotation]
+        :rtype: collections.Iterable[Entity]
         """
         for part in self.parts():
             for annotation in part.predicted_annotations:
@@ -140,7 +140,7 @@ class Dataset:
         helper function that return annotation object with part id
         to be able to find out abstract or full document
 
-        :rtype: collections.Iterable[(str, Annotation)]
+        :rtype: collections.Iterable[(str, Entity)]
         """
         for part_id, part in self.partids_with_parts():
             for annotation in part.annotations:
@@ -150,7 +150,7 @@ class Dataset:
         """
         yields pubmedid, partid and ann through whole dataset
 
-        :rtype: collections.Iterable[(str, str, Annotation)]
+        :rtype: collections.Iterable[(str, str, Entity)]
         """
         for pubmedid, doc in self.documents.items():
             for partid, part in doc.key_value_parts():
@@ -161,7 +161,7 @@ class Dataset:
         """
         yields pubmedid, partid, is_abstract and ann through whole dataset
 
-        :rtype: collections.Iterable[(str, str, bool, Annotation)]
+        :rtype: collections.Iterable[(str, str, bool, Entity)]
         """
         for pubmedid, doc in self.documents.items():
             for partid, part in doc.key_value_parts():
@@ -701,8 +701,8 @@ class Part:
 
     :type text: str
     :type sentences: list[list[Token]]
-    :type annotations: list[Annotation]
-    :type predicted_annotations: list[Annotation]
+    :type annotations: list[Entity]
+    :type predicted_annotations: list[Entity]
     :type is_abstract: bool
     """
 

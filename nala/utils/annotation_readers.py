@@ -51,7 +51,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         :type dataset: nala.structures.data.Dataset
         """
-        for filename in glob.glob(str(self.directory + "/*.ann.json")):
+        if not os.path.isdir(self.directory):
+            filenames = [self.directory]
+        else:
+            filenames = glob.glob(str(self.directory + "/*.ann.json"))
+
+        for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
                     basename = os.path.basename(filename)
@@ -115,7 +120,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     1. Union or intersection
     2. Shortest entity, longest entity or priority
     """
-    def __init__(self, directory, strategy='union', entity_strategy='shortest', read_just_mutations=True):
+    def __init__(self, directory, strategy='union', entity_strategy='shortest', read_just_mutations=True,
+                 filter_below_iaa_threshold=False, iaa_threshold=0.8):
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -144,6 +150,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         self.priority = ['Ectelion', 'abojchevski', 'sanjeevkrn', 'Shpendi']
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
+        self.filter_below_iaa_threshold = filter_below_iaa_threshold
+        self.iaa_threshold = iaa_threshold
 
     def annotate(self, dataset):
         """
@@ -229,17 +237,45 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         self.__append_union(merged, entities_x, entities_y)
         return merged
 
+    def __is_acceptable(self, doc_id, doc, annotators):
+        if len(annotators) == 1:
+            return True
+
+        from itertools import combinations
+        from nala.structures.data import Dataset
+        from nala.learning.evaluators import MentionLevelEvaluator
+        import math
+
+        agreement = []
+        for first, second in combinations(annotators, 2):
+            data = Dataset()
+            data.documents[doc_id] = doc
+
+            AnnJsonAnnotationReader(first).annotate(data)
+            AnnJsonAnnotationReader(second, is_predicted=True).annotate(data)
+            results = MentionLevelEvaluator().evaluate(data)
+            if not math.isnan(results[-1]):
+                agreement.append(results[-1])
+
+        return agreement and sum(agreement)/len(agreement) >= self.iaa_threshold
+
     def __merge(self, dataset, annotators):
         for doc_id, doc in dataset.documents.items():
             annotator_entities = {}
             # find the annotations that are marked complete by any annotator
+            filenames = []
             for annotator in annotators:
                 # either once or zero times
                 for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
                     with open(filename, 'r', encoding='utf-8') as file:
+                        filenames.append(filename)
                         ann_json = json.load(file)
                         if ann_json['anncomplete']:
                             annotator_entities[annotator] = ann_json['entities']
+
+            if self.filter_below_iaa_threshold and not self.__is_acceptable(doc_id, doc, filenames):
+                del dataset.documents[doc_id]
+                continue
 
             # if there is at least once set of annotations
             if len(annotator_entities) > 0:

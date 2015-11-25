@@ -257,6 +257,11 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             if not math.isnan(results[-1]):
                 agreement.append(results[-1])
 
+        # clean the doc from any annotations we added to calculate agreement
+        for part in doc.parts.values():
+            part.annotations = []
+            part.predicted_annotations = []
+
         return agreement and sum(agreement)/len(agreement) >= self.iaa_threshold
 
     def __merge(self, dataset, annotators):

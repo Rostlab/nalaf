@@ -98,6 +98,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 ann = Entity(entity['classId'], entity['offsets'][0]['start'],
                                                  entity['offsets'][0]['text'], entity['confidence']['prob'])
                                 document.parts[entity['part']].predicted_annotations.append(ann)
+
+                    # delete parts that are not annotatable
+                    for part_id, part in document.parts.items():
+                        if part_id not in ann_json['annotatable']['parts']:
+                            del document.parts[part_id]
+
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
@@ -269,6 +275,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             annotator_entities = {}
             # find the annotations that are marked complete by any annotator
             filenames = []
+
+            annotatable_parts = set()
             for annotator in annotators:
                 # either once or zero times
                 for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
@@ -276,6 +284,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                         filenames.append(filename)
                         ann_json = json.load(file)
                         if ann_json['anncomplete']:
+                            annotatable_parts |= set(ann_json['annotatable']['parts'])
                             annotator_entities[annotator] = ann_json['entities']
 
             if self.filter_below_iaa_threshold and not self.__is_acceptable(doc_id, doc, filenames):
@@ -300,6 +309,12 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                     if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
                         part.annotations.append(
                             Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+
+            # delete parts that are not annotatable
+            for part_id, part in doc.parts.items():
+                if part_id not in annotatable_parts:
+                    del doc.parts[part_id]
+
             # delete documents with no annotations
             else:
                 del dataset.documents[doc_id]

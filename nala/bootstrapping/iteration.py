@@ -350,12 +350,11 @@ class Iteration():
             for subclass, averages in subclass_averages_exact.items():
                 writer.writerow(list(chain(['average', 'exact', subclass],
                                            [sum(col)/len(col) for col in zip(*averages)])))
+            folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
+            writer.writerow(list(chain(['average', 'exact', 'total'], folds_results_exact)))
+
             for subclass, averages in subclass_averages_overlapping.items():
                 writer.writerow(list(chain(['average', 'overlapping', subclass],
                                            [sum(col)/len(col) for col in zip(*averages)])))
-
-            folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
             folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
-
-            writer.writerow(list(chain(['average', 'exact', 'total'], folds_results_exact)))
             writer.writerow(list(chain(['average', 'overlapping', 'total'], folds_results_overlapping)))

@@ -1,8 +1,8 @@
 import unittest
 from nose.plugins.attrib import attr
-from nala.bootstrapping.utils import generate_documents
-from nala.bootstrapping.document_filters import HighRecallRegexDocumentFilter
-from nala.structures.data import Dataset
+from nalaf.bootstrapping.utils import generate_documents
+from nalaf.bootstrapping.document_filters import HighRecallRegexDocumentFilter
+from nalaf.structures.data import Dataset
 
 
 @attr('slow')

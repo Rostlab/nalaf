@@ -1,6 +1,6 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token
-from nala.features.stemming import PorterStemFeatureGenerator
+from nalaf.structures.data import Dataset, Document, Part, Token
+from nalaf.features.stemming import PorterStemFeatureGenerator
 
 
 class TestPorterStemFeatureGenerator(unittest.TestCase):

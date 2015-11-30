@@ -1,12 +1,12 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, FeatureDictionary
-from nala.features.tmvar import TmVarFeatureGenerator
-from nala.features import FeatureGenerator
-from nala.features import eval_binary_feature
-from nala.features.tmvar import TmVarDictionaryFeatureGenerator
-from nala.utils.readers import StringReader
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import TmVarTokenizer
+from nalaf.structures.data import Dataset, Document, Part, Token, FeatureDictionary
+from nalaf.features.tmvar import TmVarFeatureGenerator
+from nalaf.features import FeatureGenerator
+from nalaf.features import eval_binary_feature
+from nalaf.features.tmvar import TmVarDictionaryFeatureGenerator
+from nalaf.utils.readers import StringReader
+from nalaf.preprocessing.spliters import NLTKSplitter
+from nalaf.preprocessing.tokenizers import TmVarTokenizer
 
 
 class TmVarDefaultTest(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token
-from nala.features.window import WindowFeatureGenerator
+from nalaf.structures.data import Dataset, Document, Part, Token
+from nalaf.features.window import WindowFeatureGenerator
 
 
 class TestWindowFeatureGenerator(unittest.TestCase):

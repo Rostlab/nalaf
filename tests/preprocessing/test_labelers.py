@@ -1,10 +1,10 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token, Entity
-from nala.utils.readers import StringReader
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import TmVarTokenizer
-from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
-from nala.utils import MUT_CLASS_ID
+from nalaf.structures.data import Dataset, Document, Part, Token, Entity
+from nalaf.utils.readers import StringReader
+from nalaf.preprocessing.spliters import NLTKSplitter
+from nalaf.preprocessing.tokenizers import TmVarTokenizer
+from nalaf.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
+from nalaf.utils import MUT_CLASS_ID
 
 
 class TestLabelers(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Entity
-from nala.learning.evaluators import Evaluator, MentionLevelEvaluator
-from nala.utils import MUT_CLASS_ID
+from nalaf.structures.data import Dataset, Document, Part, Entity
+from nalaf.learning.evaluators import Evaluator, MentionLevelEvaluator
+from nalaf.utils import MUT_CLASS_ID
 
 
 class TestMentionLevelEvaluator(unittest.TestCase):

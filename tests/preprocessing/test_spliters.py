@@ -1,6 +1,6 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part
-from nala.preprocessing.spliters import NLTKSplitter
+from nalaf.structures.data import Dataset, Document, Part
+from nalaf.preprocessing.spliters import NLTKSplitter
 
 
 class TestNLTKSplitter(unittest.TestCase):

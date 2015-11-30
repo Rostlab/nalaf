@@ -1,7 +1,7 @@
 import unittest
-from nala.preprocessing.tokenizers import Tokenizer
-from nala.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
-from nala.structures.data import Dataset, Document, Part, Token
+from nalaf.preprocessing.tokenizers import Tokenizer
+from nalaf.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
+from nalaf.structures.data import Dataset, Document, Part, Token
 
 
 class TestNLTKTokenizer(unittest.TestCase):

@@ -1,10 +1,10 @@
 from nose.plugins.attrib import attr
 from unittest import TestCase
-from nala.utils.tagger import TmVarTagger
-from nala.utils.ncbi_utils import GNormPlus
-from nala.utils.annotation_readers import AnnJsonAnnotationReader
-from nala.utils.readers import HTMLReader
-from nala.utils.uniprot_utils import Uniprot
+from nalaf.utils.tagger import TmVarTagger
+from nalaf.utils.ncbi_utils import GNormPlus
+from nalaf.utils.annotation_readers import AnnJsonAnnotationReader
+from nalaf.utils.readers import HTMLReader
+from nalaf.utils.uniprot_utils import Uniprot
 
 __author__ = 'carst'
 

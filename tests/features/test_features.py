@@ -1,6 +1,6 @@
 import unittest
-from nala.features import eval_binary_feature
-from nala.structures.data import FeatureDictionary
+from nalaf.features import eval_binary_feature
+from nalaf.structures.data import FeatureDictionary
 import re
 
 

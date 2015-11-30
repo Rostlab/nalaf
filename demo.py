@@ -4,25 +4,25 @@ import json
 import os
 import sys
 import math
-from nala.bootstrapping.iteration import Iteration
+from nalaf.bootstrapping.iteration import Iteration
 
-from nala.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
-from nala.preprocessing.spliters import NLTKSplitter
-from nala.preprocessing.tokenizers import NLTKTokenizer
-from nala.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader
-from nala.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
-from nala.preprocessing.definers import TmVarRegexNLDefiner
-from nala.preprocessing.definers import ExclusiveNLDefiner, SimpleExclusiveNLDefiner
-from nala.preprocessing.definers import TmVarNLDefiner
-from nala.preprocessing.definers import InclusiveNLDefiner
-from nala.utils.writers import StatsWriter
-from nala.features.simple import SimpleFeatureGenerator
-from nala.features.tmvar import TmVarFeatureGenerator
-from nala.features.window import WindowFeatureGenerator
-from nala.learning.crfsuite import CRFSuite
+from nalaf.utils.readers import HTMLReader, SETHReader, TmVarReader, VerspoorReader
+from nalaf.preprocessing.spliters import NLTKSplitter
+from nalaf.preprocessing.tokenizers import NLTKTokenizer
+from nalaf.utils.annotation_readers import AnnJsonAnnotationReader, SETHAnnotationReader
+from nalaf.preprocessing.labelers import BIOLabeler, BIEOLabeler, TmVarLabeler
+from nalaf.preprocessing.definers import TmVarRegexNLDefiner
+from nalaf.preprocessing.definers import ExclusiveNLDefiner, SimpleExclusiveNLDefiner
+from nalaf.preprocessing.definers import TmVarNLDefiner
+from nalaf.preprocessing.definers import InclusiveNLDefiner
+from nalaf.utils.writers import StatsWriter
+from nalaf.features.simple import SimpleFeatureGenerator
+from nalaf.features.tmvar import TmVarFeatureGenerator
+from nalaf.features.window import WindowFeatureGenerator
+from nalaf.learning.crfsuite import CRFSuite
 
-import nala.utils.db_validation as dbcheck
-from nala.utils.writers import TagTogFormat
+import nalaf.utils.db_validation as dbcheck
+from nalaf.utils.writers import TagTogFormat
 
 
 def print_stats(data_stats):
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     config_iteration_number_help= "Manual assignment of number of Iteration"
 
-    parser = argparse.ArgumentParser(description='A simple demo of using the nala pipeline')
+    parser = argparse.ArgumentParser(description='A simple demo of using the nalaf pipeline')
     parser.add_argument('-c', '--config', type=argparse.FileType('r'), help=config_ini_help, default='config.ini')
     parser.add_argument('-db', '--check-db', action='store_true', help=config_checkdb_help)
     parser.add_argument('--stats-demo', action='store_true', help=config_stats_demo_help)

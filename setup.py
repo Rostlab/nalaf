@@ -7,7 +7,7 @@ def readme():
         return file.read()
 
 setup(
-    name='nala',
+    name='nalaf',
     version='0.1',
     description='Pipeline for NER of natural language mutation mentions',
     long_description=readme(),

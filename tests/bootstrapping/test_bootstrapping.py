@@ -1,5 +1,5 @@
 import unittest
-from nala.bootstrapping.utils import generate_documents
+from nalaf.bootstrapping.utils import generate_documents
 from nose.plugins.attrib import attr
 
 

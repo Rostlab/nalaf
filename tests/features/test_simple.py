@@ -1,6 +1,6 @@
 import unittest
-from nala.structures.data import Dataset, Document, Part, Token
-from nala.features.simple import SimpleFeatureGenerator, SentenceMarkerFeatureGenerator
+from nalaf.structures.data import Dataset, Document, Part, Token
+from nalaf.features.simple import SimpleFeatureGenerator, SentenceMarkerFeatureGenerator
 
 
 class TestSimpleFeatureGenerator(unittest.TestCase):

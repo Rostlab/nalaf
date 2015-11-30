@@ -79,8 +79,8 @@ class ManualDocumentFilter(DocumentFilter, Cacheable):
             # if we can't find it in the cache
             # ask the user and save it to the cache
             if pmid not in self.cache:
-                answer = input('{}\nDo you accept this document?\n'.
-                               format('\n'.join(part.text for part in doc.parts.values())))
+                answer = input('https://www.ncbi.nlm.nih.gov/pubmed/{}'
+                               '\nDo you accept this document?\n'.format(pmid))
                 self.cache[pmid] = answer.lower() in ['yes', 'y']
 
             if self.cache[pmid]:
@@ -119,13 +119,14 @@ class HighRecallRegexDocumentFilter(DocumentFilter):
             """ compiled regex patterns from pattern_file param to specify custom json file,
              containing regexs for high recall finding of nl mentions. (or sth else) """
 
-    def filter(self, documents, min_found=10):
+    def filter(self, documents, min_found=3):
         """
         :type documents: collections.Iterable[(str, nala.structures.data.Document)]
         """
 
         _progress = 1
         _timestart = time.time()
+        # TODO add caching highrecalldocumentfilter
 
         _time_avg_per_pattern = 0
         _pattern_calls = 0

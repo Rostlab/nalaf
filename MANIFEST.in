@@ -1,2 +1,2 @@
 include README.md
-include nala/data/*.*
+include nalaf/data/*.*

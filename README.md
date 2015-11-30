@@ -31,7 +31,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
 
  Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
 
-    pip3 install nala
+    pip3 install nalaf
 
 # Examples
 Run:

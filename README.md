@@ -23,7 +23,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
     git clone https://github.com/carstenuhlig/thesis-alex-carsten.git
     cd thesis-alex-carsten
     python3 setup.py install
-    python3 -m nala.download_corpora
+    python3 -m nalaf.download_corpora
 
  If you want to run the unit tests (excluding the slow ones) do:
 
@@ -35,7 +35,7 @@ The goals of this project can be found on the [wiki.](https://github.com/carsten
 
 # Examples
 Run:
-* `nala.py` for a simple example how to use NALA just for prediction with a pre-trained model
-    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
-    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
-    * `python3 nala.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
+* `nalaf.py` for a simple example how to use NALA just for prediction with a pre-trained model
+    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
+    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
+    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -d example.txt`

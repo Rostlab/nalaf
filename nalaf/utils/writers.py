@@ -231,7 +231,7 @@ class TagTogFormat:
         """
         init function that does prepare annjson folder and html folder
         :param to_save_to: usually resources/corpora/[name of corpus]/anndoc/
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         :param who:
         :param _annjson_folder:
         :param _html_folder:

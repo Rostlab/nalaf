@@ -34,7 +34,7 @@ class BagOfWordsFeatureGenerator(FeatureGenerator):
     """
     Generates Bag of Words representation for each sentence that contains an edge
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type training_mode: bool
     """
     def __init__(self, feature_set, training_mode=True):
@@ -65,7 +65,7 @@ class StemmedBagOfWordsFeatureGenerator(FeatureGenerator):
 
     By default it uses Porter stemmer
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type training_mode: bool
     """
 
@@ -99,7 +99,7 @@ class OrderOfEntitiesFeatureGenerator(FeatureGenerator):
     Value of 1 means that the order is '...entity1...entity2...'
     Value of 0 means that the order is '...entity2...entity1...'
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type training_mode: bool
     """
     def __init__(self, feature_set, training_mode=True):
@@ -129,7 +129,7 @@ class CapitalizedTokenFeatureGenerator(FeatureGenerator):
     Value of 1 means that the entity is capitalized
     Value of 0 means that the entity is not capitalized
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type training_mode: bool
     """
     def __init__(self, feature_set, training_mode=True):
@@ -169,7 +169,7 @@ class WordFilterFeatureGenerator(FeatureGenerator):
     Value of 1 means that the sentence contains that word
     Value of 0 means that the sentence does not contain the word
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type words: list[str]
     :type stem: bool
     :type training_mode: bool
@@ -235,7 +235,7 @@ class NPChunkRootFeatureGenerator(FeatureGenerator):
     the package data, which can be downloaded using
     `python3 -m spacy.en.download all`
 
-    :type feature_set: nala.structures.data.FeatureDictionary
+    :type feature_set: nalaf.structures.data.FeatureDictionary
     :type nlp: spacy.en.English
     :type training_mode: bool
     """

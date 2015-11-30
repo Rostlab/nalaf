@@ -1,9 +1,9 @@
 """
-Downloads the necessary NLTK corpora for nala.
+Downloads the necessary NLTK corpora for nalaf.
 
 Usage: ::
 
-    $ python -m nala.download_corpora
+    $ python -m nalaf.download_corpora
 
 """
 if __name__ == '__main__':

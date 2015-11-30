@@ -17,7 +17,7 @@ class Evaluator:
     @abc.abstractmethod
     def evaluate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         :returns (precision, recall, f_measure): (float, float, float)
         """
         return
@@ -53,7 +53,7 @@ class MentionLevelEvaluator(Evaluator):
 
     def evaluate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         :returns (tp, fp, fn, tp_overlapping, precision, recall, f_measure): (int, int, int, int, float, float, float)
 
         Calculates precision, recall and subsequently F1 measure, defined as:

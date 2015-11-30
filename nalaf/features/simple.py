@@ -11,7 +11,7 @@ class SimpleFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for token in dataset.tokens():
             token.features['word'] = token.word
@@ -28,7 +28,7 @@ class SentenceMarkerFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for sentence in dataset.sentences():
             sentence[0].features['BOS'] = 1

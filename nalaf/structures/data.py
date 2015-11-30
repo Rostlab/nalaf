@@ -403,7 +403,7 @@ class Dataset:
         """
         Does run on self and returns nothing. Extends the self-dataset with other-dataset.
         Each Document-ID that already exists in self-dataset gets skipped to add.
-        :type other: nala.structures.data.Dataset
+        :type other: nalaf.structures.data.Dataset
         """
         for key in other.documents:
             if key not in self.documents:
@@ -446,7 +446,7 @@ class Dataset:
         :type n: int
 
         :return: a list of N train datasets and N test datasets
-        :rtype: (list[nala.structures.data.Dataset], list[nala.structures.data.Dataset])
+        :rtype: (list[nalaf.structures.data.Dataset], list[nalaf.structures.data.Dataset])
         """
         keys = list(sorted(self.documents.keys()))
         random.seed(2727)
@@ -479,7 +479,7 @@ class Dataset:
         :type percentage: float
 
         :return train dataset, test dataset
-        :rtype: (nala.structures.data.Dataset, nala.structures.data.Dataset)
+        :rtype: (nalaf.structures.data.Dataset, nalaf.structures.data.Dataset)
         """
         keys = list(sorted(self.documents.keys()))
         random.seed(2727)
@@ -818,8 +818,8 @@ class Edge:
     """
     Represent an edge - a possible relation between two named entities.
 
-    :type entity1: nala.structures.data.Entity
-    :type entity2: nala.structures.data.Entity
+    :type entity1: nalaf.structures.data.Entity
+    :type entity2: nalaf.structures.data.Entity
     :type relation_type: str
     :type features: dict
     """
@@ -1036,7 +1036,7 @@ class Relation:
         """
         validation of itself with annotations and the text
         :param part: the part where this relation is saved inside
-        :type part: nala.structures.data.Part
+        :type part: nalaf.structures.data.Part
         :return: bool
         """
         first = False

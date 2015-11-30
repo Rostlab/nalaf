@@ -18,7 +18,7 @@ class PorterStemFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for token in dataset.tokens():
             token.features['stem'] = self.stemmer.stem(token.word)

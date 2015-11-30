@@ -12,7 +12,7 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for token in dataset.tokens():
             if token.word.lower() in self.model:

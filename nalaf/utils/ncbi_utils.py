@@ -48,7 +48,7 @@ class GNormPlus(Cacheable):
         Retrieval via RESTful API with full documents.
         Attention!: one call can take a very long time. (no idea why, but sometimes it takes years and might not even finish)
         :param doc: Document that is supplied
-        :type doc: nala.structures.data.Document
+        :type doc: nalaf.structures.data.Document
         :param postproc: postprocessing option for excluding 'GeneID:XXX...' to 'XXX'
         :return: list of GeneIDs in EntrezGene-Format (Number)
         """

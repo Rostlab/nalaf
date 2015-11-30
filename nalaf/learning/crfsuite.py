@@ -26,7 +26,7 @@ class CRFSuite:
         Creates the input files for training, testing or prediction in the appropriate format required by CRFSuite.
         Saves the files in the same directory where the executable is located.
 
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         :param mode: one of the following 'train' or 'test' or 'predict'
         :type mode: str
         """
@@ -74,7 +74,7 @@ class CRFSuite:
 
     def read_predictions(self, dataset, prediction_file='output.txt', class_id = MUT_CLASS_ID):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
 
         Reads in the predictions made by our model for each token and stores them into token.predicted_label[]
 

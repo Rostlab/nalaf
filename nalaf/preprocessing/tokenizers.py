@@ -17,7 +17,7 @@ class Tokenizer:
     @abc.abstractmethod
     def tokenize(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         return
 
@@ -25,7 +25,7 @@ class Tokenizer:
 class NLTKTokenizer(Tokenizer):
     def tokenize(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for part in dataset.parts():
             so_far = 0
@@ -44,7 +44,7 @@ class TmVarTokenizer(Tokenizer):
     """
     def tokenize(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for part in dataset.parts():
             so_far = 0

@@ -23,7 +23,7 @@ class AnnotationReader:
     @abc.abstractmethod
     def annotate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         return
 
@@ -49,7 +49,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         if not os.path.isdir(self.directory):
             filenames = [self.directory]
@@ -161,7 +161,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         if self.entity_strategy == 'priority':
             annotators = self.priority
@@ -346,7 +346,7 @@ class SETHAnnotationReader(AnnotationReader):
 
     def annotate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         for filename in glob.glob(str(self.directory + "/*.ann")):
             with open(filename, 'r', encoding='utf-8') as file:

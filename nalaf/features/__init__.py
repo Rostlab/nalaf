@@ -12,7 +12,7 @@ class FeatureGenerator:
     @abc.abstractmethod
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         return
 
@@ -26,7 +26,7 @@ def eval_binary_feature(feature_dict, feature_name, evaluator, *args):
     :param feature_name: the feature name to be used
     :param evaluator: any callable that evaluates to True or False
     :param args: arguments needed for the callable
-    :type feature_dict: nala.structures.data.FeatureDictionary
+    :type feature_dict: nalaf.structures.data.FeatureDictionary
     :type feature_name: str
     """
     if evaluator(*args):

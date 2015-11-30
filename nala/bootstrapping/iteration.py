@@ -115,8 +115,8 @@ class Iteration():
         if not os.path.exists(self.stats_file):
             with open(self.stats_file, 'w', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['iteration_number', 'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap',
-                            'precision', 'recall', 'f1-score', 'threshold'])
+                writer.writerow(['iteration_number', 'subclass', 'threshold',
+                                 'tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap', 'precision', 'recall', 'f1-score'])
 
     def before_annotation(self, nr_new_docs=10):
         self.learning()
@@ -226,13 +226,6 @@ class Iteration():
         :return:
         """
         ExclusiveNLDefiner().define(self.reviewed)
-        results = MentionLevelEvaluator().evaluate(self.reviewed)
-        with open(self.stats_file, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(list(chain([self.number], results, [self.threshold_val])))
-            # file.write(','.join(chain([self.number], (str(r) for r in results), [self.threshold_val])))
-            # f.write("IterationNumber={}\tPerformance{}\tThresholdValue={}\n".format(self.number, "\t".join(
-            #     list(str(r) for r in results)), self.threshold_val))
 
         # debug results / annotations
         results = []
@@ -372,10 +365,16 @@ class Iteration():
             writer.writerow(list(chain(['sum_of_folds', 'exact', 'total'],
                                        MentionLevelEvaluator(strictness='exact').calc_measures(
                                            *[sum(col) for col in zip(*folds_results_exact)][:5]))))
-            for subclass, averages in subclass_averages_exact.items():
-                writer.writerow(list(chain(['sum_of_folds', 'overlapping', subclass],
-                                           MentionLevelEvaluator(strictness='overlapping').calc_measures(
-                                               *[sum(col) for col in zip(*averages)][:5]))))
-            writer.writerow(list(chain(['sum_of_folds', 'overlapping', 'total'],
-                                       MentionLevelEvaluator(strictness='overlapping').calc_measures(
-                                           *[sum(col) for col in zip(*folds_results_exact)][:5]))))
+
+            with open(self.stats_file, 'a',  newline='') as stats_write_file:
+                stats_writer = csv.writer(stats_write_file)
+                for subclass, averages in subclass_averages_exact.items():
+                    stats = MentionLevelEvaluator(strictness='overlapping').calc_measures(
+                        *[sum(col) for col in zip(*averages)][:5])
+                    writer.writerow(list(chain(['sum_of_folds', 'overlapping', subclass], stats)))
+                    stats_writer.writerow([self.number-1, subclass, self.threshold_val] + list(stats))
+
+                stats = MentionLevelEvaluator(strictness='overlapping').calc_measures(
+                    *[sum(col) for col in zip(*folds_results_exact)][:5])
+                writer.writerow(list(chain(['sum_of_folds', 'overlapping', 'total'], stats)))
+                stats_writer.writerow([self.number-1, 'total', self.threshold_val] + list(stats))

@@ -310,10 +310,10 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                         part.annotations.append(
                             Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
 
-            # delete parts that are not annotatable
-            for part_id, part in doc.parts.items():
-                if part_id not in annotatable_parts:
-                    del doc.parts[part_id]
+                # delete parts that are not annotatable
+                for part_id, part in doc.parts.items():
+                    if part_id not in annotatable_parts:
+                        del doc.parts[part_id]
 
             # delete documents with no annotations
             else:

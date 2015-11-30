@@ -1,5 +1,0 @@
-dataset,num_docs,IAA exact,IAA overlapping,IAA half_overlapping
-iteration 1,4,0.9565,0.9565,0.9565
-iteration 2,8,0.8772,0.9841,0.8889
-iteration 3,18,0.6964,0.8939,0.7424
-"iteration 1, 2, 3",30,0.7812,0.9266,0.8073

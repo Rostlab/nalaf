@@ -1,3 +1,0 @@
-iteration_number,tp,fp,fn,fp_overlap,fn_overlap,precision,recall,f1-score,threshold
-1,170,0,3,0,0,1.0,0.9826589595375722,0.9912536443148687,1
-2,23,0,6,0,0,1.0,0.7931034482758621,0.8846153846153846,1

@@ -347,14 +347,35 @@ class Iteration():
         # calculate and write average of folds
         with open(cv_file, 'a', newline='') as file:
             writer = csv.writer(file)
+            # ================== EXACT =================
             for subclass, averages in subclass_averages_exact.items():
                 writer.writerow(list(chain(['average', 'exact', subclass],
                                            [sum(col)/len(col) for col in zip(*averages)])))
-            folds_results_exact = [sum(col)/len(col) for col in zip(*folds_results_exact)]
-            writer.writerow(list(chain(['average', 'exact', 'total'], folds_results_exact)))
+            # average out everything in the columns
+            writer.writerow(list(chain(['average', 'exact', 'total'],
+                                       [sum(col)/len(col) for col in zip(*folds_results_exact)])))
 
+            # =============== OVERLAPPING ===============
             for subclass, averages in subclass_averages_overlapping.items():
                 writer.writerow(list(chain(['average', 'overlapping', subclass],
                                            [sum(col)/len(col) for col in zip(*averages)])))
-            folds_results_overlapping = [sum(col)/len(col) for col in zip(*folds_results_overlapping)]
-            writer.writerow(list(chain(['average', 'overlapping', 'total'], folds_results_overlapping)))
+            # average out everything in the columns
+            writer.writerow(list(chain(['average', 'overlapping', 'total'],
+                                       [sum(col)/len(col) for col in zip(*folds_results_overlapping)])))
+
+            # =============== sum of folds ===============
+            # sum up the counts (tp, fp, etc.) and then calculate the measures
+            for subclass, averages in subclass_averages_exact.items():
+                writer.writerow(list(chain(['sum_of_folds', 'exact', subclass],
+                                           MentionLevelEvaluator(strictness='exact').calc_measures(
+                                               *[sum(col) for col in zip(*averages)][:5]))))
+            writer.writerow(list(chain(['sum_of_folds', 'exact', 'total'],
+                                       MentionLevelEvaluator(strictness='exact').calc_measures(
+                                           *[sum(col) for col in zip(*folds_results_exact)][:5]))))
+            for subclass, averages in subclass_averages_exact.items():
+                writer.writerow(list(chain(['sum_of_folds', 'overlapping', subclass],
+                                           MentionLevelEvaluator(strictness='overlapping').calc_measures(
+                                               *[sum(col) for col in zip(*averages)][:5]))))
+            writer.writerow(list(chain(['sum_of_folds', 'overlapping', 'total'],
+                                       MentionLevelEvaluator(strictness='overlapping').calc_measures(
+                                           *[sum(col) for col in zip(*folds_results_exact)][:5]))))

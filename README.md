@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/carstenuhlig/nalaf.svg?token=VhCZKjoiPjzKEaXybidS&branch=develop)
+![Build Status](https://travis-ci.com/carstenuhlig/nalaf.svg?token=VhCZKjoiPjzKEaXybidS&branch=develop)
 
 # NALA - Natural Language Text Mining
 Nala is a Text Mining (TM) tool and was initially created to serve as Natural Language (NL) mutation mention predictor for 2 theses from 2 students of the Technical University in Munich. The reason behind focusing on NL mentions is documented [here](https://github.com/carstenuhlig/thesis-alex-carsten/wiki/Natural-language-mentions). It is designed however, as extensible, module-based, easy-to-use and well documented tool for general Named Entity Recognition (NER) in TM. The software is under the MIT license `TODO which license`. So people can use it and extend it with their own modules e.g. tokenizers,  dictionaries, features, etc. The method uses Conditional Random Fields (CRF), which are currently state-of-the-art for NER.

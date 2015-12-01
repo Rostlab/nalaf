@@ -281,9 +281,9 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                 # either once or zero times
                 for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
                     with open(filename, 'r', encoding='utf-8') as file:
-                        filenames.append(filename)
                         ann_json = json.load(file)
                         if ann_json['anncomplete']:
+                            filenames.append(filename)
                             annotatable_parts |= set(ann_json['annotatable']['parts'])
                             annotator_entities[annotator] = ann_json['entities']
 

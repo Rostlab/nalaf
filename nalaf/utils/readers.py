@@ -1,6 +1,6 @@
 import abc
 from bs4 import BeautifulSoup
-from nalaf.bootstrapping.utils import DownloadArticle
+from nalaf.utils.download import DownloadArticle
 from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
 import re
 import glob

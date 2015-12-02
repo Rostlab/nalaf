@@ -432,7 +432,7 @@ class PMIDReader(Reader):
         :returns: nalaf.structures.data.Dataset
         """
         dataset = Dataset()
-        with DownloadArticle(one_part=True) as da:
+        with DownloadArticle() as da:
             for pmid, doc in da.download(self.pmids):
                 dataset.documents[pmid] = doc
         return dataset

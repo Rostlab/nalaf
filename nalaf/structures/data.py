@@ -414,9 +414,12 @@ class Dataset:
         deletes all the parts that contain no annotations at all
         """
         for doc_id, doc in self.documents.items():
+            part_ids_to_del = []
             for part_id, part in doc.parts.items():
                 if len(part.annotations) == 0:
-                    del doc.parts[part_id]
+                    part_ids_to_del.append(part_id)
+            for part_id in part_ids_to_del:
+                del doc.parts[part_id]
 
     def delete_subclass_annotations(self, subclass, predicted=True):
         """

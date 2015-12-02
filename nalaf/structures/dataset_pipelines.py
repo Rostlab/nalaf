@@ -1,7 +1,6 @@
 from nalaf.features import FeatureGenerator
 from nalaf.features.simple import SimpleFeatureGenerator
 from nalaf.features.stemming import PorterStemFeatureGenerator
-from nalaf.features.tmvar import TmVarFeatureGenerator, TmVarDictionaryFeatureGenerator
 from nalaf.features.window import WindowFeatureGenerator
 from nalaf.preprocessing.spliters import NLTKSplitter, Splitter
 from nalaf.preprocessing.tokenizers import TmVarTokenizer, Tokenizer
@@ -30,11 +29,8 @@ class PrepareDatasetPipeline:
         if not tokenizer:
             tokenizer = TmVarTokenizer()
         if not feature_generators:
-            include = ['pattern0[0]', 'pattern1[0]', 'pattern2[0]', 'pattern3[0]', 'pattern4[0]', 'pattern5[0]',
-                       'pattern6[0]', 'pattern7[0]', 'pattern8[0]', 'pattern9[0]', 'pattern10[0]', 'word[0]', 'stem[0]']
-            feature_generators = [SimpleFeatureGenerator(), PorterStemFeatureGenerator(), TmVarFeatureGenerator(),
-                                  TmVarDictionaryFeatureGenerator(),
-                                  WindowFeatureGenerator(template=(-3, -2, -1, 1, 2, 3), include_list=include)]
+            feature_generators = [SimpleFeatureGenerator(), PorterStemFeatureGenerator(),
+                                  WindowFeatureGenerator((-3, -2, -1, 1, 2, 3), ['word[0]', 'stem[0]'])]
 
         if isinstance(splitter, Splitter):
             self.splitter = splitter

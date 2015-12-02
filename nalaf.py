@@ -12,7 +12,6 @@ from nalaf.learning.taggers import CRFSuiteMutationTagger
 from nalaf.utils import MUT_CLASS_ID
 from nalaf.learning.taggers import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
-from nalaf.learning.postprocessing import PostProcessing
 
 
 if __name__ == "__main__":
@@ -61,8 +60,6 @@ if __name__ == "__main__":
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)
     StubSameSentenceRelationExtractor().tag(dataset)
-
-    PostProcessing().process(dataset)
 
     if args.output_dir:
         if not os.path.isdir(args.output_dir):

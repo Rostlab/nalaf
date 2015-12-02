@@ -2,8 +2,8 @@ from itertools import chain
 
 import requests
 
-from structures.data import Document, Part
-from utils.cache import Cacheable
+from nalaf.structures.data import Document, Part
+from nalaf.utils.cache import Cacheable
 from xml.etree import ElementTree as ET
 
 

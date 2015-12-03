@@ -83,8 +83,8 @@ class Dataset:
         for part in self.parts():
             for rel in part.relations:
                 yield rel
-	
-	def predicted_relations(self):
+
+    def predicted_relations(self):
         """
         helper function that iterates through all predicted relations
         :rtype: collections.Iterable[Relation]
@@ -92,7 +92,7 @@ class Dataset:
         for part in self.parts():
             for relation in part.predicted_relations:
                 yield relation
-	
+
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -220,8 +220,8 @@ class Dataset:
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
-	
-	def form_predicted_relations(self):
+
+    def form_predicted_relations(self):
         """
         Populates part.predicted_relations with a list of Relation objects
         based on the values of the field target for each edge.
@@ -239,7 +239,7 @@ class Dataset:
                                                         edge.entity1.text,
                                                         edge.entity2.text,
                                                         edge.relation_type))
-	
+
     def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
         """
         An array for most occuring words.
@@ -775,7 +775,7 @@ class Part:
         self.edges = []
         """a list of possible relations between any two entities in the part"""
         self.is_abstract = is_abstract
-		"""whether the part is the abstract of the paper"""
+        """whether the part is the abstract of the paper"""
         self.sentence_parse_trees = []
         """the parse trees for each sentence stored as a string"""
         self.tokens = []
@@ -818,8 +818,8 @@ class Part:
             if start <= annotation.offset < end and annotation.class_id == entity_classId:
                 entities.append(annotation)
         return entities
-	
-	def percolate_tokens_to_entities(self, annotated=True):
+
+    def percolate_tokens_to_entities(self, annotated=True):
         """
         if entity start and token start, and entity end and token end match,
         store tokens directly.
@@ -834,9 +834,9 @@ class Part:
                 if entity.offset <= token.start < entity_end or \
                     token.start <= entity.offset < token.end:
                     entity.tokens.append(token)
-	
-	# TODO move to edge features
-	def calculate_token_scores(self):
+
+    # TODO move to edge features
+    def calculate_token_scores(self):
         """
         calculate score for each entity based on a simple heuristic of which
         token is closest to the root based on the dependency tree.
@@ -1036,7 +1036,7 @@ class Token:
                 return entity
         return None
 
-	# TODO review this method
+    # TODO review this method
     def masked_text(self, part):
         """
         if token is part of an entity, return the entity class id, otherwise

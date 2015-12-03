@@ -55,7 +55,8 @@ class RelationExtractionPipeline:
         self.graphs = {}
 
         if not parser:
-            parser = SpacyParser()
+            nlp = English()
+            parser = SpacyParser(nlp)
         if isinstance(parser, Parser):
             self.parser = parser
         else:

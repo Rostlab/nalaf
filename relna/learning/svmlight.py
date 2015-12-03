@@ -3,8 +3,8 @@ import sys
 import subprocess
 import pkg_resources
 
-from nala.structures.data import Label
-from nala.utils import MUT_CLASS_ID
+from nalaf.structures.data import Label
+from nalaf.utils import MUT_CLASS_ID
 from random import random, seed
 
 

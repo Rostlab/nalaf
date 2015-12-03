@@ -6,6 +6,7 @@ from nltk.stem.lancaster import LancasterStemmer
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from progress.bar import Bar
+from spacy.en import English
 
 class Parser:
     """
@@ -122,7 +123,7 @@ class SpacyParser(Parser):
     from spacy.en import English
     from progress.bar import Bar
 
-    def __init__(self, nlp, constituency_parser=True):
+    def __init__(self, nlp, constituency_parser=False):
         self.nlp = nlp
         """an instance of spacy.en.English"""
         self.constituency_parser = constituency_parser

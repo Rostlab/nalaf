@@ -1,4 +1,4 @@
-from nala.features import FeatureGenerator
+from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
 import abc
 
@@ -14,7 +14,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
     @abc.abstractmethod
     def generate(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         return
 

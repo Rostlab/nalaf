@@ -2,13 +2,13 @@
 
 # nalaf - (Na)tural (La)nguage (F)ramework
 
-nalaf is a NLP framework written in python. The goal is to be a general-purpose module-based and easy-to-use framework for common text mining tasks. At the moment two tasks are covered: named-entity recognition (NER) and relationship extraction. These modules support both training and annotating. Associated to these, helper components such as cross-validation training or reading and conversion from different corpora formats are given. At the moment, NER is implemented with Conditional Random Fields (CRFs) and relationship extraction with Support Vector Machines (SVMs) using either linear or tree kernels.
+nalaf is a NLP framework written in python. The goal is to be a general-purpose module-based and easy-to-use framework for common text mining tasks. At the moment two tasks are covered: named-entity recognition (NER) and relationship extraction. These modules support both training and annotating. Associated to these, helper components such as cross-validation training or reading and conversion from different corpora formats are given. At the moment, NER is implemented with Conditional Random Fields (CRFs) and relationship extraction with Support Vector Machines (SVMs) using either linear or tree kernels. The code is licensed under the Apache License 2.0.
 
 Historically, the framework started from 2 joint theses at [Rostlab](https://rostlab.org) at [Technische Universität München](http://www.tum.de/en/homepage/) with a focus on bioinformatics / BioNLP. Concretely the first goal was to do extraction of NL mutation mentions. Soon after another master's thesis used and generalized the framework to do relationship extraction of transcription factors (TF) interacting with gene or gene products. The nalaf framework is planned to be used in other BioNLP tasks at Rostlab.
 
 As a result of the original BioNLP focus, some parts of the code are tailored to the biomedical domain. However, current efforts are underway to generalize all parts and this process is almost done. Development is active. Thus expect many changes in the time being. All 3 theses and the generalization process is being supervised by Juan Miguel Cejuela. Contact person for inquiries.
 
-The goals and more details of this project can be found in the [wiki](https://github.com/jmcejuela/nalaf/wiki).
+The goals and more details of this project can be found in the [wiki](https://github.com/Rostlab/nalaf/wiki).
 
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
 
@@ -23,7 +23,7 @@ The goals and more details of this project can be found in the [wiki](https://gi
 ## Install nalaf
 
 ```shell
-git clone https://github.com/jmcejuela/nalaf.git
+git clone https://github.com/Rostlab/nalaf.git
 cd nalaf
 python3 setup.py install
 python3 -m nalaf.download_corpora

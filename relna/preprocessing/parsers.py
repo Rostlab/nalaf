@@ -1,7 +1,6 @@
 import abc
 import re
 from nalaf.structures.data import *
-from bllipparser import RerankingParser
 from nltk.stem.lancaster import LancasterStemmer
 from nltk import word_tokenize
 from nltk.corpus import stopwords
@@ -41,6 +40,11 @@ class BllipParser(Parser):
     :type overparsing: int
     """
     def __init__(self, nbest=10, overparsing=10, only_parse=False, stop_words=None):
+        try:
+            from bllipparser import RerankingParser
+        except ImportError:
+            raise ImportError('BllipParser not installed, perhaps it is not supported on OS X yet')
+        
         self.parser = RerankingParser.fetch_and_load('GENIA+PubMed', verbose=False)
         """create a Reranking Parser from BllipParser"""
         self.parser.set_parser_options(nbest=nbest, overparsing=overparsing)

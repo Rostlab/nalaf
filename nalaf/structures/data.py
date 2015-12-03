@@ -485,6 +485,7 @@ class Dataset:
         :rtype: (nalaf.structures.data.Dataset, nalaf.structures.data.Dataset)
         """
         keys = list(sorted(self.documents.keys()))
+        # 2727 is an arbitrary number when Alex was drunk one day, and it's just to have reliable order in randomization.
         random.seed(2727)
         random.shuffle(keys)
 

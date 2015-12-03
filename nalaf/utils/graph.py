@@ -13,7 +13,7 @@ def floyd_warshall(graph):
     :param node_to: the token to which path must be calculated
     :type node_to: int
     :param adjacency: a list of tokens in the sentence
-    :type sentence: list[nala.structures.data.Token]
+    :type sentence: list[nalaf.structures.data.Token]
     :return: shortest path between each node
     :rtype: dict[list[int]]
     """

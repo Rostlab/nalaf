@@ -83,7 +83,16 @@ class Dataset:
         for part in self.parts():
             for rel in part.relations:
                 yield rel
-
+	
+	def predicted_relations(self):
+        """
+        helper function that iterates through all predicted relations
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts():
+            for relation in part.predicted_relations:
+                yield relation
+	
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -211,7 +220,26 @@ class Dataset:
                         confidence = aggregator_function(confidence_values)
                         part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
+	
+	def form_predicted_relations(self):
+        """
+        Populates part.predicted_relations with a list of Relation objects
+        based on the values of the field target for each edge.
 
+        Each Relation object denotes a relationship between two entities (usually)
+        of different classes. Each relation is given by a relation type.
+
+        Requires edge.target to be set for each edge.
+        """
+        for part in self.parts():
+            for edge in part.edges:
+                if edge.target == 1:
+                    part.predicted_relations.append(Relation(edge.entity1.offset,
+                                                        edge.entity2.offset,
+                                                        edge.entity1.text,
+                                                        edge.entity2.text,
+                                                        edge.relation_type))
+	
     def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
         """
         An array for most occuring words.
@@ -559,14 +587,27 @@ class Document:
 
         return set(mentions)
 
-    def get_unique_relations(self):
-        """:return: set of all relations (ignoring the text offset and
-        considering only the relation text)"""
+    def unique_relations(self, rel_type, predicted=False):
+        """
+        :param predicted: iterate through predicted relations or true relations
+        :type predicted: bool
+        :return: set of all relations (ignoring the text offset and
+        considering only the relation text)
+        """
         relations = []
         for part in self:
-            for rel in part.relations:
-                relations.append(rel.get_relation_without_offset())
-
+            if predicted:
+                relation_list = part.predicted_relations
+            else:
+                relation_list = part.relations
+            for rel in relation_list:
+                entity1, relation_type, entity2 = rel.get_relation_without_offset()
+                if entity1 < entity2:
+                    relation_string = entity1+' '+relation_type+' '+entity2
+                else:
+                    relation_string = entity2+' '+relation_type+' '+entity1
+                if relation_string not in relations and relation_type == rel_type:
+                    relations.append(relation_string)
         return set(relations)
 
     def relations(self):
@@ -734,6 +775,10 @@ class Part:
         self.edges = []
         """a list of possible relations between any two entities in the part"""
         self.is_abstract = is_abstract
+		"""whether the part is the abstract of the paper"""
+        self.sentence_parse_trees = []
+        """the parse trees for each sentence stored as a string"""
+        self.tokens = []
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
@@ -773,6 +818,70 @@ class Part:
             if start <= annotation.offset < end and annotation.class_id == entity_classId:
                 entities.append(annotation)
         return entities
+	
+	def percolate_tokens_to_entities(self, annotated=True):
+        """
+        if entity start and token start, and entity end and token end match,
+        store tokens directly.
+        if entity start and token start or entity end and token end don't match
+        store the nearest entity having index just before for the start of the
+        entity and just after for the end of the entity
+        """
+        for entity in chain(self.annotations, self.predicted_annotations):
+            entity.tokens = []
+            entity_end = entity.offset + len(entity.text)
+            for token in self.tokens:
+                if entity.offset <= token.start < entity_end or \
+                    token.start <= entity.offset < token.end:
+                    entity.tokens.append(token)
+	
+	# TODO move to edge features
+	def calculate_token_scores(self):
+        """
+        calculate score for each entity based on a simple heuristic of which
+        token is closest to the root based on the dependency tree.
+        """
+        not_tokens = []
+        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
+                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
+        for sentence in self.sentences:
+            for token in sentence:
+                if token.word not in not_tokens:
+                    token.features['score'] = 1
+                if token.features['dependency_from'][0].word not in not_tokens:
+                    token.features['dependency_from'][0].features['score'] = 1
+
+            done = False
+            counter = 0
+
+            while(not done):
+                done = True
+                for token in sentence:
+                    dep_from = token.features['dependency_from'][0]
+                    dep_to = token
+                    dep_type = token.features['dependency_from'][1]
+
+                    if dep_type in important_dependencies:
+                        if dep_from.features['score'] <= dep_to.features['score']:
+                            dep_from.features['score'] = dep_to.features['score'] + 1
+                            done = True
+                counter += 1
+                if counter > 20:
+                    break
+
+    def set_head_tokens(self):
+        """
+        set head token for each entity based on the scores for each token
+        """
+        for token in self.tokens:
+            if token.features['score'] is None:
+                token.features['score'] = 1
+
+        for entity in chain(self.annotations, self.predicted_annotations):
+            if len(entity.tokens) == 1:
+                entity.head_token = entity.tokens[0]
+            else:
+                entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
     def __iter__(self):
         """
@@ -824,6 +933,9 @@ class Edge:
     :type entity1: nalaf.structures.data.Entity
     :type entity2: nalaf.structures.data.Entity
     :type relation_type: str
+    :type sentence: list[nalaf.structures.data.Token]
+    :type sentence_id: int
+    :type part: nalaf.structures.data.Part
     :type features: dict
     """
 
@@ -836,6 +948,8 @@ class Edge:
         """The type of relationship between the two entities"""
         self.sentence = sentence
         """The sentence which contains the edge"""
+        # TODO Design decision, whether to retain sentence or retain part and sentence id
+        # Part and Sentence ID might make sense for double sentence relationships
         self.sentence_id = sentence_id
         """The index of the sentence mentioned in sentence"""
         self.part = part
@@ -899,11 +1013,71 @@ class Token:
         * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
         """
 
+    def is_entity_part(self, part):
+        """
+        check if the token is part of an entity
+        :return bool:
+        """
+        for entity in part.annotations:
+            if self.start <= entity.offset < self.end:
+                return True
+        return False
+
+    def get_entity(self, part):
+        """
+        if the token is part of an entity, return the entity else return None
+        :param part: an object of type Part in which to search for the entity.
+        :type part: nalaf.structures.data.Part
+        :return nalaf.structures.data.Entity or None
+        """
+        for entity in part.annotations:
+            if self.start <= entity.offset < self.end:
+                # entity.offset <= self.start < entity.offset + len(entity.text):
+                return entity
+        return None
+
+	# TODO review this method
+    def masked_text(self, part):
+        """
+        if token is part of an entity, return the entity class id, otherwise
+        return the token word itself.
+        :param part: an object of type Part in which to search for the entity.
+        :type part: nalaf.structures.data.Part
+        :return str
+        """
+        for entity in part.annotations:
+            if self.start <= entity.offset < self.end: # or \
+                # entity.offset <= self.start < entity.offset + len(entity.text):
+                return entity.class_id
+        return self.word
+
     def __repr__(self):
         """
         print calls to the class Token will print out the string contents of the word
         """
         return self.word
+
+    def __eq__(self, other):
+        """
+        consider two tokens equal if and only if their token words and start
+        offsets coincide.
+        :type other: nalaf.structures.data.Token
+        :return bool:
+        """
+        if hasattr(other, 'word') and hasattr(other, 'start'):
+            if self.word == other.word and self.start == other.start:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def __ne__(self, other):
+        """
+        :type other: nalaf.structures.data.Token
+        :return bool:
+        """
+        return not self.__eq__(other)
 
 
 class FeatureDictionary(dict):
@@ -937,6 +1111,8 @@ class Entity:
     :type confidence: float
     :type normalisation_dict: dict
     :type normalized_text: str
+    :type tokens: list[nalaf.structures.data.Token]
+    :type head_token: nalaf.structures.data.Token
     """
     def __init__(self, class_id, offset, text, confidence=1):
         self.class_id = class_id
@@ -956,6 +1132,10 @@ class Entity:
         """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""
+        self.tokens = []
+        """the tokens in each entity"""
+        self.head_token = None
+        """the head token for the entity"""
 
     equality_operator = 'exact'
     """
@@ -1033,7 +1213,7 @@ class Relation:
 
     def get_relation_without_offset(self):
         """:return string with entity1 and entity2 separated by relation type"""
-        return self.text1 + '--' + self.class_id + '--' + self.text2
+        return (self.text1, self.class_id, self.text2)
 
     def validate_itself(self, part):
         """
@@ -1054,7 +1234,22 @@ class Relation:
         return False
 
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        """
+        consider two relations equal if and only if all their parameters match
+        :type other: nalaf.structures.data.Relation
+        :return bool:
+        """
+        if other is not None:
+            return self.__dict__ == other.__dict__
+        else:
+            return False
 
     def __ne__(self, other):
-        return not self.__dict__ == other.__dict__
+        """
+        :type other: nalaf.structures.data.Relation
+        :return bool:
+        """
+        if other is not None:
+            return not self.__dict__ == other.__dict__
+        else:
+            return False

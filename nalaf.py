@@ -8,7 +8,7 @@ from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import CRFSuite
-from nalaf.learning.taggers import CRFSuiteMutationTagger
+from nalaf.learning.taggers import CRFSuiteTagger
 from nalaf.utils import MUT_CLASS_ID
 from nalaf.learning.taggers import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     # get the predictions
     crf = CRFSuite(args.crf_suite_dir)
-    tagger = CRFSuiteMutationTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nalaf.data', 'default_model'))
+    tagger = CRFSuiteTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nalaf.data', 'default_model'))
     tagger.tag(dataset)
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)

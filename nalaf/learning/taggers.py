@@ -97,7 +97,7 @@ class RelationExtractor(Annotator):
         pass
 
 
-class CRFSuiteMutationTagger(Tagger):
+class CRFSuiteTagger(Tagger):
     """
     Performs tagging with a binary model using CRFSuite
 

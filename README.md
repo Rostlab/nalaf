@@ -1,41 +1,51 @@
 [![Build Status](https://travis-ci.com/carstenuhlig/nalaf.svg?token=VhCZKjoiPjzKEaXybidS&branch=develop)](https://travis-ci.com/carstenuhlig/nalaf)
 
-# NALA - Natural Language Text Mining
-Nala is a Text Mining (TM) tool and was initially created to serve as Natural Language (NL) mutation mention predictor for 2 theses from 2 students of the Technical University in Munich. The reason behind focusing on NL mentions is documented [here](https://github.com/carstenuhlig/thesis-alex-carsten/wiki/Natural-language-mentions). It is designed however, as extensible, module-based, easy-to-use and well documented tool for general Named Entity Recognition (NER) in TM. The software is under the MIT license `TODO which license`. So people can use it and extend it with their own modules e.g. tokenizers,  dictionaries, features, etc. The method uses Conditional Random Fields (CRF), which are currently state-of-the-art for NER.
+# nalaf - (Na)tural (La)nguage (F)ramework
 
-The goals of this project can be found on the [wiki.](https://github.com/carstenuhlig/thesis-alex-carsten/wiki#goals-of-2-theses-and-this-method)
+nalaf is a NLP framework written in python. The goal is to be a general-purpose module-based and easy-to-use framework for common text mining tasks. At the moment two tasks are covered: named-entity recognition (NER) and relationship extraction. These modules support both training and annotating. Associated to these, helper components such as cross-validation training or reading and conversion from different corpora formats are given. At the moment, NER is implemented with Conditional Random Fields (CRFs) and relationship extraction with Support Vector Machines (SVMs) using either linear or tree kernels.
+
+Historically, the framework started from 2 joint theses at [Rostlab](https://rostlab.org) at [Technische Universität München](http://www.tum.de/en/homepage/) with a focus on bioinformatics / BioNLP. Concretely the first goal was to do extraction of NL mutation mentions. Soon after another master's thesis used and generalized the framework to do relationship extraction of transcription factors (TF) interacting with gene or gene products. The nalaf framework is planned to be used in other BioNLP tasks at Rostlab.
+
+As a result of the original BioNLP focus, some parts of the code are tailored to the biomedical domain. However, current efforts are underway to generalize all parts and this process is almost done. Development is active. Thus expect many changes in the time being. All 3 theses and the generalization process is being supervised by Juan Miguel Cejuela.
+
+The goals and more details of this project can be found in the [wiki](https://github.com/jmcejuela/nalaf/wiki).
 
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
 
-# Install
+# HOWTO Install
 
-##  Requirements
+## Requirements
 
 * Requires Python 3
-* Requires a working installation of CRFsuite
-    * The easieast way to install it is to download compiled binaries from the [official website.](http://www.chokkan.org/software/crfsuite/) For example for linux systems do the following:
-        * `wget https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz`
-        * `tar -xvf crfsuite-0.12-x86_64.tar.gz`
-        * then the working crf suite direcotry you need it under `/crfsuite-0.12/bin`
+* Requires a working installation of [CRFsuite](https://github.com/downloads/chokkan/crfsuite) (add the binary folder to your `$PATH`)
+* Requires a working installation of [SVM-Light-TK](http://disi.unitn.it/moschitti/TK1.2-software/download.html) (you need to fill in a form; add the binary folder to your `$PATH`)
 
-## Install Code
+## Install nalaf
 
-    git clone https://github.com/carstenuhlig/thesis-alex-carsten.git
-    cd thesis-alex-carsten
-    python3 setup.py install
-    python3 -m nalaf.download_corpora
+```shell
+git clone https://github.com/jmcejuela/nalaf.git
+cd nalaf
+python3 setup.py install
+python3 -m nalaf.download_corpora
+```
 
- If you want to run the unit tests (excluding the slow ones) do:
+If you want to run the unit tests (excluding the slow ones) do:
 
-    python3 setup.py nosetests -a '!slow'
+```shell
+python3 setup.py nosetests -a '!slow'
+```
 
- Note: When we eventually register the package on pypi, the first 3 steps will be replaced with just this next one:
+Note: eventually we will register the package on PyPi to just do:
 
-    pip3 install nalaf
+```
+pip3 install nalaf
+```
 
 # Examples
+
 Run:
-* `nalaf.py` for a simple example how to use NALA just for prediction with a pre-trained model
-    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
-    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
-    * `python3 nalaf.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
+
+* `example_annotate.py` for a simple example of annotation with a pre-trained model for mutations and proteins extraction:
+  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
+  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
+  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -d example.txt`

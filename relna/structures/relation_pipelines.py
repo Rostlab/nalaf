@@ -4,10 +4,10 @@ from relna.features.loctext import *
 from relna.features.path import *
 from relna.features.sentence import *
 from relna.features.ngrams import *
-from nala.features import FeatureGenerator
-from nala.structures.data import FeatureDictionary
-from nala.preprocessing.spliters import Splitter, NLTKSplitter
-from nala.preprocessing.tokenizers import Tokenizer, NLTKTokenizer, TmVarTokenizer
+from nalaf.features import FeatureGenerator
+from nalaf.structures.data import FeatureDictionary
+from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
+from nalaf.preprocessing.tokenizers import Tokenizer, NLTKTokenizer, TmVarTokenizer
 from relna.preprocessing.parsers import Parser, BllipParser, SpacyParser
 from relna.preprocessing.edges import SimpleEdgeGenerator
 from spacy.en import English
@@ -55,7 +55,7 @@ class RelationExtractionPipeline:
         self.graphs = {}
 
         if not parser:
-            parser = BllipParser()
+            parser = SpacyParser()
         if isinstance(parser, Parser):
             self.parser = parser
         else:

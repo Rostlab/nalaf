@@ -1,6 +1,6 @@
 import abc
 from bs4 import BeautifulSoup
-from nalaf.bootstrapping.utils import DownloadArticle
+from nalaf.utils.download import DownloadArticle
 from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
 import re
 import glob
@@ -432,7 +432,7 @@ class PMIDReader(Reader):
         :returns: nalaf.structures.data.Dataset
         """
         dataset = Dataset()
-        with DownloadArticle(one_part=True) as da:
+        with DownloadArticle() as da:
             for pmid, doc in da.download(self.pmids):
                 dataset.documents[pmid] = doc
         return dataset

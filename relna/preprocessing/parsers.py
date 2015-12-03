@@ -1,6 +1,6 @@
 import abc
 import re
-from nala.structures.data import *
+from nalaf.structures.data import *
 from bllipparser import RerankingParser
 from nltk.stem.lancaster import LancasterStemmer
 from nltk import word_tokenize
@@ -19,7 +19,7 @@ class Parser:
     @abc.abstractmethod
     def parse(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         return
 
@@ -132,7 +132,7 @@ class SpacyParser(Parser):
         if (not isinstance(self.nlp, English)):
             raise TypeError('Not an instance of spacy.en.English')
         # Use the default tokenization done by a call to
-        # nala.preprocessing.Tokenizer before.
+        # nalaf.preprocessing.Tokenizer before.
         old_tokenizer = self.nlp.tokenizer
         self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
         if self.constituency_parser == True:
@@ -140,7 +140,7 @@ class SpacyParser(Parser):
 
     def parse(self, dataset):
         """
-        :type dataset: nala.structures.data.Dataset
+        :type dataset: nalaf.structures.data.Dataset
         """
         outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
         for part in dataset.parts():

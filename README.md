@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?token=VhCZKjoiPjzKEaXybidS&branch=develop)](https://travis-ci.org/Rostlab/nalaf)
+[![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?branch=develop)](https://travis-ci.org/Rostlab/nalaf)
 
 # nalaf - (Na)tural (La)nguage (F)ramework
 

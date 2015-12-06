@@ -3,6 +3,7 @@ import glob
 import json
 import csv
 import os
+from collections import OrderedDict
 from itertools import chain
 from functools import reduce
 from operator import lt, gt
@@ -110,8 +111,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         # some docs may not even have a corresponding .ann.json file
         # delete those as well
         if self.delete_incomplete_docs:
-            dataset.documents = {doc_id: doc for doc_id, doc in dataset.documents.items()
-                                 if sum(len(part.annotations) for part in doc.parts.values()) > 0}
+            dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items()
+                                            if sum(len(part.annotations) for part in doc.parts.values()) > 0)
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):

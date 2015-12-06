@@ -449,6 +449,28 @@ class Dataset:
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
 
+    def prune_sentences(self, percent_to_keep=0):
+        """
+        * keep all sentences that contain  at least one mention
+        * keep a random selection of the rest of the sentences
+
+        :param percent_to_keep: what percentage of the sentences with no mentions to keep
+        :type percent_to_keep: float
+        """
+        for part in self.parts():
+            # find which sentences have at least one mention
+            sentences_have_ann = [any(sentence[0].start <= ann.offset < ann.offset + len(ann.text) <= sentence[-1].end
+                                      for ann in part.annotations)
+                                  for sentence in part.sentences]
+
+            # choose a certain percentage of the ones that have no mention
+            false_indices = [index for index in range(len(part.sentences)) if not sentences_have_ann[index]]
+            chosen = random.sample(false_indices, round(percent_to_keep*len(false_indices)))
+
+            # keep the sentence if it has a mention or it was chosen randomly
+            part.sentences = [sentence for index, sentence in enumerate(part.sentences)
+                              if sentences_have_ann[index] or index in chosen]
+
     def delete_subclass_annotations(self, subclass, predicted=True):
         """
         Method does delete all annotations that have subclass.
@@ -831,10 +853,11 @@ class Part:
         for entity in chain(self.annotations, self.predicted_annotations):
             entity.tokens = []
             entity_end = entity.offset + len(entity.text)
-            for token in self.tokens:
-                if entity.offset <= token.start < entity_end or \
-                    token.start <= entity.offset < token.end:
-                    entity.tokens.append(token)
+            for sentence in self.sentences:
+                for token in sentence:
+                    if entity.offset <= token.start < entity_end or \
+                        token.start <= entity.offset < token.end:
+                        entity.tokens.append(token)
 
     # TODO move to edge features
     def calculate_token_scores(self):

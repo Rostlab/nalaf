@@ -471,24 +471,22 @@ class Dataset:
             part.sentences = [sentence for index, sentence in enumerate(part.sentences)
                               if sentences_have_ann[index] or index in chosen]
 
-    def delete_subclass_annotations(self, subclass, predicted=True):
+    def delete_subclass_annotations(self, subclasses, predicted=True):
         """
         Method does delete all annotations that have subclass.
         Will not delete anything if not specified that particular subclass.
-        :param subclass: annotation type to delete.
-        :param no_predicted: if True it will only consider Part.annotations array and not Part.pred_annotations
+        :param subclasses: one ore more subclasses to delete
+        :param predicted: if False it will only consider Part.annotations array and not Part.pred_annotations
         """
-        if isinstance(subclass, int) or isinstance(subclass, str) or isinstance(subclass, bool):
-            for part in self.parts():
-                part.annotations = [ann for ann in part.annotations if ann.subclass != subclass]
-                if predicted:
-                    part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subclass]
-        else:
-            for subcl in subclass:
-                for part in self.parts():
-                    part.annotations = [ann for ann in part.annotations if ann.subclass != subcl]
-                    if predicted:
-                        part.predicted_annotations = [ann for ann in part.predicted_annotations if ann.subclass != subcl]
+        # if it is not a list, create a list of 1 element
+        if not hasattr(subclasses, '__iter__'):
+            subclasses = [subclasses]
+
+        for part in self.parts():
+            part.annotations = [ann for ann in part.annotations if ann.subclass not in subclasses]
+            if predicted:
+                part.predicted_annotations = [ann for ann in part.predicted_annotations
+                                              if ann.subclass not in subclasses]
 
     def n_fold_split(self, n=5):
         """

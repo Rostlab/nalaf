@@ -1,5 +1,4 @@
 import re
-
 from nalaf.features import FeatureGenerator
 
 
@@ -50,3 +49,34 @@ class NonAsciiFeatureGenerator(FeatureGenerator):
         for token in dataset.tokens():
             if re.search('[^\x00-\x7F]', token.word):
                 token.features['non_ascii'] = 1
+
+
+class ExternalPredictedLabelsFeatureGenerator(FeatureGenerator):
+    """
+    For each token generates a simple float features:
+    [SYSTEM NAME]-[LABEL]:[PROBABILITY] where:
+        * [SYSTEM NAME] is the name of some other tagging system that was used to predict labels
+        * [LABEL] is the label assigned by that system
+        * [PROBABILITY] is the confidence assigned by that system
+
+    The labels should be provided in an input file where:
+        * for each token there is a new line with [LABEL]\t[PROBABILITY]
+        * sequences are separated by an empty line
+    """
+
+    def __init__(self, system_name, input_file):
+        self.input_file = input_file
+        self.system_name = system_name
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+
+        with open(self.input_file) as file:
+            for sentence in dataset.sentences():
+                for token in sentence:
+                    label, probability = file.readline().split('\t')
+                    token.features['{}-{}'.format(self.system_name, label)] = float(probability)
+
+                file.readline()  # skip the empty line signifying new sentence

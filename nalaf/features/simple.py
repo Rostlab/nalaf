@@ -64,7 +64,11 @@ class ExternalPredictedLabelsFeatureGenerator(FeatureGenerator):
         * sequences are separated by an empty line
     """
 
-    def __init__(self, system_name, input_file):
+    def __init__(self, system_name, input_file, weight=1):
+        self.weight = weight
+        """
+        the weight of the external features, by default 1
+        """
         self.input_file = input_file
         self.system_name = system_name
 
@@ -77,6 +81,6 @@ class ExternalPredictedLabelsFeatureGenerator(FeatureGenerator):
             for sentence in dataset.sentences():
                 for token in sentence:
                     label, probability = file.readline().split('\t')
-                    token.features['{}-{}'.format(self.system_name, label)] = float(probability)
+                    token.features['{}-{}'.format(self.system_name, label)] = self.weight * float(probability)
 
                 file.readline()  # skip the empty line signifying new sentence

@@ -56,6 +56,10 @@ class TmVarTokenizer(Tokenizer):
                 sentence = re.sub('([a-z])([A-Z])', r'\1 \2', sentence)
                 sentence = re.sub('([A-Za-z])([0-9])', r'\1 \2', sentence)
                 sentence = re.sub('([a-z])(fs)', r'\1 \2', sentence)
+
+                # separate non-ascii characters into their own tokens
+                sentence = re.sub('([^\x00-\x7F])', r' \1 ', sentence)
+
                 sentence = re.sub('([\W\-_])', r' \1 ', sentence)
 
                 part.sentences[index] = []

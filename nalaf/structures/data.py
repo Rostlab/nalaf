@@ -551,6 +551,48 @@ class Dataset:
 
         return train, test
 
+    def stratified_split(self, percentage=0.66):
+        """
+        Splits the dataset randomly into train and test dataset
+        given the size of the train dataset in percentage.
+
+        Additionally it tries to keep the distribution of entities
+        in terms of subclass similar in both sets.
+
+        :param percentage: the size of the train dataset between 0.0 and 1.0
+        :type percentage: float
+
+        :return train dataset, test dataset
+        :rtype: (nalaf.structures.data.Dataset, nalaf.structures.data.Dataset)
+        """
+        from collections import Counter
+        from itertools import groupby
+        train = Dataset()
+        test = Dataset()
+
+        strat = [(doc_id, Counter(ann.subclass for part in doc for ann in part.annotations))
+             for doc_id, doc in self.documents.items()]
+        strat = sorted(strat, key= lambda x: (x[1].get(0, 0), x[1].get(1, 0), x[1].get(2, 0)))
+
+        switch = 0
+        for _, group in groupby(strat, key=lambda x:x[1]):
+            group = list(group)
+            if len(group) == 1:
+                tmp = train if switch else test
+                tmp.documents[group[0][0]] = self.documents[group[0][0]]
+                switch = 1-switch
+            else:
+                len_train = round(len(group) * percentage)
+                random.seed(2727)
+                random.shuffle(group)
+
+                for key in group[:len_train]:
+                    train.documents[key[0]] = self.documents[key[0]]
+                for key in group[len_train:]:
+                    test.documents[key[0]] = self.documents[key[0]]
+
+        return train, test
+
 
 class Document:
     """

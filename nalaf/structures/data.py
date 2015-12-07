@@ -571,16 +571,16 @@ class Dataset:
         test = Dataset()
 
         strat = [(doc_id, Counter(ann.subclass for part in doc for ann in part.annotations))
-             for doc_id, doc in self.documents.items()]
-        strat = sorted(strat, key= lambda x: (x[1].get(0, 0), x[1].get(1, 0), x[1].get(2, 0)))
+                 for doc_id, doc in self.documents.items()]
+        strat = sorted(strat, key=lambda x: (x[1].get(0, 0), x[1].get(1, 0), x[1].get(2, 0)))
 
         switch = 0
-        for _, group in groupby(strat, key=lambda x:x[1]):
+        for _, group in groupby(strat, key=lambda x: x[1]):
             group = list(group)
             if len(group) == 1:
                 tmp = train if switch else test
                 tmp.documents[group[0][0]] = self.documents[group[0][0]]
-                switch = 1-switch
+                switch = 1 - switch
             else:
                 len_train = round(len(group) * percentage)
                 random.seed(2727)

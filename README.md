@@ -8,9 +8,8 @@ Historically, the framework started from 2 joint theses at [Rostlab](https://ros
 
 As a result of the original BioNLP focus, some parts of the code are tailored to the biomedical domain. However, current efforts are underway to generalize all parts and this process is almost done. Development is active. Thus expect many changes in the time being. All 3 theses and the generalization process is being supervised by Juan Miguel Cejuela. Contact person for inquiries.
 
-The goals and more details of this project can be found in the [wiki](https://github.com/Rostlab/nalaf/wiki).
-
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
+(_[editable version on Lucidchart of the pipeline diagram](https://www.lucidchart.com/invitations/accept/9236d544-8b56-46c4-9f99-62fdf18e838a); requires log in_)
 
 # HOWTO Install
 
@@ -41,7 +40,7 @@ Note: eventually we will register the package on PyPi to just do:
 pip3 install nalaf
 ```
 
-# Examples
+# HOWTO Run, Examples
 
 Run:
 
@@ -49,3 +48,9 @@ Run:
   * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
   * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
   * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
+  
+
+# Development
+
+* [See on wiki](https://github.com/Rostlab/nalaf/wiki/Developer-Info)
+

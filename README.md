@@ -40,7 +40,7 @@ Note: eventually we will register the package on PyPi to just do:
 pip3 install nalaf
 ```
 
-# Examples
+# HOWTO Run, Examples
 
 Run:
 

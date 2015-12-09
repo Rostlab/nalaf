@@ -462,14 +462,16 @@ class Dataset:
             sentences_have_ann = [any(sentence[0].start <= ann.offset < ann.offset + len(ann.text) <= sentence[-1].end
                                       for ann in part.annotations)
                                   for sentence in part.sentences]
+            if any(sentences_have_ann):
+                # choose a certain percentage of the ones that have no mention
+                false_indices = [index for index in range(len(part.sentences)) if not sentences_have_ann[index]]
+                chosen = random.sample(false_indices, round(percent_to_keep*len(false_indices)))
 
-            # choose a certain percentage of the ones that have no mention
-            false_indices = [index for index in range(len(part.sentences)) if not sentences_have_ann[index]]
-            chosen = random.sample(false_indices, round(percent_to_keep*len(false_indices)))
-
-            # keep the sentence if it has a mention or it was chosen randomly
-            part.sentences = [sentence for index, sentence in enumerate(part.sentences)
-                              if sentences_have_ann[index] or index in chosen]
+                # keep the sentence if it has a mention or it was chosen randomly
+                part.sentences = [sentence for index, sentence in enumerate(part.sentences)
+                                  if sentences_have_ann[index] or index in chosen]
+            else:
+                part.sentences = []
 
     def delete_subclass_annotations(self, subclasses, predicted=True):
         """

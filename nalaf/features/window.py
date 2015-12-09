@@ -37,17 +37,18 @@ class WindowFeatureGenerator(FeatureGenerator):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        if self.include_list is None:
+            feature_names = set(name for token in dataset.tokens() for name in token.features.keys())
+        else:
+            feature_names = set(self.include_list)
+
         for sentence in dataset.sentences():
             for index, token in enumerate(sentence):
-
-                if self.include_list is None:
-                    feature_names = list(token.features.keys())
-                else:
-                    feature_names = [name for name in token.features.keys() if name in self.include_list]
-
                 for feature_name in feature_names:
-                    if feature_name.endswith('[0]'):
-                        for template_index in self.template:
-                            if -1 < index + template_index < len(sentence):
+                    for template_index in self.template:
+                        if -1 < index + template_index < len(sentence):
+                            try:
                                 token.features['{}[{}]'.format(feature_name[:-3], template_index)] = \
                                     sentence[index + template_index].features[feature_name]
+                            except KeyError:
+                                pass

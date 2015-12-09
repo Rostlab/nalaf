@@ -11,6 +11,7 @@ As a result of the original BioNLP focus, some parts of the code are tailored to
 The goals and more details of this project can be found in the [wiki](https://github.com/Rostlab/nalaf/wiki).
 
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
+(_[editable version on Lucidchart of the pipeline diagram](https://www.lucidchart.com/invitations/accept/9236d544-8b56-46c4-9f99-62fdf18e838a); requires log in_)
 
 # HOWTO Install
 

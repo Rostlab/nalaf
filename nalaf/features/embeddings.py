@@ -21,3 +21,23 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
                     # value.item() since value is a numpy float
                     # and we want native python floats
                     token.features['embedding_{}'.format(index)] = self.weight * value.item()
+
+
+class BrownClusteringFeatureGenerator(FeatureGenerator):
+        """
+        DOCSTRING
+        """
+        def __init__(self, model_file, weight=1):
+            with open(model_file, encoding='utf-8') as file:
+                self.clusters = {str(line.split()[1]): line.split()[0] for line in file.readlines()}
+            self.weight = weight
+
+        def generate(self, dataset):
+            """
+            :type dataset: nalaf.structures.data.Dataset
+            """
+            for token in dataset.tokens():
+                if token.word in self.clusters:
+                    assignment = self.clusters[token.word]
+                    for i in range(len(assignment)):
+                        token.features['brown'] = assignment[:i+1]

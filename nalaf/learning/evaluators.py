@@ -159,18 +159,18 @@ class MentionLevelEvaluator(Evaluator):
                 exact += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
                                            subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
             except KeyError:
-                exact += ['x', 'x', 'x']
+                exact += [-1, -1, -1]
             try:
                 exact += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
                                             subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
             except KeyError:
-                exact += ['x', 'x', 'x']
+                exact += [-1, -1, -1]
 
             try:
                 exact += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
                                             subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
             except KeyError:
-                exact += ['x', 'x', 'x']
+                exact += [-1, -1, -1]
             exact += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
 
             overlapping = []
@@ -179,18 +179,18 @@ class MentionLevelEvaluator(Evaluator):
                 overlapping += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
                                            subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
             except KeyError:
-                overlapping += ['x', 'x', 'x']
+                overlapping += [-1, -1, -1]
             try:
                 overlapping += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
                                             subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
             except KeyError:
-                overlapping += ['x', 'x', 'x']
+                overlapping += [-1, -1, -1]
 
             try:
                 overlapping += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
                                             subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
             except KeyError:
-                overlapping += ['x', 'x', 'x']
+                overlapping += [-1, -1, -1]
             overlapping += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
 
             print(k.format(self.print_latex_table, *(exact + overlapping)))

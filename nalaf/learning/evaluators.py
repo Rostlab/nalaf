@@ -154,22 +154,45 @@ class MentionLevelEvaluator(Evaluator):
             """
             save_strictnes = self.strictness
             self.strictness = 'exact'
-            exact = self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
-                                         subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:] \
-                      + self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
-                                 subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]\
-                      + self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
-                                 subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]\
-                      + self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
+            exact = []
+            try:
+                exact += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
+                                           subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
+            except KeyError:
+                exact += ['x', 'x', 'x']
+            try:
+                exact += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
+                                            subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
+            except KeyError:
+                exact += ['x', 'x', 'x']
 
+            try:
+                exact += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
+                                            subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
+            except KeyError:
+                exact += ['x', 'x', 'x']
+            exact += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
+
+            overlapping = []
             self.strictness = 'overlapping'
-            overlapping = self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
-                                         subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:] \
-                      + self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
-                                 subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]\
-                      + self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
-                                 subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]\
-                      + self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
+            try:
+                overlapping += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
+                                           subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
+            except KeyError:
+                overlapping += ['x', 'x', 'x']
+            try:
+                overlapping += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
+                                            subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
+            except KeyError:
+                overlapping += ['x', 'x', 'x']
+
+            try:
+                overlapping += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
+                                            subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
+            except KeyError:
+                overlapping += ['x', 'x', 'x']
+            overlapping += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
+
             print(k.format(self.print_latex_table, *(exact + overlapping)))
             self.strictness = save_strictnes
 

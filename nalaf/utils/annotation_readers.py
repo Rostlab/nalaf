@@ -101,9 +101,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 document.parts[entity['part']].predicted_annotations.append(ann)
 
                     # delete parts that are not annotatable
-                    for part_id, part in document.parts.items():
-                        if part_id not in ann_json['annotatable']['parts']:
-                            del document.parts[part_id]
+                    part_ids_to_del = []
+                    for part_id, part in doc.parts.items():
+                        if part_id not in annotatable_parts:
+                            part_ids_to_del.append(part_id)
+                    for part_id in part_ids_to_del:
+                        del doc.parts[part_id]
 
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113

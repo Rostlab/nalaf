@@ -7,9 +7,10 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
     DOCSTRING
     """
 
-    def __init__(self, model_file, weight=1):
+    def __init__(self, model_file, additive=0,  multiplicative=1):
         self.model = Word2Vec.load(model_file)
-        self.weight = weight
+        self.additive = additive
+        self.multiplicative = multiplicative
 
     def generate(self, dataset):
         """
@@ -20,7 +21,7 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
                 for index, value in enumerate(self.model[token.word.lower()]):
                     # value.item() since value is a numpy float
                     # and we want native python floats
-                    token.features['embedding_{}'.format(index)] = self.weight * value.item()
+                    token.features['embedding_{}'.format(index)] = (self.additive + value.item()) * self.multiplicative
 
 
 class BrownClusteringFeatureGenerator(FeatureGenerator):

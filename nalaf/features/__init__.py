@@ -30,4 +30,4 @@ def eval_binary_feature(feature_dict, feature_name, evaluator, *args):
     :type feature_name: str
     """
     if evaluator(*args):
-        feature_dict[feature_name] = 1
+        feature_dict[feature_name] = True

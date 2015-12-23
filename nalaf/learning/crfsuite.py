@@ -3,6 +3,46 @@ import sys
 from nalaf.structures.data import Label
 from nalaf.utils import MUT_CLASS_ID
 
+
+class PyCRFSuite:
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def train(data, model_file):
+        """
+        :type data: nalaf.structures.data.Dataset
+        :type model_file: str
+        """
+        from pycrfsuite import Trainer, ItemSequence
+        trainer = Trainer()
+
+        for sentence in data.sentences():
+            trainer.append(ItemSequence([token.features for token in sentence]),
+                           [token.original_labels[0].value for token in sentence])
+
+        trainer.train(model_file)
+
+    @staticmethod
+    def tag(data, model_file, class_id = MUT_CLASS_ID):
+        """
+        :type data: nalaf.structures.data.Dataset
+        :type model_file: str
+        """
+        from pycrfsuite import Tagger, ItemSequence
+        tagger = Tagger()
+        tagger.open(model_file)
+
+        for sentence in data.sentences():
+            labels = tagger.tag(ItemSequence(token.features for token in sentence))
+
+            for token_index in range(len(sentence)):
+                label = labels[token_index]
+                sentence[token_index].predicted_labels = [Label(label, tagger.marginal(label, token_index))]
+
+        data.form_predicted_annotations(class_id)
+
+
 class CRFSuite:
     """
     Basic class for interaction with CRFSuite

@@ -278,7 +278,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         return agreement and sum(agreement)/len(agreement) >= self.iaa_threshold
 
     def __merge(self, dataset, annotators):
-        for doc_id, doc in dataset.documents.items():
+        for doc_id in list(dataset.documents):
+            doc = dataset.documents[doc_id]
             annotator_entities = {}
             # find the annotations that are marked complete by any annotator
             filenames = []

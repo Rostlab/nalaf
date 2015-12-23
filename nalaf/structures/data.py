@@ -793,7 +793,7 @@ class Document:
                         len(part.text) - end + offset - 1))
                     print_verbose("FOUND:".ljust(10) + ann.text.rjust(ann.offset + len(ann.text), 'o') + 'o' * (
                         ann.offset + len(ann.text) - 1))
-                    return True
+                    return ann
             offset += len(part.text) + 1
         print_verbose('=========\nNOT FOUND\n=========')
         print_verbose(

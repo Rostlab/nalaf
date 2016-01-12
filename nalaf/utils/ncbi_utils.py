@@ -32,7 +32,11 @@ class GNormPlus(Cacheable):
             self.cache[pmid] = text
 
         genes = []
-        for line in text.splitlines()[2:-1]:  # skip title and abstract
+        lines = text.splitlines()
+        title = lines[0]
+        abstract = lines[1]
+
+        for line in lines[2:]:  # skip title and abstract
             try:
                 _, start, end, text, _, gene_id = line.split('\t')
                 if postproc:
@@ -41,7 +45,8 @@ class GNormPlus(Cacheable):
             # the provided pmid was not a valid one
             except ValueError:
                 pass
-        return genes
+
+        return genes, re.sub('\d+\|t\|', '', title), re.sub('\d+\|a\|', '', abstract)
 
     def get_genes_for_text(self, doc, docid='sampleid', postproc=False):
         """

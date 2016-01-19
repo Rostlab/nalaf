@@ -4,7 +4,7 @@ from nalaf.features.stemming import PorterStemFeatureGenerator
 from nalaf.features.window import WindowFeatureGenerator
 from nalaf.preprocessing.spliters import NLTKSplitter, Splitter
 from nalaf.preprocessing.tokenizers import TmVarTokenizer, Tokenizer
-
+from nalaf import print_verbose
 __author__ = 'Aleksandar'
 
 
@@ -59,6 +59,7 @@ class PrepareDatasetPipeline:
         self.splitter.split(dataset)
         self.tokenizer.tokenize(dataset)
         for feature_generator in self.feature_generators:
+            print('starting feature generator:', type(feature_generator))
             feature_generator.generate(dataset)
 
     def serialize(self, dataset, to_file=None):

@@ -68,8 +68,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
+                    annotatable_parts = set(ann_json['annotatable']['parts'])
                     if ann_json['anncomplete']:
-                        annotatable_parts = set(ann_json['annotatable']['parts'])
                         for entity in ann_json['entities']:
                             # if read_just_mutations is False
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:

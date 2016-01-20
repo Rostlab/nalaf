@@ -56,7 +56,9 @@ class HTMLReader(Reader):
 
                 basename = os.path.basename(filename)
                 if '-' in basename:
-                    dataset.documents[filename.split('-')[-1].replace('.plain.html', '')] = document
+                    doc_id = filename.split('-')[-1].replace('.plain.html', '')
+                    doc_id = doc_id.replace('.html','')
+                    dataset.documents[doc_id] = document
                 else:
                     dataset.documents[basename.replace('.html', '')] = document
         return dataset

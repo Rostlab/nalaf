@@ -1,6 +1,6 @@
 from nalaf.features import FeatureGenerator
 from gensim.models import Word2Vec
-
+from nalaf import print_verbose
 
 class WordEmbeddingsFeatureGenerator(FeatureGenerator):
     """
@@ -11,6 +11,7 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
         self.model = Word2Vec.load(model_file)
         self.additive = additive
         self.multiplicative = multiplicative
+        print_verbose('word embddings loaded with vocab size:', len(self.model.vocab))
 
     def generate(self, dataset):
         """

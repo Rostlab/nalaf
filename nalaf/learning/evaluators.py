@@ -32,7 +32,7 @@ class MentionLevelEvaluator(Evaluator):
     by the value of the parameter 'strictness'.
     """
 
-    def __init__(self, strictness='exact', subclass_analysis=False, print_latex_table=None):
+    def __init__(self, strictness='exact', subclass_analysis=False):
         self.strictness = strictness
         """
         Determines whether a text spans matches and how we count that match, 3 possible values:

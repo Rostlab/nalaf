@@ -130,10 +130,10 @@ class MentionLevelEvaluator(Evaluator):
         if self.subclass_analysis:
             subclass_measures = {}
             for subclass, counts in subclass_counts.items():
-                print('SUBCLASS {:4}'.format(subclass), end='\t')
+                print_debug('SUBCLASS {:4}'.format(subclass), end='\t')
                 subclass_measures[subclass] = self.calc_measures(
                     counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap'])
-            print('TOTAL'.ljust(14), end='\t')
+            print_debug('TOTAL'.ljust(14), end='\t')
         if self.subclass_analysis:
             return subclass_measures, self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
         else:

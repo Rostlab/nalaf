@@ -50,10 +50,6 @@ class MentionLevelEvaluator(Evaluator):
         Whether to report the performance for each subclass separately
         Can be used only with strictness='exact'
         """
-        self.print_latex_table = print_latex_table
-        """
-        temporary used for generating nice latex tables for both exact and overlapping
-        """
 
     def evaluate(self, dataset):
         """

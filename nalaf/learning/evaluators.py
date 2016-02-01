@@ -167,9 +167,6 @@ class MentionLevelEvaluator(Evaluator):
 
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
-        print_debug('tp:{:4} fp:{:4} fn:{:4} fp_overlap:{:4} fn_overlap:{:4} '
-                      .format(tp, fp, fn, fp_overlap, fn_overlap))
-
         print_debug('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
               .format(precision, recall, f_measure, self.strictness))
         return tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure

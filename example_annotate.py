@@ -7,8 +7,7 @@ from nalaf.utils.readers import TextFilesReader, PMIDReader
 from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
-from nalaf.learning.crfsuite import CRFSuite
-from nalaf.learning.taggers import CRFSuiteTagger
+from nalaf.learning.crfsuite import PyCRFSuite
 from nalaf.utils import MUT_CLASS_ID
 from nalaf.learning.taggers import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
@@ -16,9 +15,6 @@ from nalaf.learning.taggers import StubSameSentenceRelationExtractor
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A simple demo for using the nalaf pipeline for prediction')
-
-    parser.add_argument('-c', '--crf_suite_dir', help='path to the directory containing the crfsuite executable',
-                        required=True)
 
     parser.add_argument('--color', help='uses color for highlighting predictions if supported '
                                         'otherwise prints them in new line',
@@ -54,9 +50,8 @@ if __name__ == "__main__":
     PrepareDatasetPipeline().execute(dataset)
 
     # get the predictions
-    crf = CRFSuite(args.crf_suite_dir)
-    tagger = CRFSuiteTagger([MUT_CLASS_ID], crf, pkg_resources.resource_filename('nalaf.data', 'default_model'))
-    tagger.tag(dataset)
+    crf = PyCRFSuite()
+    crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'default_model'), class_id=MUT_CLASS_ID)
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)
     StubSameSentenceRelationExtractor().tag(dataset)

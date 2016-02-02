@@ -32,7 +32,7 @@ class MentionLevelEvaluator(Evaluator):
     by the value of the parameter 'strictness'.
     """
 
-    def __init__(self, strictness='exact', subclass_analysis=False, print_latex_table=None):
+    def __init__(self, strictness='exact', subclass_analysis=False):
         self.strictness = strictness
         """
         Determines whether a text spans matches and how we count that match, 3 possible values:
@@ -49,10 +49,6 @@ class MentionLevelEvaluator(Evaluator):
         """
         Whether to report the performance for each subclass separately
         Can be used only with strictness='exact'
-        """
-        self.print_latex_table = print_latex_table
-        """
-        temporary used for generating nice latex tables for both exact and overlapping
         """
 
     def evaluate(self, dataset):
@@ -127,79 +123,14 @@ class MentionLevelEvaluator(Evaluator):
                             subclass_counts[ann.subclass]['fn'] += 1
                             if ann in overlap_subclass_real[ann.subclass]:
                                 subclass_counts[ann.subclass]['fn_overlap'] += 1
-        if self.print_latex_table:
-            k = r"""
-\begin{{table}}[]
-    \centering
-    \caption{{{}}}
-    \label{{my-label}}
-    \begin{{tabular}}{{ccccc}}
-        \hline
-        subclass & strictness  & precision & recall & $F_1$ score \\
-        \hline
-        0        & exact       & {:.4f} & {:.4f} & {:.4f} \\
-        1        & exact       & {:.4f} & {:.4f} & {:.4f} \\
-        2        & exact       & {:.4f} & {:.4f} & {:.4f} \\
-        all      & exact       & {:.4f} & {:.4f} & {:.4f} \\
-        0        & overlapping & {:.4f} & {:.4f} & {:.4f} \\
-        1        & overlapping & {:.4f} & {:.4f} & {:.4f} \\
-        2        & overlapping & {:.4f} & {:.4f} & {:.4f} \\
-        all      & overlapping & {:.4f} & {:.4f} & {:.4f} \\
-        \hline
-    \end{{tabular}}
-\end{{table}}
-            """
-            save_strictnes = self.strictness
-            self.strictness = 'exact'
-            exact = []
-            try:
-                exact += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
-                                           subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
-            except KeyError:
-                exact += [-1, -1, -1]
-            try:
-                exact += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
-                                            subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
-            except KeyError:
-                exact += [-1, -1, -1]
-
-            try:
-                exact += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
-                                            subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
-            except KeyError:
-                exact += [-1, -1, -1]
-            exact += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
-
-            overlapping = []
-            self.strictness = 'overlapping'
-            try:
-                overlapping += self.calc_measures(subclass_counts[0]['tp'], subclass_counts[0]['fp'], subclass_counts[0]['fn'],
-                                           subclass_counts[0]['fp_overlap'], subclass_counts[0]['fn_overlap'])[-3:]
-            except KeyError:
-                overlapping += [-1, -1, -1]
-            try:
-                overlapping += self.calc_measures(subclass_counts[1]['tp'], subclass_counts[1]['fp'], subclass_counts[1]['fn'],
-                                            subclass_counts[1]['fp_overlap'], subclass_counts[1]['fn_overlap'])[-3:]
-            except KeyError:
-                overlapping += [-1, -1, -1]
-
-            try:
-                overlapping += self.calc_measures(subclass_counts[2]['tp'], subclass_counts[2]['fp'], subclass_counts[2]['fn'],
-                                            subclass_counts[2]['fp_overlap'], subclass_counts[2]['fn_overlap'])[-3:]
-            except KeyError:
-                overlapping += [-1, -1, -1]
-            overlapping += self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)[-3:]
-
-            print(k.format(self.print_latex_table, *(exact + overlapping)))
-            self.strictness = save_strictnes
 
         if self.subclass_analysis:
             subclass_measures = {}
             for subclass, counts in subclass_counts.items():
-                print('SUBCLASS {:4}'.format(subclass), end='\t')
+                print_debug('SUBCLASS {:4}'.format(subclass), end='\t')
                 subclass_measures[subclass] = self.calc_measures(
                     counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap'])
-            print('TOTAL'.ljust(14), end='\t')
+            print_debug('TOTAL'.ljust(14), end='\t')
         if self.subclass_analysis:
             return subclass_measures, self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
         else:
@@ -233,9 +164,6 @@ class MentionLevelEvaluator(Evaluator):
 
         f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
 
-        print_debug('tp:{:4} fp:{:4} fn:{:4} fp_overlap:{:4} fn_overlap:{:4} '
-                      .format(tp, fp, fn, fp_overlap, fn_overlap))
-
-        print_debug('p:{:.4f} r:{:.4f} f:{:.4f} strictness:{} '
+        print_debug('p:{:6.4f} r:{:6.4f} f:{:6.4f} strictness:{}'
               .format(precision, recall, f_measure, self.strictness))
         return tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure

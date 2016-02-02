@@ -33,10 +33,16 @@ class GNormPlus(Cacheable):
 
         genes = []
         lines = text.splitlines()
-        title = lines[0]
-        abstract = lines[1]
 
-        for line in lines[2:]:  # skip title and abstract
+        # skip possible empty lines at start
+        line_counter = 0
+        while not lines[line_counter]:
+            line_counter += 1
+
+        title = lines[line_counter]
+        abstract = lines[line_counter+1]
+
+        for line in lines[line_counter+2:]:  # skip title and abstract
             try:
                 _, start, end, text, _, gene_id = line.split('\t')
                 if postproc:

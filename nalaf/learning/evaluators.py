@@ -64,9 +64,6 @@ class MentionLevelEvaluator(Evaluator):
                 len(real items that are also predicted)/len(real)
                 or in other words tp / tp + fn
             * possibly considers overlapping matches as well
-
-        Also prints the value of the calculated precision, recall, F1 measure
-        as well as the value of the parameter 'strictness'.
         """
         tp, fp, fn, fp_overlap, fn_overlap = 0, 0, 0, 0, 0
 

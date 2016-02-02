@@ -8,6 +8,7 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
+from nalaf import print_verbose, print_debug
 from nalaf.structures.data import Entity, Relation
 from nalaf.utils import MUT_CLASS_ID
 
@@ -65,6 +66,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         doc_id = filename.split('-')[-1].replace('.ann.json', '')
                     else:
                         doc_id = basename.replace('.ann.json', '')
+
+                    print_debug("annotation_readers ann.json", doc_id)
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]

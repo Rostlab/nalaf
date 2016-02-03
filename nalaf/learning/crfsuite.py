@@ -2,6 +2,7 @@ import os
 import sys
 from nalaf.structures.data import Label
 from nalaf.utils import MUT_CLASS_ID
+import warnings
 
 
 class PyCRFSuite:
@@ -50,6 +51,7 @@ class CRFSuite:
     #NOTE: Make the class a bit more generic or replace with an existing package such as python-crfsuite (as for the binding)
 
     def __init__(self, directory, minify=False):
+        warnings.warn('Depricated. Please use PyCRFSuite instead', DeprecationWarning)
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'default_model'

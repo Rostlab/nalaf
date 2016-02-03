@@ -31,7 +31,7 @@ def import_html_to_db(documents, filelist):
         with open(x, "rb") as f:
             doc = {}
             counter = 0
-            soup = BeautifulSoup(f)
+            soup = BeautifulSoup(f, "html.parser")
             pubmedid = soup.html.attrs['data-origid']
             # print("PubMed-ID:", pubmedid)
             # title = soup.find(attrs={"data-type": "title"}).h2.string

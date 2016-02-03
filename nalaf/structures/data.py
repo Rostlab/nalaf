@@ -8,6 +8,7 @@ import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf.utils.qmath import harmonic_mean
 from nalaf import print_debug, print_verbose
+import warnings
 
 
 class Dataset:
@@ -239,6 +240,16 @@ class Dataset:
                                                         edge.entity1.text,
                                                         edge.entity2.text,
                                                         edge.relation_type))
+
+    def validate_annotation_offsets(self):
+        """
+        Helper function to validate that the annotation offsets match the annotation text.
+        Mostly used as a sanity check and to make sure GNormPlus works as intentded.
+        """
+        for part in self.parts():
+            for ann in part.predicted_annotations:
+                if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
+                    warnings.warn('the offsets do not match in {}'.format(ann))
 
     def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
         """

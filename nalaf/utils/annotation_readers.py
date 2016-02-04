@@ -136,8 +136,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     1. Union or intersection
     2. Shortest entity, longest entity or priority
     """
-    def __init__(self, directory, strategy='union', entity_strategy='shortest', read_just_mutations=True,
-                 filter_below_iaa_threshold=False, iaa_threshold=0.8):
+    def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None, read_just_mutations=True,
+                 delete_incomplete_docs=True, filter_below_iaa_threshold=False, iaa_threshold=0.8):
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -160,10 +160,9 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
         * shortest: takes the shortest overlapping entity
-        * priority: take the entity from the annotator with higher priority in the following order:
-            (abojchevski, Ectelion, sanjeevkrn, Shpendi, jmcejuela, cuhlig, ANKIT)
+        * priority: take the entity from the annotator with higher priority in the order provided by parameter `priority`
         """
-        self.priority = ['Ectelion', 'abojchevski', 'sanjeevkrn', 'Shpendi']
+        self.priority = priority
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
         self.filter_below_iaa_threshold = filter_below_iaa_threshold

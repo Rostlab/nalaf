@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name='nalaf',
-    version='0.1',
+    version='0.1.1',
     description='Pipeline for NER of natural language mutation mentions',
     long_description=readme(),
     classifiers=[
@@ -18,16 +18,17 @@ setup(
         'Topic :: Text Processing :: Linguistic'
     ],
     keywords='crf mutation natural language ner',
-    url='https://github.com/carstenuhlig/thesis-alex-carsten',
-    author='Aleksandar Bojchevski, Carsten Uhlig',
-    author_email='email@somedomain.com',
+    url='https://github.com/Rostlab/nalaf',
+    author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
+    author_email='juanmi@jmcejuela.com',
     license='MIT',
     packages=find_packages(exclude=['tests']),
     install_requires=[
         'nltk',
         'beautifulsoup4',
         'requests',
-        'python-crfsuite' #Note: it may cause problems on Windows machines
+        'python-crfsuite', #Note: it may cause problems on Windows machines
+        'gensim' #Note: it may cause problems on different environments
     ],
     include_package_data=True,
     zip_safe=False,

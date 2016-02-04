@@ -43,7 +43,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
-        """whether to delete documents from the dataset that are not marked as 'anncomplete'"""
+        """delete documents from the dataset that are not marked as 'anncomplete' provided the docs are not predicted"""
         self.is_predicted = is_predicted
         """whether the annotation is predicted or real, which determines where it will be saved"""
         self.read_relations = read_relations
@@ -71,22 +71,22 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
-                    annotatable_parts = set(ann_json['annotatable']['parts'])
-                    if ann_json['anncomplete']:
+
+                    if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
+                        del dataset.documents[doc_id]
+                    else:
                         for entity in ann_json['entities']:
-                            # if read_just_mutations is False
                             if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                # if it is predicted put it in predicted_annotations else in annotations
+                                ann = Entity(entity['classId'], entity['offsets'][0]['start'],
+                                                 entity['offsets'][0]['text'], entity['confidence']['prob'])
                                 if self.is_predicted:
-                                    ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                                     entity['offsets'][0]['text'], entity['confidence']['prob'])
                                     document.parts[entity['part']].predicted_annotations.append(ann)
                                 else:
-                                    ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                                     entity['offsets'][0]['text'])
                                     document.parts[entity['part']].annotations.append(ann)
+
                         if self.read_relations:
                             for relation in ann_json['relations']:
+                                # no distinction with predicted_relations yet
                                 part = document.parts[relation['entities'][0].split('|')[0]]
                                 e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
                                 e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
@@ -95,18 +95,9 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 e1_text = part.text[e1_start:e1_end]
                                 e2_text = part.text[e2_start:e2_end]
                                 part.relations.append(Relation(e1_start, e2_start, e1_text, e2_text, relation['classId']))
-                    elif self.delete_incomplete_docs:
-                        del dataset.documents[doc_id]
-                    elif self.is_predicted:  # anncomplete=False, delete_incomplete_docs=False, is_predicted=True
-                        for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                                ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                                 entity['offsets'][0]['text'], entity['confidence']['prob'])
-                                document.parts[entity['part']].predicted_annotations.append(ann)
-
-
 
                         # delete parts that are not annotatable
+                        annotatable_parts = set(ann_json['annotatable']['parts'])
                         part_ids_to_del = []
                         for part_id, part in document.parts.items():
                             if part_id not in annotatable_parts:
@@ -117,11 +108,10 @@ class AnnJsonAnnotationReader(AnnotationReader):
                 except KeyError:
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
-        # some docs may not even have a corresponding .ann.json file
-        # delete those as well
-        if self.delete_incomplete_docs:
-            dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items()
-                                            if sum(len(part.annotations) for part in doc.parts.values()) > 0)
+
+        # some docs may not even have a corresponding .ann.json file; delete those
+        dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items()
+            if sum(len(part.annotations) for part in doc.parts.values()) > 0)
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):
@@ -136,8 +126,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     1. Union or intersection
     2. Shortest entity, longest entity or priority
     """
-    def __init__(self, directory, strategy='union', entity_strategy='shortest', read_just_mutations=True,
-                 filter_below_iaa_threshold=False, iaa_threshold=0.8):
+    def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None, read_just_mutations=True,
+                 delete_incomplete_docs=True, filter_below_iaa_threshold=False, iaa_threshold=0.8):
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -160,12 +150,13 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         the merging strategy for entities when they are overlapping, can be:
         * longest: takes the longest overlapping entity
         * shortest: takes the shortest overlapping entity
-        * priority: take the entity from the annotator with higher priority in the following order:
-            (abojchevski, Ectelion, sanjeevkrn, Shpendi, jmcejuela, cuhlig, ANKIT)
+        * priority: take the entity from the annotator with higher priority in the order provided by parameter `priority`
         """
-        self.priority = ['Ectelion', 'abojchevski', 'sanjeevkrn', 'Shpendi']
+        self.priority = priority
         self.read_just_mutations = read_just_mutations
         """whether to read in only mutation entities"""
+        self.delete_incomplete_docs = delete_incomplete_docs
+        """delete documents from the dataset that are not marked as 'anncomplete'"""
         self.filter_below_iaa_threshold = filter_below_iaa_threshold
         self.iaa_threshold = iaa_threshold
 
@@ -293,7 +284,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                 for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
                     with open(filename, 'r', encoding='utf-8') as file:
                         ann_json = json.load(file)
-                        if ann_json['anncomplete']:
+                        if ann_json['anncomplete'] or not self.delete_incomplete_docs:
                             filenames.append(filename)
                             annotatable_parts |= set(ann_json['annotatable']['parts'])
                             annotator_entities[annotator] = ann_json['entities']

@@ -27,7 +27,7 @@ setup(
         'nltk',
         'beautifulsoup4',
         'requests',
-        'python-crfsuite'
+        'python-crfsuite' #Note: it may cause problems on Windows machines
     ],
     include_package_data=True,
     zip_safe=False,

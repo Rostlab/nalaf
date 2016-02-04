@@ -105,7 +105,7 @@ class CRFSuiteTagger(Tagger):
     :type crf_suite: nalaf.learning.crfsuite.CRFSuite
     """
 
-    def __init__(self, predicts_classes, crf_suite, model_file='default_model'):
+    def __init__(self, predicts_classes, crf_suite, model_file='example_entity_model'):
         super().__init__(predicts_classes)
         self.crf_suite = crf_suite
         """an instance of CRFSuite used to actually generate predictions"""

@@ -54,7 +54,7 @@ class CRFSuite:
         warnings.warn('Depricated. Please use PyCRFSuite instead', DeprecationWarning)
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
-        self.model_filename = 'default_model'
+        self.model_filename = 'example_entity_model'
         """name to be used for saving the model"""
         if sys.platform.startswith('linux'):
             self.crf_suite_call = './crfsuite'
@@ -133,7 +133,7 @@ class CRFSuite:
 
         For example first we would call:
             * crf.create_input_file(dataset=test, mode='test')
-            * crf.test(options='-m default_model -i test > output.txt')
+            * crf.test(options='-m example_entity_model -i test > output.txt')
         Then we would call:
             * crf.read_predictions(dataset=test)
         """

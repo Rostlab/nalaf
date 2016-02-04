@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     # get the predictions
     crf = PyCRFSuite()
-    crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'default_model'), class_id=MUT_CLASS_ID)
+    crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'example_entity_model'), class_id=MUT_CLASS_ID)
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)
     StubSameSentenceRelationExtractor().tag(dataset)

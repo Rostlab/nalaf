@@ -111,14 +111,14 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(subclass_counts[1][0], 1)
         self.assertEqual(subclass_counts[2][0], 2)
 
-        self.assertEqual(subclass_counts[1][1], 2)
-        self.assertEqual(subclass_counts[2][1], 2)
+        self.assertEqual(subclass_counts[1][1], 3)
+        self.assertEqual(subclass_counts[2][1], 1)
 
         self.assertEqual(subclass_counts[1][2], 4)
         self.assertEqual(subclass_counts[2][2], 1)
 
-        self.assertEqual(subclass_counts[1][3], 1)
-        self.assertEqual(subclass_counts[1][4], 1)
+        self.assertEqual(subclass_counts[1][3], 2)
+        self.assertEqual(subclass_counts[1][4], 2)
         self.assertEqual(subclass_counts[2][3], 1)
         self.assertEqual(subclass_counts[2][4], 1)
 

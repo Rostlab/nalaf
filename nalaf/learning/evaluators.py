@@ -95,11 +95,11 @@ class MentionLevelEvaluator(Evaluator):
                             overlap_real.append(ann_a)
                             overlap_predicted.append(ann_b)
 
-                            if ann_a.subclass != ann_b.subclass:
-                                print_debug('overlapping subclasses do not match', ann_a.subclass, ann_b.subclass)
-                                ann_b.subclass = ann_a.subclass
-
                             if self.subclass_analysis:
+                                if ann_a.subclass != ann_b.subclass:
+                                    print_debug('overlapping subclasses do not match', ann_a.subclass, ann_b.subclass)
+                                    ann_b.subclass = ann_a.subclass
+
                                 overlap_subclass_real[ann_a.subclass].append(ann_a)
                                 overlap_subclass_predicted[ann_b.subclass].append(ann_b)
 

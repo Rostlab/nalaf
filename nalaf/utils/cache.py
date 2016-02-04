@@ -38,7 +38,8 @@ class Cacheable:
         self.is_timed = True
 
     def __enter__(self):
-        self.cache_filename = '{}_cache.json'.format(os.path.join(os.path.expanduser('~'), self.__class__.__name__))
+        self.cache_directory = os.path.join(os.path.expanduser('~'), '.nalaf')
+        self.cache_filename = '{}_cache.json'.format(os.path.join(self.cache_directory, self.__class__.__name__))
         if os.path.exists(self.cache_filename):
 
             # if the file is too old reset the cache
@@ -57,5 +58,7 @@ class Cacheable:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.cache:
             print_verbose('writing the cache {}'.format(self.cache_filename))
+            if not os.path.exists(self.cache_directory):
+                os.makedirs(self.cache_directory)
             with open(self.cache_filename, 'w') as file:
                 json.dump(self.cache, file)

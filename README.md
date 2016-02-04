@@ -44,13 +44,12 @@ pip3 install nalaf
 
 Run:
 
-* `example_annotate.py` for a simple example of annotation with a pre-trained model for mutations and proteins extraction:
-  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -p 15878741 12625412`
-  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -s "This is c.A1003G an example"`
-  * `python3 example_annotate.py -c [PATH CRFSUITE BIN DIR] -d example.txt`
-  
+* `example_annotate.py` for a simple example of annotation with a pre-trained model for proteins extraction:
+  * `python3 example_annotate.py -p 15878741 12625412`
+  * `python3 example_annotate.py -s "This is c.A1003G an example # issue https://github.com/Rostlab/nalaf/issues/159`
+  * `python3 example_annotate.py -d resources/example.txt # issue https://github.com/Rostlab/nalaf/issues/159
+
 
 # Development
 
 * [See on wiki](https://github.com/Rostlab/nalaf/wiki/Developer-Info)
-

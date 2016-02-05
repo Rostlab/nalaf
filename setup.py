@@ -28,7 +28,7 @@ setup(
         'beautifulsoup4',
         'requests',
         'python-crfsuite', #Note: it may cause problems on Windows machines
-        'gensim' #Note: it may cause problems on different environments
+         # 'gensim' #Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
     ],
     include_package_data=True,
     zip_safe=False,

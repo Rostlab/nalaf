@@ -1210,7 +1210,11 @@ class Entity:
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""
         self.tokens = []
-        """the tokens in each entity"""
+        """
+        the tokens in each entity
+        TODO Note that tokens are already within sentences. You should use those by default.
+        This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
+        """
         self.head_token = None
         """the head token for the entity"""
 

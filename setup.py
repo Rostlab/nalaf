@@ -27,8 +27,13 @@ setup(
         'nltk',
         'beautifulsoup4',
         'requests',
-        'python-crfsuite', #Note: it may cause problems on Windows machines
-         # 'gensim' #Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
+        'python-crfsuite>=0.8.4',
+        # Note: it may cause problems on Windows machines
+        # Throubleshooting
+        # * Install python3-devel package or similar from your UNIX distribution
+
+        # 'gensim'
+        # Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
     ],
     include_package_data=True,
     zip_safe=False,

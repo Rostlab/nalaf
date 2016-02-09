@@ -26,7 +26,7 @@ setup(
     install_requires=[
         'nltk',
         'beautifulsoup4',
-        'requests',
+        'requests>=2.8.1',
         'python-crfsuite>=0.8.4',
         # Note: it may cause problems on Windows machines
         # Throubleshooting

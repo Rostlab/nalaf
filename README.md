@@ -16,7 +16,6 @@ As a result of the original BioNLP focus, some parts of the code are tailored to
 ## Requirements
 
 * Requires Python 3
-* Requires a working installation of [CRFsuite](https://github.com/downloads/chokkan/crfsuite) (add the binary folder to your `$PATH`)
 * Requires a working installation of [SVM-Light-TK](http://disi.unitn.it/moschitti/TK1.2-software/download.html) (you need to fill in a form; add the binary folder to your `$PATH`)
 
 ## Install nalaf

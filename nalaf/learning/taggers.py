@@ -132,10 +132,10 @@ class GNormPlusGeneTagger(Tagger):
     def __init__(self):
         super().__init__([ENTREZ_GENE_ID, UNIPROT_ID])
 
-    def __find_offset_adjustments(self, s1, s2):
-        return [(i1, j2-j1-i2+i1)
+    def __find_offset_adjustments(self, s1, s2, start_offset):
+        return [(start_offset+i1, j2-j1-i2+i1)
                    for type, i1, i2, j1, j2  in difflib.SequenceMatcher(None, s1, s2).get_opcodes()
-                   if type == 'replace']
+                   if type in ['replace', 'insert']]
 
     def tag(self, dataset, annotated=False, uniprot=False, process_only_abstract=True):
         """
@@ -160,9 +160,9 @@ class GNormPlusGeneTagger(Tagger):
                     abstract = next(parts)
                     adjustment_offsets = []
                     if title.text != gnorm_title:
-                        adjustment_offsets += self.__find_offset_adjustments(title.text, gnorm_title)
+                        adjustment_offsets += self.__find_offset_adjustments(title.text, gnorm_title, 0)
                     if abstract.text != gnorm_abstract:
-                        adjustment_offsets += self.__find_offset_adjustments(abstract.text, gnorm_abstract)
+                        adjustment_offsets += self.__find_offset_adjustments(abstract.text, gnorm_abstract, len(gnorm_title))
 
                     for start, end, text, gene_id in genes:
                         if 0 <= start < end <= len(title.text):

@@ -41,7 +41,7 @@ class DownloadArticle(Cacheable):
                 doc.parts['title'] = Part(xml.find('.//ArticleTitle').text)
                 abstract = []
                 for elem in xml.findall('.//AbstractText'):
-                    if 'Label' in elem.attrib:
+                    if 'Label' in elem.attrib and elem.attrib['Label'] != 'UNLABELLED':
                         abstract.append('{}: {}'.format(elem.attrib['Label'], elem.text))
                     else:
                         abstract.append(elem.text)

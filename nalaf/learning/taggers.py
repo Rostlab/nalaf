@@ -133,7 +133,7 @@ class GNormPlusGeneTagger(Tagger):
         super().__init__([ENTREZ_GENE_ID, UNIPROT_ID])
 
     def __find_offset_adjustments(self, s1, s2, start_offset):
-        return [(start_offset+i1 if type == 'insert' else i1, j2-j1-i2+i1)
+        return [(start_offset+i1, j2-j1-i2+i1)
                    for type, i1, i2, j1, j2  in difflib.SequenceMatcher(None, s1, s2).get_opcodes()
                    if type in ['replace', 'insert']]
 

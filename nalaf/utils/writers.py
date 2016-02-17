@@ -372,11 +372,9 @@ class TagTogFormat:
                         else:
                             state = ''
 
-                        # fields generation
                         fields = {}
-
-                        # normalizations generation
                         normalizations = {}
+
                         for key, value in ann.normalisation_dict.items():
                             if isinstance(value, str):
                                 normalizations[key] = {

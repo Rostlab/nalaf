@@ -365,7 +365,7 @@ class TagTogFormat:
                 for i, (partid, part) in enumerate(doc.parts.items()):
                     for ann in chain(part.annotations, part.predicted_annotations):
                         if threshhold_value:
-                            if ann.confidence > threshhold_value:
+                            if ann.confidence >= threshhold_value:
                                 state = 'selected'
                             else:
                                 state = 'pre-added'

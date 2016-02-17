@@ -328,7 +328,7 @@ class TagTogFormat:
         """
         for pubmedid, doc in self.data.documents.items():
             fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
-            print(fname)
+            print_verbose(fname)
             with open(fname, 'w', encoding='utf-8') as f:
 
                 # conversion keys partids into normalised tagtog-compatible format

@@ -323,7 +323,7 @@ class TagTogFormat:
     def export_ann_json(self, threshhold_value=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
-        Description of ann.json-format: "https://github.com/jmcejuela/tagtog-doc/wiki/ann.json"
+        Description of ann.json-format: "https://github.com/tagtog/tagtog-doc/wiki/ann.json"
         :return:
         """
         for pubmedid, doc in self.data.documents.items():

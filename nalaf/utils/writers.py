@@ -8,6 +8,7 @@ import json
 import sys
 import os
 from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
+from nalaf import print_verbose, print_debug
 
 
 class StatsWriter:

@@ -331,17 +331,10 @@ class TagTogFormat:
             fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
             print_verbose(fname)
             with open(fname, 'w', encoding='utf-8') as f:
-
-                # conversion keys partids into normalised tagtog-compatible format
-                part_ids_raw = list(doc.parts.keys())
-                part_ids_normalised = []
-                for i, partid in enumerate(part_ids_raw):
-                    part_ids_normalised.append("s1p{}".format(i + 1))
-
                 # init empty json-object
                 json_obj = {
                     "annotatable": {
-                        "parts" : part_ids_normalised
+                        "parts" : list(doc.parts.keys())
                     },
                     "anncomplete": False,
                     "sources": [
@@ -391,10 +384,9 @@ class TagTogFormat:
                                         # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
                                     }
 
-                        tagtog_part_id = "s1p{}".format(i + 1)
                         ent = {
                             "classId": ann.class_id,
-                            "part": tagtog_part_id,
+                            "part": partid,
                             "offsets": [{"start": ann.offset, "text": ann.text}],
                             "confidence": {
                                 "state": state,

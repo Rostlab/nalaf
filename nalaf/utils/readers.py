@@ -43,30 +43,36 @@ class HTMLReader(Reader):
         dataset = Dataset()
         filelist = glob.glob(str(self.path + "/*.html"))
         for filename in filelist:
-            dataset = self.__read_file(filename, dataset)
+            dataset = self.__read_file_path(filename, dataset)
 
         return dataset
 
-    def __read_file(self, filename, dataset = Dataset()):
+    def __read_file_path(self, filename, dataset = Dataset()):
         with open(filename, 'rb') as file:
-            soup = BeautifulSoup(file, "html.parser")
-            document = Document()
+            HTMLReader.read_file(file, filename, dataset)
 
-            for part in soup.find_all(id=re.compile('^s')):
-                if re.match(r'^s[3-9]', part['id']):
-                    is_abstract = False
-                else:
-                    is_abstract = True
-                document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
+        return dataset
 
-            basename = os.path.basename(filename)
-            if '-' in basename:
-                doc_id = filename.split('-')[-1].replace('.plain.html', '')
-                doc_id = doc_id.replace('.html','')
+    @staticmethod
+    def read_file(file, filename, dataset = Dataset()):
+        soup = BeautifulSoup(file, "html.parser")
+        document = Document()
+
+        for part in soup.find_all(id=re.compile('^s')):
+            if re.match(r'^s[3-9]', part['id']):
+                is_abstract = False
             else:
-                doc_id = basename.replace('.html', '')
+                is_abstract = True
+            document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
 
-            dataset.documents[doc_id] = document
+        basename = os.path.basename(filename)
+        if '-' in basename:
+            doc_id = filename.split('-')[-1].replace('.plain.html', '')
+            doc_id = doc_id.replace('.html','')
+        else:
+            doc_id = basename.replace('.html', '')
+
+        dataset.documents[doc_id] = document
 
         return dataset
 
@@ -74,7 +80,7 @@ class HTMLReader(Reader):
         if os.path.isdir(self.path):
             return self.__read_directory()
         else:
-            return self.__read_file(filename = self.path)
+            return self.__read_file_path(filename = self.path)
 
 
 class SETHReader(Reader):

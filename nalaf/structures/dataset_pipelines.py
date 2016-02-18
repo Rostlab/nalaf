@@ -59,7 +59,7 @@ class PrepareDatasetPipeline:
         self.splitter.split(dataset)
         self.tokenizer.tokenize(dataset)
         for feature_generator in self.feature_generators:
-            print('starting feature generator:', type(feature_generator))
+            print_verbose('starting feature generator:', type(feature_generator))
             feature_generator.generate(dataset)
 
     def serialize(self, dataset, to_file=None):

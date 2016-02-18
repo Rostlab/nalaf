@@ -245,22 +245,24 @@ class TagTogFormat:
         self.who = who
         """ who parameter """
 
-        # check for root folder for files to save to
-        if not os.path.isdir(self.location):
-            print_verbose("mkdir", os.path.abspath(self.location))
-            os.mkdir(self.location)
+        # Possibility to use instance without writing files to disk
+        if to_save_to:
+            # check for root folder for files to save to
+            if not os.path.isdir(self.location):
+                print_verbose("mkdir", os.path.abspath(self.location))
+                os.mkdir(self.location)
 
-        # create subfolders if not existent
-        # annjson folder
-        self.annjson_path = os.path.join(self.location, _annjson_folder)
-        """ subfolder where ann.json files are saved into """
-        if not os.path.isdir(self.annjson_path):
-            os.mkdir(self.annjson_path)
-        # html folder
-        self.html_folder = os.path.join(self.location, _html_folder)
-        """ subfolder where html files are saved into """
-        if not os.path.isdir(self.html_folder):
-            os.mkdir(self.html_folder)
+            # create subfolders if not existent
+            # annjson folder
+            self.annjson_path = os.path.join(self.location, _annjson_folder)
+            """ subfolder where ann.json files are saved into """
+            if not os.path.isdir(self.annjson_path):
+                os.mkdir(self.annjson_path)
+            # html folder
+            self.html_folder = os.path.join(self.location, _html_folder)
+            """ subfolder where html files are saved into """
+            if not os.path.isdir(self.html_folder):
+                os.mkdir(self.html_folder)
 
     def export(self, threshold_val):
         self.export_html()

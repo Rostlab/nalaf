@@ -326,7 +326,7 @@ class TagTogFormat:
         if docid:
             doc = self.data.documents[docid]
         else:
-            docid, doc = next(iter(self.data.documents.items()))        
+            docid, doc = next(iter(self.data.documents.items()))
 
         # init empty json-object
         json_obj = {

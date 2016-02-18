@@ -272,16 +272,16 @@ class TagTogFormat:
         Html files have sections and everything as if document was exported from tagtog.net itself.
         :return:
         """
-        for pubmedid, doc in self.data.documents.items():
-            fname = os.path.join(self.html_folder, pubmedid + ".html")
+        for docid, doc in self.data.documents.items():
+            fname = os.path.join(self.html_folder, docid + ".html")
             print(fname)
             with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes
 
                 html_attr = {
-                    'id' : pubmedid,
-                    'data-origid' : pubmedid,
+                    'id' : docid,
+                    'data-origid' : docid,
                     'class' : 'anndoc',
                     'data-anndoc-version' : '2.0',
                     'lang' : '',
@@ -294,10 +294,10 @@ class TagTogFormat:
 
                 # meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
                 # meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nalaf.utils.writers.TagTogFormat'} )
-                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + pubmedid } )  # deprecated maybe different sources
+                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + docid } )  # deprecated maybe different sources
 
                 title = ET.SubElement(head, 'title')
-                title.text = pubmedid
+                title.text = docid
 
                 body = ET.SubElement(html, 'body')
 
@@ -327,8 +327,8 @@ class TagTogFormat:
         Description of ann.json-format: "https://github.com/tagtog/tagtog-doc/wiki/ann.json"
         :return:
         """
-        for pubmedid, doc in self.data.documents.items():
-            fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
+        for docid, doc in self.data.documents.items():
+            fname = os.path.join(self.annjson_path, docid + ".ann.json")
             print_verbose(fname)
             with open(fname, 'w', encoding='utf-8') as f:
                 # init empty json-object
@@ -340,7 +340,7 @@ class TagTogFormat:
                     "sources": [
                         {
                             "name": "ORIG",
-                            "id": pubmedid,
+                            "id": docid,
                             "url": ""
                         }
                         # each entry is a dict with "name", "id", "url"

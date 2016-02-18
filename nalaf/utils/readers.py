@@ -29,39 +29,52 @@ class Reader:
 
 
 class HTMLReader(Reader):
-    def __init__(self, directory):
-        self.directory = directory
-        """the directory containing the .html files"""
+    """
+    Reader for tagtog plain.html files
+
+    It reads either a single file or a directory (the contained .html's)
+    """
+
+    def __init__(self, path):
+        self.path = path
+        """an html file or a directory containing .html files"""
+
+    def __read_directory(self):
+        dataset = Dataset()
+        filelist = glob.glob(str(self.path + "/*.html"))
+        for filename in filelist:
+            dataset = self.__read_file(filename, dataset)
+
+        return dataset
+
+    def __read_file(self, filename, dataset = Dataset()):
+        with open(filename, 'rb') as file:
+            soup = BeautifulSoup(file, "html.parser")
+            document = Document()
+
+            for part in soup.find_all(id=re.compile('^s')):
+                if re.match(r'^s[3-9]', part['id']):
+                    is_abstract = False
+                else:
+                    is_abstract = True
+                document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
+
+            basename = os.path.basename(filename)
+            if '-' in basename:
+                doc_id = filename.split('-')[-1].replace('.plain.html', '')
+                doc_id = doc_id.replace('.html','')
+            else:
+                doc_id = basename.replace('.html', '')
+
+            dataset.documents[doc_id] = document
+
+        return dataset
 
     def read(self):
-        """
-        read each html file in the directory, parse it and create and instance of Document
-        form a dataset consisting of every document parsed and return it
-
-        :returns structures.data.Dataset
-        """
-        dataset = Dataset()
-        filelist = glob.glob(str(self.directory + "/*.html"))
-        for filename in filelist:
-            with open(filename, 'rb') as file:
-                soup = BeautifulSoup(file, "html.parser")
-                document = Document()
-
-                for part in soup.find_all(id=re.compile('^s')):
-                    if re.match(r'^s[3-9]', part['id']):
-                        is_abstract = False
-                    else:
-                        is_abstract = True
-                    document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
-
-                basename = os.path.basename(filename)
-                if '-' in basename:
-                    doc_id = filename.split('-')[-1].replace('.plain.html', '')
-                    doc_id = doc_id.replace('.html','')
-                    dataset.documents[doc_id] = document
-                else:
-                    dataset.documents[basename.replace('.html', '')] = document
-        return dataset
+        if os.path.isdir(self.path):
+            return self.__read_directory()
+        else:
+            return self.__read_file(filename = self.path)
 
 
 class SETHReader(Reader):

@@ -8,6 +8,7 @@ import json
 import sys
 import os
 from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
+from nalaf import print_verbose, print_debug
 
 
 class StatsWriter:
@@ -246,7 +247,7 @@ class TagTogFormat:
 
         # check for root folder for files to save to
         if not os.path.isdir(self.location):
-            print(os.path.abspath(self.location))
+            print_verbose("mkdir", os.path.abspath(self.location))
             os.mkdir(self.location)
 
         # create subfolders if not existent
@@ -263,7 +264,7 @@ class TagTogFormat:
 
     def export(self, threshold_val):
         self.export_html()
-        self.export_ann_json(threshhold_value=threshold_val)
+        self.export_ann_json(threshold_val=threshold_val)
 
     def export_html(self):
         """
@@ -271,16 +272,16 @@ class TagTogFormat:
         Html files have sections and everything as if document was exported from tagtog.net itself.
         :return:
         """
-        for pubmedid, doc in self.data.documents.items():
-            fname = os.path.join(self.html_folder, pubmedid + ".html")
+        for docid, doc in self.data.documents.items():
+            fname = os.path.join(self.html_folder, docid + ".html")
             print(fname)
             with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes
 
                 html_attr = {
-                    'id' : pubmedid,
-                    'data-origid' : pubmedid,
+                    'id' : docid,
+                    'data-origid' : docid,
                     'class' : 'anndoc',
                     'data-anndoc-version' : '2.0',
                     'lang' : '',
@@ -293,10 +294,10 @@ class TagTogFormat:
 
                 # meta1 = ET.SubElement(head, 'meta', { 'charset' : 'UTF-8'} )
                 # meta2 = ET.SubElement(head, 'meta', { 'name' : 'generator', 'content' : 'nalaf.utils.writers.TagTogFormat'} )
-                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + pubmedid } )  # deprecated maybe different sources
+                # meta3 = ET.SubElement(head, 'meta', { 'name': 'dcterms.source', 'content' : 'http://www.ncbi.nlm.nih.gov/pubmed/' + docid } )  # deprecated maybe different sources
 
                 title = ET.SubElement(head, 'title')
-                title.text = pubmedid
+                title.text = docid
 
                 body = ET.SubElement(html, 'body')
 
@@ -320,107 +321,108 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
-    def export_ann_json(self, threshhold_value=None):
+
+    def get_single_ann_json(self, threshold_val=None, docid=None):
+        if docid:
+            doc = self.data.documents[docid]
+        else:
+            docid, doc = next(iter(self.data.documents.items()))        
+
+        # init empty json-object
+        json_obj = {
+            "annotatable": {
+                "parts" : list(doc.parts.keys())
+            },
+            "anncomplete": False,
+            "sources": [
+                {
+                    "name": "ORIG",
+                    "id": docid,
+                    "url": ""
+                }
+                # each entry is a dict with "name", "id", "url"
+            ],
+            "metas": {
+                # nothing important -->  # OPTIONAL add meta information from project
+            },
+            "entities": [
+                # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
+            ],
+            "relations": [
+                # not important for here  # OPTIONAL get relations as well
+            ]
+        }
+
+        for i, (partid, part) in enumerate(doc.parts.items()):
+            for ann in chain(part.annotations, part.predicted_annotations):
+                if threshold_val:
+                    if ann.confidence >= threshold_val:
+                        state = 'selected'
+                    else:
+                        state = 'pre-added'
+                else:
+                    state = ''
+
+                fields = {}
+                normalizations = {}
+
+                for key, value in ann.normalisation_dict.items():
+                    if isinstance(value, str):
+                        normalizations[key] = {
+                            # "source": 'http://uniprot.org',
+                            "recName": value,
+                            # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                        }
+                    else:
+                        for substring in value:
+                            normalizations[key + '_' + substring[0]] = {
+                                # "source": 'http://uniprot.org',
+                                "recName": substring,
+                                # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                            }
+
+                ent = {
+                    "classId": ann.class_id,
+                    "part": partid,
+                    "offsets": [{"start": ann.offset, "text": ann.text}],
+                    "confidence": {
+                        "state": state,
+                        "who": [
+                            self.who
+                        ],
+                        "prob": ann.confidence
+                    },
+                    "fields": fields,
+                    "normalizations": normalizations
+                }
+                json_obj['entities'].append(ent)
+
+            for rel in doc.relations():
+                ent_string_format = '{}|{},{}'
+                ent_string1 = ent_string_format.format(partid, rel.start1, rel.start1 + len(rel.text1))
+                ent_string2 = ent_string_format.format(partid, rel.start2, rel.start2 + len(rel.text2))
+                relation = {
+                    "classId": rel.class_id,
+                    "directed": False,
+                    "entities": [ent_string1, ent_string2],
+                    "confidence": 1
+                }
+                json_obj['relations'].append(relation)
+
+        return json_obj
+
+
+    def export_ann_json(self, threshold_val=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
-        Description of ann.json-format: "https://github.com/jmcejuela/tagtog-doc/wiki/ann.json"
+        Description of ann.json-format: "https://github.com/tagtog/tagtog-doc/wiki/ann.json"
         :return:
         """
-        for pubmedid, doc in self.data.documents.items():
-            fname = os.path.join(self.annjson_path, pubmedid + ".ann.json")
-            print(fname)
+        for docid in self.data.documents.keys():
+            fname = os.path.join(self.annjson_path, docid + ".ann.json")
+            print_verbose(fname)
             with open(fname, 'w', encoding='utf-8') as f:
-
-                # conversion keys partids into normalised tagtog-compatible format
-                part_ids_raw = list(doc.parts.keys())
-                part_ids_normalised = []
-                for i, partid in enumerate(part_ids_raw):
-                    part_ids_normalised.append("s1p{}".format(i + 1))
-
-                # init empty json-object
-                json_obj = {
-                    "annotatable": {
-                        "parts" : part_ids_normalised
-                    },
-                    "anncomplete": False,
-                    "sources": [
-                        {
-                            "name": "ORIG",
-                            "id": pubmedid,
-                            "url": ""
-                        }
-                        # each entry is a dict with "name", "id", "url"
-                    ],
-                    "metas": {
-                        # nothing important -->  # OPTIONAL add meta information from project
-                    },
-                    "entities": [
-                        # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
-                    ],
-                    "relations": [
-                        # not important for here  # OPTIONAL get relations as well
-                    ]
-                }
-
-                for i, (partid, part) in enumerate(doc.parts.items()):
-                    for ann in chain(part.annotations, part.predicted_annotations):
-                        if threshhold_value:
-                            if ann.confidence > threshhold_value:
-                                state = 'selected'
-                            else:
-                                state = 'pre-added'
-                        else:
-                            state = ''
-
-                        # fields generation
-                        fields = {}
-
-                        # normalizations generation
-                        normalizations = {}
-                        for key, value in ann.normalisation_dict.items():
-                            if isinstance(value, str):
-                                normalizations[key] = {
-                                    # "source": 'http://uniprot.org',
-                                    "recName": value,
-                                    # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
-                                }
-                            else:
-                                for substring in value:
-                                    normalizations[key + '_' + substring[0]] = {
-                                        # "source": 'http://uniprot.org',
-                                        "recName": substring,
-                                        # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
-                                    }
-
-                        tagtog_part_id = "s1p{}".format(i + 1)
-                        ent = {
-                            "classId": ann.class_id,
-                            "part": tagtog_part_id,
-                            "offsets": [{"start": ann.offset, "text": ann.text}],
-                            "confidence": {
-                                "state": state,
-                                "who": [
-                                    self.who
-                                ],
-                                "prob": ann.confidence
-                            },
-                            "fields": fields,
-                            "normalizations": normalizations
-                        }
-                        json_obj['entities'].append(ent)
-
-                    for rel in doc.relations():
-                        ent_string_format = '{}|{},{}'
-                        ent_string1 = ent_string_format.format(partid, rel.start1, rel.start1 + len(rel.text1))
-                        ent_string2 = ent_string_format.format(partid, rel.start2, rel.start2 + len(rel.text2))
-                        relation = {
-                            "classId": rel.class_id,
-                            "directed": False,
-                            "entities": [ent_string1, ent_string2],
-                            "confidence": 1
-                        }
-                        json_obj['relations'].append(relation)
-
+                json_obj = self.get_single_ann_json(threshold_val, docid)
                 json.dump(json_obj, f)
 
 

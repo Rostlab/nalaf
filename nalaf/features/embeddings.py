@@ -17,13 +17,14 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        # create the feature names only once
+        feature_names = ['embedding_{}'.format(index)
+                         for index in range(self.model[next(iter(self.model.vocab))].shape[0])]
         for token in dataset.tokens():
             if token.word.lower() in self.model:
                 for index, value in enumerate(self.model[token.word.lower()]):
-                    # value.item() since value is a numpy float
-                    # and we want native python floats
-                    token.features['embedding_{}'.format(index)] = (self.additive + value.item()) * self.multiplicative
-
+                    # value.item() since value is a numpy float and we want native python floats
+                    token.features[feature_names[index]] = (self.additive + value.item()) * self.multiplicative
 
 class BrownClusteringFeatureGenerator(FeatureGenerator):
         """

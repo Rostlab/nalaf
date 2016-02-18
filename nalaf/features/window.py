@@ -42,13 +42,19 @@ class WindowFeatureGenerator(FeatureGenerator):
         else:
             feature_names = set(self.include_list)
 
+        # generate window feature names only once since string creation is expensive
+        window_feature_names = {}
+        for feature_name in feature_names:
+            for index in self.template:
+                window_feature_names[(feature_name, index)] = '{}[{}]'.format(feature_name[:-3], index)
+
         for sentence in dataset.sentences():
             for index, token in enumerate(sentence):
                 for feature_name in feature_names:
                     for template_index in self.template:
                         if -1 < index + template_index < len(sentence):
                             try:
-                                token.features['{}[{}]'.format(feature_name[:-3], template_index)] = \
+                                token.features[window_feature_names[(feature_name, template_index)]] = \
                                     sentence[index + template_index].features[feature_name]
                             except KeyError:
                                 pass

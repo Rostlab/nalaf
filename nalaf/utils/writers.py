@@ -264,7 +264,7 @@ class TagTogFormat:
 
     def export(self, threshold_val):
         self.export_html()
-        self.export_ann_json(threshhold_value=threshold_val)
+        self.export_ann_json(threshold_val=threshold_val)
 
     def export_html(self):
         """
@@ -321,7 +321,7 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
-    def export_ann_json(self, threshhold_value=None):
+    def export_ann_json(self, threshold_val=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
         Description of ann.json-format: "https://github.com/tagtog/tagtog-doc/wiki/ann.json"
@@ -358,8 +358,8 @@ class TagTogFormat:
 
                 for i, (partid, part) in enumerate(doc.parts.items()):
                     for ann in chain(part.annotations, part.predicted_annotations):
-                        if threshhold_value:
-                            if ann.confidence >= threshhold_value:
+                        if threshold_val:
+                            if ann.confidence >= threshold_val:
                                 state = 'selected'
                             else:
                                 state = 'pre-added'

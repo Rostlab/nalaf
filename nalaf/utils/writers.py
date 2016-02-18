@@ -321,97 +321,108 @@ class TagTogFormat:
                 # output = ET.tostring(html, encoding='UTF-8')
                 f.write(ET.tostring(html, encoding='utf-8', method='html'))
 
+
+    def get_single_ann_json(self, threshold_val=None, docid=None):
+        if docid:
+            doc = self.data.documents[docid]
+        else:
+            docid, doc = next(iter(self.data.documents.items()))        
+
+        # init empty json-object
+        json_obj = {
+            "annotatable": {
+                "parts" : list(doc.parts.keys())
+            },
+            "anncomplete": False,
+            "sources": [
+                {
+                    "name": "ORIG",
+                    "id": docid,
+                    "url": ""
+                }
+                # each entry is a dict with "name", "id", "url"
+            ],
+            "metas": {
+                # nothing important -->  # OPTIONAL add meta information from project
+            },
+            "entities": [
+                # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
+            ],
+            "relations": [
+                # not important for here  # OPTIONAL get relations as well
+            ]
+        }
+
+        for i, (partid, part) in enumerate(doc.parts.items()):
+            for ann in chain(part.annotations, part.predicted_annotations):
+                if threshold_val:
+                    if ann.confidence >= threshold_val:
+                        state = 'selected'
+                    else:
+                        state = 'pre-added'
+                else:
+                    state = ''
+
+                fields = {}
+                normalizations = {}
+
+                for key, value in ann.normalisation_dict.items():
+                    if isinstance(value, str):
+                        normalizations[key] = {
+                            # "source": 'http://uniprot.org',
+                            "recName": value,
+                            # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                        }
+                    else:
+                        for substring in value:
+                            normalizations[key + '_' + substring[0]] = {
+                                # "source": 'http://uniprot.org',
+                                "recName": substring,
+                                # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
+                            }
+
+                ent = {
+                    "classId": ann.class_id,
+                    "part": partid,
+                    "offsets": [{"start": ann.offset, "text": ann.text}],
+                    "confidence": {
+                        "state": state,
+                        "who": [
+                            self.who
+                        ],
+                        "prob": ann.confidence
+                    },
+                    "fields": fields,
+                    "normalizations": normalizations
+                }
+                json_obj['entities'].append(ent)
+
+            for rel in doc.relations():
+                ent_string_format = '{}|{},{}'
+                ent_string1 = ent_string_format.format(partid, rel.start1, rel.start1 + len(rel.text1))
+                ent_string2 = ent_string_format.format(partid, rel.start2, rel.start2 + len(rel.text2))
+                relation = {
+                    "classId": rel.class_id,
+                    "directed": False,
+                    "entities": [ent_string1, ent_string2],
+                    "confidence": 1
+                }
+                json_obj['relations'].append(relation)
+
+        return json_obj
+
+
     def export_ann_json(self, threshold_val=None):
         """
         Creates all Annotation files in the corresponding ann.json format.
         Description of ann.json-format: "https://github.com/tagtog/tagtog-doc/wiki/ann.json"
         :return:
         """
-        for docid, doc in self.data.documents.items():
+        for docid in self.data.documents.keys():
             fname = os.path.join(self.annjson_path, docid + ".ann.json")
             print_verbose(fname)
             with open(fname, 'w', encoding='utf-8') as f:
-                # init empty json-object
-                json_obj = {
-                    "annotatable": {
-                        "parts" : list(doc.parts.keys())
-                    },
-                    "anncomplete": False,
-                    "sources": [
-                        {
-                            "name": "ORIG",
-                            "id": docid,
-                            "url": ""
-                        }
-                        # each entry is a dict with "name", "id", "url"
-                    ],
-                    "metas": {
-                        # nothing important -->  # OPTIONAL add meta information from project
-                    },
-                    "entities": [
-                        # dict with "classId", "part", "offsets" (being [{"start","text"},...], confidence
-                    ],
-                    "relations": [
-                        # not important for here  # OPTIONAL get relations as well
-                    ]
-                }
-
-                for i, (partid, part) in enumerate(doc.parts.items()):
-                    for ann in chain(part.annotations, part.predicted_annotations):
-                        if threshold_val:
-                            if ann.confidence >= threshold_val:
-                                state = 'selected'
-                            else:
-                                state = 'pre-added'
-                        else:
-                            state = ''
-
-                        fields = {}
-                        normalizations = {}
-
-                        for key, value in ann.normalisation_dict.items():
-                            if isinstance(value, str):
-                                normalizations[key] = {
-                                    # "source": 'http://uniprot.org',
-                                    "recName": value,
-                                    # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
-                                }
-                            else:
-                                for substring in value:
-                                    normalizations[key + '_' + substring[0]] = {
-                                        # "source": 'http://uniprot.org',
-                                        "recName": substring,
-                                        # "confidence": 1  # todo discussion confidence from GNormPlus is not provided so just putting in here 1
-                                    }
-
-                        ent = {
-                            "classId": ann.class_id,
-                            "part": partid,
-                            "offsets": [{"start": ann.offset, "text": ann.text}],
-                            "confidence": {
-                                "state": state,
-                                "who": [
-                                    self.who
-                                ],
-                                "prob": ann.confidence
-                            },
-                            "fields": fields,
-                            "normalizations": normalizations
-                        }
-                        json_obj['entities'].append(ent)
-
-                    for rel in doc.relations():
-                        ent_string_format = '{}|{},{}'
-                        ent_string1 = ent_string_format.format(partid, rel.start1, rel.start1 + len(rel.text1))
-                        ent_string2 = ent_string_format.format(partid, rel.start2, rel.start2 + len(rel.text2))
-                        relation = {
-                            "classId": rel.class_id,
-                            "directed": False,
-                            "entities": [ent_string1, ent_string2],
-                            "confidence": 1
-                        }
-                        json_obj['relations'].append(relation)
-
+                json_obj = self.get_single_ann_json(threshold_val, docid)
                 json.dump(json_obj, f)
 
 

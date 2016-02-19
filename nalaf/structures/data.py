@@ -723,7 +723,6 @@ class Document:
         for p in self.parts.values():
             text += "{0} ".format(p.text)
         return text.strip()
-        # todo check whether this is correct. i have the feeling something is wrong with this (last part usually missing)
 
     def get_body(self):
         """

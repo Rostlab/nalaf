@@ -720,12 +720,10 @@ class Document:
 
         _length = self.get_size()
 
-        for i, p in enumerate(self.parts.values()):
-            if _length - 1 == i:
-                text += p.text
-                break
+        for p in self.parts.values():
             text += "{0} ".format(p.text)
         return text.strip()
+        # todo check whether this is correct. i have the feeling something is wrong with this (last part usually missing)
 
     def get_body(self):
         """

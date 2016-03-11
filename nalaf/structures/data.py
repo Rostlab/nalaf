@@ -3,10 +3,8 @@ from itertools import chain
 import json
 import random
 from nalaf.utils import MUT_CLASS_ID
-import math
 import re
 from nalaf.utils.qmath import arithmetic_mean
-from nalaf.utils.qmath import harmonic_mean
 from nalaf import print_debug, print_verbose
 import warnings
 

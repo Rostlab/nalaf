@@ -18,8 +18,8 @@ class TestPorterStemFeatureGenerator(unittest.TestCase):
     def test_generate(self):
         self.generator.generate(self.dataset)
         features = [token.features for token in self.dataset.tokens()]
-        expected = iter([{'stem[0]': 'Make'}, {'stem[0]': 'make'}, {'stem[0]': 'made'},
-                         {'stem[0]': 'Tri'}, {'stem[0]': 'tri'}, {'stem[0]': 'tri'}])
+        expected = iter([{'stem[0]': 'make'}, {'stem[0]': 'make'}, {'stem[0]': 'made'},
+                         {'stem[0]': 'tri'}, {'stem[0]': 'tri'}, {'stem[0]': 'tri'}])
         for feature in features:
             self.assertEqual(feature, next(expected))
 

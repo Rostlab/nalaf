@@ -3,10 +3,8 @@ from itertools import chain
 import json
 import random
 from nalaf.utils import MUT_CLASS_ID
-import math
 import re
 from nalaf.utils.qmath import arithmetic_mean
-from nalaf.utils.qmath import harmonic_mean
 from nalaf import print_debug, print_verbose
 import warnings
 
@@ -720,10 +718,7 @@ class Document:
 
         _length = self.get_size()
 
-        for i, p in enumerate(self.parts.values()):
-            if _length - 1 == i:
-                text += p.text
-                break
+        for p in self.parts.values():
             text += "{0} ".format(p.text)
         return text.strip()
 

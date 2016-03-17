@@ -65,9 +65,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if '-' in basename:
                         doc_id = filename.split('-')[-1].replace('.ann.json', '')
                     else:
-                        doc_id = basename.replace('.ann.json', '')
-
-                    print_debug("annotation_readers ann.json", doc_id)
+                        doc_id = basename.replace('.ann.json', '')                    
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]

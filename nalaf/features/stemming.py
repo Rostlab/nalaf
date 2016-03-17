@@ -1,6 +1,76 @@
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
+from subprocess import Popen, PIPE
+import os
+import fcntl
+import os.path
+import pkg_resources
+from nalaf import print_debug
 
+class BioLemmatizer(FeatureGenerator):
+    """
+    Uses BioLemmatizer (http://biolemmatizer.sourceforge.net)
+    to set the feature 'stem' (actually a lemma) for every token
+
+    NOTE: requires Java 6 installed on the system. The needed biolemmatizer jar is included in the nalaf distribution
+
+    Implements the abstract class FeatureGenerator.
+    """
+
+    @staticmethod
+    def __setNonBlocking(fd):
+        """
+        Set the file description of the given file descriptor to non-blocking.
+        """
+        flags = fcntl.fcntl(fd, fcntl.F_GETFL)
+        flags = flags | os.O_NONBLOCK
+        fcntl.fcntl(fd, fcntl.F_SETFL, flags)
+
+    def __init__(self):
+        self.jar_path = pkg_resources.resource_filename('nalaf.data', "biolemmatizer-core-1.2-jar-with-dependencies.jar")
+        if not os.path.isfile(self.jar_path):
+            raise Exception("Could't find biolemmatizer jar: " + self.jar_path)
+
+        self.program = ["java", "-Xmx1G", "-jar", self.jar_path, "-l", "-t"]
+        self.p = Popen(self.program, universal_newlines = True, stdin = PIPE, stdout = PIPE, stderr = PIPE, bufsize = 1)
+        BioLemmatizer.__setNonBlocking(self.p.stdout)
+        BioLemmatizer.__setNonBlocking(self.p.stderr)
+
+        # Initialize java program
+        print_debug("BioLemmatizer: INIT START")
+        out = None
+        while not out:
+            try:
+                out = self.p.stdout.read()
+            except TypeError as e:
+                continue
+            else:
+                if ("Running BioLemmatizer in interactive mode" in out):
+                    break
+                else:
+                    out = None
+
+        print_debug("BioLemmatizer: INIT END")
+
+    def generate_word(self, word, postag):
+        self.p.stdin.write(word + " " + postag + "\n")
+        out = None
+        while not out:
+            try:
+                out = self.p.stdout.read()
+                out = out.strip().lower()
+            except TypeError as e:
+                continue
+            else:
+                if out:                    
+                    return out
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        for token in dataset.tokens():
+            token.features['stem'] = self.generate_word(token.word, token.features['tag[0]'])
 
 class PorterStemFeatureGenerator(FeatureGenerator):
     """

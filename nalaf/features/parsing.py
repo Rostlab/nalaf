@@ -3,6 +3,7 @@ from textblob.en.taggers import NLTKTagger
 from textblob.en.np_extractors import FastNPExtractor
 from nalaf.features import FeatureGenerator
 from spacy.en import English
+from nalaf import print_debug
 #import time
 
 class SpacyPosTagger(FeatureGenerator):
@@ -11,7 +12,9 @@ class SpacyPosTagger(FeatureGenerator):
     """
 
     def __init__(self):
+        print_debug("SpacyPosTagger: INIT START")
         self.nlp = English()
+        print_debug("SpacyPosTagger: INIT END")
 
     def generate(self, dataset):
         """

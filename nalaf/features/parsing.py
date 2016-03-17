@@ -1,8 +1,28 @@
 from textblob import TextBlob
+from textblob.en.taggers import NLTKTagger
 from textblob.en.np_extractors import FastNPExtractor
-
 from nalaf.features import FeatureGenerator
 
+class NLKTPosTagger(FeatureGenerator):
+    """
+    POS-tag a dataset using the NLTK Pos Tagger
+    See: https://textblob.readthedocs.org/en/dev/_modules/textblob/en/taggers.html#NLTKTagger
+    """
+
+    def __init__(self):
+        self.tagger = NLTKTagger()
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """        
+
+        for part in dataset.parts():
+            for sentence in part.sentences:
+                text_tokens = list(map(lambda x : x.word, sentence))
+                tags = self.tagger.tag(text_tokens, tokenize=False)
+                for token, tag in zip(sentence, tags):
+                    token.features['tag'] = tag[1]
 
 class PosTagFeatureGenerator(FeatureGenerator):
     """

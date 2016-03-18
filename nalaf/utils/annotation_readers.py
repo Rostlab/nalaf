@@ -107,9 +107,9 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
 
-        # some docs may not even have a corresponding .ann.json file; delete those
-        dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items()
-            if sum(len(part.annotations) for part in doc.parts.values()) > 0)
+        dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items())
+            # this was the old behavior: some docs may not even have a corresponding .ann.json file; delete those
+            # if sum(len(part.annotations) for part in doc.parts.values()) > 0)
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):
@@ -318,9 +318,9 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                 for part_id in part_ids_to_del:
                     del doc.parts[part_id]
 
-            # delete documents with no annotations
             else:
-                del dataset.documents[doc_id]
+                continue #keep the document
+                #del dataset.documents[doc_id] # delete documents with no annotations
 
 
 class BRATPartsAnnotationReader(AnnotationReader):

@@ -2,6 +2,65 @@ import abc
 from nalaf.structures.data import Entity
 from nalaf import print_verbose, print_debug
 
+class Evaluation:
+
+    @staticmethod
+    def __safe_division(nominator, denominator):
+        try:
+            return nominator / denominator
+        except ZeroDivisionError:
+            return float('NaN')
+
+    def __str__(self):
+        return self.format_simple()
+
+    def format_simple(self):
+        fs = "{:6.4f}"
+        p, r, f = list(map(lambda x: fs.format(x), [self.precision, self.recall, self.f_measure]))
+        l = ["P:"+p, "R:"+r, "F:"+f, self.label, self.strictness]
+        return '\t'.join(l)
+
+    def __init__(self, label, strictness, tp, fp, fn, fp_overlap = 0, fn_overlap = 0):
+        self.label = label
+        self.strictness = strictness
+        self.tp = tp
+        self.fp = fp
+        self.fn = fn
+        self.fp_overlap = fp_overlap
+        self.fn_overlap = fn_overlap
+
+        if strictness == 'exact':
+            self.precision = self.__safe_division(tp, tp + fp)
+            self.recall = self.__safe_division(tp, tp + fn)
+
+        elif strictness == 'overlapping':
+            fp = fp - fp_overlap
+            fn = fn - fn_overlap
+
+            self.precision = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fp + fp_overlap + fn_overlap)
+            self.recall = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fn + fp_overlap + fn_overlap)
+
+        elif strictness == 'half_overlapping':
+            fp = fp - fp_overlap
+            fn = fn - fn_overlap
+
+            self.precision = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fp + fp_overlap + fn_overlap)
+            self.recall = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fn + fp_overlap + fn_overlap)
+
+        else:
+            raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
+
+        self.f_measure = 2 * self.__safe_division(self.precision * self.recall, self.precision + self.recall)
+
+class Evaluations:
+    def __init__(self):
+        self.l = []
+
+    def append(self, evaluation):
+        self.l.append(evaluation)
+
+    def __iter__(self):
+        return self.l.__iter__()
 
 class Evaluator:
     """
@@ -128,46 +187,16 @@ class MentionLevelEvaluator(Evaluator):
                             if ann in overlap_subclass_real[ann.subclass]:
                                 subclass_counts[ann.subclass]['fn_overlap'] += 1
 
+        evaluations = Evaluations()
+
         if self.subclass_analysis:
             subclass_measures = {}
             for subclass, counts in subclass_counts.items():
-                print_debug('SUBCLASS {:4}'.format(subclass), end='\t')
-                subclass_measures[subclass] = self.calc_measures(
-                    counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap'])
-            print_debug('TOTAL'.ljust(14), end='\t')
-        if self.subclass_analysis:
-            return subclass_measures, self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
-        else:
-            return self.calc_measures(tp, fp, fn, fp_overlap, fn_overlap)
+                if subclass == None:
+                    break
+                evaluations.append(
+                Evaluation(str(subclass), self.strictness, counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap']))
 
-    @staticmethod
-    def __safe_division(nominator, denominator):
-        try:
-            return nominator / denominator
-        except ZeroDivisionError:
-            return float('NaN')
+        evaluations.append(Evaluation('TOTAL', self.strictness, tp, fp, fn, fp_overlap, fn_overlap))
 
-    def calc_measures(self, tp, fp, fn, fp_overlap, fn_overlap):
-        if self.strictness == 'exact':
-            precision = self.__safe_division(tp, tp + fp)
-            recall = self.__safe_division(tp, tp + fn)
-        elif self.strictness == 'overlapping':
-            fp = fp - fp_overlap
-            fn = fn - fn_overlap
-
-            precision = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fp + fp_overlap + fn_overlap)
-            recall = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fn + fp_overlap + fn_overlap)
-        elif self.strictness == 'half_overlapping':
-            fp = fp - fp_overlap
-            fn = fn - fn_overlap
-
-            precision = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fp + fp_overlap + fn_overlap)
-            recall = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fn + fp_overlap + fn_overlap)
-        else:
-            raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
-
-        f_measure = 2 * self.__safe_division(precision * recall, precision + recall)
-
-        print_debug('p:{:6.4f} r:{:6.4f} f:{:6.4f} strictness:{}'
-              .format(precision, recall, f_measure, self.strictness))
-        return tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure
+        return evaluations

@@ -1,6 +1,8 @@
 from nalaf.features import FeatureGenerator
 from gensim.models import Word2Vec
 from nalaf import print_verbose
+from spacy.en import English
+
 
 class WordEmbeddingsFeatureGenerator(FeatureGenerator):
     """
@@ -44,3 +46,47 @@ class BrownClusteringFeatureGenerator(FeatureGenerator):
                     assignment = self.clusters[token.word]
                     for i in range(len(assignment)):
                         token.features['brown'] = assignment[:i+1]
+
+class SpacyWordEmbeddingsFeatureGenerator(FeatureGenerator):
+    def __init__(self, additive=0,  multiplicative=1):
+        self.additive = additive
+        self.multiplicative = multiplicative
+        self.nlp = English(parser=False, tagger=False, entity=False)
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        # create the feature names only once
+        feature_names = ['embedding_{}'.format(index) for index in range(self.nlp('the')[0].vector.shape[0])]
+        for part in dataset.parts():
+            spc = self.nlp(part.text)
+            for sentence in part.sentences:
+                for token in sentence:
+                    for spacy_token in spc:
+                        start = spacy_token.idx
+                        end = start + len(spacy_token)
+                        if start <= token.start < token.end <= end:
+                            for index, value in enumerate(spacy_token.vector):
+                                token.features[feature_names[index]] = (self.additive + value.item()) * self.multiplicative
+
+                            break
+
+class SpacyBrownClusteringFeatureGenerator(FeatureGenerator):
+    def __init__(self):
+        self.nlp = English(parser=False, tagger=False, entity=False)
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        for part in dataset.parts():
+            spc = self.nlp(part.text)
+            for sentence in part.sentences:
+                for token in sentence:
+                    for spacy_token in spc:
+                        start = spacy_token.idx
+                        end = start + len(spacy_token)
+                        if start <= token.start < token.end <= end:
+                            token.features['brown_cluster'] = str(spacy_token.cluster)
+                            break

@@ -6,7 +6,6 @@ import re
 import glob
 import csv
 import os
-import json
 from nalaf.utils import MUT_CLASS_ID
 # from lxml import etree
 from xml.etree import ElementTree as etree
@@ -141,7 +140,7 @@ class MutationFinderReader(Reader):
 
 class VerspoorReader(Reader):
     """
-    Reader for the Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
+    Reader for the Variome / Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
     Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
     """
 
@@ -157,12 +156,13 @@ class VerspoorReader(Reader):
         :returns structures.data.Dataset
         """
         dataset = Dataset()
-        file_list = glob.glob(str(self.directory + "/*.txt"))
 
         # last pmid
         last_pmid = ""
         id_counter = 0
         ids_per_file_array = [1]
+
+        file_list = glob.glob(str(self.directory + "/*.txt"))
 
         for file_path in file_list:
             file_name = os.path.basename(file_path)
@@ -238,7 +238,7 @@ class VerspoorReader(Reader):
                 for row in reader:
                     if row[0].startswith('T'):
                         entity_type, start, end = row[1].split()
-                        # start = int(start)
+                        text = row[2]
                         # calc of which part it belongs to
                         id = "None"
                         to_correct_off = 0
@@ -279,29 +279,23 @@ class VerspoorReader(Reader):
                         # print(document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])], "==", row[2])
 
                         try:
-                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])]
+                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(text)]
                         except KeyError:
                             simple_id = simple_id.replace("p", "h")
                             properid = properid.replace("p", "h")
-                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])]
+                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(text)]
 
 
-                        if calc_ann_text != row[2]:
+                        if calc_ann_text != text:
                             print(pmid, serial, paragraph, start, to_correct_off, id)
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, int(start) - to_correct_off, row[2])
-                            # try:
+                            ann = Entity(MUT_CLASS_ID, int(start) - to_correct_off, text)
                             dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
-                            # except KeyError:
-                            #     dataset.documents[pmid].parts[simple_id_h + properid_h].annotations.append(ann)
 
                         elif entity_type == 'gene':
-                            ann = Entity('e_1', int(start) - to_correct_off, row[2])
-                            # try:
+                            ann = Entity('e_1', int(start) - to_correct_off, text)
                             dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
-                            # except KeyError:
-                            #     dataset.documents[pmid].parts[simple_id_h + properid_h].annotations.append(ann)
 
         return dataset
 

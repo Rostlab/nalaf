@@ -65,9 +65,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if '-' in basename:
                         doc_id = filename.split('-')[-1].replace('.ann.json', '')
                     else:
-                        doc_id = basename.replace('.ann.json', '')
-
-                    print_debug("annotation_readers ann.json", doc_id)
+                        doc_id = basename.replace('.ann.json', '')                    
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
@@ -323,6 +321,50 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
             # delete documents with no annotations
             else:
                 del dataset.documents[doc_id]
+
+
+class BRATPartsAnnotationReader(AnnotationReader):
+    """
+    Reads the annotations from the SETH-corpus (http://rockt.github.io/SETH/)
+    Format filename = docid-partid.ann
+    Tab separated:
+        annotation_type = T# or R# or E# (entity or relationship or ?)
+        mention = space separated:
+            entity_type start end
+        text
+
+        entity_type = mutation
+
+    Implements the abstract class Annotator.
+    """
+
+    def __init__(self, directory, is_predicted=False):
+        self.directory = directory
+        """the directory containing *.ann files"""
+        self.is_predicted = is_predicted
+
+    def annotate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        for filename in glob.glob(str(self.directory + "/*.ann")):
+            with open(filename, 'r', encoding='utf-8') as file:
+                reader = csv.reader(file, delimiter='\t')
+
+                docid, partid = os.path.basename(filename).replace('.ann', '').split('-')
+                document = dataset.documents[docid].parts[partid]
+
+                for row in reader:
+                    if row[0].startswith('T'):
+                        entity_type, start, end = row[1].split()
+                        text = row[2]
+
+                        if entity_type == 'mutation':
+                            ann = Entity(MUT_CLASS_ID, start, text)
+                            if self.is_predicted:
+                                dataset.documents[docid].parts[partid].predicted_annotations.append(ann)
+                            else:
+                                dataset.documents[docid].parts[partid].annotations.append(ann)
 
 
 class SETHAnnotationReader(AnnotationReader):

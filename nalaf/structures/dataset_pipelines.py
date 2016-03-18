@@ -30,7 +30,7 @@ class PrepareDatasetPipeline:
             tokenizer = TmVarTokenizer()
         if not feature_generators:
             feature_generators = [SimpleFeatureGenerator(), PorterStemFeatureGenerator(),
-                                  WindowFeatureGenerator((-3, -2, -1, 1, 2, 3), ['word[0]', 'stem[0]'])]
+                                  WindowFeatureGenerator((-3, -2, -1, 1, 2, 3), ['stem[0]'])]
 
         if isinstance(splitter, Splitter):
             self.splitter = splitter

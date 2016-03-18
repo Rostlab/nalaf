@@ -1,8 +1,56 @@
 from textblob import TextBlob
+from textblob.en.taggers import NLTKTagger
 from textblob.en.np_extractors import FastNPExtractor
-
 from nalaf.features import FeatureGenerator
+from spacy.en import English
+from nalaf import print_debug
+#import time
 
+class SpacyPosTagger(FeatureGenerator):
+    """
+    POS-tag a dataset using the Spacy Pos Tagger
+    """
+
+    def __init__(self):
+        print_debug("SpacyPosTagger: INIT START")
+        self.nlp = English()
+        print_debug("SpacyPosTagger: INIT END")
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+
+        for part in dataset.parts():
+            for sentence in part.sentences:
+                text_tokens = list(map(lambda x: x.word, sentence))
+                spacy_doc = self.nlp.tokenizer.tokens_from_list(text_tokens)
+
+                self.nlp.tagger(spacy_doc)
+                for token, spacy_token in zip(sentence, spacy_doc):
+                    token.features['pos'] = spacy_token.pos_
+                    token.features['tag'] = spacy_token.tag_
+
+class NLKTPosTagger(FeatureGenerator):
+    """
+    POS-tag a dataset using the NLTK Pos Tagger
+    See: https://textblob.readthedocs.org/en/dev/_modules/textblob/en/taggers.html#NLTKTagger
+    """
+
+    def __init__(self):
+        self.tagger = NLTKTagger()
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+
+        for part in dataset.parts():
+            for sentence in part.sentences:
+                text_tokens = list(map(lambda x : x.word, sentence))
+                tags = self.tagger.tag(text_tokens, tokenize=False)
+                for token, tag in zip(sentence, tags):
+                    token.features['tag'] = tag[1]
 
 class PosTagFeatureGenerator(FeatureGenerator):
     """

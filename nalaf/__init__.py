@@ -1,6 +1,7 @@
 import configparser
 import pkg_resources
 import os
+import sys
 
 config = configparser.ConfigParser()
 
@@ -11,5 +12,8 @@ if os.path.exists('config.ini'):
 else:
     config.read(pkg_resources.resource_filename('nalaf.data', 'default_config.ini'))
 
-print_verbose = print if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
-print_debug = print if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None
+def print_err(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+print_verbose = print_err if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
+print_debug = print_err if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None

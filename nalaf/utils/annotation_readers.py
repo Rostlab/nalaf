@@ -65,7 +65,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if '-' in basename:
                         doc_id = filename.split('-')[-1].replace('.ann.json', '')
                     else:
-                        doc_id = basename.replace('.ann.json', '')                    
+                        doc_id = basename.replace('.ann.json', '')
 
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
@@ -103,7 +103,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         for part_id in part_ids_to_del:
                             del document.parts[part_id]
 
-                except KeyError:
+                except KeyError as e:
+                    print_debug(e)
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
                     pass
 

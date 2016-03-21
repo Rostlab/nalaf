@@ -62,7 +62,7 @@ class BioLemmatizer(FeatureGenerator):
             except TypeError as e:
                 continue
             else:
-                if out:                    
+                if out:
                     return out
 
     def generate(self, dataset):

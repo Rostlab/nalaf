@@ -126,7 +126,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     2. Shortest entity, longest entity or priority
     """
     def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None, read_just_mutations=True,
-                 delete_incomplete_docs=True, filter_below_iaa_threshold=False, iaa_threshold=0.8):
+                 delete_incomplete_docs=True, filter_below_iaa_threshold=False, iaa_threshold=0.8, is_predicted=False):
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -158,6 +158,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         """delete documents from the dataset that are not marked as 'anncomplete'"""
         self.filter_below_iaa_threshold = filter_below_iaa_threshold
         self.iaa_threshold = iaa_threshold
+        self.is_predicted = is_predicted
 
     def annotate(self, dataset):
         """
@@ -287,7 +288,6 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                             filenames.append(filename)
                             annotatable_parts |= set(ann_json['annotatable']['parts'])
                             annotator_entities[annotator] = ann_json['entities']
-
             if self.filter_below_iaa_threshold and not self.__is_acceptable(doc_id, doc, filenames):
                 del dataset.documents[doc_id]
                 continue
@@ -308,8 +308,12 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                         # TODO: Remove once the tagtog bug is fixed
                         break
                     if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
-                        part.annotations.append(
-                            Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+                        if self.is_predicted:
+                            part.predicted_annotations.append(
+                                Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
+                        else:
+                            part.annotations.append(
+                                Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))
 
                 # delete parts that are not annotatable
                 part_ids_to_del = []

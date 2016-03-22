@@ -6,6 +6,34 @@ import fcntl
 import os.path
 import pkg_resources
 from nalaf import print_debug
+from spacy.en import English
+
+class SpacyLemmatizer(FeatureGenerator):
+    """
+    Lemmatize using spacy default English lemmatizer
+
+    Note: the lemma is stored as feature 'stem' for consistency with other parts.
+    """
+
+    def __init__(self):
+        print_debug("SpacyLemmatizer: INIT START")
+        self.nlp = English()
+        print_debug("SpacyLemmatizer: INIT END")
+
+    def generate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+
+        for part in dataset.parts():
+            for sentence in part.sentences:
+                text_tokens = list(map(lambda x: x.word, sentence))
+                spacy_doc = self.nlp.tokenizer.tokens_from_list(text_tokens)
+
+                self.nlp.tagger(spacy_doc)
+
+                for token, spacy_token in zip(sentence, spacy_doc):
+                    token.features['stem'] = spacy_token.lemma_ #already in lower case
 
 class BioLemmatizer(FeatureGenerator):
     """

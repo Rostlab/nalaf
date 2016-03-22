@@ -17,7 +17,7 @@ class SpacyLemmatizer(FeatureGenerator):
 
     def __init__(self):
         print_debug("SpacyLemmatizer: INIT START")
-        self.nlp = English()
+        self.nlp = English(parser=False, entity=False)
         print_debug("SpacyLemmatizer: INIT END")
 
     def generate(self, dataset):

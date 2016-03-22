@@ -28,7 +28,6 @@ setup(
         'beautifulsoup4',
         'requests>=2.8.1',
         'python-crfsuite>=0.8.4',
-        'spacy'
         # Note: it may cause problems on Windows machines
         # Throubleshooting
         # * Install python3-devel package or similar from your UNIX distribution

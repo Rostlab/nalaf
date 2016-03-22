@@ -6,7 +6,7 @@ import fcntl
 import os.path
 import pkg_resources
 from nalaf import print_debug
-from spacy.en import English
+
 
 class SpacyLemmatizer(FeatureGenerator):
     """
@@ -17,6 +17,7 @@ class SpacyLemmatizer(FeatureGenerator):
 
     def __init__(self):
         print_debug("SpacyLemmatizer: INIT START")
+        from spacy.en import English
         self.nlp = English(parser=False, entity=False)
         print_debug("SpacyLemmatizer: INIT END")
 
@@ -33,7 +34,8 @@ class SpacyLemmatizer(FeatureGenerator):
                 self.nlp.tagger(spacy_doc)
 
                 for token, spacy_token in zip(sentence, spacy_doc):
-                    token.features['stem'] = spacy_token.lemma_ #already in lower case
+                    token.features['stem'] = spacy_token.lemma_  # already in lower case
+
 
 class BioLemmatizer(FeatureGenerator):
     """
@@ -55,12 +57,13 @@ class BioLemmatizer(FeatureGenerator):
         fcntl.fcntl(fd, fcntl.F_SETFL, flags)
 
     def __init__(self):
-        self.jar_path = pkg_resources.resource_filename('nalaf.data', "biolemmatizer-core-1.2-jar-with-dependencies.jar")
+        self.jar_path = pkg_resources.resource_filename('nalaf.data',
+                                                        "biolemmatizer-core-1.2-jar-with-dependencies.jar")
         if not os.path.isfile(self.jar_path):
             raise Exception("Could't find biolemmatizer jar: " + self.jar_path)
 
         self.program = ["java", "-Xmx1G", "-jar", self.jar_path, "-l", "-t"]
-        self.p = Popen(self.program, universal_newlines = True, stdin = PIPE, stdout = PIPE, stderr = PIPE, bufsize = 1)
+        self.p = Popen(self.program, universal_newlines=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
         BioLemmatizer.__setNonBlocking(self.p.stdout)
         BioLemmatizer.__setNonBlocking(self.p.stderr)
 
@@ -99,6 +102,7 @@ class BioLemmatizer(FeatureGenerator):
         """
         for token in dataset.tokens():
             token.features['stem'] = self.generate_word(token.word, token.features['tag[0]'])
+
 
 class PorterStemFeatureGenerator(FeatureGenerator):
     """

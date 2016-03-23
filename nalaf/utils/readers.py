@@ -161,9 +161,7 @@ class VerspoorReader(Reader):
         """
         dataset = Dataset()
 
-        # last pmid
-        last_pmid = ""
-        id_counter = 0
+
         ids_per_file_array = [1]
 
         file_list = glob.glob(str(self.directory + "/*.txt"))
@@ -171,14 +169,10 @@ class VerspoorReader(Reader):
         for file_path in file_list:
             file_name = os.path.basename(file_path)
 
-            pmid, serial, part_type, *_, paragraph, = file_name.replace('.txt', '').split('-')
-            # serial = first section
-            # paragrahp = second section
-            # partid = kind of part e.g. Abstract
-            # divided by newlines = 3rd param which is p## or h##
-            # NOTE h## follows with p## so no seperate calculations
+            docid, partid_prefix, = file_name.replace('.txt', '').split('-', 1)
+            # partid_prefix not complete due to multiple part cration for a single .txt file
 
-            if 'Abstract' in part_type:
+            if 'Abstract' in partid_prefix:
                 is_abstract = True
             else:
                 is_abstract = False
@@ -189,14 +183,6 @@ class VerspoorReader(Reader):
             text = text_raw.replace('** IGNORE LINE **\n', '')
             paragraph_list = text.split('\n\n')
 
-            # check for last document the same as now, otherwise restart counter for ids
-            if pmid != last_pmid:
-                id_counter = 0
-                ids_per_file_array = [1]
-                last_pmid = pmid
-            else:
-                ids_per_file_array.append(id_counter + 1)  # id_counter finishes with last id of last file so --> +1
-
             # inital offset for raw_text
             tot_offset = text_raw.count('** IGNORE LINE **\n') * 18
             offsets = [tot_offset]
@@ -204,29 +190,14 @@ class VerspoorReader(Reader):
             for i, text_part in enumerate(paragraph_list):
                 # if text is empty (usually last text due to splitting of "\n\n")
                 if text_part != "":
-                    first_serial = "s" + serial
-                    second_serial = "s" + paragraph.replace("p", "")
+                    partid = "{}-p{}".format(partid_prefix, i + 1)
 
-                    # simple_id counter starts with 0 and before each use in simple_id var increment 1
-                    id_counter += 1
-
-                    # OPTIONAL to activate but annotation reader has to modified as well
-                    # header when 10 >= words in text_part
-                    if len(text_part.split(" ")) < 10:
-                        paragraph_id = "h" + "{:02d}".format(i + 1)
-                        simple_id = "s1h{}".format(id_counter)
-                    else:
-                        paragraph_id = "p" + "{:02d}".format(i + 1)
-                        simple_id = "s1p{}".format(id_counter)
-
-                    partid = "{0}{1}{2}".format(first_serial, second_serial, paragraph_id)
-
-                    if pmid in dataset:
-                        dataset.documents[pmid].parts[simple_id + partid] = Part(text_part, is_abstract=is_abstract)
+                    if docid in dataset:
+                        dataset.documents[docid].parts[partid] = Part(text_part, is_abstract=is_abstract)
                     else:
                         document = Document()
-                        document.parts[simple_id + partid] = Part(text_part, is_abstract=is_abstract)
-                        dataset.documents[pmid] = document
+                        document.parts[partid] = Part(text_part, is_abstract=is_abstract)
+                        dataset.documents[docid] = document
 
                     # add offset for next paragraph
                     tot_offset += len(text_part) + 2
@@ -234,7 +205,6 @@ class VerspoorReader(Reader):
 
             # to delete last element
             del offsets[-1]
-            # print(pmid, serial, paragraph, offsets)
 
             # annotations
             with open(file_path.replace('.txt', '.ann'), encoding='utf-8') as f:
@@ -242,64 +212,36 @@ class VerspoorReader(Reader):
                 for row in reader:
                     if row[0].startswith('T'):
                         entity_type, start, end = row[1].split()
+                        start = int(start)
+                        end = int(end)
                         text = row[2]
-                        # calc of which part it belongs to
-                        id = "None"
-                        to_correct_off = 0
 
-                        last_off = 0
+                        partid = None
+                        part_index = None
 
-                        for i, off in enumerate(offsets):
-                            if int(start) < off:
-                                id = "p{:02d}".format(i)
-                                # id_h = "h{:02d}".format(i)
-
-                                to_correct_off = last_off
-
-                                simple_id = "s1p{}".format(ids_per_file_array[-1] + i - 1)  # -1 since starting to count with 1
-                                # simple_id_h = "s1h{}".format(ids_per_file_array[-1] + i - 1)
+                        for i in range(len(offsets) - 1):
+                            if offsets[i+1] > start:
+                                part_index = i
                                 break
-                            last_off = off
 
-                        # if last element
-                        if id == "None":
-                            id = "p{:02d}".format(len(offsets))
+                        if part_index is None:
+                            part_index = len(offsets) - 1
 
-                            simple_id = "s1p{}".format(ids_per_file_array[-1] + len(offsets) - 1)
-                            # simple_id_h = "s1h{}".format(ids_per_file_array[-1] + len(offsets) - 1)
-
-                            to_correct_off = offsets[-1]
-
-                        properid = "{0}{1}{2}".format(first_serial, second_serial, id)
-                        # properid_h = "{0}{1}{2}".format(first_serial, second_serial, id_h)
-
-                        if id == "None":
-                            print("None???", pmid, serial, paragraph, start, offsets)
-
-                        # if (simple_id + properid) not in dataset.documents[pmid].parts or (simple_id.replace("p", "h") + properid.replace("p", "h")) not in dataset.documents[pmid].parts:
-                        #     print("NoKEY???", dataset.documents[pmid].parts)
-                            # print(json.dumps(document, indent=4))
-
-                        # print(document.parts[properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(row[2])], "==", row[2])
-
-                        try:
-                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(text)]
-                        except KeyError:
-                            simple_id = simple_id.replace("p", "h")
-                            properid = properid.replace("p", "h")
-                            calc_ann_text = document.parts[simple_id + properid].text[int(start) - to_correct_off:int(start) - to_correct_off + len(text)]
-
+                        partid = "{}-p{}".format(partid_prefix, part_index + 1)
+                        real_start = start - offsets[part_index]
+                        real_end = end - offsets[part_index]
+                        calc_ann_text = document.parts[partid].text[real_start : real_end]
 
                         if calc_ann_text != text:
-                            print(pmid, serial, paragraph, start, to_correct_off, id)
+                            print("   ERROR", docid, part_index, partid, start, offsets, real_start, "\n\t", text, "\n\t", calc_ann_text, "\n\t", document.parts[partid].text)
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, int(start) - to_correct_off, text)
-                            dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
+                            ann = Entity(MUT_CLASS_ID, real_start, text)
+                            dataset.documents[docid].parts[partid].annotations.append(ann)
 
                         elif entity_type == 'gene':
-                            ann = Entity('e_1', int(start) - to_correct_off, text)
-                            dataset.documents[pmid].parts[simple_id + properid].annotations.append(ann)
+                            ann = Entity('e_1', real_start, text)
+                            dataset.documents[docid].parts[partid].annotations.append(ann)
 
         return dataset
 

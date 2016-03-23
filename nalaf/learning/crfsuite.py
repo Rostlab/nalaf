@@ -6,17 +6,19 @@ import warnings
 
 
 class PyCRFSuite:
-    def __init__(self):
+    def __init__(self, ):
         pass
 
     @staticmethod
-    def train(data, model_file):
+    def train(data, model_file, params = None):
         """
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
         """
         from pycrfsuite import Trainer, ItemSequence
         trainer = Trainer()
+        if params is not None:
+            trainer.set_params(params)
 
         for sentence in data.sentences():
             trainer.append(ItemSequence([token.features for token in sentence]),

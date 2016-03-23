@@ -276,7 +276,7 @@ class TagTogFormat:
         """
         for docid, doc in self.data.documents.items():
             fname = os.path.join(self.html_folder, docid + ".html")
-            print(fname)
+            
             with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes

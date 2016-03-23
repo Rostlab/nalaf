@@ -153,6 +153,10 @@ class VerspoorReader(Reader):
         read each html file in the directory, parse it and create and instance of Document
         form a dataset consisting of every document parsed and return it
 
+        Note that the text files may contain multiple paragraphs. The reader
+        converts these paragraphs into different parts. Because of necessary offset corrections,
+        the reader reads at the same time both the content and the annotations.
+
         :returns structures.data.Dataset
         """
         dataset = Dataset()

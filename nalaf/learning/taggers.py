@@ -1,5 +1,4 @@
 import abc
-import re
 import difflib
 from nalaf.utils.ncbi_utils import GNormPlus
 from nalaf.utils.uniprot_utils import Uniprot

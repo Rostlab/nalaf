@@ -356,7 +356,7 @@ class BRATPartsAnnotationReader(AnnotationReader):
             with open(filename, 'r', encoding='utf-8') as file:
                 reader = csv.reader(file, delimiter='\t')
 
-                docid, partid = os.path.basename(filename).replace('.ann', '').split('-')
+                docid, partid = os.path.basename(filename).replace('.ann', '').split('-', 1)
                 document = dataset.documents[docid].parts[partid]
 
                 for row in reader:

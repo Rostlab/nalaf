@@ -228,7 +228,7 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, dataset, to_save_to="resources/corpora/sample/anndoc", who="ml:nalaf", _annjson_folder="annjson", _html_folder="html"):
+    def __init__(self, dataset, to_save_to="resources/corpora/sample/anndoc", who="ml:nalaf", _annjson_folder="annjson", _html_folder="html", use_original_partids = True):
         """
         init function that does prepare annjson folder and html folder
         :param to_save_to: usually resources/corpora/[name of corpus]/anndoc/
@@ -244,6 +244,7 @@ class TagTogFormat:
         """ dataset param """
         self.who = who
         """ who parameter """
+        self.use_original_partids = use_original_partids
 
         # Possibility to use instance without writing files to disk
         if to_save_to:
@@ -276,7 +277,7 @@ class TagTogFormat:
         """
         for docid, doc in self.data.documents.items():
             fname = os.path.join(self.html_folder, docid + ".html")
-            
+
             with open(fname, 'wb') as f:
 
                 # "tag" or "tag_attr" for their attributes
@@ -308,15 +309,10 @@ class TagTogFormat:
                 section = ET.SubElement(article, 'section', { 'data-type' : 'article' } )
                 div = ET.SubElement(section, 'div', { 'class' : 'content' } )
 
-                for i, (id, part) in enumerate(doc.parts.items()):
-                    # i, id, part = tuple_i
-                    # if id.count("h") > 0 or len(part.text.split(" ")) < 10:
-                    #     h2 = ET.SubElement(section, 'h2', { 'id' : "s1h{}".format(i + 1)} )
-                    #     h2.text = part.text
-                    # else:
-                        # div = ET.SubElement(section, 'div', { 'class' : 'content' } )
-                    # todo if not part.is_abstract with s2p{} instead of s1p{}
-                    p = ET.SubElement(div, 'p', { 'id' : "s1p{}".format(i + 1) } )
+                for i, (partid, part) in enumerate(doc.parts.items()):
+                    if not self.use_original_partids:
+                        partid = "s1p{}".format(i + 1)
+                    p = ET.SubElement(div, 'p', { 'id' : partid } )
                     p.text = part.text
 
                 # print(ET.dump(html))
@@ -330,10 +326,17 @@ class TagTogFormat:
         else:
             docid, doc = next(iter(self.data.documents.items()))
 
+        partids = list(doc.parts.keys())
+        if not self.use_original_partids:
+            partids = []
+            for i, (partid, part) in enumerate(doc.parts.items()):
+                partid = "s1p{}".format(i + 1)
+                partids.append(partid)
+
         # init empty json-object
         json_obj = {
             "annotatable": {
-                "parts" : list(doc.parts.keys())
+                "parts" : partids
             },
             "anncomplete": False,
             "sources": [
@@ -356,6 +359,9 @@ class TagTogFormat:
         }
 
         for i, (partid, part) in enumerate(doc.parts.items()):
+            if not self.use_original_partids:
+                partid = "s1p{}".format(i + 1)
+
             for ann in chain(part.annotations, part.predicted_annotations):
                 if threshold_val:
                     if ann.confidence >= threshold_val:

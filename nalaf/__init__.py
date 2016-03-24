@@ -12,8 +12,9 @@ if os.path.exists('config.ini'):
 else:
     config.read(pkg_resources.resource_filename('nalaf.data', 'default_config.ini'))
 
-def print_err(*args, **kwargs):
+def _print_err(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-print_verbose = print_err if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
-print_debug = print_err if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None
+print_warning = _print_err
+print_verbose = _print_err if config.getboolean('print', 'verbose', fallback=False) else lambda *a, **k: None
+print_debug = _print_err if config.getboolean('print', 'debug', fallback=False) else lambda *a, **k: None

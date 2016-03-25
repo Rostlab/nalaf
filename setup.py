@@ -34,6 +34,9 @@ setup(
 
         # 'gensim'
         # Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
+
+        # 'spacy'
+        # Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
     ],
     include_package_data=True,
     zip_safe=False,

@@ -499,13 +499,23 @@ class Dataset:
                 part.predicted_annotations = [ann for ann in part.predicted_annotations
                                               if ann.subclass not in subclasses]
 
-    def n_fold_split(self, n=5):
+    def fold_nr_split(self, n, fold_nr):
         """
-        Returns N train, test random splits
+        Sugar syntax for next(self.cv_split(n, fold_nr), None)
+        """
+        return next(self.cv_split(n, fold_nr), None)
+
+    def cv_split(self, n=5, fold_nr=None):
+        """
+        Returns a generator of N tuples train & test random splits
         according to the standard N-fold cross validation scheme.
+        If fold_nr is given, a generator of a single fold is returned (to read as next(g, None))
+        Note that fold_nr is 0-indexed. That is, for n=5 the folds 0,1,2,3,4 exist.
 
         :param n: number of folds
         :type n: int
+
+        :param fold_nr: optional, single fold number to return, 0-indexed.
 
         :return: a list of N train datasets and N test datasets
         :rtype: (list[nalaf.structures.data.Dataset], list[nalaf.structures.data.Dataset])
@@ -514,23 +524,34 @@ class Dataset:
         random.seed(2727)
         random.shuffle(keys)
 
-        len_part = int(len(keys) / n)
+        fold_size = int(len(keys) / n)
 
-        train = []
-        test = []
-
-        for fold in range(n):
-            test_keys = keys[fold*len_part:fold*len_part+len_part]
+        def get_fold(fold_nr):
+            """
+            fold_nr starts in 0
+            """
+            start = fold_nr * fold_size
+            end = start + fold_size
+            test_keys = keys[start : end]
             train_keys = [key for key in keys if key not in test_keys]
 
-            test.append(Dataset())
+            test = Dataset()
             for key in test_keys:
-                test[-1].documents[key] = self.documents[key]
+                test.documents[key] = self.documents[key]
 
-            train.append(Dataset())
+            train = Dataset()
             for key in train_keys:
-                train[-1].documents[key] = self.documents[key]
-        return train, test
+                train.documents[key] = self.documents[key]
+
+            return train, test
+
+        if fold_nr:
+            assert(0 <= fold_nr < n)
+            yield get_fold(fold_nr)
+        else:
+            for fold_nr in range(n):
+                yield get_fold(fold_nr)
+
 
     def percentage_split(self, percentage=0.66):
         """

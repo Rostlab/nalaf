@@ -853,6 +853,7 @@ class Part:
     Each part hold a reference to the annotations for that chunk of text.
 
     :type text: str
+    :type sentences_: list[str]
     :type sentences: list[list[Token]]
     :type annotations: list[Entity]
     :type predicted_annotations: list[Entity]
@@ -861,6 +862,8 @@ class Part:
 
     def __init__(self, text, is_abstract=True):
         self.text = text
+        self.sentences_ = []
+        """the text sentences previous tokenization"""
         """the original raw text that the part is consisted of"""
         self.sentences = [[]]
         """

@@ -446,7 +446,7 @@ class Dataset:
             if key not in self.documents:
                 self.documents[key] = other.documents[key]
 
-    def prune(self):
+    def prune_empty_parts(self):
         """
         deletes all the parts that contain no annotations at all
         """
@@ -457,6 +457,23 @@ class Dataset:
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
+
+    def prune_filtered_sentences(self, filterin = (lambda _: False), percent_to_keep=0):
+        """
+        Depends on labeler
+        """
+        empty_sentence = lambda s : all(t.original_labels[0].value == 'O' for t in s)
+
+        for part in self.parts():
+            tmp = []
+            tmp_ = []
+            for index, sentence in enumerate(part.sentences):
+                do_use = not empty_sentence(sentence) or filterin(part.sentences_[index]) or random.uniform(0, 1) < percent_to_keep
+                if do_use:
+                    tmp.append(sentence)
+                    tmp_.append(part.sentences_[index])
+            part.sentences = tmp
+            part.sentences_ = tmp_
 
     def prune_sentences(self, percent_to_keep=0):
         """

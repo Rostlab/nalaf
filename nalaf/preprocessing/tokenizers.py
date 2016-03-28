@@ -29,9 +29,10 @@ class NLTKTokenizer(Tokenizer):
         """
         for part in dataset.parts():
             so_far = 0
-            for index, sentence in enumerate(part.sentences):
-                part.sentences[index] = []
-                for token_word in word_tokenize(sentence):
+            part.sentences = []
+            for index, sentence_ in enumerate(part.sentences_):
+                part.sentences.append([])
+                for token_word in word_tokenize(sentence_):
                     token_start = part.text.find(token_word, so_far)
                     so_far = token_start + len(token_word)
                     part.sentences[index].append(Token(token_word, token_start))
@@ -48,7 +49,9 @@ class TmVarTokenizer(Tokenizer):
         """
         for part in dataset.parts():
             so_far = 0
-            for index, sentence in enumerate(part.sentences):
+            part.sentences = []
+            for index, sentence_ in enumerate(part.sentences_):
+                sentence = sentence_
                 sentence = re.sub('([0-9])([A-Za-z])', r'\1 \2', sentence)
                 # removing for now split from Capital to Lower
                 # no noticeable difference in performance but we keep whole words
@@ -62,7 +65,7 @@ class TmVarTokenizer(Tokenizer):
 
                 sentence = re.sub('([\W\-_])', r' \1 ', sentence)
 
-                part.sentences[index] = []
+                part.sentences.append([])
                 for token_word in sentence.split():
                     token_start = part.text.find(token_word, so_far)
                     so_far = token_start + len(token_word)

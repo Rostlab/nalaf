@@ -28,7 +28,7 @@ class PrepareDatasetPipeline:
             splitter = NLTKSplitter()
         if not tokenizer:
             tokenizer = TmVarTokenizer()
-        if not feature_generators:
+        if feature_generators is None:
             feature_generators = [SimpleFeatureGenerator(), PorterStemFeatureGenerator(),
                                   WindowFeatureGenerator((-3, -2, -1, 1, 2, 3), ['stem[0]'])]
 

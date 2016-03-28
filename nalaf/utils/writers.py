@@ -228,7 +228,7 @@ class TagTogFormat:
     """
     Ability to Export the dataset as Html + Ann.json database.
     """
-    def __init__(self, dataset, to_save_to="resources/corpora/sample/anndoc", who="ml:nalaf", _annjson_folder="annjson", _html_folder="html", use_original_partids = True):
+    def __init__(self, dataset, use_predicted, to_save_to="resources/corpora/sample/anndoc", who="ml:nalaf", _annjson_folder="annjson", _html_folder="html", use_original_partids = True):
         """
         init function that does prepare annjson folder and html folder
         :param to_save_to: usually resources/corpora/[name of corpus]/anndoc/
@@ -245,6 +245,7 @@ class TagTogFormat:
         self.who = who
         """ who parameter """
         self.use_original_partids = use_original_partids
+        self.use_predicted = use_predicted
 
         # Possibility to use instance without writing files to disk
         if to_save_to:
@@ -362,7 +363,7 @@ class TagTogFormat:
             if not self.use_original_partids:
                 partid = "s1p{}".format(i + 1)
 
-            for ann in chain(part.annotations, part.predicted_annotations):
+            for ann in (part.predicted_annotations if self.use_predicted else part.annotations):
                 if threshold_val:
                     if ann.confidence >= threshold_val:
                         state = 'selected'

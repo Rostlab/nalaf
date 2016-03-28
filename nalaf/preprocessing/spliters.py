@@ -32,5 +32,5 @@ class NLTKSplitter(Splitter):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        for part in dataset.parts():
-            part.sentences = sent_tokenize(part.text)
+        for part in dataset.parts():            
+            part.sentences_ = sent_tokenize(part.text)

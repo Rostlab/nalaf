@@ -14,9 +14,15 @@ class TestNLTKSplitter(unittest.TestCase):
 
     def test_split(self):
         NLTKSplitter().split(self.dataset)
-        sentences = list(self.dataset.sentences())
+
+        sentences_ = []
+        for document in self.dataset.documents.values():
+            for part in document.parts.values():
+                sentences_ += part.sentences_
+
         expected = ['This is one sentence.', 'This is another one.', 'This is the third one; here continues.']
-        self.assertEqual(sentences, expected)
+
+        self.assertEqual(sentences_, expected)
 
 
 if __name__ == '__main__':

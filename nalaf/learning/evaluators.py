@@ -12,13 +12,20 @@ class Evaluation:
             return float('NaN')
 
     def __str__(self):
-        return self.format_simple()
+        return self.format()
 
     def format_simple(self):
         fs = "{:6.4f}"
-        p, r, f = list(map(lambda x: fs.format(x), [self.precision, self.recall, self.f_measure]))
+        p, r, f = list(map(lambda x: fs.format(x),  [self.precision, self.recall, self.f_measure]))
         l = ["P:"+p, "R:"+r, "F:"+f, self.label, self.strictness]
         return '\t'.join(l)
+
+    def format(self):
+        l = [n + ":" + str(v) for n, v in zip(
+                ["tp", "fp", "fn", "fpo", "fno"],
+                [self.tp, self.fp, self.fn, self.fp_overlap, self.fn_overlap])]
+
+        return '\t'.join(l) + "\t" + self.format_simple()
 
     def __init__(self, label, strictness, tp, fp, fn, fp_overlap = 0, fn_overlap = 0):
         self.label = label

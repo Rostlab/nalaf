@@ -55,43 +55,43 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_exact_strictness(self):
         evaluator = MentionLevelEvaluator(strictness='exact')
-        tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure = evaluator.evaluate(self.dataset)
+        evaluation = (evaluator.evaluate(self.dataset)).l[0]
 
-        self.assertEqual(tp, 3)  # the 3 exact matches
-        self.assertEqual(fp, 4)  # the 3 overlapping + 1 spurious
-        self.assertEqual(fn, 5)  # the 3 overlapping + 2 missing
+        self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
+        self.assertEqual(evaluation.fp, 4)  # the 3 overlapping + 1 spurious
+        self.assertEqual(evaluation.fn, 5)  # the 3 overlapping + 2 missing
 
-        self.assertEqual(precision, 3 / 7)
-        self.assertEqual(recall, 3 / 8)
-        self.assertEqual(f_measure, 2 * (3 / 7 * 3 / 8) / (3 / 7 + 3 / 8))
+        self.assertEqual(evaluation.precision, 3 / 7)
+        self.assertEqual(evaluation.recall, 3 / 8)
+        self.assertEqual(evaluation.f_measure, 2 * (3 / 7 * 3 / 8) / (3 / 7 + 3 / 8))
 
     def test_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator(strictness='overlapping')
-        tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure = evaluator.evaluate(self.dataset)
+        evaluation = (evaluator.evaluate(self.dataset)).l[0]
 
-        self.assertEqual(tp, 3)  # the 3 exact matches
-        self.assertEqual(fp, 1)  # the 1 spurious
-        self.assertEqual(fn, 2)  # the 2 missing
-        self.assertEqual(fp_overlap, 3)  # the 3 overlapping
-        self.assertEqual(fn_overlap, 3)  # the 3 overlapping
+        self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
+        self.assertEqual(evaluation.fp, 1)  # the 1 spurious
+        self.assertEqual(evaluation.fn, 2)  # the 2 missing
+        self.assertEqual(evaluation.fp_overlap, 3)  # the 3 overlapping
+        self.assertEqual(evaluation.fn_overlap, 3)  # the 3 overlapping
 
-        self.assertEqual(precision, 9 / 10)
-        self.assertEqual(recall, 9 / 11)
-        self.assertAlmostEqual(f_measure, 2 * (9 / 10 * 9 / 11) / (9 / 10 + 9 / 11), places=5)
+        self.assertEqual(evaluation.precision, 9 / 10)
+        self.assertEqual(evaluation.recall, 9 / 11)
+        self.assertAlmostEqual(evaluation.f_measure, 2 * (9 / 10 * 9 / 11) / (9 / 10 + 9 / 11), places=5)
 
     def test_half_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator(strictness='half_overlapping')
-        tp, fp, fn, fp_overlap, fn_overlap, precision, recall, f_measure = evaluator.evaluate(self.dataset)
+        evaluation = (evaluator.evaluate(self.dataset)).l[0]
 
-        self.assertEqual(tp, 3)  # the 3 exact matches
-        self.assertEqual(fp, 1)  # the 1 spurious
-        self.assertEqual(fn, 2)  # the 2 missing
-        self.assertEqual(fp_overlap, 3)  # the 3 overlapping
-        self.assertEqual(fn_overlap, 3)  # the 3 overlapping
+        self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
+        self.assertEqual(evaluation.fp, 1)  # the 1 spurious
+        self.assertEqual(evaluation.fn, 2)  # the 2 missing
+        self.assertEqual(evaluation.fp_overlap, 3)  # the 3 overlapping
+        self.assertEqual(evaluation.fn_overlap, 3)  # the 3 overlapping
 
-        self.assertEqual(precision, (3 + 6 / 2) / 10)
-        self.assertEqual(recall, (3 + 6 / 2) / 11)
-        self.assertEqual(f_measure, 2 * ((3 + 6 / 2) / 10 * (3 + 6 / 2) / 11) / ((3 + 6 / 2) / 10 + (3 + 6 / 2) / 11))
+        self.assertEqual(evaluation.precision, (3 + 6 / 2) / 10)
+        self.assertEqual(evaluation.recall, (3 + 6 / 2) / 11)
+        self.assertEqual(evaluation.f_measure, 2 * ((3 + 6 / 2) / 10 * (3 + 6 / 2) / 11) / ((3 + 6 / 2) / 10 + (3 + 6 / 2) / 11))
 
     def test_exception_on_equality_operator(self):
         ann_1 = Entity(MUT_CLASS_ID, 1, 'text_1')
@@ -107,20 +107,20 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_subclass_analysis(self):
         evaluator = MentionLevelEvaluator(strictness='exact', subclass_analysis=True)
-        subclass_counts, *_ = evaluator.evaluate(self.dataset)
-        self.assertEqual(subclass_counts[1][0], 1)
-        self.assertEqual(subclass_counts[2][0], 2)
+        evaluations = evaluator.evaluate(self.dataset)
+        self.assertEqual(evaluations.l[1].tp, 1)
+        self.assertEqual(evaluations.l[2].tp, 2)
 
-        self.assertEqual(subclass_counts[1][1], 3)
-        self.assertEqual(subclass_counts[2][1], 1)
+        self.assertEqual(evaluations.l[1].fp, 3)
+        self.assertEqual(evaluations.l[2].fp, 1)
 
-        self.assertEqual(subclass_counts[1][2], 4)
-        self.assertEqual(subclass_counts[2][2], 1)
+        self.assertEqual(evaluations.l[1].fn, 4)
+        self.assertEqual(evaluations.l[2].fn, 1)
 
-        self.assertEqual(subclass_counts[1][3], 2)
-        self.assertEqual(subclass_counts[1][4], 2)
-        self.assertEqual(subclass_counts[2][3], 1)
-        self.assertEqual(subclass_counts[2][4], 1)
+        self.assertEqual(evaluations.l[1].fp_overlap, 2)
+        self.assertEqual(evaluations.l[1].fn_overlap, 2)
+        self.assertEqual(evaluations.l[2].fp_overlap, 1)
+        self.assertEqual(evaluations.l[2].fn_overlap, 1)
 
 if __name__ == '__main__':
     unittest.main()

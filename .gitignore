@@ -56,3 +56,6 @@ config.ini
 
 # Cache files
 *cache.json
+
+# Atom related files
+.remote-sync.json

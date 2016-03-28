@@ -446,7 +446,7 @@ class Dataset:
             if key not in self.documents:
                 self.documents[key] = other.documents[key]
 
-    def prune(self):
+    def prune_empty_parts(self):
         """
         deletes all the parts that contain no annotations at all
         """
@@ -457,6 +457,23 @@ class Dataset:
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
+
+    def prune_filtered_sentences(self, filterin = (lambda _: False), percent_to_keep=0):
+        """
+        Depends on labeler
+        """
+        empty_sentence = lambda s : all(t.original_labels[0].value == 'O' for t in s)
+
+        for part in self.parts():
+            tmp = []
+            tmp_ = []
+            for index, sentence in enumerate(part.sentences):
+                do_use = not empty_sentence(sentence) or filterin(part.sentences_[index]) or random.uniform(0, 1) < percent_to_keep
+                if do_use:
+                    tmp.append(sentence)
+                    tmp_.append(part.sentences_[index])
+            part.sentences = tmp
+            part.sentences_ = tmp_
 
     def prune_sentences(self, percent_to_keep=0):
         """
@@ -499,13 +516,23 @@ class Dataset:
                 part.predicted_annotations = [ann for ann in part.predicted_annotations
                                               if ann.subclass not in subclasses]
 
-    def n_fold_split(self, n=5):
+    def fold_nr_split(self, n, fold_nr):
         """
-        Returns N train, test random splits
+        Sugar syntax for next(self.cv_split(n, fold_nr), None)
+        """
+        return next(self.cv_split(n, fold_nr), None)
+
+    def cv_split(self, n=5, fold_nr=None):
+        """
+        Returns a generator of N tuples train & test random splits
         according to the standard N-fold cross validation scheme.
+        If fold_nr is given, a generator of a single fold is returned (to read as next(g, None))
+        Note that fold_nr is 0-indexed. That is, for n=5 the folds 0,1,2,3,4 exist.
 
         :param n: number of folds
         :type n: int
+
+        :param fold_nr: optional, single fold number to return, 0-indexed.
 
         :return: a list of N train datasets and N test datasets
         :rtype: (list[nalaf.structures.data.Dataset], list[nalaf.structures.data.Dataset])
@@ -514,23 +541,34 @@ class Dataset:
         random.seed(2727)
         random.shuffle(keys)
 
-        len_part = int(len(keys) / n)
+        fold_size = int(len(keys) / n)
 
-        train = []
-        test = []
-
-        for fold in range(n):
-            test_keys = keys[fold*len_part:fold*len_part+len_part]
+        def get_fold(fold_nr):
+            """
+            fold_nr starts in 0
+            """
+            start = fold_nr * fold_size
+            end = start + fold_size
+            test_keys = keys[start : end]
             train_keys = [key for key in keys if key not in test_keys]
 
-            test.append(Dataset())
+            test = Dataset()
             for key in test_keys:
-                test[-1].documents[key] = self.documents[key]
+                test.documents[key] = self.documents[key]
 
-            train.append(Dataset())
+            train = Dataset()
             for key in train_keys:
-                train[-1].documents[key] = self.documents[key]
-        return train, test
+                train.documents[key] = self.documents[key]
+
+            return train, test
+
+        if fold_nr:
+            assert(0 <= fold_nr < n)
+            yield get_fold(fold_nr)
+        else:
+            for fold_nr in range(n):
+                yield get_fold(fold_nr)
+
 
     def percentage_split(self, percentage=0.66):
         """
@@ -815,6 +853,7 @@ class Part:
     Each part hold a reference to the annotations for that chunk of text.
 
     :type text: str
+    :type sentences_: list[str]
     :type sentences: list[list[Token]]
     :type annotations: list[Entity]
     :type predicted_annotations: list[Entity]
@@ -823,6 +862,8 @@ class Part:
 
     def __init__(self, text, is_abstract=True):
         self.text = text
+        self.sentences_ = []
+        """the text sentences previous tokenization"""
         """the original raw text that the part is consisted of"""
         self.sentences = [[]]
         """

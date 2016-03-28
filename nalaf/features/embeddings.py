@@ -2,6 +2,7 @@ from nalaf.features import FeatureGenerator
 from gensim.models import Word2Vec
 from nalaf import print_verbose
 from spacy.en import English
+import re
 
 
 class WordEmbeddingsFeatureGenerator(FeatureGenerator):
@@ -23,8 +24,9 @@ class WordEmbeddingsFeatureGenerator(FeatureGenerator):
         feature_names = ['embedding_{}'.format(index)
                          for index in range(self.model[next(iter(self.model.vocab))].shape[0])]
         for token in dataset.tokens():
-            if token.word.lower() in self.model:
-                for index, value in enumerate(self.model[token.word.lower()]):
+            wrd = re.sub('\d', '0', token.word.lower())
+            if wrd in self.model:
+                for index, value in enumerate(self.model[wrd]):
                     # value.item() since value is a numpy float and we want native python floats
                     token.features[feature_names[index]] = (self.additive + value.item()) * self.multiplicative
 

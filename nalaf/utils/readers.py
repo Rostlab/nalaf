@@ -6,9 +6,8 @@ import re
 import glob
 import csv
 import os
-from nalaf.utils import MUT_CLASS_ID
-# from lxml import etree
-from xml.etree import ElementTree as etree
+from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
+import xml.etree.ElementTree as ET
 
 
 class Reader:
@@ -421,7 +420,7 @@ class MedlineReader(Reader):
         dataset = Dataset()
 
         for xml in xmls:
-            for child in etree.parse(xml).getroot():
+            for child in ET.parse(xml).getroot():
                 pmid = next(child.iter('PMID')).text
 
                 document = Document()
@@ -434,5 +433,70 @@ class MedlineReader(Reader):
                 except StopIteration:
                     pass
                 dataset.documents[pmid] = document
+
+        return dataset
+
+
+class OSIRISReader(Reader):
+    """
+    Reads in the OSIRIS corpus.
+    """
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        """path to a folder containing files"""
+
+    def read(self):
+        """
+        :returns: nalaf.structures.data.Dataset
+        """
+        from functools import reduce
+        dataset = Dataset()
+        for filename in glob.glob(self.path + '/*.txt'):
+            with open(filename, 'r') as f:
+                data = f.read()
+
+                content = data.split("\n")
+                try:
+                    pmid = int(content[0])
+                except ValueError:
+                    continue
+
+                doc = Document()
+
+                title = content[2]
+                part_title = Part(title, is_abstract=True)
+                body = content[4]
+                part_body = Part(body, is_abstract=True)
+
+                title_offset = len(str(pmid)) + 2  # +2 for twice newline
+                body_offset = title_offset + len(title) + 2  # +2 for twice newline
+
+                # elements for temporary
+                last_end = -1
+                current_entities = []
+                last_element = None
+
+                print(filename, pmid, title)
+                with open(filename + '.ann', 'r') as fa:
+                    tree = ET.parse(fa)
+                    for element in tree.iterfind('Annotation/Annotation[@type]'):
+                        # span = element.attrib['span'].split('..')
+                        # start = int(span[0])
+                        # end = int(span[1])
+
+                        if not last_element:
+                            last_element = element
+                            continue
+
+                        span = last_element.attrib['span'].split('..')
+                        start = int(span[0])
+                        end = int(span[1])
+
+                        last_element = element
+
+                doc.parts['p1'] = part_title
+                doc.parts['p2'] = part_body
+                dataset.documents[pmid] = doc
+                # print(doc)
 
         return dataset

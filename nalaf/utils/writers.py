@@ -252,7 +252,10 @@ class TagTogFormat:
             # check for root folder for files to save to
             if not os.path.isdir(self.location):
                 print_verbose("mkdir", os.path.abspath(self.location))
-                os.mkdir(self.location)
+                try:
+                    os.makedirs(self.location)
+                except FileExistsError:
+                    pass
 
             # create subfolders if not existent
             # annjson folder

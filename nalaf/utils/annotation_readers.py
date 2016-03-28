@@ -107,9 +107,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
                             del document.parts[part_id]
 
                 except KeyError as e:
-                    print_debug(e)
                     # TODO to be removed when external tagtog part_id is fixed, see issue #113
-                    pass
+                    raise e
 
 
         # Delete docs with no ann.jsons

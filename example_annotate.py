@@ -61,7 +61,7 @@ if __name__ == "__main__":
             raise NotADirectoryError('{} is not a directory'.format(args.output_dir))
 
         if args.file_format == 'ann.json':
-            TagTogFormat(dataset, to_save_to=args.output_dir).export(threshold_val=0)
+            TagTogFormat(dataset, use_predicted=True, to_save_to=args.output_dir).export(threshold_val=0)
         elif args.file_format == 'pubtator':
             PubTatorFormat(dataset, location=os.path.join(args.output_dir, 'pubtator.txt')).export()
     else:

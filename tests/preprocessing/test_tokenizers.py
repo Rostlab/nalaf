@@ -17,7 +17,7 @@ class TestNLTKTokenizer(unittest.TestCase):
         doc_id1 = Document()
         # 15 tokens in 2 sentences
         doc_id1.parts['p1'] = Part('This is some sample text. This is another, sample sentence with coma.')
-        doc_id1.parts['p1'].sentences = ['This is some sample text.', 'This is another, sample sentence with coma.']
+        doc_id1.parts['p1'].sentences_ = ['This is some sample text.', 'This is another, sample sentence with coma.']
 
         cls.dataset.documents['doc_id1'] = doc_id1
 
@@ -54,7 +54,7 @@ class TestTmVarTokenizer(unittest.TestCase):
         doc_id1 = Document()
         # 15 tokens in 2 sentences
         doc_id1.parts['p1'] = Part('this is some sample text. it contains this c.2708_2711delTTAG mutation.')
-        doc_id1.parts['p1'].sentences = ['this is some sample text.', 'it contains this c.2708_2711delTTAG mutation.']
+        doc_id1.parts['p1'].sentences_ = ['this is some sample text.', 'it contains this c.2708_2711delTTAG mutation.']
 
         cls.dataset.documents['doc_id1'] = doc_id1
 

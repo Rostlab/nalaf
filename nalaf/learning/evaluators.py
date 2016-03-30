@@ -61,7 +61,7 @@ class Evaluation:
         return [d.precision, d.recall, d.f_measure]
 
     def format_header(self, strictnesses=['exact', 'overlapping']):
-        header = ['label', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
+        header = ['#class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for _ in strictnesses:
             header += ['match', 'P', 'R', 'F']
         return '\t'.join(header)

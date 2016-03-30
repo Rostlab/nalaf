@@ -1,73 +1,116 @@
 import abc
 from nalaf.structures.data import Entity
 from nalaf import print_verbose, print_debug
+from collections import namedtuple
 
 class Evaluation:
 
+    Computation = namedtuple('Computation', ['precision', 'recall', 'f_measure'])
+
+    def __init__(self, label, tp, fp, fn, fp_ov=0, fn_ov=0):
+        self.label = str(label)
+        self.tp = tp
+        self.fp = fp
+        self.fn = fn
+        self.fp_ov = fp_ov
+        self.fn_ov = fn_ov
+
+    def compute(self, strictness):
+        """
+        strictness:
+        Determines whether a text spans matches and how we count that match, 3 possible values:
+            * 'exact' count as:
+                1 ONLY when we have exact match: (startA = startB and endA = endB)
+            * 'overlapping' count as:
+                1 when we have exact match
+                1 when we have overlapping match
+            * 'half_overlapping' count as:
+                1 when we have exact match
+                0.5 when we have overlapping match
+        """
+
+        if strictness == 'exact':
+            precision = self.__safe_div(self.tp, self.tp + self.fp)
+            recall = self.__safe_div(self.tp, self.tp + self.fn)
+
+        elif strictness == 'overlapping':
+            fp = self.fp - self.fp_ov
+            fn = self.fn - self.fn_ov
+
+            precision = self.__safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fp + self.fp_ov + self.fn_ov)
+            recall = self.__safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fn + self.fp_ov + self.fn_ov)
+
+        elif strictness == 'half_overlapping':
+            fp = self.fp - self.fp_ov
+            fn = self.fn - self.fn_ov
+
+            precision = self.__safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fp + self.fp_ov + self.fn_ov)
+            recall = self.__safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fn + self.fp_ov + self.fn_ov)
+
+        else:
+            raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
+
+        f_measure = 2 * self.__safe_div(precision * recall, precision + recall)
+
+        return Evaluation.Computation(precision, recall, f_measure)
+
+    def __str__(self):
+        return self.format()
+
+    def __computation_to_list(self, d):
+        return [d.precision, d.recall, d.f_measure]
+
+    def format_header(self, strictnesses=['exact', 'overlapping']):
+        header = ['label', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
+        for _ in strictnesses:
+            header += ['match', 'P', 'R', 'F']
+        return '\t'.join(header)
+
+    def format(self, strictnesses=['exact', 'overlapping']):
+        l = [self.label]
+        counts = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
+        counts = [str(c) for c in counts]
+        l += counts
+        for strictness in strictnesses:
+            l += [strictness[0]]
+            l += self.format_computation(self.__computation_to_list(self.compute(strictness)))
+        return '\t'.join(l)
+
+    def format_computation(self, computationlist):
+        return ["{:6.4f}".format(n) for n in computationlist]
+
     @staticmethod
-    def __safe_division(nominator, denominator):
+    def __safe_div(nominator, denominator):
         try:
             return nominator / denominator
         except ZeroDivisionError:
             return float('NaN')
 
+
+class Evaluations:
+
+    def __init__(self):
+        self.classes = {}
+
+    def __call__(self, clazz):
+        return self.classes[str(clazz)]
+
+    def add(self, evaluation):
+        self.classes[str(evaluation.label)] = evaluation
+
     def __str__(self):
         return self.format()
 
-    def format_simple(self):
-        fs = "{:6.4f}"
-        p, r, f = list(map(lambda x: fs.format(x),  [self.precision, self.recall, self.f_measure]))
-        l = ["P:"+p, "R:"+r, "F:"+f, self.label, self.strictness]
-        return '\t'.join(l)
+    def format(self, strictnesses=['exact', 'overlapping']):
+        assert(len(self.classes) >= 1)
+        l = [next(iter(self.classes.values())).format_header(strictnesses)]
+        for evaluation in self.classes.values():
+            l += [evaluation.format(strictnesses)]
+        return '\n'.join(l)
 
-    def format(self):
-        l = [n + ":" + str(v) for n, v in zip(
-                ["tp", "fp", "fn", "fpo", "fno"],
-                [self.tp, self.fp, self.fn, self.fp_overlap, self.fn_overlap])]
-
-        return '\t'.join(l) + "\t" + self.format_simple()
-
-    def __init__(self, label, strictness, tp, fp, fn, fp_overlap=0, fn_overlap=0):
-        self.label = label
-        self.strictness = strictness
-        self.tp = tp
-        self.fp = fp
-        self.fn = fn
-        self.fp_overlap = fp_overlap
-        self.fn_overlap = fn_overlap
-
-        if strictness == 'exact':
-            self.precision = self.__safe_division(tp, tp + fp)
-            self.recall = self.__safe_division(tp, tp + fn)
-
-        elif strictness == 'overlapping':
-            fp = fp - fp_overlap
-            fn = fn - fn_overlap
-
-            self.precision = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fp + fp_overlap + fn_overlap)
-            self.recall = self.__safe_division(tp + fp_overlap + fn_overlap, tp + fn + fp_overlap + fn_overlap)
-
-        elif strictness == 'half_overlapping':
-            fp = fp - fp_overlap
-            fn = fn - fn_overlap
-
-            self.precision = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fp + fp_overlap + fn_overlap)
-            self.recall = self.__safe_division(tp + (fp_overlap + fn_overlap) / 2, tp + fn + fp_overlap + fn_overlap)
-
-        else:
-            raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
-
-        self.f_measure = 2 * self.__safe_division(self.precision * self.recall, self.precision + self.recall)
-
-class Evaluations:
-    def __init__(self):
-        self.l = []
-
-    def append(self, evaluation):
-        self.l.append(evaluation)
 
     def __iter__(self):
-        return self.l.__iter__()
+        return self.classes.__iter__()
 
 class Evaluator:
     """
@@ -98,23 +141,10 @@ class MentionLevelEvaluator(Evaluator):
     by the value of the parameter 'strictness'.
     """
 
-    def __init__(self, strictness='exact', subclass_analysis=False):
-        self.strictness = strictness
-        """
-        Determines whether a text spans matches and how we count that match, 3 possible values:
-            * 'exact' count as:
-                1 ONLY when we have exact match: (startA = startB and endA = endB)
-            * 'overlapping' count as:
-                1 when we have exact match
-                1 when we have overlapping match
-            * 'half_overlapping' count as:
-                1 when we have exact match
-                0.5 when we have overlapping match
-        """
+    def __init__(self, subclass_analysis=False):
         self.subclass_analysis = subclass_analysis
         """
         Whether to report the performance for each subclass separately
-        Can be used only with strictness='exact'
         """
 
     def evaluate(self, dataset):
@@ -131,14 +161,14 @@ class MentionLevelEvaluator(Evaluator):
                 or in other words tp / tp + fn
             * possibly considers overlapping matches as well
         """
-        tp, fp, fn, fp_overlap, fn_overlap = 0, 0, 0, 0, 0
+        tp, fp, fn, fp_ov, fn_ov = 0, 0, 0, 0, 0
 
         if self.subclass_analysis:
             # find all possible subclasses
             subclasses = set(ann.subclass for ann in dataset.annotations())
             subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations()))
             # initialize counts to zero for each subclass
-            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'fp_overlap', 'fn_overlap'], 0)
+            subclass_counts = {subclass: dict.fromkeys(['tp', 'fp', 'fn', 'fp_ov', 'fn_ov'], 0)
                                for subclass in subclasses}
 
         for doc in dataset:
@@ -178,32 +208,30 @@ class MentionLevelEvaluator(Evaluator):
                     else:
                         fp += 1
                         if ann in overlap_predicted:
-                            fp_overlap += 1
+                            fp_ov += 1
                         if self.subclass_analysis:
                             subclass_counts[ann.subclass]['fp'] += 1
                             if ann in overlap_subclass_predicted[ann.subclass]:
-                                subclass_counts[ann.subclass]['fp_overlap'] += 1
+                                subclass_counts[ann.subclass]['fp_ov'] += 1
 
                 for ann in part.annotations:
                     if ann not in part.predicted_annotations:
                         fn += 1
                         if ann in overlap_real:
-                            fn_overlap += 1
+                            fn_ov += 1
                         if self.subclass_analysis:
                             subclass_counts[ann.subclass]['fn'] += 1
                             if ann in overlap_subclass_real[ann.subclass]:
-                                subclass_counts[ann.subclass]['fn_overlap'] += 1
+                                subclass_counts[ann.subclass]['fn_ov'] += 1
 
         evaluations = Evaluations()
 
         if self.subclass_analysis:
-            subclass_measures = {}
             for subclass, counts in subclass_counts.items():
                 if subclass is None:
                     break
-                evaluations.append(
-                Evaluation(str(subclass), self.strictness, counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap']))
+                evaluations.add(Evaluation(str(subclass), counts['tp'], counts['fp'], counts['fn'], counts['fp_ov'], counts['fn_ov']))
 
-        evaluations.append(Evaluation('TOTAL', self.strictness, tp, fp, fn, fp_overlap, fn_overlap))
+        evaluations.add(Evaluation('TOTAL', tp, fp, fn, fp_ov, fn_ov))
 
         return evaluations

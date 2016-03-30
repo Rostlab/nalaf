@@ -268,7 +268,7 @@ class Dataset:
                         raw_dict[lc_word] += 1
 
         # sort by highest number
-        sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True ))
+        sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True))
         print(json.dumps(sort_dict, indent=4))
 
     def clean_nl_definitions(self):

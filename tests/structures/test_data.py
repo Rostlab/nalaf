@@ -3,6 +3,7 @@ from nalaf.structures.data import Dataset, Document, Part, Token, Label, Entity
 from nalaf.utils import MUT_CLASS_ID
 from nalaf.preprocessing.spliters import NLTKSplitter
 # from preprocessing.tokenizers import TmVarTokenizer
+from nalaf import print_verbose, print_debug
 
 
 class TestDataset(unittest.TestCase):

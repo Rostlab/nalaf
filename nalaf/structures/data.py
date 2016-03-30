@@ -894,16 +894,18 @@ class Part:
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
-        return_array = []
-        for sentence_array in self.sentences:
-            new_sentence = ""
-            for token in sentence_array:
-                if isinstance(token, Token):
+
+        if len(self.sentences) == 0 or len(self.sentences[0]) == 0:
+            return self.sentences_
+        else:
+            return_array = []
+            for sentence_array in self.sentences:
+                new_sentence = ""
+                for token in sentence_array:
                     new_sentence += token.word + " "
-                else:
-                    return self.sentences
-            return_array.append(new_sentence.rstrip())  # to delete last space
-        return return_array
+
+                return_array.append(new_sentence.rstrip())  # to delete last space
+            return return_array
 
     def get_sentence_index_for_annotation(self, annotation):
         start = annotation.offset

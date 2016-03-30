@@ -437,7 +437,7 @@ class MedlineReader(Reader):
         return dataset
 
 
-class OSIRISReader(Reader):
+class OSIRISReaderMachineLearningReady(Reader):
     """
     Reads in the OSIRIS corpus.
     """
@@ -458,6 +458,8 @@ class OSIRISReader(Reader):
                 content = data.split("\n")
                 try:
                     pmid = int(content[0])
+                    if pmid == 12915397:  # todo debug purpose, has to be deleted
+                        exit()
                 except ValueError:
                     continue
 
@@ -472,30 +474,91 @@ class OSIRISReader(Reader):
                 body_offset = title_offset + len(title) + 2  # +2 for twice newline
 
                 # elements for temporary
-                last_end = -1
-                current_entities = []
+                current_annotation = []
                 last_element = None
 
                 print(filename, pmid, title)
                 with open(filename + '.ann', 'r') as fa:
                     tree = ET.parse(fa)
                     for element in tree.iterfind('Annotation/Annotation[@type]'):
-                        # span = element.attrib['span'].split('..')
-                        # start = int(span[0])
-                        # end = int(span[1])
+                        # if gene annotation skip
+                        if element.attrib['type'] == 'ge':
+                            continue
 
-                        if not last_element:
+                        # if last element is empty (beginning of new doc) save as last_element and skip
+                        if last_element is None:
                             last_element = element
                             continue
 
                         span = last_element.attrib['span'].split('..')
                         start = int(span[0])
                         end = int(span[1])
+                        text = data[start:end]
+
+                        if start >= body_offset:
+                            norm_start = start - body_offset
+                            norm_end = end - body_offset
+                        else:
+                            norm_start = start - title_offset
+                            norm_end = end - title_offset
+
+                        if end + 1 == int(element.attrib['span'].split('..')[0]):  # todo bugfix still mistake if space is in between the whole annotation case: "#1632 T"
+                            if len(current_annotation) == 0:  # if no series of annotations linked
+                                current_annotation.append(norm_start)
+                                current_annotation.append(norm_end)
+                                current_annotation.append(text)
+                                current_annotation.append((start >= body_offset))  # if is_body
+                            else:  # if already annotations contained there
+                                current_annotation[1] = norm_end
+                                current_annotation[2] += text
+                        else:
+                            if len(current_annotation) > 0:
+                                entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                                if current_annotation[3]:
+                                    part_body.annotations.append(entity)
+                                else:
+                                    part_title.annotations.append(entity)
+                                current_annotation = []
+
+                            entity = Entity(MUT_CLASS_ID, norm_start, text)
+                            if start >= body_offset:
+                                part_body.annotations.append(entity)
+                            else:
+                                part_title.annotations.append(entity)
 
                         last_element = element
 
+                    span = last_element.attrib['span'].split('..')
+                    start = int(span[0])
+                    end = int(span[1])
+                    text = data[start:end]
+                    if len(current_annotation) == 0:  # if no series of annotations linked
+                        if start >= body_offset:
+                            norm_start = start - body_offset
+                            is_body = True
+                        else:
+                            norm_start = start - title_offset
+                            is_body = False
+
+                        entity = Entity(MUT_CLASS_ID, norm_start, text)
+
+                        if is_body:
+                            part_body.annotations.append(entity)
+                        else:
+                            part_title.annotations.append(entity)
+
+                    else:  # if already annotations contained there
+                        current_annotation[2] += text
+                        entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                        if current_annotation[3]:
+                            part_body.annotations.append(entity)
+                        else:
+                            part_title.annotations.append(entity)
+
                 doc.parts['p1'] = part_title
                 doc.parts['p2'] = part_body
+                print(part_title)
+                print(part_body)
                 dataset.documents[pmid] = doc
                 # print(doc)
 

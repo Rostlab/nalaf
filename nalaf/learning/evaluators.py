@@ -27,7 +27,7 @@ class Evaluation:
 
         return '\t'.join(l) + "\t" + self.format_simple()
 
-    def __init__(self, label, strictness, tp, fp, fn, fp_overlap = 0, fn_overlap = 0):
+    def __init__(self, label, strictness, tp, fp, fn, fp_overlap=0, fn_overlap=0):
         self.label = label
         self.strictness = strictness
         self.tp = tp
@@ -199,7 +199,7 @@ class MentionLevelEvaluator(Evaluator):
         if self.subclass_analysis:
             subclass_measures = {}
             for subclass, counts in subclass_counts.items():
-                if subclass == None:
+                if subclass is None:
                     break
                 evaluations.append(
                 Evaluation(str(subclass), self.strictness, counts['tp'], counts['fp'], counts['fn'], counts['fp_overlap'], counts['fn_overlap']))

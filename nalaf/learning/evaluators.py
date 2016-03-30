@@ -104,7 +104,8 @@ class Evaluations:
     def format(self, strictnesses=['exact', 'overlapping']):
         assert(len(self.classes) >= 1)
         l = [next(iter(self.classes.values())).format_header(strictnesses)]
-        for evaluation in self.classes.values():
+        for clazz in sorted(self.classes.keys()):
+            evaluation = self.classes[clazz]
             l += [evaluation.format(strictnesses)]
         return '\n'.join(l)
 

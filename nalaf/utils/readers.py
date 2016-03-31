@@ -439,7 +439,9 @@ class MedlineReader(Reader):
 
 class OSIRISReaderMachineLearningReady(Reader):
     """
-    Reads in the OSIRIS corpus.
+    Reads in the OSIRIS corpus by using the Wordfreak format which is aimed at
+    specific annotations for machine learning tasks and does not represent the same annotations as the XML-file.
+    # TODO still WIP (some minor bugs)
     """
     def __init__(self, path):
         self.path = os.path.abspath(path)
@@ -458,8 +460,6 @@ class OSIRISReaderMachineLearningReady(Reader):
                 content = data.split("\n")
                 try:
                     pmid = int(content[0])
-                    if pmid == 12915397:  # todo debug purpose, has to be deleted
-                        exit()
                 except ValueError:
                     continue
 
@@ -468,7 +468,7 @@ class OSIRISReaderMachineLearningReady(Reader):
                 title = content[2]
                 part_title = Part(title, is_abstract=True)
                 body = content[4]
-                part_body = Part(body, is_abstract=True)
+                part_abstract = Part(body, is_abstract=True)
 
                 title_offset = len(str(pmid)) + 2  # +2 for twice newline
                 body_offset = title_offset + len(title) + 2  # +2 for twice newline
@@ -477,7 +477,7 @@ class OSIRISReaderMachineLearningReady(Reader):
                 current_annotation = []
                 last_element = None
 
-                print(filename, pmid, title)
+                # print(filename, pmid, title)
                 with open(filename + '.ann', 'r') as fa:
                     tree = ET.parse(fa)
                     for element in tree.iterfind('Annotation/Annotation[@type]'):
@@ -515,14 +515,14 @@ class OSIRISReaderMachineLearningReady(Reader):
                             if len(current_annotation) > 0:
                                 entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
                                 if current_annotation[3]:
-                                    part_body.annotations.append(entity)
+                                    part_abstract.annotations.append(entity)
                                 else:
                                     part_title.annotations.append(entity)
                                 current_annotation = []
 
                             entity = Entity(MUT_CLASS_ID, norm_start, text)
                             if start >= body_offset:
-                                part_body.annotations.append(entity)
+                                part_abstract.annotations.append(entity)
                             else:
                                 part_title.annotations.append(entity)
 
@@ -543,7 +543,7 @@ class OSIRISReaderMachineLearningReady(Reader):
                         entity = Entity(MUT_CLASS_ID, norm_start, text)
 
                         if is_body:
-                            part_body.annotations.append(entity)
+                            part_abstract.annotations.append(entity)
                         else:
                             part_title.annotations.append(entity)
 
@@ -551,15 +551,89 @@ class OSIRISReaderMachineLearningReady(Reader):
                         current_annotation[2] += text
                         entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
                         if current_annotation[3]:
-                            part_body.annotations.append(entity)
+                            part_abstract.annotations.append(entity)
                         else:
                             part_title.annotations.append(entity)
 
-                doc.parts['p1'] = part_title
-                doc.parts['p2'] = part_body
-                print(part_title)
-                print(part_body)
+                doc.parts['title'] = part_title
+                doc.parts['abstract'] = part_abstract
+                # print(part_title)
+                # print(part_body)
                 dataset.documents[pmid] = doc
                 # print(doc)
 
+        return dataset
+
+
+class OSIRISReader(Reader):
+    """
+    Parses the OSIRIS corpus by using their supplied XML-file alone.
+    """
+    def __init__(self, path):
+        self.path = os.path.abspath(path)
+        """path to xml file"""
+
+    def read(self):
+        """
+        :returns: nalaf.structures.data.Dataset
+        """
+        from functools import reduce
+        dataset = Dataset()
+        with open(self.path, 'r') as f:
+
+            tree = ET.parse(f)
+            # level document
+            for element in tree.iterfind('Article'):
+                doc = Document()
+
+                # pmid <Pmid>
+                pmid = element[0].text
+
+                # title <Title>
+                title = element[1].text
+                if not title:
+                    title = ""
+                title_annotations = []
+                for child in element[1]:
+                    if child.tag == 'variant':
+                        entity = Entity(MUT_CLASS_ID, len(title), child.text)
+                        title_annotations.append(entity)
+                    # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
+                    try:
+                        title += child.text
+                    except TypeError:
+                        pass
+                    try:
+                        title += child.tail
+                    except TypeError:
+                        pass
+                part_title = Part(title)
+                part_title.annotations.extend(title_annotations)
+
+                # body - abstract <Abstract>
+                abstract = element[2].text
+                if not abstract:
+                    abstract = ""
+                abstract_annotations = []
+                for child in element[2]:
+                    if child.tag == 'variant':
+                        entity = Entity(MUT_CLASS_ID, len(abstract), child.text)
+                        abstract_annotations.append(entity)
+                    # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
+                    try:
+                        abstract += child.text
+                    except TypeError:
+                        pass
+                    try:
+                        abstract += child.tail
+                    except TypeError:
+                        pass
+                part_abstract = Part(abstract)
+                part_abstract.annotations.extend(abstract_annotations)
+
+                # save part to document
+                doc.parts['title'] = part_title
+                doc.parts['abstract'] = part_abstract
+                dataset.documents[pmid] = doc  # save document to dataset
+        print(dataset)
         return dataset

@@ -635,5 +635,4 @@ class OSIRISReader(Reader):
                 doc.parts['title'] = part_title
                 doc.parts['abstract'] = part_abstract
                 dataset.documents[pmid] = doc  # save document to dataset
-        print(dataset)
         return dataset

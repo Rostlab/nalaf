@@ -60,13 +60,17 @@ class Evaluation:
     def __computation_to_list(self, d):
         return [d.precision, d.recall, d.f_measure]
 
-    def format_header(self, strictnesses=['exact', 'overlapping']):
+    def format_header(self, strictnesses=None, add_SE=True):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
         header = ['#class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for _ in strictnesses:
             header += ['match', 'P', 'R', 'F']
         return '\t'.join(header)
 
-    def format(self, strictnesses=['exact', 'overlapping']):
+    def format(self, strictnesses=None, add_SE=True):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
         l = [self.label]
         counts = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
         counts = [str(c) for c in counts]

@@ -130,9 +130,17 @@ class MutationFinderReader(Reader):
         with open(self.corpus_folder, encoding='utf-8') as file:
             reader = csv.reader(file, delimiter='\t')
             for row in reader:
+                docid, title, abstract = row
+                title = title.strip()
+                abstract = abstract.strip()
+
                 document = Document()
-                document.parts['abstract'] = Part(row[1])
-                dataset.documents[row[0]] = document
+                if title:
+                    document.parts['title'] = Part(title)
+                if abstract and abstract != 'null':
+                    document.parts['abstract'] = Part(abstract)
+
+                dataset.documents[docid] = document
 
         return dataset
 

@@ -123,10 +123,13 @@ class EvaluationWithStandardError:
 
         return sum([value[count] for key, value in self.dic_counts.items() if key in keys])
 
-    def _compute_SE(self, mean, array):
+    def _compute_SE(self, mean, array, multiply_small_values=4):
         cleaned = [x for x in array if not math.isnan(x)]
         n = len(cleaned)
-        return (math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1))) / math.sqrt(n)
+        ret = math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1)) / math.sqrt(n)
+        if (ret <= 0.000001):
+            ret *= multiply_small_values
+        return ret
 
     def compute(self, strictness):
         means = self._mean_eval.compute(strictness)

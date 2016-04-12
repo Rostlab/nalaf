@@ -7,9 +7,9 @@ Usage: ::
 
 """
 if __name__ == '__main__':
-    import nltk
+    from nltk import download
 
     CORPORA = ['punkt']
 
     for corpus in CORPORA:
-        nltk.download(corpus)
+        download(corpus)

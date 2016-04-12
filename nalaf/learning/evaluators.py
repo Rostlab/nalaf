@@ -2,6 +2,8 @@ import abc
 from nalaf.structures.data import Entity
 from nalaf import print_verbose, print_debug
 from collections import namedtuple
+import random
+import math
 
 class Evaluation:
 
@@ -57,33 +59,30 @@ class Evaluation:
     def __str__(self):
         return self.format()
 
-    def __computation_to_list(self, d):
-        return [d.precision, d.recall, d.f_measure]
-
-    def format_header(self, strictnesses=None, add_SE='macro'):
+    def format_header(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
-        header = ['#class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
+        header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for _ in strictnesses:
             header += ['match', 'P', 'R', 'F']
         return '\t'.join(header)
 
-    def format(self, strictnesses=None, add_SE='macro'):
+    def _format_counts_list(self):
+        ret = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
+        return [str(c) for c in ret]
+
+    def format(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
-        # TODO plus minus
-
-        l = [self.label]
-        counts = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
-        counts = [str(c) for c in counts]
-        l += counts
+        cols = [self.label] + self._format_counts_list()
         for strictness in strictnesses:
-            l += [strictness[0]]
-            l += self.format_computation(self.__computation_to_list(self.compute(strictness)))
-        return '\t'.join(l)
+            cols += [strictness[0]]  # first character
+            cols += self.format_computation(self.compute(strictness))
+        return '\t'.join(cols)
 
-    def format_computation(self, computationlist):
-        return ["{:6.4f}".format(n) for n in computationlist]
+    def format_computation(self, c):
+        complist = [c.precision, c.recall, c.f_measure]
+        return ["{:6.4f}".format(n) for n in complist]
 
     @staticmethod
     def __safe_div(nominator, denominator):
@@ -91,6 +90,92 @@ class Evaluation:
             return nominator / denominator
         except ZeroDivisionError:
             return float('NaN')
+
+
+class EvaluationWithStandardError:
+
+    Computation = namedtuple('Computation',
+                             ['precision', 'precision_SE', 'recall', 'recall_SE', 'f_measure', 'f_measure_SE'])
+
+    def __init__(self, label, dic_counts, n=1000, p=0.15, mode='macro'):
+        self.label = str(label)
+        self.dic_counts = dic_counts
+        self.n = n
+        self.p = 0.15
+        assert mode == 'macro', "`micro` mode is not implemented yet"
+        self.mode = mode
+
+        self.keys = dic_counts.keys()
+        self.keys_len = len(dic_counts.keys())
+        self._mean_eval = Evaluation(
+            str(self.label),
+            self._get('tp'), self._get('fp'), self._get('fn'), self._get('fp_ov'), self._get('fn_ov'))
+
+        self.tp = self._mean_eval.tp
+        self.fp = self._mean_eval.fp
+        self.fn = self._mean_eval.fn
+        self.fp_ov = self._mean_eval.fp_ov
+        self.fn_ov = self._mean_eval.fn_ov
+
+    def _get(self, count, keys=None):
+        if keys is None:
+            keys = self.keys
+
+        return sum([value[count] for key, value in self.dic_counts.items() if key in keys])
+
+    def _compute_SE(self, mean, array):
+        cleaned = [x for x in array if not math.isnan(x)]
+        n = len(cleaned)
+        return (math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1))) / math.sqrt(n)
+
+    def compute(self, strictness):
+        means = self._mean_eval.compute(strictness)
+
+        samples = []
+        for _ in range(self.n):
+            random_keys = random.sample(self.keys, round(self.keys_len * self.p))
+            sample = Evaluation(str(self.label),
+                                self._get('tp', random_keys),
+                                self._get('fp', random_keys),
+                                self._get('fn', random_keys),
+                                self._get('fp_ov', random_keys),
+                                self._get('fn_ov', random_keys))
+
+            samples.append(sample.compute(strictness))
+
+        return EvaluationWithStandardError.Computation(
+            means.precision,
+            self._compute_SE(means.precision, [sample.precision for sample in samples]),
+            means.recall,
+            self._compute_SE(means.recall, [sample.recall for sample in samples]),
+            means.f_measure,
+            self._compute_SE(means.f_measure, [sample.f_measure for sample in samples]))
+
+    def __str__(self):
+        return self.format()
+
+    def format_header(self, strictnesses=None):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
+        header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
+        for _ in strictnesses:
+            header += ['match', 'P', 'P_SE', 'R', 'R_SE', 'F', 'F_SE']
+        return '\t'.join(header)
+
+    def format(self, strictnesses=None):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
+        cols = [self.label] + self._mean_eval._format_counts_list()
+        for strictness in strictnesses:
+            cols += [strictness[0]]  # first character
+            cols += self.format_computation(self.compute(strictness))
+        return '\t'.join(cols)
+
+    def format_computation(self, c):
+        complist = [c.precision, c.precision_SE, c.recall, c.recall_SE, c.f_measure, c.f_measure_SE]
+        return ["{:6.4f}".format(n) for n in complist]
+        # TODO plus minus
+
 
 
 class Evaluations:
@@ -111,11 +196,11 @@ class Evaluations:
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         assert(len(self.classes) >= 1)
-        l = [next(iter(self.classes.values())).format_header(strictnesses)]
+        rows = [next(iter(self.classes.values())).format_header(strictnesses)]
         for clazz in sorted(self.classes.keys()):
             evaluation = self.classes[clazz]
-            l += [evaluation.format(strictnesses)]
-        return '\n'.join(l)
+            rows += [evaluation.format(strictnesses)]
+        return '\n'.join(rows)
 
 
     def __iter__(self):
@@ -240,11 +325,6 @@ class MentionLevelEvaluator(Evaluator):
         evaluations = Evaluations()
 
         for label in labels:
-            evaluations.add(Evaluation(str(label),
-                                       sum([doc['tp'] for doc in counts[label].values()]),
-                                       sum([doc['fp'] for doc in counts[label].values()]),
-                                       sum([doc['fn'] for doc in counts[label].values()]),
-                                       sum([doc['fp_ov'] for doc in counts[label].values()]),
-                                       sum([doc['fn_ov'] for doc in counts[label].values()])))
+            evaluations.add(EvaluationWithStandardError(label, counts[label]))
 
         return evaluations

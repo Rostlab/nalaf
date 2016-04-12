@@ -127,7 +127,7 @@ class EvaluationWithStandardError:
         cleaned = [x for x in array if not math.isnan(x)]
         n = len(cleaned)
         ret = Evaluation._safe_div(math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1)), math.sqrt(n))
-        if (ret <= 0.000001):
+        if (ret <= 0.00001):
             ret *= multiply_small_values
         return ret
 
@@ -191,6 +191,10 @@ class EvaluationWithStandardError:
 
 
     def format_computation_removing_noise(self, c):
+        """
+        Caveat: it does not work wie SE values that equal NaN
+        """
+
         ses = [c.precision_SE, c.recall_SE, c.f_measure_SE]
         ses = ["{:5.3f}".format(x * 100) for x in ses]
         ses_zeros = [self._num_leading_zeros(x) for x in ses]

@@ -32,27 +32,27 @@ class Evaluation:
         """
 
         if strictness == 'exact':
-            precision = self.__safe_div(self.tp, self.tp + self.fp)
-            recall = self.__safe_div(self.tp, self.tp + self.fn)
+            precision = self._safe_div(self.tp, self.tp + self.fp)
+            recall = self._safe_div(self.tp, self.tp + self.fn)
 
         elif strictness == 'overlapping':
             fp = self.fp - self.fp_ov
             fn = self.fn - self.fn_ov
 
-            precision = self.__safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fp + self.fp_ov + self.fn_ov)
-            recall = self.__safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fn + self.fp_ov + self.fn_ov)
+            precision = self._safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fp + self.fp_ov + self.fn_ov)
+            recall = self._safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fn + self.fp_ov + self.fn_ov)
 
         elif strictness == 'half_overlapping':
             fp = self.fp - self.fp_ov
             fn = self.fn - self.fn_ov
 
-            precision = self.__safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fp + self.fp_ov + self.fn_ov)
-            recall = self.__safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fn + self.fp_ov + self.fn_ov)
+            precision = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fp + self.fp_ov + self.fn_ov)
+            recall = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fn + self.fp_ov + self.fn_ov)
 
         else:
             raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')
 
-        f_measure = 2 * self.__safe_div(precision * recall, precision + recall)
+        f_measure = 2 * self._safe_div(precision * recall, precision + recall)
 
         return Evaluation.Computation(precision, recall, f_measure)
 
@@ -85,7 +85,7 @@ class Evaluation:
         return ["{:6.4f}".format(n) for n in complist]
 
     @staticmethod
-    def __safe_div(nominator, denominator):
+    def _safe_div(nominator, denominator):
         try:
             return nominator / denominator
         except ZeroDivisionError:
@@ -126,7 +126,7 @@ class EvaluationWithStandardError:
     def _compute_SE(self, mean, array, multiply_small_values=4):
         cleaned = [x for x in array if not math.isnan(x)]
         n = len(cleaned)
-        ret = math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1)) / math.sqrt(n)
+        ret = Evaluation._safe_div(math.sqrt(sum((x - mean) ** 2 for x in cleaned) / (n - 1)), math.sqrt(n))
         if (ret <= 0.000001):
             ret *= multiply_small_values
         return ret

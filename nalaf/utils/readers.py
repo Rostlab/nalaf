@@ -301,7 +301,7 @@ class TmVarReader(Reader):
                 document.parts['abstract'] = abstract
 
                 for line in lines[2:]:
-                    _, start, end, mut, _, _ = line.split('\t')
+                    _, start, end, _, _, _ = line.split('\t')
                     start = int(start)
                     end = int(end)
 

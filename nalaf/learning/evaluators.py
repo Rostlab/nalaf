@@ -97,13 +97,14 @@ class EvaluationWithStandardError:
     Computation = namedtuple('Computation',
                              ['precision', 'precision_SE', 'recall', 'recall_SE', 'f_measure', 'f_measure_SE'])
 
-    def __init__(self, label, dic_counts, n=1000, p=0.15, mode='macro'):
+    def __init__(self, label, dic_counts, n=1000, p=0.15, mode='macro', precomputed_SEs=None):
         self.label = str(label)
         self.dic_counts = dic_counts
         self.n = n
         self.p = p
         assert mode == 'macro', "`micro` mode is not implemented yet"
         self.mode = mode
+        self.precomputed_SEs = precomputed_SEs
 
         self.keys = dic_counts.keys()
         self.keys_len = len(dic_counts.keys())
@@ -131,28 +132,36 @@ class EvaluationWithStandardError:
             ret *= multiply_small_values
         return ret
 
-    def compute(self, strictness):
+    def compute(self, strictness, precomputed_SE=None):
         means = self._mean_eval.compute(strictness)
 
-        samples = []
-        for _ in range(self.n):
-            random_keys = random.sample(self.keys, round(self.keys_len * self.p))
-            sample = Evaluation(str(self.label),
-                                self._get('tp', random_keys),
-                                self._get('fp', random_keys),
-                                self._get('fn', random_keys),
-                                self._get('fp_ov', random_keys),
-                                self._get('fn_ov', random_keys))
+        if precomputed_SE is None:
+            samples = []
+            for _ in range(self.n):
+                random_keys = random.sample(self.keys, round(self.keys_len * self.p))
+                sample = Evaluation(str(self.label),
+                                    self._get('tp', random_keys),
+                                    self._get('fp', random_keys),
+                                    self._get('fn', random_keys),
+                                    self._get('fp_ov', random_keys),
+                                    self._get('fn_ov', random_keys))
 
-            samples.append(sample.compute(strictness))
+                samples.append(sample.compute(strictness))
+
+            p_SE = self._compute_SE(means.precision, [sample.precision for sample in samples])
+            r_SE = self._compute_SE(means.recall, [sample.recall for sample in samples])
+            f_SE = self._compute_SE(means.f_measure, [sample.f_measure for sample in samples])
+
+        else:
+            p_SE = precomputed_SE['precision_SE']
+            r_SE = precomputed_SE['recall_SE']
+            f_SE = precomputed_SE['f_measure_SE']
 
         return EvaluationWithStandardError.Computation(
-            means.precision,
-            self._compute_SE(means.precision, [sample.precision for sample in samples]),
-            means.recall,
-            self._compute_SE(means.recall, [sample.recall for sample in samples]),
-            means.f_measure,
-            self._compute_SE(means.f_measure, [sample.f_measure for sample in samples]))
+            means.precision, p_SE,
+            means.recall, r_SE,
+            means.f_measure, f_SE)
+
 
     def __str__(self):
         return self.format()
@@ -171,7 +180,8 @@ class EvaluationWithStandardError:
         cols = [self.label] + self._mean_eval._format_counts_list()
         for strictness in strictnesses:
             cols += [strictness[0]]  # first character
-            cols += self.format_computation_simple(self.compute(strictness))
+            precomputed_SE = self.precomputed_SEs[strictness] if self.precomputed_SEs else None
+            cols += self.format_computation_simple(self.compute(strictness, precomputed_SE))
         return '\t'.join(cols)
 
     def _num_leading_zeros(self, num_str):

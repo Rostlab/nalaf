@@ -57,8 +57,39 @@ class DiscreteWordEmbeddingsFeatureGenerator(FeatureGenerator):
             word = re.sub('\d', '0', token.word.lower())
             if word in self.model:
                 digits = np.digitize(self.model[word], self.bin_edges)
-                for index, value in enumerate(digits
-                                              ):
+                for index, value in enumerate(digits):
+                    token.features[feature_names[index]] = str(value)
+
+
+class BinarizedWordEmbeddingsFeatureGenerator(FeatureGenerator):
+    """
+    DOCSTRING
+    """
+
+    def __init__(self, model_file, n_bins=300):
+        import numpy as np
+        self.model = Word2Vec.load(model_file)
+
+        data = np.vstack(self.model[word] for word in self.model.vocab)
+        self.pos_means = np.average(data, axis=0, weights=(data > 0))
+        self.neg_means = np.average(data, axis=0, weights=(data < 0))
+
+        print_verbose('word embddings loaded with vocab size:', len(self.model.vocab))
+
+    def generate(self, dataset):
+        import numpy as np
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        # create the feature names only once
+        feature_names = ['embedding_{}'.format(index)
+                         for index in range(self.model[next(iter(self.model.vocab))].shape[0])]
+        for token in dataset.tokens():
+            word = re.sub('\d', '0', token.word.lower())
+            if word in self.model:
+                vector = self.model[word]
+                binarized = np.where(vector > self.pos_means, '+', np.where(vector < self.neg_means, '-', '0'))
+                for index, value in enumerate(binarized):
                     token.features[feature_names[index]] = value
 
 

@@ -66,7 +66,7 @@ class BinarizedWordEmbeddingsFeatureGenerator(FeatureGenerator):
     DOCSTRING
     """
 
-    def __init__(self, model_file, n_bins=300):
+    def __init__(self, model_file):
         import numpy as np
         self.model = Word2Vec.load(model_file)
 

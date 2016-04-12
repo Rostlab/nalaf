@@ -101,7 +101,7 @@ class EvaluationWithStandardError:
         self.label = str(label)
         self.dic_counts = dic_counts
         self.n = n
-        self.p = 0.15
+        self.p = p
         assert mode == 'macro', "`micro` mode is not implemented yet"
         self.mode = mode
 

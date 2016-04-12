@@ -283,30 +283,38 @@ class TmVarReader(Reader):
         :returns: nalaf.structures.data.Dataset
         """
         dataset = Dataset()
+        print(self.corpus_file)
         with open(self.corpus_file, encoding='utf-8') as file:
+            documents = file.read().strip().split('\n\n')
+            for document_text in documents:
+                lines = document_text.strip().splitlines()
 
-            for line in file:
-                title = line.split('|t|')[-1]
-                splitted = next(file).split(('|a|'))
-
-                pmid = splitted[0]
-                abstract = "".join([xs + " " for xs in splitted[1:]]).strip()
+                first_line = re.search('(\d+)\|t\|(.*)', lines[0])
+                doc_id = first_line.group(1)
+                tmvar_title = first_line.group(2)
+                tmvar_abstract = re.search('(\d+)\|a\|(.*)', lines[1]).group(2)
 
                 document = Document()
-                document.parts['abstract'] = Part(title + abstract)
+                title = Part(tmvar_title)
+                abstract = Part(tmvar_abstract)
+                document.parts['title'] = title
+                document.parts['abstract'] = abstract
 
-                line = next(file)
-                while line != '\n' and line != '':
-                    _, start, end, text, *_ = line.split('\t')
-                    document.parts['abstract'].annotations.append(Entity(MUT_CLASS_ID, int(start), text))
-                    try:
-                        oldline = line
-                        line = next(file)
-                    except StopIteration:
-                        print('StopIteration Error, Line before:', oldline)
-                        line = '\n'
+                for line in lines[2:]:
+                    _, start, end, mut, _, _ = line.split('\t')
+                    start = int(start)
+                    end = int(end)
 
-                dataset.documents[pmid] = document
+                    if 0 <= start < end <= len(tmvar_title):
+                        part = title
+                    else:
+                        part = abstract
+                        start -= len(tmvar_title) + 1
+                        end -= len(tmvar_title) + 1
+
+                    part.annotations.append(Entity(MUT_CLASS_ID, start, part.text[start:end]))
+
+                dataset.documents[doc_id] = document
 
         return dataset
 

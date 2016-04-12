@@ -231,7 +231,7 @@ class Evaluator:
 
 class MentionLevelEvaluator(Evaluator):
 
-    TOTAL_LABEL = 'TOTAL'
+    TOTAL_LABEL = "\u2211"
 
     """
     Implements mention level performance evaluation. That means it compares if the predicted text spans match

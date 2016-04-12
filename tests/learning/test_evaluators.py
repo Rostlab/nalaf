@@ -55,7 +55,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_exact_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))('TOTAL')
+        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp, 4)  # the 3 overlapping + 1 spurious
@@ -69,7 +69,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))('TOTAL')
+        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp - evaluation.fp_ov, 1)  # the 1 spurious
@@ -85,7 +85,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_half_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))('TOTAL')
+        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp - evaluation.fp_ov, 1)  # the 1 spurious
@@ -108,7 +108,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_exception_on_strictness(self):
         evaluator = MentionLevelEvaluator()  # this is fine
-        evaluation = (evaluator.evaluate(self.dataset))('TOTAL')  # this is fine
+        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)  # this is fine
 
         self.assertRaises(ValueError, evaluation.compute, 'strictness not valid')
 

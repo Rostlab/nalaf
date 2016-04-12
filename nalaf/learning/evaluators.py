@@ -269,7 +269,7 @@ class Evaluator:
 
 class MentionLevelEvaluator(Evaluator):
 
-    TOTAL_LABEL = "T"
+    TOTAL_LABEL = "TOTAL"
 
     """
     Implements mention level performance evaluation. That means it compares if the predicted text spans match

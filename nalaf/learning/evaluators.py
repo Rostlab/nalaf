@@ -162,7 +162,7 @@ class EvaluationWithStandardError:
 
         header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for _ in strictnesses:
-            header += ['match', 'P', 'P_SE', 'R', 'R_SE', 'F', 'F_SE']
+            header += ['match', 'P', '\u00B1P_SE', 'R', '\u00B1R_SE', 'F', '\u00B1F_SE']
         return '\t'.join(header)
 
     def format(self, strictnesses=None):

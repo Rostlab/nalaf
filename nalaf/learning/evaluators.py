@@ -171,14 +171,38 @@ class EvaluationWithStandardError:
         cols = [self.label] + self._mean_eval._format_counts_list()
         for strictness in strictnesses:
             cols += [strictness[0]]  # first character
-            cols += self.format_computation(self.compute(strictness))
+            cols += self.format_computation_simple(self.compute(strictness))
         return '\t'.join(cols)
 
-    def format_computation(self, c):
+    def _num_leading_zeros(self, num_str):
+        ret = 0
+        for digit in num_str:
+            if not digit.isdigit():  # digital symbol: . or ,
+                continue
+            if digit == '0':
+                ret += 1
+            else:
+                return ret
+        return ret
+
+    def format_computation_simple(self, c):
         complist = [c.precision, c.precision_SE, c.recall, c.recall_SE, c.f_measure, c.f_measure_SE]
         return ["{:6.4f}".format(n) for n in complist]
-        # TODO plus minus
 
+
+    def format_computation_removing_noise(self, c):
+        ses = [c.precision_SE, c.recall_SE, c.f_measure_SE]
+        ses = ["{:5.3f}".format(x * 100) for x in ses]
+        ses_zeros = [self._num_leading_zeros(x) for x in ses]
+        ses_zeros = [(1 if x == 0 else x) for x in ses_zeros]
+        ses_ints = [x.index('.') for x in ses]
+        # number of digits depends on respective SE
+        ses_reduced = [se[:(integer+1+zeros)] for integer, zeros, se in zip(ses_ints, ses_zeros, ses)]
+        ses_formats = [("{:6."+str(x)+"f}") for x in ses_zeros]
+        comps = [sef.format(x * 100) for sef, x in zip(ses_formats, [c.precision, c.recall, c.f_measure])]
+        comps = [c[:min(6, len(c))] for c in comps]
+
+        return [item for pair in zip(comps, ses_reduced) for item in pair]
 
 
 class Evaluations:

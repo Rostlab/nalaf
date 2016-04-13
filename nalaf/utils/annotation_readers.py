@@ -431,3 +431,61 @@ class SETHAnnotationReader(AnnotationReader):
                         elif entity_type == 'Gene':
                             ann = Entity('e_1', start, row[2])
                             document.parts['abstract'].annotations.append(ann)
+
+
+class DownloadedSETHAnnotationReader(AnnotationReader):
+    """
+    Reads the annotations from the SETH-corpus (http://rockt.github.io/SETH/)
+    Format: filename = PMID
+    Tab separated:
+        annotation_type = T# or R# or E# (entity or relationship or ?)
+        mention = space separated:
+            entity_type start end
+        text
+
+        entity_type = one of the following: 'SNP', 'Gene', 'RS'
+
+    We map:
+        SNP to e_2 (mutation entity)
+        Gene to e_1 (protein entity)
+        RS to e_2 (mutation entity)
+
+    Implements the abstract class Annotator.
+    """
+
+    def __init__(self, directory, read_just_mutations=True):
+        self.directory = directory
+        self.read_just_mutations = read_just_mutations
+        """the directory containing *.ann files"""
+
+    def annotate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        for filename in glob.glob(str(self.directory + "/*.ann")):
+            with open(filename, 'r', encoding='utf-8') as file:
+                reader = csv.reader(file, delimiter='\t')
+
+                pmid = os.path.basename(filename).replace('.ann', '')
+                document = dataset.documents[pmid]
+
+                for row in reader:
+                    if row[0].startswith('T'):
+                        entity_type, start, end = row[1].split()
+                        start = int(start)
+                        end = int(end)
+
+                        title_len = len(document.parts['title'].text)
+                        if 0 <= start < end <= title_len:
+                            part = document.parts['title']
+                        else:
+                            part = document.parts['abstract']
+                            start -= title_len + 1
+                            end -= title_len + 1
+
+                        if entity_type == 'SNP' or entity_type == 'RS':
+                            ann = Entity(MUT_CLASS_ID, start, row[2])
+                            document.parts['abstract'].annotations.append(ann)
+                        elif not self.read_just_mutations and entity_type == 'Gene':
+                            ann = Entity('e_1', start, row[2])
+                            document.parts['abstract'].annotations.append(ann)

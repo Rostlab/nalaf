@@ -458,11 +458,11 @@ class Dataset:
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
 
-    def prune_filtered_sentences(self, filterin = (lambda _: False), percent_to_keep=0):
+    def prune_filtered_sentences(self, filterin=(lambda _: False), percent_to_keep=0):
         """
         Depends on labeler
         """
-        empty_sentence = lambda s : all(t.original_labels[0].value == 'O' for t in s)
+        empty_sentence = lambda s: all(t.original_labels[0].value == 'O' for t in s)
 
         for part in self.parts():
             tmp = []

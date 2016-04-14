@@ -283,7 +283,7 @@ class TmVarReader(Reader):
         :returns: nalaf.structures.data.Dataset
         """
         dataset = Dataset()
-        print(self.corpus_file)
+
         with open(self.corpus_file, encoding='utf-8') as file:
             documents = file.read().strip().split('\n\n')
             for document_text in documents:

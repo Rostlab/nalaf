@@ -10,7 +10,7 @@ from operator import lt, gt
 
 from nalaf import print_verbose, print_debug
 from nalaf.structures.data import Entity, Relation
-from nalaf.utils import MUT_CLASS_ID
+from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
 
 
 class AnnotationReader:
@@ -468,7 +468,6 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
 
                 pmid = os.path.basename(filename).replace('.ann', '')
                 document = dataset.documents[pmid]
-
                 for row in reader:
                     if row[0].startswith('T'):
                         entity_type, start, end = row[1].split()
@@ -485,7 +484,7 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
 
                         if entity_type == 'SNP' or entity_type == 'RS':
                             ann = Entity(MUT_CLASS_ID, start, row[2])
-                            document.parts['abstract'].annotations.append(ann)
+                            part.annotations.append(ann)
                         elif not self.read_just_mutations and entity_type == 'Gene':
-                            ann = Entity('e_1', start, row[2])
-                            document.parts['abstract'].annotations.append(ann)
+                            ann = Entity(PRO_CLASS_ID, start, row[2])
+                            part.annotations.append(ann)

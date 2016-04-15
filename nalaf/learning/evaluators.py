@@ -315,12 +315,13 @@ class MentionLevelEvaluator(Evaluator):
         counts = {label: {docid: dict.fromkeys(subcounts, 0) for docid in docids} for label in labels}
 
         for docid, doc in dataset.documents.items():
-            for part in doc:
+            for partid, part in doc.parts.items():
                 tests = ' || '.join(sorted(ann.text for ann in part.annotations))
                 preds = ' || '.join(sorted(ann.text for ann in part.predicted_annotations))
                 if tests != preds:
-                    print_debug("test: " + tests)
-                    print_debug("pred: " + preds)
+                    print_debug("* docid={} part={}".format(docid, partid))
+                    print_debug("test: {}".format(tests))
+                    print_debug("pred: {}".format(preds))
                     print_debug()
 
                 overlap_real = {label: [] for label in labels}

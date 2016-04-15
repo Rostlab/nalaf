@@ -316,8 +316,8 @@ class MentionLevelEvaluator(Evaluator):
 
         for docid, doc in dataset.documents.items():
             for part in doc:
-                print_debug(' || '.join(ann.text for ann in part.annotations))
-                print_debug(' || '.join(ann.text for ann in part.predicted_annotations))
+                print_debug(' || '.join(sorted(ann.text for ann in part.annotations)))
+                print_debug(' || '.join(sorted(ann.text for ann in part.predicted_annotations)))
                 print_debug()
 
                 overlap_real = {label: [] for label in labels}

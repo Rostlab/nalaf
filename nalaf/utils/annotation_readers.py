@@ -292,9 +292,9 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                 # either once or zero times
                 for filename in glob.glob(os.path.join(os.path.join(self.directory, annotator), '*{}*.ann.json'.format(doc_id))):
                     with open(filename, 'r', encoding='utf-8') as file:
-                        doc_is_read = True
                         ann_json = json.load(file)
                         if ann_json['anncomplete'] or not self.delete_incomplete_docs:
+                            doc_is_read = True
                             filenames.append(filename)
                             annotatable_parts |= set(ann_json['annotatable']['parts'])
                             annotator_entities[annotator] = ann_json['entities']
@@ -338,8 +338,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                 del dataset.documents[doc_id]
 
             else:
-                continue #keep the document
-                #del dataset.documents[doc_id] # delete documents with no annotations
+                continue  # keep the document
+                # del dataset.documents[doc_id] # delete documents with no annotations
 
 
 class BRATPartsAnnotationReader(AnnotationReader):

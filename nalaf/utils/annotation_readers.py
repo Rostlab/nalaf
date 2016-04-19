@@ -379,7 +379,7 @@ class BRATPartsAnnotationReader(AnnotationReader):
                         text = row[2]
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, start, text)
+                            ann = Entity(MUT_CLASS_ID, int(start), text)
                             if self.is_predicted:
                                 dataset.documents[docid].parts[partid].predicted_annotations.append(ann)
                             else:

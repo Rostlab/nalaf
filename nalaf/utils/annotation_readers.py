@@ -107,9 +107,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                             del document.parts[part_id]
 
                 except KeyError as e:
-                    # TODO to be removed when external tagtog part_id is fixed, see issue #113
-                    raise e
-
+                    pass
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs

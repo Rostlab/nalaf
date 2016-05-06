@@ -38,16 +38,17 @@ class Evaluation:
         elif strictness == 'overlapping':
             fp = self.fp - self.fp_ov
             fn = self.fn - self.fn_ov
+            tp = self.tp + self.fp_ov + self.fn_ov
 
-            precision = self._safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fp + self.fp_ov + self.fn_ov)
-            recall = self._safe_div(self.tp + self.fp_ov + self.fn_ov, self.tp + fn + self.fp_ov + self.fn_ov)
+            precision = self._safe_div(tp, tp + fp)
+            recall = self._safe_div(tp, tp + fn)
 
         elif strictness == 'half_overlapping':
             fp = self.fp - self.fp_ov
             fn = self.fn - self.fn_ov
 
-            precision = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fp + self.fp_ov + self.fn_ov)
-            recall = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + fn + self.fp_ov + self.fn_ov)
+            precision = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + self.fp_ov + self.fn_ov + fp)
+            recall = self._safe_div(self.tp + (self.fp_ov + self.fn_ov) / 2, self.tp + self.fp_ov + self.fn_ov + fn)
 
         else:
             raise ValueError('strictness must be "exact" or "overlapping" or "half_overlapping"')

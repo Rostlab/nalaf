@@ -25,7 +25,7 @@ class TestTmVarTagger(TestCase):
 class TestGNormPlus(TestCase):
     def test_get_genes_for_pmid(self):
         pmid = '22457529'
-        dataset = HTMLReader('resources/corpora/idp4/html').read()
+        dataset = HTMLReader('resources/bootstrapping/iteration_0/base/html/').read()
         # AnnJsonAnnotationReader('resources/corpora/idp4/annjson').annotate(dataset)
         all_genes = []
         with GNormPlus() as gnorm:

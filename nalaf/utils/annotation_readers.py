@@ -40,7 +40,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False, read_relations=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
-        self.read_just_mutations = read_just_mutations
+        self.read_just_mutations = read_just_mutations  # TODO this should not be part of nalaf
         """whether to read in only mutation entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
         """delete documents from the dataset that are not marked as 'anncomplete' provided the docs are not predicted"""

@@ -2,9 +2,8 @@ from textblob import TextBlob
 from textblob.en.taggers import NLTKTagger
 from textblob.en.np_extractors import FastNPExtractor
 from nalaf.features import FeatureGenerator
-from spacy.en import English
 from nalaf import print_debug
-#import time
+from nalaf.features import get_spacy_nlp_english
 
 class SpacyPosTagger(FeatureGenerator):
     """
@@ -12,9 +11,7 @@ class SpacyPosTagger(FeatureGenerator):
     """
 
     def __init__(self):
-        print_debug("SpacyPosTagger: INIT START")
-        self.nlp = English()
-        print_debug("SpacyPosTagger: INIT END")
+        self.nlp = get_spacy_nlp_english()
 
     def generate(self, dataset):
         """
@@ -47,7 +44,7 @@ class NLKTPosTagger(FeatureGenerator):
 
         for part in dataset.parts():
             for sentence in part.sentences:
-                text_tokens = list(map(lambda x : x.word, sentence))
+                text_tokens = list(map(lambda x: x.word, sentence))
                 tags = self.tagger.tag(text_tokens, tokenize=False)
                 for token, tag in zip(sentence, tags):
                     token.features['tag'] = tag[1]

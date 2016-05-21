@@ -6,6 +6,7 @@ import fcntl
 import os.path
 import pkg_resources
 from nalaf import print_debug
+from nalaf.features import get_spacy_nlp_english
 
 
 class SpacyLemmatizer(FeatureGenerator):
@@ -16,16 +17,12 @@ class SpacyLemmatizer(FeatureGenerator):
     """
 
     def __init__(self):
-        print_debug("SpacyLemmatizer: INIT START")
-        from spacy.en import English
-        self.nlp = English(parser=False, entity=False)
-        print_debug("SpacyLemmatizer: INIT END")
+        self.nlp = get_spacy_nlp_english()
 
     def generate(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-
         for part in dataset.parts():
             for sentence in part.sentences:
                 text_tokens = list(map(lambda x: x.word, sentence))

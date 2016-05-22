@@ -33,9 +33,10 @@ class HTMLReader(Reader):
     It reads either a single file or a directory (the contained .html's)
     """
 
-    def __init__(self, path):
+    def __init__(self, path, whole_basename_as_docid=False):
         self.path = path
         """an html file or a directory containing .html files"""
+        self.whole_basename_as_docid = whole_basename_as_docid
 
     def __read_directory(self):
         dataset = Dataset()
@@ -47,12 +48,12 @@ class HTMLReader(Reader):
 
     def __read_file_path(self, filename, dataset=Dataset()):
         with open(filename, 'rb') as file:
-            HTMLReader.read_file(file, filename, dataset)
+            HTMLReader.read_file(file, filename, dataset, self.whole_basename_as_docid)
 
         return dataset
 
     @staticmethod
-    def read_file(file, filename, dataset=Dataset()):
+    def read_file(file, filename, dataset=Dataset(), whole_basename_as_docid=False):
         soup = BeautifulSoup(file, "html.parser")
         document = Document()
 
@@ -63,14 +64,10 @@ class HTMLReader(Reader):
                 is_abstract = True
             document.parts[part['id']] = Part(str(part.string), is_abstract=is_abstract)
 
-        basename = os.path.basename(filename)
-        if '-' in basename:
-            doc_id = filename.split('-')[-1].replace('.plain.html', '')
-            doc_id = doc_id.replace('.html', '')
-            doc_id = doc_id.replace('.xml', '')
-        else:
-            doc_id = basename.replace('.html', '')
-            doc_id = basename.replace('.xml', '')
+        doc_id = os.path.basename(filename).replace('.plain.html', '').replace('.html', '').replace('.xml', '')
+        if not whole_basename_as_docid and '-' in doc_id:
+            doc_id = doc_id.split('-')[-1]
+
 
         dataset.documents[doc_id] = document
 

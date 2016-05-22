@@ -38,7 +38,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     """
 
     # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
-    def __init__(self, directory, read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, is_predicted=False, read_relations=False):
+    def __init__(self, directory, read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_only_class_id = read_only_class_id
@@ -49,6 +49,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """whether the annotation is predicted or real, which determines where it will be saved"""
         self.read_relations = read_relations
         """whether relations should be read as well"""
+        self.whole_basename_as_docid = whole_basename_as_docid
 
     def annotate(self, dataset):
         """
@@ -64,11 +65,10 @@ class AnnJsonAnnotationReader(AnnotationReader):
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
-                    basename = os.path.basename(filename)
-                    if '-' in basename:
-                        doc_id = filename.split('-')[-1].replace('.ann.json', '')
-                    else:
-                        doc_id = basename.replace('.ann.json', '')
+                    doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
+                    if not self.whole_basename_as_docid and '-' in doc_id:
+                        doc_id = doc_id.split('-')[-1]
+
 
                     read_docs.add(doc_id)
                     ann_json = json.load(file)

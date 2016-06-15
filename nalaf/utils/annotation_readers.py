@@ -37,17 +37,19 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True, delete_incomplete_docs=True, is_predicted=False, read_relations=False):
+    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
+    def __init__(self, directory, read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
-        self.read_just_mutations = read_just_mutations
-        """whether to read in only mutation entities"""
+        self.read_only_class_id = read_only_class_id
+        """whether to read in only entities with given class_id. Otherwise if None, read all entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
         """delete documents from the dataset that are not marked as 'anncomplete' provided the docs are not predicted"""
         self.is_predicted = is_predicted
         """whether the annotation is predicted or real, which determines where it will be saved"""
         self.read_relations = read_relations
         """whether relations should be read as well"""
+        self.whole_basename_as_docid = whole_basename_as_docid
 
     def annotate(self, dataset):
         """
@@ -63,11 +65,10 @@ class AnnJsonAnnotationReader(AnnotationReader):
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as file:
                 try:
-                    basename = os.path.basename(filename)
-                    if '-' in basename:
-                        doc_id = filename.split('-')[-1].replace('.ann.json', '')
-                    else:
-                        doc_id = basename.replace('.ann.json', '')
+                    doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
+                    if not self.whole_basename_as_docid and '-' in doc_id:
+                        doc_id = doc_id.split('-')[-1]
+
 
                     read_docs.add(doc_id)
                     ann_json = json.load(file)
@@ -77,9 +78,9 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         del dataset.documents[doc_id]
                     else:
                         for entity in ann_json['entities']:
-                            if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                            if not self.read_only_class_id or entity['classId'] == self.read_only_class_id:
                                 ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                                 entity['offsets'][0]['text'], entity['confidence']['prob'])
+                                             entity['offsets'][0]['text'], entity['confidence']['prob'])
                                 if self.is_predicted:
                                     document.parts[entity['part']].predicted_annotations.append(ann)
                                 else:
@@ -131,8 +132,12 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     1. Union or intersection
     2. Shortest entity, longest entity or priority
     """
-    def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None, read_just_mutations=True,
-                 delete_incomplete_docs=True, filter_below_iaa_threshold=False, iaa_threshold=0.8, is_predicted=False):
+
+    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
+    def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None,
+                 read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
+                 iaa_threshold=0.8, is_predicted=False):
+
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files
@@ -158,8 +163,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         * priority: take the entity from the annotator with higher priority in the order provided by parameter `priority`
         """
         self.priority = priority
-        self.read_just_mutations = read_just_mutations
-        """whether to read in only mutation entities"""
+        self.read_only_class_id = read_only_class_id
+        """whether to read in only entities with given class_id. Otherwise if None, read all entities"""
         self.delete_incomplete_docs = delete_incomplete_docs
         """delete documents from the dataset that are not marked as 'anncomplete'"""
         self.filter_below_iaa_threshold = filter_below_iaa_threshold
@@ -315,7 +320,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                     except KeyError:
                         # TODO: Remove once the tagtog bug is fixed
                         break
-                    if not self.read_just_mutations or entity['classId'] == MUT_CLASS_ID:
+                    if not self.read_only_class_id or entity['classId'] == self.read_only_class_id:
                         if self.is_predicted:
                             part.predicted_annotations.append(
                                 Entity(entity['classId'], entity['offsets'][0]['start'], entity['offsets'][0]['text']))

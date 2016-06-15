@@ -1,4 +1,21 @@
 import abc
+from nalaf import print_debug
+import time
+
+_SPACY_NLP_ENGLISH = None
+
+
+def get_spacy_nlp_english():
+    global _SPACY_NLP_ENGLISH
+
+    if _SPACY_NLP_ENGLISH is None:
+        start = time.time()
+        print_debug("Spacy NLP English: INIT START")
+        from spacy.en import English
+        _SPACY_NLP_ENGLISH = English(parser=False, entity=False)
+        print_debug("Spacy NLP English: INIT END", (time.time() - start))
+
+    return _SPACY_NLP_ENGLISH
 
 
 class FeatureGenerator:
@@ -9,6 +26,7 @@ class FeatureGenerator:
     * Implement the abstract method generate
     * Append new items to the dictionary field "features" of each Token in the dataset
     """
+
     @abc.abstractmethod
     def generate(self, dataset):
         """

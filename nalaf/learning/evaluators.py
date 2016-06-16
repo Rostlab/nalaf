@@ -139,7 +139,7 @@ class EvaluationWithStandardError:
         if precomputed_SE is None:
             samples = []
             for _ in range(self.n):
-                random_keys = random.sample(self.keys, round(self.keys_len * self.p))
+                random_keys = random.sample(self.keys, round(self.keys_len * self.p))  # without replacement
                 sample = Evaluation(str(self.label),
                                     self._get('tp', random_keys),
                                     self._get('fp', random_keys),

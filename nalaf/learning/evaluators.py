@@ -167,7 +167,7 @@ class EvaluationWithStandardError:
     def __str__(self):
         return self.format()
 
-    def format_header(self, strictnesses=None):
+    def format_header_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
@@ -175,12 +175,30 @@ class EvaluationWithStandardError:
             header += ['match', 'P', 'P_SE', 'R', 'R_SE', 'F', 'F_SE']
         return '\t'.join(header)
 
-    def format(self, strictnesses=None):
+    def format_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._mean_eval._format_counts_list()
         for strictness in strictnesses:
             cols += [strictness[0]]  # first character
+            precomputed_SE = self.precomputed_SEs[strictness] if self.precomputed_SEs else None
+            cols += self.format_computation_simple(self.compute(strictness, precomputed_SE))
+        return '\t'.join(cols)
+
+    def format_header_simple(self, strictnesses=None):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
+        header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
+        for strictness in strictnesses:
+            s = strictness[0].lower()+"|"  # first letter
+            header += [s + c for c in ['P', 'R', 'F', 'F_SE']]
+        return '\t'.join(header)
+
+    def format_simple(self, strictnesses=None):
+        strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
+
+        cols = [self.label] + self._mean_eval._format_counts_list()
+        for strictness in strictnesses:
             precomputed_SE = self.precomputed_SEs[strictness] if self.precomputed_SEs else None
             cols += self.format_computation_simple(self.compute(strictness, precomputed_SE))
         return '\t'.join(cols)
@@ -196,12 +214,15 @@ class EvaluationWithStandardError:
                 return ret
         return ret
 
-    def format_computation_simple(self, c):
+    def format_computation_complete(self, c):
         complist = [c.precision, c.precision_SE, c.recall, c.recall_SE, c.f_measure, c.f_measure_SE]
         return ["{:6.4f}".format(n) for n in complist]
 
+    def format_computation_simple(self, c):
+        complist = [c.precision, c.recall, c.f_measure, c.f_measure_SE]
+        return ["{:6.4f}".format(n) for n in complist]
 
-    def format_computation_removing_noise(self, c):
+    def format_computation_complete_removing_noise(self, c):
         """
         Caveat: it does not work wie SE values that equal NaN
         """
@@ -238,10 +259,10 @@ class Evaluations:
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         assert(len(self.classes) >= 1)
-        rows = [next(iter(self.classes.values())).format_header(strictnesses)]
+        rows = [next(iter(self.classes.values())).format_header_simple(strictnesses)]
         for clazz in sorted(self.classes.keys()):
             evaluation = self.classes[clazz]
-            rows += [evaluation.format(strictnesses)]
+            rows += [evaluation.format_simple(strictnesses)]
         return '\n'.join(rows)
 
 

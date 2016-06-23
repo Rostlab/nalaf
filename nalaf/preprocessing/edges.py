@@ -1,6 +1,5 @@
 import abc
 from nalaf.structures.data import Edge
-from nltk.stem import PorterStemmer
 
 class EdgeGenerator:
     """

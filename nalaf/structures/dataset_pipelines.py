@@ -5,7 +5,6 @@ from nalaf.features.window import WindowFeatureGenerator
 from nalaf.preprocessing.spliters import NLTKSplitter, Splitter
 from nalaf.preprocessing.tokenizers import TmVarTokenizer, Tokenizer
 from nalaf import print_verbose
-__author__ = 'Aleksandar'
 
 
 class PrepareDatasetPipeline:

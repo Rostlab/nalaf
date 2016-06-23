@@ -9,7 +9,7 @@ from nalaf.structures.data import FeatureDictionary
 from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTKTokenizer, TmVarTokenizer
 from relna.preprocessing.parsers import Parser, BllipParser, SpacyParser
-from relna.preprocessing.edges import SimpleEdgeGenerator
+from nalaf.preprocessing.edges import SimpleEdgeGenerator
 from spacy.en import English
 
 class RelationExtractionPipeline:

@@ -395,3 +395,99 @@ class MentionLevelEvaluator(Evaluator):
             evaluations.add(EvaluationWithStandardError(label, counts[label]))
 
         return evaluations
+
+
+class DocumentLevelRelationEvaluator(Evaluator):
+    """
+    Implements document level performance evaluation for relations. That means
+    it extracts all unique relations from a document, and compares it with the
+    predicted relations.
+
+    The evaluator does not care about the order of entities in a relation and
+    assumes that all relations are undirected.
+
+    The comparision of unique relations can be done by the 'match_case'
+    argument. If the value of 'match_case' is True, then a predicted relation
+    will match only if the cases match. If set to False, both entities will be
+    converted to lower case. By default, match_case is set to True.
+    """
+    def __init__(self, match_case=True):
+        self.match_case = match_case
+        """
+        If set to True, two relations will match only if their entities have the
+        same case. For instance, (entityA, entityB) and (EntityA, EntityB) will
+        be considered different.
+
+        However, if set to False, (entityA, entityB) is the same as
+        (EntityA, EntityB).
+
+        In general, (entityA, entityB) is also the same as (entityB, entityA)
+        """
+
+    def evaluate(self, dataset, relation):
+        """
+        :type dataset: nala.structures.data.Dataset
+        :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
+
+        Calculates precision, recall and subsequently F1 measure, defined as:
+            * precision: number of correctly predicted items as a percentage of
+                the total number of predicted items
+                len(predicted items that are also real)/len(predicted)
+                or in other words tp / tp + fp
+            * recall: number of correctly predicted items as a percentage of
+                the total number of correct items
+                len(real items that are also predicted)/len(real)
+                or in other words tp / tp + fn
+            * f1 measure: the harmonic mean of precision and recall or in
+                other words 2 * precision * recall / (precision + recall)
+
+        Also prints the value of the calculated precision, recall, F1 measure
+        as well as the value of the parameter 'match_case'.
+        """
+
+        tp, fp, fn = 0, 0, 0
+
+        true_relations = {}
+        for index, document in enumerate(dataset):
+            relations = list(document.unique_relations(relation))
+            true_relations[index] = relations
+
+        predicted_relations = {}
+        for index, document in enumerate(dataset):
+            relations = list(document.unique_relations(relation, predicted=True))
+            predicted_relations[index] = relations
+
+        for key in true_relations.keys():
+            predicted = predicted_relations[key]
+            actual = true_relations[key]
+            if self.match_case:
+                predicted = [ x.lower() for x in predicted ]
+                actual = [ x.lower() for x in actual ]
+            for relation in predicted:
+                if relation in actual:
+                    tp += 1
+                else:
+                    fp += 1
+            for relation in actual:
+                if relation not in predicted:
+                    fn += 1
+
+        precision, recall, f_measure = self.__calc_measures(tp, fp, fn)
+        return (tp, fp, fn, precision, recall, f_measure)
+
+    @staticmethod
+    def __safe_division(nominator, denominator):
+        try:
+            return nominator / denominator
+        except ZeroDivisionError:
+            return float('NaN')
+
+    def __calc_measures(self, tp, fp, fn):
+        precision = self.__safe_division(tp, tp+fp)
+        recall = self.__safe_division(tp, tp+fn)
+        f_measure = 2 * self.__safe_division(precision*recall, precision+recall)
+        print_verbose('tp:{:4} fp:{:4} fn:{:4} '
+                      .format(tp, fp, fn))
+        print('p:{:.4f} r:{:.4f} f:{:.4f} match_case:{} '
+              .format(precision, recall, f_measure, self.match_case))
+        return (precision, recall, f_measure)

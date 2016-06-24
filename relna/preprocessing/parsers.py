@@ -44,7 +44,7 @@ class BllipParser(Parser):
             from bllipparser import RerankingParser
         except ImportError:
             raise ImportError('BllipParser not installed, perhaps it is not supported on OS X yet')
-        
+
         self.parser = RerankingParser.fetch_and_load('GENIA+PubMed', verbose=False)
         """create a Reranking Parser from BllipParser"""
         self.parser.set_parser_options(nbest=nbest, overparsing=overparsing)
@@ -124,8 +124,6 @@ class SpacyParser(Parser):
         syntactic (constituency) parse trees. Currently, supports only 'bllip'.
     :type constituency_parser: str
     """
-    from spacy.en import English
-    from progress.bar import Bar
 
     def __init__(self, nlp, constituency_parser=False):
         self.nlp = nlp

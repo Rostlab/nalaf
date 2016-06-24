@@ -18,11 +18,11 @@ class GNormPlus(Cacheable):
 
     def get_genes_for_pmid(self, pmid, postproc=False):
         """
-        For pmid get Genes in 4-tuple.
+        For pmid get Genes in 3-tuple.
         If wanting to postprocess, meaning no 'GeneID:XXXX/...' then provide True boolean.
         :param pmid: PubMED ID
         :param postproc: postprocessing option for excluding 'GeneID:XXX...' to 'XXX'
-        :return: (int, int, str, str)
+        :return: (list_genes, str, str)
         """
         if pmid in self.cache:
             text = self.cache[pmid]

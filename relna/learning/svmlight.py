@@ -90,17 +90,17 @@ class SVMLightTreeKernels:
             file = os.path.join(self.directory, 'train')
         if self.use_tree_kernel:
             subprocess.call([
-    					self.svm_learn_call,
-                        '-v', '0',
-    					'-t', '5',
-    					'-T', '1',
-    					'-W', 'S',
-    					'-V', 'S',
-    					'-C', '+',
-                        '-c', str(c),
-    					file,
-    					os.path.join(self.directory, self.model),
-    					])
+                self.svm_learn_call,
+                '-v', '0',
+                '-t', '5',
+                '-T', '1',
+                '-W', 'S',
+                '-V', 'S',
+                '-C', '+',
+                '-c', str(c),
+                file,
+                os.path.join(self.directory, self.model)
+            ])
         else:
             subprocess.call([
                         self.svm_learn_call,

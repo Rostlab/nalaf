@@ -2,10 +2,7 @@ import os
 import sys
 import subprocess
 import pkg_resources
-
-from nalaf.structures.data import Label
-from nalaf.utils import MUT_CLASS_ID
-from random import random, seed
+from random import random
 
 
 class SVMLightTreeKernels:

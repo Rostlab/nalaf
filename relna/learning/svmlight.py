@@ -115,13 +115,18 @@ class SVMLightTreeKernels:
             file = os.path.join(self.directory, mode)
         if output is None:
             output = os.path.join(self.directory, 'predictions')
-        subprocess.call([
-                        self.svm_classify_call,
-                        '-v', '0',
-                        file,
-                        os.path.join(self.directory, self.model),
-                        output
-                        ])
+
+        call = [
+            self.svm_classify_call,
+            '-v', '0',
+            file,
+            os.path.join(self.directory, self.model),
+            output
+        ]
+        exitcode = subprocess.call(call)
+
+        if exitcode != 0:
+            raise Exception("Error when tagging: " + ' '.join(call))
 
     def read_predictions(self, dataset, predictions=None):
         if predictions is None:

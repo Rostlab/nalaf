@@ -97,6 +97,22 @@ class RelationExtractor(Annotator):
         pass
 
 
+class StubSameSentenceRelationExtractor(RelationExtractor):
+
+    def __init__(self):
+        super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
+
+    def tag(self, dataset):
+        from itertools import product
+        for part in dataset.parts():
+            for ann_1, ann_2 in product(
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
+                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
+                if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
+                    part.predicted_relations.append(
+                        Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))
+
+
 class CRFSuiteTagger(Tagger):
     """
     Performs tagging with a binary model using CRFSuite
@@ -199,18 +215,3 @@ class GNormPlusGeneTagger(Tagger):
                     # todo this is not used for now anywhere, might need to be re-worked or excluded
                     # genes = gnorm.get_genes_for_text(part.text)
                     pass
-
-
-class StubSameSentenceRelationExtractor(RelationExtractor):
-    def __init__(self):
-        super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
-
-    def tag(self, dataset):
-        from itertools import product
-        for part in dataset.parts():
-            for ann_1, ann_2 in product(
-                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
-                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
-                if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
-                    part.predicted_relations.append(
-                        Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))

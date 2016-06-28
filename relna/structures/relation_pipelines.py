@@ -33,8 +33,7 @@ class RelationExtractionPipeline:
     :type feature_generators: collections.Iterable[FeatureGenerator]
     """
 
-    def __init__(self, class1, class2, rel_type, splitter=None, tokenizer=None,
-            parser=None):
+    def __init__(self, class1, class2, rel_type, splitter=None, tokenizer=None, parser=None):
         self.class1 = class1
         self.class2 = class2
 

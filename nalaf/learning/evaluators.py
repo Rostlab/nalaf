@@ -424,7 +424,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         In general, (entityA, entityB) is also the same as (entityB, entityA)
         """
 
-    def evaluate(self, dataset, relation):
+    def evaluate(self, dataset, rel_type):
         """
         :type dataset: nala.structures.data.Dataset
         :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
@@ -449,12 +449,12 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
         true_relations = {}
         for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(relation))
+            relations = list(document.unique_relations(rel_type))
             true_relations[index] = relations
 
         predicted_relations = {}
         for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(relation, predicted=True))
+            relations = list(document.unique_relations(rel_type, predicted=True))
             predicted_relations[index] = relations
 
         for key in true_relations.keys():

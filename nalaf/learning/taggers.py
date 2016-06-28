@@ -99,8 +99,8 @@ class RelationExtractor(Annotator):
 
 class StubSameSentenceRelationExtractor(RelationExtractor):
 
-    def __init__(self):
-        super().__init__(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID)
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        super().__init__(entity1_class, entity2_class, relation_type)
 
     def tag(self, dataset):
         from itertools import product
@@ -110,7 +110,7 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
                     (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
                     part.predicted_relations.append(
-                        Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, PRO_REL_MUT_CLASS_ID))
+                        Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type))
 
 
 class CRFSuiteTagger(Tagger):

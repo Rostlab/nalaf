@@ -106,8 +106,8 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
         from itertools import product
         for part in dataset.parts():
             for ann_1, ann_2 in product(
-                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity1_class),
-                    (ann for ann in part.predicted_annotations if ann.class_id == self.entity2_class)):
+                    (ann for ann in part.annotations if ann.class_id == self.entity1_class),
+                    (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
                     part.predicted_relations.append(
                         Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type))

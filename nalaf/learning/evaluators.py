@@ -460,9 +460,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
         for key in true_relations.keys():
             predicted = predicted_relations[key]
             actual = true_relations[key]
-            if self.match_case:
-                predicted = [ x.lower() for x in predicted ]
-                actual = [ x.lower() for x in actual ]
+            if not self.match_case:
+                predicted = [x.lower() for x in predicted]
+                actual = [x.lower() for x in actual]
             for relation in predicted:
                 if relation in actual:
                     tp += 1

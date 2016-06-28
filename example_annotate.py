@@ -8,7 +8,7 @@ from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
-from nalaf.utils import MUT_CLASS_ID
+from nalaf.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
 from nalaf.learning.taggers import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'example_entity_model'), class_id=MUT_CLASS_ID)
 
     GNormPlusGeneTagger().tag(dataset, uniprot=True)
-    StubSameSentenceRelationExtractor().tag(dataset)
+    StubSameSentenceRelationExtractor(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID).tag(dataset)
 
     if args.output_dir:
         if not os.path.isdir(args.output_dir):

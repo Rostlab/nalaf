@@ -549,7 +549,7 @@ class Dataset:
             """
             start = fold_nr * fold_size
             end = start + fold_size
-            test_keys = keys[start : end]
+            test_keys = keys[start:end]
             train_keys = [key for key in keys if key not in test_keys]
 
             test = Dataset()

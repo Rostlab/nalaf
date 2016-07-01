@@ -44,6 +44,7 @@ class BllipParser(Parser):
             raise ImportError('BllipParser not installed, perhaps it is not supported on OS X yet')
 
         self.parser = RerankingParser.fetch_and_load('GENIA+PubMed', verbose=False)
+        # CAUTION this can take a long while. Install manually: `python -mbllipparser.ModelFetcher -i GENIA+PubMed`
         """create a Reranking Parser from BllipParser"""
         self.parser.set_parser_options(nbest=nbest, overparsing=overparsing)
         """set parser options"""

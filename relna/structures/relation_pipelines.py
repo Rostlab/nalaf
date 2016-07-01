@@ -65,7 +65,7 @@ class RelationExtractionPipeline:
 
         self.edge_generator = SimpleEdgeGenerator(class1, class2, rel_type)
 
-    def set_mode(self, train, feature_set, feature_generators=None):
+    def _set_mode(self, train, feature_set, feature_generators=None):
         if feature_generators is None:
             feature_generators = [NamedEntityCountFeatureGenerator(self.class1, feature_set, training_mode=train),
                                   NamedEntityCountFeatureGenerator(self.class2, feature_set, training_mode=train),
@@ -110,7 +110,7 @@ class RelationExtractionPipeline:
             self.feature_set = FeatureDictionary()
         else:
             self.feature_set = feature_set
-        self.set_mode(train, feature_set=self.feature_set, feature_generators=feature_generators)
+        self._set_mode(train, feature_set=self.feature_set, feature_generators=feature_generators)
         try:
             gen = dataset.tokens()
             next(gen)

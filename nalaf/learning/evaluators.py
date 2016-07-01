@@ -108,7 +108,7 @@ class EvaluationWithStandardError:
         self.precomputed_SEs = precomputed_SEs
 
         self.keys = dic_counts.keys()
-        self.keys_len = len(dic_counts.keys())
+        self.keys_len = len(self.keys)
         self._mean_eval = Evaluation(
             str(self.label),
             self._get('tp'), self._get('fp'), self._get('fn'), self._get('fp_ov'), self._get('fn_ov'))

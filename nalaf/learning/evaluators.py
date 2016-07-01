@@ -472,22 +472,6 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 if relation not in predicted:
                     fn += 1
 
-        precision, recall, f_measure = self.__calc_measures(tp, fp, fn)
-        return (tp, fp, fn, precision, recall, f_measure)
-
-    @staticmethod
-    def __safe_division(nominator, denominator):
-        try:
-            return nominator / denominator
-        except ZeroDivisionError:
-            return float('NaN')
-
-    def __calc_measures(self, tp, fp, fn):
-        precision = self.__safe_division(tp, tp+fp)
-        recall = self.__safe_division(tp, tp+fn)
-        f_measure = 2 * self.__safe_division(precision*recall, precision+recall)
-        print_verbose('tp:{:4} fp:{:4} fn:{:4} '
-                      .format(tp, fp, fn))
-        print('p:{:.4f} r:{:.4f} f:{:.4f} match_case:{} '
-              .format(precision, recall, f_measure, self.match_case))
-        return (precision, recall, f_measure)
+        evaluations = Evaluations()
+        evaluations.add(Evaluation(self.rel_type, tp, fp, fn))
+        return evaluations

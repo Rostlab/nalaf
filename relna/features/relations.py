@@ -1,6 +1,8 @@
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
 import abc
+from math import log2
+from operator import itemgetter
 
 class EdgeFeatureGenerator(FeatureGenerator):
     """

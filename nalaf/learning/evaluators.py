@@ -72,7 +72,7 @@ class Evaluation:
         ret = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
         return [str(c) for c in ret]
 
-    def format(self, strictnesses=None):
+    def format_row(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._format_counts_list()
@@ -167,6 +167,12 @@ class EvaluationWithStandardError:
     def __str__(self):
         return self.format()
 
+    def format_header(self, strictnesses=None):
+        return self.format_header_simple(strictnesses)
+
+    def format_row(self, strictnesses=None):
+        return self.format_row_simple(strictnesses)
+
     def format_header_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
@@ -175,7 +181,7 @@ class EvaluationWithStandardError:
             header += ['match', 'P', 'P_SE', 'R', 'R_SE', 'F', 'F_SE']
         return '\t'.join(header)
 
-    def format_complete(self, strictnesses=None):
+    def format_row_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._mean_eval._format_counts_list()
@@ -194,7 +200,7 @@ class EvaluationWithStandardError:
             header += [s + c for c in ['P', 'R', 'F', 'F_SE']]
         return '\t'.join(header)
 
-    def format_simple(self, strictnesses=None):
+    def format_row_simple(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._mean_eval._format_counts_list()
@@ -259,10 +265,10 @@ class Evaluations:
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         assert(len(self.classes) >= 1)
-        rows = [next(iter(self.classes.values())).format_header_simple(strictnesses)]
+        rows = [next(iter(self.classes.values())).format_header(strictnesses)]
         for clazz in sorted(self.classes.keys()):
             evaluation = self.classes[clazz]
-            rows += [evaluation.format_simple(strictnesses)]
+            rows += [evaluation.format_row(strictnesses)]
         return '\n'.join(rows)
 
 

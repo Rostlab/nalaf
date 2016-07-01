@@ -411,7 +411,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
     will match only if the cases match. If set to False, both entities will be
     converted to lower case. By default, match_case is set to True.
     """
-    def __init__(self, match_case=True):
+    def __init__(self, rel_type, match_case=True):
+        self.rel_type = rel_type
         self.match_case = match_case
         """
         If set to True, two relations will match only if their entities have the
@@ -424,7 +425,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         In general, (entityA, entityB) is also the same as (entityB, entityA)
         """
 
-    def evaluate(self, dataset, rel_type):
+    def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
         :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
@@ -449,12 +450,12 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
         true_relations = {}
         for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(rel_type))
+            relations = list(document.unique_relations(self.rel_type))
             true_relations[index] = relations
 
         predicted_relations = {}
         for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(rel_type, predicted=True))
+            relations = list(document.unique_relations(self.rel_type, predicted=True))
             predicted_relations[index] = relations
 
         for key in true_relations.keys():

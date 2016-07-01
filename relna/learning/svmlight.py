@@ -18,6 +18,7 @@ class SVMLightTreeKernels:
         """the model to read from / write to"""
         self.use_tree_kernel = use_tree_kernel
         """whether to use tree kernels or not"""
+
         if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
             self.svm_learn_call = os.path.join(self.directory, 'svm_learn')
             self.svm_classify_call = os.path.join(self.directory, 'svm_classify')

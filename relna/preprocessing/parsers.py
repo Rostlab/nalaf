@@ -1,8 +1,6 @@
 import abc
-import re
 from nalaf.structures.data import *
 from nltk.stem.lancaster import LancasterStemmer
-from nltk import word_tokenize
 from nltk.corpus import stopwords
 from progress.bar import Bar
 from spacy.en import English

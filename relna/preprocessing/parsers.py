@@ -45,6 +45,8 @@ class BllipParser(Parser):
 
         self.parser = RerankingParser.fetch_and_load('GENIA+PubMed', verbose=True)
         # CAUTION this can take a long while. Install manually: `python -mbllipparser.ModelFetcher -i GENIA+PubMed`
+        # CAUTION depends on PyStanfordDependencies (pip install PyStanfordDependencies)
+        # CAUTION this depends on JPype1, which depends on deprecated java 6
         """create a Reranking Parser from BllipParser"""
         self.parser.set_parser_options(nbest=nbest, overparsing=overparsing)
         """set parser options"""

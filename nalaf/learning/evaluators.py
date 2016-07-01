@@ -123,7 +123,7 @@ class EvaluationWithStandardError:
         if keys is None:
             keys = self.keys
 
-        return sum([value[count] for key, value in self.dic_counts.items() if key in keys])
+        return sum([counts.get(count, 0) for key, counts in self.dic_counts.items() if key in keys])
 
     def _compute_SE(self, mean, array, multiply_small_values=4):
         cleaned = [x for x in array if not math.isnan(x)]
@@ -434,51 +434,39 @@ class DocumentLevelRelationEvaluator(Evaluator):
     def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
-        :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
-
-        Calculates precision, recall and subsequently F1 measure, defined as:
-            * precision: number of correctly predicted items as a percentage of
-                the total number of predicted items
-                len(predicted items that are also real)/len(predicted)
-                or in other words tp / tp + fp
-            * recall: number of correctly predicted items as a percentage of
-                the total number of correct items
-                len(real items that are also predicted)/len(real)
-                or in other words tp / tp + fn
-            * f1 measure: the harmonic mean of precision and recall or in
-                other words 2 * precision * recall / (precision + recall)
-
-        Also prints the value of the calculated precision, recall, F1 measure
-        as well as the value of the parameter 'match_case'.
+        :returns Evaluations
         """
 
-        tp, fp, fn = 0, 0, 0
+        docids = dataset.documents.keys()
+        subcounts = ['tp', 'fp', 'fn']
+        counts = {docid: dict.fromkeys(subcounts, 0) for docid in docids}
 
         true_relations = {}
-        for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(self.rel_type))
-            true_relations[index] = relations
+        for docid, doc in dataset.documents.items():
+            relations = list(doc.unique_relations(self.rel_type))
+            true_relations[docid] = relations
 
         predicted_relations = {}
-        for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(self.rel_type, predicted=True))
-            predicted_relations[index] = relations
+        for docid, doc in dataset.documents.items():
+            relations = list(doc.unique_relations(self.rel_type, predicted=True))
+            predicted_relations[docid] = relations
 
-        for key in true_relations.keys():
-            predicted = predicted_relations[key]
-            actual = true_relations[key]
+        for docid in docids:
+            predicted = predicted_relations[docid]
+            actual = true_relations[docid]
+
             if not self.match_case:
                 predicted = [x.lower() for x in predicted]
                 actual = [x.lower() for x in actual]
             for relation in predicted:
                 if relation in actual:
-                    tp += 1
+                    counts[docid]['tp'] += 1
                 else:
-                    fp += 1
+                    counts[docid]['fp'] += 1
             for relation in actual:
                 if relation not in predicted:
-                    fn += 1
+                    counts[docid]['fn'] += 1
 
         evaluations = Evaluations()
-        evaluations.add(Evaluation(self.rel_type, tp, fp, fn))
+        evaluations.add(EvaluationWithStandardError(self.rel_type, counts))
         return evaluations

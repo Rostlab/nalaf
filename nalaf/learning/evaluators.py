@@ -284,7 +284,7 @@ class Evaluator:
     def evaluate(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
-        :returns (precision, recall, f_measure): (float, float, float)
+        :returns Evaluations
         """
         return
 

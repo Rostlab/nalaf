@@ -90,7 +90,7 @@ class Evaluation:
         try:
             return nominator / denominator
         except ZeroDivisionError:
-            return float('NaN')
+            return 0.0  # or float('NaN')
 
 
 class EvaluationWithStandardError:

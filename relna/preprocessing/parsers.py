@@ -139,7 +139,7 @@ class SpacyParser(Parser):
         # nalaf.preprocessing.Tokenizer before.
         old_tokenizer = self.nlp.tokenizer
         self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
-        if self.constituency_parser == True:
+        if self.constituency_parser is True:
             self.parser = BllipParser(only_parse=True)
 
     def parse(self, dataset):
@@ -174,7 +174,7 @@ class SpacyParser(Parser):
             part.set_head_tokens()
             outer_bar.next()
         outer_bar.finish()
-        if self.constituency_parser == True:
+        if self.constituency_parser is True:
             self.parser.parse(dataset)
 
     def _tokenize(self, text):

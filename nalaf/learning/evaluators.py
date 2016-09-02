@@ -275,6 +275,29 @@ class Evaluations:
     def __iter__(self):
         return self.classes.__iter__()
 
+    @staticmethod
+    def merge(evaluations_itr):
+        """
+        Common use case: combine cross-validation evaluations
+        The single evaluations are assumed to be of type EvaluationWithStandardError
+        """
+
+        labels = {}
+
+        for evaluations in evaluations_itr:
+            for evaluation_label, evaluation in evaluations.classes.items():
+                dic_counts = labels.get(evaluation.label, {})
+                dic_counts.update(evaluation.dic_counts)
+                labels[evaluation.label] = dic_counts
+
+        ret = Evaluations()
+
+        for label, dic_counts in labels.items():
+            ret.add(EvaluationWithStandardError(label, dic_counts))
+
+        return ret
+
+
 class Evaluator:
     """
     Calculates precision, recall and subsequently F1 measure based on the original and the predicted mention

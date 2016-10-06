@@ -516,6 +516,48 @@ class Dataset:
                 part.predicted_annotations = [ann for ann in part.predicted_annotations
                                               if ann.subclass not in subclasses]
 
+    def _cv_kfold_split(l, k, fold, validation_set=True):
+        total_size = len(l)
+        sub_size = round(total_size / k)
+
+        def folds(k, fold):
+            return [i % k for i in list(range(fold, fold + k))]
+
+        subsamples = folds(k, fold)
+        training = subsamples[0:k-2]
+        validation = subsamples[k-2:k-1]
+        test = subsamples[k-1:k]
+        if not validation_set:
+            training += validation
+            validation = []
+
+        def create_set(subsample_indexes):
+            ret = []
+            for sub in subsample_indexes:
+                start = sub_size * sub
+                end = start + sub_size if sub != (k-1) else total_size  # k-1 is the last subsample index
+                ret += l[start:end]
+            return ret
+
+        return (create_set(training), create_set(validation), create_set(test))
+
+
+    def cv_kfold_split(self, k, fold, validation_set=True):
+        keys = list(sorted(self.documents.keys()))
+        random.seed(2727)
+        random.shuffle(keys)
+
+        def create_dataset(sett):
+            ret = Dataset()
+            for elem in sett:
+                ret.documents[elem] = self.documents[elem]
+            return ret
+
+        training, validation, test = Dataset._cv_kfold_split(keys, k, fold, validation_set)
+
+        return (create_dataset(training), create_dataset(validation), create_dataset(test))
+
+
     def fold_nr_split(self, n, fold_nr):
         """
         Sugar syntax for next(self.cv_split(n, fold_nr), None)
@@ -549,7 +591,7 @@ class Dataset:
             """
             start = fold_nr * fold_size
             end = start + fold_size
-            test_keys = keys[start : end]
+            test_keys = keys[start:end]
             train_keys = [key for key in keys if key not in test_keys]
 
             test = Dataset()

@@ -72,7 +72,7 @@ class Evaluation:
         ret = [self.tp, self.fp, self.fn, self.fp_ov, self.fn_ov]
         return [str(c) for c in ret]
 
-    def format(self, strictnesses=None):
+    def format_row(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._format_counts_list()
@@ -90,7 +90,7 @@ class Evaluation:
         try:
             return nominator / denominator
         except ZeroDivisionError:
-            return float('NaN')
+            return 0.0  # or float('NaN')
 
 
 class EvaluationWithStandardError:
@@ -108,7 +108,7 @@ class EvaluationWithStandardError:
         self.precomputed_SEs = precomputed_SEs
 
         self.keys = dic_counts.keys()
-        self.keys_len = len(dic_counts.keys())
+        self.keys_len = len(self.keys)
         self._mean_eval = Evaluation(
             str(self.label),
             self._get('tp'), self._get('fp'), self._get('fn'), self._get('fp_ov'), self._get('fn_ov'))
@@ -123,7 +123,7 @@ class EvaluationWithStandardError:
         if keys is None:
             keys = self.keys
 
-        return sum([value[count] for key, value in self.dic_counts.items() if key in keys])
+        return sum([counts.get(count, 0) for key, counts in self.dic_counts.items() if key in keys])
 
     def _compute_SE(self, mean, array, multiply_small_values=4):
         cleaned = [x for x in array if not math.isnan(x)]
@@ -167,6 +167,12 @@ class EvaluationWithStandardError:
     def __str__(self):
         return self.format()
 
+    def format_header(self, strictnesses=None):
+        return self.format_header_simple(strictnesses)
+
+    def format_row(self, strictnesses=None):
+        return self.format_row_simple(strictnesses)
+
     def format_header_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
@@ -175,7 +181,7 @@ class EvaluationWithStandardError:
             header += ['match', 'P', 'P_SE', 'R', 'R_SE', 'F', 'F_SE']
         return '\t'.join(header)
 
-    def format_complete(self, strictnesses=None):
+    def format_row_complete(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._mean_eval._format_counts_list()
@@ -194,7 +200,7 @@ class EvaluationWithStandardError:
             header += [s + c for c in ['P', 'R', 'F', 'F_SE']]
         return '\t'.join(header)
 
-    def format_simple(self, strictnesses=None):
+    def format_row_simple(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         cols = [self.label] + self._mean_eval._format_counts_list()
@@ -259,15 +265,38 @@ class Evaluations:
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
 
         assert(len(self.classes) >= 1)
-        rows = [next(iter(self.classes.values())).format_header_simple(strictnesses)]
+        rows = [next(iter(self.classes.values())).format_header(strictnesses)]
         for clazz in sorted(self.classes.keys()):
             evaluation = self.classes[clazz]
-            rows += [evaluation.format_simple(strictnesses)]
+            rows += [evaluation.format_row(strictnesses)]
         return '\n'.join(rows)
 
 
     def __iter__(self):
         return self.classes.__iter__()
+
+    @staticmethod
+    def merge(evaluations_itr):
+        """
+        Common use case: combine cross-validation evaluations
+        The single evaluations are assumed to be of type EvaluationWithStandardError
+        """
+
+        labels = {}
+
+        for evaluations in evaluations_itr:
+            for evaluation_label, evaluation in evaluations.classes.items():
+                dic_counts = labels.get(evaluation.label, {})
+                dic_counts.update(evaluation.dic_counts)
+                labels[evaluation.label] = dic_counts
+
+        ret = Evaluations()
+
+        for label, dic_counts in labels.items():
+            ret.add(EvaluationWithStandardError(label, dic_counts))
+
+        return ret
+
 
 class Evaluator:
     """
@@ -284,7 +313,7 @@ class Evaluator:
     def evaluate(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
-        :returns (precision, recall, f_measure): (float, float, float)
+        :returns Evaluations
         """
         return
 
@@ -411,7 +440,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
     will match only if the cases match. If set to False, both entities will be
     converted to lower case. By default, match_case is set to True.
     """
-    def __init__(self, match_case=True):
+    def __init__(self, rel_type, match_case=True):
+        self.rel_type = rel_type
         self.match_case = match_case
         """
         If set to True, two relations will match only if their entities have the
@@ -424,70 +454,42 @@ class DocumentLevelRelationEvaluator(Evaluator):
         In general, (entityA, entityB) is also the same as (entityB, entityA)
         """
 
-    def evaluate(self, dataset, rel_type):
+    def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset
-        :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
-
-        Calculates precision, recall and subsequently F1 measure, defined as:
-            * precision: number of correctly predicted items as a percentage of
-                the total number of predicted items
-                len(predicted items that are also real)/len(predicted)
-                or in other words tp / tp + fp
-            * recall: number of correctly predicted items as a percentage of
-                the total number of correct items
-                len(real items that are also predicted)/len(real)
-                or in other words tp / tp + fn
-            * f1 measure: the harmonic mean of precision and recall or in
-                other words 2 * precision * recall / (precision + recall)
-
-        Also prints the value of the calculated precision, recall, F1 measure
-        as well as the value of the parameter 'match_case'.
+        :returns Evaluations
         """
 
-        tp, fp, fn = 0, 0, 0
+        docids = dataset.documents.keys()
+        subcounts = ['tp', 'fp', 'fn']
+        counts = {docid: dict.fromkeys(subcounts, 0) for docid in docids}
 
         true_relations = {}
-        for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(rel_type))
-            true_relations[index] = relations
+        for docid, doc in dataset.documents.items():
+            relations = list(doc.unique_relations(self.rel_type))
+            true_relations[docid] = relations
 
         predicted_relations = {}
-        for index, document in enumerate(dataset):
-            relations = list(document.unique_relations(rel_type, predicted=True))
-            predicted_relations[index] = relations
+        for docid, doc in dataset.documents.items():
+            relations = list(doc.unique_relations(self.rel_type, predicted=True))
+            predicted_relations[docid] = relations
 
-        for key in true_relations.keys():
-            predicted = predicted_relations[key]
-            actual = true_relations[key]
+        for docid in docids:
+            predicted = predicted_relations[docid]
+            actual = true_relations[docid]
+
             if not self.match_case:
                 predicted = [x.lower() for x in predicted]
                 actual = [x.lower() for x in actual]
             for relation in predicted:
                 if relation in actual:
-                    tp += 1
+                    counts[docid]['tp'] += 1
                 else:
-                    fp += 1
+                    counts[docid]['fp'] += 1
             for relation in actual:
                 if relation not in predicted:
-                    fn += 1
+                    counts[docid]['fn'] += 1
 
-        precision, recall, f_measure = self.__calc_measures(tp, fp, fn)
-        return (tp, fp, fn, precision, recall, f_measure)
-
-    @staticmethod
-    def __safe_division(nominator, denominator):
-        try:
-            return nominator / denominator
-        except ZeroDivisionError:
-            return float('NaN')
-
-    def __calc_measures(self, tp, fp, fn):
-        precision = self.__safe_division(tp, tp+fp)
-        recall = self.__safe_division(tp, tp+fn)
-        f_measure = 2 * self.__safe_division(precision*recall, precision+recall)
-        print_verbose('tp:{:4} fp:{:4} fn:{:4} '
-                      .format(tp, fp, fn))
-        print('p:{:.4f} r:{:.4f} f:{:.4f} match_case:{} '
-              .format(precision, recall, f_measure, self.match_case))
-        return (precision, recall, f_measure)
+        evaluations = Evaluations()
+        evaluations.add(EvaluationWithStandardError(self.rel_type, counts))
+        return evaluations

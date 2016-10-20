@@ -61,8 +61,7 @@ class Tagger(Annotator):
         :type dataset: nalaf.structures.data.Dataset
         """
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
-
-        pass
+        self.annotate(dataset)
 
     @abc.abstractmethod
     def annotate(self, dataset):
@@ -106,7 +105,7 @@ class RelationExtractor(Annotator):
         :type dataset: nalaf.structures.data.Dataset
         """
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
-        pass
+        self.annotate(dataset)
 
     @abc.abstractmethod
     def annotate(self, dataset):

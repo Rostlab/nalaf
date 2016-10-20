@@ -3,7 +3,7 @@ import difflib
 from nalaf.utils.ncbi_utils import GNormPlus
 from nalaf.utils.uniprot_utils import Uniprot
 from nalaf.structures.data import Entity, Relation
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID, PRO_REL_MUT_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
+from nalaf.utils import PRO_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
 class Annotator:
@@ -17,6 +17,7 @@ class Annotator:
     * Be named [Name]Tagger
     * Implement the abstract method tag
     """
+
     def __init__(self, predicts_classes):
         self.predicts_classes = predicts_classes
         """a list of class IDs that this tagger can predict"""

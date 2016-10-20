@@ -12,16 +12,16 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.1.2',
+    version='0.2.0',
     description='Pipeline for NER of natural language mutation mentions',
     long_description=readme(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Text Processing :: Linguistic'
     ],
-    keywords='crf mutation natural language ner',
+    keywords='nlp ner natural langauge crf svm extraction entities relationships framework',
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
     author_email='i@juanmi.rocks',

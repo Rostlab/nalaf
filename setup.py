@@ -6,6 +6,10 @@ def readme():
     with open('README.md', encoding='utf-8') as file:
         return file.read()
 
+def license():
+    with open('LICENSE.txt', encoding='utf-8') as file:
+        return file.read()
+
 setup(
     name='nalaf',
     version='0.1.2',
@@ -20,8 +24,8 @@ setup(
     keywords='crf mutation natural language ner',
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
-    author_email='juanmi@jmcejuela.com',
-    license='MIT',
+    author_email='i@juanmi.rocks',
+    license=license(),
     packages=find_packages(exclude=['tests']),
     install_requires=[
         'nltk',

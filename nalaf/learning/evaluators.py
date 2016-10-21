@@ -298,6 +298,26 @@ class Evaluations:
         return ret
 
 
+    @staticmethod
+    def cross_validate(annotator, corpus, evaluator, k_num_folds, use_validation_set=True):
+        merged_evaluations = []
+
+        print_debug("Cross-Validation")
+        for fold in range(k_num_folds):
+            training, validation, test = corpus.cv_kfold_split(k_num_folds, fold, validation_set=use_validation_set)
+            actual_evaluation_set = validation if use_validation_set else test
+
+            annotator.tag(actual_evaluation_set)
+
+            r = evaluator.evaluate(actual_evaluation_set)
+            print_debug(r)
+            merged_evaluations.append(r)
+
+
+        ret = Evaluations.merge(merged_evaluations)
+        return ret
+
+
 class Evaluator:
     """
     Calculates precision, recall and subsequently F1 measure based on the original and the predicted mention

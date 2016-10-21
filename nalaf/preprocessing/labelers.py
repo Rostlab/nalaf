@@ -27,7 +27,7 @@ class Labeler(TokenLabeler):
     @abc.abstractmethod
     def label(self, dataset):
         warnings.warn('Deprecated. Instead, use: TokenLabeler', DeprecationWarning)
-        super.label(dataset)
+        return super.label(dataset)
 
 
 class BIOLabeler(TokenLabeler):

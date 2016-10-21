@@ -21,6 +21,7 @@ class Annotator:
 
         :type dataset: nalaf.structures.data.Dataset
         """
+        pass
 
 
 class Tagger(Annotator):
@@ -61,7 +62,7 @@ class Tagger(Annotator):
         :type dataset: nalaf.structures.data.Dataset
         """
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
-        self.annotate(dataset)
+        return self.annotate(dataset)
 
     @abc.abstractmethod
     def annotate(self, dataset):
@@ -105,13 +106,14 @@ class RelationExtractor(Annotator):
         :type dataset: nalaf.structures.data.Dataset
         """
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
-        self.annotate(dataset)
+        return self.annotate(dataset)
 
     @abc.abstractmethod
     def annotate(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        pass
 
 
 class StubSameSentenceRelationExtractor(RelationExtractor):
@@ -128,3 +130,17 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
                 if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
                     part.predicted_relations.append(
                         Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type))
+
+    def tag(self, dataset):
+        warnings.warn('Use rather the method: annotate', DeprecationWarning)
+        return self.annotate(dataset)
+
+    def annotate(self, dataset):
+            from itertools import product
+            for part in dataset.parts():
+                for ann_1, ann_2 in product(
+                        (ann for ann in part.annotations if ann.class_id == self.entity1_class),
+                        (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
+                    if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
+                        part.predicted_relations.append(
+                            Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type))

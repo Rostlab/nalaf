@@ -307,7 +307,7 @@ class Evaluations:
             training, validation, test = corpus.cv_kfold_split(k_num_folds, fold, validation_set=use_validation_set)
             actual_evaluation_set = validation if use_validation_set else test
 
-            annotator.tag(actual_evaluation_set)
+            annotator.annotate(actual_evaluation_set)
 
             r = evaluator.evaluate(actual_evaluation_set)
             print_debug(r)

@@ -2,9 +2,10 @@ import abc
 from nalaf.structures.data import Label
 import re
 from nalaf.utils import MUT_CLASS_ID
+import warnings
 
 
-class Labeler:
+class TokenLabeler:
     """
     Abstract class for generating labels for each token in the dataset.
     Subclasses that inherit this class should:
@@ -18,10 +19,18 @@ class Labeler:
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        return
+        pass
 
 
-class BIOLabeler(Labeler):
+class Labeler(TokenLabeler):
+
+    @abc.abstractmethod
+    def label(self, dataset):
+        warnings.warn('Deprecated. Instead, use: TokenLabeler', DeprecationWarning)
+        super.label(dataset)
+
+
+class BIOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the BIO (beginning, inside, outside) format. Creates labels
@@ -54,7 +63,7 @@ class BIOLabeler(Labeler):
                             break
 
 
-class TmVarLabeler(Labeler):
+class TmVarLabeler(TokenLabeler):
     """
     Implements a labeler using the annotations of the dataset
     based on the labeling scheme used by tmVar (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
@@ -156,7 +165,7 @@ class TmVarLabeler(Labeler):
                             current.original_labels[0].value = 'P'
 
 
-class BIEOLabeler(Labeler):
+class BIEOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the BIEO (beginning, inside, ending, outside) format. Creates labels
@@ -193,7 +202,7 @@ class BIEOLabeler(Labeler):
                             break
 
 
-class IOLabeler(Labeler):
+class IOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the IO (inside, outside) format. Creates labels

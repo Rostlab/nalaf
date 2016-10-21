@@ -37,7 +37,7 @@ class FeatureGenerator:
 
 def eval_binary_feature(feature_dict, feature_name, evaluator, *args):
     """
-    Calls the provided callable with the provided arguments which evaluates to True or False.
+    Calls the provided callable, which evaluates to True or False, with the provided arguments.
     If the evaluation results in True add a new feature to the features dictionary with the provided feature name.
 
     :param feature_dict: the target feature dictionary where the feature should be added

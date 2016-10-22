@@ -28,6 +28,7 @@ class SVMLightTreeKernels:
 
     def create_input_file(self, dataset, mode, features, undersampling=0.4, minority_class=-1, file=None):
         string = ''
+
         if mode == 'train':
             for edge in dataset.edges():
                 if edge.target == minority_class:

@@ -271,9 +271,9 @@ class Dataset:
         sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True))
         print(json.dumps(sort_dict, indent=4))
 
-    def clean_nl_definitions(self):
+    def clean_subclasses(self):
         """
-        cleans all subclass = True to = False
+        cleans all subclass by setting them to = False
         """
         for ann in self.annotations():
             ann.subclass = False

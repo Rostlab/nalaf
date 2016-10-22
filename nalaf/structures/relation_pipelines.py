@@ -6,6 +6,7 @@ from nalaf.preprocessing.parsers import Parser, SpacyParser
 # from nalaf.features import get_spacy_nlp_english
 from spacy.en import English
 from nalaf.preprocessing.edges import SimpleEdgeGenerator
+from nalaf.features.relations import NamedEntityCountFeatureGenerator
 
 
 class RelationExtractionPipeline:
@@ -63,7 +64,10 @@ class RelationExtractionPipeline:
 
     def _set_mode(self, train, feature_set, feature_generators=None):
         if feature_generators is None:
-            feature_generators = []  # TODO populate with something minimally meaningful
+            feature_generators = [
+                NamedEntityCountFeatureGenerator(self.class1, feature_set, training_mode=train),
+                NamedEntityCountFeatureGenerator(self.class2, feature_set, training_mode=train)
+            ]
 
         if hasattr(feature_generators, '__iter__'):
             for index, feature_generator in enumerate(feature_generators):

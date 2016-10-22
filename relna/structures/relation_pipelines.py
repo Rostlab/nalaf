@@ -8,7 +8,7 @@ from nalaf.features import FeatureGenerator
 from nalaf.structures.data import FeatureDictionary
 from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
 from nalaf.preprocessing.tokenizers import Tokenizer, TmVarTokenizer
-from relna.preprocessing.parsers import Parser, SpacyParser
+from nalaf.preprocessing.parsers import Parser, SpacyParser
 # from nalaf.features import get_spacy_nlp_english
 from spacy.en import English
 from nalaf.preprocessing.edges import SimpleEdgeGenerator

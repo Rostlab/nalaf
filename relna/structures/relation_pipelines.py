@@ -94,11 +94,11 @@ class RelationExtractionPipeline:
             for index, feature_generator in enumerate(feature_generators):
                 if not isinstance(feature_generator, FeatureGenerator):
                     raise TypeError('not an instance that implements FeatureGenerator at index {}'.format(index))
-                if not feature_generator.training_mode==train:
+                if not feature_generator.training_mode == train:
                     raise ValueError('FeatureGenerator at index {} not set in the correct mode'.format(index))
             self.feature_generators = feature_generators
         elif isinstance(feature_generators, FeatureGenerator):
-            if not feature_genenrators.training_mode==train:
+            if not feature_genenrators.training_mode == train:
                 raise ValueError('FeatureGenerator at index not set in the correct mode.')
             else:
                 self.feature_generators = [feature_generators]
@@ -106,10 +106,7 @@ class RelationExtractionPipeline:
             raise TypeError('not an instance or iterable of instances that implements FeatureGenerator')
 
     def execute(self, dataset, train=False, feature_set=None, feature_generators=None):
-        if feature_set is None:
-            self.feature_set = FeatureDictionary()
-        else:
-            self.feature_set = feature_set
+        self.feature_set = FeatureDictionary() if feature_set is None else feature_set
         self._set_mode(train, feature_set=self.feature_set, feature_generators=feature_generators)
         try:
             gen = dataset.tokens()

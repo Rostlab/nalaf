@@ -10,21 +10,22 @@ class SVMLightTreeKernels:
     Base class for interaction with Alessandro Moschitti's Tree Kernels in
     SVM Light
     """
+
     def __init__(self, directory, model_path, use_tree_kernel=True):
         self.directory = directory
         """the directory where the executables svm_classify and svm_learn are
         located"""
-        self.model = model_path
+
+        executables_extension = '' if sys.platform.startswith('linux') or sys.platform.startswith('darwin') else '.exe'
+        self.svm_learn_call = os.path.join(self.directory, ('svm_learn' + executables_extension))
+        self.svm_classify_call = os.path.join(self.directory, ('svm_classify' + executables_extension))
+
+        self.model_path = model_path
         """the model (path) to read from / write to"""
+
         self.use_tree_kernel = use_tree_kernel
         """whether to use tree kernels or not"""
 
-        if sys.platform.startswith('linux') or sys.platform.startswith('darwin'):
-            self.svm_learn_call = os.path.join(self.directory, 'svm_learn')
-            self.svm_classify_call = os.path.join(self.directory, 'svm_classify')
-        else:
-            self.svm_learn_call = os.path.join(self.directory, 'svm_learn.exe')
-            self.svm_classify_call = os.path.join(self.directory, 'svm_classify.exe')
 
     def create_input_file(self, dataset, mode, features, undersampling=0.4, minority_class=-1, file=None):
         string = ''
@@ -100,16 +101,18 @@ class SVMLightTreeKernels:
                 '-C', '+',
                 '-c', str(c),
                 file,
-                os.path.join(self.directory, self.model)
+                self.model_path
             ])
+
         else:
             subprocess.call([
-                        self.svm_learn_call,
-                        '-c', str(c),
-                        '-v', '0',
-                        file,
-                        os.path.join(self.directory, self.model),
+                self.svm_learn_call,
+                '-c', str(c),
+                '-v', '0',
+                file,
+                self.model_path
             ])
+
 
     def tag(self, file=None, mode='predict', output=None):
         if file is None:
@@ -121,7 +124,7 @@ class SVMLightTreeKernels:
             self.svm_classify_call,
             '-v', '0',
             file,
-            os.path.join(self.directory, self.model),
+            self.model_path,
             output
         ]
         exitcode = subprocess.call(call)

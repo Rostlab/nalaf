@@ -328,7 +328,7 @@ class Dataset:
         full_unique_list = set([])
 
         # nl-docid set
-        nl_doc_id_set = { 'empty' }
+        nl_doc_id_set = {'empty'}
 
         # is abstract var
         is_abstract = True

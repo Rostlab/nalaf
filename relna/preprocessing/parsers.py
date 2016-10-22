@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from progress.bar import Bar
 from spacy.en import English
 
+
 class Parser:
     """
     Abstract class for generating parse tree for each sentence.
@@ -141,6 +142,7 @@ class SpacyParser(Parser):
         self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
         if self.constituency_parser is True:
             self.parser = BllipParser(only_parse=True)
+
 
     def parse(self, dataset):
         """

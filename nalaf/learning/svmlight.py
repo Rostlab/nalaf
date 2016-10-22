@@ -119,7 +119,7 @@ class SVMLightTreeKernels:
 
     def tag(self, instancesfile):
 
-        predictionsfile = tempfile.NamedTemporaryFile('w')
+        predictionsfile = tempfile.NamedTemporaryFile('r+')
 
         call = [
             self.svm_classify_call,
@@ -139,6 +139,8 @@ class SVMLightTreeKernels:
     def read_predictions(self, dataset, predictionsfile):
         values = []
         with predictionsfile:
+            predictionsfile.seek(0)
+
             for line in predictionsfile:
                 if float(line.strip()) > -0.1:
                     values.append(1)
@@ -147,4 +149,5 @@ class SVMLightTreeKernels:
 
         for index, edge in enumerate(dataset.edges()):
             edge.target = values[index]
+
         dataset.form_predicted_relations()

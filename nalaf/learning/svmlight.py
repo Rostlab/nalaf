@@ -10,7 +10,7 @@ class SVMLightTreeKernels:
     SVM Light
     """
 
-    def __init__(self, directory, model_path, use_tree_kernel=True):
+    def __init__(self, directory, model_path=tempfile.NamedTemporaryFile().name, use_tree_kernel=True):
         self.directory = directory
         """the directory where the executables svm_classify and svm_learn are
         located"""

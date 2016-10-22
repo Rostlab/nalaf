@@ -60,6 +60,7 @@ class RelationExtractionPipeline:
 
         self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, self.rel_type)
 
+
     def _set_mode(self, train, feature_set, feature_generators=None):
         if feature_generators is None:
             feature_generators = []  # TODO populate with something minimally meaningful
@@ -78,6 +79,7 @@ class RelationExtractionPipeline:
                 self.feature_generators = [feature_generators]
         else:
             raise TypeError('not an instance or iterable of instances that implements FeatureGenerator')
+
 
     def execute(self, dataset, train=False, feature_generators=None):
         self._set_mode(train, feature_set=self.feature_set, feature_generators=feature_generators)

@@ -2,12 +2,12 @@ import os
 import sys
 import subprocess
 from random import random
+import tempfile
 
 
 class SVMLightTreeKernels:
     """
-    Base class for interaction with Alessandro Moschitti's Tree Kernels in
-    SVM Light
+    Base class for interaction with Alessandro Moschitti's Tree Kernels in SVM Light
     """
 
     def __init__(self, directory, model_path=tempfile.NamedTemporaryFile().name, use_tree_kernel=True):
@@ -83,8 +83,10 @@ class SVMLightTreeKernels:
                         value = edge.features[key]
                         string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
+
         if file is None:
             file = os.path.join(self.directory, mode)
+
         with open(file, 'w', encoding='utf-8') as f:
             f.write(string)
 
@@ -92,6 +94,7 @@ class SVMLightTreeKernels:
     def learn(self, file=None, c=0.5):
         if file is None:
             file = os.path.join(self.directory, 'train')
+
         if self.use_tree_kernel:
             subprocess.call([
                 self.svm_learn_call,

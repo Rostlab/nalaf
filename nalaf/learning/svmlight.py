@@ -10,14 +10,16 @@ class SVMLightTreeKernels:
     Base class for interaction with Alessandro Moschitti's Tree Kernels in SVM Light
     """
 
-    def __init__(self, directory, model_path=tempfile.NamedTemporaryFile().name, use_tree_kernel=True):
-        self.directory = directory
-        """the directory where the executables svm_classify and svm_learn are
-        located"""
+    def __init__(self, svmlight_dir_path='', model_path=tempfile.NamedTemporaryFile().name, use_tree_kernel=True):
+        self.svmlight_dir_path = svmlight_dir_path
+        """
+        The directory where the executables svm_classify and svm_learn are located.
+        Defaults to the empty string '', which then means that the svmlight executables must be in your binary path
+        """
 
         executables_extension = '' if sys.platform.startswith('linux') or sys.platform.startswith('darwin') else '.exe'
-        self.svm_learn_call = os.path.join(self.directory, ('svm_learn' + executables_extension))
-        self.svm_classify_call = os.path.join(self.directory, ('svm_classify' + executables_extension))
+        self.svm_learn_call = os.path.join(self.svmlight_dir_path, ('svm_learn' + executables_extension))
+        self.svm_classify_call = os.path.join(self.svmlight_dir_path, ('svm_classify' + executables_extension))
 
         self.model_path = model_path
         """the model (path) to read from / write to"""
@@ -115,6 +117,8 @@ class SVMLightTreeKernels:
                 instancesfile.name,
                 self.model_path
             ])
+
+        return self.model_path
 
 
     def tag(self, instancesfile):

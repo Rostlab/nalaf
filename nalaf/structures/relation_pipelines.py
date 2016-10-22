@@ -30,7 +30,7 @@ class RelationExtractionPipeline:
     :type feature_generators: collections.Iterable[FeatureGenerator]
     """
 
-    def __init__(self, class1, class2, rel_type, splitter=None, tokenizer=None, parser=None, feature_set=None):
+    def __init__(self, class1, class2, rel_type, splitter=None, tokenizer=None, parser=None, edge_generator=None, feature_set=None, feature_generators=None):
         self.class1 = class1
         self.class2 = class2
         self.rel_type = rel_type
@@ -62,36 +62,17 @@ class RelationExtractionPipeline:
         else:
             raise TypeError('not an instance that implements Parser')
 
+        self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, self.rel_type) if edge_generator is None else edge_generator
+
         self.feature_set = FeatureDictionary() if feature_set is None else feature_set
 
-        self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, self.rel_type)
+        self.feature_generators = self._verify_feature_generators(feature_generators) if feature_generators else [
+            NamedEntityCountFeatureGenerator(self.class1),
+            NamedEntityCountFeatureGenerator(self.class2)
+        ]
 
 
-    def _set_mode(self, train, feature_set, feature_generators=None):
-        if feature_generators is None:
-            feature_generators = [
-                NamedEntityCountFeatureGenerator(self.class1, feature_set, training_mode=train),
-                NamedEntityCountFeatureGenerator(self.class2, feature_set, training_mode=train)
-            ]
-
-        if hasattr(feature_generators, '__iter__'):
-            for index, feature_generator in enumerate(feature_generators):
-                if not isinstance(feature_generator, FeatureGenerator):
-                    raise TypeError('not an instance that implements FeatureGenerator at index {}'.format(index))
-                if not feature_generator.training_mode == train:
-                    raise ValueError('FeatureGenerator at index {} not set in the correct mode'.format(index))
-            self.feature_generators = feature_generators
-        elif isinstance(feature_generators, FeatureGenerator):
-            if not feature_generators.training_mode == train:
-                raise ValueError('FeatureGenerator at index not set in the correct mode.')
-            else:
-                self.feature_generators = [feature_generators]
-        else:
-            raise TypeError('not an instance or iterable of instances that implements FeatureGenerator')
-
-
-    def execute(self, dataset, train=False, feature_generators=None):
-        self._set_mode(train, feature_set=self.feature_set, feature_generators=feature_generators)
+    def execute(self, dataset, train):
         try:
             gen = dataset.tokens()
             next(gen)
@@ -101,5 +82,21 @@ class RelationExtractionPipeline:
         self.edge_generator.generate(dataset)
         self.parser.parse(dataset)
         dataset.label_edges()
+
         for feature_generator in self.feature_generators:
-            feature_generator.generate(dataset)
+            feature_generator.generate(dataset, self.feature_set, train)
+
+
+    def _verify_feature_generators(self, feature_generators):
+        if hasattr(feature_generators, '__iter__'):
+            for index, feature_generator in enumerate(feature_generators):
+                if not isinstance(feature_generator, FeatureGenerator):
+                    raise TypeError('not an instance that implements FeatureGenerator at index {}'.format(index))
+
+            return feature_generators
+
+        elif isinstance(feature_generators, FeatureGenerator):
+            return [feature_generators]
+
+        else:
+            raise TypeError('not an instance or iterable of instances that implements FeatureGenerator')

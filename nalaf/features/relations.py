@@ -13,25 +13,26 @@ class EdgeFeatureGenerator(FeatureGenerator):
     """
 
     @abc.abstractmethod
-    def generate(self, dataset):
+    def generate(self, dataset, feature_set, is_training_mode):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        return
+        pass
 
-    def add_to_feature_set(self, edge, feature_name, value=1):
-        if self.training_mode:
-            if feature_name not in self.feature_set.keys():
-                self.feature_set[feature_name] = len(self.feature_set.keys()) + 1
-            edge.features[self.feature_set[feature_name]] = value
+
+    def add_to_feature_set(self, feature_set, is_training_mode, edge, feature_name, value=1):
+        if is_training_mode:
+            if feature_name not in feature_set.keys():
+                feature_set[feature_name] = len(feature_set.keys()) + 1
+            edge.features[feature_set[feature_name]] = value
         else:
-            if feature_name in self.feature_set.keys():
-                edge.features[self.feature_set[feature_name]] = value
+            if feature_name in feature_set.keys():
+                edge.features[feature_set[feature_name]] = value
 
 
 # TODO rest is potential material to delete, almost exact copy in relna's sentence.py
 
-class NamedEntityCountFeatureGenerator(FeatureGenerator):
+class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
     """
     Generates Named Entity Count for each sentence that contains an edge
 
@@ -40,25 +41,21 @@ class NamedEntityCountFeatureGenerator(FeatureGenerator):
     :type feature_set: dict
     :type training_mode: bool
     """
-    def __init__(self, entity_type, feature_set, training_mode=True):
+
+    def __init__(self, entity_type):
         self.entity_type = entity_type
         """type of entity"""
-        self.training_mode = training_mode
-        """whether the mode is training or testing"""
-        self.feature_set = feature_set
-        """the feature set"""
 
-    def generate(self, dataset):
+
+    def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
             entities = edge.part.get_entities_in_sentence(edge.sentence_id, self.entity_type)
             feature_name = self.entity_type + '_count_[' + str(len(entities)) + ']'
-            if self.training_mode:
-                if feature_name not in self.feature_set:
-                    self.feature_set[feature_name] = len(self.feature_set.keys())+1
-                edge.features[self.feature_set[feature_name]] = 1
-            else:
-                if feature_name in self.feature_set.keys():
-                    edge.features[self.feature_set[feature_name]] = 1
+
+            self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+
+
+# TODO rest is potential material to delete, almost exact copy in relna's sentence.py
 
 class BagOfWordsFeatureGenerator(FeatureGenerator):
     """

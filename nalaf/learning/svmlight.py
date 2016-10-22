@@ -85,13 +85,13 @@ class SVMLightTreeKernels:
                         string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
 
-        instancesfile = tempfile.NamedTemporaryFile()
+        instancesfile = tempfile.NamedTemporaryFile('w')
         instancesfile.write(string)
 
-        return instancesfile.name
+        return instancesfile
 
 
-    def learn(self, instancesfile_path, c=0.5):
+    def learn(self, instancesfile, c=0.5):
 
         if self.use_tree_kernel:
             subprocess.call([
@@ -103,7 +103,7 @@ class SVMLightTreeKernels:
                 '-V', 'S',
                 '-C', '+',
                 '-c', str(c),
-                instancesfile_path,
+                instancesfile.name,
                 self.model_path
             ])
 
@@ -112,39 +112,39 @@ class SVMLightTreeKernels:
                 self.svm_learn_call,
                 '-c', str(c),
                 '-v', '0',
-                instancesfile_path,
+                instancesfile.name,
                 self.model_path
             ])
 
 
-    def tag(self, instancesfile_path):
+    def tag(self, instancesfile):
 
-        predictionsfile_path = tempfile.NamedTemporaryFile().name
+        predictionsfile = tempfile.NamedTemporaryFile('w')
 
         call = [
             self.svm_classify_call,
             '-v', '0',
-            instancesfile_path,
+            instancesfile.name,
             self.model_path,
-            predictionsfile_path
+            predictionsfile.name
         ]
         exitcode = subprocess.call(call)
 
         if exitcode != 0:
             raise Exception("Error when tagging: " + ' '.join(call))
 
-        return predictionsfile_path
+        return predictionsfile
 
 
-    def read_predictions(self, dataset, predictionsfile_path):
-
+    def read_predictions(self, dataset, predictionsfile):
         values = []
-        with open(predictionsfile_path) as file:
-            for line in file:
+        with predictionsfile:
+            for line in predictionsfile:
                 if float(line.strip()) > -0.1:
                     values.append(1)
                 else:
                     values.append(-1)
+
         for index, edge in enumerate(dataset.edges()):
             edge.target = values[index]
         dataset.form_predicted_relations()

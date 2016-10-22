@@ -1,7 +1,6 @@
 import os
 import sys
 import subprocess
-import pkg_resources
 from random import random
 
 
@@ -33,7 +32,7 @@ class SVMLightTreeKernels:
             for edge in dataset.edges():
                 if edge.target == minority_class:
                     prob = random()
-                    if prob<undersampling:
+                    if prob < undersampling:
                         string += str(edge.target)
                         if self.use_tree_kernel:
                             string += ' |BT| '
@@ -43,7 +42,7 @@ class SVMLightTreeKernels:
                         for key in sorted(edge.features.keys()):
                             if key in values:
                                 value = edge.features[key]
-                                string += ' '+str(key)+':'+str(value)
+                                string += ' ' + str(key) + ':' + str(value)
                         string += '\n'
                 else:
                     string += str(edge.target)
@@ -55,9 +54,10 @@ class SVMLightTreeKernels:
                     for key in sorted(edge.features.keys()):
                         if key in values:
                             value = edge.features[key]
-                            string += ' '+str(key)+':'+str(value)
+                            string += ' ' + str(key) + ':' + str(value)
                     string += '\n'
-        elif mode=='test':
+
+        elif mode == 'test':
             for edge in dataset.edges():
                 string += str(edge.target)
                 if self.use_tree_kernel:
@@ -68,9 +68,10 @@ class SVMLightTreeKernels:
                 for key in sorted(edge.features.keys()):
                     if key in values:
                         value = edge.features[key]
-                        string += ' '+str(key)+':'+str(value)
+                        string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
-        elif mode=='predict':
+
+        elif mode == 'predict':
             for edge in dataset.edges():
                 string += '?'
                 if self.use_tree_kernel:
@@ -80,12 +81,13 @@ class SVMLightTreeKernels:
                 for key in sorted(edge.features.keys()):
                     if key in features.values():
                         value = edge.features[key]
-                        string += ' '+str(key)+':'+str(value)
+                        string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
         if file is None:
             file = os.path.join(self.directory, mode)
         with open(file, 'w', encoding='utf-8') as f:
             f.write(string)
+
 
     def learn(self, file=None, c=0.5):
         if file is None:
@@ -132,13 +134,14 @@ class SVMLightTreeKernels:
         if exitcode != 0:
             raise Exception("Error when tagging: " + ' '.join(call))
 
+
     def read_predictions(self, dataset, predictions=None):
         if predictions is None:
             predictions = os.path.join(self.directory, 'predictions')
         values = []
         with open(predictions) as file:
             for line in file:
-                if float(line.strip())>-0.1:
+                if float(line.strip()) > -0.1:
                     values.append(1)
                 else:
                     values.append(-1)

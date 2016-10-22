@@ -7,6 +7,8 @@ from nalaf.preprocessing.parsers import Parser, SpacyParser
 from spacy.en import English
 from nalaf.preprocessing.edges import SimpleEdgeGenerator
 from nalaf.features.relations import NamedEntityCountFeatureGenerator
+from nalaf import print_debug
+import time
 
 
 class RelationExtractionPipeline:
@@ -50,8 +52,11 @@ class RelationExtractionPipeline:
             raise TypeError('not an instance that implements Tokenizer')
 
         if not parser:
+            start = time.time()
+            print_debug("(relation_pipelines.py) Spacy NLP English: INIT START")
             nlp = English(entity=False)
             parser = SpacyParser(nlp)
+            print_debug("(relation_pipelines.py) Spacy NLP English: INIT END", (time.time() - start))
         if isinstance(parser, Parser):
             self.parser = parser
         else:

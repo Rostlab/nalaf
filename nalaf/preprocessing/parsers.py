@@ -59,6 +59,7 @@ class BllipParser(Parser):
         if self.stop_words is None:
             self.stop_words = stopwords.words('english')
 
+
     def parse(self, dataset):
         outer_bar = Bar('Processing [Bllip]', max=len(list(dataset.parts())))
         for part in dataset.parts():

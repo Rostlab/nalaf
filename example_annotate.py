@@ -9,7 +9,7 @@ from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
 from nalaf.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
-from nalaf.learning.taggers import GNormPlusGeneTagger
+from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
 
 

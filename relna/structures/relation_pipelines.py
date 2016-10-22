@@ -63,7 +63,7 @@ class RelationExtractionPipeline:
         else:
             raise TypeError('not an instance that implements Parser')
 
-        self.edge_generator = SimpleEdgeGenerator(class1, class2, rel_type)
+        self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, rel_type)
 
     def _set_mode(self, train, feature_set, feature_generators=None):
         if feature_generators is None:

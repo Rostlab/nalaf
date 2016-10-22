@@ -26,7 +26,7 @@ class SVMLightTreeKernels:
         """whether to use tree kernels or not"""
 
 
-    def create_input_file(self, dataset, mode, features, undersampling=0.4, minority_class=-1, file=None):
+    def create_input_file(self, dataset, mode, features, undersampling=0.4, minority_class=-1):
         string = ''
 
         if mode == 'train':
@@ -85,16 +85,13 @@ class SVMLightTreeKernels:
                         string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
 
-        if file is None:
-            file = os.path.join(self.directory, mode)
+        instancesfile = tempfile.NamedTemporaryFile()
+        instancesfile.write(string)
 
-        with open(file, 'w', encoding='utf-8') as f:
-            f.write(string)
+        return instancesfile.name
 
 
-    def learn(self, file=None, c=0.5):
-        if file is None:
-            file = os.path.join(self.directory, 'train')
+    def learn(self, instancesfile_path, c=0.5):
 
         if self.use_tree_kernel:
             subprocess.call([
@@ -106,7 +103,7 @@ class SVMLightTreeKernels:
                 '-V', 'S',
                 '-C', '+',
                 '-c', str(c),
-                file,
+                instancesfile_path,
                 self.model_path
             ])
 
@@ -115,35 +112,34 @@ class SVMLightTreeKernels:
                 self.svm_learn_call,
                 '-c', str(c),
                 '-v', '0',
-                file,
+                instancesfile_path,
                 self.model_path
             ])
 
 
-    def tag(self, file=None, mode='predict', output=None):
-        if file is None:
-            file = os.path.join(self.directory, mode)
-        if output is None:
-            output = os.path.join(self.directory, 'predictions')
+    def tag(self, instancesfile_path):
+
+        predictionsfile_path = tempfile.NamedTemporaryFile().name
 
         call = [
             self.svm_classify_call,
             '-v', '0',
-            file,
+            instancesfile_path,
             self.model_path,
-            output
+            predictionsfile_path
         ]
         exitcode = subprocess.call(call)
 
         if exitcode != 0:
             raise Exception("Error when tagging: " + ' '.join(call))
 
+        return predictionsfile_path
 
-    def read_predictions(self, dataset, predictions=None):
-        if predictions is None:
-            predictions = os.path.join(self.directory, 'predictions')
+
+    def read_predictions(self, dataset, predictionsfile_path):
+
         values = []
-        with open(predictions) as file:
+        with open(predictionsfile_path) as file:
             for line in file:
                 if float(line.strip()) > -0.1:
                     values.append(1)

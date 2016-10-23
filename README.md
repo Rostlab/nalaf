@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?branch=develop)](https://travis-ci.org/Rostlab/nalaf)
+[![codecov](https://codecov.io/gh/Rostlab/nalaf/branch/develop/graph/badge.svg)](https://codecov.io/gh/Rostlab/nalaf)
 
 # nalaf - (Na)tural (La)nguage (F)ramework
 

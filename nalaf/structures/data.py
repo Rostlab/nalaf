@@ -220,6 +220,9 @@ class Dataset:
                         part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
 
+        return self
+
+
     def form_predicted_relations(self):
         """
         Populates part.predicted_relations with a list of Relation objects
@@ -238,6 +241,8 @@ class Dataset:
                                                         edge.entity1.text,
                                                         edge.entity2.text,
                                                         edge.relation_type))
+
+        return self
 
     def validate_annotation_offsets(self):
         """

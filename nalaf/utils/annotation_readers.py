@@ -58,7 +58,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         if not os.path.isdir(self.directory):
             filenames = [self.directory]
         else:
-            filenames = glob.glob(str(self.directory + "/*.ann.json"))
+            filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
 
         read_docs = set({})
 
@@ -118,6 +118,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items())
             # this was the old behavior
             # if sum(len(part.annotations) for part in doc.parts.values()) > 0)
+
+        return dataset
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):

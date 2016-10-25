@@ -7,6 +7,7 @@ import glob
 import csv
 import os
 from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
+from nalaf import print_debug, print_verbose
 import xml.etree.ElementTree as ET
 
 
@@ -40,7 +41,7 @@ class HTMLReader(Reader):
 
     def __read_directory(self):
         dataset = Dataset()
-        filelist = glob.glob(str(self.path + "/*.html")) + glob.glob(str(self.path + "/*.xml"))
+        filelist = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
         for filename in filelist:
             dataset = self.__read_file_path(filename, dataset)
 
@@ -67,7 +68,6 @@ class HTMLReader(Reader):
         doc_id = os.path.basename(filename).replace('.plain.html', '').replace('.html', '').replace('.xml', '')
         if not whole_basename_as_docid and '-' in doc_id:
             doc_id = doc_id.split('-')[-1]
-
 
         dataset.documents[doc_id] = document
 

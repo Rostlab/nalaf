@@ -1,6 +1,7 @@
 import abc
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
+import re
 
 
 class EdgeFeatureGenerator(FeatureGenerator):
@@ -21,6 +22,9 @@ class EdgeFeatureGenerator(FeatureGenerator):
 
 
     def add_to_feature_set(self, feature_set, is_training_mode, edge, feature_name, value=1):
+        if not re.search('\[-?[0-9]+\]$', feature_name):
+            feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
+
         if is_training_mode:
             if feature_name not in feature_set.keys():
                 feature_set[feature_name] = len(feature_set.keys()) + 1
@@ -29,30 +33,30 @@ class EdgeFeatureGenerator(FeatureGenerator):
             if feature_name in feature_set.keys():
                 edge.features[feature_set[feature_name]] = value
 
+    def mk_feature_name(self, prefix, *args):
+        l = [str(x) for x in ([prefix] + list(args))]
+        return "_".join(l)
 
-# TODO rest is potential material to delete, almost exact copy in relna's sentence.py
+
+# -----------------------------------------------------------------------------
 
 class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
     """
     Generates Named Entity Count for each sentence that contains an edge
-
-    :type entity_type: str
-    :type mode: str
-    :type feature_set: dict
-    :type training_mode: bool
     """
 
-    def __init__(self, entity_type):
+    def __init__(self, entity_type, prefix1):
         self.entity_type = entity_type
         """type of entity"""
+        self.prefix1 = prefix1
 
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
             entities = edge.part.get_entities_in_sentence(edge.sentence_id, self.entity_type)
-            feature_name = self.entity_type + '_count_[' + str(len(entities)) + ']'
-
-            self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+            num_entities = len(entities)
+            feature_name = self.mk_feature_name(self.prefix1, self.entity_type, 'count', num_entities)
+            self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
 
 
 # TODO rest is potential material to delete, almost exact copy in relna's sentence.py

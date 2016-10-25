@@ -3,6 +3,7 @@ import sys
 import subprocess
 from random import random
 import tempfile
+from nalaf import print_warning, print_verbose, print_debug
 
 
 class SVMLightTreeKernels:
@@ -151,7 +152,11 @@ class SVMLightTreeKernels:
                 else:
                     values.append(-1)
 
-        for index, edge in enumerate(dataset.edges()):
-            edge.target = values[index]
+            if (len(values) > 1):
+                for index, edge in enumerate(dataset.edges()):
+                    edge.target = values[index]
+            else:
+                print_warning("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or samll number of features")
+                raise Exception
 
-        dataset.form_predicted_relations()
+        return dataset.form_predicted_relations()

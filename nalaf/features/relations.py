@@ -22,20 +22,37 @@ class EdgeFeatureGenerator(FeatureGenerator):
 
 
     def add_to_feature_set(self, feature_set, is_training_mode, edge, feature_name, value=1):
-        if not re.search('\[-?[0-9]+\]$', feature_name):
-            feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
+        """
+        Return True if feature was added to feature_set. False, otherwise
 
-        if is_training_mode:
-            if feature_name not in feature_set.keys():
-                feature_set[feature_name] = len(feature_set.keys()) + 1
-            edge.features[feature_set[feature_name]] = value
+        If the feature_name is None, the feature is not added in anycase. See: self.mk_feature_name
+        """
+        if feature_name is None:
+            return False
+
         else:
-            if feature_name in feature_set.keys():
+            if not re.search('\[-?[0-9]+\]$', feature_name):
+                feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
+
+            if is_training_mode:
+                if feature_name not in feature_set.keys():
+                    feature_set[feature_name] = len(feature_set.keys()) + 1
                 edge.features[feature_set[feature_name]] = value
+                return True
+            else:
+                if feature_name in feature_set.keys():
+                    edge.features[feature_set[feature_name]] = value
+                    return True
+            else:
+                return False
+
 
     def mk_feature_name(self, prefix, *args):
-        l = [str(x) for x in ([prefix] + list(args))]
-        return "_".join(l)
+        if prefix is None:
+            return None
+        else:
+            l = [str(x) for x in ([prefix] + list(args))]
+            return "_".join(l)
 
 
 # -----------------------------------------------------------------------------

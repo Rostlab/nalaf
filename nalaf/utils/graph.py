@@ -60,7 +60,12 @@ def convert_to_dependency_graph(sentence):
 
     return graph
 
+
 def get_path(token_from, token_to, part, sentence_id, graphs):
+    """
+    graphs is a mutable dictionary
+    """
+
     sentence = part.sentences[sentence_id]
     if part.text not in graphs.keys():
         graphs[part.text] = {}
@@ -95,6 +100,7 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
 
     path.reverse()
     return path
+
 
 def build_walks(path, first_id=0, second_id=1):
 

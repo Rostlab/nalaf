@@ -43,8 +43,8 @@ class EdgeFeatureGenerator(FeatureGenerator):
                 if feature_name in feature_set.keys():
                     edge.features[feature_set[feature_name]] = value
                     return True
-            else:
-                return False
+                else:
+                    return False
 
 
     def mk_feature_name(self, prefix, *args):

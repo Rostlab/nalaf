@@ -142,7 +142,7 @@ class SVMLightTreeKernels:
             predictionsfile.seek(0)
 
             for line in predictionsfile:
-                if float(line.strip()) > -0.1:
+                if float(line.strip()) > 0:  # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
                     values.append(1)
                 else:
                     values.append(-1)

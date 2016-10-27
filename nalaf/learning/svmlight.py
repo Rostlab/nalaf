@@ -29,26 +29,12 @@ class SVMLightTreeKernels:
         """whether to use tree kernels or not"""
 
 
-    def create_input_file(self, dataset, mode, features, undersampling=0.4, minority_class=-1):
+    def create_input_file(self, dataset, mode, features, minority_class=None, undersampling=1):
         string = ''
 
         if mode == 'train':
             for edge in dataset.edges():
-                if edge.target == minority_class:
-                    prob = random()
-                    if prob < undersampling:
-                        string += str(edge.target)
-                        if self.use_tree_kernel:
-                            string += ' |BT| '
-                            string += edge.part.sentence_parse_trees[edge.sentence_id]
-                            string += ' |ET|'
-                        values = set(features.values())
-                        for key in sorted(edge.features.keys()):
-                            if key in values:
-                                value = edge.features[key]
-                                string += ' ' + str(key) + ':' + str(value)
-                        string += '\n'
-                else:
+                if minority_class is None or edge.target == minority_class or random() < undersampling:
                     string += str(edge.target)
                     if self.use_tree_kernel:
                         string += ' |BT| '

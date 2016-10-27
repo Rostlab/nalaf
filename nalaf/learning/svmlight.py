@@ -89,7 +89,7 @@ class SVMLightTreeKernels:
                 string += '\n'
 
         instancesfile = tempfile.NamedTemporaryFile('w', delete=False)
-        print_debug("Instances file: " + instancesfile.name)
+        print_debug("Instances file for mode={} -> {}".format(mode, instancesfile.name))
         instancesfile.write(string)
 
         return instancesfile

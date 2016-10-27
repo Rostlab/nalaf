@@ -88,7 +88,8 @@ class SVMLightTreeKernels:
                         string += ' ' + str(key) + ':' + str(value)
                 string += '\n'
 
-        instancesfile = tempfile.NamedTemporaryFile('w')
+        instancesfile = tempfile.NamedTemporaryFile('w', delete=False)
+        print_debug("Instances file: " + instancesfile.name)
         instancesfile.write(string)
 
         return instancesfile
@@ -124,7 +125,8 @@ class SVMLightTreeKernels:
 
     def tag(self, instancesfile):
 
-        predictionsfile = tempfile.NamedTemporaryFile('r+')
+        predictionsfile = tempfile.NamedTemporaryFile('r+', delete=False)
+        print_debug("Predictions file: " + predictionsfile.name)
 
         call = [
             self.svm_classify_call,
@@ -156,6 +158,6 @@ class SVMLightTreeKernels:
                 for index, edge in enumerate(dataset.edges()):
                     edge.target = values[index]
             else:
-                raise Exception("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or too few of features")
+                raise Exception("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or too few of features. Predictions file: " + predictionsfile.name)
 
         return dataset.form_predicted_relations()

@@ -38,9 +38,10 @@ def floyd_warshall(graph):
                 newdist = dist[u][t] + dist[t][v]
                 if newdist < dist[u][v]:
                     dist[u][v] = newdist
-                    pred[u][v] = pred[t][v] # route new path through t
+                    pred[u][v] = pred[t][v]  # route new path through t
 
     return dist, pred
+
 
 def convert_to_dependency_graph(sentence):
     """
@@ -104,8 +105,8 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
 
 def build_walks(path, first_id=0, second_id=1):
 
-    if len(path) != second_id+1:
-        ret_walks = build_walks(path, first_id=first_id+1, second_id=second_id+1)
+    if len(path) != second_id + 1:
+        ret_walks = build_walks(path, first_id=first_id + 1, second_id=second_id + 1)
     else:
         ret_walks = []
 
@@ -117,7 +118,7 @@ def build_walks(path, first_id=0, second_id=1):
             forward_dep.append(dep)
 
     for f_dep in forward_dep:
-        if len(ret_walks)>0:
+        if len(ret_walks) > 0:
             for walk in ret_walks:
                 new_walk = []
                 new_walk.append(f_dep)
@@ -134,7 +135,7 @@ def build_walks(path, first_id=0, second_id=1):
         if dep[0] == path[first_id]:
             backward_dep.append(dep)
     for b_dep in backward_dep:
-        if len(ret_walks)>0:
+        if len(ret_walks) > 0:
             for walk in ret_walks:
                 new_walk = []
                 new_walk.append(b_dep)

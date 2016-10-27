@@ -136,13 +136,15 @@ class SVMLightTreeKernels:
         return predictionsfile
 
 
-    def read_predictions(self, dataset, predictionsfile):
+    def read_predictions(self, dataset, predictionsfile, threshold=0):
         values = []
         with predictionsfile:
             predictionsfile.seek(0)
 
             for line in predictionsfile:
-                if float(line.strip()) > 0:  # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
+                # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
+                # See more information in: https://github.com/Rostlab/relna/issues/21
+                if float(line.strip()) > threshold:
                     values.append(1)
                 else:
                     values.append(-1)

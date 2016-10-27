@@ -77,7 +77,7 @@ class SVMLightTreeKernels:
 
         elif mode == 'predict':
             for edge in dataset.edges():
-                string += '?'
+                string += '0'  # http://svmlight.joachims.org "A class label of 0 indicates that this example should be classified using transduction"
                 if self.use_tree_kernel:
                     string += ' |BT| '
                     string += edge.part.sentence_parse_trees[edge.sentence_id]

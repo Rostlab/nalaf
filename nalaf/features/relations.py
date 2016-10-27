@@ -2,7 +2,7 @@ import abc
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
 import re
-from nalaf import print_debug
+from nalaf import print_debug, print_verbose
 
 
 class EdgeFeatureGenerator(FeatureGenerator):
@@ -39,7 +39,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
                 if feature_name not in feature_set.keys():
                     index = len(feature_set.keys()) + 1
                     feature_set[feature_name] = index
-                    print_debug("Feature map: {} == {}".format(str(index), feature_name))
+                    print_verbose("Feature map: {} == {}".format(str(index), feature_name))
                 edge.features[feature_set[feature_name]] = value
                 return True
             else:

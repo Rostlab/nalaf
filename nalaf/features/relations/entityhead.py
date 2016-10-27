@@ -76,9 +76,11 @@ class EntityHeadTokenUpperCaseFeatureGenerator(EdgeFeatureGenerator):
         feature_name_2 = '11_entity2_upper_case_start_[0]'
         feature_name_3 = '12_entity1_upper_case_middle_[0]'
         feature_name_4 = '12_entity2_upper_case_middle_[0]'
+
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
+
             if is_training_mode:
                 if head1.word[0].isupper():
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
@@ -108,6 +110,7 @@ class EntityHeadTokenDigitsFeatureGenerator(EdgeFeatureGenerator):
             feature_name_2 = '13_entity2_has_digits_[0]'
             feature_name_3 = '14_entity1_has_hyphenated_digits_[0]'
             feature_name_4 = '14_entity2_has_hyphenated_digits_[0]'
+
             if is_training_mode:
                 if self.contains_digits(head1):
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)

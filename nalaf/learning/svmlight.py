@@ -77,36 +77,40 @@ class SVMLightTreeKernels:
         instancesfile = tempfile.NamedTemporaryFile('w', delete=False)
         print_debug("Instances file for mode={} -> {}".format(mode, instancesfile.name))
         instancesfile.write(string)
+        instancesfile.flush()
+        # Note, we do not close the file
 
         return instancesfile
 
 
     def learn(self, instancesfile, c=0.5):
 
-        if self.use_tree_kernel:
-            subprocess.call([
-                self.svm_learn_call,
-                '-v', '1',
-                '-t', '5',
-                '-T', '1',
-                '-W', 'S',
-                '-V', 'S',
-                '-C', '+',
-                '-c', str(c),
-                instancesfile.name,
-                self.model_path
-            ])
+        with instancesfile:
 
-        else:
-            subprocess.call([
-                self.svm_learn_call,
-                '-c', str(c),
-                '-v', '1',
-                instancesfile.name,
-                self.model_path
-            ])
+            if self.use_tree_kernel:
+                subprocess.call([
+                    self.svm_learn_call,
+                    '-v', '1',
+                    '-t', '5',
+                    '-T', '1',
+                    '-W', 'S',
+                    '-V', 'S',
+                    '-C', '+',
+                    '-c', str(c),
+                    instancesfile.name,
+                    self.model_path
+                ])
 
-        return self.model_path
+            else:
+                subprocess.call([
+                    self.svm_learn_call,
+                    '-c', str(c),
+                    '-v', '1',
+                    instancesfile.name,
+                    self.model_path
+                ])
+
+            return self.model_path
 
 
     def tag(self, instancesfile):
@@ -125,6 +129,9 @@ class SVMLightTreeKernels:
 
         if exitcode != 0:
             raise Exception("Error when tagging: " + ' '.join(call))
+
+        predictionsfile.flush()
+        # Note, we do not close the file
 
         return predictionsfile
 

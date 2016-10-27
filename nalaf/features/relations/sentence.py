@@ -30,11 +30,19 @@ class BagOfWordsFeatureGenerator(EdgeFeatureGenerator):
     :type stop_words: list[str]
     :type is_training_mode: bool
     """
-    def __init__(self, stop_words=None):
+
+    def __init__(
+        self, stop_words=None,
+        prefix_bow_text=None,
+        prefix_ne_bow_count=None,
+    ):
+
         if stop_words is None:
             stop_words = stopwords.words('english')
         self.stop_words = stop_words
-        """a list of stop words"""
+
+        self.prefix_bow_text = prefix_bow_text
+        self.prefix_ne_bow_count = prefix_ne_bow_count
 
 
     def generate(self, dataset, feature_set, is_training_mode):
@@ -42,17 +50,21 @@ class BagOfWordsFeatureGenerator(EdgeFeatureGenerator):
             sentence = edge.part.sentences[edge.sentence_id]
             bow_map = {}
             for token in sentence:
-                if token.word not in self.stop_words and not token.features['is_punct']:
-                    feature_name = '2_bow_text_' + token.word + '_[0]'
+
+                bow_string = token.word
+
+                if bow_string not in self.stop_words and not token.features['is_punct']:
+                    feature_name = self.gen_prefix_feat_name("prefix_bow_text", bow_string)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+
                     if token.is_entity_part(edge.part):
-                        bow_string = 'ne_bow_' + token.word + '_[0]'
                         if bow_string not in bow_map.keys():
                             bow_map[bow_string] = 0
-                        bow_map[bow_string] = bow_map[bow_string]+1
-            for key, value in bow_map.items():
-                feature_name = '3_'+key
-                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value)
+                        bow_map[bow_string] = bow_map[bow_string] + 1
+
+            for ne_bow_key, count in bow_map.items():
+                feature_name = self.gen_prefix_feat_name("prefix_ne_bow_count", ne_bow_key)
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=count)
 
 
 class StemmedBagOfWordsFeatureGenerator(EdgeFeatureGenerator):
@@ -68,11 +80,15 @@ class StemmedBagOfWordsFeatureGenerator(EdgeFeatureGenerator):
     :type is_training_mode: bool
     """
 
-    def __init__(self, stop_words=[]):
+    def __init__(
+        self, stop_words=[],
+        prefix_bow_stem=None
+    ):
         self.stemmer = PorterStemmer()
         """an instance of the PorterStemmer"""
         self.stop_words = stop_words
-        """a list of stop words"""
+
+        self.prefix_bow_stem = prefix_bow_stem
 
 
     def generate(self, dataset, feature_set, is_training_mode):
@@ -82,5 +98,5 @@ class StemmedBagOfWordsFeatureGenerator(EdgeFeatureGenerator):
             if is_training_mode:
                 for token in sentence:
                     if self.stemmer.stem(token.word) not in self.stop_words and not token.features['is_punct']:
-                        feature_name = '4_bow_stem_' + self.stemmer.stem(token.word) + '_[0]'
+                        feature_name = self.gen_prefix_feat_name("prefix_bow_stem", self.stemmer.stem(token.word))
                         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)

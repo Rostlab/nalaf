@@ -6,7 +6,7 @@ from nalaf.preprocessing.parsers import Parser, SpacyParser
 # from nalaf.features import get_spacy_nlp_english
 from spacy.en import English
 from nalaf.preprocessing.edges import SimpleEdgeGenerator
-from nalaf.features.relations import NamedEntityCountFeatureGenerator
+from nalaf.features.relations.sentence import NamedEntityCountFeatureGenerator
 from nalaf import print_debug
 import time
 

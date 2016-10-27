@@ -86,7 +86,7 @@ class SVMLightTreeKernels:
         if self.use_tree_kernel:
             subprocess.call([
                 self.svm_learn_call,
-                '-v', '0',
+                '-v', '1',
                 '-t', '5',
                 '-T', '1',
                 '-W', 'S',
@@ -101,7 +101,7 @@ class SVMLightTreeKernels:
             subprocess.call([
                 self.svm_learn_call,
                 '-c', str(c),
-                '-v', '0',
+                '-v', '1',
                 instancesfile.name,
                 self.model_path
             ])
@@ -116,7 +116,7 @@ class SVMLightTreeKernels:
 
         call = [
             self.svm_classify_call,
-            '-v', '0',
+            '-v', '1',
             instancesfile.name,
             self.model_path,
             predictionsfile.name

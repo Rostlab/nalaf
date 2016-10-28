@@ -107,13 +107,13 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         feature_name_1 = self.gen_prefix_feat_name('prefix_45_len_tokens', str(len(path)))
         feature_name_2 = self.gen_prefix_feat_name('prefix_46_len')
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2, len(path))
+        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2, value=len(path))
 
 
     def path_constituents(self, path, edge, words, feature_set, is_training_mode):
         for token in path:
             if self.stemmer.stem(token.word) in words:
-                feature_name_1 = self.gen_prefix_feat_name('prefix_47_word_in_path_' + self.stemmer.stem(token.word))
+                feature_name_1 = self.gen_prefix_feat_name('prefix_47_word_in_path', self.stemmer.stem(token.word))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
 
 
@@ -123,20 +123,20 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             token2 = path[i+1]
             for dep in token1.features['dependency_to']:
                 if dep[0]==token2:
-                    feature_name = self.gen_prefix_feat_name('prefix_48_dep_'+dep[1]+'_forward')
+                    feature_name = self.gen_prefix_feat_name('prefix_48_dep_foward', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             for dep in token2.features['dependency_to']:
                 if dep[0]==token1:
-                    feature_name = self.gen_prefix_feat_name('prefix_49_dep_'+dep[1]+'_reverse')
+                    feature_name = self.gen_prefix_feat_name('prefix_49_dep_reverse', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
         for i in range(1, len(path)-1):
             token = path[i]
-            feature_name_1 = self.gen_prefix_feat_name('prefix_50_internal_pos_' + token.features['pos'])
-            feature_name_2 = self.gen_prefix_feat_name('prefix_51_internal_masked_txt_' + token.masked_text(edge.part))
-            feature_name_3 = self.gen_prefix_feat_name('prefix_52_internal_txt_' + token.word)
-            feature_name_4 = self.gen_prefix_feat_name('prefix_53_internal_stem_' + self.stemmer.stem(token.word))
+            feature_name_1 = self.gen_prefix_feat_name('prefix_50_internal_pos', token.features['pos'])
+            feature_name_2 = self.gen_prefix_feat_name('prefix_51_internal_masked_txt', token.masked_text(edge.part))
+            feature_name_3 = self.gen_prefix_feat_name('prefix_52_internal_txt', token.word)
+            feature_name_4 = self.gen_prefix_feat_name('prefix_53_internal_stem', self.stemmer.stem(token.word))
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
@@ -147,12 +147,12 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             token2 = path[i+1]
             for dep in token1.features['dependency_to']:
                 if dep[0]==token2:
-                    feature_name = self.gen_prefix_feat_name('prefix_54_internal_dep_'+dep[1]+'_forward')
+                    feature_name = self.gen_prefix_feat_name('prefix_54_internal_dep_foward', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             for dep in token2.features['dependency_to']:
                 if dep[0]==token1:
-                    feature_name = self.gen_prefix_feat_name('prefix_55_internal_dep_'+dep[1]+'_reverse')
+                    feature_name = self.gen_prefix_feat_name('prefix_55_internal_dep_reverse', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 
@@ -163,7 +163,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             for ann in ann_types:
                 internal_types += '_'+ann
             internal_types += '_'
-            feature_name = self.gen_prefix_feat_name('prefix_56_token_path'+internal_types+'')
+            feature_name = self.gen_prefix_feat_name('prefix_56_token_path', internal_types)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 
@@ -194,19 +194,19 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
                     for k in range(n):
                         dep = current_walk[i-(n-1)+k][1]
-                        feature_name = self.gen_prefix_feat_name('prefix_57_dep_'+style_gram+'_'+str(k)+'_'+dep+'')
+                        feature_name = self.gen_prefix_feat_name('prefix_57_dep', style_gram, str(k), dep)
                         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                         edge_gram += '_' + dep
 
-                    feature_name = self.gen_prefix_feat_name('prefix_58_'+edge_gram+'')
+                    feature_name = self.gen_prefix_feat_name('prefix_5'+edge_gram)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
                     for ann1 in token1_anns:
                         for ann2 in token2_anns:
-                            feature_name = self.gen_prefix_feat_name('prefix_59_'+ann1+'_'+edge_gram+'_'+ann2+'')
+                            feature_name = self.gen_prefix_feat_name('prefix_5'+ann1, edge_gram, ann2)
                             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-                feature_name = self.gen_prefix_feat_name('prefix_60_edge_directions_' + dir_grams)
+                feature_name = self.gen_prefix_feat_name('prefix_60_edge_direction' + dir_grams)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 
@@ -221,17 +221,17 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             dependency_list.append(token1.features['dependency_from'])
 
         for dependency in dependency_list:
-            feature_name = self.gen_prefix_feat_name('prefix_61_dep_'+dependency[1]+'')
+            feature_name = self.gen_prefix_feat_name('prefix_61_de'+dependency[1])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-            feature_name = self.gen_prefix_feat_name('prefix_62_txt_'+dependency[0].masked_text(edge.part)+'')
+            feature_name = self.gen_prefix_feat_name('prefix_62_tx'+dependency[0].masked_text(edge.part))
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-            feature_name = self.gen_prefix_feat_name('prefix_63_pos_'+dependency[0].features['pos']+'')
+            feature_name = self.gen_prefix_feat_name('prefix_63_po'+dependency[0].features['pos'])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             token1 = dependency[0]
             ann_types_1 = self.token_feature_generator.annotated_types(token1, edge)
             for ann in ann_types_1:
-                feature_name = self.gen_prefix_feat_name('prefix_64_ann_type_'+ann+'')
+                feature_name = self.gen_prefix_feat_name('prefix_64_ann_typ'+ann)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             g_text = dependency[0].masked_text(edge.part)
@@ -239,34 +239,34 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             g_at = 'no_ann_type'
 
             for dep in dependency[0].features['dependency_to']:
-                feature_name = self.gen_prefix_feat_name('prefix_65_'+dep[1]+'')
+                feature_name = self.gen_prefix_feat_name('prefix_6'+dep[1])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                feature_name = self.gen_prefix_feat_name('prefix_66_txt_'+dep[0].masked_text(edge.part)+'')
+                feature_name = self.gen_prefix_feat_name('prefix_66_tx'+dep[0].masked_text(edge.part))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                feature_name = self.gen_prefix_feat_name('prefix_67_pos_'+dep[0].features['pos']+'')
+                feature_name = self.gen_prefix_feat_name('prefix_67_po'+dep[0].features['pos'])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
                 token2 = dep[0]
                 ann_types_2 = self.token_feature_generator.annotated_types(token2, edge)
                 for ann in ann_types_2:
-                    feature_name = self.gen_prefix_feat_name('prefix_68_ann_type_'+ann+'')
+                    feature_name = self.gen_prefix_feat_name('prefix_68_ann_typ'+ann)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
                 d_text = token2.masked_text(edge.part)
                 d_pos = token2.features['pos']
                 d_at = 'no_ann_type'
 
-                feature_name = self.gen_prefix_feat_name('prefix_69_gov_'+g_text+'_'+d_text+'')
+                feature_name = self.gen_prefix_feat_name('prefix_69_go'+g_text, d_text)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-                feature_name = self.gen_prefix_feat_name('prefix_70_gov_'+g_pos+'_'+d_pos+'')
+                feature_name = self.gen_prefix_feat_name('prefix_70_go'+g_pos, d_pos)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
                 for ann1 in ann_types_1:
                     for ann2 in ann_types_2:
-                        feature_name = self.gen_prefix_feat_name('prefix_71_gov_'+ann1+'_'+ann2+'')
+                        feature_name = self.gen_prefix_feat_name('prefix_71_go'+ann1, ann2)
                         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
                 for ann1 in ann_types_1:
-                    feature_name = self.gen_prefix_feat_name('prefix_72_triple_'+ann1+'_'+dependency[1]+'_'+d_at+'')
+                    feature_name = self.gen_prefix_feat_name('prefix_72_tripl'+ann1, dependency[1], d_at)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)

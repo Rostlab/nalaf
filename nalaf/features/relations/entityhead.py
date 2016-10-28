@@ -67,15 +67,25 @@ class EntityHeadTokenUpperCaseFeatureGenerator(EdgeFeatureGenerator):
 
     Value of 1 indicates that the entity starts with an upper case letter
     """
-    def __init__(self):
-        pass
+    def __init__(
+        self,
+        prefix_entity1_upper_case_start,
+        prefix_entity2_upper_case_start,
+        prefix_entity1_upper_case_middle,
+        prefix_entity2_upper_case_middle,
+    ):
+
+        self.prefix_entity1_upper_case_start = prefix_entity1_upper_case_start
+        self.prefix_entity2_upper_case_start = prefix_entity2_upper_case_start
+        self.prefix_entity1_upper_case_middle = prefix_entity1_upper_case_middle
+        self.prefix_entity2_upper_case_middle = prefix_entity2_upper_case_middle
 
 
     def generate(self, dataset, feature_set, is_training_mode):
-        feature_name_1 = '11_entity1_upper_case_start_[0]'
-        feature_name_2 = '11_entity2_upper_case_start_[0]'
-        feature_name_3 = '12_entity1_upper_case_middle_[0]'
-        feature_name_4 = '12_entity2_upper_case_middle_[0]'
+        feature_name_1 = self.gen_prefix_feat_name('prefix_entity1_upper_case_start')
+        feature_name_2 = self.gen_prefix_feat_name('prefix_entity2_upper_case_start')
+        feature_name_3 = self.gen_prefix_feat_name('prefix_entity1_upper_case_middle')
+        feature_name_4 = self.gen_prefix_feat_name('prefix_entity2_upper_case_middle')
 
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
@@ -84,10 +94,13 @@ class EntityHeadTokenUpperCaseFeatureGenerator(EdgeFeatureGenerator):
             if is_training_mode:
                 if head1.word[0].isupper():
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
+
                 if head2.word[0].isupper():
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
+
                 if not head1.word.isupper() and not head1.word.islower():
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
+
                 if not head2.word.isupper() and not head2.word.islower():
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
 

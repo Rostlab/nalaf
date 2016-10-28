@@ -78,11 +78,11 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
 
     def __init__(
         self,
-        prefix_txt=None,
-        prefix_pos=None,
-        prefix_masked_txt=None,
-        prefix_stem=None,
-        prefix_ann_type=None,
+        prefix_txt=None,  # 73 in relna
+        prefix_pos=None,  # 74
+        prefix_masked_txt=None,  # 75
+        prefix_stem=None,  # 76
+        prefix_ann_type=None,  # 77
     ):
         self.stemmer = PorterStemmer()
         """an instance of the PorterStemmer()"""

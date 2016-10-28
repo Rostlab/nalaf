@@ -1,4 +1,5 @@
 from nalaf.features.relations import EdgeFeatureGenerator
+from nltk.stem import PorterStemmer
 
 
 class LinearDistanceFeatureGenerator(EdgeFeatureGenerator):
@@ -70,3 +71,94 @@ class EntityOrderFeatureGenerator(EdgeFeatureGenerator):
                 feature_name = self.gen_prefix_feat_name("prefix_order_entity2_entity1")
 
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+
+
+class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
+    """
+    Generate the bag of words representation, masked text, stemmed text and
+    parts of speech tag for each of the tokens present between two entities in
+    an edge.
+    """
+
+    def __init__(
+        self,
+
+        prefix_fwd_bow_intermediate,
+        prefix_fwd_bow_intermediate_masked,
+        prefix_fwd_stem_intermediate,
+        prefix_fwd_pos_intermediate,
+
+        prefix_bkd_bow_intermediate,
+        prefix_bkd_bow_intermediate_masked,
+        prefix_bkd_stem_intermediate,
+        prefix_bkd_pos_intermediate,
+
+        prefix_bow_intermediate,
+        prefix_bow_intermediate_masked,
+        prefix_stem_intermediate,
+        prefix_pos_intermediate,
+    ):
+        self.stemmer = PorterStemmer()
+        """an instance of PorterStemmer"""
+
+        self.prefix_fwd_bow_intermediate = prefix_fwd_bow_intermediate
+        self.prefix_fwd_bow_intermediate_masked = prefix_fwd_bow_intermediate_masked
+        self.prefix_fwd_stem_intermediate = prefix_fwd_stem_intermediate
+        self.prefix_fwd_pos_intermediate = prefix_fwd_pos_intermediate
+
+        self.prefix_bkd_bow_intermediate = prefix_bkd_bow_intermediate
+        self.prefix_bkd_bow_intermediate_masked = prefix_bkd_bow_intermediate_masked
+        self.prefix_bkd_stem_intermediate = prefix_bkd_stem_intermediate
+        self.prefix_bkd_pos_intermediate = prefix_bkd_pos_intermediate
+
+        self.prefix_bow_intermediate = prefix_bow_intermediate
+        self.prefix_bow_intermediate_masked = prefix_bow_intermediate_masked
+        self.prefix_stem_intermediate = prefix_stem_intermediate
+        self.prefix_pos_intermediate = prefix_pos_intermediate
+
+
+    def generate(self, dataset, feature_set, is_training_mode):
+        for edge in dataset.edges():
+            sentence = edge.part.sentences[edge.sentence_id]
+
+            if edge.entity1.head_token.features['id'] < edge.entity2.head_token.features['id']:
+                first = edge.entity1.head_token.features['id']
+                second = edge.entity2.head_token.features['id']
+
+                for i in range(first+1, second):
+                    token = sentence[i]
+
+                    feature_name = '33_fwd_bow_intermediate_'+token.word+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '34_fwd_bow_intermediate_masked_'+token.masked_text(edge.part)+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '35_fwd_stem_intermediate_'+self.stemmer.stem(token.word)+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '36_fwd_pos_intermediate_'+token.features['pos']+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+
+            else:
+                first = edge.entity2.head_token.features['id']
+                second = edge.entity1.head_token.features['id']
+
+                for i in range(first+1, second):
+                    token = sentence[i]
+                    feature_name = '37_bkd_bow_intermediate_'+token.word+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '38_bkd_bow_intermediate_masked_'+token.masked_text(edge.part)+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '39_bkd_stem_intermediate_'+self.stemmer.stem(token.word)+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                    feature_name = '40_bkd_pos_intermediate_'+token.features['pos']+'_[0]'
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+
+            for i in range(first+1, second):
+                token = sentence[i]
+                feature_name = '41_bow_intermediate_'+token.word+'_[0]'
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                feature_name = '42_bow_intermediate_masked_'+token.masked_text(edge.part)+'_[0]'
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                feature_name = '43_stem_intermediate_'+self.stemmer.stem(token.word)+'_[0]'
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+                feature_name = '44_pos_intermediate_'+token.features['pos']+'_[0]'
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)

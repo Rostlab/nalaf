@@ -1208,7 +1208,7 @@ class Token:
         :return str
         """
         for entity in part.annotations:
-            if self.start <= entity.offset < self.end: # or \
+            if self.start <= entity.offset < self.end:  # or \
                 # entity.offset <= self.start < entity.offset + len(entity.text):
                 return entity.class_id
         return self.word

@@ -110,37 +110,52 @@ class EntityHeadTokenDigitsFeatureGenerator(EdgeFeatureGenerator):
     Checks if the head token for the entities in the edge contain a digit.
     If there is a digit, the corresponding feature value is set to 1
     """
-    def __init__(self):
+    def __init__(
+        self,
+        prefix_entity1_has_digits=None,
+        prefix_entity2_has_digits=None,
+        prefix_entity1_has_hyphenated_digits=None,
+        prefix_entity2_has_hyphenated_digits=None,
+    ):
         self._digits = re.compile('\d')
         """search regular expression for presence of digits"""
+
+        self.prefix_entity1_has_digits = prefix_entity1_has_digits
+        self.prefix_entity2_has_digits = prefix_entity2_has_digits
+        self.prefix_entity1_has_hyphenated_digits = prefix_entity1_has_hyphenated_digits
+        self.prefix_entity2_has_hyphenated_digits = prefix_entity2_has_hyphenated_digits
 
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
-            feature_name_1 = '13_entity1_has_digits_[0]'
-            feature_name_2 = '13_entity2_has_digits_[0]'
-            feature_name_3 = '14_entity1_has_hyphenated_digits_[0]'
-            feature_name_4 = '14_entity2_has_hyphenated_digits_[0]'
 
-            if is_training_mode:
-                if self.contains_digits(head1):
-                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
-                    if self.contains_hyphenated_digits(head1):
-                        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
+            feature_name_1 = self.gen_prefix_feat_name('prefix_entity1_has_digits')
+            feature_name_2 = self.gen_prefix_feat_name('prefix_entity2_has_digits')
+            feature_name_3 = self.gen_prefix_feat_name('prefix_entity1_has_hyphenated_digits')
+            feature_name_4 = self.gen_prefix_feat_name('prefix_entity2_has_hyphenated_digits')
 
-                if self.contains_digits(head2):
-                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
-                    if self.contains_hyphenated_digits(head2):
-                        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
+            if self.contains_digits(head1):
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
+
+                if self.contains_hyphenated_digits(head1):
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
+
+            if self.contains_digits(head2):
+                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
+
+                if self.contains_hyphenated_digits(head2):
+                    self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
+
 
     def contains_digits(self, token):
         return bool(self._digits.search(token.word))
 
+
     def contains_hyphenated_digits(self, token):
         span = self._digits.search(token.word)
-        if span.start()>0 and token.word[span.start()-1]=='-':
+        if span.start() > 0 and token.word[span.start() - 1] == '-':
             return True
         return False
 

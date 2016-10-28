@@ -1198,7 +1198,7 @@ class Token:
                 return entity
         return None
 
-    # TODO review this method
+    # TODO review this method. This was added for relna. It is now also used in LocText
     def masked_text(self, part):
         """
         if token is part of an entity, return the entity class id, otherwise

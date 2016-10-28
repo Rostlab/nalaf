@@ -69,10 +69,10 @@ class EntityHeadTokenUpperCaseFeatureGenerator(EdgeFeatureGenerator):
     """
     def __init__(
         self,
-        prefix_entity1_upper_case_start,
-        prefix_entity2_upper_case_start,
-        prefix_entity1_upper_case_middle,
-        prefix_entity2_upper_case_middle,
+        prefix_entity1_upper_case_start=None,
+        prefix_entity2_upper_case_start=None,
+        prefix_entity1_upper_case_middle=None,
+        prefix_entity2_upper_case_middle=None,
     ):
 
         self.prefix_entity1_upper_case_start = prefix_entity1_upper_case_start

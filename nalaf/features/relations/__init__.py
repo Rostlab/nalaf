@@ -81,7 +81,7 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
         prefix_txt=None,  # 73 in relna
         prefix_pos=None,  # 74
         prefix_masked_txt=None,  # 75
-        prefix_stem=None,  # 76
+        prefix_stem_masked_txt=None,  # 76
         prefix_ann_type=None,  # 77
     ):
         self.stemmer = PorterStemmer()
@@ -90,7 +90,7 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
         self.prefix_txt = prefix_txt
         self.prefix_pos = prefix_pos
         self.prefix_masked_txt = prefix_masked_txt
-        self.prefix_stem = prefix_stem
+        self.prefix_stem_masked_txt = prefix_stem_masked_txt
         self.prefix_ann_type = prefix_ann_type
 
 
@@ -112,7 +112,8 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
         feature_name_3 = self.gen_prefix_feat_name("prefix_masked_txt", addendum, token.masked_text(edge.part))
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
 
-        feature_name_4 = self.gen_prefix_feat_name("prefix_stem", addendum, self.stemmer.stem(token.masked_text(edge.part)))
+        # TODO why stem of masked text? -- makes little sense -- See TODO in original loctext too
+        feature_name_4 = self.gen_prefix_feat_name("prefix_stem_masked_txt", addendum, self.stemmer.stem(token.masked_text(edge.part)))
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
 
         ann_types = self.annotated_types(token, edge)

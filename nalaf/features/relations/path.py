@@ -9,13 +9,74 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
     The length of the path from entity 1 to entity 2 and token features for the
     two tokens at the terminal of the path
     """
-    def __init__(self, graphs):
+    def __init__(
+        self, graphs,
+
+        token_feature_generator,
+
+        prefix_45_len_tokens,
+        prefix_46_len,
+        prefix_47_word_in_path,
+        prefix_48_dep_forward,
+        prefix_49_dep_reverse,
+        prefix_50_internal_pos,
+        prefix_51_internal_masked_txt,
+        prefix_52_internal_txt,
+        prefix_53_internal_stem,
+        prefix_54_internal_dep_forward,
+        prefix_55_internal_dep_reverse,
+        prefix_56_token_path,
+        prefix_57_dep_style_gram,
+        prefix_58_edge_gram,
+        prefix_59_ann_edge_gram,
+        prefix_60_edge_directions,
+        prefix_61_dep_1,
+        prefix_62_txt_dep_0,
+        prefix_63_pos_dep_0,
+        prefix_64_ann_1_type,
+        prefix_65_dep_to_1,
+        prefix_66_txt_dep_to_0_masked,
+        prefix_67_pos_to,
+        prefix_68_ann_2_type,
+        prefix_69_gov_g_text,
+        prefix_70_gov_g_pos,
+        prefix_71_gov_anns,
+        prefix_72_triple,
+    ):
         self.graphs = graphs
         """a dictionary of graphs to avoid recomputation of path"""
         self.stemmer = PorterStemmer()
         """an instance of PorterStemmer"""
         self.token_feature_generator = TokenFeatureGenerator()
-        """an instance of TokenFeatureGenerator"""
+
+        self.prefix_45_len_tokens = prefix_45_len_tokens
+        self.prefix_46_len = prefix_46_len
+        self.prefix_47_word_in_path = prefix_47_word_in_path
+        self.prefix_48_dep_forward = prefix_48_dep_forward
+        self.prefix_49_dep_reverse = prefix_49_dep_reverse
+        self.prefix_50_internal_pos = prefix_50_internal_pos
+        self.prefix_51_internal_masked_txt = prefix_51_internal_masked_txt
+        self.prefix_52_internal_txt = prefix_52_internal_txt
+        self.prefix_53_internal_stem = prefix_53_internal_stem
+        self.prefix_54_internal_dep_forward = prefix_54_internal_dep_forward
+        self.prefix_55_internal_dep_reverse = prefix_55_internal_dep_reverse
+        self.prefix_56_token_path = prefix_56_token_path
+        self.prefix_57_dep_style_gram = prefix_57_dep_style_gram
+        self.prefix_58_edge_gram = prefix_58_edge_gram
+        self.prefix_59_ann_edge_gram = prefix_59_ann_edge_gram
+        self.prefix_60_edge_directions = prefix_60_edge_directions
+        self.prefix_61_dep_1 = prefix_61_dep_1
+        self.prefix_62_txt_dep_0 = prefix_62_txt_dep_0
+        self.prefix_63_pos_dep_0 = prefix_63_pos_dep_0
+        self.prefix_64_ann_1_type = prefix_64_ann_1_type
+        self.prefix_65_dep_to_1 = prefix_65_dep_to_1
+        self.prefix_66_txt_dep_to_0_masked = prefix_66_txt_dep_to_0_masked
+        self.prefix_67_pos_to = prefix_67_pos_to
+        self.prefix_68_ann_2_type = prefix_68_ann_2_type
+        self.prefix_69_gov_g_text = prefix_69_gov_g_text
+        self.prefix_70_gov_g_pos = prefix_70_gov_g_pos
+        self.prefix_71_gov_anns = prefix_71_gov_anns
+        self.prefix_72_triple = prefix_72_triple
 
 
     def generate(self, dataset, feature_set, is_training_mode):

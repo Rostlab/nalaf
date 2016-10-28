@@ -83,20 +83,20 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
     def __init__(
         self,
 
-        prefix_fwd_bow_intermediate,
-        prefix_fwd_bow_intermediate_masked,
-        prefix_fwd_stem_intermediate,
-        prefix_fwd_pos_intermediate,
+        prefix_fwd_bow_intermediate=None,
+        prefix_fwd_bow_intermediate_masked=None,
+        prefix_fwd_stem_intermediate=None,
+        prefix_fwd_pos_intermediate=None,
 
-        prefix_bkd_bow_intermediate,
-        prefix_bkd_bow_intermediate_masked,
-        prefix_bkd_stem_intermediate,
-        prefix_bkd_pos_intermediate,
+        prefix_bkd_bow_intermediate=None,
+        prefix_bkd_bow_intermediate_masked=None,
+        prefix_bkd_stem_intermediate=None,
+        prefix_bkd_pos_intermediate=None,
 
-        prefix_bow_intermediate,
-        prefix_bow_intermediate_masked,
-        prefix_stem_intermediate,
-        prefix_pos_intermediate,
+        prefix_bow_intermediate=None,
+        prefix_bow_intermediate_masked=None,
+        prefix_stem_intermediate=None,
+        prefix_pos_intermediate=None,
     ):
         self.stemmer = PorterStemmer()
         """an instance of PorterStemmer"""

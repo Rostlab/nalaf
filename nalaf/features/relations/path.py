@@ -47,7 +47,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         """a dictionary of graphs to avoid recomputation of path"""
         self.stemmer = PorterStemmer()
         """an instance of PorterStemmer"""
-        self.token_feature_generator = TokenFeatureGenerator()
+        self.token_feature_generator = token_feature_generator,
 
         self.prefix_45_len_tokens = prefix_45_len_tokens
         self.prefix_46_len = prefix_46_len

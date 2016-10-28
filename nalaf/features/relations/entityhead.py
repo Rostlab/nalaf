@@ -191,25 +191,37 @@ class EntityHeadTokenPunctuationFeatureGenerator(EdgeFeatureGenerator):
     Check whether the entity head token has punctuations such as forward slash
     ('/') or hyphen ('-')
     """
-    def __init__(self):
-        pass
+    def __init__(
+        self,
+        prefix_entity1_has_hyphen=None,
+        prefix_entity1_has_fslash=None,
+        prefix_entity2_has_hyphen=None,
+        prefix_entity2_has_fslash=None,
+    ):
+        self.prefix_entity1_has_hyphen = prefix_entity1_has_hyphen
+        self.prefix_entity1_has_fslash = prefix_entity1_has_fslash
+        self.prefix_entity2_has_hyphen = prefix_entity2_has_hyphen
+        self.prefix_entity2_has_fslash = prefix_entity2_has_fslash
 
 
     def generate(self, dataset, feature_set, is_training_mode):
-        feature_name_1 = '17_entity1_has_hyphen_[0]'
-        feature_name_2 = '18_entity1_has_fslash_[0]'
-        feature_name_3 = '17_entity2_has_hyphen_[0]'
-        feature_name_4 = '18_entity2_has_fslash_[0]'
+        feature_name_1 = self.gen_prefix_feat_name('prefix_entity1_has_hyphen')
+        feature_name_2 = self.gen_prefix_feat_name('prefix_entity1_has_fslash')
+        feature_name_3 = self.gen_prefix_feat_name('prefix_entity2_has_hyphen')
+        feature_name_4 = self.gen_prefix_feat_name('prefix_entity2_has_fslash')
+
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
-            if head1.word.find('-')>=0:
+
+            if head1.word.find('-') >= 0:
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
-            if head1.word.find('/')>=0:
+            if head1.word.find('/') >= 0:
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
-            if head2.word.find('-')>=0:
+
+            if head2.word.find('-') >= 0:
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
-            if head2.word.find('/')>=0:
+            if head2.word.find('/') >= 0:
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
 
 

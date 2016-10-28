@@ -105,8 +105,9 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
     def path_length_features(self, path, edge, feature_set, is_training_mode):
         feature_name_1 = self.gen_prefix_feat_name('prefix_45_len_tokens', str(len(path)))
-        feature_name_2 = self.gen_prefix_feat_name('prefix_46_len')
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
+
+        feature_name_2 = self.gen_prefix_feat_name('prefix_46_len')
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2, value=len(path))
 
 

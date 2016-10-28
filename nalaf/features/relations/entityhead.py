@@ -117,8 +117,8 @@ class EntityHeadTokenDigitsFeatureGenerator(EdgeFeatureGenerator):
         prefix_entity1_has_hyphenated_digits=None,
         prefix_entity2_has_hyphenated_digits=None,
     ):
-        self._digits = re.compile('\d')
-        """search regular expression for presence of digits"""
+        self._regex_digits = re.compile('\d')
+        self._regex_hyphenated_digits = re.compile('-\d')
 
         self.prefix_entity1_has_digits = prefix_entity1_has_digits
         self.prefix_entity2_has_digits = prefix_entity2_has_digits
@@ -150,14 +150,12 @@ class EntityHeadTokenDigitsFeatureGenerator(EdgeFeatureGenerator):
 
 
     def contains_digits(self, token):
-        return bool(self._digits.search(token.word))
+        return bool(self._regex_digits.search(token.word))
 
 
     def contains_hyphenated_digits(self, token):
-        span = self._digits.search(token.word)
-        if span.start() > 0 and token.word[span.start() - 1] == '-':
-            return True
-        return False
+        # Note: this follows LocText's original impl. relna was also different. We could think that the hyphen could be at the end of the word
+        return self._regex_hyphenated_digits.search(token.word) is not None
 
 
 class EntityHeadTokenLetterPrefixesFeatureGenerator(EdgeFeatureGenerator):

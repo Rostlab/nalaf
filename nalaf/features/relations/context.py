@@ -143,6 +143,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
                 for i in range(first + 1, second):
                     token = sentence[i]
+
                     feature_name = self.gen_prefix_feat_name('prefix_bkd_bow_intermediate', token.word)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                     feature_name = self.gen_prefix_feat_name('prefix_bkd_bow_intermediate_masked', token.masked_text(edge.part))
@@ -154,6 +155,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
             for i in range(first + 1, second):
                 token = sentence[i]
+
                 feature_name = self.gen_prefix_feat_name('prefix_bow_intermediate', token.word)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_bow_intermediate_masked', token.masked_text(edge.part))

@@ -41,13 +41,13 @@ class BllipParser(Parser):
     def __init__(self, nbest=10, overparsing=10, only_parse=False, stop_words=None):
         try:
             from bllipparser import RerankingParser
+            # WARNING if only_parse=False, BllipParser depends on PyStanfordDependencies: pip install PyStanfordDependencies
         except ImportError:
             raise ImportError('BllipParser not installed, perhaps it is not supported on OS X yet')
 
         self.parser = RerankingParser.fetch_and_load('GENIA+PubMed', verbose=True)
-        # CAUTION this can take a long while. Install manually: `python -mbllipparser.ModelFetcher -i GENIA+PubMed`
-        # CAUTION depends on PyStanfordDependencies (pip install PyStanfordDependencies)
-        # CAUTION this depends on JPype1, which depends on deprecated java 6
+        # WARNING this can take a long while. Install manually: `python -mbllipparser.ModelFetcher -i GENIA+PubMed`
+
         """create a Reranking Parser from BllipParser"""
         self.parser.set_parser_options(nbest=nbest, overparsing=overparsing)
         """set parser options"""
@@ -67,7 +67,7 @@ class BllipParser(Parser):
             if len(part.sentence_parse_trees)>0:
                 continue
             for index, sentence in enumerate(part.sentences):
-                sentence = [ token.word for token in part.sentences[index] ]
+                sentence = [token.word for token in part.sentences[index]]
                 parse = self.parser.parse(sentence)
                 parsed = parse[0]
                 part.sentence_parse_trees.append(str(parsed.ptb_parse))
@@ -96,6 +96,7 @@ class BllipParser(Parser):
             part.percolate_tokens_to_entities()
             part.calculate_token_scores()
             part.set_head_tokens()
+
         outer_bar.finish()
 
 

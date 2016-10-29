@@ -23,6 +23,87 @@ class Parser:
         return
 
 
+class SpacyParser(Parser):
+    """
+    Implementation of the SpaCy English for parsing the each sentence in each
+    part separately, finding dependencies, parts of speech tags, lemmas and
+    head words for each entity.
+
+    :param nlp: an instance of spacy.en.English
+    :type nlp: spacy.en.English
+    :param constituency_parser: the constituency parser to use to generate
+        syntactic (constituency) parse trees. Currently, supports only 'bllip'.
+    :type constituency_parser: str
+    """
+
+    def __init__(self, nlp, constituency_parser=False):
+        self.nlp = nlp
+        """an instance of spacy.en.English"""
+        self.constituency_parser = constituency_parser
+        """the type of constituency parser to use, current supports only bllip"""
+        # TODO SpaCy may soon have its own constituency parser: https://github.com/explosion/spaCy/issues/59
+
+        if (not isinstance(self.nlp, English)):
+            raise TypeError('Not an instance of spacy.en.English')
+        # Use the default tokenization done by a call to
+        # nalaf.preprocessing.Tokenizer before.
+        old_tokenizer = self.nlp.tokenizer
+        self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
+        if self.constituency_parser is True:
+            self.parser = BllipParser(only_parse=True)
+
+
+    def parse(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
+        for part in dataset.parts():
+            sentences = part.get_sentence_string_array()
+            for index, sentence in enumerate(sentences):
+                doc = self.nlp(sentence)
+                for token in doc:
+                    tok = part.sentences[index][token.i]
+                    tok.features = {
+                                    'id': token.i,
+                                    'pos': token.tag_,
+                                    'dep': token.dep_,
+                                    'lemma': token.lemma_,
+                                    'prob': token.prob,
+                                    'is_punct': token.is_punct,
+                                    'is_stop': token.is_stop,
+                                    'cluster': token.cluster,
+                                    'dependency_from': None,
+                                    'dependency_to': [],
+                                    'is_root': False,
+                                   }
+                    part.tokens.append(tok)
+                for tok in doc:
+                    self._dependency_path(tok, index, part)
+            part.percolate_tokens_to_entities()
+            part.calculate_token_scores()
+            part.set_head_tokens()
+            outer_bar.next()
+        outer_bar.finish()
+
+        if self.constituency_parser is True:
+            self.parser.parse(dataset)
+
+
+    def _tokenize(self, text):
+        return text.split(' ')
+
+
+    def _dependency_path(self, tok, index, part):
+        token = part.sentences[index][tok.i]
+        token.features['dependency_from'] = (part.sentences[index][tok.head.i], tok.dep_)
+        token_from = part.sentences[index][tok.head.i]
+        if (tok.i != tok.head.i):
+            token_from.features['dependency_to'].append((token, tok.dep_))
+        else:
+            token.features['is_root'] = True
+
+
 class BllipParser(Parser):
     """
     Implementation of the bllipparser for parsing the each sentence in each
@@ -116,84 +197,3 @@ class BllipParser(Parser):
         if text in ['.', ',', '-']:
             return True
         return False
-
-
-class SpacyParser(Parser):
-    """
-    Implementation of the SpaCy English for parsing the each sentence in each
-    part separately, finding dependencies, parts of speech tags, lemmas and
-    head words for each entity.
-
-    :param nlp: an instance of spacy.en.English
-    :type nlp: spacy.en.English
-    :param constituency_parser: the constituency parser to use to generate
-        syntactic (constituency) parse trees. Currently, supports only 'bllip'.
-    :type constituency_parser: str
-    """
-
-    def __init__(self, nlp, constituency_parser=False):
-        self.nlp = nlp
-        """an instance of spacy.en.English"""
-        self.constituency_parser = constituency_parser
-        """the type of constituency parser to use, current supports only bllip"""
-        # TODO SpaCy may soon have its own constituency parser: https://github.com/explosion/spaCy/issues/59
-
-        if (not isinstance(self.nlp, English)):
-            raise TypeError('Not an instance of spacy.en.English')
-        # Use the default tokenization done by a call to
-        # nalaf.preprocessing.Tokenizer before.
-        old_tokenizer = self.nlp.tokenizer
-        self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
-        if self.constituency_parser is True:
-            self.parser = BllipParser(only_parse=True)
-
-
-    def parse(self, dataset):
-        """
-        :type dataset: nalaf.structures.data.Dataset
-        """
-        outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
-        for part in dataset.parts():
-            sentences = part.get_sentence_string_array()
-            for index, sentence in enumerate(sentences):
-                doc = self.nlp(sentence)
-                for token in doc:
-                    tok = part.sentences[index][token.i]
-                    tok.features = {
-                                    'id': token.i,
-                                    'pos': token.tag_,
-                                    'dep': token.dep_,
-                                    'lemma': token.lemma_,
-                                    'prob': token.prob,
-                                    'is_punct': token.is_punct,
-                                    'is_stop': token.is_stop,
-                                    'cluster': token.cluster,
-                                    'dependency_from': None,
-                                    'dependency_to': [],
-                                    'is_root': False,
-                                   }
-                    part.tokens.append(tok)
-                for tok in doc:
-                    self._dependency_path(tok, index, part)
-            part.percolate_tokens_to_entities()
-            part.calculate_token_scores()
-            part.set_head_tokens()
-            outer_bar.next()
-        outer_bar.finish()
-
-        if self.constituency_parser is True:
-            self.parser.parse(dataset)
-
-
-    def _tokenize(self, text):
-        return text.split(' ')
-
-
-    def _dependency_path(self, tok, index, part):
-        token = part.sentences[index][tok.i]
-        token.features['dependency_from'] = (part.sentences[index][tok.head.i], tok.dep_)
-        token_from = part.sentences[index][tok.head.i]
-        if (tok.i != tok.head.i):
-            token_from.features['dependency_to'].append((token, tok.dep_))
-        else:
-            token.features['is_root'] = True

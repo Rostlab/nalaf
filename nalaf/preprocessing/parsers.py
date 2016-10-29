@@ -25,7 +25,7 @@ class Parser:
 
 class BllipParser(Parser):
     """
-    Implementation of the SpaCy English for parsing the each sentence in each
+    Implementation of the bllipparser for parsing the each sentence in each
     part separately, finding dependencies, parts of speech tags, lemmas and
     head words for each entity.
 
@@ -98,6 +98,7 @@ class BllipParser(Parser):
             part.set_head_tokens()
         outer_bar.finish()
 
+
     def _dependency_path(self, bllip_token, token, part, index):
         if bllip_token.head-1>=0:
             token.features['dependency_from'] = (part.sentences[index][bllip_token.head-1], bllip_token.deprel)
@@ -108,6 +109,7 @@ class BllipParser(Parser):
             token_from.features['dependency_to'].append((token, bllip_token.deprel))
         else:
             token.features['is_root'] = True
+
 
     def _is_punct(self, text):
         if text in ['.', ',', '-']:
@@ -133,7 +135,7 @@ class SpacyParser(Parser):
         """an instance of spacy.en.English"""
         self.constituency_parser = constituency_parser
         """the type of constituency parser to use, current supports only bllip"""
-        # TODO SpaCy will soon have it's own constituency parser, integrate that
+        # TODO SpaCy will soon have its own constituency parser, integrate that
         # as the default
         if (not isinstance(self.nlp, English)):
             raise TypeError('Not an instance of spacy.en.English')
@@ -177,11 +179,14 @@ class SpacyParser(Parser):
             part.set_head_tokens()
             outer_bar.next()
         outer_bar.finish()
+
         if self.constituency_parser is True:
             self.parser.parse(dataset)
 
+
     def _tokenize(self, text):
         return text.split(' ')
+
 
     def _dependency_path(self, tok, index, part):
         token = part.sentences[index][tok.i]

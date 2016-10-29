@@ -136,8 +136,8 @@ class SpacyParser(Parser):
         """an instance of spacy.en.English"""
         self.constituency_parser = constituency_parser
         """the type of constituency parser to use, current supports only bllip"""
-        # TODO SpaCy will soon have its own constituency parser, integrate that
-        # as the default
+        # TODO SpaCy may soon have its own constituency parser: https://github.com/explosion/spaCy/issues/59
+
         if (not isinstance(self.nlp, English)):
             raise TypeError('Not an instance of spacy.en.English')
         # Use the default tokenization done by a call to

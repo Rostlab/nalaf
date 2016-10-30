@@ -79,9 +79,10 @@ class RelationExtractionPipeline:
         except StopIteration:
             self.splitter.split(dataset)
             self.tokenizer.tokenize(dataset)
+
         self.edge_generator.generate(dataset)
-        self.parser.parse(dataset)
         dataset.label_edges()
+        self.parser.parse(dataset)
 
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset, self.feature_set, train)

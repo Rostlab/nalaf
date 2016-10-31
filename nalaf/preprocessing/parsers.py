@@ -45,12 +45,17 @@ class SpacyParser(Parser):
 
         if (not isinstance(self.nlp, English)):
             raise TypeError('Not an instance of spacy.en.English')
-        # Use the default tokenization done by a call to
-        # nalaf.preprocessing.Tokenizer before.
-        old_tokenizer = self.nlp.tokenizer
-        self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
+
         if self.constituency_parser is True:
             self.parser = BllipParser(only_parse=True)
+
+        # Use the default tokenization done by a call to
+        # nalaf.preprocessing.Tokenizer before.
+        # TODO check this, this is not using the final Tokenizer ???
+        old_tokenizer = self.nlp.tokenizer
+        self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
+
+
 
 
     def parse(self, dataset):
@@ -78,8 +83,10 @@ class SpacyParser(Parser):
                                     'is_root': False,
                                    }
                     part.tokens.append(tok)
+
                 for tok in doc:
                     self._dependency_path(tok, index, part)
+
             part.percolate_tokens_to_entities()
             part.calculate_token_scores()
             part.set_head_tokens()
@@ -171,9 +178,11 @@ class BllipParser(Parser):
                                         'is_root': False,
                                         }
                         part.tokens.append(tok)
+
                     for token in tokens:
                         tok = part.sentences[index][token.index-1]
                         self._dependency_path(token, tok, part, index)
+
             part.percolate_tokens_to_entities()
             part.calculate_token_scores()
             part.set_head_tokens()

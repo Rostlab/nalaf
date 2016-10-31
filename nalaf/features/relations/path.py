@@ -119,9 +119,10 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
 
     def path_dependency_features(self, path, edge, feature_set, is_training_mode):
-        for i in range(len(path)-1):
+        for i in range(len(path) - 1):
             token1 = path[i]
-            token2 = path[i+1]
+            token2 = path[i + 1]
+
             for dep in token1.features['dependency_to']:
                 if dep[0]==token2:
                     feature_name = self.gen_prefix_feat_name('prefix_48_dep_foward', dep[1])

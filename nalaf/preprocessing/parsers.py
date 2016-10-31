@@ -49,14 +49,6 @@ class SpacyParser(Parser):
         if self.constituency_parser is True:
             self.parser = BllipParser(only_parse=True)
 
-        # Use the default tokenization done by a call to
-        # nalaf.preprocessing.Tokenizer before.
-        # TODO check this, this is not using the final Tokenizer ???
-        old_tokenizer = self.nlp.tokenizer
-        self.nlp.tokenizer = lambda string: old_tokenizer.tokens_from_list(self._tokenize(string))
-
-
-
 
     def parse(self, dataset):
         """
@@ -65,8 +57,10 @@ class SpacyParser(Parser):
         outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
         for part in dataset.parts():
             sentences = part.get_sentence_string_array()
+
             for index, sentence in enumerate(sentences):
-                doc = self.nlp(sentence)
+                doc = self.nlp.tokenizer.tokens_from_list(self._tokenize(sentence))
+
                 for token in doc:
                     tok = part.sentences[index][token.i]
                     tok.features = {
@@ -97,6 +91,9 @@ class SpacyParser(Parser):
             self.parser.parse(dataset)
 
 
+    # Use the default tokenization done by a call to
+    # nalaf.preprocessing.Tokenizer before.
+    # TODO check this, this is not using the final Tokenizer ???
     def _tokenize(self, text):
         return text.split(' ')
 

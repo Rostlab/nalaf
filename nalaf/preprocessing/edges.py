@@ -24,6 +24,8 @@ class SimpleEdgeGenerator(EdgeGenerator):
     Simple implementation of generating edges between the two entities
     if they are contained in the same sentence.
 
+    **It uses both the _gold_ annotations and _predicted_ annotations.**
+
     Implements the abstract class EdgeGenerator.
 
     :type entity1_class: str
@@ -45,16 +47,17 @@ class SimpleEdgeGenerator(EdgeGenerator):
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity2_class)):
                 index_1 = part.get_sentence_index_for_annotation(ann_1)
                 index_2 = part.get_sentence_index_for_annotation(ann_2)
-                if index_1 == index_2 and index_1 != None:
+                if index_1 == index_2 and index_1 is not None:
                     part.edges.append(
-                        Edge(ann_1, ann_2, self.relation_type,
-                        part.sentences[index_1], index_1, part))
+                        Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))
 
 
 class WordFilterEdgeGenerator(EdgeGenerator):
     """
     Simple implementation of generating edges between the two entities
     if they are contained in the same sentence.
+
+    **It only uses the _gold_ annotations.**
 
     Implements the abstract class EdgeGenerator.
 
@@ -76,9 +79,8 @@ class WordFilterEdgeGenerator(EdgeGenerator):
                     (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
                 index_1 = part.get_sentence_index_for_annotation(ann_1)
                 index_2 = part.get_sentence_index_for_annotation(ann_2)
-                if index_1 == index_2 and index_1 != None:
+                if index_1 == index_2 and index_1 is not None:
                     for token in part.sentences[index_1]:
                         if token.word in self.words:
                             part.edges.append(
-                                Edge(ann_1, ann_2, self.relation_type,
-                                part.sentences[index_1], index_1, part))
+                                Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))

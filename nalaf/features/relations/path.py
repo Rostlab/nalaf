@@ -212,7 +212,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
             # Note: relna code had this within the 2nd inner loop. This was different to what's in original LocText
             # and likely an unintended bug. The difference was spotted by Madhukar
-            feature_name = self.gen_prefix_feat_name('prefix_60_edge_direction', dir_grams)
+            feature_name = self.gen_prefix_feat_name('prefix_60_edge_directions', dir_grams)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 

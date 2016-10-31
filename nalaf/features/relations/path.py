@@ -125,7 +125,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
             for dep in token1.features['dependency_to']:
                 if dep[0] == token2:
-                    feature_name = self.gen_prefix_feat_name('prefix_48_dep_foward', dep[1])
+                    feature_name = self.gen_prefix_feat_name('prefix_48_dep_forward', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             for dep in token2.features['dependency_to']:

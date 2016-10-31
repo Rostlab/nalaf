@@ -31,7 +31,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         prefix_59_ann_edge_gram,
         prefix_60_edge_directions,
         prefix_61_dep_1,
-        prefix_62_txt_dep_0,
+        prefix_62_masked_txt_dep_0,
         prefix_63_pos_dep_0,
         prefix_64_ann_type_1,
         prefix_65_dep_to_1,
@@ -66,7 +66,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         self.prefix_59_ann_edge_gram = prefix_59_ann_edge_gram
         self.prefix_60_edge_directions = prefix_60_edge_directions
         self.prefix_61_dep_1 = prefix_61_dep_1
-        self.prefix_62_txt_dep_0 = prefix_62_txt_dep_0
+        self.prefix_62_masked_txt_dep_0 = prefix_62_masked_txt_dep_0
         self.prefix_63_pos_dep_0 = prefix_63_pos_dep_0
         self.prefix_64_ann_type_1 = prefix_64_ann_type_1
         self.prefix_65_dep_to_1 = prefix_65_dep_to_1
@@ -214,6 +214,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
     def path_edge_features(self, path, edge, feature_set, is_training_mode):
         head1 = edge.entity1.head_token
         head2 = edge.entity2.head_token
+
         dependency_list = []
         for i in range(len(path)-1):
             token1 = path[i]
@@ -224,7 +225,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for dependency in dependency_list:
             feature_name = self.gen_prefix_feat_name('prefix_61_dep_1', dependency[1])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-            feature_name = self.gen_prefix_feat_name('prefix_62_txt_dep_0', dependency[0].masked_text(edge.part))
+            feature_name = self.gen_prefix_feat_name('prefix_62_masked_txt_dep_0', dependency[0].masked_text(edge.part))
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
             feature_name = self.gen_prefix_feat_name('prefix_63_pos_dep_0', dependency[0].features['pos'])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
@@ -240,6 +241,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             g_at = 'no_ann_type'
 
             for dep in dependency[0].features['dependency_to']:
+
                 feature_name = self.gen_prefix_feat_name('prefix_65_dep_to_1', dep[1])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_66_txt_dep_to_0_masked', dep[0].masked_text(edge.part))

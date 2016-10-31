@@ -29,12 +29,12 @@ class SVMLightTreeKernels:
         """whether to use tree kernels or not"""
 
 
-    def create_input_file(self, dataset, mode, features, minority_class=None, undersampling=1):
+    def create_input_file(self, dataset, mode, features, minority_class=None, majority_class_undersampling=1.0):
         string = ''
 
         if mode == 'train':
             for edge in dataset.edges():
-                if minority_class is None or edge.target == minority_class or random() < undersampling:
+                if minority_class is None or edge.target == minority_class or random() < majority_class_undersampling:
                     string += str(edge.target)
                     if self.use_tree_kernel:
                         string += ' |BT| '

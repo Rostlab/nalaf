@@ -178,12 +178,14 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
         for i in range(len(all_walks)):
             dir_grams = ''
+
             for j in range(len(path)-1):
                 current_walk = all_walks[i]
                 if current_walk[j][0].features['dependency_from'][0]==path[i]:
-                    dir_grams += 'F'
+                    dir_grams += 'F'  # Forward
                 else:
-                    dir_grams += 'R'
+                    dir_grams += 'R'  # Reverse
+
                 if i>=n-1:
                     style_gram = ''
                     style_gram = dir_grams[i-n+1:i+1]

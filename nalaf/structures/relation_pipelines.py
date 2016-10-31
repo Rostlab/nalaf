@@ -51,7 +51,6 @@ class RelationExtractionPipeline:
 
         if not parser:
             nlp = get_spacy_nlp_english(load_parser=True)
-            print("SUPPP", nlp, type(nlp))
             parser = SpacyParser(nlp)
         if isinstance(parser, Parser):
             self.parser = parser

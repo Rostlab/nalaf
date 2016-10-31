@@ -207,8 +207,10 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
                             feature_name = self.gen_prefix_feat_name('prefix_59_ann_edge_gram', ann1, edge_gram, ann2)
                             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-                feature_name = self.gen_prefix_feat_name('prefix_60_edge_direction' + dir_grams)
-                self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+            # Note: relna code had this within the 2nd inner loop. This was different to what's in original LocText
+            # and likely an unintended bug. The difference was spotted by Madhukar
+            feature_name = self.gen_prefix_feat_name('prefix_60_edge_direction', dir_grams)
+            self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 
     def path_edge_features(self, path, edge, feature_set, is_training_mode):

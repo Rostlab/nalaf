@@ -35,7 +35,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         prefix_63_pos_dep_0,
         prefix_64_ann_type_1,
         prefix_65_dep_to_1,
-        prefix_66_txt_dep_to_0_masked,
+        prefix_66_masked_txt_dep_to_0,
         prefix_67_pos_to,
         prefix_68_ann_type_2,
         prefix_69_gov_g_text,
@@ -70,7 +70,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         self.prefix_63_pos_dep_0 = prefix_63_pos_dep_0
         self.prefix_64_ann_type_1 = prefix_64_ann_type_1
         self.prefix_65_dep_to_1 = prefix_65_dep_to_1
-        self.prefix_66_txt_dep_to_0_masked = prefix_66_txt_dep_to_0_masked
+        self.prefix_66_masked_txt_dep_to_0 = prefix_66_masked_txt_dep_to_0
         self.prefix_67_pos_to = prefix_67_pos_to
         self.prefix_68_ann_type_2 = prefix_68_ann_type_2
         self.prefix_69_gov_g_text = prefix_69_gov_g_text
@@ -244,7 +244,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
 
                 feature_name = self.gen_prefix_feat_name('prefix_65_dep_to_1', dep[1])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                feature_name = self.gen_prefix_feat_name('prefix_66_txt_dep_to_0_masked', dep[0].masked_text(edge.part))
+                feature_name = self.gen_prefix_feat_name('prefix_66_masked_txt_dep_to_0', dep[0].masked_text(edge.part))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_67_pos_to', dep[0].features['pos'])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)

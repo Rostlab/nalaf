@@ -86,7 +86,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             sentence = edge.part.sentences[edge.sentence_id]
             path = []
             path = get_path(head1, head2, edge.part, edge.sentence_id, self.graphs)
-            if len(path)==0:
+            if len(path) == 0:
                 path = [head1, head2]
             self.path_length_features(path, edge, feature_set, is_training_mode)
             self.token_feature_generator.token_features(path[0], 'token_term_1_', edge, feature_set, is_training_mode)
@@ -124,16 +124,16 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             token2 = path[i + 1]
 
             for dep in token1.features['dependency_to']:
-                if dep[0]==token2:
+                if dep[0] == token2:
                     feature_name = self.gen_prefix_feat_name('prefix_48_dep_foward', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             for dep in token2.features['dependency_to']:
-                if dep[0]==token1:
+                if dep[0] == token1:
                     feature_name = self.gen_prefix_feat_name('prefix_49_dep_reverse', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-        for i in range(1, len(path)-1):
+        for i in range(1, len(path) - 1):
             token = path[i]
             feature_name_1 = self.gen_prefix_feat_name('prefix_50_internal_pos', token.features['pos'])
             feature_name_2 = self.gen_prefix_feat_name('prefix_51_internal_masked_txt', token.masked_text(edge.part))
@@ -144,16 +144,16 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
 
-        for i in range(2, len(path)-1):
+        for i in range(2, len(path) - 1):
             token1 = path[i]
-            token2 = path[i+1]
+            token2 = path[i + 1]
             for dep in token1.features['dependency_to']:
-                if dep[0]==token2:
+                if dep[0] == token2:
                     feature_name = self.gen_prefix_feat_name('prefix_54_internal_dep_foward', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
             for dep in token2.features['dependency_to']:
-                if dep[0]==token1:
+                if dep[0] == token1:
                     feature_name = self.gen_prefix_feat_name('prefix_55_internal_dep_reverse', dep[1])
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
@@ -180,16 +180,16 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for i in range(len(all_walks)):
             dir_grams = ''
 
-            for j in range(len(path)-1):
+            for j in range(len(path) - 1):
                 current_walk = all_walks[i]
-                if current_walk[j][0].features['dependency_from'][0]==path[i]:
+                if current_walk[j][0].features['dependency_from'][0] == path[i]:
                     dir_grams += 'F'  # Forward
                 else:
                     dir_grams += 'R'  # Reverse
 
                 if i>=n-1:
                     style_gram = ''
-                    style_gram = dir_grams[i-n+1:i+1]
+                    style_gram = dir_grams[i-n+1:i + 1]
                     edge_gram = 'dep_gram_' + style_gram
 
                     for k in range(1, n):
@@ -221,9 +221,9 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         head2 = edge.entity2.head_token
 
         dependency_list = []
-        for i in range(len(path)-1):
+        for i in range(len(path) - 1):
             token1 = path[i]
-            token2 = path[i+1]
+            token2 = path[i + 1]
             dependency_list.append(token2.features['dependency_from'])
             dependency_list.append(token1.features['dependency_from'])
 

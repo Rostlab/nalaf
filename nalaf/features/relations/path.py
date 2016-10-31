@@ -244,8 +244,11 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             g_pos = dependency[0].features['pos']
             g_at = 'no_ann_type'
 
-            for dep in dependency[0].features['dependency_to']:
 
+            # TODO Juanmi: I do not understand why the extra inner loop here (not in original LocText)
+            # I think it's just trying to get the dep-to token. However, that should already be included in dependency[1]
+            # to the best of my knowledge. Also `depdnency_to` is now broken
+            for dep in dependency[0].features['dependency_to']:
                 feature_name = self.gen_prefix_feat_name('prefix_65_dep_to_1', dep[1])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_66_masked_txt_dep_to_0', dep[0].masked_text(edge.part))

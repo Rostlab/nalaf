@@ -136,10 +136,13 @@ class SVMLightTreeKernels:
             predictionsfile.seek(0)
 
             for line in predictionsfile:
+                prediction = float(line.strip())
+                print_debug("  pred: " + str(prediction))
+
                 # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
                 # See more information in: https://github.com/Rostlab/relna/issues/21
-                if float(line.strip()) > threshold:
-                    values.append(1)
+                if prediction > threshold:
+                    values.append(+1)
                 else:
                     values.append(-1)
 

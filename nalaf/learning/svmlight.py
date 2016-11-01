@@ -33,63 +33,46 @@ class SVMLightTreeKernels:
     def create_input_file(self, dataset, mode, features, minority_class=None, majority_class_undersampling=1.0):
         string = ''
 
-        if mode == 'train':
-            num_positive_instances = 0
-            num_negative_instances = 0
+        num_positive_instances = 0
+        num_negative_instances = 0
+        num_unlabeled_instances = 0
 
-            for edge in dataset.edges():
-                if minority_class is None or edge.target == minority_class or random() < majority_class_undersampling:
-                    if edge.target > 0:
-                        num_positive_instances += 1
-                    else:
-                        num_negative_instances += 1
+        allowed_features_keys = set(features.values())
 
-                    string += str(edge.target)
-                    if self.use_tree_kernel:
-                        string += ' |BT| '
-                        string += edge.part.sentence_parse_trees[edge.sentence_id]
-                        string += ' |ET|'
-                    values = set(features.values())
-                    for key in sorted(edge.features.keys()):
-                        if key in values:
-                            value = edge.features[key]
-                            string += ' ' + str(key) + ':' + str(value)
-                    string += '\n'
+        for edge in dataset.edges():
+            if mode != 'train' or minority_class is None or edge.target == minority_class or random() < majority_class_undersampling:
+                if edge.target == 1:
+                    num_positive_instances += 1
+                elif edge.target == -1:
+                    num_negative_instances += 1
+                else:
+                    num_unlabeled_instances += 1
 
-            print_debug("Num instances for training: #P (+1): {} vs. #N (-1): {} -- Total: {}".format(num_positive_instances, num_negative_instances, (num_positive_instances + num_negative_instances)))
+                # http://svmlight.joachims.org "A class label of 0 indicates that this example should be classified using transduction"
+                instance_label = '0' if mode == 'predict' else str(edge.target)
 
-        elif mode == 'test':
-            for edge in dataset.edges():
-                string += str(edge.target)
+                string += instance_label
+
                 if self.use_tree_kernel:
                     string += ' |BT| '
                     string += edge.part.sentence_parse_trees[edge.sentence_id]
                     string += ' |ET|'
-                values = set(features.values())
-                for key in sorted(edge.features.keys()):
-                    if key in values:
-                        value = edge.features[key]
-                        string += ' ' + str(key) + ':' + str(value)
-                string += '\n'
 
-        elif mode == 'predict':
-            for edge in dataset.edges():
-                string += '0'  # http://svmlight.joachims.org "A class label of 0 indicates that this example should be classified using transduction"
-                if self.use_tree_kernel:
-                    string += ' |BT| '
-                    string += edge.part.sentence_parse_trees[edge.sentence_id]
-                    string += ' |ET|'
                 for key in sorted(edge.features.keys()):
-                    if key in features.values():
+                    if key in allowed_features_keys:
                         value = edge.features[key]
                         string += ' ' + str(key) + ':' + str(value)
+
                 string += '\n'
 
         instancesfile = tempfile.NamedTemporaryFile('w', delete=False)
-        print_debug("Instances file for mode={} -> {}".format(mode, instancesfile.name))
+        print_debug("{}: svmlight instances file: {}".format(mode, instancesfile.name))
         instancesfile.write(string)
         instancesfile.flush()
         # Note, we do not close the file
+
+        total = (num_positive_instances + num_negative_instances + num_unlabeled_instances)
+        print_debug("{}: svmlight instances, total: {} == #P(+1): {} + #N(-1): {} + #?(0): ".format(mode, total, num_positive_instances, num_negative_instances, num_unlabeled_instances))
 
         return instancesfile
 
@@ -127,7 +110,7 @@ class SVMLightTreeKernels:
     def tag(self, instancesfile):
 
         predictionsfile = tempfile.NamedTemporaryFile('r+', delete=False)
-        print_debug("Predictions file: " + predictionsfile.name)
+        print_debug("predict: svm predictions file: " + predictionsfile.name)
 
         call = [
             self.svm_classify_call,

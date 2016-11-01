@@ -14,6 +14,7 @@ class Annotator:
         self.predicts_classes = predicts_classes
         """a list of class IDs that this tagger can predict"""
 
+
     @abc.abstractmethod
     def annotate(self, dataset):
         """

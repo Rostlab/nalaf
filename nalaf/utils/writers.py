@@ -7,7 +7,6 @@ import xml.etree.ElementTree as ET
 import json
 import sys
 import os
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
 from nalaf import print_verbose, print_debug
 
 
@@ -68,6 +67,7 @@ class StatsWriter:
             w.writeheader()
             for row in self.data:
                 w.writerow(row)
+
 
     def makegraph(self):
         import matplotlib.pyplot as plt
@@ -442,12 +442,14 @@ class ConsoleWriter:
     """
     Writes the predicted annotations onto the console.
     """
-    def __init__(self, color=True):
+    def __init__(self, ent1_class_id, ent2_class_id, color=True):
         self.color = self.__supports_color() if color else color
         self.protein_color_start = '\033[42m'
         self.mutation_color_start = '\033[41m'
         self.end_color = '\033[0m'
-        pass
+        self.ent1_class_id = ent1_class_id
+        self.ent2_class_id = ent2_class_id
+
 
     def write(self, dataset):
         """
@@ -464,7 +466,7 @@ class ConsoleWriter:
             text = part.text
             total_offset = 0
             for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
-                color = self.mutation_color_start if ann.class_id == MUT_CLASS_ID else self.protein_color_start
+                color = self.mutation_color_start if ann.class_id == self.ent2_class_id else self.protein_color_start
                 text = text[:ann.offset+total_offset] + color + text[ann.offset+total_offset:]
                 total_offset += 5
                 text = text[:ann.offset+len(ann.text)+total_offset] + self.end_color + text[ann.offset+len(ann.text)+total_offset:]
@@ -476,10 +478,10 @@ class ConsoleWriter:
             print(part.text)
             print('ANNOTATIONS')
             for ann in sorted(part.predicted_annotations, key=lambda x: x.offset):
-                if ann.class_id == MUT_CLASS_ID:
+                if ann.class_id == self.ent2_class_id:
                     print('Mutation {0: <{pad}} {1: <{pad}} {2}'
                           .format(ann.offset, ann.offset+len(ann.text), ann.text, pad=padding))
-                elif ann.class_id == PRO_CLASS_ID:
+                elif ann.class_id == self.ent1_class_id:
                     print('GGP      {0: <{pad}} {1: <{pad}} {2} {3}'
                           .format(ann.offset, ann.offset+len(ann.text), ann.text, ann.normalisation_dict, pad=padding))
         print('RELATIONS')

@@ -289,13 +289,19 @@ class VerspoorReader(Reader):
     Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
     """
 
-    def __init__(self, directory, mut_class_id):
+    def __init__(self, directory, mut_class_id, gene_class_id):
+        import warnings
         warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.directory = directory
         """the directory containing the .html files"""
         self.mut_class_id = mut_class_id
         """
         class id that will be associated to the read (mutation) entities.
+        """
+        self.gene_class_id = gene_class_id
+        """
+        class id that will be associated to the read (gene / GGP) entities.
         """
 
 
@@ -390,7 +396,7 @@ class VerspoorReader(Reader):
                             dataset.documents[docid].parts[partid].annotations.append(ann)
 
                         elif entity_type == 'gene':
-                            ann = Entity('e_1', real_start, text)
+                            ann = Entity(self.gene_class_id, real_start, text)
                             dataset.documents[docid].parts[partid].annotations.append(ann)
 
         return dataset
@@ -418,7 +424,9 @@ class TmVarReader(Reader):
     """
 
     def __init__(self, corpus_file, mut_class_id):
+        import warnings
         warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.corpus_file = corpus_file
         """the directory containing the .html files"""
         self.mut_class_id = mut_class_id

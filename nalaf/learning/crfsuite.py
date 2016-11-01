@@ -1,7 +1,6 @@
 import os
 import sys
 from nalaf.structures.data import Label
-from nalaf.utils import MUT_CLASS_ID
 from nalaf.learning.taggers import Tagger
 import warnings
 
@@ -28,8 +27,9 @@ class PyCRFSuite:
 
         trainer.train(model_file)
 
+
     @staticmethod
-    def tag(data, model_file, class_id=MUT_CLASS_ID):
+    def tag(data, model_file, class_id):
         """
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
@@ -66,6 +66,7 @@ class CRFSuite:
         self.minify = minify
         """controls whether to replace feature names with an index in order to minimize input file length"""
 
+
     def create_input_file(self, dataset, mode):
         """
         Creates the input files for training, testing or prediction in the appropriate format required by CRFSuite.
@@ -97,6 +98,7 @@ class CRFSuite:
                     file.write('{}\t{}\n'.format(label, features))
                 file.write('\n')
 
+
     def learn(self, options=''):
         """
         Train and save a CRF model with the latest train file.
@@ -106,6 +108,7 @@ class CRFSuite:
             os.system('{} learn {}'.format(self.crf_suite_call, options))
         else:
             os.system('{} learn -m {} train'.format(self.crf_suite_call, self.model_filename))
+
 
     def tag(self, options=''):
         """
@@ -117,7 +120,8 @@ class CRFSuite:
         else:
             os.system('{} tag -qt -m {} test'.format(self.crf_suite_call, self.model_filename))
 
-    def read_predictions(self, dataset, prediction_file='output.txt', class_id = MUT_CLASS_ID):
+
+    def read_predictions(self, dataset, class_id, prediction_file='output.txt'):
         """
         :type dataset: nalaf.structures.data.Dataset
 

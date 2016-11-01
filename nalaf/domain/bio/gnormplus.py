@@ -3,7 +3,6 @@ from nalaf.learning.taggers import Tagger
 from nalaf.utils.ncbi_utils import GNormPlus
 from nalaf.utils.uniprot_utils import Uniprot
 from nalaf.structures.data import Entity
-from nalaf.utils import PRO_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID
 
 
 class GNormPlusGeneTagger(Tagger):
@@ -14,13 +13,14 @@ class GNormPlusGeneTagger(Tagger):
     :type crf_suite: nalaf.learning.crfsuite.CRFSuite
     """
 
-    def __init__(self):
-        super().__init__([ENTREZ_GENE_ID, UNIPROT_ID])
+    def __init__(self, ggp_e_id, entrez_gene_id, uniprot_id):
+        super().__init__([ggp_e_id, entrez_gene_id, uniprot_id])
 
     def __find_offset_adjustments(self, s1, s2, start_offset):
         return [(start_offset+i1, j2-j1-i2+i1)
                    for type, i1, i2, j1, j2 in difflib.SequenceMatcher(None, s1, s2).get_opcodes()
                    if type in ['replace', 'insert']]
+
 
     def tag(self, dataset, annotated=False, uniprot=False, process_only_abstract=True):
         """
@@ -64,15 +64,15 @@ class GNormPlusGeneTagger(Tagger):
                             if start > adjustment_offset:
                                 start -= adjustment
 
-                        # todo discussion which confidence value for gnormplus because there is no value supplied
-                        ann = Entity(class_id=PRO_CLASS_ID, offset=start, text=text, confidence=0.5)
+                        # discussion which confidence value for gnormplus because there is no value supplied
+                        ann = Entity(class_id=self.predicts_classes[0], offset=start, text=text, confidence=0.5)
                         try:
                             norm_dict = {
-                                ENTREZ_GENE_ID: gene_id,
-                                UNIPROT_ID: genes_mapping[gene_id]
+                                self.predicts_classes[1]: gene_id,
+                                self.predicts_classes[2]: genes_mapping[gene_id]
                             }
                         except KeyError:
-                            norm_dict = {ENTREZ_GENE_ID: gene_id}
+                            norm_dict = {self.predicts_classes[1]: gene_id}
 
                         norm_string = ''  # todo normalized_text (stemming ... ?)
                         ann.normalisation_dict = norm_dict

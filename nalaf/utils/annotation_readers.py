@@ -133,9 +133,8 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     2. Shortest entity, longest entity or priority
     """
 
-    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
     def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None,
-                 read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
+                 read_only_class_id=None, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
                  iaa_threshold=0.8, is_predicted=False):
 
         self.directory = directory
@@ -170,6 +169,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         self.filter_below_iaa_threshold = filter_below_iaa_threshold
         self.iaa_threshold = iaa_threshold
         self.is_predicted = is_predicted
+
 
     def annotate(self, dataset):
         """
@@ -360,10 +360,14 @@ class BRATPartsAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, is_predicted=False):
+    def __init__(self, directory, is_predicted=False, entity_class_id):
         self.directory = directory
         """the directory containing *.ann files"""
         self.is_predicted = is_predicted
+        self.entity_class_id
+        """
+        class id that will be associated to the read entities.
+        """
 
     def annotate(self, dataset):
         """
@@ -382,7 +386,7 @@ class BRATPartsAnnotationReader(AnnotationReader):
                         text = row[2]
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, int(start), text)
+                            ann = Entity(self.entity_class_id, int(start), text)
                             if self.is_predicted:
                                 dataset.documents[docid].parts[partid].predicted_annotations.append(ann)
                             else:
@@ -409,9 +413,16 @@ class SETHAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, gene_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
         self.directory = directory
         """the directory containing *.ann files"""
+
+        self.gene_class_id = gene_class_id
+        """
+        class id that will be associated to the read (gene / GGP) entities.
+        """
 
     def annotate(self, dataset):
         """
@@ -431,8 +442,9 @@ class SETHAnnotationReader(AnnotationReader):
                         if entity_type == 'SNP' or entity_type == 'RS':
                             ann = Entity(MUT_CLASS_ID, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
+
                         elif entity_type == 'Gene':
-                            ann = Entity('e_1', start, row[2])
+                            ann = Entity(self.gene_class_id, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
 
 
@@ -457,9 +469,13 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
     """
 
     def __init__(self, directory, read_just_mutations=True):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.directory = directory
         self.read_just_mutations = read_just_mutations
         """the directory containing *.ann files"""
+
 
     def annotate(self, dataset):
         """
@@ -488,6 +504,7 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
                         if entity_type == 'SNP' or entity_type == 'RS':
                             ann = Entity(MUT_CLASS_ID, start, row[2])
                             part.annotations.append(ann)
+
                         elif not self.read_just_mutations and entity_type == 'Gene':
                             ann = Entity(PRO_CLASS_ID, start, row[2])
                             part.annotations.append(ann)

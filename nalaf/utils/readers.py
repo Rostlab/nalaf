@@ -6,7 +6,6 @@ import re
 import glob
 import csv
 import os
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
 import xml.etree.ElementTree as ET
 
 

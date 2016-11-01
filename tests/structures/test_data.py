@@ -1,9 +1,10 @@
 import unittest
 from nalaf.structures.data import Dataset, Document, Part, Token, Label, Entity
-from nalaf.utils import MUT_CLASS_ID
 from nalaf.preprocessing.spliters import NLTKSplitter
 # from preprocessing.tokenizers import TmVarTokenizer
 from nalaf import print_verbose, print_debug
+
+MUT_CLASS_ID = 'e_2'
 
 
 class TestDataset(unittest.TestCase):

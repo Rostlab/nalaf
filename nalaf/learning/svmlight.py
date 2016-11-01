@@ -72,7 +72,7 @@ class SVMLightTreeKernels:
         # Note, we do not close the file
 
         total = (num_positive_instances + num_negative_instances + num_unlabeled_instances)
-        print_debug("{}: svmlight instances, total: {} == #P(+1): {} + #N(-1): {} + #?(0): ".format(mode, total, num_positive_instances, num_negative_instances, num_unlabeled_instances))
+        print_debug("{}: svmlight instances, total: {} == #P: {} + #N: {} + #?: {}".format(mode, total, num_positive_instances, num_negative_instances, num_unlabeled_instances))
 
         return instancesfile
 

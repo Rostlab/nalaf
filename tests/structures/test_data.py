@@ -4,7 +4,7 @@ from nalaf.preprocessing.spliters import NLTKSplitter
 # from preprocessing.tokenizers import TmVarTokenizer
 from nalaf import print_verbose, print_debug
 
-MUT_CLASS_ID = 'e_2'
+STUB_ENTITY_CLASS_ID = 'e_x'
 
 
 class TestDataset(unittest.TestCase):
@@ -23,8 +23,8 @@ class TestDataset(unittest.TestCase):
 
         part1 = Part('123')
         part2 = Part('45678')
-        ann1 = Entity(class_id='e_2', offset=1, text='2', confidence=0)
-        ann2 = Entity(class_id='e_2', offset=1, text='567', confidence=1)
+        ann1 = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=1, text='2', confidence=0)
+        ann2 = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=1, text='567', confidence=1)
         ann1.subclass = 0
         ann2.subclass = 2
         part1.annotations.append(ann1)
@@ -171,7 +171,7 @@ class TestMentionLevel(unittest.TestCase):
         cls.dataset.documents['doc_1'].parts['p2'] = part
 
     def test_form_predicted_annotations(self):
-        self.dataset.form_predicted_annotations(MUT_CLASS_ID)
+        self.dataset.form_predicted_annotations(STUB_ENTITY_CLASS_ID)
 
         part = self.dataset.documents['doc_1'].parts['p1']
 

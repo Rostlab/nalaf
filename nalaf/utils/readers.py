@@ -149,9 +149,14 @@ class VerspoorReader(Reader):
     Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, mut_class_id):
         self.directory = directory
         """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+
 
     def read(self):
         """
@@ -165,7 +170,6 @@ class VerspoorReader(Reader):
         :returns structures.data.Dataset
         """
         dataset = Dataset()
-
 
         ids_per_file_array = [1]
 
@@ -241,7 +245,7 @@ class VerspoorReader(Reader):
                             print("   ERROR", docid, part_index, partid, start, offsets, real_start, "\n\t", text, "\n\t", calc_ann_text, "\n\t", document.parts[partid].text)
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, real_start, text)
+                            ann = Entity(self.mut_class_id, real_start, text)
                             dataset.documents[docid].parts[partid].annotations.append(ann)
 
                         elif entity_type == 'gene':
@@ -272,9 +276,13 @@ class TmVarReader(Reader):
         ...
     """
 
-    def __init__(self, corpus_file):
+    def __init__(self, corpus_file, mut_class_id):
         self.corpus_file = corpus_file
         """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
 
     def read(self):
         """
@@ -310,7 +318,7 @@ class TmVarReader(Reader):
                         start -= len(tmvar_title) + 1
                         end -= len(tmvar_title) + 1
 
-                    part.annotations.append(Entity(MUT_CLASS_ID, start, part.text[start:end]))
+                    part.annotations.append(Entity(self.mut_class_id, start, part.text[start:end]))
 
                 dataset.documents[doc_id] = document
 
@@ -457,9 +465,13 @@ class OSIRISReaderMachineLearningReady(Reader):
     specific annotations for machine learning tasks and does not represent the same annotations as the XML-file.
     # TODO still WIP (some minor bugs)
     """
-    def __init__(self, path):
+    def __init__(self, path, mut_class_id):
         self.path = os.path.abspath(path)
         """path to a folder containing files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
 
     def read(self):
         """
@@ -527,14 +539,14 @@ class OSIRISReaderMachineLearningReady(Reader):
                                 current_annotation[2] += text
                         else:
                             if len(current_annotation) > 0:
-                                entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                                entity = Entity(self.mut_class_id, current_annotation[0], current_annotation[2])
                                 if current_annotation[3]:
                                     part_abstract.annotations.append(entity)
                                 else:
                                     part_title.annotations.append(entity)
                                 current_annotation = []
 
-                            entity = Entity(MUT_CLASS_ID, norm_start, text)
+                            entity = Entity(self.mut_class_id, norm_start, text)
                             if start >= body_offset:
                                 part_abstract.annotations.append(entity)
                             else:
@@ -554,7 +566,7 @@ class OSIRISReaderMachineLearningReady(Reader):
                             norm_start = start - title_offset
                             is_body = False
 
-                        entity = Entity(MUT_CLASS_ID, norm_start, text)
+                        entity = Entity(self.mut_class_id, norm_start, text)
 
                         if is_body:
                             part_abstract.annotations.append(entity)
@@ -563,7 +575,7 @@ class OSIRISReaderMachineLearningReady(Reader):
 
                     else:  # if already annotations contained there
                         current_annotation[2] += text
-                        entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                        entity = Entity(self.mut_class_id, current_annotation[0], current_annotation[2])
                         if current_annotation[3]:
                             part_abstract.annotations.append(entity)
                         else:
@@ -610,7 +622,7 @@ class OSIRISReader(Reader):
                 title_annotations = []
                 for child in element[1]:
                     if child.tag == 'variant':
-                        entity = Entity(MUT_CLASS_ID, len(title), child.text)
+                        entity = Entity(self.mut_class_id, len(title), child.text)
                         title_annotations.append(entity)
                     # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
                     try:
@@ -631,7 +643,7 @@ class OSIRISReader(Reader):
                 abstract_annotations = []
                 for child in element[2]:
                     if child.tag == 'variant':
-                        entity = Entity(MUT_CLASS_ID, len(abstract), child.text)
+                        entity = Entity(self.mut_class_id, len(abstract), child.text)
                         abstract_annotations.append(entity)
                     # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
                     try:

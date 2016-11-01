@@ -236,7 +236,6 @@ class Dataset:
             for e in part.edges:
                 if e.target == 1:
                     r = Relation(e.entity1.offset, e.entity2.offset, e.entity1.text, e.entity2.text, e.relation_type)
-                    print_debug(str(r), e.target)
                     part.predicted_relations.append(r)
 
         return self

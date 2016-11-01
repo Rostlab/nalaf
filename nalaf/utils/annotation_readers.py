@@ -359,7 +359,7 @@ class BRATPartsAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, is_predicted=False, entity_class_id):
+    def __init__(self, directory, entity_class_id, is_predicted=False):
         self.directory = directory
         """the directory containing *.ann files"""
         self.is_predicted = is_predicted

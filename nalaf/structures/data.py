@@ -1010,9 +1010,6 @@ class Edge:
         return False
 
     def __repr__(self):
-        """
-        print calls to the class Token will print out the string contents of the word
-        """
         return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
 
 

@@ -17,7 +17,7 @@ def _get_spacy_nlp_english(load_parser):
     else:
         nlp = spacy.load('en', parser=False, entity=False)
 
-    print_debug("Spacy NLP English, Parser: {} -- INIT END".format(str(load_parser)), (time.time() - start))
+    print_debug("Spacy NLP English, Parser: {} -- INIT END   : ".format(str(load_parser)), (time.time() - start))
 
     return nlp
 

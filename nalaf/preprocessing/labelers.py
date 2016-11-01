@@ -1,7 +1,6 @@
 import abc
 from nalaf.structures.data import Label
 import re
-from nalaf.utils import MUT_CLASS_ID
 import warnings
 
 
@@ -87,7 +86,9 @@ class TmVarLabeler(TokenLabeler):
     Implements the abstract class Labeler.
     """
 
-    def __init__(self):
+    def __init__(self, mut_class_id):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         # A
         self.label_reference_sequence = re.compile('(^[cgrmp]$)|(^(ivs|ex|orf)$)')
         # T
@@ -107,6 +108,12 @@ class TmVarLabeler(TokenLabeler):
 
         # P or S (mutation_position or frameshift_position)
         self.position = re.compile('^[0-9]+$')
+
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+
 
     def _match_regex_label(self, previous_token, token):
         if self.label_reference_sequence.search(token.word):
@@ -144,7 +151,7 @@ class TmVarLabeler(TokenLabeler):
                         start = ann.offset
                         end = ann.offset + len(ann.text)
                         if start == token.start or start < token.start < end:
-                            if ann.class_id == MUT_CLASS_ID:
+                            if ann.class_id == self.mut_class_id:
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
 

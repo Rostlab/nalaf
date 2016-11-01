@@ -24,6 +24,7 @@ class SVMLightTreeKernels:
 
         self.model_path = model_path
         """the model (path) to read from / write to"""
+        print_debug("SVM model file path: " + model_path)
 
         self.use_tree_kernel = use_tree_kernel
         """whether to use tree kernels or not"""

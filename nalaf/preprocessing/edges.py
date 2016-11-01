@@ -40,13 +40,16 @@ class SimpleEdgeGenerator(EdgeGenerator):
 
     def generate(self, dataset):
         from itertools import product, chain
+
         for part in dataset.parts():
             part.edges = []
             for ann_1, ann_2 in product(
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity1_class),
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity2_class)):
+
                 index_1 = part.get_sentence_index_for_annotation(ann_1)
                 index_2 = part.get_sentence_index_for_annotation(ann_2)
+
                 if index_1 == index_2 and index_1 is not None:
                     part.edges.append(
                         Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))

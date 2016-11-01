@@ -251,7 +251,8 @@ class Dataset:
                 if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
                     warnings.warn('the offsets do not match in {}'.format(ann))
 
-    def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id):
+
+    def generate_top_stats_array(self, class_id, top_nr=10, is_alpha_only=False):
         """
         An array for most occuring words.
         :param top_nr: how many top words are shown

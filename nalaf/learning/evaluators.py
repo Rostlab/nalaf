@@ -489,18 +489,15 @@ class DocumentLevelRelationEvaluator(Evaluator):
         counts = {docid: dict.fromkeys(subcounts, 0) for docid in docids}
 
         true_relations = {}
-        for docid, doc in dataset.documents.items():
-            relations = list(doc.unique_relations(self.rel_type))
-            true_relations[docid] = relations
-
         predicted_relations = {}
+
         for docid, doc in dataset.documents.items():
-            relations = list(doc.unique_relations(self.rel_type, predicted=True))
-            predicted_relations[docid] = relations
+            true_relations[docid] = list(doc.unique_relations(self.rel_type))
+            predicted_relations[docid] = list(doc.unique_relations(self.rel_type, predicted=True))
 
         for docid in docids:
-            predicted = predicted_relations[docid]
             actual = true_relations[docid]
+            predicted = predicted_relations[docid]
 
             if not self.match_case:
                 predicted = [x.lower() for x in predicted]

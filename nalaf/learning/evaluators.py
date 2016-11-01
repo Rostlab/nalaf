@@ -463,6 +463,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     will match only if the cases match. If set to False, both entities will be
     converted to lower case. By default, match_case is set to True.
     """
+
     def __init__(self, rel_type, match_case=True):
         self.rel_type = rel_type
         self.match_case = match_case

@@ -2,7 +2,6 @@ from collections import OrderedDict
 from itertools import chain
 import json
 import random
-from nalaf.utils import MUT_CLASS_ID
 import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
@@ -234,13 +233,11 @@ class Dataset:
         Requires edge.target to be set for each edge.
         """
         for part in self.parts():
-            for edge in part.edges:
-                if edge.target == 1:
-                    part.predicted_relations.append(Relation(edge.entity1.offset,
-                                                        edge.entity2.offset,
-                                                        edge.entity1.text,
-                                                        edge.entity2.text,
-                                                        edge.relation_type))
+            for e in part.edges:
+                if e.target == 1:
+                    r = Relation(e.entity1.offset, e.entity2.offset, e.entity1.text, e.entity2.text, e.relation_type)
+                    print_debug(str(r), e.target)
+                    part.predicted_relations.append(r)
 
         return self
 
@@ -254,7 +251,7 @@ class Dataset:
                 if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
                     warnings.warn('the offsets do not match in {}'.format(ann))
 
-    def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
+    def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id):
         """
         An array for most occuring words.
         :param top_nr: how many top words are shown
@@ -276,6 +273,7 @@ class Dataset:
         sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True))
         print(json.dumps(sort_dict, indent=4))
 
+
     def clean_subclasses(self):
         """
         cleans all subclass by setting them to = False
@@ -283,15 +281,18 @@ class Dataset:
         for ann in self.annotations():
             ann.subclass = False
 
+
     def get_size_chars(self):
         """
         :return: total number of chars in this dataset
         """
         return sum(doc.get_size() for doc in self.documents.values())
 
+
     def __repr__(self):
         return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
                                                                    sum(1 for _ in self.annotations()))
+
 
     def __str__(self):
         second_part = "\n".join(
@@ -309,6 +310,7 @@ class Dataset:
         for key in other.documents:
             if key not in self.documents:
                 self.documents[key] = other.documents[key]
+
 
     def prune_empty_parts(self):
         """
@@ -612,6 +614,7 @@ class Document:
         :return: set of all relations (ignoring the text offset and
         considering only the relation text)
         """
+
         relations = []
         for part in self:
             if predicted:

@@ -10,7 +10,6 @@ from operator import lt, gt
 
 from nalaf import print_verbose, print_debug
 from nalaf.structures.data import Entity, Relation
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
 
 
 class AnnotationReader:
@@ -37,8 +36,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
-    def __init__(self, directory, read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
+    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_only_class_id = read_only_class_id
@@ -50,6 +48,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         self.read_relations = read_relations
         """whether relations should be read as well"""
         self.whole_basename_as_docid = whole_basename_as_docid
+
 
     def annotate(self, dataset):
         """
@@ -416,6 +415,7 @@ class SETHAnnotationReader(AnnotationReader):
     def __init__(self, directory, gene_class_id):
         import warnings
         warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.directory = directory
         """the directory containing *.ann files"""
 

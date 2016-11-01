@@ -56,46 +56,42 @@ class SpacyParser(Parser):
         """
         outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
         for part in dataset.parts():
-            sentences = part.get_sentence_string_array()
 
-            for index, sentence in enumerate(sentences):
-                doc = self.nlp.tokenizer.tokens_from_list(self._tokenize(sentence))
+            for index, sentence in enumerate(part.sentences):
 
-                for token in doc:
-                    tok = part.sentences[index][token.i]
+                sentence_tokens = [tok.word for tok in sentence]
+                nlp_spacy_doc = self.nlp.tokenizer.tokens_from_list(sentence_tokens)
+
+                for spacy_token in nlp_spacy_doc:
+                    tok = part.sentences[index][spacy_token.i]
                     tok.features = {
-                                    'id': token.i,
-                                    'pos': token.tag_,
-                                    'dep': token.dep_,
-                                    'lemma': token.lemma_,
-                                    'prob': token.prob,
-                                    'is_punct': token.is_punct,
-                                    'is_stop': token.is_stop,
-                                    'cluster': token.cluster,
-                                    'dependency_from': None,
-                                    'dependency_to': [],
-                                    'is_root': False,
-                                   }
+                        'id': spacy_token.i,
+                        'pos': spacy_token.tag_,
+                        'dep': spacy_token.dep_,
+                        'lemma': spacy_token.lemma_,
+                        'prob': spacy_token.prob,
+                        'is_punct': spacy_token.is_punct,
+                        'is_stop': spacy_token.is_stop,
+                        'cluster': spacy_token.cluster,
+                        'dependency_from': None,
+                        'dependency_to': [],
+                        'is_root': False,
+                    }
+
                     part.tokens.append(tok)
 
-                for tok in doc:
+                for tok in nlp_spacy_doc:
                     self._dependency_path(tok, index, part)
 
             part.percolate_tokens_to_entities()
             part.calculate_token_scores()
             part.set_head_tokens()
             outer_bar.next()
+
         outer_bar.finish()
 
         if self.constituency_parser is True:
             self.parser.parse(dataset)
-
-
-    # Use the default tokenization done by a call to
-    # nalaf.preprocessing.Tokenizer before.
-    # TODO check this, this is not using the final Tokenizer ???
-    def _tokenize(self, text):
-        return text.split(' ')
 
 
     def _dependency_path(self, tok, index, part):

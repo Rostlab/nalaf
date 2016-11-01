@@ -26,7 +26,7 @@ class GenericTokenizer(Tokenizer):
 
     def __init__(self, string_splitter_fun):
         self.string_splitter_fun = string_splitter_fun
-        "A function that takes a string as input and returns a list of splitted/tokenized string items"
+        "A function that takes a string as input and returns a list/iterator of splitted/tokenized string items"
 
 
     def tokenize(self, dataset):
@@ -38,6 +38,7 @@ class GenericTokenizer(Tokenizer):
             part.sentences = []
             for index, sentence_ in enumerate(part.sentences_):
                 part.sentences.append([])
+
                 for token_word in self.string_splitter_fun(sentence_):
                     token_start = part.text.find(token_word, so_far)
                     so_far = token_start + len(token_word)

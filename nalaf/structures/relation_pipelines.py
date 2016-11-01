@@ -1,7 +1,7 @@
 from nalaf.features import FeatureGenerator
 from nalaf.structures.data import FeatureDictionary
 from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
-from nalaf.preprocessing.tokenizers import Tokenizer, TmVarTokenizer
+from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.preprocessing.parsers import Parser, SpacyParser
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.edges import SimpleEdgeGenerator
@@ -28,10 +28,18 @@ class RelationExtractionPipeline:
     :type feature_generators: collections.Iterable[FeatureGenerator]
     """
 
-    def __init__(self, class1, class2, rel_type, splitter=None, tokenizer=None, parser=None, edge_generator=None, feature_set=None, feature_generators=None):
+    def __init__(self, class1, class2, rel_type, parser=None, splitter=None, tokenizer=None, edge_generator=None, feature_set=None, feature_generators=None):
         self.class1 = class1
         self.class2 = class2
         self.rel_type = rel_type
+
+        if not parser:
+            nlp = get_spacy_nlp_english(load_parser=True)
+            parser = SpacyParser(nlp)
+        if isinstance(parser, Parser):
+            self.parser = parser
+        else:
+            raise TypeError('not an instance that implements Parser')
 
         if not splitter:
             splitter = NLTKSplitter()
@@ -42,20 +50,16 @@ class RelationExtractionPipeline:
             raise TypeError('not an instance that implements Splitter')
 
         if not tokenizer:
-            tokenizer = TmVarTokenizer()
+            if nlp:  # Spacy parser is used, which includes a tokenizer
+                tokenizer = GenericTokenizer(lambda string: (tok.text for tok in nlp.tokenizer(string)))
+
+            else:
+                tokenizer = NLTK_TOKENIZER
 
         if isinstance(tokenizer, Tokenizer):
             self.tokenizer = tokenizer
         else:
             raise TypeError('not an instance that implements Tokenizer')
-
-        if not parser:
-            nlp = get_spacy_nlp_english(load_parser=True)
-            parser = SpacyParser(nlp)
-        if isinstance(parser, Parser):
-            self.parser = parser
-        else:
-            raise TypeError('not an instance that implements Parser')
 
         self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, self.rel_type) if edge_generator is None else edge_generator
 
@@ -68,6 +72,8 @@ class RelationExtractionPipeline:
 
 
     def execute(self, dataset, train):
+        # Note, the order of splitter/tokenizer/edger/parser is important
+
         try:
             gen = dataset.tokens()
             next(gen)

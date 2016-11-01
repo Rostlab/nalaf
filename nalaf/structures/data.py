@@ -626,15 +626,20 @@ class Document:
             for rel in relation_list:
                 entity1, relation_type, entity2 = rel.get_relation_without_offset()
 
-                if entity1 < entity2:
-                    relation_string = entity1 + ' ' + relation_type + ' ' + entity2
-                else:
-                    relation_string = entity2 + ' ' + relation_type + ' ' + entity1
+                if relation_type == rel_type:
 
-                if relation_string not in relations and relation_type == rel_type:
-                    relations.append(relation_string)
+                    if entity1 < entity2:
+                        relation_string = entity1 + ' ' + relation_type + ' ' + entity2
+                    else:
+                        relation_string = entity2 + ' ' + relation_type + ' ' + entity1
 
-        return set(relations)
+                    if relation_string not in relations:
+                        relations.append(relation_string)
+
+        ret = set(relations)
+
+        return ret
+
 
     def relations(self):
         """  helper function for providing an iterator of relations on document level """

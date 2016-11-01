@@ -299,7 +299,7 @@ class Evaluations:
 
 
     @staticmethod
-    def cross_validate(annotator_fun, corpus, evaluator, k_num_folds, use_validation_set=True):
+    def cross_validate(annotator_gen_fun, corpus, evaluator, k_num_folds, use_validation_set=True):
         merged_evaluations = []
 
         print_debug("Cross-Validation")
@@ -307,9 +307,9 @@ class Evaluations:
             training, validation, test = corpus.cv_kfold_split(k_num_folds, fold, validation_set=use_validation_set)
             actual_evaluation_set = validation if use_validation_set else test
 
-            annotator = annotator_fun(training)
+            annotator_apply = annotator_gen_fun(training)
 
-            annotator.annotate(actual_evaluation_set)
+            annotator_apply(actual_evaluation_set)
 
             r = evaluator.evaluate(actual_evaluation_set)
             print_debug(r)

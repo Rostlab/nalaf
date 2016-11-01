@@ -33,8 +33,16 @@ class SVMLightTreeKernels:
         string = ''
 
         if mode == 'train':
+            num_positive_instances = 0
+            num_negative_instances = 0
+
             for edge in dataset.edges():
                 if minority_class is None or edge.target == minority_class or random() < majority_class_undersampling:
+                    if edge.target > 0:
+                        num_positive_instances += 1
+                    else:
+                        num_negative_instances += 1
+
                     string += str(edge.target)
                     if self.use_tree_kernel:
                         string += ' |BT| '
@@ -46,6 +54,8 @@ class SVMLightTreeKernels:
                             value = edge.features[key]
                             string += ' ' + str(key) + ':' + str(value)
                     string += '\n'
+
+            print_debug("Num instances for training: #P (+1): {} vs. #N (-1): {} -- Total: {}".format(num_positive_instances, num_negative_instances, (num_positive_instances + num_negative_instances)))
 
         elif mode == 'test':
             for edge in dataset.edges():

@@ -32,7 +32,9 @@ class BagOfWordsFeatureGenerator(EdgeFeatureGenerator):
     """
 
     def __init__(
-        self, stop_words=None,
+        self,
+        stop_words=None,
+        #
         prefix_bow_text=None,
         prefix_ne_bow_count=None,
     ):

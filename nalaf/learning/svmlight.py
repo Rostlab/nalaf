@@ -40,7 +40,7 @@ class SVMLightTreeKernels:
         allowed_features_keys = set(features.values())
 
         for edge in dataset.edges():
-            if mode != 'train' or minority_class is None or edge.target == minority_class or random() < majority_class_undersampling:
+            if mode != 'train' or minority_class is None or edge.target == minority_class or random() <= majority_class_undersampling:
                 if edge.target == 1:
                     num_positive_instances += 1
                 elif edge.target == -1:

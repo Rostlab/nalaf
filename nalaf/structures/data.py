@@ -91,6 +91,7 @@ class Dataset:
             for relation in part.predicted_relations:
                 yield relation
 
+
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -101,6 +102,7 @@ class Dataset:
         for part in self.parts():
             for sentence in part.sentences:
                 yield sentence
+
 
     def tokens(self):
         """
@@ -780,14 +782,17 @@ class Part:
 
     def __init__(self, text, is_abstract=True):
         self.text = text
+        """the original raw text that the part is consisted of"""
+
         self.sentences_ = []
         """the text sentences previous tokenization"""
-        """the original raw text that the part is consisted of"""
+
         self.sentences = [[]]
         """
         a list sentences where each sentence is a list of tokens
         derived from text by calling Splitter and Tokenizer
         """
+
         self.annotations = []
         """the annotations of the chunk of text as populated by a call to Annotator"""
         self.predicted_annotations = []
@@ -809,6 +814,7 @@ class Part:
         self.sentence_parse_trees = []
         """the parse trees for each sentence stored as a string. TODO this may be too relna-specific"""
         self.tokens = []
+
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """

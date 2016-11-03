@@ -829,10 +829,14 @@ class Part:
     def get_sentence_index_for_annotation(self, annotation):
         start = annotation.offset
         end = annotation.offset + len(annotation.text)
+
         for index, sentence in enumerate(self.sentences):
+            assert sentence != [[]], "The sentences have not been splitted/defined yet"
             for token in sentence:
                 if start <= token.start <= end:
                     return index
+
+        assert False, ("The annotation did not (and should) have an associated sentence. Ann: " + str(annotation))
 
 
     def get_entities_in_sentence(self, sentence_id, entity_classId):

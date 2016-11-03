@@ -1,7 +1,8 @@
 import abc
 from nalaf.structures.data import Relation
 import warnings
-
+from nalaf.preprocessing.spliters import NLTKSplitter
+from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 
 class Annotator:
     """
@@ -121,6 +122,8 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
 
     def __init__(self, entity1_class, entity2_class, relation_type):
         super().__init__(entity1_class, entity2_class, relation_type)
+        self.sentence_splitter = NLTKSplitter()
+        self.tokenizer = NLTK_TOKENIZER
 
 
     def tag(self, dataset):
@@ -129,11 +132,46 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
 
 
     def annotate(self, dataset):
-            from itertools import product
-            for part in dataset.parts():
+        from itertools import product
+
+        self.sentence_splitter.split(dataset)
+        self.tokenizer.tokenize(dataset)
+
+        for document in dataset:
+            for part in document:
                 for ann_1, ann_2 in product(
-                        (ann for ann in part.annotations if ann.class_id == self.entity1_class),
-                        (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
+                    (a for a in part.annotations if a.class_id == self.entity1_class),
+                    (a for a in part.annotations if a.class_id == self.entity2_class)):
+
                     if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
-                        part.predicted_relations.append(
-                            Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type))
+                        rel = Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type)
+                        part.predicted_relations.append(rel)
+
+
+class StubSameDocumentPartRelationExtractor(RelationExtractor):
+
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        super().__init__(entity1_class, entity2_class, relation_type)
+        self.sentence_splitter = NLTKSplitter()
+        self.tokenizer = NLTK_TOKENIZER
+
+
+    def tag(self, dataset):
+        warnings.warn('Use the method: annotate', DeprecationWarning)
+        return self.annotate(dataset)
+
+
+    def annotate(self, dataset):
+        from itertools import product
+
+        self.sentence_splitter.split(dataset)
+        self.tokenizer.tokenize(dataset)
+
+        for document in dataset:
+            for part in document:
+                for ann_1, ann_2 in product(
+                    (a for a in part.annotations if a.class_id == self.entity1_class),
+                    (a for a in part.annotations if a.class_id == self.entity2_class)):
+
+                    rel = Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type)
+                    part.predicted_relations.append(rel)

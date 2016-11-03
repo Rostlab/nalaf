@@ -825,6 +825,7 @@ class Part:
                 return_array.append(new_sentence.rstrip())  # to delete last space
             return return_array
 
+
     def get_sentence_index_for_annotation(self, annotation):
         start = annotation.offset
         end = annotation.offset + len(annotation.text)
@@ -832,6 +833,7 @@ class Part:
             for token in sentence:
                 if start <= token.start <= end:
                     return index
+
 
     def get_entities_in_sentence(self, sentence_id, entity_classId):
         """

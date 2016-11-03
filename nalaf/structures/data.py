@@ -40,6 +40,7 @@ class Dataset:
     def __contains__(self, item):
         return item in self.documents
 
+
     def parts(self):
         """
         helper functions that iterates through all parts
@@ -50,6 +51,7 @@ class Dataset:
         for document in self:
             for part in document:
                 yield part
+
 
     def annotations(self):
         """
@@ -62,6 +64,7 @@ class Dataset:
             for annotation in part.annotations:
                 yield annotation
 
+
     def predicted_annotations(self):
         """
         helper functions that iterates through all parts
@@ -72,6 +75,7 @@ class Dataset:
         for part in self.parts():
             for annotation in part.predicted_annotations:
                 yield annotation
+
 
     def relations(self):
         """
@@ -114,6 +118,7 @@ class Dataset:
         for sentence in self.sentences():
             for token in sentence:
                 yield token
+
 
     def edges(self):
         """
@@ -795,25 +800,33 @@ class Part:
 
         self.annotations = []
         """the annotations of the chunk of text as populated by a call to Annotator"""
+
         self.predicted_annotations = []
         """
         a list of predicted annotations as populated by a call to form_predicted_annotations()
         this represent the prediction on a mention label rather then on a token level
         """
+
         self.relations = []
         """
         a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
         where the mutation occurs inside
         """
+
         self.predicted_relations = []
         """a list of predicted relations as populated by a call to form_predicted_relations()"""
+
         self.edges = []
         """a list of possible relations between any two entities in the part"""
+
         self.is_abstract = is_abstract
         """whether the part is the abstract of the paper"""
+
         self.sentence_parse_trees = []
         """the parse trees for each sentence stored as a string. TODO this may be too relna-specific"""
+
         self.tokens = []
+        # TODO what's this?
 
 
     def get_sentence_string_array(self):
@@ -863,6 +876,7 @@ class Part:
             if start <= annotation.offset < end and annotation.class_id == entity_classId:
                 entities.append(annotation)
         return entities
+
 
     def percolate_tokens_to_entities(self, annotated=True):
         """

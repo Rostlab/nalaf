@@ -33,20 +33,28 @@ class SVMLightTreeKernels:
     def create_input_file(self, dataset, mode, features, minority_class=None, majority_class_undersampling=1.0):
         string = ''
 
-        num_positive_instances = 0
-        num_negative_instances = 0
-        num_unlabeled_instances = 0
+        # Real counts vs Used ones after undersampling is applied
+        num_pos_instances = [0, 0]
+        num_neg_instances = [0, 0]
+        num_unl_instances = [0, 0]
 
         allowed_features_keys = set(features.values())
 
         for edge in dataset.edges():
+            if edge.target == 1:
+                num_pos_instances[0] += 1
+            elif edge.target == -1:
+                num_neg_instances[0] += 1
+            else:
+                num_unl_instances[0] += 1
+
             if mode != 'train' or minority_class is None or edge.target == minority_class or random() <= majority_class_undersampling:
                 if edge.target == 1:
-                    num_positive_instances += 1
+                    num_pos_instances[1] += 1
                 elif edge.target == -1:
-                    num_negative_instances += 1
+                    num_neg_instances[1] += 1
                 else:
-                    num_unlabeled_instances += 1
+                    num_unl_instances[1] += 1
 
                 # http://svmlight.joachims.org "A class label of 0 indicates that this example should be classified using transduction"
                 instance_label = '0' if mode == 'predict' else str(edge.target)
@@ -71,8 +79,10 @@ class SVMLightTreeKernels:
         instancesfile.flush()
         # Note, we do not close the file
 
-        total = (num_positive_instances + num_negative_instances + num_unlabeled_instances)
-        print_debug("{}: svmlight instances, total: {} == #P: {} + #N: {} + #?: {}".format(mode, total, num_positive_instances, num_negative_instances, num_unlabeled_instances))
+        total_real = (num_pos_instances[0] + num_neg_instances[0] + num_unl_instances[0])
+        total_used = (num_pos_instances[1] + num_neg_instances[1] + num_unl_instances[1])
+        print_line = "{}: instances, REAL: #{} == #P: {} + #N: {} + #?: {} || vs. USED: #{} == #P: {} + #N: {} + #?: {}"
+        print_debug(print_line.format(mode, total_real, num_pos_instances[0], num_neg_instances[0], num_unl_instances[0], total_used, num_pos_instances[1], num_neg_instances[1], num_unl_instances[1]))
 
         return instancesfile
 

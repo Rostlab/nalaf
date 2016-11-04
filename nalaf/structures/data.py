@@ -411,7 +411,7 @@ class Dataset:
             ret = []
             for sub in subsample_indexes:
                 start = sub_size * sub
-                end = start + sub_size if sub != (k-1) else total_size  # k-1 is the last subsample index
+                end = (start + sub_size) if sub != (k-1) else total_size  # k-1 is the last subsample index
                 ret += l[start:end]
             return ret
 

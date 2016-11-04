@@ -400,7 +400,10 @@ class Dataset:
         training = subsamples[0:k-2]
         validation = subsamples[k-2:k-1]
         test = subsamples[k-1:k]
-        if not validation_set:
+
+        if validation_set:
+            test = []
+        else:
             training += validation
             validation = []
 

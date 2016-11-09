@@ -92,7 +92,7 @@ class SVMLightTreeKernels:
         with instancesfile:
 
             if self.use_tree_kernel:
-                subprocess.call([
+                callv = [
                     self.svm_learn_call,
                     '-v', '0',
                     '-t', '5',
@@ -103,16 +103,19 @@ class SVMLightTreeKernels:
                     '-c', str(c),
                     instancesfile.name,
                     self.model_path
-                ])
+                ]
 
             else:
-                subprocess.call([
+                callv = [
                     self.svm_learn_call,
                     '-c', str(c),
                     '-v', '0',
                     instancesfile.name,
                     self.model_path
-                ])
+                ]
+
+            print_debug("svm light learn parameters: " + ' '.join(callv))
+            subprocess.call(callv)
 
             return self.model_path
 
@@ -122,14 +125,16 @@ class SVMLightTreeKernels:
         predictionsfile = tempfile.NamedTemporaryFile('r+', delete=False)
         print_debug("predict: svm predictions file: " + predictionsfile.name)
 
-        call = [
+        callv = [
             self.svm_classify_call,
             '-v', '0',
             instancesfile.name,
             self.model_path,
             predictionsfile.name
         ]
-        exitcode = subprocess.call(call)
+
+        print_debug("svm light classify parameters: " + ' '.join(callv))
+        exitcode = subprocess.call(callv)
 
         if exitcode != 0:
             raise Exception("Error when tagging: " + ' '.join(call))

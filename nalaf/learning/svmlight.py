@@ -11,7 +11,17 @@ class SVMLightTreeKernels:
     Base class for interaction with Alessandro Moschitti's Tree Kernels in SVM Light
     """
 
-    def __init__(self, svmlight_dir_path='', model_path=tempfile.NamedTemporaryFile().name, use_tree_kernel=True):
+    def __init__(self, model_path=tempfile.NamedTemporaryFile().name, classification_threshold=0.0, use_tree_kernel=False, svmlight_dir_path=''):
+
+        self.model_path = model_path
+        """the model (path) to read from / write to"""
+        print_debug("SVM-Light model file path: " + model_path)
+
+        self.classification_threshold = classification_threshold
+
+        self.use_tree_kernel = use_tree_kernel
+        """whether to use tree kernels or not"""
+
         self.svmlight_dir_path = svmlight_dir_path
         """
         The directory where the executables svm_classify and svm_learn are located.
@@ -21,13 +31,6 @@ class SVMLightTreeKernels:
         executables_extension = '' if sys.platform.startswith('linux') or sys.platform.startswith('darwin') else '.exe'
         self.svm_learn_call = os.path.join(self.svmlight_dir_path, ('svm_learn' + executables_extension))
         self.svm_classify_call = os.path.join(self.svmlight_dir_path, ('svm_classify' + executables_extension))
-
-        self.model_path = model_path
-        """the model (path) to read from / write to"""
-        print_debug("SVM model file path: " + model_path)
-
-        self.use_tree_kernel = use_tree_kernel
-        """whether to use tree kernels or not"""
 
         self.verbosity_level = str(1 if is_debug_mode else 0)
 
@@ -127,7 +130,7 @@ class SVMLightTreeKernels:
             return self.model_path
 
 
-    def tag(self, instancesfile):
+    def classify(self, instancesfile):
 
         predictionsfile = tempfile.NamedTemporaryFile('r+', delete=False)
         print_debug("predict: svm predictions file: " + predictionsfile.name)
@@ -152,7 +155,9 @@ class SVMLightTreeKernels:
         return predictionsfile
 
 
-    def read_predictions(self, dataset, predictionsfile, threshold=0):
+    def read_predictions(self, dataset, predictionsfile, classification_threshold=None):
+        classification_threshold = classification_threshold if classification_threshold is not None else self.classification_threshold
+
         values = []
         with predictionsfile:
             predictionsfile.seek(0)
@@ -161,9 +166,7 @@ class SVMLightTreeKernels:
                 prediction = float(line.strip())
                 print_verbose("  pred: " + str(prediction))
 
-                # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
-                # See more information in: https://github.com/Rostlab/relna/issues/21
-                if prediction > threshold:
+                if prediction > classification_threshold:
                     values.append(+1)
                 else:
                     values.append(-1)

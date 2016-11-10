@@ -3,7 +3,7 @@ import sys
 import subprocess
 from random import random
 import tempfile
-from nalaf import print_warning, print_verbose, print_debug
+from nalaf import print_warning, print_verbose, print_debug, is_debug_mode
 
 
 class SVMLightTreeKernels:
@@ -28,6 +28,8 @@ class SVMLightTreeKernels:
 
         self.use_tree_kernel = use_tree_kernel
         """whether to use tree kernels or not"""
+
+        self.verbosity_level = str(1 if is_debug_mode else 0)
 
 
     def create_input_file(self, dataset, mode, features, minority_class=None, majority_class_undersampling=1.0):
@@ -87,14 +89,14 @@ class SVMLightTreeKernels:
         return instancesfile
 
 
-    def learn(self, instancesfile, c=0.5):
+    def learn(self, instancesfile, c=None):
 
         with instancesfile:
 
             if self.use_tree_kernel:
                 callv = [
                     self.svm_learn_call,
-                    '-v', '0',
+                    '-v', self.verbosity_level,
                     '-t', '5',
                     '-T', '1',
                     '-W', 'S',
@@ -108,8 +110,13 @@ class SVMLightTreeKernels:
             else:
                 callv = [
                     self.svm_learn_call,
-                    '-c', str(c),
-                    '-v', '0',
+                    '-v', self.verbosity_level
+                ]
+
+                if c is not None:
+                    callv = callv + ['-c', str(c)]
+
+                callv = callv + [
                     instancesfile.name,
                     self.model_path
                 ]
@@ -152,7 +159,7 @@ class SVMLightTreeKernels:
 
             for line in predictionsfile:
                 prediction = float(line.strip())
-                print_debug("  pred: " + str(prediction))
+                print_verbose("  pred: " + str(prediction))
 
                 # http://svmlight.joachims.org For classification, the sign of this value determines the predicted class -- CAUTION, relna (Ashish), had it set before to exactly: '-0.1' (was this a bug or a conscious decision to move the threshold of classification?)
                 # See more information in: https://github.com/Rostlab/relna/issues/21

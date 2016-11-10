@@ -1024,6 +1024,7 @@ class Edge:
         each feature is represented as a key value pair:
         """
         self.target = None
+        # TODO or -1 and +1 ? or negative or positive?
         """class of the edge - True or False or any other float value"""
 
     def is_relation(self):

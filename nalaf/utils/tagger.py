@@ -12,6 +12,10 @@ class Tagger():
     """
     @abc.abstractmethod
     def generate(self, dataset):
+        raise Exception('DEPRECATED -- This shimply should not be here. Use Annotator definition in annotators.py')
+        # import warnings
+        # warnings.warn(...)
+
         """
         Generates annotations from an external method, like tmVar or SETH.
         :type nalaf.structures.Dataset:

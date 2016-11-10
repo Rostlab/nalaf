@@ -42,7 +42,8 @@ class SimpleEdgeGenerator(EdgeGenerator):
         from itertools import product, chain
 
         for part in dataset.parts():
-            part.edges = []
+            part.edges = []  # TODO should we rewrite the edges?
+
             for ann_1, ann_2 in product(
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity1_class),
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity2_class)):
@@ -53,6 +54,24 @@ class SimpleEdgeGenerator(EdgeGenerator):
                 if index_1 == index_2 and index_1 is not None:
                     part.edges.append(
                         Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))
+
+
+class SimpleD1EdgeGenerator(EdgeGenerator):
+    """
+        TODO document me
+    """
+    # TODO this is a STUB, for now
+
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        self.entity1_class = entity1_class
+        self.entity2_class = entity2_class
+        self.relation_type = relation_type
+
+    def generate(self, dataset):
+
+        for part in dataset.parts():
+            pass
+            # part.edges = []  # TODO leave the edges intact for now
 
 
 class WordFilterEdgeGenerator(EdgeGenerator):
@@ -69,6 +88,9 @@ class WordFilterEdgeGenerator(EdgeGenerator):
     :type relation_type: str
     """
     def __init__(self, entity1_class, entity2_class, relation_type, words):
+        import warnings
+        warnings.warn('This will be likely removed as it serves no purpose', DeprecationWarning)
+
         self.entity1_class = entity1_class
         self.entity2_class = entity2_class
         self.relation_type = relation_type
@@ -80,6 +102,7 @@ class WordFilterEdgeGenerator(EdgeGenerator):
             for ann_1, ann_2 in product(
                     (ann for ann in part.annotations if ann.class_id == self.entity1_class),
                     (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
+
                 index_1 = part.get_sentence_index_for_annotation(ann_1)
                 index_2 = part.get_sentence_index_for_annotation(ann_2)
                 if index_1 == index_2 and index_1 is not None:

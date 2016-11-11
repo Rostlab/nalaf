@@ -1035,6 +1035,7 @@ class Edge:
         # TODO or -1 and +1 ? or negative or positive?
         """class of the edge - True or False or any other float value"""
 
+
     def is_relation(self):
         """
         check if the edge is present in part.relations.
@@ -1048,6 +1049,7 @@ class Edge:
             if relation_2 == relation:
                 return True
         return False
+
 
     def __repr__(self):
         return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
@@ -1281,13 +1283,16 @@ class Relation:
         self.text2 = text2
         self.class_id = type_of_relation
 
+
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
                'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
 
+
     def get_relation_without_offset(self):
         """:return string with entity1 and entity2 separated by relation type"""
         return (self.text1, self.class_id, self.text2)
+
 
     def validate_itself(self, part):
         """
@@ -1307,6 +1312,7 @@ class Relation:
                 return True
         return False
 
+
     def __eq__(self, other):
         """
         consider two relations equal if and only if all their parameters match
@@ -1317,6 +1323,7 @@ class Relation:
             return self.__dict__ == other.__dict__
         else:
             return False
+
 
     def __ne__(self, other):
         """

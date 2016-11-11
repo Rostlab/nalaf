@@ -60,6 +60,9 @@ class Dataset:
 
         :rtype: collections.Iterable[Entity]
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part in self.parts():
             for annotation in part.annotations:
                 yield annotation
@@ -72,6 +75,9 @@ class Dataset:
 
         :rtype: collections.Iterable[Entity]
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part in self.parts():
             for annotation in part.predicted_annotations:
                 yield annotation
@@ -152,6 +158,7 @@ class Dataset:
         for part in self.parts():
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
 
+
     def partids_with_parts(self):
         """
         helper function that yields part id with part
@@ -162,6 +169,7 @@ class Dataset:
             for part_id, part in document.key_value_parts():
                 yield part_id, part
 
+
     def annotations_with_partids(self):
         """
         helper function that return annotation object with part id
@@ -169,6 +177,9 @@ class Dataset:
 
         :rtype: collections.Iterable[(str, Entity)]
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part_id, part in self.partids_with_parts():
             for annotation in part.annotations:
                 yield part_id, annotation
@@ -179,6 +190,9 @@ class Dataset:
 
         :rtype: collections.Iterable[(str, str, Entity)]
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for pubmedid, doc in self.documents.items():
             for partid, part in doc.key_value_parts():
                 for ann in part.annotations:
@@ -190,6 +204,9 @@ class Dataset:
 
         :rtype: collections.Iterable[(str, str, bool, Entity)]
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for pubmedid, doc in self.documents.items():
             for partid, part in doc.key_value_parts():
                 for ann in part.annotations:
@@ -211,6 +228,9 @@ class Dataset:
 
         Requires predicted_label[0].value for each token to be set.
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part_id, part in self.partids_with_parts():
             for sentence in part.sentences:
                 index = 0
@@ -257,6 +277,9 @@ class Dataset:
         Helper function to validate that the annotation offsets match the annotation text.
         Mostly used as a sanity check and to make sure GNormPlus works as intentded.
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part in self.parts():
             for ann in part.predicted_annotations:
                 if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
@@ -302,6 +325,9 @@ class Dataset:
 
 
     def __repr__(self):
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
                                                                    sum(1 for _ in self.annotations()))
 
@@ -326,7 +352,7 @@ class Dataset:
 
     def prune_empty_parts(self):
         """
-        deletes all the parts that contain no annotations at all
+        deletes all the parts that contain no entities at all
         """
         for doc_id, doc in self.documents.items():
             part_ids_to_del = []
@@ -384,6 +410,9 @@ class Dataset:
         :param subclasses: one ore more subclasses to delete
         :param predicted: if False it will only consider Part.annotations array and not Part.pred_annotations
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         # if it is not a list, create a list of 1 element
         if not hasattr(subclasses, '__iter__'):
             subclasses = [subclasses]
@@ -807,13 +836,17 @@ class Part:
         """
 
         self.annotations = []
-        """the annotations of the chunk of text as populated by a call to Annotator"""
+        """the entity of the chunk of text as populated by a call to Annotator"""
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         self.predicted_annotations = []
         """
-        a list of predicted annotations as populated by a call to form_predicted_annotations()
+        a list of predicted entities as populated by a call to form_predicted_annotations()
         this represent the prediction on a mention label rather then on a token level
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         self.relations = []
         """
@@ -982,8 +1015,8 @@ class Part:
             relations_string = "[]"
         if not pred_relations_string:
             pred_relations_string = "[]"
-        return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
-               '-Predicted annotations-\n{pred_annotations}\n' \
+        return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Entities-\n{annotations}\n' \
+               '-Predicted entities-\n{pred_annotations}\n' \
                '-Relations-\n{relations}\n' \
                '-Predicted relations-{pred_relations}'.format(
                         text=self.text, annotations=annotations_string,

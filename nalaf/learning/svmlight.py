@@ -175,6 +175,7 @@ class SVMLightTreeKernels:
                 for index, edge in enumerate(dataset.edges()):
                     edge.target = values[index]
             else:
-                raise Exception("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or too few of features. Predictions file: " + predictionsfile.name)
+                if (next(dataset.edges(), None)):
+                    raise Exception("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or too few of features. Predictions file: " + predictionsfile.name)
 
         return dataset.form_predicted_relations()

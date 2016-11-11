@@ -11,11 +11,11 @@ class SVMLightTreeKernels:
     Base class for interaction with Alessandro Moschitti's Tree Kernels in SVM Light
     """
 
-    def __init__(self, model_path=tempfile.NamedTemporaryFile().name, classification_threshold=0.0, use_tree_kernel=False, svmlight_dir_path=''):
+    def __init__(self, model_path=None, classification_threshold=0.0, use_tree_kernel=False, svmlight_dir_path=''):
 
-        self.model_path = model_path
+        self.model_path = model_path if model_path is not None else tempfile.NamedTemporaryFile().name
         """the model (path) to read from / write to"""
-        print_debug("SVM-Light model file path: " + model_path)
+        print_debug("SVM-Light model file path: " + self.model_path)
 
         self.classification_threshold = classification_threshold
 

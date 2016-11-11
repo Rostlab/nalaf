@@ -37,7 +37,6 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
 
     def generate(self, dataset):
 
-
         for part in dataset.parts():
             part.edges = []
 

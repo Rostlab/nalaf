@@ -1001,28 +1001,36 @@ class Edge:
     :type sentence_id: int
     :type part: nalaf.structures.data.Part
     :type features: dict
+    :type target: float
     """
 
     def __init__(self, entity1, entity2, relation_type, sentence, sentence_id, part):
         self.entity1 = entity1
         """The first entity in the edge"""
+
         self.entity2 = entity2
         """The second entity in the edge"""
+
         self.relation_type = relation_type
         """The type of relationship between the two entities"""
+
         self.sentence = sentence
         """The sentence which contains the edge"""
+
         # TODO Design decision, whether to retain sentence or retain part and sentence id
         # Part and Sentence ID might make sense for double sentence relationships
         self.sentence_id = sentence_id
         """The index of the sentence mentioned in sentence"""
+
         self.part = part
         """The part in which the sentence is contained"""
+
         self.features = {}
         """
         a dictionary of features for the edge
         each feature is represented as a key value pair:
         """
+
         self.target = None
         # TODO or -1 and +1 ? or negative or positive?
         """class of the edge - True or False or any other float value"""

@@ -27,8 +27,6 @@ class SimpleEdgeGenerator(EdgeGenerator):
 
     **It uses both the _gold_ annotations and _predicted_ annotations.**
 
-    **It _does_ reset the edges: first they are emptied, then more are added**
-
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type):
@@ -40,7 +38,7 @@ class SimpleEdgeGenerator(EdgeGenerator):
         from itertools import product, chain
 
         for part in dataset.parts():
-            part.edges = []  # TODO should we rewrite the edges?
+            part.edges = []
 
             for ann_1, ann_2 in product(
                     (ann for ann in chain(part.annotations, part.predicted_annotations) if ann.class_id == self.entity1_class),
@@ -62,8 +60,6 @@ class WordFilterEdgeGenerator(EdgeGenerator):
 
     **It only uses the _gold_ annotations**
 
-    **It does _not_ reset the edges: it only adds more**
-
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type, words):
@@ -77,6 +73,7 @@ class WordFilterEdgeGenerator(EdgeGenerator):
         from itertools import product
 
         for part in dataset.parts():
+            part.edges = []
 
             for ann_1, ann_2 in product(
                     (ann for ann in part.annotations if ann.class_id == self.entity1_class),
@@ -109,5 +106,4 @@ class SimpleD1EdgeGenerator(EdgeGenerator):
     def generate(self, dataset):
 
         for part in dataset.parts():
-            pass
-            # part.edges = []  # TODO leave the edges intact for now
+            part.edges = []

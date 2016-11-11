@@ -1003,14 +1003,14 @@ class Part:
             abs=self.is_abstract)
 
     def __str__(self):
-        annotations_string = "\n".join([str(x) for x in self.annotations])
-        pred_annotations_string = "\n".join([str(x) for x in self.predicted_annotations])
+        entities_string = "\n".join([str(x) for x in self.annotations])
+        pred_entities_string = "\n".join([str(x) for x in self.predicted_annotations])
         relations_string = "\n".join([str(x) for x in self.relations])
         pred_relations_string = "\n".join([str(x) for x in self.predicted_relations])
-        if not annotations_string:
-            annotations_string = "[]"
-        if not pred_annotations_string:
-            pred_annotations_string = "[]"
+        if not entities_string:
+            entities_string = "[]"
+        if not pred_entities_string:
+            pred_entities_string = "[]"
         if not relations_string:
             relations_string = "[]"
         if not pred_relations_string:
@@ -1019,13 +1019,13 @@ class Part:
                '-Predicted entities-\n{pred_annotations}\n' \
                '-Relations-\n{relations}\n' \
                '-Predicted relations-{pred_relations}'.format(
-                        text=self.text, annotations=annotations_string,
-                        pred_annotations=pred_annotations_string, relations=relations_string,
+                        text=self.text, annotations=entities_string,
+                        pred_annotations=pred_entities_string, relations=relations_string,
                         pred_relations=pred_relations_string, abstract=self.is_abstract)
 
     def get_size(self):
         """ just returns number of chars that this part contains """
-        # OPTIONAL might be updated in order to represent annotations and such as well
+        # OPTIONAL might be updated in order to represent entities and such as well
         return len(self.text)
 
 
@@ -1254,7 +1254,7 @@ class Entity:
 
     equality_operator = 'exact'
     """
-    determines when we consider two annotations to be equal
+    determines when we consider two entities to be equal
     can be "exact" or "overlapping" or "exact_or_overlapping"
     """
 
@@ -1307,7 +1307,7 @@ class Label:
 
 class Relation:
     """
-    Represents a relationship between 2 annotations.
+    Represents a relationship between 2 entities.
     :type start1: int
     :type start2: int
     :type text1: str
@@ -1336,7 +1336,7 @@ class Relation:
 
     def validate_itself(self, part):
         """
-        validation of itself with annotations and the text
+        validation of itself with entities and the text
         :param part: the part where this relation is saved inside
         :type part: nalaf.structures.data.Part
         :return: bool

@@ -1283,7 +1283,7 @@ class Relation:
     :type class_id: str
     """
 
-    # TODO we must add normalization ids
+    # TODO we must link somehow the actual Entity objects (and so have, among other info, their normalizations)
     def __init__(self, start1, start2, text1, text2, type_of_relation):
         self.start1 = start1
         self.start2 = start2

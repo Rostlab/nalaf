@@ -4,7 +4,7 @@ import warnings
 from nalaf.preprocessing.spliters import NLTKSplitter
 from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 
-class Annotator:
+class Annotator(object):
     """
     Abstract class for Entity tagging or Relationship tagging.
     This forms a hierarchy, where Tagger and RelationExtractor are abstract

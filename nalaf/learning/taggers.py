@@ -1,6 +1,5 @@
 import abc
 from nalaf.structures.data import Relation
-import warnings
 from nalaf.preprocessing.spliters import NLTKSplitter
 from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 
@@ -63,6 +62,7 @@ class Tagger(Annotator):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        import warnings
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
         return self.annotate(dataset)
 
@@ -107,6 +107,7 @@ class RelationExtractor(Annotator):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        import warnings
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
         return self.annotate(dataset)
 
@@ -127,6 +128,7 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
 
 
     def tag(self, dataset):
+        import warnings
         warnings.warn('Use the method: annotate', DeprecationWarning)
         return self.annotate(dataset)
 
@@ -157,6 +159,7 @@ class StubSameDocumentPartRelationExtractor(RelationExtractor):
 
 
     def tag(self, dataset):
+        import warnings
         warnings.warn('Use the method: annotate', DeprecationWarning)
         return self.annotate(dataset)
 

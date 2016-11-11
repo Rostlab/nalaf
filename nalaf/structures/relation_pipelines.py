@@ -72,18 +72,9 @@ class RelationExtractionPipeline:
 
 
     def execute(self, dataset, train):
-        # Note, the order of splitter/tokenizer/edger/parser is important
-
-        # Note: this was the previous logic, which is clever. However, this may break things when for example
-        #   applying different pipelines due to difference models (as in LocText)
-        #   May come up with a fully robust solution in the future, as in having a switch parameter in init for this
-        #
-        # try:
-        #     gen = dataset.tokens()
-        #     next(gen)
-        # except StopIteration:
-        #     self.splitter.split(dataset)
-        #     self.tokenizer.tokenize(dataset)
+        # Note: the order of splitter/tokenizer/edger/parser is important
+        # Note: we could avoid the re-splitting & tokenization (see c3d320f08ed8893460d5a68b1b5c87aab6ea0c27)
+        #   yet that may later create unforseen problems and re-doing has no significant impact in running time
 
         self.splitter.split(dataset)
         self.tokenizer.tokenize(dataset)

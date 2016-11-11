@@ -862,7 +862,7 @@ class Part:
             sentence_end = sentence[-1].end
 
             if sentence_start <= annotation.offset < sentence_end:
-                    return sentence_index
+                return sentence_index
 
         assert False, ("The annotation did not (and should) have an associated sentence. Ann: " + str(annotation))
 

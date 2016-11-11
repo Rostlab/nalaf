@@ -1010,7 +1010,7 @@ class Edge:
     :type target: float
     """
 
-    def __init__(self, entity1, entity2, relation_type, sentence, sentence_id, part):
+    def __init__(self, entity1, entity2, relation_type, sentence_id, part):
         self.entity1 = entity1
         """The first entity in the edge"""
 
@@ -1023,8 +1023,6 @@ class Edge:
         self.part = part
         """The part in which the sentence is contained"""
 
-        self.sentence = sentence
-        """The sentence which contains the edge"""
 
         # TODO Design decision, whether to retain sentence or only part and sentence id
         # Part and Sentence ID might make sense for double sentence relationships

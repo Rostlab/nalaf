@@ -51,7 +51,7 @@ class SimpleEdgeGenerator(EdgeGenerator):
 
                 if index_1 == index_2 and index_1 is not None:
                     part.edges.append(
-                        Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))
+                        Edge(ann_1, ann_2, self.relation_type, index_1, part))
 
 
 class WordFilterEdgeGenerator(EdgeGenerator):
@@ -91,7 +91,7 @@ class WordFilterEdgeGenerator(EdgeGenerator):
 
                         if token.word in self.words:
                             part.edges.append(
-                                Edge(ann_1, ann_2, self.relation_type, part.sentences[index_1], index_1, part))
+                                Edge(ann_1, ann_2, self.relation_type, index_1, part))
                             break
 
 

@@ -132,6 +132,53 @@ class Dataset:
             for edge in part.edges:
                 yield edge
 
+
+    def label_edges(self):
+        """
+        label each edge with its target - whether it is indeed a relation or not
+        """
+        for edge in self.edges():
+            if edge.is_relation():
+                edge.target = 1
+            else:
+                edge.target = -1
+
+
+    # TODO move to edge features
+    def calculate_token_scores(self):
+        """
+        calculate score for each entity based on a simple heuristic of which
+        token is closest to the root based on the dependency tree.
+        """
+        not_tokens = []
+        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
+                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
+        for sentence in self.sentences:
+            for token in sentence:
+                if token.word not in not_tokens:
+                    token.features['score'] = 1
+                if token.features['dependency_from'][0].word not in not_tokens:
+                    token.features['dependency_from'][0].features['score'] = 1
+
+            done = False
+            counter = 0
+
+            while(not done):
+                done = True
+                for token in sentence:
+                    dep_from = token.features['dependency_from'][0]
+                    dep_to = token
+                    dep_type = token.features['dependency_from'][1]
+
+                    if dep_type in important_dependencies:
+                        if dep_from.features['score'] <= dep_to.features['score']:
+                            dep_from.features['score'] = dep_to.features['score'] + 1
+                            done = True
+                counter += 1
+                if counter > 20:
+                    break
+
+
     def purge_false_relationships(self):
         """
         cleans false relationships by validating them
@@ -183,15 +230,6 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, part.is_abstract, ann
 
-    def label_edges(self):
-        """
-        label each edge with its target - whether it is indeed a relation or not
-        """
-        for edge in self.edges():
-            if edge.is_relation():
-                edge.target = 1
-            else:
-                edge.target = -1
 
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
@@ -899,39 +937,6 @@ class Part:
                         token.start <= entity.offset < token.end:
                         entity.tokens.append(token)
 
-    # TODO move to edge features
-    def calculate_token_scores(self):
-        """
-        calculate score for each entity based on a simple heuristic of which
-        token is closest to the root based on the dependency tree.
-        """
-        not_tokens = []
-        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
-                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
-        for sentence in self.sentences:
-            for token in sentence:
-                if token.word not in not_tokens:
-                    token.features['score'] = 1
-                if token.features['dependency_from'][0].word not in not_tokens:
-                    token.features['dependency_from'][0].features['score'] = 1
-
-            done = False
-            counter = 0
-
-            while(not done):
-                done = True
-                for token in sentence:
-                    dep_from = token.features['dependency_from'][0]
-                    dep_to = token
-                    dep_type = token.features['dependency_from'][1]
-
-                    if dep_type in important_dependencies:
-                        if dep_from.features['score'] <= dep_to.features['score']:
-                            dep_from.features['score'] = dep_to.features['score'] + 1
-                            done = True
-                counter += 1
-                if counter > 20:
-                    break
 
     def set_head_tokens(self):
         """

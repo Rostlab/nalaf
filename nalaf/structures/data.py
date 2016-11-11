@@ -1019,16 +1019,18 @@ class Edge:
         self.relation_type = relation_type
         """The type of relationship between the two entities"""
 
+        self.part = part
+        """The part in which the sentence is contained"""
+
         self.sentence = sentence
         """The sentence which contains the edge"""
 
-        # TODO Design decision, whether to retain sentence or retain part and sentence id
+        # TODO Design decision, whether to retain sentence or only part and sentence id
         # Part and Sentence ID might make sense for double sentence relationships
         self.sentence_id = sentence_id
         """The index of the sentence mentioned in sentence"""
 
-        self.part = part
-        """The part in which the sentence is contained"""
+        # TODO we likely need a pair of sentence ids for non same-sentence relationships
 
         self.features = {}
         """

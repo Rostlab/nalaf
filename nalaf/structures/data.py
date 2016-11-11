@@ -144,41 +144,6 @@ class Dataset:
                 edge.target = -1
 
 
-    # TODO move to edge features
-    def calculate_token_scores(self):
-        """
-        calculate score for each entity based on a simple heuristic of which
-        token is closest to the root based on the dependency tree.
-        """
-        not_tokens = []
-        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
-                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
-        for sentence in self.sentences:
-            for token in sentence:
-                if token.word not in not_tokens:
-                    token.features['score'] = 1
-                if token.features['dependency_from'][0].word not in not_tokens:
-                    token.features['dependency_from'][0].features['score'] = 1
-
-            done = False
-            counter = 0
-
-            while(not done):
-                done = True
-                for token in sentence:
-                    dep_from = token.features['dependency_from'][0]
-                    dep_to = token
-                    dep_type = token.features['dependency_from'][1]
-
-                    if dep_type in important_dependencies:
-                        if dep_from.features['score'] <= dep_to.features['score']:
-                            dep_from.features['score'] = dep_to.features['score'] + 1
-                            done = True
-                counter += 1
-                if counter > 20:
-                    break
-
-
     def purge_false_relationships(self):
         """
         cleans false relationships by validating them
@@ -285,6 +250,7 @@ class Dataset:
                     part.predicted_relations.append(r)
 
         return self
+
 
     def validate_annotation_offsets(self):
         """
@@ -936,6 +902,41 @@ class Part:
                     if entity.offset <= token.start < entity_end or \
                         token.start <= entity.offset < token.end:
                         entity.tokens.append(token)
+
+
+    # TODO move to edge features
+    def calculate_token_scores(self):
+        """
+        calculate score for each entity based on a simple heuristic of which
+        token is closest to the root based on the dependency tree.
+        """
+        not_tokens = []
+        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
+                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
+        for sentence in self.sentences:
+            for token in sentence:
+                if token.word not in not_tokens:
+                    token.features['score'] = 1
+                if token.features['dependency_from'][0].word not in not_tokens:
+                    token.features['dependency_from'][0].features['score'] = 1
+
+            done = False
+            counter = 0
+
+            while(not done):
+                done = True
+                for token in sentence:
+                    dep_from = token.features['dependency_from'][0]
+                    dep_to = token
+                    dep_type = token.features['dependency_from'][1]
+
+                    if dep_type in important_dependencies:
+                        if dep_from.features['score'] <= dep_to.features['score']:
+                            dep_from.features['score'] = dep_to.features['score'] + 1
+                            done = True
+                counter += 1
+                if counter > 20:
+                    break
 
 
     def set_head_tokens(self):

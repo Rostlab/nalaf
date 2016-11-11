@@ -856,7 +856,7 @@ class Part:
     def get_sentence_index_for_annotation(self, annotation):
 
         for sentence_index, sentence in enumerate(self.sentences):
-            assert sentence != [[]], "The sentences have not been splitted/defined yet"
+            assert sentence != [[]] and sentence != [], "The sentences have not been splitted/defined yet"
 
             sentence_start = sentence[0].start
             sentence_end = sentence[-1].end

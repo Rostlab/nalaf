@@ -1055,6 +1055,12 @@ class Part:
 class Edge:
     """
     Represent an edge - a possible relation between two named entities.
+
+    Note:
+        The same_ (part or sentence_id) are helper / sugar field for convenience
+        Their use is discourage and ideally the library would throw a warning
+
+        The best best solution would be to be able to retrieve the part and sentence_id from the entities directly
     """
 
     def __init__(self, relation_type, entity1, entity2, e1_part, e2_part, e1_sentence_id, e2_sentence_id):
@@ -1068,12 +1074,9 @@ class Edge:
         self.e2_part = e2_part
         """The part in which entity2 is contained"""
 
-        assert (self.e1_part == self.e2_part), "As of now, only relationships within a _same_ part are allowed"
+        assert self.e1_part == self.e2_part, "As of now, only relationships within a _same_ part are allowed"
 
-        self.part = self.e1_part
-        # Helper / sugar field for convenience -- Ideally, we would throw a warning to notify this use is discouraged
-        # A possible solution would be to do what we do below with the sentences too. No need to complicate things now
-        # The best best solution would be to be able to retrieve the part and sentence_id from the entities directly
+        self.same_part = self.e1_part
 
         self.e1_sentence_id = e1_sentence_id
         """The index of the sentence mentioning entity1 (contain in its corresponding part)"""

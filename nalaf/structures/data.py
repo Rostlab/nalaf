@@ -1072,12 +1072,19 @@ class Edge:
 
         self.part = self.e1_part
         # Helper / sugar field for convenience -- Ideally, we would throw a warning to notify this use is discouraged
+        # A possible solution would be to do what we do below with the sentences too. No need to complicate things now
+        # The best best solution would be to be able to retrieve the part and sentence_id from the entities directly
 
         self.e1_sentence_id = e1_sentence_id
         """The index of the sentence mentioning entity1 (contain in its corresponding part)"""
 
         self.e2_sentence_id = e2_sentence_id
         """The index of the sentence mentioning entity2 (contain in its corresponding part)"""
+
+        self.same_sentence_id = AssertionError("The assummed _same_ sentences, are actually different: {} vs {}".format(self.e1_sentence_id, self.e2_sentence_id))
+
+        if (self.e1_sentence_id == self.e2_sentence_id):
+            self.same_sentence_id = self.e1_sentence_id
 
         self.features = {}
         """

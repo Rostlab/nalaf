@@ -90,15 +90,24 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                         if self.read_relations:
                             for relation in ann_json['relations']:
-                                # no distinction with predicted_relations yet
+                                # Note: no distinction with predicted_relations yet
+
                                 part = document.parts[relation['entities'][0].split('|')[0]]
+
                                 e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
                                 e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
                                 e1_end = int(relation['entities'][0].split('|')[1].split(',')[1])
                                 e2_end = int(relation['entities'][1].split('|')[1].split(',')[1])
                                 e1_text = part.text[e1_start:e1_end]
                                 e2_text = part.text[e2_start:e2_end]
-                                part.relations.append(Relation(e1_start, e2_start, e1_text, e2_text, relation['classId']))
+
+                                rel_id = relation['classId']
+                                e1 = None  # TODO part.get_entity(e1_start)
+                                e2 = None  # TODO part.get_entity(e2_start)
+
+                                rel = Relation(e1_start, e2_start, e1_text, e2_text, rel_id, e1, e2)
+
+                                part.relations.append(rel)
 
                         # delete parts that are not annotatable
                         annotatable_parts = set(ann_json['annotatable']['parts'])

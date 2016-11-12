@@ -15,9 +15,16 @@ class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
 
 
     def generate(self, dataset, feature_set, is_training_mode):
+
         for edge in dataset.edges():
-            entities = edge.same_part.get_entities_in_sentence(edge.same_sentence_id, self.entity_type)
-            num_entities = len(entities)
+
+            sentences_entities = []
+
+            sentences_entities += edge.same_part.get_entities_in_sentence(edge.e1_sentence_id, self.entity_type)
+            if (edge.e1_sentence_id != edge.e2_sentence_id):
+                sentences_entities += edge.same_part.get_entities_in_sentence(edge.e2_sentence_id, self.entity_type)
+
+            num_entities = len(sentences_entities)
             feature_name = self.mk_feature_name(self.prefix, self.entity_type, 'count', num_entities)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
 

@@ -1334,17 +1334,21 @@ class Relation:
     """
 
     # TODO we must link somehow the actual Entity objects (and so have, among other info, their normalizations)
-    def __init__(self, start1, start2, text1, text2, type_of_relation):
+    # TODO in the end: remove other fields
+    def __init__(self, start1, start2, text1, text2, type_of_relation, entity1=None, entity2=None):
         self.start1 = start1
         self.start2 = start2
         self.text1 = text1
         self.text2 = text2
         self.class_id = type_of_relation
+        self.entity1 = entity1
+        self.entity2 = entity2
 
 
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
-               'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
+            'Start2:{self.start2}, Text2:"{self.text2}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(
+            self=self)
 
 
     def get_relation_without_offset(self):

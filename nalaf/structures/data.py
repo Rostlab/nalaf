@@ -1110,6 +1110,7 @@ class Edge:
         relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type, self.entity1, self.entity2)
         relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type, self.entity1, self.entity2)
 
+        # TODO, yes, we are aware that we also have self.same_part. However, ideally here we do not use that variable
         assert(self.e1_part == self.e2_part)
         self_part = self.e1_part
 

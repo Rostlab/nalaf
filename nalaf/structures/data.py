@@ -1103,8 +1103,8 @@ class Edge:
         check if the edge is present in part.relations.
         :rtype: bool
         """
-        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type, None, None)  # TODO self.entity1, self.entity2)
-        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type, None, None)  # TODO self.entity1, self.entity2)
+        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type, self.entity1, self.entity2)
+        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type, self.entity1, self.entity2)
 
         for relation in self.part.relations:
             if relation_1 == relation:

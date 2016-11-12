@@ -1055,37 +1055,29 @@ class Part:
 class Edge:
     """
     Represent an edge - a possible relation between two named entities.
-
-    :type entity1: nalaf.structures.data.Entity
-    :type entity2: nalaf.structures.data.Entity
-    :type relation_type: str
-    :type sentence: list[nalaf.structures.data.Token]
-    :type sentence_id: int
-    :type part: nalaf.structures.data.Part
-    :type features: dict
-    :type target: float
     """
 
-    def __init__(self, entity1, entity2, relation_type, sentence_id, part):
-        self.entity1 = entity1
-        """The first entity in the edge"""
-
-        self.entity2 = entity2
-        """The second entity in the edge"""
-
+    def __init__(self, relation_type, entity1, entity2, e1_part, e2_part, e1_sentence_id, e2_sentence_id):
         self.relation_type = relation_type
-        """The type of relationship between the two entities"""
+        self.entity1 = entity1
+        self.entity2 = entity2
 
-        self.part = part
-        """The part in which the sentence is contained"""
+        self.e1_part = e1_part
+        """The part in which entity1 is contained"""
 
+        self.e2_part = e2_part
+        """The part in which entity2 is contained"""
 
-        # TODO Design decision, whether to retain sentence or only part and sentence id
-        # Part and Sentence ID might make sense for double sentence relationships
-        self.sentence_id = sentence_id
-        """The index of the sentence mentioned in sentence"""
+        assert (self.e1_part == self.e2_part), "As of now, only relationships within a _same_ part are allowed"
 
-        # TODO we likely need a pair of sentence ids for non same-sentence relationships
+        self.part = self.e1_part
+        # Helper / sugar field for convenience -- Ideally, we would throw a warning to notify this use is discouraged
+
+        self.e1_sentence_id = e1_sentence_id
+        """The index of the sentence mentioning entity1 (contain in its corresponding part)"""
+
+        self.e2_sentence_id = e2_sentence_id
+        """The index of the sentence mentioning entity2 (contain in its corresponding part)"""
 
         self.features = {}
         """
@@ -1103,14 +1095,20 @@ class Edge:
         check if the edge is present in part.relations.
         :rtype: bool
         """
+        # TODO change the equals method in Relation appropriately not to do thi bullshit
+
         relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type, self.entity1, self.entity2)
         relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type, self.entity1, self.entity2)
 
-        for relation in self.part.relations:
+        assert(self.e1_part == self.e2_part)
+        self_part = self.e1_part
+
+        for relation in self_part.relations:
             if relation_1 == relation:
                 return True
             if relation_2 == relation:
                 return True
+
         return False
 
 

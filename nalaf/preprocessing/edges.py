@@ -28,6 +28,8 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type, distance, use_predicted_entities=True):
+        # Note: would be nice to implement the word filter too here -- see below
+
         self.entity1_class = entity1_class
         self.entity2_class = entity2_class
         self.relation_type = relation_type
@@ -50,8 +52,9 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
                 pair_distance = abs(sent_index_1 - sent_index_2)
 
                 if pair_distance == self.distance:
-                    part.edges.append(
-                        Edge(ann_1, ann_2, self.relation_type, sent_index_1, part))
+                    edge = Edge(self.relation_type, ann_1, ann_2, part, part, sent_index_1, sent_index_2)
+                    part.edges.append(edge)
+
 
 
 class SimpleEdgeGenerator(SentenceDistanceEdgeGenerator):
@@ -112,6 +115,8 @@ class WordFilterEdgeGenerator(EdgeGenerator):
                     for token in part.sentences[index_1]:
 
                         if token.word in self.words:
-                            part.edges.append(
-                                Edge(ann_1, ann_2, self.relation_type, index_1, part))
+                            edge = Edge(self.relation_type, ann_1, ann_2, part, part, index_1, index_2)
+
+                            part.edges.append(edge)
+
                             break

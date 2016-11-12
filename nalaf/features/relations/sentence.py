@@ -16,7 +16,7 @@ class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
-            entities = edge.part.get_entities_in_sentence(edge.sentence_id, self.entity_type)
+            entities = edge.part.get_entities_in_sentence(edge.same_sentence_id, self.entity_type)
             num_entities = len(entities)
             feature_name = self.mk_feature_name(self.prefix, self.entity_type, 'count', num_entities)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
@@ -49,7 +49,7 @@ class BagOfWordsFeatureGenerator(EdgeFeatureGenerator):
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
-            sentence = edge.part.sentences[edge.sentence_id]
+            sentence = edge.part.sentences[edge.same_sentence_id]
             bow_map = {}
             for token in sentence:
 
@@ -95,7 +95,7 @@ class StemmedBagOfWordsFeatureGenerator(EdgeFeatureGenerator):
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
-            sentence = edge.part.sentences[edge.sentence_id]
+            sentence = edge.part.sentences[edge.same_sentence_id]
 
             if is_training_mode:
                 for token in sentence:

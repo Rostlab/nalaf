@@ -119,7 +119,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
-            sentence = edge.part.sentences[edge.sentence_id]
+            sentence = edge.part.sentences[edge.same_sentence_id]
 
             if edge.entity1.head_token.features['id'] < edge.entity2.head_token.features['id']:
                 first = edge.entity1.head_token.features['id']

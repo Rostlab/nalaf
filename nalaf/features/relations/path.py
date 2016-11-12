@@ -83,9 +83,9 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
-            sentence = edge.part.sentences[edge.sentence_id]
+            sentence = edge.part.sentences[edge.same_sentence_id]
             path = []
-            path = get_path(head1, head2, edge.part, edge.sentence_id, self.graphs)
+            path = get_path(head1, head2, edge.part, edge.same_sentence_id, self.graphs)
             if len(path) == 0:
                 path = [head1, head2]
             self.path_length_features(path, edge, feature_set, is_training_mode)
@@ -193,7 +193,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
                     edge_gram = 'dep_gram_' + style_gram
 
                     for k in range(1, n):
-                        token = edge.part.sentences[edge.sentence_id][(path[i-(n-1)+k]).features['id']-1]
+                        token = edge.part.sentences[edge.same_sentence_id][(path[i-(n-1)+k]).features['id']-1]
                         self.token_feature_generator.token_features(token, 'tok_'+style_gram, edge, feature_set, is_training_mode)
 
                     for k in range(n):

@@ -900,7 +900,7 @@ class Part:
         assert False, ("The annotation did not (and should) have an associated sentence. Ann: " + str(annotation))
 
 
-    def get_entity(self, start_offset, raise_exception_on_not_found=True):
+    def get_entity(self, start_offset, raise_exception_on_incosistencies=True):
         """
         Retrieves entity object from a list of annotations based on start_offset value.
         """
@@ -908,16 +908,8 @@ class Part:
         length = len(found_list)
 
         if length == 0:
-            if (raise_exception_on_not_found):
-                print()
-
-                for e in self.annotations:
-                    print("****", e)
-
-                print()
-
-                return None
-                # raise Exception("Entity with offset {} was expected and yet was not found".format(str(start_offset)))
+            if (raise_exception_on_incosistencies):
+                raise Exception("Entity with offset {} was expected and yet was not found".format(str(start_offset)))
             else:
                 return None
 
@@ -925,20 +917,10 @@ class Part:
             return found_list[0]
 
         else:
-            print()
-
-            for e in found_list:
-                print(e)
-
-            print()
-
-            for e in self.annotations:
-                print(e)
-
-            print()
-
-            #assert False, "As of now, Part's should not have multiple entities with _same_ start_offset: {} -- found: {}".format(str(start_offset), str(length), (" || ".join((str(e) for e in found_list))))
-            return found_list[0]
+            if (raise_exception_on_incosistencies):
+                raise Exception("As of now, Part's should not have multiple entities with _same_ start_offset: {} -- found: {}, list: \n\t{}".format(str(start_offset), str(length), ("\n\t".join((str(e) for e in found_list)))))
+            else:
+                return found_list[0]
 
 
     def get_entities_in_sentence(self, sentence_id, entity_classId):

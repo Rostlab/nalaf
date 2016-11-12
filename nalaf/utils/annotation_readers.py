@@ -36,7 +36,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
+    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False, raise_exception_on_incosistencies=True):
         self.directory = directory
         """the directory containing *.ann.json files"""
         self.read_only_class_id = read_only_class_id
@@ -48,6 +48,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         self.read_relations = read_relations
         """whether relations should be read as well"""
         self.whole_basename_as_docid = whole_basename_as_docid
+        self.raise_exception_on_incosistencies = raise_exception_on_incosistencies
 
 
     def annotate(self, dataset):
@@ -103,8 +104,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                                 rel_id = relation['classId']
 
-                                e1 = part.get_entity(e1_start)
-                                e2 = part.get_entity(e2_start)
+                                e1 = part.get_entity(e1_start, self.raise_exception_on_incosistencies)
+                                e2 = part.get_entity(e2_start, self.raise_exception_on_incosistencies)
 
                                 rel = Relation(e1_start, e2_start, e1_text, e2_text, rel_id, e1, e2)
 

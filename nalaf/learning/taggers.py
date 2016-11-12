@@ -148,7 +148,7 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
                     (a for a in part.annotations if a.class_id == self.entity2_class)):
 
                     if part.get_sentence_index_for_annotation(ann_1) == part.get_sentence_index_for_annotation(ann_2):
-                        rel = Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type, ann_1, ann_2)
+                        rel = Relation(self.relation_type, ann_1, ann_2)
                         part.predicted_relations.append(rel)
 
 
@@ -179,5 +179,5 @@ class StubSameDocumentPartRelationExtractor(RelationExtractor):
                     (a for a in part.annotations if a.class_id == self.entity1_class),
                     (a for a in part.annotations if a.class_id == self.entity2_class)):
 
-                    rel = Relation(ann_1.offset, ann_2.offset, ann_1.text, ann_2.text, self.relation_type, ann_1, ann_2)
+                    rel = Relation(self.relation_type, ann_1, ann_2)
                     part.predicted_relations.append(rel)

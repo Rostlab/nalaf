@@ -268,7 +268,7 @@ class Dataset:
             for e in part.edges:
 
                 if e.target == 1:
-                    r = Relation(e.entity1.offset, e.entity2.offset, e.entity1.text, e.entity2.text, e.relation_type, e.entity1, e.entity2)
+                    r = Relation(e.relation_type, e.entity1, e.entity2)
                     part.predicted_relations.append(r)
 
         return self
@@ -1110,8 +1110,8 @@ class Edge:
         """
         # TODO change the equals method in Relation appropriately not to do thi bullshit
 
-        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type, self.entity1, self.entity2)
-        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type, self.entity2, self.entity1)
+        relation_1 = Relation(self.relation_type, self.entity1, self.entity2)
+        relation_2 = Relation(self.relation_type, self.entity2, self.entity1)
 
         # TODO, yes, we are aware that we also have self.same_part. However, ideally here we do not use that variable
         assert(self.e1_part == self.e2_part)
@@ -1288,19 +1288,24 @@ class Entity:
         self.head_token = None
         """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see relna)"""
 
+
     equality_operator = 'exact'
     """
     determines when we consider two entities to be equal
     can be "exact" or "overlapping" or "exact_or_overlapping"
     """
 
+
     def __repr__(self):
         norm_string = ''
+
         if self.normalisation_dict:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
+
         return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
                'Text: "{self.text}", SubClass: {self.subclass}, ' \
                'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
+
 
     def __eq__(self, other):
         # consider them a match only if class_id matches
@@ -1344,36 +1349,23 @@ class Label:
 class Relation:
     """
     Represents a relationship between 2 entities.
-    :type start1: int
-    :type start2: int
-    :type text1: str
-    :type text2: str
-    :type class_id: str
     """
 
-    # TODO we must link somehow the actual Entity objects (and so have, among other info, their normalizations)
-    # TODO in the end: remove other fields
-    def __init__(self, start1, start2, text1, text2, type_of_relation, entity1=None, entity2=None):
-        self.start1 = start1
-        self.start2 = start2
-        self.text1 = text1
-        self.text2 = text2
-        self.class_id = type_of_relation
+    def __init__(self, relation_type, entity1, entity2):
+        self.class_id = relation_type
+        assert entity1 is not None and entity2 is not None, "Some of the entities are None"
 
-        # TODO
-        self.entity1 = None  # entity1
-        self.entity2 = None  # entity2
+        self.entity1 = entity1
+        self.entity2 = entity2
 
 
     def __repr__(self):
-        return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
-            'Start2:{self.start2}, Text2:"{self.text2}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(
-            self=self)
+        return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
 
 
     def get_relation_without_offset(self):
         """:return string with entity1 and entity2 separated by relation type"""
-        return (self.text1, self.class_id, self.text2)
+        return (self.entity1.text, self.class_id, self.entity2.text)
 
 
     def validate_itself(self, part):
@@ -1385,13 +1377,16 @@ class Relation:
         """
         first = False
         second = False
+
         for ann in chain(part.annotations, part.predicted_annotations):
-            if ann.offset == self.start1 and ann.text == self.text1:
+
+            if ann.offset == self.entity1.offset and ann.text == self.entity1.text:
                 first = True
-            if ann.offset == self.start2 and ann.text == self.text2:
+            if ann.offset == self.entity2.øffset and ann.text == self.entity2.text:
                 second = True
             if first and second:
                 return True
+
         return False
 
 
@@ -1403,7 +1398,9 @@ class Relation:
         """
 
         if other is not None:
+            # TODO CAUTION (https://github.com/juanmirocks/LocText/issues/6) this may have terrible consequences
             return self.__dict__ == other.__dict__
+
         else:
             return False
 

@@ -900,6 +900,24 @@ class Part:
         assert False, ("The annotation did not (and should) have an associated sentence. Ann: " + str(annotation))
 
 
+    def get_entity(self, start_offset, raise_exception_on_not_found=True):
+        """
+        Retrieves entity object from a list of annotations based on start_offset value.
+        """
+        found_list = list(filter(lambda ann: ann.offset == start_offset, self.annotations))
+        length = len(found_list)
+
+        if length == 0:
+            if (raise_exception_on_not_found):
+                raise Exception("Entity with offset {} was expected but was not found".format(str(start_offset)))
+            else:
+                return None
+        elif length == 1:
+            return found_list[0]
+        else:
+            assert false, "As of now, Parts should not have multiple entities with _same_ start_offset: {}".format(str(start_offset))
+
+
     def get_entities_in_sentence(self, sentence_id, entity_classId):
         """
         get entities of a particular type in a particular sentence

@@ -3,6 +3,7 @@ from nalaf.structures.data import Relation
 from nalaf.preprocessing.spliters import NLTKSplitter
 from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 
+
 class Annotator(object):
     """
     Abstract class for Entity tagging or Relationship tagging.

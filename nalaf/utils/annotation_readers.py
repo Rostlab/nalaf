@@ -102,8 +102,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 e2_text = part.text[e2_start:e2_end]
 
                                 rel_id = relation['classId']
-                                e1 = None  # TODO part.get_entity(e1_start)
-                                e2 = None  # TODO part.get_entity(e2_start)
+
+                                # TODO
+                                e1 = part.get_entity(e1_start)
+                                e2 = part.get_entity(e2_start)
+                                e1 = None
+                                e2 = None
 
                                 rel = Relation(e1_start, e2_start, e1_text, e2_text, rel_id, e1, e2)
 

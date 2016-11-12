@@ -909,13 +909,36 @@ class Part:
 
         if length == 0:
             if (raise_exception_on_not_found):
-                raise Exception("Entity with offset {} was expected but was not found".format(str(start_offset)))
+                print()
+
+                for e in self.annotations:
+                    print("****", e)
+
+                print()
+
+                return None
+                # raise Exception("Entity with offset {} was expected and yet was not found".format(str(start_offset)))
             else:
                 return None
+
         elif length == 1:
             return found_list[0]
+
         else:
-            assert false, "As of now, Parts should not have multiple entities with _same_ start_offset: {}".format(str(start_offset))
+            print()
+
+            for e in found_list:
+                print(e)
+
+            print()
+
+            for e in self.annotations:
+                print(e)
+
+            print()
+
+            #assert False, "As of now, Part's should not have multiple entities with _same_ start_offset: {} -- found: {}".format(str(start_offset), str(length), (" || ".join((str(e) for e in found_list))))
+            return found_list[0]
 
 
     def get_entities_in_sentence(self, sentence_id, entity_classId):

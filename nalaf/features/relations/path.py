@@ -83,9 +83,9 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
-            sentence = edge.part.sentences[edge.same_sentence_id]
+            sentence = edge.same_part.sentences[edge.same_sentence_id]
             path = []
-            path = get_path(head1, head2, edge.part, edge.same_sentence_id, self.graphs)
+            path = get_path(head1, head2, edge.same_part, edge.same_sentence_id, self.graphs)
             if len(path) == 0:
                 path = [head1, head2]
             self.path_length_features(path, edge, feature_set, is_training_mode)
@@ -136,7 +136,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for i in range(1, len(path) - 1):
             token = path[i]
             feature_name_1 = self.gen_prefix_feat_name('prefix_50_internal_pos', token.features['pos'])
-            feature_name_2 = self.gen_prefix_feat_name('prefix_51_internal_masked_txt', token.masked_text(edge.part))
+            feature_name_2 = self.gen_prefix_feat_name('prefix_51_internal_masked_txt', token.masked_text(edge.same_part))
             feature_name_3 = self.gen_prefix_feat_name('prefix_52_internal_txt', token.word)
             feature_name_4 = self.gen_prefix_feat_name('prefix_53_internal_stem', self.stemmer.stem(token.word))
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
@@ -193,7 +193,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
                     edge_gram = 'dep_gram_' + style_gram
 
                     for k in range(1, n):
-                        token = edge.part.sentences[edge.same_sentence_id][(path[i-(n-1)+k]).features['id']-1]
+                        token = edge.same_part.sentences[edge.same_sentence_id][(path[i-(n-1)+k]).features['id']-1]
                         self.token_feature_generator.token_features(token, 'tok_'+style_gram, edge, feature_set, is_training_mode)
 
                     for k in range(n):
@@ -230,7 +230,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
         for dependency in dependency_list:
             feature_name = self.gen_prefix_feat_name('prefix_61_dep_1', dependency[1])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-            feature_name = self.gen_prefix_feat_name('prefix_62_masked_txt_dep_0', dependency[0].masked_text(edge.part))
+            feature_name = self.gen_prefix_feat_name('prefix_62_masked_txt_dep_0', dependency[0].masked_text(edge.same_part))
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
             feature_name = self.gen_prefix_feat_name('prefix_63_pos_dep_0', dependency[0].features['pos'])
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
@@ -241,7 +241,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
                 feature_name = self.gen_prefix_feat_name('prefix_64_ann_type_1', ann)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-            g_text = dependency[0].masked_text(edge.part)
+            g_text = dependency[0].masked_text(edge.same_part)
             g_pos = dependency[0].features['pos']
             g_at = 'no_ann_type'
 
@@ -252,7 +252,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
             for dep in dependency[0].features['dependency_to']:
                 feature_name = self.gen_prefix_feat_name('prefix_65_dep_to_1', dep[1])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                feature_name = self.gen_prefix_feat_name('prefix_66_masked_txt_dep_to_0', dep[0].masked_text(edge.part))
+                feature_name = self.gen_prefix_feat_name('prefix_66_masked_txt_dep_to_0', dep[0].masked_text(edge.same_part))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_67_pos_to', dep[0].features['pos'])
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
@@ -263,7 +263,7 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
                     feature_name = self.gen_prefix_feat_name('prefix_68_ann_type_2', ann)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
-                d_text = token2.masked_text(edge.part)
+                d_text = token2.masked_text(edge.same_part)
                 d_pos = token2.features['pos']
                 d_at = 'no_ann_type'
 

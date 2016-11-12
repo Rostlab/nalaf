@@ -119,7 +119,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
     def generate(self, dataset, feature_set, is_training_mode):
         for edge in dataset.edges():
-            sentence = edge.part.sentences[edge.same_sentence_id]
+            sentence = edge.same_part.sentences[edge.same_sentence_id]
 
             if edge.entity1.head_token.features['id'] < edge.entity2.head_token.features['id']:
                 first = edge.entity1.head_token.features['id']
@@ -130,7 +130,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
                     feature_name = self.gen_prefix_feat_name('prefix_fwd_bow_intermediate', token.word)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                    feature_name = self.gen_prefix_feat_name('prefix_fwd_bow_intermediate_masked', token.masked_text(edge.part))
+                    feature_name = self.gen_prefix_feat_name('prefix_fwd_bow_intermediate_masked', token.masked_text(edge.same_part))
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                     feature_name = self.gen_prefix_feat_name('prefix_fwd_stem_intermediate', self.stemmer.stem(token.word))
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
@@ -146,7 +146,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
                     feature_name = self.gen_prefix_feat_name('prefix_bkd_bow_intermediate', token.word)
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                    feature_name = self.gen_prefix_feat_name('prefix_bkd_bow_intermediate_masked', token.masked_text(edge.part))
+                    feature_name = self.gen_prefix_feat_name('prefix_bkd_bow_intermediate_masked', token.masked_text(edge.same_part))
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                     feature_name = self.gen_prefix_feat_name('prefix_bkd_stem_intermediate', self.stemmer.stem(token.word))
                     self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
@@ -158,7 +158,7 @@ class IntermediateTokensFeatureGenerator(EdgeFeatureGenerator):
 
                 feature_name = self.gen_prefix_feat_name('prefix_bow_intermediate', token.word)
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
-                feature_name = self.gen_prefix_feat_name('prefix_bow_intermediate_masked', token.masked_text(edge.part))
+                feature_name = self.gen_prefix_feat_name('prefix_bow_intermediate_masked', token.masked_text(edge.same_part))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
                 feature_name = self.gen_prefix_feat_name('prefix_stem_intermediate', self.stemmer.stem(token.word))
                 self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)

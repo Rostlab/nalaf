@@ -56,7 +56,7 @@ class EntityHeadTokenFeatureGenerator(EdgeFeatureGenerator):
 
 
     def named_entity_count(self, prefix, entity_type, edge, feature_set, is_training_mode):
-        entities = edge.part.get_entities_in_sentence(edge.same_sentence_id, entity_type)
+        entities = edge.same_part.get_entities_in_sentence(edge.same_sentence_id, entity_type)
         feature_name = '1_'+prefix+entity_type+'_count_['+str(len(entities))+']'
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
@@ -243,19 +243,19 @@ class EntityHeadTokenChainFeatureGenerator(EdgeFeatureGenerator):
         for edge in dataset.edges():
             head1 = edge.entity1.head_token
             head2 = edge.entity2.head_token
-            self.build_chains(head1, edge.part.sentences[edge.same_sentence_id], edge, 'entity1_', '', self.depth, feature_set, is_training_mode)
-            self.build_chains(head2, edge.part.sentences[edge.same_sentence_id], edge, 'entity2_', '', self.depth, feature_set, is_training_mode)
+            self.build_chains(head1, edge.same_part.sentences[edge.same_sentence_id], edge, 'entity1_', '', self.depth, feature_set, is_training_mode)
+            self.build_chains(head2, edge.same_part.sentences[edge.same_sentence_id], edge, 'entity2_', '', self.depth, feature_set, is_training_mode)
             self.build_token_features(edge, feature_set, is_training_mode)
             self.entity_combination(edge, feature_set, is_training_mode)
 
 
     def build_token_features(self, edge, feature_set, is_training_mode):
-        sentence = edge.part.sentences[edge.same_sentence_id]
+        sentence = edge.same_part.sentences[edge.same_sentence_id]
         for token in sentence:
-            if token.is_entity_part(edge.part):
-                if token.get_entity(edge.part)==edge.entity1:
+            if token.is_entity_part(edge.same_part):
+                if token.get_entity(edge.same_part)==edge.entity1:
                     self.token_feature_generator.token_features(token, 'e1_', edge, feature_set, is_training_mode)
-                if token.get_entity(edge.part)==edge.entity2:
+                if token.get_entity(edge.same_part)==edge.entity2:
                     self.token_feature_generator.token_features(token, 'e2_', edge, feature_set, is_training_mode)
 
 
@@ -283,14 +283,14 @@ class EntityHeadTokenChainFeatureGenerator(EdgeFeatureGenerator):
         feature_name_1 = '23_' + prefix + 'txt_' + token.word + '_[0]'
         feature_name_2 = '24_' + prefix + 'pos_' + token.features['pos'] + '_[0]'
         feature_name_3 = '25_' + prefix + 'given_[0]'
-        feature_name_4 = '26_' + prefix + 'txt_' + token.masked_text(edge.part) + '_[0]'
+        feature_name_4 = '26_' + prefix + 'txt_' + token.masked_text(edge.same_part) + '_[0]'
         feature_name_5 = '27_' + prefix + 'ann_type_entity_[0]'
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
-        if token.is_entity_part(edge.part):
-            entity = token.get_entity(edge.part)
+        if token.is_entity_part(edge.same_part):
+            entity = token.get_entity(edge.same_part)
             feature_name_6 = '28_' + prefix + 'ann_type_' + entity.class_id + '_[0]'
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_5)
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_6)

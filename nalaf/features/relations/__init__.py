@@ -109,11 +109,11 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
         feature_name_2 = self.gen_prefix_feat_name("prefix_pos", addendum, token.features['pos'])
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
 
-        feature_name_3 = self.gen_prefix_feat_name("prefix_masked_txt", addendum, token.masked_text(edge.part))
+        feature_name_3 = self.gen_prefix_feat_name("prefix_masked_txt", addendum, token.masked_text(edge.same_part))
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
 
         # TODO why stem of masked text? -- makes little sense -- See TODO in original loctext too
-        feature_name_4 = self.gen_prefix_feat_name("prefix_stem_masked_txt", addendum, self.stemmer.stem(token.masked_text(edge.part)))
+        feature_name_4 = self.gen_prefix_feat_name("prefix_stem_masked_txt", addendum, self.stemmer.stem(token.masked_text(edge.same_part)))
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
 
         ann_types = self.annotated_types(token, edge)
@@ -126,13 +126,13 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
         head1 = edge.entity1.head_token
         head2 = edge.entity2.head_token
 
-        if not token.is_entity_part(edge.part):
+        if not token.is_entity_part(edge.same_part):
             feature_name = 'no_ann_type'
             return [feature_name]
         else:
             ann_types = []
-            if token.is_entity_part(edge.part):
-                entity = token.get_entity(edge.part)
+            if token.is_entity_part(edge.same_part):
+                entity = token.get_entity(edge.same_part)
                 feature_name_1 = entity.class_id
                 ann_types.append(feature_name_1)
                 if entity == edge.entity1:

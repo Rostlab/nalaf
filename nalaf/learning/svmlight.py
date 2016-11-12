@@ -68,7 +68,7 @@ class SVMLightTreeKernels:
 
                 if self.use_tree_kernel:
                     string += ' |BT| '
-                    string += edge.part.sentence_parse_trees[edge.same_sentence_id]
+                    string += edge.same_part.sentence_parse_trees[edge.same_sentence_id]
                     string += ' |ET|'
 
                 for key in sorted(edge.features.keys()):

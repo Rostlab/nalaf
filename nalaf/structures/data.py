@@ -1401,6 +1401,7 @@ class Relation:
         :type other: nalaf.structures.data.Relation
         :return bool:
         """
+
         if other is not None:
             return self.__dict__ == other.__dict__
         else:

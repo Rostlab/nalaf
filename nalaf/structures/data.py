@@ -1347,8 +1347,10 @@ class Relation:
         self.text1 = text1
         self.text2 = text2
         self.class_id = type_of_relation
-        self.entity1 = entity1
-        self.entity2 = entity2
+
+        # TODO
+        self.entity1 = None  # entity1
+        self.entity2 = None  # entity2
 
 
     def __repr__(self):

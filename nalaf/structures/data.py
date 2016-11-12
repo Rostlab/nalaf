@@ -1096,8 +1096,9 @@ class Edge:
         """
 
         self.target = None
-        # TODO or -1 and +1 ? or negative or positive?
-        """class of the edge - True or False or any other float value"""
+        """class of the edge -- ASSUMED to be in [-1, +1] or None when not defined"""
+        # TODO we should much more carefully take care of its type, and whether it could even contain other values
+        # As of now, it seems to devependant on `svmlight.py`
 
 
     def is_relation(self):

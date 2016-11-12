@@ -258,13 +258,15 @@ class Dataset:
         Populates part.predicted_relations with a list of Relation objects
         based on the values of the field target for each edge.
 
-        Each Relation object denotes a relationship between two entities (usually)
-        of different classes. Each relation is given by a relation type.
+        Each Relation object denotes a relationship between two entities
+        of (usually) different classes. Each relation is given by a relation type.
 
         Requires edge.target to be set for each edge.
         """
+
         for part in self.parts():
             for e in part.edges:
+
                 if e.target == 1:
                     r = Relation(e.entity1.offset, e.entity2.offset, e.entity1.text, e.entity2.text, e.relation_type, e.entity1, e.entity2)
                     part.predicted_relations.append(r)

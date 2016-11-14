@@ -512,6 +512,10 @@ class DocumentLevelRelationEvaluator(Evaluator):
             print("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
             print("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
+            if (len(set(actual)) != len(list(actual)) or len(set(predicted)) != len(list(predicted))):
+                print("*********", len(set(actual)), len(list(actual)), len(set(predicted)), len(list(predicted)))
+                raise Exception("fuck")
+
             for relation in predicted:
                 if relation in actual:
                     counts[docid]['tp'] += 1

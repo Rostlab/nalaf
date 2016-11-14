@@ -465,7 +465,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     """
 
     COMMON_ENTITY_MAP_FUNS = {
-        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+        'unordered_lowercased': (lambda e: '|'.join([e.text.lower()])),
         'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
     }
 
@@ -495,6 +495,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
         for docid in docids:
             actual = true_relations[docid]
             predicted = predicted_relations[docid]
+
+            print("\n\nactual: \n" + '\n'.join(actual))
+            print("\npredicted: \n" + '\n'.join(predicted))
 
             for relation in predicted:
                 if relation in actual:

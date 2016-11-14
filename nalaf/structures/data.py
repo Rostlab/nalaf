@@ -1381,10 +1381,10 @@ class Relation:
         e1_string = entity_map_fun(self.entity1)
         e2_string = entity_map_fun(self.entity2)
 
-        entities = [e1_string, e2_string]
-
-        if (self.bidirectional):
-            entities = sorted(entities)
+        if (self.bidirectional and self.entity2.class_id <= self.entity1.class_id):
+            entities = [e2_string, e1_string]
+        else:
+            entities = [e1_string, e2_string]
 
         items = [self.class_id, *entities]
 

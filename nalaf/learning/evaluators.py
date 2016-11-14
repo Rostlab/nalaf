@@ -508,6 +508,10 @@ class DocumentLevelRelationEvaluator(Evaluator):
             if not self.match_case:
                 predicted = [x.lower() for x in predicted]
                 actual = [x.lower() for x in actual]
+
+            print("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
+            print("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
+
             for relation in predicted:
                 if relation in actual:
                     counts[docid]['tp'] += 1

@@ -671,30 +671,6 @@ class Document:
 
         return ret
 
-        # relations = []
-        # for part in self:
-        #     if predicted:
-        #         relation_list = part.predicted_relations
-        #     else:
-        #         relation_list = part.relations
-        #
-        #     for rel in relation_list:
-        #         entity1, relation_type, entity2 = rel.get_relation_without_offset()
-        #
-        #         if relation_type == rel_type:
-        #
-        #             if entity1 < entity2:
-        #                 relation_string = entity1 + ' ' + relation_type + ' ' + entity2
-        #             else:
-        #                 relation_string = entity2 + ' ' + relation_type + ' ' + entity1
-        #
-        #             if relation_string not in relations:
-        #                 relations.append(relation_string)
-        #
-        # ret = set(relations)
-        #
-        # return ret
-
 
     def purge_false_relationships(self):
         """

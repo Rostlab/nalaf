@@ -153,7 +153,7 @@ class StubSameSentenceRelationExtractor(RelationExtractor):
 
 
 class StubSameDocumentPartRelationExtractor(RelationExtractor):
-    # TODO reuse distance-sentence edge generator _and then_ make all those edges a relation
+    # Would be better if it just ussed an existing edge generator
 
     def __init__(self, entity1_class, entity2_class, relation_type):
         super().__init__(entity1_class, entity2_class, relation_type)

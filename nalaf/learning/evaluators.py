@@ -496,8 +496,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             actual = true_relations[docid]
             predicted = predicted_relations[docid]
 
-            print("\n\nactual: \n" + '\n'.join(actual))
-            print("\npredicted: \n" + '\n'.join(predicted))
+            print_verbose("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
+            print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
             for relation in predicted:
                 if relation in actual:

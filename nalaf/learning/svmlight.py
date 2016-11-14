@@ -124,7 +124,7 @@ class SVMLightTreeKernels:
                     self.model_path
                 ]
 
-            print_debug("svm light learn parameters: " + ' '.join(callv))
+            print_debug("svm light learn parameters: " + ' '.join(callv) + "\n")
             subprocess.call(callv)
 
             return self.model_path
@@ -143,7 +143,7 @@ class SVMLightTreeKernels:
             predictionsfile.name
         ]
 
-        print_debug("svm light classify parameters: " + ' '.join(callv))
+        print_debug("svm light classify parameters: " + ' '.join(callv) + "\n")
         exitcode = subprocess.call(callv)
 
         if exitcode != 0:

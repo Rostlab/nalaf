@@ -656,37 +656,44 @@ class Document:
         return set(mentions)
 
 
-    def unique_relations(self, rel_type, predicted=False):
+    def map_relations(self, use_predicted, relation_type, entity_map_fun):
         """
-        :param predicted: iterate through predicted relations or true relations
-        :type predicted: bool
-        :return: set of all relations (ignoring the text offset and
-        considering only the relation text)
+        Create a set of the document's relations based on the map function of the relation themselves and the given map
+        function for their entities. Relations end up being represented as strings in the set.
         """
 
-        relations = []
+        ret = set()
+
         for part in self:
-            if predicted:
-                relation_list = part.predicted_relations
-            else:
-                relation_list = part.relations
-
-            for rel in relation_list:
-                entity1, relation_type, entity2 = rel.get_relation_without_offset()
-
-                if relation_type == rel_type:
-
-                    if entity1 < entity2:
-                        relation_string = entity1 + ' ' + relation_type + ' ' + entity2
-                    else:
-                        relation_string = entity2 + ' ' + relation_type + ' ' + entity1
-
-                    if relation_string not in relations:
-                        relations.append(relation_string)
-
-        ret = set(relations)
+            part_relations = part.predicted_relations if use_predicted else part.relations
+            part_mapped_relations = {r.map(entity_map_fun) for r in part_relations}
+            ret.update(part_mapped_relations)
 
         return ret
+
+        # relations = []
+        # for part in self:
+        #     if predicted:
+        #         relation_list = part.predicted_relations
+        #     else:
+        #         relation_list = part.relations
+        #
+        #     for rel in relation_list:
+        #         entity1, relation_type, entity2 = rel.get_relation_without_offset()
+        #
+        #         if relation_type == rel_type:
+        #
+        #             if entity1 < entity2:
+        #                 relation_string = entity1 + ' ' + relation_type + ' ' + entity2
+        #             else:
+        #                 relation_string = entity2 + ' ' + relation_type + ' ' + entity1
+        #
+        #             if relation_string not in relations:
+        #                 relations.append(relation_string)
+        #
+        # ret = set(relations)
+        #
+        # return ret
 
 
     def purge_false_relationships(self):
@@ -1363,6 +1370,8 @@ class Relation:
         self.entity1 = entity1
         self.entity2 = entity2
 
+        self.bidirectional = bidirectional
+
 
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
@@ -1377,7 +1386,7 @@ class Relation:
         if (self.bidirectional):
             entities = sorted(entities)
 
-        items = [self.relation_type, *entities]
+        items = [self.class_id, *entities]
 
         return '|'.join(items)
 

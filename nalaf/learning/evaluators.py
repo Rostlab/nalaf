@@ -464,24 +464,15 @@ class DocumentLevelRelationEvaluator(Evaluator):
     converted to lower case. By default, match_case is set to True.
     """
 
-    def __init__(self, rel_type, match_case=True):
-        self.rel_type = rel_type
-        self.match_case = match_case
-        """
-        If set to True, two relations will match only if their entities have the
-        same case. For instance, (entityA, entityB) and (EntityA, EntityB) will
-        be considered different.
-
-        However, if set to False, (entityA, entityB) is the same as
-        (EntityA, EntityB).
-
-        In general, (entityA, entityB) is also the same as (entityB, entityA)
-        """
-
     COMMON_ENTITY_MAP_FUNS = {
-        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower])),
+        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
         'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
     }
+
+
+    def __init__(self, rel_type, entity_map_fun=None):
+        self.rel_type = rel_type
+        self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['unordered_lowercased'] if entity_map_fun is None else entity_map_fun
 
 
     def evaluate(self, dataset):
@@ -498,16 +489,13 @@ class DocumentLevelRelationEvaluator(Evaluator):
         predicted_relations = {}
 
         for docid, doc in dataset.documents.items():
-            true_relations[docid] = list(doc.unique_relations(self.rel_type))
-            predicted_relations[docid] = list(doc.unique_relations(self.rel_type, predicted=True))
+            true_relations[docid] = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
+            predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
 
         for docid in docids:
             actual = true_relations[docid]
             predicted = predicted_relations[docid]
 
-            if not self.match_case:
-                predicted = [x.lower() for x in predicted]
-                actual = [x.lower() for x in actual]
             for relation in predicted:
                 if relation in actual:
                     counts[docid]['tp'] += 1

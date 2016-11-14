@@ -692,6 +692,7 @@ class Document:
             for rel in part.relations:
                 yield rel
 
+
     def purge_false_relationships(self):
         """
         purging false relationships (that do not return true if validating themselves)
@@ -699,6 +700,7 @@ class Document:
         """
         for part in self.parts:
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
+
 
     def get_size(self):
         """returns nr of chars including spaces between parts"""
@@ -1351,8 +1353,9 @@ class Relation:
     Represents a relationship between 2 entities.
     """
 
-    def __init__(self, relation_type, entity1, entity2):
+    def __init__(self, relation_type, entity1, entity2, bidirectional=True):
         self.class_id = relation_type
+
         assert entity1 is not None and entity2 is not None, "Some of the entities are None"
 
         self.entity1 = entity1
@@ -1361,11 +1364,6 @@ class Relation:
 
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
-
-
-    def get_relation_without_offset(self):
-        """:return string with entity1 and entity2 separated by relation type"""
-        return (self.entity1.text, self.class_id, self.entity2.text)
 
 
     def validate_itself(self, part):
@@ -1388,6 +1386,10 @@ class Relation:
                 return True
 
         return False
+
+    def get_relation_without_offset(self):
+        """:return string with entity1 and entity2 separated by relation type"""
+        return (self.entity1.text, self.class_id, self.entity2.text)
 
 
     def __eq__(self, other):

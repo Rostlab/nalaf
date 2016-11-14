@@ -32,7 +32,7 @@ class SVMLightTreeKernels:
         self.svm_learn_call = os.path.join(self.svmlight_dir_path, ('svm_learn' + executables_extension))
         self.svm_classify_call = os.path.join(self.svmlight_dir_path, ('svm_classify' + executables_extension))
 
-        self.verbosity_level = str(1 if is_verbose_mode else 0)
+        self.verbosity_level = str(0)  # for now, for verbosity=0; -- alternative: str(1 if is_verbose_mode else 0)
 
 
     def create_input_file(self, dataset, mode, features, minority_class=None, majority_class_undersampling=1.0):

@@ -639,10 +639,12 @@ class Document:
         second_part = "\n".join(partslist)
         return 'Size: ' + str(self.get_size()) + ", Title: " + self.get_title() + '\n' + second_part
 
+
     def key_value_parts(self):
         """yields iterator for partids"""
         for part_id, part in self.parts.items():
             yield part_id, part
+
 
     def get_unique_mentions(self):
         """:return: set of all mentions (standard + natural language)"""
@@ -652,6 +654,7 @@ class Document:
                 mentions.append(ann.text)
 
         return set(mentions)
+
 
     def unique_relations(self, rel_type, predicted=False):
         """
@@ -687,7 +690,7 @@ class Document:
 
 
     def relations(self):
-        """  helper function for providing an iterator of relations on document level """
+        """helper function for providing an iterator of relations on document level """
         for part in self.parts.values():
             for rel in part.relations:
                 yield rel
@@ -706,12 +709,14 @@ class Document:
         """returns nr of chars including spaces between parts"""
         return sum(len(x.text) + 1 for x in self.parts.values()) - 1
 
+
     def get_title(self):
         """:returns title of document as str"""
         if len(self.parts.keys()) == 0:
             return ""
         else:
             return list(self.parts.values())[0].text
+
 
     def get_text(self):
         """
@@ -726,6 +731,7 @@ class Document:
             text += "{0} ".format(p.text)
         return text.strip()
 
+
     def get_body(self):
         """
         :return: Text without title. No '\n' and spaces between parts.
@@ -739,6 +745,7 @@ class Document:
                 else:
                     text += part.text.strip()
         return text
+
 
     def overlaps_with_mention2(self, start, end):
         """
@@ -768,6 +775,7 @@ class Document:
                                                                                         offset_corrected_ann.text))
             offset += len(part.text)
         return False
+
 
     def overlaps_with_mention(self, *span, annotated=True):
         """
@@ -1263,6 +1271,7 @@ class Entity:
     :type tokens: list[nalaf.structures.data.Token]
     :type head_token: nalaf.structures.data.Token
     """
+
     def __init__(self, class_id, offset, text, confidence=1):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
@@ -1364,6 +1373,20 @@ class Relation:
 
     def __repr__(self):
         return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
+
+
+    def map(self, entity_map_fun):
+        e1_string = entity_map_fun(self.entity1)
+        e2_string = entity_map_fun(self.entity2)
+
+        entities = [e1_string, e2_string]
+
+        if (self.bidirectional):
+            entities = sorted(entities)
+
+        items = [self.relation_type, *entities]
+
+        return '|'.join(items)
 
 
     def validate_itself(self, part):

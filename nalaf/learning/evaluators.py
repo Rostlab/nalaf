@@ -478,6 +478,12 @@ class DocumentLevelRelationEvaluator(Evaluator):
         In general, (entityA, entityB) is also the same as (entityB, entityA)
         """
 
+    COMMON_ENTITY_MAP_FUNS = {
+        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower])),
+        'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
+    }
+
+
     def evaluate(self, dataset):
         """
         :type dataset: nala.structures.data.Dataset

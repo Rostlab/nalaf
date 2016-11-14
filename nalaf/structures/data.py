@@ -1350,7 +1350,7 @@ class Relation:
 
 
     def __repr__(self):
-        return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
+        return 'Relation(Class ID:"{self.class_id}", entity1:"{self.entity1}", entity2:"{self.entity2}")'.format(self=self)
 
 
     def map(self, entity_map_fun):

@@ -689,13 +689,6 @@ class Document:
         return ret
 
 
-    def relations(self):
-        """helper function for providing an iterator of relations on document level """
-        for part in self.parts.values():
-            for rel in part.relations:
-                yield rel
-
-
     def purge_false_relationships(self):
         """
         purging false relationships (that do not return true if validating themselves)

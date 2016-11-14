@@ -666,7 +666,7 @@ class Document:
 
         for part in self:
             part_relations = part.predicted_relations if use_predicted else part.relations
-            part_mapped_relations = {r.map(entity_map_fun) for r in part_relations}
+            part_mapped_relations = {r.map(entity_map_fun) for r in part_relations if r.class_id == relation_type}
             ret.update(part_mapped_relations)
 
         return ret

@@ -1377,7 +1377,8 @@ class Relation:
         if (self.bidirectional):
             entities = sorted(entities)
 
-        items = [self.relation_type, *entities]
+        # items = [self.relation_type, *entities]
+        items = [entities[0], self.class_id, entities[1]]
 
         return '|'.join(items)
 

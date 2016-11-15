@@ -6,6 +6,7 @@ import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
+from itertools import chain
 
 
 class Dataset:
@@ -363,6 +364,7 @@ class Dataset:
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
+
 
     def prune_filtered_sentences(self, filterin=(lambda _: False), percent_to_keep=0):
         """
@@ -1094,22 +1096,12 @@ class Edge:
         check if the edge is present in part.relations.
         :rtype: bool
         """
-        # TODO change the equals method in Relation appropriately not to do thi bullshit
+        potential_edge_relation = Relation(self.relation_type, self.entity1, self.entity2)
+        assert potential_edge_relation.bidirectional, "Code tested only for bidirectional relations"
 
-        relation_1 = Relation(self.relation_type, self.entity1, self.entity2)
-        relation_2 = Relation(self.relation_type, self.entity2, self.entity1)
+        relations = self.same_part.relations if self.e1_part == self.e2_part else chain(self.e1_part.relations, self.e2_part.relations)
 
-        # TODO, yes, we are aware that we also have self.same_part. However, ideally here we do not use that variable
-        assert(self.e1_part == self.e2_part)
-        self_part = self.e1_part
-
-        for relation in self_part.relations:
-            if relation_1 == relation:
-                return True
-            if relation_2 == relation:
-                return True
-
-        return False
+        return potential_edge_relation in relations
 
 
     def __repr__(self):
@@ -1289,9 +1281,8 @@ class Entity:
         if self.normalisation_dict:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
 
-        return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
-               'Text: "{self.text}", SubClass: {self.subclass}, ' \
-               'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
+        return 'Entity(id: {self.class_id}, offset: {self.offset}, ' \
+               'text: {self.text}, subclass: {self.subclass}{norm})'.format(self=self, norm=norm_string)
 
 
     def __eq__(self, other):
@@ -1350,7 +1341,7 @@ class Relation:
 
 
     def __repr__(self):
-        return 'Relation(Class ID:"{self.class_id}", entity1:"{self.entity1}", entity2:"{self.entity2}")'.format(self=self)
+        return 'Relation(id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
 
 
     def map(self, entity_map_fun):
@@ -1401,8 +1392,10 @@ class Relation:
         """
 
         if other is not None:
-            # TODO CAUTION (https://github.com/juanmirocks/LocText/issues/6) this may have terrible consequences
-            return self.__dict__ == other.__dict__
+            return (self.class_id == other.class_id and
+                    self.bidirectional == other.bidirectional and
+                    (self.entity1 == other.entity1 and self.entity2 == other.entity2 or
+                        self.bidirectional and self.entity1 == other.entity2 and self.entity2 == other.entity1))
 
         else:
             return False

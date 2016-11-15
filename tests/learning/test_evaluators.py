@@ -2,42 +2,44 @@ import unittest
 from nalaf.structures.data import Dataset, Document, Part, Entity
 from nalaf.learning.evaluators import Evaluator, MentionLevelEvaluator
 
-STUB_ENTITY_CLASS_ID = 'e_x'
+
+STUB_E_ID_1 = 'e_x_1'
+STUB_E_ID_2 = 'e_x_2'
 
 
 class TestMentionLevelEvaluator(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # create a sample dataset to test
-        cls.dataset = Dataset()
+        # create a sample dataset1 (1) to test
+        cls.dataset1 = Dataset()
         doc_1 = Document()
 
         text = '.... aaaa .... bbbb .... cccc .... dddd .... eeee .... ffff .... gggg .... hhhh .... jjjj'
         part_1 = Part(text)
 
-        cls.dataset.documents['doc_1'] = doc_1
+        cls.dataset1.documents['doc_1'] = doc_1
         doc_1.parts['part_1'] = part_1
 
-        exact_1 = Entity(STUB_ENTITY_CLASS_ID, 5, 'aaaa')
+        exact_1 = Entity(STUB_E_ID_1, 5, 'aaaa')
         exact_1.subclass = 1
-        exact_2 = Entity(STUB_ENTITY_CLASS_ID, 55, 'ffff')
+        exact_2 = Entity(STUB_E_ID_1, 55, 'ffff')
         exact_2.subclass = 2
-        exact_3 = Entity(STUB_ENTITY_CLASS_ID, 75, 'hhhh')
+        exact_3 = Entity(STUB_E_ID_1, 75, 'hhhh')
         exact_3.subclass = 2
 
-        overlap_1_1 = Entity(STUB_ENTITY_CLASS_ID, 25, 'cccc')
+        overlap_1_1 = Entity(STUB_E_ID_1, 25, 'cccc')
         overlap_1_1.subclass = 1
-        overlap_1_2 = Entity(STUB_ENTITY_CLASS_ID, 26, 'cc')
+        overlap_1_2 = Entity(STUB_E_ID_1, 26, 'cc')
         overlap_1_2.subclass = 1
 
-        overlap_2_1 = Entity(STUB_ENTITY_CLASS_ID, 32, '.. ddd')
+        overlap_2_1 = Entity(STUB_E_ID_1, 32, '.. ddd')
         overlap_2_1.subclass = 2
-        overlap_2_2 = Entity(STUB_ENTITY_CLASS_ID, 36, 'ddd ...')
+        overlap_2_2 = Entity(STUB_E_ID_1, 36, 'ddd ...')
         overlap_2_2.subclass = 2
 
-        overlap_3_1 = Entity(STUB_ENTITY_CLASS_ID, 65, 'gggg')
+        overlap_3_1 = Entity(STUB_E_ID_1, 65, 'gggg')
         overlap_3_1.subclass = 1
-        overlap_3_2 = Entity(STUB_ENTITY_CLASS_ID, 62, '.. gggg ..')
+        overlap_3_2 = Entity(STUB_E_ID_1, 62, '.. gggg ..')
         overlap_3_2.subclass = 2
 
         missing_1 = Entity('e2', 45, 'eeee')
@@ -51,12 +53,17 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         part_1.annotations = [exact_1, exact_2, exact_3, overlap_1_1, overlap_2_1, overlap_3_1, missing_1, missing_2]
         part_1.predicted_annotations = [exact_1, exact_2, exact_3, overlap_1_2, overlap_2_2, overlap_3_2, spurios]
 
+        # Create a second dataset2 for relations
+        cls.dataset2 = Dataset()
+        doc_1 = Document()
+        doc_2 = Document()
+
     def test_implements_evaluator_interface(self):
         self.assertIsInstance(MentionLevelEvaluator(), Evaluator)
 
     def test_exact_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
+        evaluation = (evaluator.evaluate(self.dataset1))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp, 4)  # the 3 overlapping + 1 spurious
@@ -70,7 +77,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
+        evaluation = (evaluator.evaluate(self.dataset1))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp - evaluation.fp_ov, 1)  # the 1 spurious
@@ -86,7 +93,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_half_overlapping_strictness(self):
         evaluator = MentionLevelEvaluator()
-        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)
+        evaluation = (evaluator.evaluate(self.dataset1))(MentionLevelEvaluator.TOTAL_LABEL)
 
         self.assertEqual(evaluation.tp, 3)  # the 3 exact matches
         self.assertEqual(evaluation.fp - evaluation.fp_ov, 1)  # the 1 spurious
@@ -101,21 +108,21 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(ret.f_measure, 2 * ((3 + 6 / 2) / 10 * (3 + 6 / 2) / 11) / ((3 + 6 / 2) / 10 + (3 + 6 / 2) / 11))
 
     def test_exception_on_equality_operator(self):
-        ann_1 = Entity(STUB_ENTITY_CLASS_ID, 1, 'text_1')
-        ann_2 = Entity(STUB_ENTITY_CLASS_ID, 2, 'text_2')
+        ann_1 = Entity(STUB_E_ID_1, 1, 'text_1')
+        ann_2 = Entity(STUB_E_ID_1, 2, 'text_2')
 
         Entity.equality_operator = 'not valid'
         self.assertRaises(ValueError, lambda: ann_1 == ann_2)
 
     def test_exception_on_strictness(self):
         evaluator = MentionLevelEvaluator()  # this is fine
-        evaluation = (evaluator.evaluate(self.dataset))(MentionLevelEvaluator.TOTAL_LABEL)  # this is fine
+        evaluation = (evaluator.evaluate(self.dataset1))(MentionLevelEvaluator.TOTAL_LABEL)  # this is fine
 
         self.assertRaises(ValueError, evaluation.compute, 'strictness not valid')
 
     def test_subclass_analysis(self):
         evaluator = MentionLevelEvaluator(subclass_analysis=True)
-        evaluations = evaluator.evaluate(self.dataset)
+        evaluations = evaluator.evaluate(self.dataset1)
 
         self.assertEqual(evaluations(1).tp, 1)
         self.assertEqual(evaluations(2).tp, 2)

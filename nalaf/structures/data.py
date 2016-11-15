@@ -1245,7 +1245,7 @@ class Entity:
     :type head_token: nalaf.structures.data.Token
     """
 
-    def __init__(self, class_id, offset, text, confidence=1):
+    def __init__(self, class_id, offset, text, confidence=1, norm=None):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
         self.offset = offset
@@ -1259,7 +1259,7 @@ class Entity:
         """
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
-        self.normalisation_dict = {}
+        self.normalisation_dict = {} if norm is None else norm
         """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""

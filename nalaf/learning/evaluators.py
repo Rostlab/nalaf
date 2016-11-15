@@ -4,6 +4,8 @@ from nalaf import print_verbose, print_debug
 from collections import namedtuple
 import random
 import math
+import uuid
+
 
 class Evaluation:
 
@@ -467,7 +469,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
-        'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
+
+        # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
+        'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(e.class_id), str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))
     }
 
 
@@ -476,6 +480,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         if entity_map_fun is None:
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
         elif isinstance(entity_map_fun, str):
+            assert not entity_map_fun.endswith('_fun'), "You cannot give function names that are complex functions such as 'normalized_fun'"
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
         else:
             self.entity_map_fun = entity_map_fun

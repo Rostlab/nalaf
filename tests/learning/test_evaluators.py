@@ -353,5 +353,68 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 1.0)
 
+
+    def test_DocumentLevelRelationEvaluator_normalized_entities(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1, entity_map_fun=DocumentLevelRelationEvaluator.COMMON_ENTITY_MAP_FUNS['normalized_fun']('n_1'))
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_1.relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": 1964}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": 1961})),
+        ]
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool"),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": 1961})),
+
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": 666}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": 1961})),
+
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": 1964}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": 1961})),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 0)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 3)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.0)
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool band", norm={"n_1": 1964}),
+                Entity(STUB_E_ID_2, 0, "Maynard James Keenan", norm={"n_1": 1961})),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+
 if __name__ == '__main__':
     unittest.main()

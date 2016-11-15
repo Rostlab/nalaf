@@ -451,28 +451,27 @@ class MentionLevelEvaluator(Evaluator):
 
 class DocumentLevelRelationEvaluator(Evaluator):
     """
-    Implements document level performance evaluation for relations. That means
-    it extracts all unique relations from a document, and compares it with the
-    predicted relations.
+    Implements document level performance evaluation for relations. It extracts
+    and compares unique (gold) relations against the predicted relations.
 
-    The evaluator does not care about the order of entities in a relation and
-    assumes that all relations are undirected.
+    The evaluator assumes that all relations are undirected (bidirectional)
+    (beware: this is note checked).
 
-    The comparision of unique relations can be done by the 'match_case'
-    argument. If the value of 'match_case' is True, then a predicted relation
-    will match only if the cases match. If set to False, both entities will be
-    converted to lower case. By default, match_case is set to True.
+    How entities within the relations are compared against each other is decided
+    by the user and given in the `entity_map_fun` parameter. The default for this
+    is to compare entities by their class id and their text lowercased.
+    See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`
     """
 
     COMMON_ENTITY_MAP_FUNS = {
-        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+        'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
         'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
     }
 
 
     def __init__(self, rel_type, entity_map_fun=None):
         self.rel_type = rel_type
-        self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['unordered_lowercased'] if entity_map_fun is None else entity_map_fun
+        self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased'] if entity_map_fun is None else entity_map_fun
 
 
     def evaluate(self, dataset):
@@ -504,6 +503,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
                     counts[docid]['tp'] += 1
                 else:
                     counts[docid]['fp'] += 1
+
             for relation in actual:
                 if relation not in predicted:
                     counts[docid]['fn'] += 1

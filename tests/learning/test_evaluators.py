@@ -236,7 +236,39 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 1.0)
 
+
+    def test_DocumentLevelRelationEvaluator_parts_irrelevant(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_ PART *1*')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_2 = Part('_irrelevant_ PART *2*')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_2'] = part_2
+
+        part_1.relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "maynard")),
+        ]
+
         # -
+
+        part_2.predicted_relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_2, 0, "maynard"), Entity(STUB_E_ID_1, 0, "TOOL")),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
 
     def test_DocumentLevelRelationEvaluator_repeated_relations_irrelevant(self):
 

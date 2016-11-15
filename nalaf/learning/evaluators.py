@@ -465,6 +465,16 @@ class DocumentLevelRelationEvaluator(Evaluator):
     See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
     You can give this parameter as either a function or as a string name
     that matches one of `COMMON_ENTITY_MAP_FUNS`.
+
+    Furthermore, you can choose how to compare relations to each other.
+    First of all, relations are converted to unique strings (together with the
+    `entity_map_fun` parameter). Second of all, the default is to compare the
+    relation-strings with string's equals function (str.__eq__). Howerver,
+    the user decide by `relation_equals_fun` how to compare the relation strings.
+    This must be an equals function that takes two strings as parameters and returns
+    a Boolean (True or Fals). This is helpful in some circumtances, e.g., when
+    normalization ids must be compared in a hierarchical manner, for which mere
+    equals comparison is not enough.
     """
 
     COMMON_ENTITY_MAP_FUNS = {
@@ -475,7 +485,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     }
 
 
-    def __init__(self, rel_type, entity_map_fun=None):
+    def __init__(self, rel_type, entity_map_fun=None, relation_equals_fun=None):
         self.rel_type = rel_type
         if entity_map_fun is None:
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
@@ -484,6 +494,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
         else:
             self.entity_map_fun = entity_map_fun
+
+        self.relation_equals_fun = str.__eq__ if relation_equals_fun is None else relation_equals_fun
 
 
     def evaluate(self, dataset):
@@ -510,14 +522,16 @@ class DocumentLevelRelationEvaluator(Evaluator):
             print_verbose("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
             print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
-            for relation in predicted:
-                if relation in actual:
+            for r_predicted in predicted:
+
+                if any(self.relation_equals_fun(r_predicted, r_actual) for r_actual in actual):
                     counts[docid]['tp'] += 1
                 else:
                     counts[docid]['fp'] += 1
 
-            for relation in actual:
-                if relation not in predicted:
+            for r_actual in actual:
+
+                if not any(self.relation_equals_fun(r_actual, r_predicted) for r_predicted in predicted):
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

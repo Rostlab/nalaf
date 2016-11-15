@@ -1,10 +1,11 @@
 import unittest
-from nalaf.structures.data import Dataset, Document, Part, Entity
-from nalaf.learning.evaluators import Evaluator, MentionLevelEvaluator
+from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
+from nalaf.learning.evaluators import Evaluator, MentionLevelEvaluator, DocumentLevelRelationEvaluator
 
 
 STUB_E_ID_1 = 'e_x_1'
 STUB_E_ID_2 = 'e_x_2'
+STUB_R_ID_1 = 'r_x_1'
 
 
 class TestMentionLevelEvaluator(unittest.TestCase):
@@ -53,10 +54,6 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         part_1.annotations = [exact_1, exact_2, exact_3, overlap_1_1, overlap_2_1, overlap_3_1, missing_1, missing_2]
         part_1.predicted_annotations = [exact_1, exact_2, exact_3, overlap_1_2, overlap_2_2, overlap_3_2, spurios]
 
-        # Create a second dataset2 for relations
-        cls.dataset2 = Dataset()
-        doc_1 = Document()
-        doc_2 = Document()
 
     def test_implements_evaluator_interface(self):
         self.assertIsInstance(MentionLevelEvaluator(), Evaluator)
@@ -137,6 +134,191 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(evaluations(1).fn_ov, 2)
         self.assertEqual(evaluations(2).fp_ov, 1)
         self.assertEqual(evaluations(2).fn_ov, 1)
+
+    # -------
+
+    def test_DocumentLevelRelationEvaluator_default_entities_case_irrelevant(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_1.relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "maynard")
+            ),
+        ]
+
+        # -
+
+        part_1.predicted_relations = [
+            # empty
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.0)
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "maynard")
+            ),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "tool"),
+                Entity(STUB_E_ID_2, 0, "MAYNARD")
+            ),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+
+    def test_DocumentLevelRelationEvaluator_order_irrelevant(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_1.relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "maynard")
+            ),
+        ]
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_2, 0, "maynard"),
+                Entity(STUB_E_ID_1, 0, "TOOL")
+            ),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+        # -
+
+    def test_DocumentLevelRelationEvaluator_repeated_relations_irrelevant(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_1.relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "maynard")
+            ),
+
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "Danny Carey")
+            ),
+
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 1, "TOOL"),
+                Entity(STUB_E_ID_2, 1, "Danny Carey")
+            ),
+        ]
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "TOOL"),
+                Entity(STUB_E_ID_2, 0, "maynard")
+            ),
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 1, "TOOL"),
+                Entity(STUB_E_ID_2, 1, "maynard")
+            ),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.6666666666666666)
+
+        # -
+
+        part_1.predicted_relations = [
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 2, "TOOL"),
+                Entity(STUB_E_ID_2, 2, "maynard")
+            ),
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 3, "TOOL"),
+                Entity(STUB_E_ID_2, 3, "maynard")
+            ),
+
+            Relation(
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 4, "TOOL"),
+                Entity(STUB_E_ID_2, 4, "Danny Carey")
+            ),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 2)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
 
 if __name__ == '__main__':
     unittest.main()

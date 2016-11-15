@@ -460,7 +460,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
     How entities within the relations are compared against each other is decided
     by the user and given in the `entity_map_fun` parameter. The default for this
     is to compare entities by their class id and their text lowercased.
-    See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`
+    See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
+    You can give this parameter as either a function or as a string name
+    that matches one of `COMMON_ENTITY_MAP_FUNS`.
     """
 
     COMMON_ENTITY_MAP_FUNS = {
@@ -471,7 +473,12 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
     def __init__(self, rel_type, entity_map_fun=None):
         self.rel_type = rel_type
-        self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased'] if entity_map_fun is None else entity_map_fun
+        if entity_map_fun is None:
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
+        elif isinstance(entity_map_fun, str):
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
+        else:
+            self.entity_map_fun = entity_map_fun
 
 
     def evaluate(self, dataset):

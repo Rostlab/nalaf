@@ -237,6 +237,39 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(computation.f_measure, 1.0)
 
 
+    def test_DocumentLevelRelationEvaluator_false_positives(self):
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_ PART *1*')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+
+        part_2 = Part('_irrelevant_ PART *2*')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_2'] = part_2
+
+        part_1.relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "Maynard")),
+        ]
+
+        # -
+
+        part_2.predicted_relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_2, 0, "TOOL"), Entity(STUB_E_ID_1, 0, "Snoop Dog")),
+        ]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 0)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.0)
+
+
     def test_DocumentLevelRelationEvaluator_parts_irrelevant(self):
 
         evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
@@ -281,38 +314,18 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         doc_1.parts['part_1'] = part_1
 
         part_1.relations = [
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "TOOL"),
-                Entity(STUB_E_ID_2, 0, "maynard")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "maynard")),
 
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "TOOL"),
-                Entity(STUB_E_ID_2, 0, "Danny Carey")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "Danny Carey")),
 
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 1, "TOOL"),
-                Entity(STUB_E_ID_2, 1, "Danny Carey")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 1, "TOOL"), Entity(STUB_E_ID_2, 1, "Danny Carey")),
         ]
 
         # -
 
         part_1.predicted_relations = [
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "TOOL"),
-                Entity(STUB_E_ID_2, 0, "maynard")
-            ),
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 1, "TOOL"),
-                Entity(STUB_E_ID_2, 1, "maynard")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "maynard")),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 1, "TOOL"), Entity(STUB_E_ID_2, 1, "maynard")),
         ]
 
         evals = evaluator.evaluate(dataset)
@@ -326,22 +339,10 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         # -
 
         part_1.predicted_relations = [
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 2, "TOOL"),
-                Entity(STUB_E_ID_2, 2, "maynard")
-            ),
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 3, "TOOL"),
-                Entity(STUB_E_ID_2, 3, "maynard")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 2, "TOOL"), Entity(STUB_E_ID_2, 2, "maynard")),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 3, "TOOL"), Entity(STUB_E_ID_2, 3, "maynard")),
 
-            Relation(
-                STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 4, "TOOL"),
-                Entity(STUB_E_ID_2, 4, "Danny Carey")
-            ),
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 4, "TOOL"), Entity(STUB_E_ID_2, 4, "Danny Carey")),
         ]
 
         evals = evaluator.evaluate(dataset)

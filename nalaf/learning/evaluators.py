@@ -4,6 +4,8 @@ from nalaf import print_verbose, print_debug
 from collections import namedtuple
 import random
 import math
+import uuid
+
 
 class Evaluation:
 
@@ -451,37 +453,37 @@ class MentionLevelEvaluator(Evaluator):
 
 class DocumentLevelRelationEvaluator(Evaluator):
     """
-    Implements document level performance evaluation for relations. That means
-    it extracts all unique relations from a document, and compares it with the
-    predicted relations.
+    Implements document level performance evaluation for relations. It extracts
+    and compares unique (gold) relations against the predicted relations.
 
-    The evaluator does not care about the order of entities in a relation and
-    assumes that all relations are undirected.
+    The evaluator assumes that all relations are undirected (bidirectional)
+    (beware: this is note checked).
 
-    The comparision of unique relations can be done by the 'match_case'
-    argument. If the value of 'match_case' is True, then a predicted relation
-    will match only if the cases match. If set to False, both entities will be
-    converted to lower case. By default, match_case is set to True.
+    How entities within the relations are compared against each other is decided
+    by the user and given in the `entity_map_fun` parameter. The default for this
+    is to compare entities by their class id and their text lowercased.
+    See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
+    You can give this parameter as either a function or as a string name
+    that matches one of `COMMON_ENTITY_MAP_FUNS`.
     """
 
-    def __init__(self, rel_type, match_case=True):
-        self.rel_type = rel_type
-        self.match_case = match_case
-        """
-        If set to True, two relations will match only if their entities have the
-        same case. For instance, (entityA, entityB) and (EntityA, EntityB) will
-        be considered different.
-
-        However, if set to False, (entityA, entityB) is the same as
-        (EntityA, EntityB).
-
-        In general, (entityA, entityB) is also the same as (entityB, entityA)
-        """
-
     COMMON_ENTITY_MAP_FUNS = {
-        'unordered_lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower])),
-        'normalized_fun': (lambda n_id: (lambda e: str(e.normalisation_dict[n_id])))
+        'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+
+        # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
+        'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(e.class_id), str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))
     }
+
+
+    def __init__(self, rel_type, entity_map_fun=None):
+        self.rel_type = rel_type
+        if entity_map_fun is None:
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
+        elif isinstance(entity_map_fun, str):
+            assert not entity_map_fun.endswith('_fun'), "You cannot give function names that are complex functions such as 'normalized_fun'"
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
+        else:
+            self.entity_map_fun = entity_map_fun
 
 
     def evaluate(self, dataset):
@@ -498,29 +500,22 @@ class DocumentLevelRelationEvaluator(Evaluator):
         predicted_relations = {}
 
         for docid, doc in dataset.documents.items():
-            true_relations[docid] = list(doc.unique_relations(self.rel_type))
-            predicted_relations[docid] = list(doc.unique_relations(self.rel_type, predicted=True))
+            true_relations[docid] = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
+            predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
 
         for docid in docids:
             actual = true_relations[docid]
             predicted = predicted_relations[docid]
 
-            if not self.match_case:
-                predicted = [x.lower() for x in predicted]
-                actual = [x.lower() for x in actual]
-
-            print("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
-            print("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
-
-            if (len(set(actual)) != len(list(actual)) or len(set(predicted)) != len(list(predicted))):
-                print("*********", len(set(actual)), len(list(actual)), len(set(predicted)), len(list(predicted)))
-                raise Exception("fuck")
+            print_verbose("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
+            print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
             for relation in predicted:
                 if relation in actual:
                     counts[docid]['tp'] += 1
                 else:
                     counts[docid]['fp'] += 1
+
             for relation in actual:
                 if relation not in predicted:
                     counts[docid]['fn'] += 1

@@ -5,7 +5,6 @@ from nalaf.structures.data import *
 from nalaf.learning.domain.bio import GNormPlusGeneTagger
 from nalaf.preprocessing.spliters import NLTKSplitter
 from nalaf.preprocessing.tokenizers import TmVarTokenizer
-from nalaf.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
 
 
 @attr('slow')

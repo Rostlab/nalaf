@@ -6,6 +6,7 @@ import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
+from itertools import chain
 
 
 class Dataset:
@@ -53,39 +54,43 @@ class Dataset:
                 yield part
 
 
-    def annotations(self):
+    def entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         for part in self.parts():
             for annotation in part.annotations:
                 yield annotation
 
 
-    def predicted_annotations(self):
+    def annotations(self):
+        warnings.warn('Use `self.entities` instead', DeprecationWarning)
+        return self.entities()
+
+
+    def predicted_entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all predicted entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
         for part in self.parts():
             for annotation in part.predicted_annotations:
                 yield annotation
 
 
+    def predicted_annotations(self):
+        warnings.warn('Use `self.predicted_entities` instead', DeprecationWarning)
+        return self.predicted_entities()
+
+
     def relations(self):
         """
-        helper function that iterates through all relations
+        Yield all relations of the dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():
@@ -95,7 +100,8 @@ class Dataset:
 
     def predicted_relations(self):
         """
-        helper function that iterates through all predicted relations
+        Yield all relations of the dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():
@@ -363,6 +369,7 @@ class Dataset:
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
+
 
     def prune_filtered_sentences(self, filterin=(lambda _: False), percent_to_keep=0):
         """
@@ -656,35 +663,18 @@ class Document:
         return set(mentions)
 
 
-    def unique_relations(self, rel_type, predicted=False):
+    def map_relations(self, use_predicted, relation_type, entity_map_fun):
         """
-        :param predicted: iterate through predicted relations or true relations
-        :type predicted: bool
-        :return: set of all relations (ignoring the text offset and
-        considering only the relation text)
+        Create a set of the document's relations based on the map function of the relation themselves and the given map
+        function for their entities. Relations end up being represented as strings in the set.
         """
 
-        relations = []
+        ret = set()
+
         for part in self:
-            if predicted:
-                relation_list = part.predicted_relations
-            else:
-                relation_list = part.relations
-
-            for rel in relation_list:
-                entity1, relation_type, entity2 = rel.get_relation_without_offset()
-
-                if relation_type == rel_type:
-
-                    if entity1 < entity2:
-                        relation_string = entity1 + ' ' + relation_type + ' ' + entity2
-                    else:
-                        relation_string = entity2 + ' ' + relation_type + ' ' + entity1
-
-                    if relation_string not in relations:
-                        relations.append(relation_string)
-
-        ret = set(relations)
+            part_relations = part.predicted_relations if use_predicted else part.relations
+            part_mapped_relations = {r.map(entity_map_fun) for r in part_relations if r.class_id == relation_type}
+            ret.update(part_mapped_relations)
 
         return ret
 
@@ -1111,22 +1101,12 @@ class Edge:
         check if the edge is present in part.relations.
         :rtype: bool
         """
-        # TODO change the equals method in Relation appropriately not to do thi bullshit
+        potential_edge_relation = Relation(self.relation_type, self.entity1, self.entity2)
+        assert potential_edge_relation.bidirectional, "Code tested only for bidirectional relations"
 
-        relation_1 = Relation(self.relation_type, self.entity1, self.entity2)
-        relation_2 = Relation(self.relation_type, self.entity2, self.entity1)
+        relations = self.same_part.relations if self.e1_part == self.e2_part else chain(self.e1_part.relations, self.e2_part.relations)
 
-        # TODO, yes, we are aware that we also have self.same_part. However, ideally here we do not use that variable
-        assert(self.e1_part == self.e2_part)
-        self_part = self.e1_part
-
-        for relation in self_part.relations:
-            if relation_1 == relation:
-                return True
-            if relation_2 == relation:
-                return True
-
-        return False
+        return potential_edge_relation in relations
 
 
     def __repr__(self):
@@ -1265,7 +1245,7 @@ class Entity:
     :type head_token: nalaf.structures.data.Token
     """
 
-    def __init__(self, class_id, offset, text, confidence=1):
+    def __init__(self, class_id, offset, text, confidence=1, norm=None):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
         self.offset = offset
@@ -1279,7 +1259,7 @@ class Entity:
         """
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
-        self.normalisation_dict = {}
+        self.normalisation_dict = {} if norm is None else norm
         """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""
@@ -1306,9 +1286,8 @@ class Entity:
         if self.normalisation_dict:
             norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
 
-        return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
-               'Text: "{self.text}", SubClass: {self.subclass}, ' \
-               'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
+        return 'Entity(id: {self.class_id}, offset: {self.offset}, ' \
+               'text: {self.text}, subclass: {self.subclass}{norm})'.format(self=self, norm=norm_string)
 
 
     def __eq__(self, other):
@@ -1363,22 +1342,23 @@ class Relation:
         self.entity1 = entity1
         self.entity2 = entity2
 
+        self.bidirectional = bidirectional
+
 
     def __repr__(self):
-        return 'Relation(Class ID:"{self.class_id}", entity1:"{str(self.entity1)}", entity2:"{str(self.entity2)}")'.format(self=self)
+        return 'Relation(id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
 
 
     def map(self, entity_map_fun):
         e1_string = entity_map_fun(self.entity1)
         e2_string = entity_map_fun(self.entity2)
 
-        entities = [e1_string, e2_string]
+        if (self.bidirectional and self.entity2.class_id <= self.entity1.class_id):
+            entities = [e2_string, e1_string]
+        else:
+            entities = [e1_string, e2_string]
 
-        if (self.bidirectional):
-            entities = sorted(entities)
-
-        # items = [self.relation_type, *entities]
-        items = [entities[0], self.class_id, entities[1]]
+        items = [self.class_id, *entities]
 
         return '|'.join(items)
 
@@ -1417,8 +1397,10 @@ class Relation:
         """
 
         if other is not None:
-            # TODO CAUTION (https://github.com/juanmirocks/LocText/issues/6) this may have terrible consequences
-            return self.__dict__ == other.__dict__
+            return (self.class_id == other.class_id and
+                    self.bidirectional == other.bidirectional and
+                    (self.entity1 == other.entity1 and self.entity2 == other.entity2 or
+                        self.bidirectional and self.entity1 == other.entity2 and self.entity2 == other.entity1))
 
         else:
             return False

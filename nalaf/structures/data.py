@@ -54,39 +54,43 @@ class Dataset:
                 yield part
 
 
-    def annotations(self):
+    def entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         for part in self.parts():
             for annotation in part.annotations:
                 yield annotation
 
 
-    def predicted_annotations(self):
+    def annotations(self):
+        warnings.warn('Use `self.entities` instead', DeprecationWarning)
+        return self.entities()
+
+
+    def predicted_entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all predicted entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
         for part in self.parts():
             for annotation in part.predicted_annotations:
                 yield annotation
 
 
+    def predicted_annotations(self):
+        warnings.warn('Use `self.predicted_entities` instead', DeprecationWarning)
+        return self.predicted_entities()
+
+
     def relations(self):
         """
-        helper function that iterates through all relations
+        Yield all relations of the dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():
@@ -96,7 +100,8 @@ class Dataset:
 
     def predicted_relations(self):
         """
-        helper function that iterates through all predicted relations
+        Yield all relations of the dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():

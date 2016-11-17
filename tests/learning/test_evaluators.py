@@ -416,5 +416,67 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(computation.f_measure, 1.0)
 
 
+    def _create_basic_dataset(self):
+        dataset = Dataset()
+        doc_1 = Document()
+        part_1 = Part('_irrelevant_')
+        dataset.documents['doc_1'] = doc_1
+        doc_1.parts['part_1'] = part_1
+        return (dataset, part_1)
+
+
+    def test_DocumentLevelRelationEvaluator_relation_equiv_fun_order_matters(self):
+
+        simple_entity_map_fun = (lambda e: e.text)
+        def relation_equiv_fun(gold, pred):
+            print('gold:', gold, ' <---> ', 'pred:', pred)
+            return gold < pred
+
+        evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, simple_entity_map_fun, relation_equiv_fun)
+
+        (dataset, part) = self._create_basic_dataset()
+
+        part.relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "1"), Entity(STUB_E_ID_2, 0, "2")),
+        ]
+
+        part.predicted_relations = [
+            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "2"), Entity(STUB_E_ID_2, 0, "1")),
+        ]
+
+        self.assertTrue(relation_equiv_fun(
+            part.relations[0].map(simple_entity_map_fun),
+            part.predicted_relations[0].map(simple_entity_map_fun)))
+
+        self.assertFalse(relation_equiv_fun(
+            part.predicted_relations[0].map(simple_entity_map_fun),
+            part.relations[0].map(simple_entity_map_fun)))
+
+        # -
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        print(evaluation)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+        # -
+
+        tmp = part.relations
+        part.relations = part.predicted_relations
+        part.predicted_relations = tmp
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 0)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.0)
+
+
 if __name__ == '__main__':
     unittest.main()

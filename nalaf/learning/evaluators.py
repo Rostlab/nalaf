@@ -471,11 +471,13 @@ class DocumentLevelRelationEvaluator(Evaluator):
     First of all, relations are converted to unique strings (together with the
     `entity_map_fun` parameter). Second of all, the default is to compare the
     relation-strings with string's equals function (str.__eq__). Howerver,
-    the user can decide with `relation_equals_fun` how to compare the relations' strings.
-    This must be an function that takes two strings as parameters and returns
-    a Boolean (True or Fals). This arbitrary `equals` function is helpful in some circumtances,
-    e.g., when normalization ids must be compared in a hierarchical manner, for which mere
-    string equals comparison is not enough.
+    the user can decide with `relation_equiv_fun` how to compare the relations' strings.
+    This must be an function that takes two parameter strings (`gold` and `pred`, i.e truth relation and prediction)
+    and returns a Boolean (True or Fals). This arbitrary `equivalent` function is helpful
+    when mere string equals comparison is not enough. Example: when normalization ids must be compared
+    in a hierarchical manner. Important: the order of the parameters _does matter_, i.e.,
+    `gold` _equiv_ `pred` does not imply that `pred` _equiv_ `gold` or they other way around.
+    Example: '1' < '2 but not '1' > '2'
     """
 
     COMMON_ENTITY_MAP_FUNS = {
@@ -486,7 +488,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     }
 
 
-    def __init__(self, rel_type, entity_map_fun=None, relation_equals_fun=None):
+    def __init__(self, rel_type, entity_map_fun=None, relation_equiv_fun=None):
         self.rel_type = rel_type
         if entity_map_fun is None:
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
@@ -496,7 +498,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         else:
             self.entity_map_fun = entity_map_fun
 
-        self.relation_equals_fun = str.__eq__ if relation_equals_fun is None else relation_equals_fun
+        self.relation_equiv_fun = str.__eq__ if relation_equiv_fun is None else relation_equiv_fun
 
 
     def evaluate(self, dataset):
@@ -525,14 +527,14 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_predicted in predicted:
 
-                if any(self.relation_equals_fun(r_predicted, r_actual) for r_actual in actual):
+                if any(self.relation_equiv_fun(r_actual, r_predicted) for r_actual in actual):
                     counts[docid]['tp'] += 1
                 else:
                     counts[docid]['fp'] += 1
 
             for r_actual in actual:
 
-                if not any(self.relation_equals_fun(r_actual, r_predicted) for r_predicted in predicted):
+                if not any(self.relation_equiv_fun(r_actual, r_predicted) for r_predicted in predicted):
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

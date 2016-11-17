@@ -476,7 +476,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     and returns a Boolean (True or Fals). This arbitrary `equivalent` function is helpful
     when mere string equals comparison is not enough. Example: when normalization ids must be compared
     in a hierarchical manner. Important: the order of the parameters _does matter_, i.e.,
-    `gold` _equiv_ `pred` does not imply that `pred` _equiv_ `gold` or they other way around.
+    `gold` _equiv_ `pred` does not necessarily imply that `pred` _equiv_ `gold` or they other way around.
     Example: '1' < '2 but not '1' > '2'
     """
 

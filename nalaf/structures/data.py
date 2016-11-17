@@ -1349,7 +1349,7 @@ class Relation:
         return 'Relation(id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
 
 
-    def map(self, entity_map_fun):
+    def map(self, entity_map_fun, prefix_with_rel_type=True):
         e1_string = entity_map_fun(self.entity1)
         e2_string = entity_map_fun(self.entity2)
 
@@ -1358,7 +1358,10 @@ class Relation:
         else:
             entities = [e1_string, e2_string]
 
-        items = [self.class_id, *entities]
+        if prefix_with_rel_type:
+            items = [self.class_id, *entities]
+        else:
+            items = entities
 
         return '|'.join(items)
 

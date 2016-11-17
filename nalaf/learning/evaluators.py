@@ -481,7 +481,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
         # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
-        'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(e.class_id), str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))
+        'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))
     }
 
 

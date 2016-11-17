@@ -60,7 +60,7 @@ class Evaluation:
         return Evaluation.Computation(precision, recall, f_measure)
 
     def __str__(self):
-        return self.format()
+        return '\n'.join([self.format_header(), self.format_row()])
 
     def format_header(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
@@ -167,7 +167,8 @@ class EvaluationWithStandardError:
 
 
     def __str__(self):
-        return self.format()
+        return '\n'.join([self.format_header(), self.format_row()])
+
 
     def format_header(self, strictnesses=None):
         return self.format_header_simple(strictnesses)

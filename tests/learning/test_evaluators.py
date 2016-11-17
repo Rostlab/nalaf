@@ -425,34 +425,80 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         return (dataset, part_1)
 
 
-    def test_DocumentLevelRelationEvaluator_relation_equiv_fun_order_matters(self):
+    def test_DocumentLevelRelationEvaluator_arbitrary_relation_equiv_fun_order_does_not_matter(self):
 
-        simple_entity_map_fun = (lambda e: e.text)
+        entity_map_fun = (lambda e: "SAME")
+
+        def relation_equiv_fun(gold, pred):
+            print('gold:', gold, ' <---> ', 'pred:', pred)
+            return gold == pred
+
+        r1 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "yin"), Entity(STUB_E_ID_2, 0, "yan"))
+        r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "yan"), Entity(STUB_E_ID_2, 0, "yin"))
+
+        self.assertTrue(relation_equiv_fun(r1.map(entity_map_fun), r1.map(entity_map_fun)))
+        self.assertTrue(relation_equiv_fun(r1.map(entity_map_fun), r2.map(entity_map_fun)))
+        self.assertTrue(relation_equiv_fun(r2.map(entity_map_fun), r1.map(entity_map_fun)))
+
+        evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, entity_map_fun, relation_equiv_fun)
+
+        (dataset, part) = self._create_basic_dataset()
+
+        # -
+
+        part.relations = [r1]
+        part.predicted_relations = [r1]
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        print(evaluation)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 1.0)
+
+
+    def test_DocumentLevelRelationEvaluator_arbitrary_relation_equiv_fun_order_matters(self):
+
+        entity_map_fun = (lambda e: e.text)
+
         def relation_equiv_fun(gold, pred):
             print('gold:', gold, ' <---> ', 'pred:', pred)
             return gold < pred
 
-        evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, simple_entity_map_fun, relation_equiv_fun)
+        r1 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "1"), Entity(STUB_E_ID_2, 0, "2"))
+        r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "2"), Entity(STUB_E_ID_2, 0, "1"))
+
+        # r1 not equiv r1 because this IS NOT equals (r1 not < r1)
+        self.assertFalse(relation_equiv_fun(r1.map(entity_map_fun), r1.map(entity_map_fun)))
+        # r1 < r2
+        self.assertTrue(relation_equiv_fun(r1.map(entity_map_fun), r2.map(entity_map_fun)))
+        # r2 not < r1
+        self.assertFalse(relation_equiv_fun(r2.map(entity_map_fun), r1.map(entity_map_fun)))
+
+        evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, entity_map_fun, relation_equiv_fun)
 
         (dataset, part) = self._create_basic_dataset()
 
-        part.relations = [
-            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "1"), Entity(STUB_E_ID_2, 0, "2")),
-        ]
+        # -
 
-        part.predicted_relations = [
-            Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "2"), Entity(STUB_E_ID_2, 0, "1")),
-        ]
+        part.relations = [r1]
+        part.predicted_relations = [r1]
 
-        self.assertTrue(relation_equiv_fun(
-            part.relations[0].map(simple_entity_map_fun),
-            part.predicted_relations[0].map(simple_entity_map_fun)))
-
-        self.assertFalse(relation_equiv_fun(
-            part.predicted_relations[0].map(simple_entity_map_fun),
-            part.relations[0].map(simple_entity_map_fun)))
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        print(evaluation)
+        self.assertEqual(evaluation.tp, 0)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.0)
 
         # -
+
+        part.relations = [r1]
+        part.predicted_relations = [r2]
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
@@ -465,9 +511,8 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
         # -
 
-        tmp = part.relations
-        part.relations = part.predicted_relations
-        part.predicted_relations = tmp
+        part.relations = [r2]
+        part.predicted_relations = [r1]
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)

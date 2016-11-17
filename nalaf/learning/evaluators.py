@@ -470,11 +470,11 @@ class DocumentLevelRelationEvaluator(Evaluator):
     First of all, relations are converted to unique strings (together with the
     `entity_map_fun` parameter). Second of all, the default is to compare the
     relation-strings with string's equals function (str.__eq__). Howerver,
-    the user decide by `relation_equals_fun` how to compare the relation strings.
-    This must be an equals function that takes two strings as parameters and returns
-    a Boolean (True or Fals). This is helpful in some circumtances, e.g., when
-    normalization ids must be compared in a hierarchical manner, for which mere
-    equals comparison is not enough.
+    the user can decide with `relation_equals_fun` how to compare the relations' strings.
+    This must be an function that takes two strings as parameters and returns
+    a Boolean (True or Fals). This arbitrary `equals` function is helpful in some circumtances,
+    e.g., when normalization ids must be compared in a hierarchical manner, for which mere
+    string equals comparison is not enough.
     """
 
     COMMON_ENTITY_MAP_FUNS = {

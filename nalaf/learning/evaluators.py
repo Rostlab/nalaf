@@ -308,13 +308,13 @@ class Evaluations:
         print_debug("Cross-Validation")
         for fold in range(k_num_folds):
             training, validation, test = corpus.cv_kfold_split(k_num_folds, fold, validation_set=use_validation_set)
-            actual_evaluation_set = validation if use_validation_set else test
+            gold_evaluation_set = validation if use_validation_set else test
 
             annotator_apply = annotator_gen_fun(training)
 
-            annotator_apply(actual_evaluation_set)
+            annotator_apply(gold_evaluation_set)
 
-            r = evaluator.evaluate(actual_evaluation_set)
+            r = evaluator.evaluate(gold_evaluation_set)
             print_debug(r)
             merged_evaluations.append(r)
 
@@ -519,22 +519,22 @@ class DocumentLevelRelationEvaluator(Evaluator):
             predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
 
         for docid in docids:
-            actual = true_relations[docid]
+            gold = true_relations[docid]
             predicted = predicted_relations[docid]
 
-            print_verbose("\n\nactual: \n" + '\n'.join(sorted(list(actual))))
+            print_verbose("\n\ngold: \n" + '\n'.join(sorted(list(gold))))
             print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
-            for r_predicted in predicted:
+            for r_pred in predicted:
 
-                if any(self.relation_equiv_fun(r_actual, r_predicted) for r_actual in actual):
+                if any(self.relation_equiv_fun(r_gold, r_pred) for r_gold in gold):
                     counts[docid]['tp'] += 1
                 else:
                     counts[docid]['fp'] += 1
 
-            for r_actual in actual:
+            for r_gold in gold:
 
-                if not any(self.relation_equiv_fun(r_actual, r_predicted) for r_predicted in predicted):
+                if not any(self.relation_equiv_fun(r_gold, r_pred) for r_pred in predicted):
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

@@ -80,14 +80,24 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
                     else:
-                        for entity in ann_json['entities']:
-                            if not self.read_only_class_id or entity['classId'] == self.read_only_class_id:
-                                ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                             entity['offsets'][0]['text'], entity['confidence']['prob'])
+                        for e in ann_json['entities']:
+                            if not self.read_only_class_id or e['classId'] == self.read_only_class_id:
+
+                                part = document.parts[e['part']]
+
+                                normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
+
+                                entity = Entity(
+                                    e['classId'],
+                                    e['offsets'][0]['start'],
+                                    e['offsets'][0]['text'],
+                                    e['confidence']['prob'],
+                                    norm=normalizations)
+
                                 if self.is_predicted:
-                                    document.parts[entity['part']].predicted_annotations.append(ann)
+                                    part.predicted_annotations.append(entity)
                                 else:
-                                    document.parts[entity['part']].annotations.append(ann)
+                                    part.annotations.append(entity)
 
                         if self.read_relations:
                             for relation in ann_json['relations']:

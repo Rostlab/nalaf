@@ -280,13 +280,11 @@ class Dataset:
         return self
 
 
-    def validate_annotation_offsets(self):
+    def validate_entity_offsets(self):
         """
         Helper function to validate that the annotation offsets match the annotation text.
         Mostly used as a sanity check and to make sure GNormPlus works as intentded.
         """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         for part in self.parts():
             for ann in part.predicted_annotations:

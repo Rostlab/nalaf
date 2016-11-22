@@ -335,7 +335,7 @@ class Dataset:
         warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
-                                                                   sum(1 for _ in self.annotations()))
+                                                                   sum(1 for _ in self.entities()))
 
 
     def __str__(self):

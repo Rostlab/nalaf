@@ -301,7 +301,7 @@ class Dataset:
 
         raw_dict = {}
 
-        for ann in self.annotations():
+        for ann in self.entities():
             for word in ann.text.split(" "):
                 lc_word = word.lower()
                 if lc_word.isalpha() and ann.class_id == class_id:
@@ -319,7 +319,7 @@ class Dataset:
         """
         cleans all subclass by setting them to = False
         """
-        for ann in self.annotations():
+        for ann in self.entities():
             ann.subclass = False
 
 

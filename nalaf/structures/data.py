@@ -89,7 +89,7 @@ class Dataset:
 
     def relations(self):
         """
-        Yield all relations of the dataset.
+        Yield all relations of the Dataset.
 
         :rtype: collections.Iterable[Relation]
         """
@@ -386,6 +386,7 @@ class Dataset:
             part.sentences = tmp
             part.sentences_ = tmp_
 
+
     def prune_sentences(self, percent_to_keep=0):
         """
         * keep all sentences that contain  at least one mention
@@ -558,6 +559,7 @@ class Dataset:
             train.documents[key] = self.documents[key]
 
         return train, test
+
 
     def stratified_split(self, percentage=0.66):
         """

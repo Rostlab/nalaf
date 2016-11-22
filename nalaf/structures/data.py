@@ -843,16 +843,15 @@ class Part:
 
         self.annotations = []
         """the entity of the chunk of text as populated by a call to Annotator"""
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
 
         self.predicted_annotations = []
         """
         a list of predicted entities as populated by a call to form_predicted_annotations()
         this represent the prediction on a mention label rather then on a token level
         """
+
         # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+        warnings.warn('"annotations" (and "predicted_annotations") are meant to be "entities". This and related attributes will soon be renamed')
 
         self.relations = []
         """

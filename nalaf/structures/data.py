@@ -651,6 +651,17 @@ class Document:
             yield part_id, part
 
 
+    def relations(self):
+        """
+        Yield all relations of the Document.
+
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts.values():
+            for rel in part.relations:
+                yield rel
+
+
     def get_unique_mentions(self):
         """:return: set of all mentions (standard + natural language)"""
         mentions = []

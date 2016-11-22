@@ -331,11 +331,7 @@ class Dataset:
 
 
     def __repr__(self):
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
-        return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
-                                                                   sum(1 for _ in self.entities()))
+        return "Dataset({0} documents and {1} entities)".format(len(self.documents), sum(1 for _ in self.entities()))
 
 
     def __str__(self):

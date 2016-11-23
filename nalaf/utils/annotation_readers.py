@@ -492,19 +492,22 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
 
     We map:
         SNP to e_2 (mutation entity)
-        Gene to e_1 (protein entity)
+        Gene to e_1 (gene/protein entity)
         RS to e_2 (mutation entity)
 
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True):
+    def __init__(self, directory, mut_class_id, gene_class_id=None):
         import warnings
         warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
 
         self.directory = directory
-        self.read_just_mutations = read_just_mutations
         """the directory containing *.ann files"""
+        self.mut_class_id = mut_class_id
+        """class id that will be associated to the read mutation entities"""
+        self.gene_class_id = gene_class_id
+        """class id that will be associated to the read gene/protein entities. Optional. If False/None --> do not read"""
 
 
     def annotate(self, dataset):
@@ -532,9 +535,9 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
                             end -= title_len + 1
 
                         if entity_type == 'SNP' or entity_type == 'RS':
-                            ann = Entity(MUT_CLASS_ID, start, row[2])
+                            ann = Entity(self.mut_class_id, start, row[2])
                             part.annotations.append(ann)
 
-                        elif not self.read_just_mutations and entity_type == 'Gene':
-                            ann = Entity(PRO_CLASS_ID, start, row[2])
+                        elif self.gene_class_id is not None and entity_type == 'Gene':
+                            ann = Entity(self.gene_clas_id, start, row[2])
                             part.annotations.append(ann)

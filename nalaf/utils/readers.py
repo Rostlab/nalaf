@@ -479,6 +479,7 @@ class OSIRISReaderMachineLearningReady(Reader):
     """
     Reads in the OSIRIS corpus by using the Wordfreak format which is aimed at
     specific annotations for machine learning tasks and does not represent the same annotations as the XML-file.
+
     # TODO still WIP (some minor bugs)
     """
     def __init__(self, path, mut_class_id):
@@ -612,10 +613,14 @@ class OSIRISReader(Reader):
     """
     Parses the OSIRIS corpus by using their supplied XML-file alone.
     """
-    def __init__(self, path):
+    def __init__(self, path, mut_class_id):
         warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
         self.path = os.path.abspath(path)
         """path to xml file"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
 
     def read(self):
         """

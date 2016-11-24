@@ -58,10 +58,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         if not os.path.isdir(self.directory):
             filenames = [self.directory]
         else:
-            filenames = glob.glob(str(self.directory + "/*.ann.json"))
-            # TODO we may need the following
-            # filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
-
+            filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
 
         read_docs = set({})
 

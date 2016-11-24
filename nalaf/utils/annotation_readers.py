@@ -8,7 +8,7 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
-from nalaf import print_verbose, print_debug
+from nalaf import print_verbose, print_debug, print_warning
 from nalaf.structures.data import Entity, Relation
 
 
@@ -77,13 +77,18 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         del dataset.documents[doc_id]
 
                     else:
+
                         for e in ann_json['entities']:
 
                             if not self.read_only_class_id or e['classId'] == self.read_only_class_id:
 
                                 part = document.parts[e['part']]
 
-                                normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
+                                try:
+                                    normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
+                                except KeyError as err:
+                                    print_warning("The normalization is badly formatted: (docid={}) {}".format(doc_id, str(e['normalizations'])))
+                                    normalizations = None
 
                                 entity = Entity(
                                     e['classId'],
@@ -127,8 +132,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         for part_id in part_ids_to_del:
                             del document.parts[part_id]
 
-                except KeyError as e:
-                    pass
+                except KeyError as err:
+                    if self.raise_exception_on_incosistencies:
+                        raise err
+                    else:
+                        pass
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs

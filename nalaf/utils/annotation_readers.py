@@ -106,13 +106,6 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                 e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
                                 e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
 
-                                # TODO delete this old code:
-                                #
-                                # e1_end = int(relation['entities'][0].split('|')[1].split(',')[1])
-                                # e2_end = int(relation['entities'][1].split('|')[1].split(',')[1])
-                                # e1_text = part.text[e1_start:e1_end]
-                                # e2_text = part.text[e2_start:e2_end]
-
                                 rel_id = relation['classId']
 
                                 e1 = part.get_entity(e1_start, self.raise_exception_on_incosistencies)

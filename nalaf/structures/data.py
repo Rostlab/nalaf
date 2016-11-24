@@ -204,6 +204,7 @@ class Dataset:
                 for ann in part.annotations:
                     yield pubmedid, partid, ann
 
+
     def all_annotations_with_ids_and_is_abstract(self):
         """
         yields pubmedid, partid, is_abstract and ann through whole dataset
@@ -649,6 +650,28 @@ class Document:
             yield part_id, part
 
 
+    def entities(self):
+        """
+        Yield all entities of the Document.
+
+        :rtype: collections.Iterable[Entity]
+        """
+        for part in self.parts.values():
+            for e in part.annotations:
+                yield e
+
+
+    def predicted_entities(self):
+        """
+        Yield all predicted entities of the Document.
+
+        :rtype: collections.Iterable[Entity]
+        """
+        for part in self.parts.values():
+            for e in part.predicted_annotations:
+                yield e
+
+
     def relations(self):
         """
         Yield all relations of the Document.
@@ -657,6 +680,17 @@ class Document:
         """
         for part in self.parts.values():
             for rel in part.relations:
+                yield rel
+
+
+    def predicted_relations(self):
+        """
+        Yield all predicted relations of the Document.
+
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts.values():
+            for rel in part.predicted_relations:
                 yield rel
 
 

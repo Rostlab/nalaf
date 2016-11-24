@@ -69,15 +69,16 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if not self.whole_basename_as_docid and '-' in doc_id:
                         doc_id = doc_id.split('-')[-1]
 
-
                     read_docs.add(doc_id)
                     ann_json = json.load(file)
                     document = dataset.documents[doc_id]
 
                     if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
+
                     else:
                         for e in ann_json['entities']:
+
                             if not self.read_only_class_id or e['classId'] == self.read_only_class_id:
 
                                 part = document.parts[e['part']]

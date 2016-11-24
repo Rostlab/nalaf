@@ -144,8 +144,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
             del dataset.documents[doc_id]
 
         dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items())
-            # this was the old behavior
-            # if sum(len(part.annotations) for part in doc.parts.values()) > 0)
+
+        dataset.validate_entity_offsets()
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):

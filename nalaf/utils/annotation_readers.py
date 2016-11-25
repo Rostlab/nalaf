@@ -165,6 +165,10 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
                  read_only_class_id=None, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
                  iaa_threshold=0.8, is_predicted=False):
 
+        # TODO
+        import warnings
+        warnings.warn('AnnJsonMergerAnnotationReader has not been thouroughly tested. The logic should be reduced to only merge given read annotations (i.e. not a reader)')
+
         self.directory = directory
         """
         the directory containing several sub-directories with .ann.json files

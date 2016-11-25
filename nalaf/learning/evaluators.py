@@ -5,6 +5,7 @@ from collections import namedtuple
 import random
 import math
 import uuid
+from collections import Counter
 
 
 class Evaluation:
@@ -282,8 +283,9 @@ class Evaluations:
     def __iter__(self):
         return self.classes.__iter__()
 
+
     @staticmethod
-    def merge(evaluations_itr):
+    def merge(evaluations_itr, are_disjoint_evaluations=True):
         """
         Common use case: combine cross-validation evaluations
         The single evaluations are assumed to be of type EvaluationWithStandardError
@@ -294,7 +296,28 @@ class Evaluations:
         for evaluations in evaluations_itr:
             for evaluation_label, evaluation in evaluations.classes.items():
                 dic_counts = labels.get(evaluation.label, {})
-                dic_counts.update(evaluation.dic_counts)
+
+                if are_disjoint_evaluations:
+                    joint_size = len(set(dic_counts.keys()) & set(evaluation.dic_counts))
+                    assert joint_size == 0, "The evaluations are assumed to be disjoint, yet they are not. Joint size: " + str(joint_size)
+
+                    dic_counts.update(evaluation.dic_counts)
+
+                else:
+                    for docid, eval_docid_counts in evaluation.dic_counts.items():
+
+                        total_docid_counts = dic_counts.get(docid, None)
+
+                        if total_docid_counts:
+                            counter = Counter()
+                            for d in [total_docid_counts, eval_docid_counts]:
+                                counter.update(d)
+
+                            dic_counts[docid] = dict(counter)
+
+                        else:
+                            dic_counts[docid] = eval_docid_counts
+
                 labels[evaluation.label] = dic_counts
 
         ret = Evaluations()

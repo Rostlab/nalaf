@@ -25,11 +25,13 @@ class Dataset:
         and the value is an instance of Document
         """
 
+
     def __len__(self):
         """
         the length (size) of a dataset equals to the number of documents it has
         """
         return len(self.documents)
+
 
     def __iter__(self):
         """
@@ -37,6 +39,7 @@ class Dataset:
         """
         for doc_id, document in self.documents.items():
             yield document
+
 
     def __contains__(self, item):
         return item in self.documents

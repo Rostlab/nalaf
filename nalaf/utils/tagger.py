@@ -5,6 +5,7 @@ import os
 from nalaf import print_debug
 from nalaf.structures.data import Dataset, Document, Part, Entity
 
+
 # todo major refactor to learning/taggers class
 class Tagger():
     """
@@ -100,7 +101,7 @@ class TmVarTagger(Tagger):
                 denotations = tm_var[doc_id]['denotations']
                 annotations = []
                 for deno in denotations:
-                    ann = Entity(class_id=self_mut_class_id, offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
+                    ann = Entity(class_id=self.mut_class_id, offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
                     annotations.append(ann)
                     # note should the annotations from tmvar go to predicted_annotations or annotations?
                 part.annotations = annotations

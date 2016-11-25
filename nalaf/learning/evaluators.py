@@ -407,15 +407,20 @@ class MentionLevelEvaluator(Evaluator):
         TOTAL = MentionLevelEvaluator.TOTAL_LABEL
         labels = [TOTAL]
 
+        def labelize(e):
+            """
+            Use this to represent an entity subclass as string and, if this is None or False (but not 0!), represent the entity with its class_id
+
+            Conver to subclasses / classes ids to avoid the misstep of comparing possible subclass '0' with False, which in python breaks the universe
+            --> info: https://twitter.com/juanmirocks/status/802209750612054016
+            """
+            return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
+
         if self.subclass_analysis:
             # find all possible subclasses or otherwise full classes
 
-            def subclass_or_class(e):
-                # Avoid the misstep  of comparing possible subclass '0' with False, which in python breaks the universe
-                return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
-
-            subclasses = set(subclass_or_class(e) for e in dataset.entities())
-            subclasses.update(set(subclass_or_class(e) for e in dataset.predicted_entities()))
+            subclasses = set(labelize(e) for e in dataset.entities())
+            subclasses.update(set(labelize(e) for e in dataset.predicted_entities()))
 
             for x in subclasses:
                 labels.append(x)

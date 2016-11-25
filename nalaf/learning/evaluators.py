@@ -409,8 +409,8 @@ class MentionLevelEvaluator(Evaluator):
 
         if self.subclass_analysis:
             # find all possible subclasses
-            subclasses = set(ann.subclass for ann in dataset.annotations() if ann.subclass is not None)
-            subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations() if ann.subclass is not None))
+            subclasses = set(str(ann.subclass) for ann in dataset.annotations() if ann.subclass is not None)
+            subclasses.update(set(str(ann.subclass) for ann in dataset.predicted_annotations() if ann.subclass is not None))
             for x in subclasses:
                 labels.append(x)
 

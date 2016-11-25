@@ -456,12 +456,16 @@ class MentionLevelEvaluator(Evaluator):
                 for ann in part.predicted_annotations:
                     if ann in part.annotations:
                         counts[TOTAL][docid]['tp'] += 1
+
                         if self.subclass_analysis:
                             counts[ann.subclass][docid]['tp'] += 1
+
                     else:
                         counts[TOTAL][docid]['fp'] += 1
+
                         if ann in overlap_predicted[TOTAL]:
                             counts[TOTAL][docid]['fp_ov'] += 1
+
                         if self.subclass_analysis:
                             counts[ann.subclass][docid]['fp'] += 1
                             if ann in overlap_predicted[ann.subclass]:
@@ -470,8 +474,10 @@ class MentionLevelEvaluator(Evaluator):
                 for ann in part.annotations:
                     if ann not in part.predicted_annotations:
                         counts[TOTAL][docid]['fn'] += 1
+
                         if ann in overlap_real[TOTAL]:
                             counts[TOTAL][docid]['fn_ov'] += 1
+
                         if self.subclass_analysis:
                             counts[ann.subclass][docid]['fn'] += 1
                             if ann in overlap_real[ann.subclass]:

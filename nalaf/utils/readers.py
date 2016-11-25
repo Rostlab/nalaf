@@ -411,7 +411,6 @@ class TmVarReader(Reader):
         but the annotations as well in a single pass. This is due to how the tmVar corpus
         is distributed.
 
-
     Format:
         [pmid]|t|[title]
         [pmid]|a|[abstract]
@@ -684,4 +683,77 @@ class OSIRISReader(Reader):
                 doc.parts['title'] = part_title
                 doc.parts['abstract'] = part_abstract
                 dataset.documents[pmid] = doc  # save document to dataset
+        return dataset
+
+
+class ProteinResidueCorpusPartialReader(Reader):
+    """
+    Reader for the LEAP-FS / Protein Residue (Full Text) Corpus
+    http://bionlp-corpora.sourceforge.net/proteinresidue/
+
+    Note:
+        The reader practically actually only reads annotations.
+        The text of the referenced PMIDs are not directly given and users
+        should be get that directly from PubMed. This is not trivial since
+        we do not exactly know how the original authors parsed the texts.
+
+        Since the annotations contain start&end offsets and the entities texts,
+        for every entity we create a different part that so spans the whole entity.
+
+
+    Format:
+        9724744	Mutation	31035	31062	Asp	450	Ala	D450 is replaced by alanine
+        9724744	Mutation	38528	38541	Asp	450	Ala	Asp-450 → Ala
+        9724744	Mutation	38556	38564	Asp	483	Ala	D483A
+        9724744	Mutation	38566	38571	Arg	487	Ala	R487A
+        9724744	Mutation	38613	38625	Asp	483	Ala	Asp-483 →Ala
+        9724744	Mutation	38630	38643	Arg	487	Ala	Arg-487 → Ala
+        9724744	AminoacidResidue	30956	30960	Asp	450	NULL	D450
+    """
+
+    def __init__(self, corpus_file, mut_class_id, residue_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
+        self.corpus_file = corpus_file
+        """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """class id that will be associated to the read mutation entities (Mutation)."""
+        self.residue_class_id = residue_class_id
+        """class id that will be associated to the read residue entities (AminoacidResidue)."""
+
+
+    def read(self):
+        """
+        :returns: nalaf.structures.data.Dataset
+        """
+        dataset = Dataset()
+
+        with open(self.corpus_file, encoding='utf-8') as file:
+
+            for row in file:
+                columns = row.split("\t")
+
+                docid = columns[0]
+                typ = columns[1]
+                start = columns[2]
+                end = columns[3]
+                entity_text = columns[7]
+
+                class_id = None
+                if typ == 'Mutation':
+                    class_id = self.mut_class_id
+                elif typ == 'AminoacidResidue':
+                    class_id = self.residue_class_id
+
+                if class_id:
+                    document = dataset.documents.get(docid, Document())
+
+                    part = Part(entity_text)
+                    document.parts[typ + '|' + start + '|' + end] = part
+
+                    part.annotations.append(Entity(class_id, int(start), entity_text))
+
+                    dataset.documents[docid] = document
+
         return dataset

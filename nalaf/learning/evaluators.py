@@ -12,6 +12,10 @@ class Evaluation:
     Computation = namedtuple('Computation', ['precision', 'recall', 'f_measure'])
 
     def __init__(self, label, tp, fp, fn, fp_ov=0, fn_ov=0):
+        # TODO
+        import warnings
+        warnings.warn('`Evaluation` will be removed to only leave EvaluationWithStandardError (complete superset of functionality)')
+
         self.label = str(label)
         self.tp = tp
         self.fp = fp

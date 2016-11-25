@@ -450,12 +450,12 @@ class MentionLevelEvaluator(Evaluator):
                             overlap_predicted[TOTAL].append(ann_b)
 
                             if self.subclass_analysis:
-                                if str(ann_a.subclass) != str(ann_b.subclass):
+                                if labelize(ann_a) != labelize(ann_b):
                                     print_debug('overlapping subclasses do not match', ann_a.subclass, ann_b.subclass)
                                     ann_b.subclass = ann_a.subclass
 
-                                overlap_real[str(ann_a.subclass)].append(ann_a)
-                                overlap_predicted[str(ann_b.subclass)].append(ann_b)
+                                overlap_real[labelize(ann_a)].append(ann_a)
+                                overlap_predicted[labelize(ann_b)].append(ann_b)
 
                 Entity.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
@@ -463,7 +463,7 @@ class MentionLevelEvaluator(Evaluator):
                         counts[TOTAL][docid]['tp'] += 1
 
                         if self.subclass_analysis:
-                            counts[str(ann.subclass)][docid]['tp'] += 1
+                            counts[labelize(ann)][docid]['tp'] += 1
 
                     else:
                         counts[TOTAL][docid]['fp'] += 1
@@ -472,9 +472,9 @@ class MentionLevelEvaluator(Evaluator):
                             counts[TOTAL][docid]['fp_ov'] += 1
 
                         if self.subclass_analysis:
-                            counts[str(ann.subclass)][docid]['fp'] += 1
-                            if ann in overlap_predicted[str(ann.subclass)]:
-                                counts[str(ann.subclass)][docid]['fp_ov'] += 1
+                            counts[labelize(ann)][docid]['fp'] += 1
+                            if ann in overlap_predicted[labelize(ann)]:
+                                counts[labelize(ann)][docid]['fp_ov'] += 1
 
                 for ann in part.annotations:
                     if ann not in part.predicted_annotations:
@@ -484,9 +484,9 @@ class MentionLevelEvaluator(Evaluator):
                             counts[TOTAL][docid]['fn_ov'] += 1
 
                         if self.subclass_analysis:
-                            counts[str(ann.subclass)][docid]['fn'] += 1
-                            if ann in overlap_real[str(ann.subclass)]:
-                                counts[str(ann.subclass)][docid]['fn_ov'] += 1
+                            counts[labelize(ann)][docid]['fn'] += 1
+                            if ann in overlap_real[labelize(ann)]:
+                                counts[labelize(ann)][docid]['fn_ov'] += 1
 
         evaluations = Evaluations()
 

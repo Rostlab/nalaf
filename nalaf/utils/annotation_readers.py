@@ -71,7 +71,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                     read_docs.add(doc_id)
                     ann_json = json.load(file)
-                    document = dataset.documents[doc_id]
+                    try:
+                        document = dataset.documents[doc_id]
+                    except Exception as err:
+                        print_warning("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
+                        continue
 
                     if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
@@ -132,7 +136,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         for part_id in part_ids_to_del:
                             del document.parts[part_id]
 
-                except KeyError as err:
+                except Exception as err:
                     if self.raise_exception_on_incosistencies:
                         raise err
                     else:

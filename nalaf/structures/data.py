@@ -1301,6 +1301,8 @@ class Entity:
         self.text = text
         """the text span of the annotation"""
         self.subclass = False
+        # TODO likely, we should not allow subclasses that are not string in the first place -- to the very least, the default should be None
+        # Explaination in commit: 3983e4c5449788e62e81b39b65fc7780b6c71852
         """
         int flag used to further subdivide classes based on some criteria
         for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard

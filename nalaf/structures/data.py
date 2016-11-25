@@ -335,7 +335,7 @@ class Dataset:
 
 
     def __repr__(self):
-        return "Dataset({0} documents and {1} entities)".format(len(self.documents), sum(1 for _ in self.entities()))
+        return "Dataset({0} documents and {1} entities ({2}))".format(len(self.documents), sum(1 for _ in self.entities()), {e.class_id for e in self.entities()})
 
 
     def __str__(self):

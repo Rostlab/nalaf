@@ -7,6 +7,7 @@ from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
 from itertools import chain
+from collections import Counter
 
 
 class Dataset:
@@ -335,7 +336,12 @@ class Dataset:
 
 
     def __repr__(self):
-        return "Dataset({0} documents and {1} entities ({2}))".format(len(self.documents), sum(1 for _ in self.entities()), {e.class_id for e in self.entities()})
+        def class_repr(class_id):
+            return class_id + ": " + str(Counter(e.subclass for e in self.entities() if e.class_id == class_id))
+
+        classes_repr = [class_repr(class_id) for class_id in {e.class_id for e in self.entities()}]
+
+        return "Dataset({} documents and {} entities ({}))".format(len(self.documents), sum(1 for _ in self.entities()), classes_repr)
 
 
     def __str__(self):
@@ -575,7 +581,6 @@ class Dataset:
         :return train dataset, test dataset
         :rtype: (nalaf.structures.data.Dataset, nalaf.structures.data.Dataset)
         """
-        from collections import Counter
         from itertools import groupby
         train = Dataset()
         test = Dataset()

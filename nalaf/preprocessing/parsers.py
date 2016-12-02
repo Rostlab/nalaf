@@ -95,13 +95,13 @@ class SpacyParser(Parser):
 
 
     def _dependency_path(self, spacy_token, sent_index, part):
-        token = part.sentences[sent_index][spacy_token.i]
-        token.features['dependency_from'] = (part.sentences[sent_index][spacy_token.head.i], spacy_token.dep_)
+        nalaf_token = part.sentences[sent_index][spacy_token.i]
+        nalaf_token.features['dependency_from'] = (part.sentences[sent_index][spacy_token.head.i], spacy_token.dep_)
         token_from = part.sentences[sent_index][spacy_token.head.i]
         if (spacy_token.i != spacy_token.head.i):
-            token_from.features['dependency_to'].append((token, spacy_token.dep_))
+            token_from.features['dependency_to'].append((nalaf_token, spacy_token.dep_))
         else:
-            token.features['is_root'] = True
+            nalaf_token.features['is_root'] = True
 
 
 class BllipParser(Parser):

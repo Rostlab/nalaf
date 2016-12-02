@@ -1144,6 +1144,15 @@ class Edge:
         # As of now, it seems to devependant on `svmlight.py`
 
 
+    def get_sentences_pair(self):
+        assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id, "This should not throw an exception"
+
+        sent1 = self.e1_part.sentences[e1_sentence_id]
+        sent2 = self.e2_part.sentences[e2_sentence_id]
+
+        return (sent1, sent2)
+
+
     def is_relation(self):
         """
         check if the edge is present in part.relations.

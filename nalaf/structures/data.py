@@ -1147,11 +1147,24 @@ class Edge:
         # As of now, it seems to devependant on `svmlight.py`
 
 
-    def get_sentences_pair(self):
+    def get_sentences_pair(self, force_sort=False):
+        """
+        Get tuple of corresponding edge's two entities' sentences.
+        The sentences are represented as list of Token's.
+
+        * `force_sort`: if True, return sentences sorted by their index within, the assumed, same part.
+                        Default (False): return as they are written in the edge.
+        """
+
         assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id, "This should not throw an exception"
 
-        sent1 = self.e1_part.sentences[e1_sentence_id]
-        sent2 = self.e2_part.sentences[e2_sentence_id]
+        sent1 = self.e1_part.sentences[self.e1_sentence_id]
+        sent2 = self.e2_part.sentences[self.e2_sentence_id]
+
+        if force_sort:
+            assert self.same_part, "This should not throw an exception as same part is expected"
+            if self.e2_sentence_id < self.e1_sentence_id:
+                sent1, sent2 = sent2, sent1
 
         return (sent1, sent2)
 

@@ -1071,6 +1071,7 @@ class Part:
             rl=len(self.relations), prl=len(self.predicted_relations),
             abs=self.is_abstract)
 
+
     def __str__(self):
         entities_string = "\n".join([str(x) for x in self.annotations])
         pred_entities_string = "\n".join([str(x) for x in self.predicted_annotations])
@@ -1091,6 +1092,7 @@ class Part:
                         text=self.text, annotations=entities_string,
                         pred_annotations=pred_entities_string, relations=relations_string,
                         pred_relations=pred_relations_string, abstract=self.is_abstract)
+
 
     def get_size(self):
         """ just returns number of chars that this part contains """
@@ -1216,6 +1218,7 @@ class Token:
         * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
         """
 
+
     def is_entity_part(self, part):
         """
         check if the token is part of an entity
@@ -1225,6 +1228,7 @@ class Token:
             if self.start <= entity.offset < self.end:
                 return True
         return False
+
 
     def get_entity(self, part):
         """
@@ -1238,6 +1242,7 @@ class Token:
                 # entity.offset <= self.start < entity.offset + len(entity.text):
                 return entity
         return None
+
 
     # TODO review this method. This was added for relna. It is now also used in LocText
     def masked_text(self, part):
@@ -1253,6 +1258,7 @@ class Token:
                 # entity.offset <= self.start < entity.offset + len(entity.text):
                 return entity.class_id
         return self.word
+
 
     def __repr__(self):
         """
@@ -1274,6 +1280,7 @@ class Token:
                 return False
         else:
             return False
+
 
     def __ne__(self, other):
         """

@@ -35,6 +35,7 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
         self.relation_type = relation_type
         self.distance = distance
         self.use_predicted_entities = use_predicted_entities
+
         self.part_entities = (lambda part: chain(part.annotations, part.predicted_annotations) if self.use_predicted_entities else part.annotations)
 
     def generate(self, dataset):

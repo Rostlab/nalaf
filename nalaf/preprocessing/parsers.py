@@ -71,11 +71,11 @@ class SpacyParser(Parser):
                 #  * also: https://books.google.de/books?id=1-4lDQAAQBAJ&pg=PA346&lpg=PA346&dq=spacy+tokens_from_list&source=bl&ots=26oMINRNXS&sig=hDDr29jnlKFlMZmfy_5U7XhCia8&hl=en&sa=X&sqi=2&ved=0ahUKEwi9r8P_lNXQAhVBWxoKHV4KDPIQ6AEIPDAF#v=onepage&q=spacy%20tokens_from_list&f=false
                 #  * finally: https://spacy.io/docs/usage/customizing-tokenizer
 
-                nlp_spacy_doc = self.nlp.tokenizer.tokens_from_list(sentence_tokens)
+                spacy_doc = self.nlp.tokenizer.tokens_from_list(sentence_tokens)
                 for pipe in filter(None, self.nlp.pipeline):
-                    pipe(nlp_spacy_doc)
+                    pipe(spacy_doc)
 
-                for spacy_token in nlp_spacy_doc:
+                for spacy_token in spacy_doc:
                     assert spacy_token.tag_ != "" and spacy_token.dep_ != "", "The list of tokens was actually not tagged nor parsed"
 
                     nalaf_token = part.sentences[sent_index][spacy_token.i]
@@ -95,7 +95,7 @@ class SpacyParser(Parser):
 
                     part.tokens.append(nalaf_token)
 
-                for spacy_token in nlp_spacy_doc:
+                for spacy_token in spacy_doc:
                     self._dependency_path(spacy_token, sent_index, part)
 
             part.percolate_tokens_to_entities()

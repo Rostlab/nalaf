@@ -1053,11 +1053,13 @@ class Part:
             else:
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
+
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
         """
         return iter(self.sentences)
+
 
     def __repr__(self):
         return "Part(is abstract = {abs}, len(sentences) = {sl}, ' \

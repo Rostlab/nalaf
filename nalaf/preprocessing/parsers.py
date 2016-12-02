@@ -90,6 +90,8 @@ class SpacyParser(Parser):
                         'cluster': spacy_token.cluster,
                         'dependency_from': None,
                         'dependency_to': [],
+                        'user_dependency_from': [],  # User-defined dependency of any nature
+                        'user_dependency_to': [],  # User-defined dependency of any nature
                         'is_root': False,
                     }
 

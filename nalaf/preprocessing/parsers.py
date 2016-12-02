@@ -57,14 +57,14 @@ class SpacyParser(Parser):
         outer_bar = Bar('Processing [SpaCy]', max=len(list(dataset.parts())))
         for part in dataset.parts():
 
-            for index, sentence in enumerate(part.sentences):
+            for sent_index, sentence in enumerate(part.sentences):
 
-                sentence_tokens = [tok.word for tok in sentence]
+                sentence_tokens = [nalaf_token.word for nalaf_token in sentence]
                 nlp_spacy_doc = self.nlp.tokenizer.tokens_from_list(sentence_tokens)
 
                 for spacy_token in nlp_spacy_doc:
-                    tok = part.sentences[index][spacy_token.i]
-                    tok.features = {
+                    nalaf_token = part.sentences[sent_index][spacy_token.i]
+                    nalaf_token.features = {
                         'id': spacy_token.i,
                         'pos': spacy_token.tag_,
                         'dep': spacy_token.dep_,
@@ -78,10 +78,10 @@ class SpacyParser(Parser):
                         'is_root': False,
                     }
 
-                    part.tokens.append(tok)
+                    part.tokens.append(nalaf_token)
 
-                for tok in nlp_spacy_doc:
-                    self._dependency_path(tok, index, part)
+                for spacy_token in nlp_spacy_doc:
+                    self._dependency_path(spacy_token, sent_index, part)
 
             part.percolate_tokens_to_entities()
             part.calculate_token_scores()
@@ -94,12 +94,12 @@ class SpacyParser(Parser):
             self.parser.parse(dataset)
 
 
-    def _dependency_path(self, tok, index, part):
-        token = part.sentences[index][tok.i]
-        token.features['dependency_from'] = (part.sentences[index][tok.head.i], tok.dep_)
-        token_from = part.sentences[index][tok.head.i]
-        if (tok.i != tok.head.i):
-            token_from.features['dependency_to'].append((token, tok.dep_))
+    def _dependency_path(self, spacy_token, sent_index, part):
+        token = part.sentences[sent_index][spacy_token.i]
+        token.features['dependency_from'] = (part.sentences[sent_index][spacy_token.head.i], spacy_token.dep_)
+        token_from = part.sentences[sent_index][spacy_token.head.i]
+        if (spacy_token.i != spacy_token.head.i):
+            token_from.features['dependency_to'].append((token, spacy_token.dep_))
         else:
             token.features['is_root'] = True
 

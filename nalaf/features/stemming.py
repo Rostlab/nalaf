@@ -28,7 +28,7 @@ class SpacyLemmatizer(FeatureGenerator):
                 text_tokens = list(map(lambda x: x.word, sentence))
                 spacy_doc = self.nlp.tokenizer.tokens_from_list(text_tokens)
 
-                self.nlp.tagger(spacy_doc) # this we need, otherwise the lemma is empty
+                self.nlp.tagger(spacy_doc)  # this we need, otherwise the lemma is empty
 
                 for token, spacy_token in zip(sentence, spacy_doc):
                     token.features['stem'] = spacy_token.lemma_  # already in lower case

@@ -907,10 +907,11 @@ class Part:
         """whether the part is the abstract of the paper"""
 
         self.sentence_parse_trees = []
-        """the parse trees for each sentence stored as a string. TODO this may be too relna-specific"""
+        """the parse trees for each sentence stored as a string."""
+        # TODO this may be too relna-specific
 
         self.tokens = []
-        # TODO what's this?
+        # TODO what's this? - this may be too relna-specific
 
 
     def get_sentence_string_array(self):

@@ -66,8 +66,8 @@ class RelationExtractionPipeline:
         self.feature_set = FeatureDictionary() if feature_set is None else feature_set
 
         self.feature_generators = self._verify_feature_generators(feature_generators) if feature_generators else [
-            NamedEntityCountFeatureGenerator(self.class1, 1),
-            NamedEntityCountFeatureGenerator(self.class2, 2)
+            NamedEntityCountFeatureGenerator(self.class1, prefix=1),
+            NamedEntityCountFeatureGenerator(self.class2, prefix=2)
         ]
 
 

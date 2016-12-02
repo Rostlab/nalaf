@@ -38,6 +38,7 @@ class SpacyParser(Parser):
 
     def __init__(self, nlp, constituency_parser=False):
         self.nlp = nlp
+
         """an instance of spacy.en.English"""
         self.constituency_parser = constituency_parser
         """the type of constituency parser to use, current supports only bllip"""
@@ -60,9 +61,23 @@ class SpacyParser(Parser):
             for sent_index, sentence in enumerate(part.sentences):
 
                 sentence_tokens = [nalaf_token.word for nalaf_token in sentence]
+
+                # Use spacy with custom tokenization.
+                #
+                # Info:
+                #  * https://github.com/explosion/spaCy/issues/668
+                #  * https://github.com/explosion/spaCy/issues/245#issuecomment-178014020
+                #  * https://github.com/explosion/spaCy/issues/42#issuecomment-135755528
+                #  * also: https://books.google.de/books?id=1-4lDQAAQBAJ&pg=PA346&lpg=PA346&dq=spacy+tokens_from_list&source=bl&ots=26oMINRNXS&sig=hDDr29jnlKFlMZmfy_5U7XhCia8&hl=en&sa=X&sqi=2&ved=0ahUKEwi9r8P_lNXQAhVBWxoKHV4KDPIQ6AEIPDAF#v=onepage&q=spacy%20tokens_from_list&f=false
+                #  * finally: https://spacy.io/docs/usage/customizing-tokenizer
+
                 nlp_spacy_doc = self.nlp.tokenizer.tokens_from_list(sentence_tokens)
+                for pipe in filter(None, self.nlp.pipeline):
+                    pipe(nlp_spacy_doc)
 
                 for spacy_token in nlp_spacy_doc:
+                    assert spacy_token.tag_ != "" and spacy_token.dep_ != "", "The list of tokens was actually not tagged nor parsed"
+
                     nalaf_token = part.sentences[sent_index][spacy_token.i]
                     nalaf_token.features = {
                         'id': spacy_token.i,

@@ -37,8 +37,6 @@ class EdgeFeatureGenerator(FeatureGenerator):
             if not feature_name.startswith(self.__class__.__name__):
                 feature_name = self.__class__.__name__ + "::" + feature_name
 
-            print("SUPPP", feature_name)
-
             if is_training_mode:
                 if feature_name not in feature_set.keys():
                     index = len(feature_set.keys()) + 1

@@ -1266,6 +1266,7 @@ class Token:
         """
         return self.word
 
+
     def __eq__(self, other):
         """
         consider two tokens equal if and only if their token words and start
@@ -1352,7 +1353,7 @@ class Entity:
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
         self.head_token = None
-        """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see relna)"""
+        """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see parsers.py)"""
 
 
     equality_operator = 'exact'

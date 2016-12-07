@@ -293,8 +293,8 @@ class Dataset:
 
         for part in self.parts():
             for e in chain(part.annotations, part.predicted_annotations):
-                if not e.text == e.text[e.offset:e.offset+len(e.text)]:
-                    warnings.warn('the offsets do not match in {}'.format(e))
+                if not e.text == part.text[e.offset:e.offset+len(e.text)]:
+                    warnings.warn('the offsets ({} != {}) do not match in: {}'.format(e.text, part.text[e.offset:e.offset+len(e.text)], e))
 
 
     def generate_top_stats_array(self, class_id, top_nr=10, is_alpha_only=False):

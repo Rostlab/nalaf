@@ -287,14 +287,14 @@ class Dataset:
 
     def validate_entity_offsets(self):
         """
-        Helper function to validate that the annotation offsets match the annotation text.
-        Mostly used as a sanity check and to make sure GNormPlus works as intentded.
+        Helper function to validate that the entities offsets match the entity text.
+        Use it as a sanity check when writing or reading annotations external entities.
         """
 
         for part in self.parts():
-            for ann in part.predicted_annotations:
-                if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
-                    warnings.warn('the offsets do not match in {}'.format(ann))
+            for e in chain(part.annotations, part.predicted_annotations):
+                if not e.text == e.text[e.offset:e.offset+len(e.text)]:
+                    warnings.warn('the offsets do not match in {}'.format(e))
 
 
     def generate_top_stats_array(self, class_id, top_nr=10, is_alpha_only=False):

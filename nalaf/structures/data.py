@@ -1004,15 +1004,16 @@ class Part:
                         entity.tokens.append(token)
 
 
-    # TODO move to edge features
     def calculate_token_scores(self):
         """
         calculate score for each entity based on a simple heuristic of which
         token is closest to the root based on the dependency tree.
         """
         not_tokens = []
-        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
-                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
+        important_dependencies = [
+            'det', 'amod', 'appos', 'npadvmod', 'compound',
+            'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct'
+        ]
         for sentence in self.sentences:
             for token in sentence:
                 if token.word not in not_tokens:

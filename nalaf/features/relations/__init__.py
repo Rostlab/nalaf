@@ -41,7 +41,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
                 if feature_name not in feature_set.keys():
                     index = len(feature_set.keys()) + 1
                     feature_set[feature_name] = index
-                    print_verbose("Feature map: {} == {} -- with value: {}".format(str(index), feature_name, str(value)))
+                    print_verbose("Feature map: {} == {} -- _1st_ value: {}".format(str(index), feature_name, str(value)))
                 edge.features[feature_set[feature_name]] = value
                 return True
             else:

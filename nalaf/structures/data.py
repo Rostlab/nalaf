@@ -1003,11 +1003,107 @@ class Part:
                         token.start <= entity.offset < token.end:
                         entity.tokens.append(token)
 
+    @staticmethod
+    def get_sentence_roots(sentence, feature_key='is_root'):
+        """
+        **Depends on** parsers.py :: SpacyParser (dependency parser).
+
+        Gets the roots of a sentence list of tokens.
+
+        Note that the spaCy parser allows multiple roots.
+        In this view, a root is a token that does not have any incoming dependency,
+        that is, the dependency graph is a tree with multiple roots (more generally, a graph).
+
+        Note that many other parsers enforce to have a sole root by creating a dummy node
+        than then connects to the real root nodes (those without real incoming dependencies).
+        """
+        roots = [token for token in sentence if token.features[feature_key] is True]
+        assert len(roots) >= 1, "The sentence contains {} roots (?). Expected: >= 1 -- Sentence: {}".format(len(roots), ' '.join((t.word for t in sentence)))
+
+        return roots
+
+
+    def compute_tokens_depth(self):
+        """
+        **Depends on** parsers.py :: SpacyParser (dependency parser).
+
+
+        Computes the depth for every token of every sentence defined as:
+
+        * root tokens have depth == 0
+        * other tokens have depth == depth(parent_token) + 1
+
+        The depth of each token is finally saved in the tokens' features with key 'depth'
+        """
+        feat_key = 'depth'
+
+        for sentence in self.sentences:
+            roots = get_sentence_roots(sentence)
+
+            for r in roots:
+                r.features[feat_key] = 0
+
+
+    @staticmethod
+    def _recursive_compute_tokens_depth(tokens):
+        if len(tokens) == 0:
+            return
+        else:
+            for token in tokens:
+                next_depth_tokens = []
+
+                (parent_token, dep_type) = token.features['dependency_from']
+                assert feat_key in parent_token.features
+
+                if feat_key in token.features:
+                    pass  # depth already defined by another and _shorter_ path (and for all its children too)
+                else:
+                    token.features[feat_key] = parent_token.features[feat_key] + 1
+                    next_depth_tokens += [child for (child, _) in token.features['dependency_to']]
+
+            _recursive_compute_tokens_depth(next_depth_tokens)
+
+
+    def set_entities_head_tokens(self):
+        """
+        A head token of an entity is an arbitrary definition of ours.
+        It roughly means "the most important token of an entity's token list".
+
+        Shrikant, essentially, defined this heuristically setting the head as the "root"
+        of the entity. Meaning, the token that is closest to an actual root of the dependency graph.
+
+        Shrikant code (Sentence::calculateHeadScores) also considered "important" dependencies
+        as to only follow those to calculate "closedness" to the root (depth), and further,
+        also penalized punctuation tokens.
+
+        Ashish supposedly implemented the same idea in the deprecated `calculate_token_scores`.
+
+        YET, in my view, BOTH Shrikant's and Ashish's implementations and logics were wrong
+        (if we follow the idea of their methods' descriptions).
+
+
+        In this new implementation (author @juanmirocks), we calculate the "score" of tokens
+        with the new function `compute_tokens_depth` and we consider as head of an entity:
+
+        *   the token that has the least depth. That is, e.g., depth 2 "wins" over depth 3.
+        *   Further, all-punctuation tokens will never be selected as entity head tokens
+            (unless they are the sole token of the entity; this should never happen anyway
+            and we assert it appropriately; maybe special unicode characters can slip through, e.g. delta).
+        *   Further, upon tokens with same depth, the token that is a Noun wins (Token::is_POS_Noun)
+        *   Finally, if still multiple token candidates remain, the first is arbitrarily selected.
+
+        """
+
+        for entity in chain(self.annotations, self.predicted_annotations):
+            pass
+
 
     def calculate_token_scores(self):
         """
         calculate score for each entity based on a simple heuristic of which
         token is closest to the root based on the dependency tree.
+
+        @
         """
         not_tokens = []
         important_dependencies = [
@@ -1031,10 +1127,11 @@ class Part:
                     dep_to = token
                     dep_type = token.features['dependency_from'][1]
 
-                    if dep_type in important_dependencies:
+                    # if dep_type in important_dependencies:
+                    if True:
                         if dep_from.features['score'] <= dep_to.features['score']:
                             dep_from.features['score'] = dep_to.features['score'] + 1
-                            done = True
+                            done = False
                 counter += 1
                 if counter > 20:
                     break
@@ -1052,6 +1149,10 @@ class Part:
             if len(entity.tokens) == 1:
                 entity.head_token = entity.tokens[0]
             else:
+                for t in entity.tokens:
+                    print("SUPPP", t.word, token.features['score'], "***************" if token.features['score'] > 1 else "")
+                print()
+
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
 

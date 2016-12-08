@@ -1,8 +1,11 @@
 import unittest
 from nalaf.structures.data import Dataset, Document, Part, Token, Label, Entity
 from nalaf.preprocessing.spliters import NLTKSplitter
-# from preprocessing.tokenizers import TmVarTokenizer
+from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 from nalaf import print_verbose, print_debug
+from nalaf.utils.readers import StringReader
+from nalaf.preprocessing.parsers import Parser, SpacyParser
+from nalaf.features import get_spacy_nlp_english
 
 STUB_ENTITY_CLASS_ID = 'e_x'
 
@@ -134,11 +137,46 @@ class TestLabel(unittest.TestCase):
 
 
 class TestPart(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        nlp = get_spacy_nlp_english(load_parser=True)
+        cls.parser = SpacyParser(nlp)
+
     def test_init(self):
         pass  # TODO
 
     def test_iter(self):
         pass  # TODO
+
+
+    def _get_test_data(self, test_string_sentence, assumed_tokens_words=None):
+        if assumed_tokens_words is None:
+            assumed_tokens_words = test_string_sentence.split(' ')
+
+        test_dataset = StringReader(test_string_sentence).read()
+        NLTKSplitter().split(test_dataset)
+        NLTK_TOKENIZER.tokenize(test_dataset)
+        cls.parser.parse(test_dataset)
+
+        sentences = list(test_dataset.parts)[0].sentences
+        assert len(sentences) == 1
+        sentence = sentences[0]
+
+        assert len(assumed_tokens_words) == len(sentence)
+        for (assumed_token_word, actual_token) in zip(assumed_tokens_words, sentence):
+            assert assumed_token_word == actual_token.word
+
+        return (dataset, sentence)
+
+
+    def test_compute_tokens_depth(self):
+        # Deps graph: https://demos.explosion.ai/displacy/?text=ecto%20-%20nucleotide%20pyrophosphatase%20%2F%20phosphodiesterase%20I-1&model=en&cpu=0&cph=0
+        #(d, s) = self._get_test_data('ecto - nucleotide pyrophosphatase / phosphodiesterase I-1')
+        pass
+
+        #assert
+
 
 
 class TestMentionLevel(unittest.TestCase):

@@ -43,17 +43,17 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
         for part in dataset.parts():
             part.edges = []
 
-            for ann_1, ann_2 in product(
+            for e_1, e_2 in product(
                     (ann for ann in self.part_entities(part) if ann.class_id == self.entity1_class),
                     (ann for ann in self.part_entities(part) if ann.class_id == self.entity2_class)):
 
-                sent_index_1 = part.get_sentence_index_for_annotation(ann_1)
-                sent_index_2 = part.get_sentence_index_for_annotation(ann_2)
+                sent_index_1 = part.get_sentence_index_for_annotation(e_1)
+                sent_index_2 = part.get_sentence_index_for_annotation(e_2)
 
                 pair_distance = abs(sent_index_1 - sent_index_2)
 
                 if pair_distance == self.distance:
-                    edge = Edge(self.relation_type, ann_1, ann_2, part, part, sent_index_1, sent_index_2)
+                    edge = Edge(self.relation_type, e_1, e_2, part, part, sent_index_1, sent_index_2)
                     part.edges.append(edge)
 
 

@@ -1003,6 +1003,7 @@ class Part:
                         token.start <= entity.offset < token.end:
                         entity.tokens.append(token)
 
+
     @staticmethod
     def get_sentence_roots(sentence, feature_key='is_root'):
         """
@@ -1066,6 +1067,8 @@ class Part:
 
     def set_entities_head_tokens(self):
         """
+        **Depends on** __class__::compute_tokens_depth
+
         A head token of an entity is an arbitrary definition of ours.
         It roughly means "the most important token of an entity's token list".
 
@@ -1094,8 +1097,30 @@ class Part:
 
         """
 
-        for entity in chain(self.annotations, self.predicted_annotations):
-            pass
+        # The following code can be made more efficient by iterating only once over the tokens lists
+        # The code will become more verbose, thoughss
+
+        for e in chain(self.annotations, self.predicted_annotations):
+
+            tokens = e.tokens
+            # Filter out punctuation tokens
+            tokens = list(filter(lambda t: not t.features['is_punct'], tokens))
+            assert len(tokens) >= 1, (e, " --> ", tokens)
+            # Leave only minum depth tokens
+            minimum_depth = min((t.features[Part._FEAT_DEPTH_KEY] for t in tokens))
+            tokens = [t for t in tokens if t.features[Part._FEAT_DEPTH_KEY] == minimum_depth]
+
+            if len(tokens) == 1:
+                e.head_token = tokens[0]
+
+            else:
+                # Leave only nouns
+                tokens = [t for t in tokens if t.is_POS_Noun()]
+
+                if len(tokens) > 1:
+                    print_debug("Same score for entity head tokens", tokens)
+
+                e.head_token = tokens[0]
 
 
     def calculate_token_scores(self):
@@ -1319,6 +1344,15 @@ class Token:
         * [string], [string] pair denotes the feature "[string]=[string]"
         * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
         """
+
+
+    def is_POS_Noun(self):
+        """ matches NN, NNS, NNP, NNPS : https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html"""
+        return "NN" == self.features['pos'][0:2]
+
+
+    def is_POS_Verb(token):
+        return "V" == self.features['pos'][0]
 
 
     def is_entity_part(self, part):

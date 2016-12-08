@@ -154,13 +154,21 @@ class TestPart(unittest.TestCase):
         if assumed_tokens_words is None:
             assumed_tokens_words = entity_sentence.split(' ')
 
+        # Create dataset
+
         dataset = StringReader(entity_sentence).read()
+        part = next(dataset.parts())
+        entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=0, text=entity_sentence)
+        part.annotations.append(entity)
+
+        # Apply through pipeline
 
         NLTKSplitter().split(dataset)
         NLTK_TOKENIZER.tokenize(dataset)
         self.parser.parse(dataset)
 
-        part = next(dataset.parts())
+        # Rest
+
         sentences = part.sentences
         assert len(sentences) == 1
         sentence = sentences[0]
@@ -169,13 +177,12 @@ class TestPart(unittest.TestCase):
         for (assumed_token_word, actual_token) in zip(assumed_tokens_words, sentence):
             assert assumed_token_word == actual_token.word
 
-        entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=0, text=entity_sentence)
-        part.annotations.append(entity)
-
         part.compute_tokens_depth()
         roots = Part.get_sentence_roots(sentence)
         for r in roots:
             self._assert_depth_eq(r, 0)
+
+        part.set_entities_head_tokens()
 
         return (dataset, sentence, entity, roots)
 
@@ -199,6 +206,8 @@ class TestPart(unittest.TestCase):
         self.assert_depth_eq(s, 'pyrophosphatase', 1)
         self.assert_depth_eq(s, '/', 1)
         self.assert_depth_eq(s, 'I-1', 1)
+
+        assert e.head_token.word == 'phosphodiesterase', e.head_token.word
 
 
 class TestMentionLevel(unittest.TestCase):

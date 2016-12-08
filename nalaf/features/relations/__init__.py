@@ -72,6 +72,11 @@ class EdgeFeatureGenerator(FeatureGenerator):
         self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
 
 
+    def add_with_value(self, feature_set, is_training_mode, edge, field_prefix_feature, value, *args):
+        feature_name = self.gen_prefix_feat_name(field_prefix_feature, *args)
+        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=value)
+
+
 from nalaf.features.relations import EdgeFeatureGenerator
 from nltk.stem import PorterStemmer
 from math import log2

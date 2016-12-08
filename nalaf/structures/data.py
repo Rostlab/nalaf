@@ -1116,7 +1116,7 @@ class Part:
             nn_tokens = [t for t in tokens if t.is_POS_Noun()]
 
             if len(nn_tokens) == 0:
-                print_debug("No Noun in the entity tokens", (e, e.tokens))
+                # print_debug("No Noun in the entity tokens", (e, e.tokens))
                 e.head_token = tokens[0]
 
             else:

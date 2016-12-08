@@ -101,8 +101,9 @@ class SpacyParser(Parser):
                     self._dependency_path(spacy_token, sent_index, part)
 
             part.percolate_tokens_to_entities()
-            part.calculate_token_scores()
-            part.set_head_tokens()
+            part.compute_tokens_depth()
+            part.set_entities_head_tokens()
+
             outer_bar.next()
 
         outer_bar.finish()

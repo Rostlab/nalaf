@@ -1130,6 +1130,8 @@ class Part:
 
         @
         """
+        warnings.warn('Use `compute_tokens_depth` instead', DeprecationWarning)
+
         not_tokens = []
         important_dependencies = [
             'det', 'amod', 'appos', 'npadvmod', 'compound',
@@ -1166,6 +1168,8 @@ class Part:
         """
         set head token for each entity based on the scores for each token
         """
+        warnings.warn('Use `set_entities_head_tokens` instead', DeprecationWarning)
+
         for token in self.tokens:
             if token.features['score'] is None:
                 token.features['score'] = 1
@@ -1174,10 +1178,6 @@ class Part:
             if len(entity.tokens) == 1:
                 entity.head_token = entity.tokens[0]
             else:
-                for t in entity.tokens:
-                    print("SUPPP", t.word, token.features['score'], "***************" if token.features['score'] > 1 else "")
-                print()
-
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
 

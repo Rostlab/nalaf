@@ -1237,8 +1237,8 @@ class Edge:
     Asserted:
         The entities are assumed to be sorted, that is:
             * their parts are sorted ( <= )  # can be same part
-            * their sentences are sorted ( <= )  # can be same sentence
-            * their start offsets are sorted ( < )  # must be strictly <, for they must be different entities/tokens
+            * (if same parts), their sentences are sorted ( <= )  # can be same sentence
+            * (if same parts), their start offsets are sorted ( < )  # < for they must be different entities/tokens
 
     Note:
         The same_ (part or sentence_id) are sugar fields for convenience.
@@ -1249,8 +1249,8 @@ class Edge:
 
     def __init__(self, relation_type, entity1, entity2, e1_part, e2_part, e1_sentence_id, e2_sentence_id):
         assert e1_part.sentences[0][0].start <= e2_part.sentences[0][0].start, ("Parts must be sorted", e1_part, e2_part)
-        assert e1_sentence_id <= e2_sentence_id, ("Sentences must be sorted", e1_sentence_id, e2_sentence_id)
-        assert entity1.tokens[0].start < entity2.tokens[0].start, ("Entities must be sorted", e1_part, e2_part)
+        assert e1_part != e2_part or e1_sentence_id <= e2_sentence_id, ("Sentences must be sorted", e1_sentence_id, e2_sentence_id)
+        assert e1_part != e2_part or entity1.offset < entity2.offset, ("Entities must be sorted", e1_sentence_id, e2_sentence_id, entity1, entity2)
 
         #
 

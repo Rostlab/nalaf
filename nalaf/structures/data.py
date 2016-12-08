@@ -1234,14 +1234,26 @@ class Edge:
     """
     Represent an edge - a possible relation between two named entities.
 
+    Asserted:
+        The entities are assumed to be sorted, that is:
+            * their parts are sorted ( <= )  # can be same part
+            * their sentences are sorted ( <= )  # can be same sentence
+            * their start offsets are sorted ( < )  # must be strictly <, for they must be different entities/tokens
+
     Note:
-        The same_ (part or sentence_id) are helper / sugar field for convenience
-        Their use is discourage and ideally the library would throw a warning
+        The same_ (part or sentence_id) are sugar fields for convenience.
+        Their use is discouraged and ideally the library would throw a warning when used.
 
         The best best solution would be to be able to retrieve the part and sentence_id from the entities directly
     """
 
     def __init__(self, relation_type, entity1, entity2, e1_part, e2_part, e1_sentence_id, e2_sentence_id):
+        assert e1_part.sentences[0][0].start <= e2_part.sentences[0][0].start, ("Parts must be sorted", e1_part, e2_part)
+        assert e1_sentence_id <= e2_sentence_id, ("Sentences must be sorted", e1_sentence_id, e2_sentence_id)
+        assert entity1.tokens[0].start < entity2.tokens[0].start, ("Entities must be sorted", e1_part, e2_part)
+
+        #
+
         self.relation_type = relation_type
         self.entity1 = entity1
         self.entity2 = entity2
@@ -1279,24 +1291,16 @@ class Edge:
         # As of now, it seems to devependant on `svmlight.py`
 
 
-    def get_sentences_pair(self, force_sort=False):
+    def get_sentences_pair(self):
         """
         Get tuple of corresponding edge's two entities' sentences.
         The sentences are represented as list of Token's.
-
-        * `force_sort`: if True, return sentences sorted by their index within, the assumed, same part.
-                        Default (False): return as they are written in the edge.
         """
 
         assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id, "This should not throw an exception"
 
         sent1 = self.e1_part.sentences[self.e1_sentence_id]
         sent2 = self.e2_part.sentences[self.e2_sentence_id]
-
-        if force_sort:
-            assert self.same_part, "This should not throw an exception as same part is expected"
-            if self.e2_sentence_id < self.e1_sentence_id:
-                sent1, sent2 = sent2, sent1
 
         return (sent1, sent2)
 
@@ -1324,6 +1328,7 @@ class Token:
     Usually one token represent one word from the document.
 
     :type word: str
+    :type start: int
     :type original_labels: list[Label]
     :type predicted_labels: list[Label]
     :type features: FeatureDictionary

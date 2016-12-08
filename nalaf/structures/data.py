@@ -1103,24 +1103,27 @@ class Part:
         for e in chain(self.annotations, self.predicted_annotations):
 
             tokens = e.tokens
+
             # Filter out punctuation tokens
             tokens = list(filter(lambda t: not t.features['is_punct'], tokens))
             assert len(tokens) >= 1, (e, " --> ", tokens)
+
             # Leave only minum depth tokens
             minimum_depth = min((t.features[Part._FEAT_DEPTH_KEY] for t in tokens))
             tokens = [t for t in tokens if t.features[Part._FEAT_DEPTH_KEY] == minimum_depth]
 
-            if len(tokens) == 1:
+            # Leave only nouns
+            nn_tokens = [t for t in tokens if t.is_POS_Noun()]
+
+            if len(nn_tokens) == 0:
+                print_debug("No Noun in the entity tokens", (e, e.tokens))
                 e.head_token = tokens[0]
 
             else:
-                # Leave only nouns
-                tokens = [t for t in tokens if t.is_POS_Noun()]
+                if len(nn_tokens) > 1:
+                    print_debug("Same score for entity head tokens", (e, e.tokens))
 
-                if len(tokens) > 1:
-                    print_debug("Same score for entity head tokens", tokens)
-
-                e.head_token = tokens[0]
+                e.head_token = nn_tokens[0]
 
 
     def calculate_token_scores(self):
@@ -1351,7 +1354,7 @@ class Token:
         return "NN" == self.features['pos'][0:2]
 
 
-    def is_POS_Verb(token):
+    def is_POS_Verb(self):
         return "V" == self.features['pos'][0]
 
 

@@ -195,7 +195,7 @@ class TestPart(unittest.TestCase):
         self._assert_depth_eq(next(filter(lambda t: t.word == word, sentence)), depth)
 
 
-    def test_compute_tokens_depth(self):
+    def test_depths_and_head_token__the_root(self):
         # Deps graph: https://demos.explosion.ai/displacy/?text=ecto%20-%20nucleotide%20pyrophosphatase%20%2F%20phosphodiesterase%20I-1&model=en&cpu=0&cph=0
         (d, s, e, rs) = self._get_test_data('ecto - nucleotide pyrophosphatase / phosphodiesterase I-1')
         assert len(rs) == 1 and rs[0].word == 'phosphodiesterase'

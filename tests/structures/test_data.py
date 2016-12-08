@@ -161,7 +161,6 @@ class TestPart(unittest.TestCase):
         self.parser.parse(dataset)
 
         part = next(dataset.parts())
-        part.compute_tokens_depth()
         sentences = part.sentences
         assert len(sentences) == 1
         sentence = sentences[0]
@@ -182,7 +181,7 @@ class TestPart(unittest.TestCase):
 
 
     def _assert_depth_eq(self, token, depth):
-        assert token.features[Part._FEAT_DEPTH_KEY] == 0
+        assert token.features[Part._FEAT_DEPTH_KEY] == depth, (token, " : ", token.features[Part._FEAT_DEPTH_KEY], " != ", depth)
 
 
     def assert_depth_eq(self, sentence, word, depth):
@@ -198,8 +197,8 @@ class TestPart(unittest.TestCase):
         self.assert_depth_eq(s, '-', 2)
         self.assert_depth_eq(s, 'nucleotide', 1)
         self.assert_depth_eq(s, 'pyrophosphatase', 1)
-        self.assert_depth_eq(s, '/', 0)
-        self.assert_depth_eq(s, 'I-1', 8)
+        self.assert_depth_eq(s, '/', 1)
+        self.assert_depth_eq(s, 'I-1', 1)
 
 
 class TestMentionLevel(unittest.TestCase):

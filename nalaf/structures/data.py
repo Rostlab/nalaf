@@ -1023,6 +1023,9 @@ class Part:
         return roots
 
 
+    _FEAT_DEPTH_KEY = 'depth'
+
+
     def compute_tokens_depth(self):
         """
         **Depends on** parsers.py :: SpacyParser (dependency parser).
@@ -1035,13 +1038,16 @@ class Part:
 
         The depth of each token is finally saved in the tokens' features with key 'depth'
         """
-        feat_key = 'depth'
 
         for sentence in self.sentences:
-            roots = get_sentence_roots(sentence)
+            roots = Part.get_sentence_roots(sentence)
+            roots_children = []
 
             for r in roots:
-                r.features[feat_key] = 0
+                r.features[Part._FEAT_DEPTH_KEY] = 0
+                roots_children += [child for (child, _) in r.features['dependency_to']]
+
+            Part._recursive_compute_tokens_depth(roots_children)
 
 
     @staticmethod
@@ -1053,15 +1059,15 @@ class Part:
                 next_depth_tokens = []
 
                 (parent_token, dep_type) = token.features['dependency_from']
-                assert feat_key in parent_token.features
+                assert Part._FEAT_DEPTH_KEY in parent_token.features
 
-                if feat_key in token.features:
+                if Part._FEAT_DEPTH_KEY in token.features:
                     pass  # depth already defined by another and _shorter_ path (and for all its children too)
                 else:
-                    token.features[feat_key] = parent_token.features[feat_key] + 1
+                    token.features[Part._FEAT_DEPTH_KEY] = parent_token.features[Part._FEAT_DEPTH_KEY] + 1
                     next_depth_tokens += [child for (child, _) in token.features['dependency_to']]
 
-            _recursive_compute_tokens_depth(next_depth_tokens)
+            Part._recursive_compute_tokens_depth(next_depth_tokens)
 
 
     def set_entities_head_tokens(self):

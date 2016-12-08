@@ -150,16 +150,19 @@ class TestPart(unittest.TestCase):
         pass  # TODO
 
 
-    def _get_test_data(self, test_string_sentence, assumed_tokens_words=None):
+    def _get_test_data(self, entity_sentence, assumed_tokens_words=None):
         if assumed_tokens_words is None:
-            assumed_tokens_words = test_string_sentence.split(' ')
+            assumed_tokens_words = entity_sentence.split(' ')
 
-        test_dataset = StringReader(test_string_sentence).read()
-        NLTKSplitter().split(test_dataset)
-        NLTK_TOKENIZER.tokenize(test_dataset)
-        cls.parser.parse(test_dataset)
+        dataset = StringReader(entity_sentence).read()
 
-        sentences = list(test_dataset.parts)[0].sentences
+        NLTKSplitter().split(dataset)
+        NLTK_TOKENIZER.tokenize(dataset)
+        self.parser.parse(dataset)
+
+        part = next(dataset.parts())
+        part.compute_tokens_depth()
+        sentences = part.sentences
         assert len(sentences) == 1
         sentence = sentences[0]
 
@@ -167,16 +170,36 @@ class TestPart(unittest.TestCase):
         for (assumed_token_word, actual_token) in zip(assumed_tokens_words, sentence):
             assert assumed_token_word == actual_token.word
 
-        return (dataset, sentence)
+        entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=0, text=entity_sentence)
+        part.annotations.append(entity)
+
+        part.compute_tokens_depth()
+        roots = Part.get_sentence_roots(sentence)
+        for r in roots:
+            self._assert_depth_eq(r, 0)
+
+        return (dataset, sentence, entity, roots)
+
+
+    def _assert_depth_eq(self, token, depth):
+        assert token.features[Part._FEAT_DEPTH_KEY] == 0
+
+
+    def assert_depth_eq(self, sentence, word, depth):
+        self._assert_depth_eq(next(filter(lambda t: t.word == word, sentence)), depth)
 
 
     def test_compute_tokens_depth(self):
         # Deps graph: https://demos.explosion.ai/displacy/?text=ecto%20-%20nucleotide%20pyrophosphatase%20%2F%20phosphodiesterase%20I-1&model=en&cpu=0&cph=0
-        #(d, s) = self._get_test_data('ecto - nucleotide pyrophosphatase / phosphodiesterase I-1')
-        pass
+        (d, s, e, rs) = self._get_test_data('ecto - nucleotide pyrophosphatase / phosphodiesterase I-1')
+        assert len(rs) == 1 and rs[0].word == 'phosphodiesterase'
 
-        #assert
-
+        self.assert_depth_eq(s, 'ecto', 2)
+        self.assert_depth_eq(s, '-', 2)
+        self.assert_depth_eq(s, 'nucleotide', 1)
+        self.assert_depth_eq(s, 'pyrophosphatase', 1)
+        self.assert_depth_eq(s, '/', 0)
+        self.assert_depth_eq(s, 'I-1', 8)
 
 
 class TestMentionLevel(unittest.TestCase):

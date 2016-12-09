@@ -1120,10 +1120,10 @@ class Part:
                 e.head_token = tokens[0]
 
             else:
-                if len(nn_tokens) > 1:
-                    print_debug("Same score for entity head tokens", (e, e.tokens))
-
                 e.head_token = nn_tokens[0]
+
+                if len(nn_tokens) > 1:
+                    print_debug("Same score for entity head tokens", (e.text, "head: ", e.head_token, "nn tokens: ", nn_tokens))
 
 
     def calculate_token_scores(self):

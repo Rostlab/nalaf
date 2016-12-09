@@ -45,19 +45,21 @@ def floyd_warshall(graph):
 
 def convert_to_dependency_graph(sentence):
     """
-    helper function for the Floyd Warshall algorithm where it computes the
-    adjacency matrix based on the dependency graph and sentence tokens
+    Helper function for the Floyd Warshall algorithm where it computes the
+    adjacency matrix based on the dependency graph and sentence tokens.
     """
     graph = {}
 
     for token in sentence:
+        # Init the matrix rows
         graph[token.features['id']] = {}
 
-    for token in sentence:
-        graph[token.features['id']] = {}
-        for tok in token.features['dependency_to']:
-            graph[token.features['id']][tok[0].features['id']] = 1
-            graph[tok[0].features['id']][token.features['id']] = 1
+    for from_token in sentence:
+        graph[from_token.features['id']] = {}
+
+        for to_token in from_token.features['dependency_to']:
+            graph[from_token.features['id']][to_token[0].features['id']] = 1
+            graph[to_token[0].features['id']][from_token.features['id']] = 1
 
     return graph
 

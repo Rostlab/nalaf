@@ -10,7 +10,9 @@ class PathFeatureGenerator(EdgeFeatureGenerator):
     two tokens at the terminal of the path
     """
     def __init__(
-        self, graphs,
+        self,
+
+        graphs,
 
         token_feature_generator,
 

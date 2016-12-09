@@ -70,6 +70,7 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
     sentence = part.sentences[sentence_id]
     if part.text not in graphs.keys():
         graphs[part.text] = {}
+
     if sentence_id not in graphs[part.text].keys():
         graphs[part.text][sentence_id] = {}
         graph = convert_to_dependency_graph(sentence)
@@ -77,6 +78,7 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
         graphs[part.text][sentence_id]['graph'] = graph
         graphs[part.text][sentence_id]['distances'] = distances
         graphs[part.text][sentence_id]['parents'] = parents
+
     else:
         distances = graphs[part.text][sentence_id]['distances']
         parents = graphs[part.text][sentence_id]['parents']
@@ -89,7 +91,7 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
     path.append(token_to)
     i, j = token_from.features['id'], token_to.features['id']
 
-    while(True):
+    while True:
         parent = parents[i][j]
         if distances[i][j] == float('inf'):
             path = []

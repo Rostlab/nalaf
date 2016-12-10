@@ -113,26 +113,17 @@ class Dataset:
                 yield relation
 
 
-    def compute_stats_relations_distances(self, predicted=False, splitter=None, tokenizer=None):
+    def compute_stats_relations_distances(self, predicted=False):
         """
         Returns a counter of the relationships distances.
         """
         from collections import Counter
 
-        assert sentence != [[]] and sentence != [], "The sentences have not been splitted/defined yet"
-
-        # Compute sentences&tokens if not already done or if user specified a splitter or tokenizer
-        if sentence == [[]] or sentence == [] or splitter is not None or tokenizer is not None:
-            if splitter is None:
-                splitter = NLTKSplitter()
-            if tokenizer is None:
-                tokenizer = NLTK_TOKENIZER
-            splitter.split(self)
-            tokenizer.split(self)
-
-        counter = Counter()
+        counter_nums = Counter()
 
         for part in self.parts():
+            assert part.sentences != [[]] and part.sentences != [], "The sentences have not been splitted/defined yet"
+
             relations = part.predicted_relations if predicted else part.relations
 
             for rel in relations:
@@ -140,10 +131,7 @@ class Dataset:
                 index2 = part.get_sentence_index_for_annotation(rel.entity2)
                 distance = abs(index1 - index2)
 
-                if distance >= 4:
-                    counter.update(['D4or+'])
-                else:
-                    counter.update(['D'+distance])
+                counter_nums.update(['D'+str(distance)])
 
         return counter
 

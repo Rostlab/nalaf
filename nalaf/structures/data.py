@@ -133,7 +133,7 @@ class Dataset:
 
                 counter_nums.update(['D'+str(distance)])
 
-        return counter
+        return counter_nums
 
 
     def sentences(self):

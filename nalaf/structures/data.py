@@ -113,6 +113,41 @@ class Dataset:
                 yield relation
 
 
+    def compute_stats_relations_distances(self, predicted=False, splitter=None, tokenizer=None):
+        """
+        Returns a counter of the relationships distances.
+        """
+        from collections import Counter
+
+        assert sentence != [[]] and sentence != [], "The sentences have not been splitted/defined yet"
+
+        # Compute sentences&tokens if not already done or if user specified a splitter or tokenizer
+        if sentence == [[]] or sentence == [] or splitter is not None or tokenizer is not None:
+            if splitter is None:
+                splitter = NLTKSplitter()
+            if tokenizer is None:
+                tokenizer = NLTK_TOKENIZER
+            splitter.split(self)
+            tokenizer.split(self)
+
+        counter = Counter()
+
+        for part in self.parts():
+            relations = part.predicted_relations if predicted else part.relations
+
+            for rel in relations:
+                index1 = part.get_sentence_index_for_annotation(rel.entity1)
+                index2 = part.get_sentence_index_for_annotation(rel.entity2)
+                distance = abs(index1 - index2)
+
+                if distance >= 4:
+                    counter.update(['D4or+'])
+                else:
+                    counter.update(['D'+distance])
+
+        return counter
+
+
     def sentences(self):
         """
         helper functions that iterates through all sentences
@@ -930,7 +965,7 @@ class Part:
             return return_array
 
 
-    def get_sentence_index_for_annotation(self, annotation):
+    def get_sentence_index_for_annotation(self, entity):
 
         for sentence_index, sentence in enumerate(self.sentences):
             assert sentence != [[]] and sentence != [], "The sentences have not been splitted/defined yet"
@@ -938,10 +973,10 @@ class Part:
             sentence_start = sentence[0].start
             sentence_end = sentence[-1].end
 
-            if sentence_start <= annotation.offset < sentence_end:
+            if sentence_start <= entity.offset < sentence_end:
                 return sentence_index
 
-        assert False, ("The annotation did not (and should) have an associated sentence. Ann: " + str(annotation))
+        assert False, ("The entity did not (and should) have an associated sentence. Ann: " + str(entity))
 
 
     def get_entity(self, start_offset, raise_exception_on_incosistencies=True):

@@ -128,23 +128,30 @@ class Dataset:
 
         counter_nums = Counter()
 
-        for part in self.parts():
-            assert part.sentences != [[]] and part.sentences != [], "The sentences have not been splitted/defined yet"
+        for doc in self:
 
-            dict_relations = \
-                part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
+            # Group relationships at the document level, not part level
+            min_distances = {}
 
-            for _, rels in dict_relations.items():
+            for part in doc:
 
-                min_distance = float('inf')
+                part_dict_relations = \
+                    part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
-                for rel in rels:
-                    index1 = part.get_sentence_index_for_annotation(rel.entity1)
-                    index2 = part.get_sentence_index_for_annotation(rel.entity2)
-                    distance = abs(index1 - index2)
-                    min_distance = min(distance, min_distance)
+                for rel_key, rels in part_dict_relations.items():
+                    for rel in rels:
+                        index1 = part.get_sentence_index_for_annotation(rel.entity1)
+                        index2 = part.get_sentence_index_for_annotation(rel.entity2)
+                        distance = abs(index1 - index2)
 
-                counter_nums.update(['D'+str(min_distance)])
+                        min_distance = min_distances.get(rel_key, float('inf'))
+                        min_distance = min(distance, min_distance)
+                        min_distances[rel_key] = min_distance
+
+            # print_debug("\ndoc:")
+            for rel_key, count in min_distances.items():
+                # print_debug("    ", rel_key)
+                counter_nums.update(['D'+str(count)])
 
         total = sum(counter_nums.values())
 

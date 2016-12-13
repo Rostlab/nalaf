@@ -496,6 +496,14 @@ class MentionLevelEvaluator(Evaluator):
         return evaluations
 
 
+def _normalized_first(e):
+    key = next(iter(e.normalisation_dict.keys()), "none")
+    value = next(iter(e.normalisation_dict.values()), None)
+    value = str(uuid.uuid4()) if value is None else value
+
+    return '|'.join([key, value])
+
+
 class DocumentLevelRelationEvaluator(Evaluator):
     """
     Implements document level performance evaluation for relations. It extracts
@@ -527,6 +535,11 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+
+        # Take the first normalization only
+        # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
+
+        'normalized_first': _normalized_first,
 
         # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
         'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))

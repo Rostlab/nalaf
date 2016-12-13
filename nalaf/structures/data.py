@@ -116,6 +116,10 @@ class Dataset:
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, predicted=False):
         """
         Returns a counter of the relationships distances.
+
+        The relationships are mapped to unique strings as determined by entity_map_fun (see `map_relations`).
+
+        The minimal distance of the mapped relations with same map key is used.
         """
         from collections import Counter
 

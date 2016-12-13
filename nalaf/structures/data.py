@@ -127,16 +127,20 @@ class Dataset:
         for part in self.parts():
             assert part.sentences != [[]] and part.sentences != [], "The sentences have not been splitted/defined yet"
 
-            relations = \
+            dict_relations = \
                 part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
-            for rel in relations:
+            for _, rels in dict_relations.items():
 
-                index1 = part.get_sentence_index_for_annotation(rel.entity1)
-                index2 = part.get_sentence_index_for_annotation(rel.entity2)
-                distance = abs(index1 - index2)
+                min_distance = float('inf')
 
-                counter_nums.update(['D'+str(distance)])
+                for rel in rels:
+                    index1 = part.get_sentence_index_for_annotation(rel.entity1)
+                    index2 = part.get_sentence_index_for_annotation(rel.entity2)
+                    distance = abs(index1 - index2)
+                    min_distance = min(distance, min_distance)
+
+                counter_nums.update(['D'+str(min_distance)])
 
         total = sum(counter_nums.values())
 

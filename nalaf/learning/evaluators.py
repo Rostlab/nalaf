@@ -501,8 +501,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
     Implements document level performance evaluation for relations. It extracts
     and compares unique (gold) relations against the predicted relations.
 
-    The evaluator assumes that all relations are undirected (bidirectional)
-    (beware: this is note checked).
+    The evaluator assumes that all relations are undirected (bidirectional).
+    Beware: the assumption is not checked.
 
     How entities within the relations are compared against each other is decided
     by the user and given in the `entity_map_fun` parameter. The default for this
@@ -514,14 +514,15 @@ class DocumentLevelRelationEvaluator(Evaluator):
     Furthermore, you can choose how to compare relations to each other.
     First of all, relations are converted to unique strings (together with the
     `entity_map_fun` parameter). Second of all, the default is to compare the
-    relation-strings with string's equals function (str.__eq__). Howerver,
+    relation-strings with string's equals function (str.__eq__). However,
     the user can decide with `relation_equiv_fun` how to compare the relations' strings.
     This must be an function that takes two parameter strings (`gold` and `pred`, i.e truth relation and prediction)
     and returns a Boolean (True or Fals). This arbitrary `equivalent` function is helpful
     when mere string equals comparison is not enough. Example: when normalization ids must be compared
     in a hierarchical manner. Important: the order of the parameters _does matter_, i.e.,
-    `gold` _equiv_ `pred` does not necessarily imply that `pred` _equiv_ `gold` or they other way around.
-    Example: '1' < '2 but not '1' > '2'
+    `gold` _equiv_ `pred` does not necessarily imply that `pred` _equiv_ `gold` or the other way around.
+    Example: '1' < '2 but not '1' > '2'.
+    In this view, the function resembles the meaning of sth like `the prediction is acceptable`.
     """
 
     COMMON_ENTITY_MAP_FUNS = {

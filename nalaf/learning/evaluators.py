@@ -560,8 +560,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
         predicted_relations = {}
 
         for docid, doc in dataset.documents.items():
-            true_relations[docid] = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
-            predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun)
+            true_relations[docid] = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
+            predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
         for docid in docids:
             gold = true_relations[docid]

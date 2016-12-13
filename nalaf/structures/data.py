@@ -113,27 +113,36 @@ class Dataset:
                 yield relation
 
 
-    def compute_stats_relations_distances(self, predicted=False):
+    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, predicted=False):
         """
         Returns a counter of the relationships distances.
         """
         from collections import Counter
+
+        if entity_map_fun is None:
+            entity_map_fun = Entity.__repr__
 
         counter_nums = Counter()
 
         for part in self.parts():
             assert part.sentences != [[]] and part.sentences != [], "The sentences have not been splitted/defined yet"
 
-            relations = part.predicted_relations if predicted else part.relations
+            relations = \
+                part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
             for rel in relations:
+
                 index1 = part.get_sentence_index_for_annotation(rel.entity1)
                 index2 = part.get_sentence_index_for_annotation(rel.entity2)
                 distance = abs(index1 - index2)
 
                 counter_nums.update(['D'+str(distance)])
 
-        return counter_nums
+        total = sum(counter_nums.values())
+
+        counter_percts = Counter({key: (count/total) for (key, count) in counter_nums.items()})
+
+        return (counter_nums, counter_percts)
 
 
     def sentences(self):
@@ -735,20 +744,23 @@ class Document:
         return set(mentions)
 
 
-    def map_relations(self, use_predicted, relation_type, entity_map_fun):
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, doc_mapped_relations=None):
         """
+        Map all Documents's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
+
         Create a set of the document's relations based on the map function of the relation themselves and the given map
         function for their entities. Relations end up being represented as strings in the set.
+
+        Return: set of strings that represent unique relationsihps
         """
 
-        ret = set()
+        if doc_mapped_relations is None:
+            doc_mapped_relations = {}
 
         for part in self:
-            part_relations = part.predicted_relations if use_predicted else part.relations
-            part_mapped_relations = {r.map(entity_map_fun) for r in part_relations if r.class_id == relation_type}
-            ret.update(part_mapped_relations)
+            doc_mapped_relations = part.map_relations(use_predicted, relation_type, entity_map_fun, doc_mapped_relations)
 
-        return ret
+        return doc_mapped_relations
 
 
     def purge_false_relationships(self):
@@ -1205,6 +1217,31 @@ class Part:
                 entity.head_token = entity.tokens[0]
             else:
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
+
+
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, part_mapped_relations=None):
+        """
+        Map all Parts's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
+
+        Create a set of the document's relations based on the map function of the relation themselves and the given map
+        function for their entities. Relations end up being represented as strings in the set.
+
+        Return: set of strings that represent unique relationsihps
+        """
+
+        if part_mapped_relations is None:
+            part_mapped_relations = {}
+
+        part_relations = self.predicted_relations if use_predicted else self.relations
+
+        for r in part_relations:
+            if r.class_id == relation_type:
+                mapkey = r.map(entity_map_fun)
+                equivalent = part_mapped_relations.get(mapkey, [])
+                equivalent.append(r)
+                part_mapped_relations[mapkey] = equivalent
+
+        return part_mapped_relations
 
 
     def __iter__(self):

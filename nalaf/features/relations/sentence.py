@@ -26,6 +26,7 @@ class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
 
             num_entities = len(sentences_entities)
             feature_name = self.mk_feature_name(self.prefix, self.entity_type, 'count', num_entities)
+            # TODO we could set it as real value - ⚠️ that's what `entityhead::named_entity_count` did
             self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
 
 

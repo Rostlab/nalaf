@@ -28,8 +28,9 @@ class EntityHeadTokenFeatureGenerator(EdgeFeatureGenerator):
             entity1 = edge.entity1
             entity2 = edge.entity2
 
-            self.named_entity_count('entity1_', entity1.class_id, edge, feature_set, is_training_mode)
-            self.named_entity_count('entity2_', entity2.class_id, edge, feature_set, is_training_mode)
+            # No need to count here, see: NamedEntityCountFeatureGenerator
+            # self.named_entity_count('entity1_', entity1.class_id, edge, feature_set, is_training_mode)
+            # self.named_entity_count('entity2_', entity2.class_id, edge, feature_set, is_training_mode)
 
             entity1_stem = self.stemmer.stem(entity1.head_token.word)
             entity1_non_stem = entity1.head_token.word[len(entity1_stem):]

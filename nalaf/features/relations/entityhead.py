@@ -260,7 +260,7 @@ class EntityHeadTokenChainFeatureGenerator(EdgeFeatureGenerator):
 
 
     def build_chains(self, token, sentence, edge, prefix, chain, depth_left, feature_set, is_training_mode):
-        if depth_left==0:
+        if depth_left == 0:
             return
         depth_string = 'dist_'+str(depth_left)+'_'
         feature_name_1 = '19_'+prefix+'dep_'+depth_string+'from_'+token.features['dep']+'_[0]'

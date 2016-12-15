@@ -594,6 +594,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
                 accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
                 assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+                assert not (True in accept_decisions and None in accept_decisions)
 
                 if True in accept_decisions:
                     counts[docid]['tp'] += 1

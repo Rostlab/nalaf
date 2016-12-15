@@ -6,6 +6,8 @@ from nalaf import print_verbose, print_debug
 from nalaf.utils.readers import StringReader
 from nalaf.preprocessing.parsers import Parser, SpacyParser
 from nalaf.features import get_spacy_nlp_english
+from nose.plugins.attrib import attr
+
 
 STUB_ENTITY_CLASS_ID = 'e_x'
 
@@ -136,6 +138,7 @@ class TestLabel(unittest.TestCase):
         pass  # TODO
 
 
+@attr('slow')
 class TestPart(unittest.TestCase):
 
     @classmethod

@@ -598,11 +598,11 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
                 if True in accept_decisions:
                     counts[docid]['tp'] += 1
-                elif False in accept_decisions:
-                    counts[docid]['fp'] += 1
-                else:  # is None
+                elif None in accept_decisions:
                     # Ignore as documented
                     pass
+                else:  # either False or the set is empty, meaning that there are no gold annotations
+                    counts[docid]['fp'] += 1
 
             for r_gold in gold:
 

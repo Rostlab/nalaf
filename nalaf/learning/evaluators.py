@@ -523,14 +523,19 @@ class DocumentLevelRelationEvaluator(Evaluator):
     First of all, relations are converted to unique strings (together with the
     `entity_map_fun` parameter). Second of all, the default is to compare the
     relation-strings with string's equals function (str.__eq__). However,
-    the user can decide with `relation_equiv_fun` how to compare the relations' strings.
-    This must be an function that takes two parameter strings (`gold` and `pred`, i.e truth relation and prediction)
-    and returns a Boolean (True or Fals). This arbitrary `equivalent` function is helpful
-    when mere string equals comparison is not enough. Example: when normalization ids must be compared
-    in a hierarchical manner. Important: the order of the parameters _does matter_, i.e.,
-    `gold` _equiv_ `pred` does not necessarily imply that `pred` _equiv_ `gold` or the other way around.
-    Example: '1' < '2 but not '1' > '2'.
-    In this view, the function resembles the meaning of sth like `the prediction is acceptable`.
+    the user can decide with `relation_accept_fun` how to compare the relations' strings.
+
+    More than an equals function, `relation_accept_fun` means:
+    * Input: `gold` and `pred` relations in string form (*order matters* --> 1 < 2 but 2 <! 1)
+    * Output: decide for `pred` to either, accept (True), reject (False), ignore (None).
+
+    Outputs True and False lead to the expected counts: tp or fp, respectively.
+    The special None case is when a prediciton is simply ignored and not counted at all.
+    For example, the prediction may be actually correct, yet too vague to be tp, and correct enough to not be a fp.
+    As for missing predictions, fn's are counted as usual: `fn` if False or None
+
+    This arbitrary `accept` function is helpful when mere string equals comparison is not enough.
+    Example: when normalization ids must be compared in a hierarchical manner.
     """
 
     COMMON_ENTITY_MAP_FUNS = {
@@ -548,7 +553,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     }
 
 
-    def __init__(self, rel_type, entity_map_fun=None, relation_equiv_fun=None):
+    def __init__(self, rel_type, entity_map_fun=None, relation_accept_fun=None):
         self.rel_type = rel_type
         if entity_map_fun is None:
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
@@ -558,7 +563,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         else:
             self.entity_map_fun = entity_map_fun
 
-        self.relation_equiv_fun = str.__eq__ if relation_equiv_fun is None else relation_equiv_fun
+        self.relation_accept_fun = str.__eq__ if relation_accept_fun is None else relation_accept_fun
 
 
     def evaluate(self, dataset):
@@ -587,14 +592,20 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_pred in predicted:
 
-                if any(self.relation_equiv_fun(r_gold, r_pred) for r_gold in gold):
+                accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
+                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+
+                if True in accept_decisions:
                     counts[docid]['tp'] += 1
-                else:
+                elif False in accept_decisions:
                     counts[docid]['fp'] += 1
+                else:  # is None
+                    # Ignore as documented
+                    pass
 
             for r_gold in gold:
 
-                if not any(self.relation_equiv_fun(r_gold, r_pred) for r_pred in predicted):
+                if not any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

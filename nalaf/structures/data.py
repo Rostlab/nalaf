@@ -800,9 +800,9 @@ class Document:
             return list(self.parts.values())[0].text
 
 
-    def get_text(self):
+    def get_text(self, separation=" "):
         """
-        Gives the whole text concatenated with spaces in between.
+        Gives the whole text concatenated with `separation` parameter string in between (default: spaces).
         :return: string
         """
         text = ""
@@ -810,7 +810,7 @@ class Document:
         _length = self.get_size()
 
         for p in self.parts.values():
-            text += "{0} ".format(p.text)
+            text += "{}{}".format(p.text, separation)
         return text.strip()
 
 

@@ -496,10 +496,17 @@ class MentionLevelEvaluator(Evaluator):
         return evaluations
 
 
-def _normalized_first(e):
-    key = next(iter(e.normalisation_dict.keys()), "none")
+def _normalized_first(e, penalize_unknown_normalizations="soft"):
+    key = next(iter(e.normalisation_dict.keys()), "None")
     value = next(iter(e.normalisation_dict.values()), None)
-    value = str(uuid.uuid4()) if value is None else value
+
+    if value is None:
+        if penalize_unknown_normalizations == "hard":
+            value = "UNKNOWN:"+str(uuid.uuid4())
+        elif penalize_unknown_normalizations == "soft":
+            value = e.text.lower()
+        else:
+            value = "None"
 
     return '|'.join([key, value])
 
@@ -594,19 +601,22 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
                 accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
                 assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
-                assert not (True in accept_decisions and None in accept_decisions)
+                # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
 
                 if True in accept_decisions:
+                    print_verbose("    ", "true positive", r_pred)
                     counts[docid]['tp'] += 1
                 elif None in accept_decisions:
                     # Ignore as documented
                     pass
                 else:  # either False or the set is empty, meaning that there are no gold annotations
+                    print_verbose("    ", "FALSE positiv", r_pred)
                     counts[docid]['fp'] += 1
 
             for r_gold in gold:
 
                 if not any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
+                    print_verbose("    ", "FALSE negativ", r_gold)
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

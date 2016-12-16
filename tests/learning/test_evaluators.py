@@ -590,10 +590,11 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         r1 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))
         r5 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "9"))  # Missing
         r6 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))
+        r8 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Own repetition in  gold, so 1 should be counted twice
 
         r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Accept 1
-        r3 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # *repeated* Accept 1
-        r4 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "3"))  # *repeated* Accept 1
+        r3 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # repeated Accept 1, --> do count because of own repetition in gold
+        r4 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "3"))  # repeated Accept 1, --> do not count because it's over repetition
         r7 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))  # Accept 4
 
         self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r2.map(entity_map_fun)))
@@ -610,13 +611,13 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
         # -
 
-        part.relations = [r1, r5, r6]
+        part.relations = [r1, r5, r6, r8]
         part.predicted_relations = [r2, r3, r4, r7]  # Only one shold be accepted
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         print(evaluation)
-        self.assertEqual(evaluation.tp, 2, evaluation)
+        self.assertEqual(evaluation.tp, 3, evaluation)
         self.assertEqual(evaluation.fn, 1)
         self.assertEqual(evaluation.fp, 0)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")

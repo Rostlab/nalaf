@@ -113,6 +113,8 @@ class Dataset:
                 yield relation
 
 
+
+
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
         """
         Returns a counter of the relationships distances.
@@ -147,6 +149,9 @@ class Dataset:
                     doc_tmp_rels = doc_relations.get(rel_key, [])
                     doc_tmp_rels += part_rels_with_dists
                     doc_relations[rel_key] = doc_tmp_rels
+
+            if relation_accept_fun is not None:
+                raise NotImplementedError("use of relation_accept_fun is not implemented yet")
 
             for rel_key, rels in doc_relations.items():
                 _, min_distance_for_unique_rel_key = min(rels, key=lambda reldist_tuple: reldist_tuple[1])

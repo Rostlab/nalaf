@@ -113,26 +113,26 @@ class Dataset:
                 yield relation
 
 
-    def _remove_repetitions_with_relation_accept_fun(self, doc_relations, relation_accept_fun):
-        new_doc_relations = {}
+    def _remove_repetitions_with_relation_accept_fun(self, map_relations, relation_accept_fun):
+        new_map_relations = {}
         discard = set()
 
         def get(key):
-            return new_doc_relations.get(key, doc_relations.get(key))
+            return new_map_relations.get(key, map_relations.get(key))
 
-        for rel_key_1, rel_key_2 in combinations(doc_relations.keys(), 2):
+        for rel_key_1, rel_key_2 in combinations(map_relations.keys(), 2):
 
             accept_1 = relation_accept_fun(rel_key_2, rel_key_1)  # Order matters, here, rel_key_1 is deemed "pred"
             accept_2 = relation_accept_fun(rel_key_1, rel_key_2)  # here, rel_key_2 is deemed "pred"
 
             if accept_1 is False and accept_2 is False:
-                new_doc_relations[rel_key_1] = get(rel_key_1)
-                new_doc_relations[rel_key_2] = get(rel_key_2)
+                new_map_relations[rel_key_1] = get(rel_key_1)
+                new_map_relations[rel_key_2] = get(rel_key_2)
             elif accept_1 is True and accept_2 is None:
-                new_doc_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
+                new_map_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
                 discard.update({rel_key_2})
             elif accept_1 is None and accept_2 is True:
-                new_doc_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
+                new_map_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
                 discard.update({rel_key_1})
             elif accept_1 is True and accept_2 is True:
                 # Should only happen in cases with either one contains more information
@@ -141,24 +141,24 @@ class Dataset:
 
                 # kinda hack: arbitrarily select they longest key
                 # if len(rel_key_1) > len(rel_key_2):
-                #     new_doc_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
+                #     new_map_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
                 #     discard.update({rel_key_2})
                 # else:
-                #     new_doc_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
+                #     new_map_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
                 #     discard.update({rel_key_1})
 
                 # For simplicity, we keep both
-                new_doc_relations[rel_key_1] = get(rel_key_1)
-                new_doc_relations[rel_key_2] = get(rel_key_2)
+                new_map_relations[rel_key_1] = get(rel_key_1)
+                new_map_relations[rel_key_2] = get(rel_key_2)
 
             else:
                 assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
 
         for rel_key in discard:
-            if rel_key in new_doc_relations:
-                del new_doc_relations[rel_key]
+            if rel_key in new_map_relations:
+                del new_map_relations[rel_key]
 
-        return new_doc_relations
+        return new_map_relations
 
 
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):

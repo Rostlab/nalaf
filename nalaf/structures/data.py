@@ -115,7 +115,6 @@ class Dataset:
 
     def _clean_relation_accept_fun(self, doc_relations, relation_accept_fun):
         print("\n\n", "--------------")
-        made_changes = False
         new_doc_relations = {}
         keys = list(doc_relations.keys())  # In this case, order does not matter
         discard = set()
@@ -135,35 +134,30 @@ class Dataset:
                 new_doc_relations[rel_key_1] = doc_relations[rel_key_1]
                 new_doc_relations[rel_key_2] = doc_relations[rel_key_2]
             elif accept_1 is True and accept_2 is None:
-                made_changes = True
                 new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
                 discard.update({rel_key_2})
             elif accept_1 is None and accept_2 is True:
-                made_changes = True
-                if len(new_doc_relations) != 0:
-                    del new_doc_relations[rel_key_1]  # we had put it in before
-
                 new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
+                if rel_key_1 in new_doc_relations:
+                    del new_doc_relations[rel_key_1]  # we had put it in befores
                 discard.update({rel_key_1})
             elif accept_1 is True and accept_2 is True:
                 # Should only happen in cases with either one contains more information
                 # e.g. from LocText: r_5|n_7|Q95460|n_8|GO:0009986 (True) vs r_5|n_7|Q95460,Q8HWB0|n_8|GO:0009986 (True)
                 # therefore, kinda hack: arbitrarily select they longest key
-                made_changes = True
 
                 if len(rel_key_1) > len(rel_key_2):
                     new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
                     discard.update({rel_key_2})
                 else:
-                    if len(new_doc_relations) != 0:
-                        del new_doc_relations[rel_key_1]  # we had put it in before
-
                     new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
+                    if rel_key_1 in new_doc_relations:
+                        del new_doc_relations[rel_key_1]  # we had put it in before
                     discard.update({rel_key_1})
             else:
                 assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
 
-        if made_changes:
+        if len(discard) > 0:
             assert len(new_doc_relations) < len(doc_relations)
             return self._clean_relation_accept_fun(new_doc_relations, relation_accept_fun)
         else:

@@ -579,20 +579,12 @@ class DocumentLevelRelationEvaluator(Evaluator):
         :returns Evaluations
         """
 
-        docids = dataset.documents.keys()
         subcounts = ['tp', 'fp', 'fn']
-        counts = {docid: dict.fromkeys(subcounts, 0) for docid in docids}
-
-        true_relations = {}
-        predicted_relations = {}
+        counts = {docid: dict.fromkeys(subcounts, 0) for docid in dataset.documents.keys()}
 
         for docid, doc in dataset.documents.items():
-            true_relations[docid] = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
-            predicted_relations[docid] = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
-
-        for docid in docids:
-            gold = true_relations[docid]
-            predicted = predicted_relations[docid]
+            gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
+            predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
             print_verbose("\n\ngold: \n" + '\n'.join(sorted(list(gold))))
             print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))

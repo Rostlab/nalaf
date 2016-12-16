@@ -588,22 +588,32 @@ class TestMentionLevelEvaluator(unittest.TestCase):
             return gold == pred
 
         r1 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))
-        r5 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "9"))  # Missing
-        r6 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))
-        r8 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Own repetition in  gold, so 1 should be counted twice
+        r5 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "9"))  # Missing == fn
+        r6 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "5"))
+        r8 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # (maps to 1) Own repetition in gold, so 1 should be counted twice
 
-        r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Accept 1
-        r3 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # repeated Accept 1, --> do count because of own repetition in gold
-        r4 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "3"))  # repeated Accept 1, --> do not count because it's over repetition
-        r7 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))  # Accept 4
+        r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Accept 1 --> do count == tp
+        r3 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # repeated Accept 1,2 --> do count because of own repetition in gold == tp
+        r4 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "3"))  # repeated Accept 1,2 --> do not count because it's over repetition
+        r7 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "6"))  # Accept 5 --> do count == tp
+        r9 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "5"))  # Accept 5 --> do not count because it's over repetition
 
         self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r2.map(entity_map_fun)))
         self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r3.map(entity_map_fun)))
         self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r4.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r1.map(entity_map_fun), r7.map(entity_map_fun)))
+
         self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r2.map(entity_map_fun)))
         self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r3.map(entity_map_fun)))
         self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r4.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r7.map(entity_map_fun)))
+
         self.assertEqual(True, relation_accept_fun(r6.map(entity_map_fun), r7.map(entity_map_fun)))
+
+        self.assertEqual(False, relation_accept_fun(r8.map(entity_map_fun), r2.map(entity_map_fun)))
+        self.assertEqual(True, relation_accept_fun(r8.map(entity_map_fun), r3.map(entity_map_fun)))
+        self.assertEqual(True, relation_accept_fun(r8.map(entity_map_fun), r4.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r8.map(entity_map_fun), r7.map(entity_map_fun)))
 
         evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, entity_map_fun, relation_accept_fun)
 
@@ -612,7 +622,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         # -
 
         part.relations = [r1, r5, r6, r8]
-        part.predicted_relations = [r2, r3, r4, r7]  # Only one shold be accepted
+        part.predicted_relations = [r2, r3, r4, r7, r9]  # Only one shold be accepted
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
@@ -621,7 +631,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(evaluation.fn, 1)
         self.assertEqual(evaluation.fp, 0)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
-        self.assertEqual(computation.f_measure, 0.6666666666666666)
+        self.assertEqual(computation.f_measure, 0.8571428571428571)
 
 
 if __name__ == '__main__':

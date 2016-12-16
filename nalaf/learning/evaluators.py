@@ -604,8 +604,10 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
 
                 if True in accept_decisions:
-                    print_verbose("    ", "true positive", r_pred)
-                    counts[docid]['tp'] += 1
+                    # handle below while traversing gold to not create over repetitions, see test_evaluators
+                    # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
+                    print_verbose("       ", " true positive prediction (not counted yet)", r_pred)
+                    pass
                 elif None in accept_decisions:
                     # Ignore as documented
                     pass
@@ -615,7 +617,10 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_gold in gold:
 
-                if not any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
+                if any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
+                    print_verbose("    ", "true positive", r_gold)
+                    counts[docid]['tp'] += 1
+                else:
                     print_verbose("    ", "FALSE negativ", r_gold)
                     counts[docid]['fn'] += 1
 

@@ -6,7 +6,7 @@ import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
-from itertools import chain
+from itertools import chain, product, combinations
 from collections import Counter
 
 
@@ -113,55 +113,52 @@ class Dataset:
                 yield relation
 
 
-    def _clean_relation_accept_fun(self, doc_relations, relation_accept_fun):
-        print("\n\n", "--------------")
+    def _remove_repetitions_with_relation_accept_fun(self, doc_relations, relation_accept_fun):
         new_doc_relations = {}
-        keys = list(doc_relations.keys())  # In this case, order does not matter
         discard = set()
 
-        for (rel_key_1, rel_key_2) in zip(keys, keys[1:]):
+        def get(key):
+            return new_doc_relations.get(key, doc_relations.get(key))
 
-            if rel_key_1 in discard:
-                print("*** DISCARD, ", rel_key_1)
-                continue
+        for rel_key_1, rel_key_2 in combinations(doc_relations.keys(), 2):
 
             accept_1 = relation_accept_fun(rel_key_2, rel_key_1)  # Order matters, here, rel_key_1 is deemed "pred"
             accept_2 = relation_accept_fun(rel_key_1, rel_key_2)  # here, rel_key_2 is deemed "pred"
 
-            print(rel_key_1, rel_key_2, accept_1, accept_2)
-
             if accept_1 is False and accept_2 is False:
-                new_doc_relations[rel_key_1] = doc_relations[rel_key_1]
-                new_doc_relations[rel_key_2] = doc_relations[rel_key_2]
+                new_doc_relations[rel_key_1] = get(rel_key_1)
+                new_doc_relations[rel_key_2] = get(rel_key_2)
             elif accept_1 is True and accept_2 is None:
-                new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
+                new_doc_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
                 discard.update({rel_key_2})
             elif accept_1 is None and accept_2 is True:
-                new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
-                if rel_key_1 in new_doc_relations:
-                    del new_doc_relations[rel_key_1]  # we had put it in befores
+                new_doc_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
                 discard.update({rel_key_1})
             elif accept_1 is True and accept_2 is True:
                 # Should only happen in cases with either one contains more information
                 # e.g. from LocText: r_5|n_7|Q95460|n_8|GO:0009986 (True) vs r_5|n_7|Q95460,Q8HWB0|n_8|GO:0009986 (True)
-                # therefore, kinda hack: arbitrarily select they longest key
+                # The decision is more difficult
 
-                if len(rel_key_1) > len(rel_key_2):
-                    new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
-                    discard.update({rel_key_2})
-                else:
-                    new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
-                    if rel_key_1 in new_doc_relations:
-                        del new_doc_relations[rel_key_1]  # we had put it in before
-                    discard.update({rel_key_1})
+                # kinda hack: arbitrarily select they longest key
+                # if len(rel_key_1) > len(rel_key_2):
+                #     new_doc_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
+                #     discard.update({rel_key_2})
+                # else:
+                #     new_doc_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
+                #     discard.update({rel_key_1})
+
+                # For simplicity, we keep both
+                new_doc_relations[rel_key_1] = get(rel_key_1)
+                new_doc_relations[rel_key_2] = get(rel_key_2)
+
             else:
                 assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
 
-        if len(discard) > 0:
-            assert len(new_doc_relations) < len(doc_relations)
-            return self._clean_relation_accept_fun(new_doc_relations, relation_accept_fun)
-        else:
-            return new_doc_relations
+        for rel_key in discard:
+            if rel_key in new_doc_relations:
+                del new_doc_relations[rel_key]
+
+        return new_doc_relations
 
 
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
@@ -200,7 +197,7 @@ class Dataset:
                     doc_relations[rel_key] = doc_tmp_rels
 
             if relation_accept_fun is not None:
-                doc_relatiosn = self._clean_relation_accept_fun(doc_relations, relation_accept_fun)
+                doc_relations = self._remove_repetitions_with_relation_accept_fun(doc_relations, relation_accept_fun)
 
             for rel_key, rels in doc_relations.items():
                 _, min_distance_for_unique_rel_key = min(rels, key=lambda reldist_tuple: reldist_tuple[1])

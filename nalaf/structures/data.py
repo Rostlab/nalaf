@@ -113,6 +113,61 @@ class Dataset:
                 yield relation
 
 
+    def _clean_relation_accept_fun(self, doc_relations, relation_accept_fun):
+        print("\n\n", "--------------")
+        made_changes = False
+        new_doc_relations = {}
+        keys = list(doc_relations.keys())  # In this case, order does not matter
+        discard = set()
+
+        for (rel_key_1, rel_key_2) in zip(keys, keys[1:]):
+
+            if rel_key_1 in discard:
+                print("*** DISCARD, ", rel_key_1)
+                continue
+
+            accept_1 = relation_accept_fun(rel_key_2, rel_key_1)  # Order matters, here, rel_key_1 is deemed "pred"
+            accept_2 = relation_accept_fun(rel_key_1, rel_key_2)  # here, rel_key_2 is deemed "pred"
+
+            print(rel_key_1, rel_key_2, accept_1, accept_2)
+
+            if accept_1 is False and accept_2 is False:
+                new_doc_relations[rel_key_1] = doc_relations[rel_key_1]
+                new_doc_relations[rel_key_2] = doc_relations[rel_key_2]
+            elif accept_1 is True and accept_2 is None:
+                made_changes = True
+                new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
+                discard.update({rel_key_2})
+            elif accept_1 is None and accept_2 is True:
+                made_changes = True
+                if len(new_doc_relations) != 0:
+                    del new_doc_relations[rel_key_1]  # we had put it in before
+
+                new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
+                discard.update({rel_key_1})
+            elif accept_1 is True and accept_2 is True:
+                # Should only happen in cases with either one contains more information
+                # e.g. from LocText: r_5|n_7|Q95460|n_8|GO:0009986 (True) vs r_5|n_7|Q95460,Q8HWB0|n_8|GO:0009986 (True)
+                # therefore, kinda hack: arbitrarily select they longest key
+                made_changes = True
+
+                if len(rel_key_1) > len(rel_key_2):
+                    new_doc_relations[rel_key_1] = doc_relations[rel_key_1] + doc_relations[rel_key_2]
+                    discard.update({rel_key_2})
+                else:
+                    if len(new_doc_relations) != 0:
+                        del new_doc_relations[rel_key_1]  # we had put it in before
+
+                    new_doc_relations[rel_key_2] = doc_relations[rel_key_2] + doc_relations[rel_key_1]
+                    discard.update({rel_key_1})
+            else:
+                assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
+
+        if made_changes:
+            assert len(new_doc_relations) < len(doc_relations)
+            return self._clean_relation_accept_fun(new_doc_relations, relation_accept_fun)
+        else:
+            return new_doc_relations
 
 
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
@@ -151,7 +206,7 @@ class Dataset:
                     doc_relations[rel_key] = doc_tmp_rels
 
             if relation_accept_fun is not None:
-                raise NotImplementedError("use of relation_accept_fun is not implemented yet")
+                doc_relatiosn = self._clean_relation_accept_fun(doc_relations, relation_accept_fun)
 
             for rel_key, rels in doc_relations.items():
                 _, min_distance_for_unique_rel_key = min(rels, key=lambda reldist_tuple: reldist_tuple[1])

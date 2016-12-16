@@ -121,7 +121,6 @@ class Dataset:
 
         The minimal distance of the mapped relations with same map key is used.
         """
-        from collections import Counter
 
         if entity_map_fun is None:
             entity_map_fun = Entity.__repr__
@@ -142,10 +141,8 @@ class Dataset:
                     part_rels_with_dists = []
 
                     for rel in rels:
-                        index1 = part.get_sentence_index_for_annotation(rel.entity1)
-                        index2 = part.get_sentence_index_for_annotation(rel.entity2)
-                        distance = abs(index1 - index2)
-                        part_rels_with_dists.append((rel, distance))  # tuple, relation first == [0], distance second == [1]
+                        distance = rel.get_sentence_distance_between_entities(part)
+                        part_rels_with_dists.append((rel, distance))  # tuple, relation [0], distance [1]
 
                     doc_tmp_rels = doc_relations.get(rel_key, [])
                     doc_tmp_rels += part_rels_with_dists
@@ -1722,3 +1719,10 @@ class Relation:
             return not self.__dict__ == other.__dict__
         else:
             return False
+
+
+    def get_sentence_distance_between_entities(self, same_part):
+        index1 = same_part.get_sentence_index_for_annotation(self.entity1)
+        index2 = same_part.get_sentence_index_for_annotation(self.entity2)
+        distance = abs(index1 - index2)
+        return distance

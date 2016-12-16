@@ -177,7 +177,7 @@ class Dataset:
 
         for doc in self:
 
-            # Group relationships at the document level, not part level
+            # Group relationships at the document level (not part level, not corpus level)
             doc_relations = {}
 
             for part in doc:

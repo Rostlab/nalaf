@@ -113,7 +113,7 @@ class Dataset:
                 yield relation
 
 
-    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, predicted=False):
+    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
         """
         Returns a counter of the relationships distances.
 
@@ -131,7 +131,7 @@ class Dataset:
         for doc in self:
 
             # Group relationships at the document level, not part level
-            min_distances = {}
+            doc_relations = {}
 
             for part in doc:
 
@@ -139,19 +139,21 @@ class Dataset:
                     part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
                 for rel_key, rels in part_dict_relations.items():
+                    part_rels_with_dists = []
+
                     for rel in rels:
                         index1 = part.get_sentence_index_for_annotation(rel.entity1)
                         index2 = part.get_sentence_index_for_annotation(rel.entity2)
                         distance = abs(index1 - index2)
+                        part_rels_with_dists.append((rel, distance))  # tuple, relation first == [0], distance second == [1]
 
-                        min_distance = min_distances.get(rel_key, float('inf'))
-                        min_distance = min(distance, min_distance)
-                        min_distances[rel_key] = min_distance
+                    doc_tmp_rels = doc_relations.get(rel_key, [])
+                    doc_tmp_rels += part_rels_with_dists
+                    doc_relations[rel_key] = doc_tmp_rels
 
-            # print_debug("\ndoc:")
-            for rel_key, count in min_distances.items():
-                # print_debug("    ", rel_key)
-                counter_nums.update(['D'+str(count)])
+            for rel_key, rels in doc_relations.items():
+                _, min_distance_for_unique_rel_key = min(rels, key=lambda reldist_tuple: reldist_tuple[1])
+                counter_nums.update(['D'+str(min_distance_for_unique_rel_key)])
 
         total = sum(counter_nums.values())
 

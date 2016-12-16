@@ -570,5 +570,58 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         self.assertEqual(computation.f_measure, 0.6666666666666666)
 
 
+    def test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits(self):
+
+        entity_map_fun = (lambda e: e.text)
+
+        def relation_accept_fun(gold, pred):
+            print('gold:', gold, ' <---> ', 'pred:', pred,)
+            gold = int(gold[-1])
+            pred = int(pred[-1])
+
+
+            if gold <= pred and ((pred - gold) < 3):  # e.g., 1 <= 1, 2, 3
+                return True
+            else:
+                return False
+
+            return gold == pred
+
+        r1 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))
+        r5 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "9"))  # Missing
+        r6 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))
+
+        r2 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "1"))  # Accept 1
+        r3 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "2"))  # *repeated* Accept 1
+        r4 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "3"))  # *repeated* Accept 1
+        r7 = Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "xxx"), Entity(STUB_E_ID_2, 0, "4"))  # Accept 4
+
+        self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r2.map(entity_map_fun)))
+        self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r3.map(entity_map_fun)))
+        self.assertEqual(True, relation_accept_fun(r1.map(entity_map_fun), r4.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r2.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r3.map(entity_map_fun)))
+        self.assertEqual(False, relation_accept_fun(r5.map(entity_map_fun), r4.map(entity_map_fun)))
+        self.assertEqual(True, relation_accept_fun(r6.map(entity_map_fun), r7.map(entity_map_fun)))
+
+        evaluator = DocumentLevelRelationEvaluator(STUB_R_ID_1, entity_map_fun, relation_accept_fun)
+
+        (dataset, part) = self._create_basic_dataset()
+
+        # -
+
+        part.relations = [r1, r5, r6]
+        part.predicted_relations = [r2, r3, r4, r7]  # Only one shold be accepted
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        print(evaluation)
+        self.assertEqual(evaluation.tp, 2, evaluation)
+        self.assertEqual(evaluation.fn, 1)
+        self.assertEqual(evaluation.fp, 0)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.6666666666666666)
+
+
 if __name__ == '__main__':
     unittest.main()

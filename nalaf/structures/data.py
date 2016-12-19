@@ -209,12 +209,6 @@ class Dataset:
                         pred_rels = preds[real_rel_key]
                         part_dict_relations[real_rel_key] = real_rels + [p for p in pred_rels if p not in real_rels]
 
-                    if relation_accept_fun is not None:
-                        for pred_rel_key, pred_rels in preds.items():
-                            if pred_rel_key not in reals and any(relation_accept_fun(real_rel_key, pred_rel_key) for real_rel_key in reals.keys()):
-                                part_dict_relations[pred_rel_key] = pred_rels
-
-
                 for rel_key, rels in part_dict_relations.items():
                     part_rels_with_dists = []
 

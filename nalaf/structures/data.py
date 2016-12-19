@@ -168,10 +168,27 @@ class Dataset:
         The relationships are mapped to unique strings as determined by entity_map_fun (see `map_relations`).
 
         The minimal distance of the mapped relations with same map key is used.
+
+
+        if predicted is True, this method will consider all possible true relations from the predictions.
+        This is useful when corpora do not exhaustily have all relationships explicitly annotated but rather,
+        other relations that are considered "the same" by the annotators, are not really defined in the dataset.
+        In that case, those implicit relations can be extrapolated by an exhaustive relationship predictor.
+        A common choice is using a predictor that consider all possible edges between all annotated entities.
+        See SentenceDistanceEdgeGenerator (edges.py) and StubRelationExtractor (taggers.py).
+
+        If this is the case, then **only** the true relations are computed in the stats. That is, the predicted
+        relations are compared against the real relations and only those that are accepted will be computed over.
+
         """
 
         if entity_map_fun is None:
             entity_map_fun = Entity.__repr__
+
+        def map_relations(part, use_predicted):
+            return part.map_relations(use_predicted=use_predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
+
+        # ---
 
         counter_nums = Counter()
 
@@ -182,8 +199,15 @@ class Dataset:
 
             for part in doc:
 
-                part_dict_relations = \
-                    part.map_relations(use_predicted=predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
+                part_dict_relations = part_dict_relations = map_relations(part, use_predicted=False)
+
+                if predicted:
+                    reals = part_dict_relations
+                    preds = map_relations(part, use_predicted=True)
+
+                    for real_rel_key, real_rels in reals.items():
+                        pred_rels = preds[real_rel_key]
+                        part_dict_relations[real_rel_key] = real_rels + [p for p in pred_rels if p not in real_rels]
 
                 for rel_key, rels in part_dict_relations.items():
                     part_rels_with_dists = []

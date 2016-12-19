@@ -64,30 +64,6 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
                     part.edges.append(edge)
 
 
-
-class SimpleEdgeGenerator(SentenceDistanceEdgeGenerator):
-    """
-    Simple implementation of generating edges between the two entities
-    if they are contained in the same sentence.
-
-    **It uses both the _gold_ annotations and _predicted_ annotations.**
-
-    """
-
-    def __init__(self, entity1_class, entity2_class, relation_type):
-        import warnings
-        warnings.warn('Use `SentenceDistanceEdgeGenerator` directly. This will be deleted', DeprecationWarning)
-
-        super().__init__(entity1_class, entity2_class, relation_type, distance=0, use_predicted_entities=True)
-
-
-    def generate(self, dataset):
-        import warnings
-        warnings.warn('Use `SentenceDistanceEdgeGenerator` directly. This will be deleted', DeprecationWarning)
-
-        super().generate(dataset)
-
-
 class WordFilterEdgeGenerator(EdgeGenerator):
     """
     Simple implementation of generating edges between the two entities

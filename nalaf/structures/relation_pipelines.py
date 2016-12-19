@@ -4,7 +4,7 @@ from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.preprocessing.parsers import Parser, SpacyParser
 from nalaf.features import get_spacy_nlp_english
-from nalaf.preprocessing.edges import SimpleEdgeGenerator
+from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator
 from nalaf.features.relations.sentence import NamedEntityCountFeatureGenerator
 from nalaf import print_debug
 
@@ -61,7 +61,7 @@ class RelationExtractionPipeline:
         else:
             raise TypeError('not an instance that implements Tokenizer')
 
-        self.edge_generator = SimpleEdgeGenerator(self.class1, self.class2, self.rel_type) if edge_generator is None else edge_generator
+        self.edge_generator = SentenceDistanceEdgeGenerator(self.class1, self.class2, self.rel_type) if edge_generator is None else edge_generator
 
         self.feature_set = FeatureDictionary() if feature_set is None else feature_set
 

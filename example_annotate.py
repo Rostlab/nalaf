@@ -61,7 +61,7 @@ if __name__ == "__main__":
     crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'example_entity_model'), class_id=ENT2_CLASS_ID)
 
     GNormPlusGeneTagger(ENT1_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID).tag(dataset, uniprot=True)
-    StubSameSentenceRelationExtractor(ENT1_CLASS_ID, ENT2_CLASS_ID, REL_ENT1_ENT2_CLASS_ID).tag(dataset)
+    StubSameSentenceRelationExtractor(ENT1_CLASS_ID, ENT2_CLASS_ID, REL_ENT1_ENT2_CLASS_ID).annotate(dataset)
 
     if args.output_dir:
         if not os.path.isdir(args.output_dir):

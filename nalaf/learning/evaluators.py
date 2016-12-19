@@ -586,7 +586,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
-            print_verbose("\n\ngold: \n" + '\n'.join(sorted(list(gold))))
+            print_verbose("\n\ndocid: " + docid)
+            print_verbose("\ngold: \n" + '\n'.join(sorted(list(gold))))
             print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
 
             for r_pred in predicted:
@@ -598,7 +599,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 if True in accept_decisions:
                     # handle below while traversing gold to not create over repetitions, see test_evaluators
                     # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
-                    print_verbose("       ", " true positive prediction (not counted yet)", r_pred)
+                    print_verbose("       ", "(not counted yet) true match prediction", r_pred)
                     pass
                 elif None in accept_decisions:
                     # Ignore as documented

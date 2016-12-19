@@ -41,6 +41,7 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
 
         self.part_entities = (lambda part: chain(part.annotations, part.predicted_annotations) if self.use_predicted_entities else part.annotations)
 
+
     def generate(self, dataset):
 
         for part in dataset.parts():

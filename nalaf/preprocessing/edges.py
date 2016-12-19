@@ -24,7 +24,10 @@ class EdgeGenerator(object):
 class SentenceDistanceEdgeGenerator(EdgeGenerator):
     """
     Simple implementation of generating edges between the two entities
-    if they are #`distance` sentences away (always same part)
+    if they are #`distance` sentences away (always same part).
+
+    As a special case, if `distance` is None, the distance is disregarded,
+    consequently creating edges for all entities within a part (paragraph or what not).
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type, distance, use_predicted_entities=True):
@@ -59,7 +62,7 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
                 pair_distance = s2_index - s1_index
                 assert pair_distance >= 0  # Because they must be sorted
 
-                if pair_distance == self.distance:
+                if pair_distance == self.distance or self.distance is None:
                     edge = Edge(self.relation_type, e_1, e_2, part, part, s1_index, s2_index)
                     part.edges.append(edge)
 

@@ -163,12 +163,6 @@ class StubSameSentenceRelationExtractor(StubRelationExtractor):
         super().__init__(edge_generator)
 
 
-    def tag(self, dataset):
-        import warnings
-        warnings.warn('Use the method: annotate', DeprecationWarning)
-        return self.annotate(dataset)
-
-
     def annotate(self, dataset):
         super().annotate(dataset)
 

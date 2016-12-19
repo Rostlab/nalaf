@@ -12,10 +12,10 @@ STUB_R_ID_1 = 'r_x_1'
 class TestTaggers(unittest.TestCase):
 
     @classmethod
-    def setUpClass(cls):
-        cls.dataset = Dataset()
-        cls.doc = Document()
-        cls.dataset.documents['testid'] = cls.doc
+    def get_test_dataset(cls):
+        dataset = Dataset()
+        doc = Document()
+        dataset.documents['testid'] = doc
 
         part1 = Part('Sentence 1: e_1_yolo may be related to e_2_tool plus hey, e_2_coco. Sentence 2: e_1_nin. Sentence 3: e_2_musk. Sentence 4: nothing')
 
@@ -46,23 +46,27 @@ class TestTaggers(unittest.TestCase):
         for r in relations:
             part1.relations.append(r)
 
-        cls.doc.parts['s1h1'] = part1
+        doc.parts['s1h1'] = part1
+
+        return dataset
 
 
     def test_StubSameSentenceRelationExtractor(self):
 
-        annotator = StubSameSentenceRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
-        annotator.annotate(self.dataset)
-        # Assert that indeed 4 sentences were considered
-        assert 4 == len(list(self.dataset.sentences())), str(list(self.dataset.sentences()))
+        dataset = TestTaggers.get_test_dataset()
 
-        print("actu_rels", list(self.dataset.relations()))
-        print("edges", list(self.dataset.edges()))
-        print("pred_rels", list(self.dataset.predicted_relations()))
+        annotator = StubSameSentenceRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        print("actu_rels", list(dataset.relations()))
+        print("edges", list(dataset.edges()))
+        print("pred_rels", list(dataset.predicted_relations()))
 
         evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
 
-        evals = evaluator.evaluate(self.dataset)
+        evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 1)
         self.assertEqual(evaluation.fn, 2)
@@ -73,18 +77,20 @@ class TestTaggers(unittest.TestCase):
 
     def test_StubSamePartRelationExtractor(self):
 
-        annotator = StubSamePartRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
-        annotator.annotate(self.dataset)
-        # Assert that indeed 4 sentences were considered
-        assert 4 == len(list(self.dataset.sentences())), str(list(self.dataset.sentences()))
+        dataset = TestTaggers.get_test_dataset()
 
-        print("actu_rels", list(self.dataset.relations()))
-        print("edges", list(self.dataset.edges()))
-        print("pred_rels", list(self.dataset.predicted_relations()))
+        annotator = StubSamePartRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        print("actu_rels", list(dataset.relations()))
+        print("edges", list(dataset.edges()))
+        print("pred_rels", list(dataset.predicted_relations()))
 
         evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
 
-        evals = evaluator.evaluate(self.dataset)
+        evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 3)
         self.assertEqual(evaluation.fn, 0)

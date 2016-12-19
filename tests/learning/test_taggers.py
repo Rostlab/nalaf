@@ -1,5 +1,5 @@
 import unittest
-from nalaf.learning.taggers import StubSameSentenceRelationExtractor
+from nalaf.learning.taggers import StubSameSentenceRelationExtractor, StubSamePartRelationExtractor
 from nalaf.structures.data import *
 from nalaf.learning.evaluators import DocumentLevelRelationEvaluator
 
@@ -69,6 +69,28 @@ class TestTaggers(unittest.TestCase):
         self.assertEqual(evaluation.fp, 1)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 0.4)
+
+
+    def test_StubSamePartRelationExtractor(self):
+
+        annotator = StubSamePartRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
+        annotator.annotate(self.dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(self.dataset.sentences())), str(list(self.dataset.sentences()))
+
+        print("actu_rels", list(self.dataset.relations()))
+        print("edges", list(self.dataset.edges()))
+        print("pred_rels", list(self.dataset.predicted_relations()))
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        evals = evaluator.evaluate(self.dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 3)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 3)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.6666666666666666)
 
 
 if __name__ == '__main__':

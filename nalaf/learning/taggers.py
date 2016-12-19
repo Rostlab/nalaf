@@ -105,6 +105,7 @@ class RelationExtractor(Annotator):
         self.relation_type = relation_type
         """the type of relation between the two entiies in predicts_classes"""
 
+
     def tag(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
@@ -112,6 +113,7 @@ class RelationExtractor(Annotator):
         import warnings
         warnings.warn('Use rather the method: annotate', DeprecationWarning)
         return self.annotate(dataset)
+
 
     @abc.abstractmethod
     def annotate(self, dataset):
@@ -171,32 +173,12 @@ class StubSameSentenceRelationExtractor(StubRelationExtractor):
         super().annotate(dataset)
 
 
-class StubSameDocumentPartRelationExtractor(RelationExtractor):
-    # Would be better if it just ussed an existing edge generator
+class StubSamePartRelationExtractor(StubRelationExtractor):
 
     def __init__(self, entity1_class, entity2_class, relation_type):
-        super().__init__(entity1_class, entity2_class, relation_type)
-        self.sentence_splitter = NLTKSplitter()
-        self.tokenizer = NLTK_TOKENIZER
-
-
-    def tag(self, dataset):
-        import warnings
-        warnings.warn('Use the method: annotate', DeprecationWarning)
-        return self.annotate(dataset)
+        edge_generator = SentenceDistanceEdgeGenerator(entity1_class, entity2_class, relation_type, distance=None)
+        super().__init__(edge_generator)
 
 
     def annotate(self, dataset):
-        from itertools import product
-
-        self.sentence_splitter.split(dataset)
-        self.tokenizer.tokenize(dataset)
-
-        for document in dataset:
-            for part in document:
-                for ann_1, ann_2 in product(
-                    (a for a in part.annotations if a.class_id == self.entity1_class),
-                    (a for a in part.annotations if a.class_id == self.entity2_class)):
-
-                    rel = Relation(self.relation_type, ann_1, ann_2)
-                    part.predicted_relations.append(rel)
+        super().annotate(dataset)

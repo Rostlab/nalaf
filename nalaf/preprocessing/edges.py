@@ -50,7 +50,8 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
     def generate(self, dataset):
 
         for part in dataset.parts():
-            part.edges = []
+            if self.rewrite_edges:
+                part.edges = []
 
             for e_1, e_2 in product(
                     (e for e in self.part_entities(part) if e.class_id == self.entity1_class),

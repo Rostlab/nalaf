@@ -1,5 +1,6 @@
 import unittest
-from nalaf.learning.taggers import StubSameSentenceRelationExtractor, StubSamePartRelationExtractor
+from nalaf.learning.taggers import StubRelationExtractor, StubSameSentenceRelationExtractor, StubSamePartRelationExtractor
+from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator, CombinatorEdgeGenerator
 from nalaf.structures.data import *
 from nalaf.learning.evaluators import DocumentLevelRelationEvaluator
 
@@ -73,6 +74,34 @@ class TestTaggers(unittest.TestCase):
         self.assertEqual(evaluation.fp, 1)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 0.4)
+
+
+    def test_Stub_D0_plus_D1_RelationExtractor(self):
+
+        dataset = TestTaggers.get_test_dataset()
+
+        edge_generator_1 = SentenceDistanceEdgeGenerator(STUB_E_ID_1, STUB_E_ID_2, STUB_R_ID_1, distance=0, rewrite_edges=False)
+        edge_generator_2 = SentenceDistanceEdgeGenerator(STUB_E_ID_1, STUB_E_ID_2, STUB_R_ID_1, distance=1, rewrite_edges=False)
+        edge_generator = CombinatorEdgeGenerator(edge_generator_1, edge_generator_2)
+        annotator = StubRelationExtractor(edge_generator)
+
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        # print("actu_rels", list(dataset.relations()))
+        # print("edges", list(dataset.edges()))
+        # print("pred_rels", list(dataset.predicted_relations()))
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 3)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 2)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.7499999999999999)
 
 
     def test_StubSamePartRelationExtractor(self):

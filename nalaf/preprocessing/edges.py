@@ -13,6 +13,12 @@ class EdgeGenerator(object):
     * Append new items to the list field "edges" of each Part in the dataset
     """
 
+    def __init__(self, entity1_class, entity2_class, relation_type):
+        self.entity1_class = entity1_class
+        self.entity2_class = entity2_class
+        self.relation_type = relation_type
+
+
     @abc.abstractmethod
     def generate(self, dataset):
         """
@@ -30,14 +36,13 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
     consequently creating edges for all entities within a part (paragraph or what not).
     """
 
-    def __init__(self, entity1_class, entity2_class, relation_type, distance, use_predicted_entities=True):
+    def __init__(self, entity1_class, entity2_class, relation_type, distance, use_predicted_entities=True, rewrite_edges=True):
         # Note: would be nice to implement the word filter too here -- see below
 
-        self.entity1_class = entity1_class
-        self.entity2_class = entity2_class
-        self.relation_type = relation_type
+        super().__init__(entity1_class, entity2_class, relation_type)
         self.distance = distance
         self.use_predicted_entities = use_predicted_entities
+        self.rewrite_edges = rewrite_edges
 
         self.part_entities = (lambda part: chain(part.annotations, part.predicted_annotations) if self.use_predicted_entities else part.annotations)
 
@@ -79,9 +84,7 @@ class WordFilterEdgeGenerator(EdgeGenerator):
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type, words):
-        self.entity1_class = entity1_class
-        self.entity2_class = entity2_class
-        self.relation_type = relation_type
+        super().__init__(entity1_class, entity2_class, relation_type)
         self.words = words
 
 

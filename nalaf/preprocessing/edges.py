@@ -74,6 +74,23 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
                     part.edges.append(edge)
 
 
+class CombinatorEdgeGenerator(EdgeGenerator):
+    """
+    Combines 2 or more edge generators.
+
+    Assumes (does not test) that all generators have same entities and relation types properties.
+    """
+
+    def __init__(self, generator_1, generator_2, *rest):
+        super().__init__(generator_1.entity1_class, generator_1.entity2_class, generator_1.relation_type)
+        self.generators = [generator_1, generator_2, *rest]
+
+
+    def generate(self, dataset):
+        for g in self.generators:
+            g.generate(dataset)
+
+
 class WordFilterEdgeGenerator(EdgeGenerator):
     """
     Simple implementation of generating edges between the two entities

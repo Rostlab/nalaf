@@ -39,8 +39,12 @@ class AnnJsonAnnotationReader(AnnotationReader):
     def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False, raise_exception_on_incosistencies=True):
         self.directory = directory
         """the directory containing *.ann.json files"""
+
+        if read_only_class_id is not None and not isinstance(read_only_class_id, list):
+            read_only_class_id = [read_only_class_id]
         self.read_only_class_id = read_only_class_id
-        """whether to read in only entities with given class_id. Otherwise if None, read all entities"""
+        """whether to read in only entities with given class_id's (single id or list of). Otherwise if None, read all entities"""
+
         self.delete_incomplete_docs = delete_incomplete_docs
         """delete documents from the dataset that are not marked as 'anncomplete' provided the docs are not predicted"""
         self.is_predicted = is_predicted
@@ -84,7 +88,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                         for e in ann_json['entities']:
 
-                            if not self.read_only_class_id or e['classId'] == self.read_only_class_id:
+                            if self.read_only_class_id is None or e['classId'] in self.read_only_class_id:
 
                                 part = document.parts[e['part']]
 

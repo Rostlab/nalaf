@@ -1092,6 +1092,21 @@ class Part:
                 return found_list[0]
 
 
+    def get_any_entities_in_sentence(self, sentence_id, predicted=False):
+        sentence = self.sentences[sentence_id]
+        start = sentence[0].start
+        end = sentence[-1].end
+        entities = self.predicted_annotations if predicted else self.annotations
+
+        ret = {}
+        for entity in entities:
+            if start <= entity.offset < end:
+                updated = ret.get(entity.class_id, [])
+                updated.append(entity)
+                ret[entity.class_id] = updated
+        return ret
+
+
     def get_entities_in_sentence(self, sentence_id, entity_classId):
         """
         get entities of a particular type in a particular sentence
@@ -1101,14 +1116,10 @@ class Part:
         :param entity_classId: the classId of the entity
         :type entity_classId: str
         """
-        sentence = self.sentences[sentence_id]
-        start = sentence[0].start
-        end = sentence[-1].end
-        entities = []
-        for annotation in self.annotations:
-            if start <= annotation.offset < end and annotation.class_id == entity_classId:
-                entities.append(annotation)
-        return entities
+        import warnings
+        warnings.warn('Use rather the method: get_any_entities_in_sentence', DeprecationWarning)
+
+        return get_any_entities_in_sentence(snetence_id, predicted=False)[entity_classId]
 
 
     def percolate_tokens_to_entities(self, annotated=True):

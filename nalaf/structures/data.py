@@ -1452,18 +1452,8 @@ class Edge:
         # As of now, it seems to devependant on `svmlight.py`
 
 
-    def get_sentences_pair(self):
-        """
-        Get tuple of corresponding edge's two entities' sentences.
-        The sentences are represented as list of Token's.
-        """
-
-        assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id, "This should not throw an exception"
-
-        sent1 = self.e1_part.sentences[self.e1_sentence_id]
-        sent2 = self.e2_part.sentences[self.e2_sentence_id]
-
-        return (sent1, sent2)
+    def __repr__(self):
+        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
 
 
     def is_relation(self):
@@ -1479,8 +1469,38 @@ class Edge:
         return potential_edge_relation in relations
 
 
-    def __repr__(self):
-        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
+    def get_sentences_pair(self):
+        """
+        Get tuple of corresponding edge's two entities' sentences.
+        The sentences are represented as list of Token's.
+        """
+
+        assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id
+
+        sent1 = self.e1_part.sentences[self.e1_sentence_id]
+        sent2 = self.e2_part.sentences[self.e2_sentence_id]
+
+        return (sent1, sent2)
+
+
+    def get_combined_sentence(self):
+        if self.e1_sentence_id == self.e2_sentence_id:
+            self.e1_part.sentences[self.e1_sentence_id]
+        else:
+            raise NotImplementedError
+
+
+    def get_any_entities_in_sentences(self, predicted=False):
+        assert self.same_part
+
+        s1 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
+        s2 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
+        for key, vals in s2.items():
+            updated = s1.get(key, [])
+            updated.append(vals)
+            s1[key] = updated
+
+        return s1
 
 
 class Token:

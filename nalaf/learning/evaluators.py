@@ -587,8 +587,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
             print_verbose("\n\ndocid: " + docid)
-            print_verbose("\ngold: \n" + '\n'.join(sorted(list(gold))))
-            print_verbose("\npredicted: \n" + '\n'.join(sorted(list(predicted))))
+            print_verbose("\ngold: \n" + '\n'.join('g: ' + x for x in sorted(list(gold))))
+            print_verbose("\npredicted: \n" + '\n'.join('p: '+ x for x in sorted(list(predicted))))
 
             for r_pred in predicted:
 

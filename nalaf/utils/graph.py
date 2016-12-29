@@ -3,10 +3,25 @@ Floyd Warshall graph algorithm for calculating dependency parse graph features p
 The implementation here avoid external libraries.
 """
 
-def get_path(token_from, token_to, part, sentence_id, graphs):
+def get_path(token_from, token_to, part, sentence_id, graphs=None):
     """
-    graphs is a mutable dictionary
+    See: https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm
+
+    :param token_from: the token from which path must be calculated
+    :type token_from: int
+    :param token_to: the token to which path must be calculated
+    :type token_to: int
+    :param sentence_id: a list of tokens in the sentence
+    :type sentence_id: int that corresponds to list[nalaf.structures.data.Token] when indexed in part
+
+    :return: shortest path between each node
+    :rtype: dict[list[int]]
+
+    Graphs is a mutable dictionary
     """
+
+    if graphs is None:
+        graphs = {}
 
     sentence = part.sentences[sentence_id]
     if part.text not in graphs.keys():
@@ -14,8 +29,8 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
 
     if sentence_id not in graphs[part.text].keys():
         graphs[part.text][sentence_id] = {}
-        graph = convert_to_dependency_graph(sentence)
-        distances, parents = floyd_warshall(graph)
+        graph = _convert_to_dependency_graph(sentence)
+        distances, parents = _floyd_warshall(graph)
         graphs[part.text][sentence_id]['graph'] = graph
         graphs[part.text][sentence_id]['distances'] = distances
         graphs[part.text][sentence_id]['parents'] = parents
@@ -35,8 +50,7 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
     while True:
         parent = parents[i][j]
         if distances[i][j] == float('inf'):
-            path = []
-            return path
+            return []
         path.append(sentence[parent])
         if parent == i:
             break
@@ -46,40 +60,31 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
     return path
 
 
-def convert_to_dependency_graph(sentence):
+def _convert_to_dependency_graph(sentence):
     """
-    Helper function for the Floyd Warshall algorithm where it computes the
-    adjacency matrix based on the dependency graph and sentence tokens.
+    (Helper function for the Floyd Warshall algorithm).
+    Computes the adjacency matrix (graph) based on the dependency graph of a sentence of tokens.
     """
     graph = {}
 
+    # Init the matrix rows
     for token in sentence:
-        # Init the matrix rows
         graph[token.features['id']] = {}
 
     for from_token in sentence:
         graph[from_token.features['id']] = {}
 
-        for to_token in from_token.features['dependency_to']:
-            graph[from_token.features['id']][to_token[0].features['id']] = 1
-            graph[to_token[0].features['id']][from_token.features['id']] = 1
+        for to_token, _ in from_token.features['dependency_to']:
+            graph[from_token.features['id']][to_token.features['id']] = 1
+            graph[to_token.features['id']][from_token.features['id']] = 1
 
     return graph
 
 
-def floyd_warshall(graph):
+def _floyd_warshall(graph):
     """
     Calculate the shortest path between two tokens using the Floyd Warshall
     algorithm where the graph is the dependency graph
-
-    :param node_from: the token from which path must be calculated
-    :type node_from: int
-    :param node_to: the token to which path must be calculated
-    :type node_to: int
-    :param adjacency: a list of tokens in the sentence
-    :type sentence: list[nalaf.structures.data.Token]
-    :return: shortest path between each node
-    :rtype: dict[list[int]]
     """
 
     dist = {}

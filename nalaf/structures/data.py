@@ -1092,7 +1092,7 @@ class Part:
                 return found_list[0]
 
 
-    def get_any_entities_in_sentence(self, sentence_id, predicted=False):
+    def get_any_entities_in_sentence(self, sentence_id, predicted):
         sentence = self.sentences[sentence_id]
         start = sentence[0].start
         end = sentence[-1].end
@@ -1119,7 +1119,7 @@ class Part:
         import warnings
         warnings.warn('Use rather the method: get_any_entities_in_sentence', DeprecationWarning)
 
-        return get_any_entities_in_sentence(snetence_id, predicted=False)[entity_classId]
+        return get_any_entities_in_sentence(sentence_id, predicted=False)[entity_classId]
 
 
     def percolate_tokens_to_entities(self, annotated=True):
@@ -1456,6 +1456,10 @@ class Edge:
         return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
 
 
+    def has_same_sentences(self):
+        return self.e1_sentence_id == self.e2_sentence_id
+
+
     def is_relation(self):
         """
         check if the edge is present in part.relations.
@@ -1484,23 +1488,40 @@ class Edge:
 
 
     def get_combined_sentence(self):
-        if self.e1_sentence_id == self.e2_sentence_id:
-            self.e1_part.sentences[self.e1_sentence_id]
+        if self.has_same_sentences:
+            return self.e1_part.sentences[self.e1_sentence_id]
         else:
             raise NotImplementedError
 
 
-    def get_any_entities_in_sentences(self, predicted=False):
+    def get_any_entities_in_sentences(self, predicted):
         assert self.same_part
 
         s1 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
-        s2 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
-        for key, vals in s2.items():
-            updated = s1.get(key, [])
-            updated.append(vals)
-            s1[key] = updated
+
+        if not self.has_same_sentences():
+            s2 = self.same_part.get_any_entities_in_sentence(self.e2_sentence_id, predicted)
+
+            for key, vals in s2.items():
+                updated = s1.get(key, [])
+                updated += vals
+                s1[key] = updated
 
         return s1
+
+
+    def get_any_entities_between_entities(self, predicted):
+        assert self.same_part
+
+        ret = {}
+        for e_class_id, entities in self.get_any_entities_in_sentences(predicted).items():
+            keep = []
+            for entity in entities:
+                if self.entity1.end_offset() <= entity.offset < self.entity2.offset:
+                    keep.append(entity)
+            ret[e_class_id] = keep
+
+        return ret
 
 
 class Token:
@@ -1686,6 +1707,9 @@ class Entity:
     determines when we consider two entities to be equal
     can be "exact" or "overlapping" or "exact_or_overlapping"
     """
+
+    def end_offset(self):
+        return self.offset + len(self.text)
 
 
     def __repr__(self):

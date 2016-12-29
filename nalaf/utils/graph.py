@@ -45,16 +45,16 @@ def get_path(token_from, token_to, part, sentence_id, graphs=None):
         return path
 
     path.append(token_to)
-    i, j = token_from.features['id'], token_to.features['id']
+    u, v = token_from.features['id'], token_to.features['id']
 
     while True:
-        parent = parents[i][j]
-        if distances[i][j] == float('inf'):
+        parent = parents[u][v]
+        if distances[u][v] == float('inf'):
             return []
         path.append(sentence[parent])
-        if parent == i:
+        if parent == u:
             break
-        j = parent
+        v = parent
 
     path.reverse()
     return path

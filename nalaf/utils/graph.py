@@ -1,68 +1,7 @@
 """
-Floyd Warshall graph algorithm for calculating dependency parse graph features
-The method here avoids the use of an external library.
+Floyd Warshall graph algorithm for calculating dependency parse graph features plus other graph-related amethods.
+The implementation here avoid external libraries.
 """
-
-def floyd_warshall(graph):
-    """
-    calculate the shortest path between two tokens using the Floyd Warshall
-    algorithm where the graph is the dependency graph
-
-    :param node_from: the token from which path must be calculated
-    :type node_from: int
-    :param node_to: the token to which path must be calculated
-    :type node_to: int
-    :param adjacency: a list of tokens in the sentence
-    :type sentence: list[nalaf.structures.data.Token]
-    :return: shortest path between each node
-    :rtype: dict[list[int]]
-    """
-
-    dist = {}
-    pred = {}
-    for u in graph:
-        dist[u] = {}
-        pred[u] = {}
-        for v in graph:
-            dist[u][v] = float('inf')
-            pred[u][v] = -1
-        dist[u][u] = 0
-        for neighbor in graph[u]:
-            dist[u][neighbor] = graph[u][neighbor]
-            pred[u][neighbor] = u
-
-    for t in graph:
-        # given dist u to v, check if path u - t - v is shorter
-        for u in graph:
-            for v in graph:
-                newdist = dist[u][t] + dist[t][v]
-                if newdist < dist[u][v]:
-                    dist[u][v] = newdist
-                    pred[u][v] = pred[t][v]  # route new path through t
-
-    return dist, pred
-
-
-def convert_to_dependency_graph(sentence):
-    """
-    Helper function for the Floyd Warshall algorithm where it computes the
-    adjacency matrix based on the dependency graph and sentence tokens.
-    """
-    graph = {}
-
-    for token in sentence:
-        # Init the matrix rows
-        graph[token.features['id']] = {}
-
-    for from_token in sentence:
-        graph[from_token.features['id']] = {}
-
-        for to_token in from_token.features['dependency_to']:
-            graph[from_token.features['id']][to_token[0].features['id']] = 1
-            graph[to_token[0].features['id']][from_token.features['id']] = 1
-
-    return graph
-
 
 def get_path(token_from, token_to, part, sentence_id, graphs):
     """
@@ -105,6 +44,67 @@ def get_path(token_from, token_to, part, sentence_id, graphs):
 
     path.reverse()
     return path
+
+
+def convert_to_dependency_graph(sentence):
+    """
+    Helper function for the Floyd Warshall algorithm where it computes the
+    adjacency matrix based on the dependency graph and sentence tokens.
+    """
+    graph = {}
+
+    for token in sentence:
+        # Init the matrix rows
+        graph[token.features['id']] = {}
+
+    for from_token in sentence:
+        graph[from_token.features['id']] = {}
+
+        for to_token in from_token.features['dependency_to']:
+            graph[from_token.features['id']][to_token[0].features['id']] = 1
+            graph[to_token[0].features['id']][from_token.features['id']] = 1
+
+    return graph
+
+
+def floyd_warshall(graph):
+    """
+    Calculate the shortest path between two tokens using the Floyd Warshall
+    algorithm where the graph is the dependency graph
+
+    :param node_from: the token from which path must be calculated
+    :type node_from: int
+    :param node_to: the token to which path must be calculated
+    :type node_to: int
+    :param adjacency: a list of tokens in the sentence
+    :type sentence: list[nalaf.structures.data.Token]
+    :return: shortest path between each node
+    :rtype: dict[list[int]]
+    """
+
+    dist = {}
+    pred = {}
+    for u in graph:
+        dist[u] = {}
+        pred[u] = {}
+        for v in graph:
+            dist[u][v] = float('inf')
+            pred[u][v] = -1
+        dist[u][u] = 0
+        for neighbor in graph[u]:
+            dist[u][neighbor] = graph[u][neighbor]
+            pred[u][neighbor] = u
+
+    for t in graph:
+        # given dist u to v, check if path u - t - v is shorter
+        for u in graph:
+            for v in graph:
+                newdist = dist[u][t] + dist[t][v]
+                if newdist < dist[u][v]:
+                    dist[u][v] = newdist
+                    pred[u][v] = pred[t][v]  # route new path through t
+
+    return dist, pred
 
 
 def build_walks(path, first_id=0, second_id=1):

@@ -114,10 +114,10 @@ def _floyd_warshall(graph):
 
 def build_walks(path, first_id=0, second_id=1):
 
-    if len(path) != second_id + 1:
-        ret_walks = build_walks(path, first_id=first_id + 1, second_id=second_id + 1)
-    else:
+    if len(path) == second_id + 1:
         ret_walks = []
+    else:
+        ret_walks = build_walks(path, first_id=first_id + 1, second_id=second_id + 1)
 
     all_walks = []
 

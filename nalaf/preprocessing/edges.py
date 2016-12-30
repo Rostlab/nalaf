@@ -53,10 +53,10 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
             if self.rewrite_edges:
                 part.edges = []
 
-            for e_1, e_2 in product(
-                    (e for e in self.part_entities(part) if e.class_id == self.entity1_class),
-                    (e for e in self.part_entities(part) if e.class_id == self.entity2_class)):
+            e1_seq = (e for e in self.part_entities(part) if e.class_id == self.entity1_class)
+            e2_seq = (e for e in self.part_entities(part) if e.class_id == self.entity2_class)
 
+            for e_1, e_2 in product(e1_seq, e2_seq):
                 s1_index = part.get_sentence_index_for_annotation(e_1)
                 s2_index = part.get_sentence_index_for_annotation(e_2)
 

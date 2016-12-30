@@ -5,6 +5,7 @@ from nalaf import print_verbose, print_debug
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.parsers import Parser, SpacyParser
+from nalaf.utils.floyd_warshall import compute_shortest_paths, path
 import sys
 
 
@@ -64,15 +65,36 @@ class TestFloydWarshall(unittest.TestCase):
         cls.tokenizer.tokenize(cls.dataset)
         cls.parser.parse(cls.dataset)
 
+        cls.computed_sentences = []
+
+        for sentence in cls.dataset.sentences():
+            dist, then = compute_shortest_paths(sentence)
+            cls.computed_sentences.append((dist, then, sentence))
+
 
     def test_distance_u_u_is_0(self):
-        pass
+        for dist, then, sentence in self.computed_sentences:
+            V = len(sentence)
+            for u in range(V):
+                self.assertEqual(0, dist[u, u])
+
 
     def test_distance_u_v_is_v_u(self):
-        pass
+        for dist, then, sentence in self.computed_sentences:
+            V = len(sentence)
+            for u in range(V):
+                for v in range(V):
+                    self.assertEqual(dist[u, v], dist[v, u])
+
 
     def test_path_u_v_is_reverseof_v_u(self):
-        pass
+        for dist, then, sentence in self.computed_sentences:
+            V = len(sentence)
+            for u in range(V):
+                for v in range(V):
+                    uv = path(u, v, dist, then, sentence)
+                    vu = path(v, u, dist, then, sentence)
+                    self.assertEqual(uv, vu)
 
 
 if __name__ == '__main__':

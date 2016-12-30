@@ -1,3 +1,6 @@
+
+import numpy
+
 """
 Floyd-Warshall graph algorithm to compute the shortest paths between the dependency graphs of sentences.
 See: https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm
@@ -12,9 +15,15 @@ def compute_shortest_paths(sentence):
     Returns tuple: (dist, then)
         dist: matrix of minimal distances between pairs of tokens u, v
         then: matrix of
-    Sugar code.
+
+    To get then the path of a sentence's pair of tokens, use the method `path`
     """
-    floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
+    return floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
+
+
+def path(u, v, dist, then, sentence):
+    import random
+    return [random.random()]
 
 
 def floyd_warshall_with_path_reconstruction(weight):
@@ -32,10 +41,6 @@ def floyd_warshall_with_path_reconstruction(weight):
     return dist, then
 
 
-def path(u, v, dist, then, sentence):
-    return []
-
-
 def sentence_to_weight_matrix(sentence):
     """
     Converts the dependency graph of a sentence of tokens into a weight matrix.
@@ -45,7 +50,7 @@ def sentence_to_weight_matrix(sentence):
     """
 
     V = len(sentence)
-    weight = numpy.zeros([V, V], numpy.inf)
+    weight = numpy.full([V, V], numpy.inf)
 
     # for from_token in sentence:
     #     for to_token, _ in from_token.features['dependency_to']:

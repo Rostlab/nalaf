@@ -56,7 +56,7 @@ class TestFloydWarshall(unittest.TestCase):
             doc2.parts[s] = part
 
         cls.nlp = get_spacy_nlp_english(load_parser=True)
-        cls.parser = SpacyParser(nlp)
+        cls.parser = SpacyParser(cls.nlp)
         cls.splitter = NLTKSplitter()
         cls.tokenizer = GenericTokenizer(lambda string: (tok.text for tok in cls.nlp.tokenizer(string)))
 

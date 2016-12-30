@@ -1,6 +1,6 @@
 from nalaf.features import FeatureGenerator
 from nalaf.structures.data import FeatureDictionary
-from nalaf.preprocessing.spliters import Splitter, NLTKSplitter
+from nalaf.preprocessing.spliters import Splitter, NLTK_SPLITTER
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.preprocessing.parsers import Parser, SpacyParser
 from nalaf.features import get_spacy_nlp_english
@@ -42,7 +42,7 @@ class RelationExtractionPipeline:
             raise TypeError('not an instance that implements Parser')
 
         if not splitter:
-            splitter = NLTKSplitter()
+            splitter = NLTK_SPLITTER
 
         if isinstance(splitter, Splitter):
             self.splitter = splitter

@@ -26,7 +26,7 @@ class GenericTokenizer(Tokenizer):
 
     def __init__(self, string_splitter_fun):
         self.string_splitter_fun = string_splitter_fun
-        "A function that takes a string as input and returns a list/iterator of splitted/tokenized string items"
+        "A function that takes a string as input and returns a list/iterator of tokenized string items"
 
 
     def tokenize(self, dataset):

@@ -1,7 +1,8 @@
 import abc
 from nalaf.structures.data import Relation
-from nalaf.preprocessing.spliters import NLTKSplitter
-from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
+from nalaf.features import get_spacy_nlp_english
+from nalaf.preprocessing.spliters import GenericSplitter, NLTK_SPLITTER
+from nalaf.preprocessing.tokenizers import GenericTokenizer, NLTK_TOKENIZER
 from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator
 
 
@@ -131,11 +132,17 @@ class StubRelationExtractor(RelationExtractor):
     all edges (and therefore relationships) between all pairs of class-chosen entities contained in the same sentence.
     """
 
-    def __init__(self, edge_generator):
+    def __init__(self, edge_generator, use_spacy_pipelines=False):
         super().__init__(edge_generator.entity1_class, edge_generator.entity2_class, edge_generator.relation_type)
 
-        self.sentence_splitter = NLTKSplitter()
-        self.tokenizer = NLTK_TOKENIZER
+        if use_spacy_pipelines:
+            nlp = get_spacy_nlp_english(load_parser=True)
+            self.sentence_splitter = GenericSplitter(lambda string: (sent.text for sent in nlp(string).sents))
+            self.tokenizer = GenericTokenizer(lambda string: (tok.text for tok in nlp.tokenizer(string)))
+        else:
+            self.sentence_splitter = NLTK_SPLITTER
+            self.tokenizer = NLTK_TOKENIZER
+
         self.edge_generator = edge_generator
 
 

@@ -33,7 +33,8 @@ TEST_SENTENCES_SINGLE_ROOT = [
 
 TEST_SENTENCES_MULTI_ROOT = [
     # SS
-    "Import assays with pea ( Pisum sativum ) chloroplasts showed that PyrR and PyrD are taken up and proteolytically processed ."
+    "Import assays with pea ( Pisum sativum ) chloroplasts showed that PyrR and PyrD are taken up and proteolytically processed .",
+    "Consistent with this inference , Arabidopsis or maize ( Zea mays ) PyrR ( At3g47390 or GRMZM2G090068 ) restored riboflavin prototrophy to an E. coli ribD deletant strain when coexpressed with the corresponding PyrD protein ( At4g20960 or GRMZM2G320099 ) but not when expressed alone ; the COG3236 domain was unnecessary for complementing activity ."
 ]
 
 class TestFloydWarshall(unittest.TestCase):
@@ -115,7 +116,8 @@ class TestFloydWarshall(unittest.TestCase):
                     print("path of:", u, "to", v, "==", uv, "|||", sentence)
                     self.assertEqual(uv, list(reversed(vu)))
 
-                    # assert len(uv) >= 1, "This still fails with multi roots"
+                    # TODO #28
+                    # assert len(uv) >= 1, ("This fails with non-connected multi roots", sentence)
 
 
 if __name__ == '__main__':

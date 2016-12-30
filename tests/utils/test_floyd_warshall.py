@@ -92,12 +92,15 @@ class TestFloydWarshall(unittest.TestCase):
                         u_dep_from = sentence[u].features['dependency_from']
                         v_dep_from = sentence[v].features['dependency_from']
 
+                        both_are_multi_root = u_dep_from is None and v_dep_from is None
+                        assert not both_are_multi_root, (u, v, sentence)
+
                         are_bidirectionaly_directly_connected = (
                             (u_dep_from is None or u_dep_from[0].features['id'] == v) or
                             (v_dep_from is None or v_dep_from[0].features['id'] == u))
 
-                        if are_bidirectionaly_directly_connected:
-                            self.assertEqual(dist[u, v], 1)
+                        if are_bidirectionaly_directly_connected and not both_are_multi_root:
+                            self.assertEqual(dist[u, v], 1, (u, v, sentence[u], sentence[v], "|", sentence))
                         else:
                             self.assertTrue(dist[u, v] >= 2)
 
@@ -109,7 +112,10 @@ class TestFloydWarshall(unittest.TestCase):
                 for v in range(V):
                     uv = path(u, v, dist, then, sentence)
                     vu = path(v, u, dist, then, sentence)
-                    self.assertEqual(uv, vu)
+                    print("path of:", u, "to", v, "==", uv, "|||", sentence)
+                    self.assertEqual(uv, list(reversed(vu)))
+
+                    # assert len(uv) >= 1, "This still fails with multi roots"
 
 
 if __name__ == '__main__':

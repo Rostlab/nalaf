@@ -1556,6 +1556,37 @@ class Token:
         """
 
 
+    def __repr__(self):
+        """
+        print calls to the class Token will print out the string contents of the word
+        """
+        return self.word
+
+
+    def __eq__(self, other):
+        """
+        consider two tokens equal if and only if their token words and start
+        offsets coincide.
+        :type other: nalaf.structures.data.Token
+        :return bool:
+        """
+        if hasattr(other, 'word') and hasattr(other, 'start'):
+            if self.word == other.word and self.start == other.start:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+
+    def __ne__(self, other):
+        """
+        :type other: nalaf.structures.data.Token
+        :return bool:
+        """
+        return not self.__eq__(other)
+
+
     def is_POS_Noun(self):
         """ matches NN, NNS, NNP, NNPS : https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html"""
         return "NN" == self.features['pos'][0:2]
@@ -1604,37 +1635,6 @@ class Token:
                 # entity.offset <= self.start < entity.offset + len(entity.text):
                 return entity.class_id
         return self.word
-
-
-    def __repr__(self):
-        """
-        print calls to the class Token will print out the string contents of the word
-        """
-        return self.word
-
-
-    def __eq__(self, other):
-        """
-        consider two tokens equal if and only if their token words and start
-        offsets coincide.
-        :type other: nalaf.structures.data.Token
-        :return bool:
-        """
-        if hasattr(other, 'word') and hasattr(other, 'start'):
-            if self.word == other.word and self.start == other.start:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-
-    def __ne__(self, other):
-        """
-        :type other: nalaf.structures.data.Token
-        :return bool:
-        """
-        return not self.__eq__(other)
 
 
 class FeatureDictionary(dict):

@@ -1,8 +1,8 @@
 from nalaf.features import FeatureGenerator
 from nalaf.structures.data import FeatureDictionary
-from nalaf.preprocessing.spliters import Splitter, NLTK_SPLITTER
-from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
-from nalaf.preprocessing.parsers import Parser, SpacyParser
+from nalaf.preprocessing.spliters import GenericSplitter, NLTK_SPLITTER
+from nalaf.preprocessing.tokenizers import GenericTokenizer, NLTK_TOKENIZER
+from nalaf.preprocessing.parsers import SpacyParser
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator
 from nalaf.features.relations.sentence import NamedEntityCountFeatureGenerator
@@ -36,30 +36,24 @@ class RelationExtractionPipeline:
         if not parser:
             nlp = get_spacy_nlp_english(load_parser=True)
             parser = SpacyParser(nlp)
-        if isinstance(parser, Parser):
-            self.parser = parser
-        else:
-            raise TypeError('not an instance that implements Parser')
+
+        self.parser = parser
 
         if not splitter:
-            splitter = NLTK_SPLITTER
+            if nlp:  # Spacy parser is used, which includes a sentence splitter
+                splitter = GenericSplitter(lambda string: (sent.text for sent in nlp(string).sents))
+            else:
+                splitter = NLTK_SPLITTER
 
-        if isinstance(splitter, Splitter):
-            self.splitter = splitter
-        else:
-            raise TypeError('not an instance that implements Splitter')
+        self.splitter = splitter
 
         if not tokenizer:
             if nlp:  # Spacy parser is used, which includes a tokenizer
                 tokenizer = GenericTokenizer(lambda string: (tok.text for tok in nlp.tokenizer(string)))
-
             else:
                 tokenizer = NLTK_TOKENIZER
 
-        if isinstance(tokenizer, Tokenizer):
-            self.tokenizer = tokenizer
-        else:
-            raise TypeError('not an instance that implements Tokenizer')
+        self.tokenizer = tokenizer
 
         self.edge_generator = SentenceDistanceEdgeGenerator(self.class1, self.class2, self.rel_type, distance=0) if edge_generator is None else edge_generator
 

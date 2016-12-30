@@ -28,19 +28,14 @@ setup(
     license=license(),
     packages=find_packages(exclude=['tests']),
     install_requires=[
-        'nltk',
-        'beautifulsoup4',
+        'numpy>=1.11.2',
+        'spacy>=1.2.0',
+        # 'gensim>= 0.13.3',  # Note: instally manually (it may cause problems on some environments, e.g. Travis CI)
+        'nltk>=3.2.1',
+        'beautifulsoup4>=4.5.1',
         'requests>=2.8.1',
         'python-crfsuite>=0.8.4',
-        'progress',
-        'spacy'
-
-        # Note: it may cause problems on Windows machines
-        # Throubleshooting
-        # * Install python3-devel package or similar from your UNIX distribution
-
-        # 'gensim'
-        # Note: it may cause problems on different environments (e.g. Travis CI)-- install it manually
+        'progress>=1.2',
     ],
     include_package_data=True,
     zip_safe=False,

@@ -1119,7 +1119,7 @@ class Part:
         import warnings
         warnings.warn('Use rather the method: get_any_entities_in_sentence', DeprecationWarning)
 
-        return get_any_entities_in_sentence(sentence_id, predicted=False)[entity_classId]
+        return self.get_any_entities_in_sentence(sentence_id, predicted=False)[entity_classId]
 
 
     def percolate_tokens_to_entities(self, annotated=True):

@@ -61,7 +61,7 @@ class RelationExtractionPipeline:
         else:
             raise TypeError('not an instance that implements Tokenizer')
 
-        self.edge_generator = SentenceDistanceEdgeGenerator(self.class1, self.class2, self.rel_type) if edge_generator is None else edge_generator
+        self.edge_generator = SentenceDistanceEdgeGenerator(self.class1, self.class2, self.rel_type, distance=0) if edge_generator is None else edge_generator
 
         self.feature_set = FeatureDictionary() if feature_set is None else feature_set
 

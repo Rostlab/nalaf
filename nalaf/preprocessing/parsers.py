@@ -4,6 +4,7 @@ from nltk.stem.lancaster import LancasterStemmer
 from nltk.corpus import stopwords
 from progress.bar import Bar
 from spacy.en import English
+from nalaf.features import get_spacy_nlp_english
 
 
 class Parser:
@@ -36,16 +37,18 @@ class SpacyParser(Parser):
     :type constituency_parser: str
     """
 
-    def __init__(self, nlp, constituency_parser=False):
-        self.nlp = nlp
+    def __init__(self, nlp=None, constituency_parser=False):
+        if nlp is None:
+            nlp = get_spacy_nlp_english(load_parser=True)
+        elif not isinstance(nlp, English):
+            raise TypeError('Not an instance of spacy.en.English')
 
+        self.nlp = nlp
         """an instance of spacy.en.English"""
+
         self.constituency_parser = constituency_parser
         """the type of constituency parser to use, current supports only bllip"""
         # NOTE: SpaCy may soon have its own constituency parser: https://github.com/explosion/spaCy/issues/59
-
-        if (not isinstance(self.nlp, English)):
-            raise TypeError('Not an instance of spacy.en.English')
 
         if self.constituency_parser is True:
             self.parser = BllipParser(only_parse=True)

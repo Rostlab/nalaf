@@ -143,6 +143,7 @@ def build_walks(path, first_id=0, second_id=1):
     for dep in path[second_id].features['dependency_to']:
         if dep[0] == path[first_id]:
             backward_dep.append(dep)
+
     for b_dep in backward_dep:
         if len(ret_walks) > 0:
             for walk in ret_walks:

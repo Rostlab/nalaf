@@ -86,6 +86,21 @@ class TestFloydWarshall(unittest.TestCase):
                 for v in range(V):
                     self.assertEqual(dist[u, v], dist[v, u])
 
+                    if u != v:
+                        self.assertTrue(dist[u, v] > 0)
+
+                        u_dep_from = sentence[u].features['dependency_from']
+                        v_dep_from = sentence[v].features['dependency_from']
+
+                        are_bidirectionaly_directly_connected = (
+                            (u_dep_from is None or u_dep_from[0].features['id'] == v) or
+                            (v_dep_from is None or v_dep_from[0].features['id'] == u))
+
+                        if are_bidirectionaly_directly_connected:
+                            self.assertEqual(dist[u, v], 1)
+                        else:
+                            self.assertTrue(dist[u, v] >= 2)
+
 
     def test_path_u_v_is_reverseof_v_u(self):
         for dist, then, sentence in self.computed_sentences:

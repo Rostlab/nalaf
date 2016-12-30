@@ -1,5 +1,6 @@
 
 import numpy
+import itertools
 
 """
 Floyd-Warshall graph algorithm to compute the shortest paths between the dependency graphs of sentences.
@@ -90,3 +91,65 @@ def sentence_to_weight_matrix(sentence):
         weight[u, u] = 0
 
     return weight
+
+
+class Path:
+
+    def __init__(tokens):
+        self.tokens = tokens
+        self.nodes = [PathNode(t, None, None) for t in tokens]
+
+        if len(self.tokens) == 0:
+            self.head = self.last = None
+            self.middle = []
+        else:
+            self.head = self.nodes[0]
+            self.middle = self.nodes[1:-1]
+            self.last = self.nodes[-1]
+
+    def exists(self):
+        return self.head is not None
+
+    def __str__(self):
+        return str_full()
+
+    def str_full(self, token_to_string_fun=lambda token: token.word):
+        return ' '.join(itertools.chain([self.head.str_full(lambda _: "")], (n.str_full() for n in self.middle)))
+
+    def str_token_only(self):
+        return ' '.join(n.str_token_only() for n in self.middle)
+
+    def str_undirected_edge_only(self):
+        return ' '.join(n.str_undirected_edge_only for n in ([self.head] + self.middle))
+
+    def str_directed_edge_only(self):
+        return ' '.join(n.str_directed_edge_only for n in ([self.head] + self.middle))
+
+
+class PathNode:
+
+    def __init__(token, edge_type, is_forward):
+        self.token = token
+        self.edge_type = edge_type
+        self.is_forward = is_forward
+
+    def __str__(self):
+        return self.str_full()
+
+    def str_full(self, token_to_string_fun=lambda token: token.word):
+        str_token = self.str_token_only(token_to_string_fun)
+        str_token = str_token + " " if str_token else ""
+
+        return "{}{} {}".format(str_token, edge_type, self.str_direction())
+
+    def str_token_only(self, token_to_string_fun):
+        return "{}".format(token_to_string_fun(token))
+
+    def str_undirected_edge_only(self):
+        return "{}".format(edge_type)
+
+    def str_directed_edge_only(self):
+        return "{} {}".format(edge_type, self.str_direction())
+
+    def str_direction(self):
+        return "F" if self.is_forward else "B"

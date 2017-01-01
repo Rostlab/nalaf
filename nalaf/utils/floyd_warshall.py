@@ -2,16 +2,22 @@
 import numpy
 import itertools
 
-"""
-Floyd-Warshall graph algorithm to compute the shortest paths between the dependency graphs of sentences.
-See: https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm
 
-As of now, matrises are written fully. An obvious performance improvement is to write them sparsely.
-"""
+def compute_shortest_path(sentence, token_1, token_2):
+    """
+    Compute the shortest path between the given pair of tokens considering the sentence's dependency graph.
+
+    Returns Path
+    """
+    # MAYBE Dikjstra algorithm is way more efficient for this case
+
+    dist, then = floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
+    return path(u=token_1.features['id'], v=token_2.features['id'], dist=dist, then=then, sentence=sentence)
+
 
 def compute_shortest_paths(sentence):
     """
-    Compute the shortest paths of a sentence's dependency graph.
+    Compute the shortest paths between all pairs of the sentence's tokens considering the sentence's dependency graph.
 
     Returns tuple: (dist, then)
         dist: matrix of minimal distances between pairs of tokens u, v
@@ -39,12 +45,14 @@ def path(u, v, dist, then, sentence):
 
 def floyd_warshall_with_path_reconstruction(weight):
     """
-    Compute the shortest distances and paths in a graph matrix representation.
+    Compute the shortest distances and paths in a graph matrix representation as per the Floyd-Warshall algorithm.
 
     Implementation of https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm#Path_reconstruction
 
     matrix 'then' is the equivalent of 'next'
     """
+    # MAYBE As of now, matrises are written fully. An obvious performance improvement is to write them sparsely.
+
     V = len(weight)
     dist = numpy.full([V, V], numpy.inf)
     then = numpy.full([V, V], numpy.nan)

@@ -8,17 +8,11 @@ from nalaf.features.relations import EdgeFeatureGenerator
 
 class SentenceFeatureGenerator(EdgeFeatureGenerator):
     """
-    Generate sentence-based features as defined in Master's Thesis page 40.
+    Generate sentence-based features as roughly defined in Master's Thesis pages 40-42.
+
+    Some feature additions, removals, or detail changes are also considered.
 
     It strictly gets features that are based on the sentence: ONLY
-
-
-    BOW
-    lemmas
-    Num Entities of type X (prot, loc, or organism)
-    Numb of words/tokens
-    POS
-
     """
 
     def __init__(
@@ -44,7 +38,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
             sentence = edge.get_combined_sentence()
 
             for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
-                count = str(len(entities))
+                count = len(entities)
+                if e_class_id in [edge.entity1.class_id, edge.entity2.class_id]:
+                    # Rest -1 thus removing each consider pair of entities
+                    count -= 1
+
                 # TODO feature select with integer value or binary representation ?
                 # self.add(f_set, is_train, edge, 'f_counts', 'binary', e_class_id, 'is', count)
                 self.add_with_value(f_set, is_train, edge, 'f_counts', count, 'int', e_class_id)

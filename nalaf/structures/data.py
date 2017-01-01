@@ -1743,6 +1743,16 @@ class Entity:
             return False
 
 
+    def prev_tokens(self, sentence, n):
+        self_head = self.tokens[0].features['id']
+        return sentence[(self_head - n):self_head]
+
+
+    def next_tokens(self, sentence, n):
+        self_last = self.tokens[-1].features['id']
+        return sentence[(self_last + 1):(self_last + 1 + n)]
+
+
 class Label:
     """
     Represents the label associated with each Token.

@@ -24,14 +24,14 @@ def compute_shortest_paths(sentence):
 
 def path(u, v, dist, then, sentence):
     if numpy.isnan(then[u, v]):
-        return []
+        return Path([])
     else:
         try:
-            path = [sentence[u]]
+            tokens_path = [sentence[u]]
             while u != v:
                 u = int(then[u, v])
-                path.append(sentence[u])
-            return path
+                tokens_path.append(sentence[u])
+            return Path(tokens_path)
         except:
             print(dist, then, sentence)
             raise
@@ -95,55 +95,60 @@ def sentence_to_weight_matrix(sentence):
 
 class Path:
 
-    def __init__(tokens):
+    __NODE_SEPARATOR = " ~ "
+
+    def __init__(self, tokens):
         self.tokens = tokens
         self.nodes = []
 
-        for u_token, v_token in zip(tokens, tokens[1:]):
+        for u_token, v_token in zip(tokens, tokens[1:]):  # Note: the last one is not added yet, see below
             u_dep_from = u_token.features['dependency_from']
             v_dep_from = v_token.features['dependency_from']
 
             if v_dep_from is not None and v_dep_from[0] == u_token:
                 edge_type = v_dep_from[1]
                 is_forward = True
-            if u_dep_from is not None and u_dep_from[0] == v_token:
+            elif u_dep_from is not None and u_dep_from[0] == v_token:
                 edge_type = u_dep_from[1]
                 is_forward = False
             else:
-                raise AssertionError(("One must be a dependency of each other", u_token, v_token))
+                raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from))
 
-            self.nodes.append(PathNode(t, None, None) for t in tokens)
+            self.nodes.append(PathNode(u_token, edge_type, is_forward))
 
         if len(self.tokens) == 0:
-            self.head = self.last = None
+            self.head = self.last = []
             self.middle = []
         else:
-            self.head = self.nodes[0]
+            self.nodes.append(PathNode(self.tokens[-1], edge_type="", is_forward=None))  # last one
+            self.head = [self.nodes[0]]
             self.middle = self.nodes[1:-1]
-            self.last = self.nodes[-1]
+            self.last = [self.nodes[-1]]
 
     def exists(self):
-        return self.head is not None
+        return len(self.head) >= 2
 
     def __str__(self):
-        return str_full()
+        return self.str_full()
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
-        return ' '.join(itertools.chain([self.head.str_full(lambda _: "")], (n.str_full() for n in self.middle)))
+        return __class__.__NODE_SEPARATOR.join(itertools.chain(
+            (head.str_full(lambda _: "") for head in self.head),
+            (n.str_full(token_to_string_fun) for n in self.middle)))
 
     def str_token_only(self):
-        return ' '.join(n.str_token_only() for n in self.middle)
+        return __class__.__NODE_SEPARATOR.join(n.str_token_only() for n in self.middle)
 
     def str_undirected_edge_only(self):
-        return ' '.join(n.str_undirected_edge_only for n in ([self.head] + self.middle))
+        return __class__.__NODE_SEPARATOR.join(n.str_undirected_edge_only for n in (self.head + self.middle))
 
     def str_directed_edge_only(self):
-        return ' '.join(n.str_directed_edge_only for n in ([self.head] + self.middle))
+        return __class__.__NODE_SEPARATOR.join(n.str_directed_edge_only for n in (self.head + self.middle))
 
 
 class PathNode:
 
-    def __init__(token, edge_type, is_forward):
+    def __init__(self, token, edge_type, is_forward):
         self.token = token
         self.edge_type = edge_type
         self.is_forward = is_forward
@@ -152,19 +157,16 @@ class PathNode:
         return self.str_full()
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
-        str_token = self.str_token_only(token_to_string_fun)
-        str_token = str_token + " " if str_token else ""
-
-        return "{}{} {}".format(str_token, edge_type, self.str_direction())
+        return ' '.join(filter(None, [self.str_token_only(token_to_string_fun), self.edge_type, self.str_direction()]))
 
     def str_token_only(self, token_to_string_fun):
-        return "{}".format(token_to_string_fun(token))
+        return token_to_string_fun(self.token)
 
     def str_undirected_edge_only(self):
-        return "{}".format(edge_type)
+        return self.edge_type
 
     def str_directed_edge_only(self):
-        return "{} {}".format(edge_type, self.str_direction())
+        return ' '.join(filter(None, [edge_type, self.str_direction()]))
 
     def str_direction(self):
-        return "F" if self.is_forward else "B"
+        return "" if (self.is_forward is None or not self.edge_type) else ("F" if self.is_forward else "B")

@@ -113,8 +113,8 @@ class TestFloydWarshall(unittest.TestCase):
                 for v in range(V):
                     uv = path(u, v, dist, then, sentence)
                     vu = path(v, u, dist, then, sentence)
-                    print("path of:", u, "to", v, "==", uv, "|||", sentence)
-                    self.assertEqual(uv, list(reversed(vu)))
+                    print("path of:", u, "to", v, " == ", uv, " == ", uv.tokens, "|||", sentence)
+                    self.assertEqual(uv.tokens, list(reversed(vu.tokens)))
 
                     # TODO #28
                     # assert len(uv) >= 1, ("This fails with non-connected multi roots", sentence)

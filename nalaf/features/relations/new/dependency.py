@@ -22,22 +22,25 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     Some feature additions, removals, or detail changes are also considered.
 
     """
+    # TODO use Dikjstra
+    # TODO have n-Gram
+    # TODO investigate features
     # TODO do kinda constituency parsing http://www.clips.ua.ac.be/pages/mbsp-tags
 
     def __init__(
         self,
         # Hyper parameters
         h_ow_size=4,  # outer window size
-        h_ow_grams=[1, 2, 3, 4],
+        h_ow_grams=[1],
         h_iw_size=4,  # inner window size
-        h_iw_grams=[1, 2, 3, 4],
-        h_ld_grams=[1, 2, 3, 4],
-        h_pd_grams=[1, 2, 3, 4],
+        h_iw_grams=[1],
+        h_ld_grams=[1],
+        h_pd_grams=[1],
         # Feature keys/names
         f_XX_YY_gram_lemma=None,  # XX in [OW, IW, LD, PD] and YY in, e.g. [1, 2, 3, 4], i.e. the n-grams numbers
+        f_XX_YY_gram_pos=None,
         f_XX_YY_gram_tokens_count=None,
         f_XX_YY_gram_tokens_count_without_punct=None,
-        f_XX_YY_gram_pos=None,
     ):
 
         # Hyper parameters
@@ -54,9 +57,20 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.f_XX_YY_gram_pos = f_XX_YY_gram_pos
 
 
-    def f(f_key, dependency_XX, ngram_YY):
+    def f(self, f_key, dependency_XX, ngram_YY):
         """Return the final real name of the feature"""
         return f_key.replace('XX', dependency_XX).replace('YY', str(ngram_YY))
+
+
+    def add_all(self, f_set, is_train, edge, tokens, dep_type, n_gram):
+
+        for t in tokens:
+            self.add(f_set, is_train, edge, 'f_XX_YY_gram_lemma', self.f('f_XX_YY_gram_lemma', dep_type, n_gram), t.features['lemma'])
+            self.add(f_set, is_train, edge, 'f_XX_YY_gram_pos', self.f('f_XX_YY_gram_pos', dep_type, n_gram), t.features['pos'])
+
+
+        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count', len(tokens), self.f('f_XX_YY_gram_tokens_count', dep_type, n_gram))
+        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count_without_punct', len(list(filter(lambda t: not t.features['is_punct'], tokens))), self.f('f_XX_YY_gram_tokens_count_without_punct', dep_type, n_gram))
 
 
     def generate(self, corpus, f_set, is_train):
@@ -73,4 +87,24 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             _e2_head_token = edge.entity2.tokens[0].features['id']
             ld = sentence[(_e1_next_token):(_e2_head_token)]
 
-            dp = compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token)
+            pd = compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token)
+
+            #
+
+            for n_gram in self.h_ow_grams:
+                self.add_all(f_set, is_train, edge, ow1, 'OW1', n_gram)
+
+            for n_gram in self.h_iw_grams:
+                self.add_all(f_set, is_train, edge, iw1, 'IW1', n_gram)
+
+            for n_gram in self.h_ow_grams:
+                self.add_all(f_set, is_train, edge, ow2, 'OW2', n_gram)
+
+            for n_gram in self.h_iw_grams:
+                self.add_all(f_set, is_train, edge, iw2, 'IW2', n_gram)
+
+            for n_gram in self.h_ld_grams:
+                self.add_all(f_set, is_train, edge, ld, 'LD', n_gram)
+
+            for n_gram in self.h_pd_grams:
+                self.add_all(f_set, is_train, edge, pd.tokens, 'PD', n_gram)

@@ -85,6 +85,7 @@ class SpacyParser(Parser):
                     nalaf_token.features = {
                         'id': spacy_token.i,
                         'pos': spacy_token.tag_,
+                        'coarsed_pos': spacy_token.pos_,  # https://spacy.io/docs/usage/pos-tagging#pos-tagging-english
                         'dep': spacy_token.dep_,
                         'lemma': spacy_token.lemma_,
                         'prob': spacy_token.prob,

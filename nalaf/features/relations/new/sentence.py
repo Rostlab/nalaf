@@ -63,4 +63,4 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 self.add(f_set, is_train, edge, 'f_bow', token.features['lemma'])
                 self.add(f_set, is_train, edge, 'f_pos', token.features['pos'])
 
-            # self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
+            self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))

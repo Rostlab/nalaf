@@ -97,7 +97,22 @@ class Path:
 
     def __init__(tokens):
         self.tokens = tokens
-        self.nodes = [PathNode(t, None, None) for t in tokens]
+        self.nodes = []
+
+        for u_token, v_token in zip(tokens, tokens[1:]):
+            u_dep_from = u_token.features['dependency_from']
+            v_dep_from = v_token.features['dependency_from']
+
+            if v_dep_from is not None and v_dep_from[0] == u_token:
+                edge_type = v_dep_from[1]
+                is_forward = True
+            if u_dep_from is not None and u_dep_from[0] == v_token:
+                edge_type = u_dep_from[1]
+                is_forward = False
+            else:
+                raise AssertionError(("One must be a dependency of each other", u_token, v_token))
+
+            self.nodes.append(PathNode(t, None, None) for t in tokens)
 
         if len(self.tokens) == 0:
             self.head = self.last = None

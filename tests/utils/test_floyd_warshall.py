@@ -93,14 +93,14 @@ class TestFloydWarshall(unittest.TestCase):
                         u_dep_from = sentence[u].features['dependency_from']
                         v_dep_from = sentence[v].features['dependency_from']
 
-                        both_are_multi_root = u_dep_from is None and v_dep_from is None
-                        assert not both_are_multi_root, (u, v, sentence)
+                        both_are_root = u_dep_from is None and v_dep_from is None
+                        assert not both_are_root, (u, v, sentence)
 
                         are_bidirectionaly_directly_connected = (
                             (u_dep_from is None or u_dep_from[0].features['id'] == v) or
                             (v_dep_from is None or v_dep_from[0].features['id'] == u))
 
-                        if are_bidirectionaly_directly_connected and not both_are_multi_root:
+                        if are_bidirectionaly_directly_connected and not both_are_root:
                             self.assertEqual(dist[u, v], 1, (u, v, sentence[u], sentence[v], "|", sentence))
                         else:
                             self.assertTrue(dist[u, v] >= 2)

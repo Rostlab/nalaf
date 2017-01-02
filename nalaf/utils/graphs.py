@@ -7,6 +7,9 @@ def compute_shortest_path(sentence, token_1, token_2):
     """
     Compute the shortest path between the given pair of tokens considering the sentence's dependency graph.
 
+    The method currently uses the Floyd Warshall algorithm to compute the shortest paths between all nodes in the graph
+    and runs in O(V^3) time. Efforts are under way to reduce this.
+
     Returns Path
     """
     # MAYBE Dikjstra algorithm is way more efficient for this case

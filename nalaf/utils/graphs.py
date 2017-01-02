@@ -14,8 +14,8 @@ def compute_shortest_path(sentence, token_1, token_2):
     """
     # MAYBE Dikjstra algorithm is way more efficient for this case
 
-    dist, then = floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
-    return path(u=token_1.features['id'], v=token_2.features['id'], dist=dist, then=then, sentence=sentence)
+    _, then = floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
+    return path(u=token_1.features['id'], v=token_2.features['id'], then=then, sentence=sentence)
 
 
 def compute_shortest_paths(sentence):
@@ -31,7 +31,7 @@ def compute_shortest_paths(sentence):
     return floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
 
 
-def path(u, v, dist, then, sentence):
+def path(u, v, then, sentence):
     """
     Traces back the path between tokens `u` and `v` after running `compute_shortest_paths`.
 

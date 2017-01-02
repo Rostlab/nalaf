@@ -111,8 +111,8 @@ class TestFloydWarshall(unittest.TestCase):
             V = len(sentence)
             for u in range(V):
                 for v in range(V):
-                    uv = path(u, v, dist, then, sentence)
-                    vu = path(v, u, dist, then, sentence)
+                    uv = path(u, v, then, sentence)
+                    vu = path(v, u, then, sentence)
                     print("path of:", u, "to", v, " == ", uv, " == ", uv.tokens, "|||", sentence)
                     self.assertEqual(uv.tokens, list(reversed(vu.tokens)))
 

@@ -22,8 +22,6 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     Some feature additions, removals, or detail changes are also considered.
 
     """
-    # TODO use Dikjstra
-    # TODO have n-Gram
     # TODO investigate features
     # TODO do kinda constituency parsing http://www.clips.ua.ac.be/pages/mbsp-tags
 
@@ -31,11 +29,11 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self,
         # Hyper parameters
         h_ow_size=4,  # outer window size
-        h_ow_grams=[1],
+        h_ow_grams=[1, 2, 3, 4],
         h_iw_size=4,  # inner window size
-        h_iw_grams=[1],
-        h_ld_grams=[1],
-        h_pd_grams=[1],
+        h_iw_grams=[1, 2, 3, 4],
+        h_ld_grams=[1, 2, 3, 4],
+        h_pd_grams=[1, 2, 3, 4],
         # Feature keys/names
         f_XX_YY_gram_lemma=None,  # XX in [OW, IW, LD, PD] and YY in, e.g. [1, 2, 3, 4], i.e. the n-grams numbers
         f_XX_YY_gram_pos=None,
@@ -63,14 +61,22 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
 
 
     def add_all(self, f_set, is_train, edge, tokens, dep_type, n_gram):
+        tokens_n_grams = zip(*(tokens[i:] for i in range(0, n_gram)))
 
-        for t in tokens:
-            self.add(f_set, is_train, edge, 'f_XX_YY_gram_lemma', self.f('f_XX_YY_gram_lemma', dep_type, n_gram), t.features['lemma'])
-            self.add(f_set, is_train, edge, 'f_XX_YY_gram_pos', self.f('f_XX_YY_gram_pos', dep_type, n_gram), t.features['pos'])
+        s = (lambda string: '[' + string + ']')
+        f = (lambda tokens_group, ft_key: s(' '.join(t.features[ft_key] for t in tokens_group)))
 
+        for tokens_group in tokens_n_grams:
+            lemmas = f(tokens_group, 'lemma')
+            poses = f(tokens_group, 'pos')
 
-        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count', len(tokens), self.f('f_XX_YY_gram_tokens_count', dep_type, n_gram))
-        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count_without_punct', len(list(filter(lambda t: not t.features['is_punct'], tokens))), self.f('f_XX_YY_gram_tokens_count_without_punct', dep_type, n_gram))
+            self.add(f_set, is_train, edge, 'f_XX_YY_gram_lemma', self.f('f_XX_YY_gram_lemma', dep_type, n_gram), lemmas)
+            self.add(f_set, is_train, edge, 'f_XX_YY_gram_pos', self.f('f_XX_YY_gram_pos', dep_type, n_gram), poses)
+
+        count = len(tokens)
+        count_without_punct = len(list(filter(lambda t: not t.features['is_punct'], tokens)))
+        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count', count, self.f('f_XX_YY_gram_tokens_count', dep_type, n_gram))
+        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count_without_punct', count_without_punct, self.f('f_XX_YY_gram_tokens_count_without_punct', dep_type, n_gram))
 
 
     def generate(self, corpus, f_set, is_train):

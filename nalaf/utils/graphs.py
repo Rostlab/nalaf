@@ -12,10 +12,10 @@ def compute_shortest_path(sentence, token_1, token_2):
 
     Returns Path
     """
-    # MAYBE Dijkstra algorithm is way more efficient for this case
-
-    _, then = floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
-    return path(u=token_1.features['id'], v=token_2.features['id'], then=then, sentence=sentence)
+    source = token_1.features['id']
+    target = token_2.features['id']
+    _, prev = dijkstra_original(source, target, sentence)
+    return path_reversed(source, target, prev, sentence)
 
 
 def compute_shortest_paths(sentence):
@@ -37,7 +37,6 @@ def path(u, v, then, sentence):
 
     Returns Path.
     """
-    print("**** THEN", then)
 
     if numpy.isnan(then[u, v]):
         return Path([])
@@ -49,21 +48,35 @@ def path(u, v, then, sentence):
         return Path(tokens_path)
 
 
+def path_reversed(source, target, prev, sentence):
+    """
+    Traces back the path (reversedly) between tokens `source` and `target` after running `dijkstra_original`.
+
+    Returns Path.
+    """
+    tokens_path = []
+    u = target
+    while u != source:
+        tokens_path.append(u)
+        u = prev[u]
+        if numpy.isnan(u):  # no possible path
+            return Path([])
+        else:
+            u = int(u)
+    tokens_path.append(u)
+
+    return Path(list([sentence[t] for t in reversed(tokens_path)]))
+
+
 def dijkstra_original(source, target, sentence, weight=None):
     """
     Computes the shortest path between tokens `u` and `v` with the original Dijkstra algorithm, O(V^2).
 
     The implementation sort of follows the pseudocode in
     https://en.wikipedia.org/w/index.php?title=Dijkstra%27s_algorithm&oldid=757046675#Pseudocode
-    yet also follows the floyd_warshall algorithm below.
-    An important difference is: instead of computing the reversed previous path vector as in the pseudocode (`prev`),
-    this implementation rather computes the forward vector as in floyd warshall (`next`).
-    Like this, we can reuse the `path` method too.
 
     Returns Path
     """
-
-    print("\nBEIDE", source, target, sentence[source], sentence[target])
 
     if weight is None:
         weight = sentence_to_weight_matrix(sentence)
@@ -72,27 +85,25 @@ def dijkstra_original(source, target, sentence, weight=None):
 
     V = len(weight)
     dist = numpy.full([V], numpy.inf)
-    then = numpy.full([V, V], numpy.nan)
+    prev = numpy.full([V], numpy.nan)
 
     def are_neighbors(u, v):
         return not numpy.isinf(weight[u, v])
 
     # Init
     for v in range(V):
-        unvisited_set.update({v})
         dist[v] = weight[source, v]
+        unvisited_set.update({v})
         if are_neighbors(source, v):
-            then[source, v] = v
+            prev[v] = source
 
     unvisited_set.remove(source)
 
     # Dynamic Recursive
     while len(unvisited_set) > 0:
         u = kinda_argmin(unvisited_set, lambda u: dist[u], target)
-        then[v, target] = u
-        print("U", u, sentence[u])
 
-        if u == target:
+        if u == target or u is None:  # when u is None, then there is no possible path
             break
 
         unvisited_set.remove(u)
@@ -101,14 +112,10 @@ def dijkstra_original(source, target, sentence, weight=None):
             if v in unvisited_set and are_neighbors(u, v):
                 dist_source_u_v = dist[u] + weight[u, v]
                 if dist[v] > dist_source_u_v:
-                    print("V", v, sentence[v])
                     dist[v] = dist_source_u_v
-                    then[u, v] = v
-                    then[source, v] = then[source, u]
-                    print("   then 1", sentence[source], sentence[u], sentence[v])
-                    print("   then 2", sentence[u], sentence[v])
+                    prev[v] = u
 
-    return dist, then
+    return dist, prev
 
 
 def kinda_argmin(iterable, key, target):

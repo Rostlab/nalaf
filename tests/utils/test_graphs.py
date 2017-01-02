@@ -127,8 +127,8 @@ class TestGraphs(unittest.TestCase):
             for u in range(V):
                 for v in range(V):
                     uv_path_fw = path(u, v, then_fw, sentence)
-                    dist_di, then_di = dijkstra_original(u, v, sentence, weight)
-                    uv_path_di = path(u, v, then_di, sentence)
+                    dist_di, prev_di = dijkstra_original(u, v, sentence, weight)
+                    uv_path_di = path_reversed(u, v, prev_di, sentence)
 
                     self.assertEqual(dist_fw[u, v], dist_di[v], (u, v, "\n", sentence, "\n", uv_path_fw, "\n", uv_path_di))
                     self.assertEqual(uv_path_fw, uv_path_di)

@@ -65,7 +65,7 @@ def floyd_warshall_with_path_reconstruction(weight):
     for u in range(V):
         for v in range(V):
             dist[u, v] = weight[u, v]
-            if weight[u, v] <= 1:
+            if not numpy.isinf(weight[u, v]):
                 then[u, v] = v
 
     # Dynamic Recursive

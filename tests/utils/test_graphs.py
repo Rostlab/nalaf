@@ -5,7 +5,7 @@ from nalaf import print_verbose, print_debug
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.parsers import Parser, SpacyParser
-from nalaf.utils.graphs import compute_shortest_paths, path
+from nalaf.utils.graphs import *
 import sys
 
 
@@ -37,7 +37,7 @@ TEST_SENTENCES_MULTI_ROOT = [
     "Consistent with this inference , Arabidopsis or maize ( Zea mays ) PyrR ( At3g47390 or GRMZM2G090068 ) restored riboflavin prototrophy to an E. coli ribD deletant strain when coexpressed with the corresponding PyrD protein ( At4g20960 or GRMZM2G320099 ) but not when expressed alone ; the COG3236 domain was unnecessary for complementing activity ."
 ]
 
-class TestFloydWarshall(unittest.TestCase):
+class TestGraphs(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -118,6 +118,20 @@ class TestFloydWarshall(unittest.TestCase):
 
                     # TODO #28
                     # assert len(uv) >= 1, ("This fails with non-connected multi roots", sentence)
+
+
+    def test_floyd_warshall_and_dijkstra_are_equal(self):
+        for dist_fw, then_fw, sentence in self.computed_sentences:
+            weight = sentence_to_weight_matrix(sentence)
+            V = len(sentence)
+            for u in range(V):
+                for v in range(V):
+                    uv_path_fw = path(u, v, then_fw, sentence)
+                    dist_di, then_di = dijkstra_original(u, v, sentence, weight)
+                    uv_path_di = path(u, v, then_di, sentence)
+
+                    self.assertEqual(dist_fw[u, v], dist_di[v], (u, v, "\n", sentence, "\n", uv_path_fw, "\n", uv_path_di))
+                    self.assertEqual(uv_path_fw, uv_path_di)
 
 
 if __name__ == '__main__':

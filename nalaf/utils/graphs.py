@@ -12,7 +12,7 @@ def compute_shortest_path(sentence, token_1, token_2):
 
     Returns Path
     """
-    # MAYBE Dikjstra algorithm is way more efficient for this case
+    # MAYBE Dijkstra algorithm is way more efficient for this case
 
     _, then = floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
     return path(u=token_1.features['id'], v=token_2.features['id'], then=then, sentence=sentence)
@@ -37,6 +37,8 @@ def path(u, v, then, sentence):
 
     Returns Path.
     """
+    print("**** THEN", then)
+
     if numpy.isnan(then[u, v]):
         return Path([])
     else:
@@ -61,6 +63,11 @@ def dijkstra_original(source, target, sentence, weight=None):
     Returns Path
     """
 
+    print("\nBEIDE", source, target, sentence[source], sentence[target])
+
+    if weight is None:
+        weight = sentence_to_weight_matrix(sentence)
+
     unvisited_set = set()
 
     V = len(weight)
@@ -72,31 +79,45 @@ def dijkstra_original(source, target, sentence, weight=None):
 
     # Init
     for v in range(V):
+        unvisited_set.update({v})
         dist[v] = weight[source, v]
         if are_neighbors(source, v):
             then[source, v] = v
 
+    unvisited_set.remove(source)
+
     # Dynamic Recursive
     while len(unvisited_set) > 0:
-        u = argmin(unvisited_set, key=lambda u: dist[u])
+        u = kinda_argmin(unvisited_set, lambda u: dist[u], target)
+        then[v, target] = u
+        print("U", u, sentence[u])
+
         if u == target:
             break
+
+        unvisited_set.remove(u)
 
         for v in range(V):
             if v in unvisited_set and are_neighbors(u, v):
                 dist_source_u_v = dist[u] + weight[u, v]
                 if dist[v] > dist_source_u_v:
+                    print("V", v, sentence[v])
                     dist[v] = dist_source_u_v
-                    then[source, v] = u
+                    then[u, v] = v
+                    then[source, v] = then[source, u]
+                    print("   then 1", sentence[source], sentence[u], sentence[v])
+                    print("   then 2", sentence[u], sentence[v])
 
     return dist, then
 
 
-def argmin(iterable, fun):
+def kinda_argmin(iterable, key, target):
     minimum = float('inf')
     ret = None
     for x in iterable:
-        if fun(x) < minimum:
+        x_val = key(x)
+        x_is_closer_to_target = ret is None or (abs(target - x) < abs(target - ret))
+        if x_is_closer_to_target and x_val < minimum:
             ret = x
     return ret
 
@@ -178,7 +199,7 @@ class Path:
                 edge_type = u_dep_from[1]
                 is_forward = False
             else:
-                raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from))
+                raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from, tokens))
 
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 
@@ -196,6 +217,12 @@ class Path:
 
     def __str__(self):
         return self.str_full()
+
+    def __repr__(self):
+        return __class__.__NODE_SEPARATOR.join(repr(n) for n in self.nodes)
+
+    def __eq__(self, other):
+        return self.nodes == other.nodes
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
         return __class__.__NODE_SEPARATOR.join(itertools.chain(
@@ -221,6 +248,14 @@ class PathNode:
 
     def __str__(self):
         return self.str_full()
+
+    def __repr__(self):
+        return str((self.token.word, self.edge_type, self.is_forward))
+
+    def __eq__(self, other):
+        return (self.token == other.token and
+                self.edge_type == other.edge_type and
+                self.is_forward == other.is_forward)
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
         return ' '.join(filter(None, [self.str_token_only(token_to_string_fun), self.edge_type, self.str_direction()]))

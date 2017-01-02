@@ -12,7 +12,7 @@ The implementation consider 4 types of dependency types:
 """
 
 from nalaf.features.relations import EdgeFeatureGenerator
-from nalaf.utils.floyd_warshall import compute_shortest_path, compute_shortest_paths, path
+from nalaf.utils.graphs import compute_shortest_path, compute_shortest_paths, path
 
 
 class DependencyFeatureGenerator(EdgeFeatureGenerator):

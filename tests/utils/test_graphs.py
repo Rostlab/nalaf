@@ -5,7 +5,7 @@ from nalaf import print_verbose, print_debug
 from nalaf.preprocessing.tokenizers import Tokenizer, NLTK_TOKENIZER, GenericTokenizer
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.parsers import Parser, SpacyParser
-from nalaf.utils.floyd_warshall import compute_shortest_paths, path
+from nalaf.utils.graphs import compute_shortest_paths, path
 import sys
 
 

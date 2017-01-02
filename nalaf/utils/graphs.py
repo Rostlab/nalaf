@@ -32,18 +32,19 @@ def compute_shortest_paths(sentence):
 
 
 def path(u, v, dist, then, sentence):
+    """
+    Traces back the path between tokens `u` and `v` after running `compute_shortest_paths`.
+
+    Returns Path.
+    """
     if numpy.isnan(then[u, v]):
         return Path([])
     else:
-        try:
-            tokens_path = [sentence[u]]
-            while u != v:
-                u = int(then[u, v])
-                tokens_path.append(sentence[u])
-            return Path(tokens_path)
-        except:
-            print(dist, then, sentence)
-            raise
+        tokens_path = [sentence[u]]
+        while u != v:
+            u = int(then[u, v])
+            tokens_path.append(sentence[u])
+        return Path(tokens_path)
 
 
 def floyd_warshall_with_path_reconstruction(weight):

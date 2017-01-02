@@ -22,7 +22,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     Some feature additions, removals, or detail changes are also considered.
 
     """
-    # TODO investigate features
+
     # TODO do kinda constituency parsing http://www.clips.ua.ac.be/pages/mbsp-tags
 
     def __init__(
@@ -35,10 +35,25 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         h_ld_grams=[1, 2, 3, 4],
         h_pd_grams=[1, 2, 3, 4],
         # Feature keys/names
-        f_XX_YY_gram_lemma=None,  # XX in [OW, IW, LD, PD] and YY in, e.g. [1, 2, 3, 4], i.e. the n-grams numbers
-        f_XX_YY_gram_pos=None,
-        f_XX_YY_gram_tokens_count=None,
-        f_XX_YY_gram_tokens_count_without_punct=None,
+        f_OW_N_gram_lemma=None,
+        f_OW_N_gram_pos=None,
+        f_OW_N_gram_tokens_count=None,
+        f_OW_N_gram_tokens_count_without_punct=None,
+        #
+        f_IW_N_gram_lemma=None,
+        f_IW_N_gram_pos=None,
+        f_IW_N_gram_tokens_count=None,
+        f_IW_N_gram_tokens_count_without_punct=None,
+        #
+        f_LD_N_gram_lemma=None,
+        f_LD_N_gram_pos=None,
+        f_LD_N_gram_tokens_count=None,
+        f_LD_N_gram_tokens_count_without_punct=None,
+        #
+        f_PD_N_gram_lemma=None,
+        f_PD_N_gram_pos=None,
+        f_PD_N_gram_tokens_count=None,
+        f_PD_N_gram_tokens_count_without_punct=None,
     ):
 
         # Hyper parameters
@@ -49,15 +64,31 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.h_ld_grams = h_ld_grams
         self.h_pd_grams = h_pd_grams
         # Feature keys/names
-        self.f_XX_YY_gram_lemma = f_XX_YY_gram_lemma
-        self.f_XX_YY_gram_tokens_count = f_XX_YY_gram_tokens_count
-        self.f_XX_YY_gram_tokens_count_without_punct = f_XX_YY_gram_tokens_count_without_punct
-        self.f_XX_YY_gram_pos = f_XX_YY_gram_pos
+        self.f_OW_N_gram_lemma = f_OW_N_gram_lemma
+        self.f_OW_N_gram_pos = f_OW_N_gram_pos
+        self.f_OW_N_gram_tokens_count = f_OW_N_gram_tokens_count
+        self.f_OW_N_gram_tokens_count_without_punct = f_OW_N_gram_tokens_count_without_punct
+        #
+        self.f_IW_N_gram_lemma = f_IW_N_gram_lemma
+        self.f_IW_N_gram_pos = f_IW_N_gram_pos
+        self.f_IW_N_gram_tokens_count = f_IW_N_gram_tokens_count
+        self.f_IW_N_gram_tokens_count_without_punct = f_IW_N_gram_tokens_count_without_punct
+        #
+        self.f_LD_N_gram_lemma = f_LD_N_gram_lemma
+        self.f_LD_N_gram_pos = f_LD_N_gram_pos
+        self.f_LD_N_gram_tokens_count = f_LD_N_gram_tokens_count
+        self.f_LD_N_gram_tokens_count_without_punct = f_LD_N_gram_tokens_count_without_punct
+        #
+        self.f_PD_N_gram_lemma = f_PD_N_gram_lemma
+        self.f_PD_N_gram_pos = f_PD_N_gram_pos
+        self.f_PD_N_gram_tokens_count = f_PD_N_gram_tokens_count
+        self.f_PD_N_gram_tokens_count_without_punct = f_PD_N_gram_tokens_count_without_punct
 
 
-    def f(self, f_key, dependency_XX, ngram_YY):
+    def f(self, f_key, dependency_XX, ngram_N=None):
         """Return the final real name of the feature"""
-        return f_key.replace('XX', dependency_XX).replace('YY', str(ngram_YY))
+        dependency_XX = dependency_XX[:2]
+        return f_key.replace('XX', dependency_XX)
 
 
     def add_all(self, f_set, is_train, edge, tokens, dep_type, n_gram):
@@ -70,13 +101,13 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             lemmas = f(tokens_group, 'lemma')
             poses = f(tokens_group, 'pos')
 
-            self.add(f_set, is_train, edge, 'f_XX_YY_gram_lemma', self.f('f_XX_YY_gram_lemma', dep_type, n_gram), lemmas)
-            self.add(f_set, is_train, edge, 'f_XX_YY_gram_pos', self.f('f_XX_YY_gram_pos', dep_type, n_gram), poses)
+            self.add(f_set, is_train, edge, self.f('f_XX_N_gram_lemma', dep_type), dep_type, n_gram, lemmas)
+            self.add(f_set, is_train, edge, self.f('f_XX_N_gram_pos', dep_type), dep_type, n_gram, poses)
 
         count = len(tokens)
         count_without_punct = len(list(filter(lambda t: not t.features['is_punct'], tokens)))
-        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count', count, self.f('f_XX_YY_gram_tokens_count', dep_type, n_gram))
-        self.add_with_value(f_set, is_train, edge, 'f_XX_YY_gram_tokens_count_without_punct', count_without_punct, self.f('f_XX_YY_gram_tokens_count_without_punct', dep_type, n_gram))
+        self.add_with_value(f_set, is_train, edge, self.f('f_XX_N_gram_tokens_count', dep_type), count, dep_type, n_gram)
+        self.add_with_value(f_set, is_train, edge, self.f('f_XX_N_gram_tokens_count_without_punct', dep_type), count_without_punct, dep_type, n_gram)
 
 
     def generate(self, corpus, f_set, is_train):

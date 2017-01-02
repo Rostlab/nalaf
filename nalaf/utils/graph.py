@@ -1,7 +1,13 @@
 """
+DEPRECATED
+
 Floyd Warshall graph algorithm for calculating dependency parse graph features plus other graph-related amethods.
 The implementation here avoid external libraries.
 """
+import warnings
+
+warnings.warn('Use the new `graphs.py` instead', DeprecationWarning)
+
 
 def get_path(token_from, token_to, part, sentence_id, graphs=None):
     """

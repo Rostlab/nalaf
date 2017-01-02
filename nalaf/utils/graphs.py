@@ -47,6 +47,60 @@ def path(u, v, then, sentence):
         return Path(tokens_path)
 
 
+def dijkstra_original(source, target, sentence, weight=None):
+    """
+    Computes the shortest path between tokens `u` and `v` with the original Dijkstra algorithm, O(V^2).
+
+    The implementation sort of follows the pseudocode in
+    https://en.wikipedia.org/w/index.php?title=Dijkstra%27s_algorithm&oldid=757046675#Pseudocode
+    yet also follows the floyd_warshall algorithm below.
+    An important difference is: instead of computing the reversed previous path vector as in the pseudocode (`prev`),
+    this implementation rather computes the forward vector as in floyd warshall (`next`).
+    Like this, we can reuse the `path` method too.
+
+    Returns Path
+    """
+
+    unvisited_set = set()
+
+    V = len(weight)
+    dist = numpy.full([V], numpy.inf)
+    then = numpy.full([V, V], numpy.nan)
+
+    def are_neighbors(u, v):
+        return not numpy.isinf(weight[u, v])
+
+    # Init
+    for v in range(V):
+        dist[v] = weight[source, v]
+        if are_neighbors(source, v):
+            then[source, v] = v
+
+    # Dynamic Recursive
+    while len(unvisited_set) > 0:
+        u = argmin(unvisited_set, key=lambda u: dist[u])
+        if u == target:
+            break
+
+        for v in range(V):
+            if v in unvisited_set and are_neighbors(u, v):
+                dist_source_u_v = dist[u] + weight[u, v]
+                if dist[v] > dist_source_u_v:
+                    dist[v] = dist_source_u_v
+                    then[source, v] = u
+
+    return dist, then
+
+
+def argmin(iterable, fun):
+    minimum = float('inf')
+    ret = None
+    for x in iterable:
+        if fun(x) < minimum:
+            ret = x
+    return ret
+
+
 def floyd_warshall_with_path_reconstruction(weight):
     """
     Compute the shortest distances and paths in a graph matrix representation as per the Floyd-Warshall algorithm.

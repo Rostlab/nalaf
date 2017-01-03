@@ -193,14 +193,14 @@ class Path:
     __STR_SOURCE = "[SOURCE"
     __STR_TARGET = "TARGET]"
 
-    def __init__(self, tokens, name="", constant_edge_type=False):
+    def __init__(self, tokens, name="", is_edge_type_constant=False):
         self.tokens = tokens
         self.nodes = []
         self.name = name
-        self.constant_edge_type = constant_edge_type
+        self.is_edge_type_constant = is_edge_type_constant
 
         for u_token, v_token in zip(tokens, tokens[1:]):  # Note: the last one is not added yet, see below
-            if constant_edge_type:
+            if is_edge_type_constant:
                 edge_type = ""
                 is_forward = None
             else:
@@ -220,7 +220,7 @@ class Path:
 
         if len(self.tokens) == 0:
             self.exists = False
-            self.source = self.target = self.middle
+            self.source = self.target = self.middle = []
         else:
             self.exists = True
 
@@ -236,7 +236,7 @@ class Path:
         return self
 
     def __str_join_nodes(self, nodes_strs):
-        return __class__.__STR_NODE_SEPARATOR.join(nodes_strs)
+        return "<" + __class__.__STR_NODE_SEPARATOR.join(nodes_strs) + ">"
 
     def __str_token(self, node, middle, source, target):
         if node.is_source:

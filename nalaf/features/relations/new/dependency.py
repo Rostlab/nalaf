@@ -54,7 +54,10 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         f_PD_pos_N_gram=None,
         f_PD_tokens_count_N_gram=None,
         f_PD_tokens_count_without_punct_N_gram=None,
-        f_PD_undirected_edges_N_gram=None
+        # Dedicated ones
+        f_PD_undirected_edges_N_gram=None,
+        f_PD_directed_edges_N_gram=None,
+        f_PD_full_N_gram=None,
     ):
 
         # Hyper parameters
@@ -89,50 +92,18 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.f_PD_tokens_count_without_punct_N_gram = f_PD_tokens_count_without_punct_N_gram
         # Dedicated ones
         self.f_PD_undirected_edges_N_gram = f_PD_undirected_edges_N_gram
+        self.f_PD_directed_edges_N_gram = f_PD_directed_edges_N_gram
+        self.f_PD_full_N_gram = f_PD_full_N_gram
 
 
-    def f(self, f_key, dependency_XX, ngram_N=None):
+    def f(self, feat_key, dependency_XX, ngram_N=None):
         """Return the final real name of the feature"""
         dependency_XX = dependency_XX[:2]
-        return f_key.replace('XX', dependency_XX)
-
-
-    def add_all(self, f_set, is_train, edge, tokens_or_path, dep_type, n_gram):
-
-        if isinstance(tokens_or_path, Path):
-            assert dep_type == 'PD'
-            path = tokens_or_path
-            tokens = tokens_or_path.tokens
-
-            # Dedicates Features
-            self.add(f_set, is_train, edge, self.f('f_XX_undirected_edges_N_gram', dep_type), dep_type, n_gram, lemmas)
-
-
-
-
-        else:
-            tokens = tokens_or_path
-
-        tokens_n_grams = zip(*(tokens[i:] for i in range(0, n_gram)))
-
-        s = (lambda string: '[' + string + ']')
-        f = (lambda tokens_group, ft_key: s(' '.join(t.features[ft_key] for t in tokens_group)))
-
-        for tokens_group in tokens_n_grams:
-            lemmas = f(tokens_group, 'lemma')
-            poses = f(tokens_group, 'pos')
-
-            self.add(f_set, is_train, edge, self.f('f_XX_lemma_N_gram', dep_type), dep_type, n_gram, lemmas)
-            self.add(f_set, is_train, edge, self.f('f_XX_pos_N_gram', dep_type), dep_type, n_gram, poses)
-
-        # TODO
-        count = len(tokens)
-        count_without_punct = len(list(filter(lambda t: not t.features['is_punct'], tokens)))
-        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type, n_gram)
-        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct_N_gram', dep_type), count_without_punct, dep_type, n_gram)
+        return feat_key.replace('XX', dependency_XX)
 
 
     def generate(self, corpus, f_set, is_train):
+
         for edge in corpus.edges():
             sentence = edge.get_combined_sentence()
 
@@ -145,29 +116,29 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 Path(
                     name='OW1',
                     tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                    constant_edge_type=True
+                    is_edge_type_constant=True
                 ),
                 Path(
                     name='IW1',
                     tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                    constant_edge_type=True
+                    is_edge_type_constant=True
                 ),
 
                 Path(
-                    name='OW2',
+                    name='IW2',
                     tokens=edge.entity2.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                    constant_edge_type=True
+                    is_edge_type_constant=True
                 ),
                 Path(
-                    name='IW2',
+                    name='OW2',
                     tokens=edge.entity2.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                    constant_edge_type=True
+                    is_edge_type_constant=True
                 ),
 
                 Path(
                     name='LD',
                     tokens=sentence[_e1_last_token:_e2_first_token + 1],
-                    constant_edge_type=True
+                    is_edge_type_constant=True
                 ),
 
                 compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token).change_name('PD')
@@ -176,3 +147,42 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             for dep_path in dependency_paths:
                 for n_gram in self.h_ow_grams:
                     self.add_all(f_set, is_train, edge, dep_path, dep_path.name, n_gram)
+
+
+    def add_all(self, f_set, is_train, edge, path, dep_type, n_gram):
+
+        def str_token(feat_key):
+            return (lambda t: t.features[feat_key]) if feat_key else (lambda t: t.word)
+
+        #
+        # Regular features for all dependency paths types/names
+        #
+
+        for n_gram_group in path.strs_n_gram_token_only(n_gram, str_token('lemma')):
+            self.add(f_set, is_train, edge, self.f('f_XX_lemma_N_gram', dep_type), dep_type, n_gram, n_gram_group)
+
+        for n_gram_group in path.strs_n_gram_token_only(n_gram, str_token('pos')):
+            self.add(f_set, is_train, edge, self.f('f_XX_pos_N_gram', dep_type), dep_type, n_gram, n_gram_group)
+
+        count = len(path.middle)
+        count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], path.middle)))
+
+
+        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type, n_gram)
+        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct_N_gram', dep_type), count_without_punct, dep_type, n_gram)
+
+        #
+        #  Dedicated features for PD only
+        #
+
+        if not path.is_edge_type_constant:
+            assert path.name == "PD"
+
+            for n_gram_group in path.strs_n_gram_undirected_edge_only(n_gram):
+                self.add(f_set, is_train, edge, self.f('f_PD_undirected_edges_N_gram', dep_type), dep_type, n_gram, n_gram_group)
+
+            for n_gram_group in path.strs_n_gram_directed_edge_only(n_gram):
+                self.add(f_set, is_train, edge, self.f('f_PD_directed_edges_N_gram', dep_type), dep_type, n_gram, n_gram_group)
+
+            for n_gram_group in path.strs_n_gram_full(n_gram, str_token('lemma')):
+                self.add(f_set, is_train, edge, self.f('f_PD_full_N_gram', dep_type), dep_type, n_gram, n_gram_group)

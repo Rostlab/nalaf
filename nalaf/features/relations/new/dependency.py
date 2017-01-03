@@ -96,12 +96,6 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.f_PD_full_N_gram = f_PD_full_N_gram
 
 
-    def f(self, feat_key, dependency_XX, ngram_N=None):
-        """Return the final real name of the feature"""
-        dependency_XX = dependency_XX[:2]
-        return feat_key.replace('XX', dependency_XX)
-
-
     def generate(self, corpus, f_set, is_train):
 
         for edge in corpus.edges():
@@ -145,31 +139,40 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             ]
 
             for dep_path in dependency_paths:
-                for n_gram in self.h_ow_grams:
-                    self.add_all(f_set, is_train, edge, dep_path, dep_path.name, n_gram)
+                dep_type = dep_path.name
+
+                for n_gram in self.h_ow_grams:  # TODO
+                    self.add_n_grams(f_set, is_train, edge, dep_path, dep_type, n_gram)
+
+                count = len(dep_path.middle)
+                count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
+                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type)
+                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct_N_gram', dep_type), count_without_punct, dep_type)
 
 
-    def add_all(self, f_set, is_train, edge, path, dep_type, n_gram):
+    def f(self, feat_key, dependency_XX, ngram_N=None):
+        """Return the final real name of the feature"""
+        dependency_XX = dependency_XX[:2]
+        return feat_key.replace('XX', dependency_XX)
 
-        def str_token(feat_key):
-            return (lambda t: t.features[feat_key]) if feat_key else (lambda t: t.word)
+
+    def add_n_grams(self, f_set, is_train, edge, path, dep_type, n_gram):
+
+        def str_token(tok_f_key):
+            return (lambda t: t.features[tok_f_key]) if tok_f_key else (lambda t: t.word)
+
+        def add_groups(gen_f_key, path_str_fun, tok_f_key=None):
+            groups = path_str_fun(n_gram, str_token(tok_f_key)) if tok_f_key else path_str_fun(n_gram)
+
+            for n_gram_group in groups:
+                self.add(f_set, is_train, edge, self.f(gen_f_key, dep_type), dep_type, n_gram, n_gram_group)
 
         #
         # Regular features for all dependency paths types/names
         #
 
-        for n_gram_group in path.strs_n_gram_token_only(n_gram, str_token('lemma')):
-            self.add(f_set, is_train, edge, self.f('f_XX_lemma_N_gram', dep_type), dep_type, n_gram, n_gram_group)
-
-        for n_gram_group in path.strs_n_gram_token_only(n_gram, str_token('pos')):
-            self.add(f_set, is_train, edge, self.f('f_XX_pos_N_gram', dep_type), dep_type, n_gram, n_gram_group)
-
-        count = len(path.middle)
-        count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], path.middle)))
-
-
-        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type, n_gram)
-        self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct_N_gram', dep_type), count_without_punct, dep_type, n_gram)
+        add_groups('f_XX_lemma_N_gram', path.strs_n_gram_token_only, 'lemma')
+        add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, 'pos')
 
         #
         #  Dedicated features for PD only
@@ -178,11 +181,6 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         if not path.is_edge_type_constant:
             assert path.name == "PD"
 
-            for n_gram_group in path.strs_n_gram_undirected_edge_only(n_gram):
-                self.add(f_set, is_train, edge, self.f('f_PD_undirected_edges_N_gram', dep_type), dep_type, n_gram, n_gram_group)
-
-            for n_gram_group in path.strs_n_gram_directed_edge_only(n_gram):
-                self.add(f_set, is_train, edge, self.f('f_PD_directed_edges_N_gram', dep_type), dep_type, n_gram, n_gram_group)
-
-            for n_gram_group in path.strs_n_gram_full(n_gram, str_token('lemma')):
-                self.add(f_set, is_train, edge, self.f('f_PD_full_N_gram', dep_type), dep_type, n_gram, n_gram_group)
+            add_groups('f_PD_undirected_edges_N_gram', path.strs_n_gram_undirected_edge_only)
+            add_groups('f_PD_directed_edges_N_gram', path.strs_n_gram_directed_edge_only)
+            add_groups('f_PD_full_N_gram', path.strs_n_gram_full)

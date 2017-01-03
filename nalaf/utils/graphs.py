@@ -193,22 +193,26 @@ class Path:
     __STR_SOURCE = "[SOURCE"
     __STR_TARGET = "TARGET]"
 
-    def __init__(self, tokens):
+    def __init__(self, tokens, fixed_edge_type=None):
         self.tokens = tokens
         self.nodes = []
 
         for u_token, v_token in zip(tokens, tokens[1:]):  # Note: the last one is not added yet, see below
-            u_dep_from = u_token.features['dependency_from']
-            v_dep_from = v_token.features['dependency_from']
-
-            if v_dep_from is not None and v_dep_from[0] == u_token:
-                edge_type = v_dep_from[1]
-                is_forward = True
-            elif u_dep_from is not None and u_dep_from[0] == v_token:
-                edge_type = u_dep_from[1]
-                is_forward = False
+            if fixed_edge_type:
+                edge_type = ""
+                is_forward = None
             else:
-                raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from, tokens))
+                u_dep_from = u_token.features['dependency_from']
+                v_dep_from = v_token.features['dependency_from']
+
+                if v_dep_from is not None and v_dep_from[0] == u_token:
+                    edge_type = v_dep_from[1]
+                    is_forward = True
+                elif u_dep_from is not None and u_dep_from[0] == v_token:
+                    edge_type = u_dep_from[1]
+                    is_forward = False
+                else:
+                    raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from, tokens))
 
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 

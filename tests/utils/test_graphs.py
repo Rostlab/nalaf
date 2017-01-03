@@ -73,6 +73,26 @@ class TestGraphs(unittest.TestCase):
             cls.computed_sentences.append((dist, then, sentence))
 
 
+    def test_print_an_example_path(self):
+        # Sample: "GOLPH3L antagonizes GOLPH3 to determine Golgi morphology .",
+        # See dependency graph: https://demos.explosion.ai/displacy/?text=GOLPH3L%20antagonizes%20GOLPH3%20to%20determine%20Golgi%20morphology%20.&model=en&cpu=0&cph=0
+
+        sample = next(filter(lambda x: x[2][0].word.startswith("GOLPH3L"), self.computed_sentences))
+        dist, then, sentence = sample
+        u = 0  # GOLPH3L
+        v = 5  # Golgi
+        uv = path(u, v, then, sentence)
+
+        self.assertEqual(str(uv), uv.str_full())
+        print()
+        print("FULL:  ", str(uv))
+        print()
+        print("U-EDGES ONLY:  ", uv.str_undirected_edge_only())
+        print("D-EDGES ONLY:  ", uv.str_directed_edge_only())
+        print("TOKENS ONLY:  ", uv.str_token_only())
+
+
+
     def test_distance_u_u_is_0(self):
         for dist, then, sentence in self.computed_sentences:
             V = len(sentence)

@@ -189,7 +189,7 @@ def sentence_to_weight_matrix(sentence):
 
 class Path:
 
-    __NODE_SEPARATOR = " ~ "
+    __NODE_SEPARATOR = " ~~ "
 
     def __init__(self, tokens):
         self.tokens = tokens
@@ -233,17 +233,18 @@ class Path:
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
         return __class__.__NODE_SEPARATOR.join(itertools.chain(
-            (head.str_full(lambda _: "") for head in self.head),
-            (n.str_full(token_to_string_fun) for n in self.middle)))
+            (head.str_full(lambda _: "SOURCE") for head in self.head),
+            (n.str_full(token_to_string_fun) for n in self.middle),
+            (last.str_full(lambda _: "TARGET") for last in self.last)))
 
-    def str_token_only(self):
-        return __class__.__NODE_SEPARATOR.join(n.str_token_only() for n in self.middle)
+    def str_token_only(self, token_to_string_fun=lambda token: token.word):
+        return __class__.__NODE_SEPARATOR.join(n.str_token_only(token_to_string_fun) for n in self.middle)
 
     def str_undirected_edge_only(self):
-        return __class__.__NODE_SEPARATOR.join(n.str_undirected_edge_only for n in (self.head + self.middle))
+        return __class__.__NODE_SEPARATOR.join(n.str_undirected_edge_only() for n in (self.head + self.middle))
 
     def str_directed_edge_only(self):
-        return __class__.__NODE_SEPARATOR.join(n.str_directed_edge_only for n in (self.head + self.middle))
+        return __class__.__NODE_SEPARATOR.join(n.str_directed_edge_only() for n in (self.head + self.middle))
 
 
 class PathNode:
@@ -265,7 +266,7 @@ class PathNode:
                 self.is_forward == other.is_forward)
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
-        return ' '.join(filter(None, [self.str_token_only(token_to_string_fun), self.edge_type, self.str_direction()]))
+        return ' '.join(filter(None, [self.str_token_only(token_to_string_fun), self.str_directed_edge_only()]))
 
     def str_token_only(self, token_to_string_fun):
         return token_to_string_fun(self.token)
@@ -274,7 +275,7 @@ class PathNode:
         return self.edge_type
 
     def str_directed_edge_only(self):
-        return ' '.join(filter(None, [edge_type, self.str_direction()]))
+        return '-'.join(filter(None, [self.edge_type, self.str_direction()]))
 
     def str_direction(self):
         return "" if (self.is_forward is None or not self.edge_type) else ("F" if self.is_forward else "B")

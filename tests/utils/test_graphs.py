@@ -81,16 +81,37 @@ class TestGraphs(unittest.TestCase):
         dist, then, sentence = sample
         u = 0  # GOLPH3L
         v = 5  # Golgi
-        uv = path(u, v, then, sentence)
+        a_path = path(u, v, then, sentence)
 
-        self.assertEqual(str(uv), uv.str_full())
+        self.assertEqual(str(a_path), a_path.str_full())
         print()
-        print("FULL:  ", str(uv))
+        print("REPR:  ", repr(a_path))
         print()
-        print("U-EDGES ONLY:  ", uv.str_undirected_edge_only())
-        print("D-EDGES ONLY:  ", uv.str_directed_edge_only())
-        print("TOKENS ONLY:  ", uv.str_token_only())
+        print()
+        print("FULL:  ", str(a_path))
+        print()
+        print("U-EDGES ONLY:  ", a_path.str_undirected_edge_only())
+        print("D-EDGES ONLY:  ", a_path.str_directed_edge_only())
+        print("TOKENS ONLY:  ", a_path.str_token_only())
+        print()
+        print()
 
+        n_grams = range(1, 4+1)
+
+        def print_group(title, a_path_fun):
+            print()
+            print(title)
+            for n_gram in n_grams:
+                print()
+                print(n_gram)
+                for group in a_path_fun(n_gram):
+                    str_group = __empty__ if group is "" else group
+                    print("\t", str_group)
+
+        print_group("undirected edges", a_path.strs_n_gram_undirected_edge_only)
+        print_group("directed edges", a_path.strs_n_gram_directed_edge_only)
+        print_group("tokens", a_path.strs_n_gram_token_only)
+        print_group("fully", a_path.strs_n_gram_full)
 
 
     def test_distance_u_u_is_0(self):

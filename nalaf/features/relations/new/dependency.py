@@ -54,6 +54,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         f_PD_pos_N_gram=None,
         f_PD_tokens_count_N_gram=None,
         f_PD_tokens_count_without_punct_N_gram=None,
+        f_PD_undirected_edges_N_gram=None
     ):
 
         # Hyper parameters
@@ -78,11 +79,16 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.f_LD_pos_N_gram = f_LD_pos_N_gram
         self.f_LD_tokens_count_N_gram = f_LD_tokens_count_N_gram
         self.f_LD_tokens_count_without_punct_N_gram = f_LD_tokens_count_without_punct_N_gram
-        #
+        ####
+        # Parsing Dependencies got more features
+        ####
+        # Regular ones
         self.f_PD_lemma_N_gram = f_PD_lemma_N_gram
         self.f_PD_pos_N_gram = f_PD_pos_N_gram
         self.f_PD_tokens_count_N_gram = f_PD_tokens_count_N_gram
         self.f_PD_tokens_count_without_punct_N_gram = f_PD_tokens_count_without_punct_N_gram
+        # Dedicated ones
+        self.f_PD_undirected_edges_N_gram = f_PD_undirected_edges_N_gram
 
 
     def f(self, f_key, dependency_XX, ngram_N=None):
@@ -94,7 +100,13 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     def add_all(self, f_set, is_train, edge, tokens_or_path, dep_type, n_gram):
 
         if isinstance(tokens_or_path, Path):
+            assert dep_type == 'PD'
+            path = tokens_or_path
             tokens = tokens_or_path.tokens
+
+            # Dedicates Features
+            self.add(f_set, is_train, edge, self.f('f_XX_undirected_edges_N_gram', dep_type), dep_type, n_gram, lemmas)
+
 
 
 
@@ -113,6 +125,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             self.add(f_set, is_train, edge, self.f('f_XX_lemma_N_gram', dep_type), dep_type, n_gram, lemmas)
             self.add(f_set, is_train, edge, self.f('f_XX_pos_N_gram', dep_type), dep_type, n_gram, poses)
 
+        # TODO
         count = len(tokens)
         count_without_punct = len(list(filter(lambda t: not t.features['is_punct'], tokens)))
         self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type, n_gram)

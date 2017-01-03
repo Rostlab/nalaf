@@ -189,7 +189,9 @@ def sentence_to_weight_matrix(sentence):
 
 class Path:
 
-    __NODE_SEPARATOR = " ~~ "
+    __STR_NODE_SEPARATOR = " ~~ "
+    __STR_SOURCE = "[SOURCE"
+    __STR_TARGET = "TARGET]"
 
     def __init__(self, tokens):
         self.tokens = tokens
@@ -211,65 +213,131 @@ class Path:
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 
         if len(self.tokens) == 0:
-            self.head = self.last = []
-            self.middle = []
+            self.exists = False
+            self.source = self.target = self.middle
         else:
-            self.nodes.append(PathNode(self.tokens[-1], edge_type="", is_forward=None))  # last one
-            self.head = [self.nodes[0]]
-            self.middle = self.nodes[1:-1]
-            self.last = [self.nodes[-1]]
+            self.exists = True
 
-    def exists(self):
-        return len(self.head) >= 2
+            self.nodes.append(PathNode(self.tokens[-1], edge_type="", is_forward=None, is_target=True))
+            self.nodes[0].is_source = True
+
+            self.source = [self.nodes[+0]]
+            self.middle = self.nodes[1:-1]
+            self.target = [self.nodes[-1]]
+
+    def __str_join_nodes(self, nodes_strs):
+        return __class__.__STR_NODE_SEPARATOR.join(nodes_strs)
+
+    def __str_token(self, node, middle, source, target):
+        if node.is_source:
+            return source
+        elif node.is_target:
+            return target
+        else:
+            assert node.is_middle()
+            return middle
 
     def __str__(self):
         return self.str_full()
 
     def __repr__(self):
-        return __class__.__NODE_SEPARATOR.join(repr(n) for n in self.nodes)
+        return self.__str_join_nodes(repr(n) for n in self.nodes)
 
     def __eq__(self, other):
         return self.nodes == other.nodes
 
-    def str_full(self, token_to_string_fun=lambda token: token.word):
-        return __class__.__NODE_SEPARATOR.join(itertools.chain(
-            (head.str_full(lambda _: "[SOURCE") for head in self.head),
-            (n.str_full(token_to_string_fun) for n in self.middle),
-            (last.str_full(lambda _: "TARGET]") for last in self.last)))
+    def str_full(
+        self,
+        str_middle_token=lambda t: t.word,
+        str_source_token=lambda t: __class__.__STR_SOURCE,
+        str_target_token=lambda t: __class__.__STR_TARGET,
+    ):
+        l = (n.str_full(self.__str_token(n, str_middle_token, str_source_token, str_target_token)) for n in self.nodes)
+        return self.__str_join_nodes(l)
 
-    def str_token_only(self, token_to_string_fun=lambda token: token.word):
-        return __class__.__NODE_SEPARATOR.join(n.str_token_only(token_to_string_fun) for n in self.middle)
+    def str_token_only(self, str_middle_token=lambda t: t.word):
+        return self.__str_join_nodes(n.str_token_only(str_middle_token) for n in self.middle)
 
     def str_undirected_edge_only(self):
-        return __class__.__NODE_SEPARATOR.join(n.str_undirected_edge_only() for n in (self.head + self.middle))
+        return self.__str_join_nodes(n.str_undirected_edge_only() for n in (self.source + self.middle))
 
     def str_directed_edge_only(self):
-        return __class__.__NODE_SEPARATOR.join(n.str_directed_edge_only() for n in (self.head + self.middle))
+        return self.__str_join_nodes(n.str_directed_edge_only() for n in (self.source + self.middle))
+
+    def __n_grams(self, iterable, n_gram):
+        return zip(*(iterable[i:] for i in range(0, n_gram)))
+
+    def strs_n_gram_undirected_edge_only(self, n_gram):
+        nodes = self.source + self.middle
+        for nodes_group in self.__n_grams(nodes, n_gram):
+            yield self.__str_join_nodes(n.str_undirected_edge_only() for n in nodes_group)
+
+    def strs_n_gram_directed_edge_only(self, n_gram):
+        nodes = self.source + self.middle
+        for nodes_group in self.__n_grams(nodes, n_gram):
+            yield self.__str_join_nodes(n.str_directed_edge_only() for n in nodes_group)
+
+    def strs_n_gram_token_only(
+        self,
+        n_gram,
+        str_middle_token=lambda t: t.word,
+        str_source_token=lambda t: __class__.__STR_SOURCE,
+        str_target_token=lambda t: __class__.__STR_TARGET
+    ):
+        if n_gram == 1:
+            nodes = self.middle
+        else:
+            nodes = self.nodes
+
+        for nodes_group in self.__n_grams(nodes, n_gram):
+            l = (n.str_token_only(self.__str_token(n, str_middle_token, str_source_token, str_target_token)) for n in nodes_group)
+            yield self.__str_join_nodes(l)
+
+    def strs_n_gram_full(
+        self,
+        n_gram,
+        str_middle_token=lambda t: t.word,
+        str_source_token=lambda t: __class__.__STR_SOURCE,
+        str_target_token=lambda t: __class__.__STR_TARGET
+    ):
+        if n_gram == 1:
+            nodes = self.source + self.middle
+        else:
+            nodes = self.nodes
+
+        for nodes_group in self.__n_grams(nodes, n_gram):
+            l = (n.str_full(self.__str_token(n, str_middle_token, str_source_token, str_target_token)) for n in nodes_group)
+            yield self.__str_join_nodes(l)
 
 
 class PathNode:
 
-    def __init__(self, token, edge_type, is_forward):
+    def __init__(self, token, edge_type, is_forward, is_source=False, is_target=False):
         self.token = token
         self.edge_type = edge_type
         self.is_forward = is_forward
+        self.is_source = is_source
+        self.is_target = is_target
+
+    def is_middle(self):
+        return not (self.is_source or self.is_target)
 
     def __str__(self):
         return self.str_full()
 
     def __repr__(self):
-        return str((self.token.word, self.edge_type, self.is_forward))
+        return str((self.token.word, self.edge_type, self.is_forward, self.is_source, self.is_target))
 
     def __eq__(self, other):
         return (self.token == other.token and
                 self.edge_type == other.edge_type and
                 self.is_forward == other.is_forward)
 
-    def str_full(self, token_to_string_fun=lambda token: token.word):
-        return ' '.join(filter(None, [self.str_token_only(token_to_string_fun), self.str_directed_edge_only()]))
+    def str_full(self, str_token=lambda t: t.word):
+        return ' '.join(filter(None, [self.str_token_only(str_token), self.str_directed_edge_only()]))
 
-    def str_token_only(self, token_to_string_fun):
-        return token_to_string_fun(self.token)
+    def str_token_only(self, str_token):
+        return str_token(self.token)
 
     def str_undirected_edge_only(self):
         return self.edge_type

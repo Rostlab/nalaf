@@ -136,34 +136,43 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         for edge in corpus.edges():
             sentence = edge.get_combined_sentence()
 
-            # Remember, the edge's entities are sorted by offset
-            ow1 = list(reversed(edge.entity1.prev_tokens(sentence, n=self.h_ow_size)))
-            iw1 = edge.entity1.next_tokens(sentence, n=self.h_iw_size)
-            ow2 = list(reversed(edge.entity2.prev_tokens(sentence, n=self.h_ow_size)))
-            iw2 = edge.entity2.next_tokens(sentence, n=self.h_iw_size)
+            # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
+            _e1_last_token = edge.entity1.tokens[-1].features['id']
+            _e2_first_token = edge.entity2.tokens[0].features['id']
+            assert _e1_last_token < _e2_first_token
 
-            _e1_next_token = edge.entity1.next_tokens(sentence, n=1)[0].features['id']
-            _e2_head_token = edge.entity2.tokens[0].features['id']
-            ld = sentence[(_e1_next_token):(_e2_head_token)]
+            dependency_paths = [
+                Path(
+                    name='OW1',
+                    tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
+                    constant_edge_type=True
+                ),
+                Path(
+                    name='IW1',
+                    tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
+                    constant_edge_type=True
+                ),
 
-            pd = compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token)  # Note: pd is a Path
+                Path(
+                    name='OW2',
+                    tokens=edge.entity2.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
+                    constant_edge_type=True
+                ),
+                Path(
+                    name='IW2',
+                    tokens=edge.entity2.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
+                    constant_edge_type=True
+                ),
 
-            #
+                Path(
+                    name='LD',
+                    tokens=sentence[_e1_last_token:_e2_first_token + 1],
+                    constant_edge_type=True
+                ),
 
-            for n_gram in self.h_ow_grams:
-                self.add_all(f_set, is_train, edge, ow1, 'OW1', n_gram)
+                compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token).change_name('PD')
+            ]
 
-            for n_gram in self.h_iw_grams:
-                self.add_all(f_set, is_train, edge, iw1, 'IW1', n_gram)
-
-            for n_gram in self.h_ow_grams:
-                self.add_all(f_set, is_train, edge, ow2, 'OW2', n_gram)
-
-            for n_gram in self.h_iw_grams:
-                self.add_all(f_set, is_train, edge, iw2, 'IW2', n_gram)
-
-            for n_gram in self.h_ld_grams:
-                self.add_all(f_set, is_train, edge, ld, 'LD', n_gram)
-
-            for n_gram in self.h_pd_grams:
-                self.add_all(f_set, is_train, edge, pd, 'PD', n_gram)
+            for dep_path in dependency_paths:
+                for n_gram in self.h_ow_grams:
+                    self.add_all(f_set, is_train, edge, dep_path, dep_path.name, n_gram)

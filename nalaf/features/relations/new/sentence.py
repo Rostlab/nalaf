@@ -22,7 +22,9 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         f_order,
         f_bow,
         f_pos,
-        f_tokens_count
+        f_tokens_count,
+        f_tokens_count_before,
+        f_tokens_count_after
     ):
 
         self.f_counts = f_counts
@@ -31,6 +33,8 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         self.f_bow = f_bow
         self.f_pos = f_pos
         self.f_tokens_count = f_tokens_count
+        self.f_tokens_count_before = f_tokens_count_before
+        self.f_tokens_count_after = f_tokens_count_after
 
 
     def generate(self, corpus, f_set, is_train):
@@ -62,3 +66,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 self.add(f_set, is_train, edge, 'f_pos', token.features['pos'])
 
             self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
+
+            # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
+            _e1_first_token = edge.entity1.tokens[0].features['id']
+            _e2_last_token = edge.entity2.tokens[-1].features['id']
+            assert _e1_first_token < _e2_last_token
+
+            self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token]))
+            self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token+1):]))

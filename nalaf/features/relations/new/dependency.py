@@ -12,7 +12,7 @@ The implementation consider 4 types of dependency types:
 """
 
 from nalaf.features.relations import EdgeFeatureGenerator
-from nalaf.utils.graphs import compute_shortest_path, compute_shortest_paths, path
+from nalaf.utils.graphs import compute_shortest_path, Path
 
 
 class DependencyFeatureGenerator(EdgeFeatureGenerator):
@@ -91,7 +91,16 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         return f_key.replace('XX', dependency_XX)
 
 
-    def add_all(self, f_set, is_train, edge, tokens, dep_type, n_gram):
+    def add_all(self, f_set, is_train, edge, tokens_or_path, dep_type, n_gram):
+
+        if isinstance(tokens_or_path, Path):
+            tokens = tokens_or_path.tokens
+
+
+
+        else:
+            tokens = tokens_or_path
+
         tokens_n_grams = zip(*(tokens[i:] for i in range(0, n_gram)))
 
         s = (lambda string: '[' + string + ']')
@@ -124,7 +133,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             _e2_head_token = edge.entity2.tokens[0].features['id']
             ld = sentence[(_e1_next_token):(_e2_head_token)]
 
-            pd = compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token)
+            pd = compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token)  # Note: pd is a Path
 
             #
 
@@ -144,4 +153,4 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 self.add_all(f_set, is_train, edge, ld, 'LD', n_gram)
 
             for n_gram in self.h_pd_grams:
-                self.add_all(f_set, is_train, edge, pd.tokens, 'PD', n_gram)
+                self.add_all(f_set, is_train, edge, pd, 'PD', n_gram)

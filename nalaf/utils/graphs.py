@@ -233,9 +233,9 @@ class Path:
 
     def str_full(self, token_to_string_fun=lambda token: token.word):
         return __class__.__NODE_SEPARATOR.join(itertools.chain(
-            (head.str_full(lambda _: "SOURCE") for head in self.head),
+            (head.str_full(lambda _: "[SOURCE") for head in self.head),
             (n.str_full(token_to_string_fun) for n in self.middle),
-            (last.str_full(lambda _: "TARGET") for last in self.last)))
+            (last.str_full(lambda _: "TARGET]") for last in self.last)))
 
     def str_token_only(self, token_to_string_fun=lambda token: token.word):
         return __class__.__NODE_SEPARATOR.join(n.str_token_only(token_to_string_fun) for n in self.middle)

@@ -1743,17 +1743,17 @@ class Entity:
             return False
 
 
-    def prev_tokens(self, sentence, n, include_self_first_token=False, have_reversed=False):
+    def prev_tokens(self, sentence, n, include_ent_first_token=False, mk_reversed=False):
         self_first = self.tokens[0].features['id']
-        right_index = self_first + 1 if include_self_first_token else self_first
+        right_index = self_first + 1 if include_ent_first_token else self_first
         left_index = self_first - n
         ret = sentence[left_index:right_index]
-        return list(reversed(ret)) if have_reversed else ret
+        return list(reversed(ret)) if mk_reversed else ret
 
 
-    def next_tokens(self, sentence, n, include_self_last_token=False):
+    def next_tokens(self, sentence, n, include_ent_last_token=False):
         self_last = self.tokens[-1].features['id']
-        left_index = self_last if include_self_last_token else self_last + 1
+        left_index = self_last if include_ent_last_token else self_last + 1
         right_index = self_last + 1 + n
         return sentence[left_index:right_index]
 

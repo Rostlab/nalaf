@@ -86,7 +86,7 @@ class SVMLightTreeKernels:
 
         total_real = (num_pos_instances[0] + num_neg_instances[0] + num_unl_instances[0])
         total_used = (num_pos_instances[1] + num_neg_instances[1] + num_unl_instances[1])
-        print_line = "{}: instances, REAL: #{} == #P: {} + #N: {} + #?: {} || vs. USED: #{} == #P: {} + #N: {} + #?: {}"
+        print_line = "{}: instances, #REAL: {} == P: {} vs N: {} vs ?: {} || vs. #USED: {} == P {} vs N: {} vs ?: {}"
         print_debug(print_line.format(mode, total_real, num_pos_instances[0], num_neg_instances[0], num_unl_instances[0], total_used, num_pos_instances[1], num_neg_instances[1], num_unl_instances[1]))
 
         return instancesfile

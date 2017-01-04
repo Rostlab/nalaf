@@ -61,8 +61,9 @@ class SVMLightTreeKernels:
                 else:
                     num_unl_instances[1] += 1
 
-                # http://svmlight.joachims.org "<class> can have the value zero indicating unknown."
-                instance_label = '0' if mode == 'predict' else str(edge.target)
+                # (Estimation) Writing any dummy target/class (0 in particular) or the actual target is irrelevant
+                # Yet, with the actual target, svmlight can throw useful evaluation performance numbers
+                instance_label = str(edge.target)
 
                 string += instance_label
 
@@ -137,7 +138,7 @@ class SVMLightTreeKernels:
 
         callv = [
             self.svm_classify_call,
-            '-v', '0',
+            '-v', '1',
             instancesfile.name,
             self.model_path,
             predictionsfile.name

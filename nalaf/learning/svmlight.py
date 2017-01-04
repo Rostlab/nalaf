@@ -61,7 +61,7 @@ class SVMLightTreeKernels:
                 else:
                     num_unl_instances[1] += 1
 
-                # http://svmlight.joachims.org "A class label of 0 indicates that this example should be classified using transduction"
+                # http://svmlight.joachims.org "<class> can have the value zero indicating unknown."
                 instance_label = '0' if mode == 'predict' else str(edge.target)
 
                 string += instance_label

@@ -37,23 +37,23 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Feature keys/names
         f_OW_lemma_N_gram=None,
         f_OW_pos_N_gram=None,
-        f_OW_tokens_count_N_gram=None,
-        f_OW_tokens_count_without_punct_N_gram=None,
+        f_OW_tokens_count=None,
+        f_OW_tokens_count_without_punct=None,
         #
         f_IW_lemma_N_gram=None,
         f_IW_pos_N_gram=None,
-        f_IW_tokens_count_N_gram=None,
-        f_IW_tokens_count_without_punct_N_gram=None,
+        f_IW_tokens_count=None,
+        f_IW_tokens_count_without_punct=None,
         #
         f_LD_lemma_N_gram=None,
         f_LD_pos_N_gram=None,
-        f_LD_tokens_count_N_gram=None,
-        f_LD_tokens_count_without_punct_N_gram=None,
+        f_LD_tokens_count=None,
+        f_LD_tokens_count_without_punct=None,
         #
         f_PD_lemma_N_gram=None,
         f_PD_pos_N_gram=None,
-        f_PD_tokens_count_N_gram=None,
-        f_PD_tokens_count_without_punct_N_gram=None,
+        f_PD_tokens_count=None,
+        f_PD_tokens_count_without_punct=None,
         # Dedicated ones
         f_PD_undirected_edges_N_gram=None,
         f_PD_directed_edges_N_gram=None,
@@ -70,26 +70,26 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Feature keys/names
         self.f_OW_lemma_N_gram = f_OW_lemma_N_gram
         self.f_OW_pos_N_gram = f_OW_pos_N_gram
-        self.f_OW_tokens_count_N_gram = f_OW_tokens_count_N_gram
-        self.f_OW_tokens_count_without_punct_N_gram = f_OW_tokens_count_without_punct_N_gram
+        self.f_OW_tokens_count = f_OW_tokens_count
+        self.f_OW_tokens_count_without_punct = f_OW_tokens_count_without_punct
         #
         self.f_IW_lemma_N_gram = f_IW_lemma_N_gram
         self.f_IW_pos_N_gram = f_IW_pos_N_gram
-        self.f_IW_tokens_count_N_gram = f_IW_tokens_count_N_gram
-        self.f_IW_tokens_count_without_punct_N_gram = f_IW_tokens_count_without_punct_N_gram
+        self.f_IW_tokens_count = f_IW_tokens_count
+        self.f_IW_tokens_count_without_punct = f_IW_tokens_count_without_punct
         #
         self.f_LD_lemma_N_gram = f_LD_lemma_N_gram
         self.f_LD_pos_N_gram = f_LD_pos_N_gram
-        self.f_LD_tokens_count_N_gram = f_LD_tokens_count_N_gram
-        self.f_LD_tokens_count_without_punct_N_gram = f_LD_tokens_count_without_punct_N_gram
+        self.f_LD_tokens_count = f_LD_tokens_count
+        self.f_LD_tokens_count_without_punct = f_LD_tokens_count_without_punct
         ####
         # Parsing Dependencies got more features
         ####
         # Regular ones
         self.f_PD_lemma_N_gram = f_PD_lemma_N_gram
         self.f_PD_pos_N_gram = f_PD_pos_N_gram
-        self.f_PD_tokens_count_N_gram = f_PD_tokens_count_N_gram
-        self.f_PD_tokens_count_without_punct_N_gram = f_PD_tokens_count_without_punct_N_gram
+        self.f_PD_tokens_count = f_PD_tokens_count
+        self.f_PD_tokens_count_without_punct = f_PD_tokens_count_without_punct
         # Dedicated ones
         self.f_PD_undirected_edges_N_gram = f_PD_undirected_edges_N_gram
         self.f_PD_directed_edges_N_gram = f_PD_directed_edges_N_gram
@@ -146,8 +146,8 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
 
                 count = len(dep_path.middle)
                 count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
-                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_N_gram', dep_type), count, dep_type)
-                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct_N_gram', dep_type), count_without_punct, dep_type)
+                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
+                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
 
 
     def f(self, feat_key, dependency_XX, ngram_N=None):

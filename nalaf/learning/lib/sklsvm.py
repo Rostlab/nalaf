@@ -33,13 +33,13 @@ class SklSVM(RelationExtractor):
 
     def train(self, corpus, feature_set):
         self.feature_set = feature_set
-        X, y = self.__convert_edges_to_SVC_instances(corpus, feature_set)
+        X, y = __class__._convert_edges_to_SVC_instances(corpus, feature_set)
         self.model.fit(X, y)
         print_debug(self.model.get_params())
         return self
 
     def annotate(self, corpus):
-        X, y = self.__convert_edges_to_SVC_instances(corpus, self.feature_set)
+        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.feature_set)
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -49,7 +49,8 @@ class SklSVM(RelationExtractor):
 
         return corpus.form_predicted_relations()
 
-    def __convert_edges_to_SVC_instances(self, corpus, feature_set):
+    @staticmethod
+    def _convert_edges_to_SVC_instances(corpus, feature_set):
         """
         rtype: Tuple[scipy.csr_matrix, List[int]]
         """

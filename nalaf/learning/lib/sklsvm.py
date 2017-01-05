@@ -47,28 +47,29 @@ class SklSVM(RelationExtractor):
 
         return corpus.form_predicted_relations()
 
-    def __convert_edges_to_SVC_instances(corpus, feature_set):
+    def __convert_edges_to_SVC_instances(self, corpus, feature_set):
         """
         rtype: Tuple[scipy.csr_matrix, List[int]]
         """
-        num_edges = len(corpus.edges())
+        num_edges = sum(1 for _ in corpus.edges())
         num_features = len(feature_set)
 
         # MAYBE: convert to numpy.float64 -- see: http://scikit-learn.org/stable/modules/svm.html#svm
         #        but that would require either converting feature values here or enforcing type in EdgeFeatureGenerator
-        X = scipy.sparse.csr_matrix(num_edges, num_features, dtype=int).toarray()
+        X = scipy.sparse.csr_matrix((num_edges, num_features), dtype=int).toarray()
         y = numpy.zeros(num_edges)
 
         allowed_features_keys = set(feature_set.values())
 
         for edge_index, edge in enumerate(corpus.edges()):
-            for f_key_index in edge.features.keys():
-                if f_key_index in allowed_features_keys:
-                    value = edge.features[f_key_index]
-                    X[edge_index, f_key_index] = value
+            for f_key in edge.features.keys():
+                if f_key in allowed_features_keys:
+                    value = edge.features[f_key]
+                    f_index = f_key - 1
+                    X[edge_index, f_index] = value
 
             y[edge_index] = edge.target
 
-        print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(sum(v > 0 for v in y), sum(v < 0 for v in y)))
+        print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(num_edges, sum(v > 0 for v in y), sum(v < 0 for v in y)))
 
         return (X, y)

@@ -69,7 +69,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
 
     def add(self, feature_set, is_training_mode, edge, field_prefix_feature, *args):
         feature_name = self.gen_prefix_feat_name(field_prefix_feature, *args)
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=1)
+        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
 
 
     def add_with_value(self, feature_set, is_training_mode, edge, field_prefix_feature, value, *args):

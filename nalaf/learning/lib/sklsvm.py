@@ -18,7 +18,8 @@ class SklSVM(RelationExtractor):
     """
     # Likely we want to create a hierarchy for ML "Trainers" or similar
 
-    def __init__(self, model_path=None, classification_threshold=0.0, **svc_parameters):
+    def __init__(self, model_path=None, classification_threshold=0.0, use_tree_kernel=False, **svc_parameters):
+        assert not use_tree_kernel, NotImplementedError
 
         self.model_path = model_path if model_path is not None else tempfile.NamedTemporaryFile().name
         """the model (path) to read from / write to"""
@@ -34,6 +35,7 @@ class SklSVM(RelationExtractor):
         self.feature_set = feature_set
         X, y = self.__convert_edges_to_SVC_instances(corpus, feature_set)
         self.model.fit(X, y)
+        print_debug(self.model.get_params())
         return self
 
     def annotate(self, corpus):

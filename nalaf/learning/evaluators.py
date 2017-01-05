@@ -333,11 +333,9 @@ class Evaluations:
         merged_evaluations = []
 
         print_debug("Cross-Validation")
-        for fold in range(k_num_folds):
-            training, validation, test = corpus.cv_kfold_split(k_num_folds, fold, validation_set=use_validation_set)
-            evaluation_set = validation if use_validation_set else test
+        for training_set, evaluation_set in corpus.cv_kfold_splits(k_num_folds, validation_set=use_validation_set):
 
-            annotator_apply = annotator_gen_fun(training)
+            annotator_apply = annotator_gen_fun(training_set)
             annotator_apply(evaluation_set)
 
             r = evaluator.evaluate(evaluation_set)

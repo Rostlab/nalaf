@@ -559,6 +559,16 @@ class Dataset:
                                               if ann.subclass not in subclasses]
 
     def _cv_kfold_split(l, k, fold, validation_set=True):
+        """
+        Create two sets of document keys: (training, evaluation)
+
+        if validation_set is True,
+            training = strictly training set
+            evaluation = validation set
+        otherwise
+            training = training set + validation set
+            evaluation = test set
+        """
         total_size = len(l)
         sub_size = round(total_size / k)
 
@@ -571,10 +581,11 @@ class Dataset:
         test = subsamples[k-1:k]
 
         if validation_set:
-            test = []
+            training = training
+            evaluation = validation
         else:
-            training += validation
-            validation = []
+            training = training + validation
+            evaluation = test
 
         def create_set(subsample_indexes):
             ret = []
@@ -584,10 +595,10 @@ class Dataset:
                 ret += l[start:end]
             return ret
 
-        return (create_set(training), create_set(validation), create_set(test))
+        return (create_set(training), create_set(evaluation))
 
 
-    def cv_kfold_split(self, k, fold, validation_set=True):
+    def cv_kfold_splits(self, k, validation_set=True):
         keys = list(sorted(self.documents.keys()))
         random.seed(2727)
         random.shuffle(keys)
@@ -598,9 +609,9 @@ class Dataset:
                 ret.documents[elem] = self.documents[elem]
             return ret
 
-        training, validation, test = Dataset._cv_kfold_split(keys, k, fold, validation_set)
-
-        return (create_dataset(training), create_dataset(validation), create_dataset(test))
+        for fold in range(k):
+            training, evaluation = Dataset._cv_kfold_split(keys, k, fold, validation_set)
+            yield (create_dataset(training), create_dataset(evaluation))
 
 
     def fold_nr_split(self, n, fold_nr):

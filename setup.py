@@ -30,6 +30,7 @@ setup(
     install_requires=[
         'numpy>=1.11.2',
         'spacy>=1.2.0',
+        'scikit-learn>=0.18.1',
         # 'gensim>= 0.13.3',  # Note: instally manually (it may cause problems on some environments, e.g. Travis CI)
         'nltk>=3.2.1',
         'beautifulsoup4>=4.5.1',

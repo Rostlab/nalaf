@@ -1,0 +1,74 @@
+import os
+import sys
+import subprocess
+from random import random
+import tempfile
+from nalaf.learning.taggers import RelationExtractor
+from nalaf import print_warning, print_verbose, print_debug, is_verbose_mode
+import numpy
+import scipy
+from sklearn import svm
+
+
+class SklSVM(RelationExtractor):
+    """
+    Base class to interact with [scikit-learn SVM](http://scikit-learn.org/stable/modules/svm.html#svm),
+    concretly [SVC class](http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC)
+    This is actually based on [LIBSVM](https://www.csie.ntu.edu.tw/%7Ecjlin/libsvm/).
+    """
+    # Likely we want to create a hierarchy for ML "Trainers" or similar
+
+    def __init__(self, model_path=None, classification_threshold=0.0, **svc_parameters):
+
+        self.model_path = model_path if model_path is not None else tempfile.NamedTemporaryFile().name
+        """the model (path) to read from / write to"""
+        print_debug("SVM-Light model file path: " + self.model_path)
+
+        self.classification_threshold = classification_threshold
+        self.verbosity_level = str(0)  # for now, for verbosity=0; -- alternative: str(1 if is_verbose_mode else 0)
+        self.svc_parameters = svc_parameters
+        self.model = svm.SVC(**svc_parameters)
+        self.feature_set = None
+
+    def train(self, corpus, feature_set):
+        self.feature_set = feature_set
+        X, y = self.__convert_edges_to_SVC_instances(corpus, feature_set)
+        self.model.fit(X, y)
+        return self
+
+    def annotate(self, corpus):
+        X, y = self.__convert_edges_to_SVC_instances(corpus, self.feature_set)
+        y_pred = self.model.predict(X)
+        y_size = len(y)
+        print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
+
+        for edge, target_pred in zip(corpus.edges(), y_pred):
+            edge.target = target_pred
+
+        return corpus.form_predicted_relations()
+
+    def __convert_edges_to_SVC_instances(corpus, feature_set):
+        """
+        rtype: Tuple[scipy.csr_matrix, List[int]]
+        """
+        num_edges = len(corpus.edges())
+        num_features = len(feature_set)
+
+        # MAYBE: convert to numpy.float64 -- see: http://scikit-learn.org/stable/modules/svm.html#svm
+        #        but that would require either converting feature values here or enforcing type in EdgeFeatureGenerator
+        X = scipy.sparse.csr_matrix(num_edges, num_features, dtype=int).toarray()
+        y = numpy.zeros(num_edges)
+
+        allowed_features_keys = set(feature_set.values())
+
+        for edge_index, edge in enumerate(corpus.edges()):
+            for f_key_index in edge.features.keys():
+                if f_key_index in allowed_features_keys:
+                    value = edge.features[f_key_index]
+                    X[edge_index, f_key_index] = value
+
+            y[edge_index] = edge.target
+
+        print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(sum(v > 0 for v in y), sum(v < 0 for v in y)))
+
+        return (X, y)

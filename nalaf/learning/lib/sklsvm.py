@@ -57,10 +57,12 @@ class SklSVM(RelationExtractor):
         num_edges = sum(1 for _ in corpus.edges())
         num_features = len(feature_set)
 
-        # MAYBE: convert to numpy.float64 -- see: http://scikit-learn.org/stable/modules/svm.html#svm
-        #        but that would require either converting feature values here or enforcing type in EdgeFeatureGenerator
-        X = scipy.sparse.csr_matrix((num_edges, num_features), dtype=int).toarray()
-        y = numpy.zeros(num_edges)
+        # We first construct the X matrix of features with the sparse lil_matrix, which is efficient in reshaping its structure dynamically
+        # At the end, we convert this to csr_matrix, which is efficient for algebra operations
+        # See https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.sparse.lil_matrix.html#scipy.sparse.lil_matrix
+        # See http://scikit-learn.org/stable/modules/svm.html#svm
+        X = scipy.sparse.lil_matrix((num_edges, num_features), dtype=numpy.float64)
+        y = numpy.zeros(num_edges, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
 
         allowed_features_keys = set(feature_set.values())
 
@@ -74,5 +76,7 @@ class SklSVM(RelationExtractor):
             y[edge_index] = edge.target
 
         print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(num_edges, sum(v > 0 for v in y), sum(v < 0 for v in y)))
+
+        X = X.tocsr()
 
         return (X, y)

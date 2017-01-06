@@ -558,9 +558,11 @@ class Dataset:
                 part.predicted_annotations = [ann for ann in part.predicted_annotations
                                               if ann.subclass not in subclasses]
 
-    def _cv_kfold_split(l, k, fold, validation_set=True):
+
+    @staticmethod
+    def _cv_kfold_split(keys, k, fold, validation_set=True):
         """
-        Create two sets of document keys: (training, evaluation)
+        Split keys (e.g. doc ids or indexes) into two groups: (training, evaluation)
 
         if validation_set is True,
             training = strictly training set
@@ -569,7 +571,7 @@ class Dataset:
             training = training set + validation set
             evaluation = test set
         """
-        total_size = len(l)
+        total_size = len(keys)
         sub_size = round(total_size / k)
 
         def folds(k, fold):
@@ -587,15 +589,15 @@ class Dataset:
             training = training + validation
             evaluation = test
 
-        def create_set(subsample_indexes):
+        def create_keys_set(subsample_indexes):
             ret = []
             for sub in subsample_indexes:
                 start = sub_size * sub
                 end = (start + sub_size) if sub != (k-1) else total_size  # k-1 is the last subsample index
-                ret += l[start:end]
+                ret += keys[start:end]
             return ret
 
-        return (create_set(training), create_set(evaluation))
+        return (create_keys_set(training), create_keys_set(evaluation))
 
 
     def cv_kfold_splits(self, k, validation_set=True):
@@ -603,9 +605,9 @@ class Dataset:
         random.seed(2727)
         random.shuffle(keys)
 
-        def create_dataset(sett):
+        def create_dataset(keys):
             ret = Dataset()
-            for elem in sett:
+            for elem in keys:
                 ret.documents[elem] = self.documents[elem]
             return ret
 

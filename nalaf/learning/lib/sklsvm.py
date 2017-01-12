@@ -7,8 +7,10 @@ from nalaf.learning.taggers import RelationExtractor
 from nalaf import print_warning, print_verbose, print_debug, is_verbose_mode
 import numpy as np
 import scipy
+import sklearn
 from sklearn import svm
 from sklearn.preprocessing import FunctionTransformer, maxabs_scale
+import time
 
 
 class SklSVM(RelationExtractor):
@@ -19,7 +21,7 @@ class SklSVM(RelationExtractor):
     """
     # Likely we want to create a hierarchy for ML "Trainers" or similar
 
-    def __init__(self, model_path=None, classification_threshold=0.0, use_tree_kernel=False, **svc_parameters):
+    def __init__(self, model_path=None, classification_threshold=0.0, use_tree_kernel=False, preprocess=False, **svc_parameters):
         assert not use_tree_kernel, NotImplementedError
 
         self.model_path = model_path if model_path is not None else tempfile.NamedTemporaryFile().name
@@ -27,6 +29,7 @@ class SklSVM(RelationExtractor):
         print_debug("SVM-Light model file path: " + self.model_path)
 
         self.classification_threshold = classification_threshold
+        self.preprocess = preprocess
         self.verbosity_level = str(0)  # for now, for verbosity=0; -- alternative: str(1 if is_verbose_mode else 0)
         self.svc_parameters = svc_parameters
         self.model = svm.SVC(**svc_parameters)
@@ -36,7 +39,10 @@ class SklSVM(RelationExtractor):
         self.feature_set = feature_set
         X, y = __class__._convert_edges_to_SVC_instances(corpus, feature_set)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
+        start = time.time()
         self.model.fit(X, y)
+        end = time.time()
+        print_debug("SVC train, running time: ", (end - start))
         return self
 
     def annotate(self, corpus):
@@ -80,6 +86,11 @@ class SklSVM(RelationExtractor):
 
         X = X.tocsr()
 
+        print_verbose("SVC, minx & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+        if self.preprocess:
+            X = __class__._preprocess(X)
+            print_verbose("SVC, minx & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+
         return (X, y)
 
 
@@ -94,5 +105,6 @@ class SklSVM(RelationExtractor):
         # See http://stackoverflow.com/a/41601532/341320
 
         logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
-        X = maxabs_scale(logtran.transform(Xs), copy=False)
+        # X = logtran.transform(X)
+        X = maxabs_scale(X, copy=False)
         return X

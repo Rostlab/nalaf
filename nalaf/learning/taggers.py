@@ -158,7 +158,7 @@ class StubRelationExtractor(RelationExtractor):
         self.edge_generator.generate(dataset)
 
         for edge in dataset.edges():
-            edge.target = +1
+            edge.pred_target = +1
 
         dataset.form_predicted_relations()
 

@@ -272,13 +272,13 @@ class Dataset:
 
     def label_edges(self):
         """
-        label each edge with its target - whether it is indeed a relation or not
+        label each edge with its REAL target (no prediction) - whether it is indeed a relation or not
         """
         for edge in self.edges():
             if edge.is_relation():
-                edge.target = 1
+                edge.real_target = +1
             else:
-                edge.target = -1
+                edge.real_target = -1
 
 
     def purge_false_relationships(self):
@@ -393,13 +393,13 @@ class Dataset:
         Each Relation object denotes a relationship between two entities
         of (usually) different classes. Each relation is given by a relation type.
 
-        Requires edge.target to be set for each edge.
+        Requires edge.pred_target to be set for each edge.
         """
 
         for part in self.parts():
             for e in part.edges:
 
-                if e.target == 1:
+                if e.pred_target == +1:
                     r = Relation(e.relation_type, e.entity1, e.entity2)
                     part.predicted_relations.append(r)
 
@@ -1466,10 +1466,14 @@ class Edge:
             The value is the feature's value in this edge
         """
 
-        self.target = None
-        """class of the edge -- ASSUMED to be in [-1, +1] or None when not defined"""
         # TODO we should much more carefully take care of its type, and whether it could even contain other values
         # As of now, it seems to devependant on `svmlight.py`
+
+        self.real_target = None
+        """real class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
+
+        self.pred_target = None
+        """real class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
 
 
     def __repr__(self):

@@ -163,7 +163,7 @@ def calculateInformationGain(feature_set, dataset, output_file):
     number_neg_instances = 0
 
     for edge in dataset.edges():
-        if edge.target == 1:
+        if edge.real_target == +1:
             number_pos_instances += 1
         else:
             number_neg_instances += 1
@@ -183,14 +183,14 @@ def calculateInformationGain(feature_set, dataset, output_file):
         total_feature_absent = 0
 
         for edge in dataset.edges():
-            if edge.target == 1:
+            if edge.real_target == +1:
                 if value in edge.features.keys():
                     feature_present_in_pos += 1
                     total_feature_present += 1
                 else:
                     feature_absent_in_pos += 1
                     total_feature_absent +=1
-            if edge.target == -1:
+            if edge.real_target == -1:
                 if value in edge.features.keys():
                     feature_present_in_neg += 1
                     total_feature_present += 1

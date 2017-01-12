@@ -46,24 +46,24 @@ class SVMLightTreeKernels:
         allowed_features_keys = set(features.values())
 
         for edge in dataset.edges():
-            if edge.target == 1:
+            if edge.real_target == +1:
                 num_pos_instances[0] += 1
-            elif edge.target == -1:
+            elif edge.real_target == -1:
                 num_neg_instances[0] += 1
             else:
                 num_unl_instances[0] += 1
 
-            if mode != 'train' or minority_class is None or edge.target == minority_class or random() <= majority_class_undersampling:
-                if edge.target == 1:
+            if mode != 'train' or minority_class is None or edge.real_target == minority_class or random() <= majority_class_undersampling:
+                if edge.real_target == +1:
                     num_pos_instances[1] += 1
-                elif edge.target == -1:
+                elif edge.real_target == -1:
                     num_neg_instances[1] += 1
                 else:
                     num_unl_instances[1] += 1
 
                 # (Estimation) Writing any dummy target/class (0 in particular) or the actual target is irrelevant
                 # Yet, with the actual target, svmlight can throw useful evaluation performance numbers
-                instance_label = str(edge.target)
+                instance_label = str(edge.real_target)
 
                 string += instance_label
 
@@ -174,7 +174,7 @@ class SVMLightTreeKernels:
 
             if (len(values) > 1):
                 for index, edge in enumerate(dataset.edges()):
-                    edge.target = values[index]
+                    edge.pred_target = values[index]
             else:
                 if (next(dataset.edges(), None)):
                     raise Exception("EMPTY PREDICTIONS FILE -- This may be due to too small dataset or too few of features. Predictions file: " + predictionsfile.name)

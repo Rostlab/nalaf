@@ -62,7 +62,7 @@ class SklSVM(RelationExtractor):
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
 
         for edge, target_pred in zip(corpus.edges(), y_pred):
-            edge.target = target_pred
+            edge.pred_target = target_pred
 
         return corpus.form_predicted_relations()
 
@@ -88,7 +88,7 @@ class SklSVM(RelationExtractor):
                     f_index = final_allowed_key_mapping[f_key]
                     X[edge_index, f_index] = value
 
-            y[edge_index] = edge.target
+            y[edge_index] = edge.real_target
 
         print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(num_edges, sum(v > 0 for v in y), sum(v < 0 for v in y)))
 

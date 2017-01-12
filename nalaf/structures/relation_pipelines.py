@@ -7,6 +7,7 @@ from nalaf.preprocessing.tokenizers import GenericTokenizer, NLTK_TOKENIZER
 from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator
 from nalaf.features.relations.sentence import NamedEntityCountFeatureGenerator
 from nalaf import print_debug
+import time
 
 
 class RelationExtractionPipeline:
@@ -66,19 +67,25 @@ class RelationExtractionPipeline:
         ]
 
 
-    def execute(self, dataset, train):
+    def execute(self, dataset, train, only_features=False):
         # Note: the order of splitter/tokenizer/edger/parser is important
         # Note: we could avoid the re-splitting & tokenization (see c3d320f08ed8893460d5a68b1b5c87aab6ea0c27)
         #   yet that may later create unforseen problems and re-doing has no significant impact in running time
 
-        self.splitter.split(dataset)
-        self.tokenizer.tokenize(dataset)
-        self.edge_generator.generate(dataset)
-        dataset.label_edges()
-        self.parser.parse(dataset)
+        start = time.time()
+
+        if not only_features:
+            self.splitter.split(dataset)
+            self.tokenizer.tokenize(dataset)
+            self.edge_generator.generate(dataset)
+            dataset.label_edges()
+            self.parser.parse(dataset)
 
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset, self.feature_set, train)
+
+        end = time.time()
+        print_debug("Relation pipeline (only_features: {}), running time: {}".format(only_features, str(end - start)))
 
 
     def _verify_feature_generators(self, feature_generators):

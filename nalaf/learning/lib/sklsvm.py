@@ -10,6 +10,7 @@ import scipy
 import sklearn
 from sklearn import svm
 from sklearn.preprocessing import FunctionTransformer, maxabs_scale
+from sklearn.feature_selection import VarianceThreshold
 import time
 
 
@@ -33,11 +34,20 @@ class SklSVM(RelationExtractor):
         self.verbosity_level = str(0)  # for now, for verbosity=0; -- alternative: str(1 if is_verbose_mode else 0)
         self.svc_parameters = svc_parameters
         self.model = svm.SVC(**svc_parameters)
-        self.feature_set = None
+        self.global_feature_set = None
+        self.allowed_features_keys = None
+        self.final_allowed_key_mapping = None
 
-    def train(self, corpus, feature_set):
-        self.feature_set = feature_set
-        X, y = __class__._convert_edges_to_SVC_instances(corpus, feature_set)
+    def train(self, training_corpus, feature_set):
+        self.global_feature_set = feature_set
+        self.allowed_features_keys = {fkey for edge in training_corpus.edges() for fkey in edge.features.keys()}
+        self.final_allowed_key_mapping = {}
+        num_feat = 0
+        for allowed_feat_key in self.allowed_features_keys:
+            self.final_allowed_key_mapping[allowed_feat_key] = num_feat
+            num_feat += 1
+
+        X, y = __class__._convert_edges_to_SVC_instances(training_corpus, self.final_allowed_key_mapping, self.preprocess)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
         self.model.fit(X, y)
@@ -46,7 +56,7 @@ class SklSVM(RelationExtractor):
         return self
 
     def annotate(self, corpus):
-        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.feature_set)
+        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.final_allowed_key_mapping, self.preprocess)
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -57,12 +67,12 @@ class SklSVM(RelationExtractor):
         return corpus.form_predicted_relations()
 
     @staticmethod
-    def _convert_edges_to_SVC_instances(corpus, feature_set):
+    def _convert_edges_to_SVC_instances(corpus, final_allowed_key_mapping, preprocess):
         """
         rtype: Tuple[scipy.csr_matrix, List[int]]
         """
         num_edges = sum(1 for _ in corpus.edges())
-        num_features = len(feature_set)
+        num_features = len(final_allowed_key_mapping)
 
         # We first construct the X matrix of features with the sparse lil_matrix, which is efficient in reshaping its structure dynamically
         # At the end, we convert this to csr_matrix, which is efficient for algebra operations
@@ -71,13 +81,11 @@ class SklSVM(RelationExtractor):
         X = scipy.sparse.lil_matrix((num_edges, num_features), dtype=np.float64)
         y = np.zeros(num_edges, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
 
-        allowed_features_keys = set(feature_set.values())
-
         for edge_index, edge in enumerate(corpus.edges()):
             for f_key in edge.features.keys():
-                if f_key in allowed_features_keys:
+                if f_key in final_allowed_key_mapping:
                     value = edge.features[f_key]
-                    f_index = f_key - 1
+                    f_index = final_allowed_key_mapping[f_key]
                     X[edge_index, f_index] = value
 
             y[edge_index] = edge.target
@@ -87,9 +95,12 @@ class SklSVM(RelationExtractor):
         X = X.tocsr()
 
         print_verbose("SVC, minx & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
-        if self.preprocess:
+        if preprocess:
             X = __class__._preprocess(X)
             print_verbose("SVC, minx & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+
+        # selector = VarianceThreshold()
+        # X = selector.fit_transform(X)
 
         return (X, y)
 

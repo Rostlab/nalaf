@@ -42,20 +42,15 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
             sentence = edge.get_combined_sentence()
 
             for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
-                count = len(entities)
-                if e_class_id in [edge.entity1.class_id, edge.entity2.class_id]:
-                    # Rest -1 thus removing each consider pair of entities
-                    count -= 1
-
-                # TODO feature select with integer value or binary representation ?
-                # self.add(f_set, is_train, edge, 'f_counts', 'binary', e_class_id, 'is', count)
+                count = -1  # start from -1, as one is already one of the edge's entities
+                count += len(entities)
+                assert count >= 0
                 self.add_with_value(f_set, is_train, edge, 'f_counts', count, 'int', e_class_id)
 
+            count = 0
             for e_class_id, entities in edge.get_any_entities_between_entities(predicted=False).items():
-                count = str(len(entities))
-                # TODO feature select with integer value or binary representation ?
-                # self.add(f_set, is_train, edge, 'f_counts_in_between', 'binary', e_class_id, 'is', count)
-                self.add_with_value(f_set, is_train, edge, 'f_counts_in_between', count, 'int', e_class_id)
+                count += len(entities)
+            self.add_with_value(f_set, is_train, edge, 'f_counts_in_between', count, 'int', "all classes")
 
             order = edge.entity1.class_id < edge.entity2.class_id
             if order:

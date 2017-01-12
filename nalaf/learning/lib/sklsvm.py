@@ -5,9 +5,10 @@ from random import random
 import tempfile
 from nalaf.learning.taggers import RelationExtractor
 from nalaf import print_warning, print_verbose, print_debug, is_verbose_mode
-import numpy
+import numpy as np
 import scipy
 from sklearn import svm
+from sklearn.preprocessing import FunctionTransformer, maxabs_scale
 
 
 class SklSVM(RelationExtractor):
@@ -34,8 +35,8 @@ class SklSVM(RelationExtractor):
     def train(self, corpus, feature_set):
         self.feature_set = feature_set
         X, y = __class__._convert_edges_to_SVC_instances(corpus, feature_set)
+        print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         self.model.fit(X, y)
-        print_debug(self.model.get_params())
         return self
 
     def annotate(self, corpus):
@@ -61,8 +62,8 @@ class SklSVM(RelationExtractor):
         # At the end, we convert this to csr_matrix, which is efficient for algebra operations
         # See https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.sparse.lil_matrix.html#scipy.sparse.lil_matrix
         # See http://scikit-learn.org/stable/modules/svm.html#svm
-        X = scipy.sparse.lil_matrix((num_edges, num_features), dtype=numpy.float64)
-        y = numpy.zeros(num_edges, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
+        X = scipy.sparse.lil_matrix((num_edges, num_features), dtype=np.float64)
+        y = np.zeros(num_edges, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
 
         allowed_features_keys = set(feature_set.values())
 
@@ -80,3 +81,18 @@ class SklSVM(RelationExtractor):
         X = X.tocsr()
 
         return (X, y)
+
+
+    @staticmethod
+    def _preprocess(X):
+        X = __class__._scale_logarithmically(X)  # inplace
+        return X
+
+
+    @staticmethod
+    def _scale_logarithmically(X):
+        # See http://stackoverflow.com/a/41601532/341320
+
+        logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
+        X = maxabs_scale(logtran.transform(Xs), copy=False)
+        return X

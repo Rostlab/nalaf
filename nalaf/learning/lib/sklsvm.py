@@ -71,6 +71,8 @@ class SklSVM(RelationExtractor):
         """
         rtype: Tuple[scipy.csr_matrix, List[int]]
         """
+        start = time.time()
+
         num_edges = sum(1 for _ in corpus.edges())
         num_features = len(final_allowed_key_mapping)
 
@@ -101,6 +103,9 @@ class SklSVM(RelationExtractor):
 
         # selector = VarianceThreshold()
         # X = selector.fit_transform(X)
+
+        end = time.time()
+        print_debug("SVC convert instances, running time: ", (end - start))
 
         return (X, y)
 

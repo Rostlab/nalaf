@@ -584,8 +584,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
             print_verbose("\n\ndocid: " + docid)
-            print_verbose("\ngold: \n" + '\n'.join('g: ' + x for x in sorted(list(gold))))
-            print_verbose("\npredicted: \n" + '\n'.join('p: '+ x for x in sorted(list(predicted))))
+            # print_verbose("\ngold: \n" + '\n'.join('g: ' + x for x in sorted(list(gold))))
+            # print_verbose("\npredicted: \n" + '\n'.join('p: '+ x for x in sorted(list(predicted))))
 
             for r_pred in predicted:
 
@@ -596,22 +596,22 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 if True in accept_decisions:
                     # handle below while traversing gold to not create over repetitions, see test_evaluators
                     # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
-                    print_verbose("       ", "(not counted yet) true match prediction", r_pred)
+                    # print_verbose("       ", docid, "(not counted yet) true match prediction", r_pred)
                     pass
                 elif None in accept_decisions:
                     # Ignore as documented
                     pass
                 else:  # either False or the set is empty, meaning that there are no gold annotations
-                    print_verbose("    ", "FALSE positiv", r_pred)
+                    print_verbose("    ", docid, ", FALSE POSITIV", r_pred)
                     counts[docid]['fp'] += 1
 
             for r_gold in gold:
 
                 if any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
-                    print_verbose("    ", "true positive", r_gold)
+                    print_verbose("    ", docid, ", true positive", r_gold)
                     counts[docid]['tp'] += 1
                 else:
-                    print_verbose("    ", "FALSE negativ", r_gold)
+                    print_verbose("    ", docid, ", FALSE NEGATIV", r_gold)
                     counts[docid]['fn'] += 1
 
         evaluations = Evaluations()

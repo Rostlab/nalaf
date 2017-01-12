@@ -1462,6 +1462,8 @@ class Edge:
         """
         a dictionary of features for the edge
         each feature is represented as a key value pair:
+            The key corresponds to a value in the dataset's assummed feature_set
+            The value is the feature's value in this edge
         """
 
         self.target = None

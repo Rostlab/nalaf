@@ -43,7 +43,7 @@ class SklSVM(RelationExtractor):
         self.allowed_features_keys, self.final_allowed_key_mapping = \
             __class__._gen_allowed_and_final_mapping_features_keys(training_corpus)
 
-        X, y = __class__._convert_edges_to_SVC_instances(training_corpus, self.final_allowed_key_mapping, self.preprocess)
+        X, y = __class__._convert_edges_to_SVC_instances(training_corpus, self.preprocess, self.final_allowed_key_mapping)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
         self.model.fit(X, y)
@@ -52,7 +52,7 @@ class SklSVM(RelationExtractor):
         return self
 
     def annotate(self, corpus):
-        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.final_allowed_key_mapping, self.preprocess)
+        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.preprocess, self.final_allowed_key_mapping)
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -74,11 +74,14 @@ class SklSVM(RelationExtractor):
         return (allowed_keys, final_mapping_keys)
 
     @staticmethod
-    def _convert_edges_to_SVC_instances(corpus, final_allowed_key_mapping, preprocess):
+    def _convert_edges_to_SVC_instances(corpus, preprocess, final_allowed_key_mapping=None):
         """
         rtype: Tuple[scipy.csr_matrix, List[int]]
         """
         start = time.time()
+
+        if final_allowed_key_mapping is None:
+            _, final_allowed_key_mapping = __class__._gen_allowed_and_final_mapping_features_keys(corpus)
 
         num_edges = sum(1 for _ in corpus.edges())
         num_features = len(final_allowed_key_mapping)

@@ -40,12 +40,8 @@ class SklSVM(RelationExtractor):
 
     def train(self, training_corpus, feature_set):
         self.global_feature_set = feature_set
-        self.allowed_features_keys = {fkey for edge in training_corpus.edges() for fkey in edge.features.keys()}
-        self.final_allowed_key_mapping = {}
-        num_feat = 0
-        for allowed_feat_key in self.allowed_features_keys:
-            self.final_allowed_key_mapping[allowed_feat_key] = num_feat
-            num_feat += 1
+        self.allowed_features_keys, self.final_allowed_key_mapping = \
+            __class__._gen_allowed_and_final_mapping_features_keys(training_corpus)
 
         X, y = __class__._convert_edges_to_SVC_instances(training_corpus, self.final_allowed_key_mapping, self.preprocess)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
@@ -65,6 +61,17 @@ class SklSVM(RelationExtractor):
             edge.pred_target = target_pred
 
         return corpus.form_predicted_relations()
+
+    @staticmethod
+    def _gen_allowed_and_final_mapping_features_keys(corpus):
+        allowed_keys = {fkey for edge in corpus.edges() for fkey in edge.features.keys()}
+        final_mapping_keys = {}
+        num_feat = 0
+        for allowed_feat_key in allowed_keys:
+            final_mapping_keys[allowed_feat_key] = num_feat
+            num_feat += 1
+
+        return (allowed_keys, final_mapping_keys)
 
     @staticmethod
     def _convert_edges_to_SVC_instances(corpus, final_allowed_key_mapping, preprocess):
@@ -101,7 +108,8 @@ class SklSVM(RelationExtractor):
             X = __class__._preprocess(X)
             print_verbose("SVC, minx & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
 
-        # selector = VarianceThreshold()
+        # # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
+        # selector = VarianceThreshold(threshold=(.9 * (1 - .9)))
         # X = selector.fit_transform(X)
 
         end = time.time()

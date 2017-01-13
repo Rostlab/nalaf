@@ -112,7 +112,7 @@ class SklSVM(RelationExtractor):
             print_verbose("SVC, minx & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
 
         # # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
-        # selector = VarianceThreshold(threshold=(.9 * (1 - .9)))
+        # selector = VarianceThreshold(threshold=(.8 * (1 - .8)))
         # X = selector.fit_transform(X)
 
         end = time.time()

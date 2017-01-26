@@ -579,6 +579,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
         subcounts = ['tp', 'fp', 'fn']
         counts = {docid: dict.fromkeys(subcounts, 0) for docid in dataset.documents.keys()}
 
+        print_verbose()
+
         for docid, doc in dataset.documents.items():
             gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()

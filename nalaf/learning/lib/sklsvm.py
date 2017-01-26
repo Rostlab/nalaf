@@ -76,22 +76,22 @@ class SklSVM(RelationExtractor):
     @staticmethod
     def _convert_edges_to_SVC_instances(corpus, preprocess, final_allowed_key_mapping=None):
         """
-        rtype: Tuple[scipy.csr_matrix, List[int]]
+        rtype: Tuple[scipy.sparse.csr_matrix, List[int]]
         """
         start = time.time()
 
         if final_allowed_key_mapping is None:
             _, final_allowed_key_mapping = __class__._gen_allowed_and_final_mapping_features_keys(corpus)
 
-        num_edges = sum(1 for _ in corpus.edges())
+        num_instances = sum(1 for _ in corpus.edges())
         num_features = len(final_allowed_key_mapping)
 
         # We first construct the X matrix of features with the sparse lil_matrix, which is efficient in reshaping its structure dynamically
         # At the end, we convert this to csr_matrix, which is efficient for algebra operations
         # See https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.sparse.lil_matrix.html#scipy.sparse.lil_matrix
         # See http://scikit-learn.org/stable/modules/svm.html#svm
-        X = scipy.sparse.lil_matrix((num_edges, num_features), dtype=np.float64)
-        y = np.zeros(num_edges, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
+        X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
+        y = np.zeros(num_instances, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
 
         for edge_index, edge in enumerate(corpus.edges()):
             for f_key in edge.features.keys():
@@ -102,7 +102,7 @@ class SklSVM(RelationExtractor):
 
             y[edge_index] = edge.real_target
 
-        print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(num_edges, sum(v > 0 for v in y), sum(v < 0 for v in y)))
+        print_debug("#instances: {}: #positive: {} vs. #negative: {}".format(num_instances, sum(v > 0 for v in y), sum(v < 0 for v in y)))
 
         X = X.tocsr()
 
@@ -111,10 +111,10 @@ class SklSVM(RelationExtractor):
         # selector = VarianceThreshold(threshold=(p * (1 - p)))
         # X = selector.fit_transform(X)
 
-        print_verbose("SVC, minx & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+        print_verbose("SVC, min & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
         if preprocess:
             X = __class__._preprocess(X)
-            print_verbose("SVC, minx & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+            print_verbose("SVC, min & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
 
         end = time.time()
         print_debug("SVC convert instances, running time: ", (end - start))

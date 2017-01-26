@@ -76,8 +76,78 @@ class SklSVM(RelationExtractor):
 
         return (allowed_keys, final_mapping_keys)
 
+
+    def gen_vector_instances(self, corpus, global_feature_set):
+        """
+        rtype: scipy.sparse.lil_matrix
+        """
+        start = time.time()
+
+        num_instances = sum(1 for _ in corpus.edges())
+        num_features = len(global_feature_set)
+
+        X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
+
+        for edge_index, edge in enumerate(corpus.edges()):
+            for f_key in edge.features.keys():
+                f_index = f_key - 1  # f_keys are 1-indexed --> convert to 0-indexed
+                value = edge.features[f_key]
+                X[edge_index, f_index] = value
+
+        X = X.tocsr()
+
+        print_verbose("SVC before preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
+        if self.preprocess:
+            X = __class__._preprocess(X)
+            print_verbose("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
+
+        end = time.time()
+        print_debug("SVC convert instances, running time: ", (end - start))
+
+        return X
+
+
+    def write_vector_instances(self, corpus, global_feature_set):
+        X = self.gen_vector_instances(corpus, global_feature_set)
+
+        for edge_index, edge in enumerate(corpus.edges()):
+            edge.features_vector = X.getrow(edge_index)
+
+        return None
+
+
     @staticmethod
     def _convert_edges_features_to_vector_instances(corpus, preprocess, final_allowed_key_mapping=None):
+        if __class__._vector_instances_already_computed(corpus):
+            return __class__._convert_edges_features_reusing_computed_vector_instances(corpus)
+        else:
+            return __class__._convert_edges_features_anew(corpus, preprocess, final_allowed_key_mapping)
+
+
+    @staticmethod
+    def _vector_instances_already_computed(corpus):
+        return next(corpus.edges()).features_vector is not None
+
+
+    @staticmethod
+    def _convert_edges_features_reusing_computed_vector_instances(corpus):
+        num_instances = sum(1 for _ in corpus.edges())
+        num_features = next(corpus.edges()).features_vector.shape[1]
+        print("****", num_features)
+
+        X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
+        y = np.zeros(num_instances, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
+
+        for edge_index, edge in enumerate(corpus.edges()):
+            X[edge_index, :] = edge.features_vector
+            y[edge_index] = edge.real_target
+
+        return (X, y)
+
+
+    @staticmethod
+    def _convert_edges_features_anew(corpus, preprocess, final_allowed_key_mapping):
+        return next(corpus.edges()).features_vector is not None
         """
         rtype: Tuple[scipy.sparse.csr_matrix, List[int]]
         """
@@ -99,8 +169,8 @@ class SklSVM(RelationExtractor):
         for edge_index, edge in enumerate(corpus.edges()):
             for f_key in edge.features.keys():
                 if f_key in final_allowed_key_mapping:
-                    value = edge.features[f_key]
                     f_index = final_allowed_key_mapping[f_key]
+                    value = edge.features[f_key]
                     X[edge_index, f_index] = value
 
             y[edge_index] = edge.real_target
@@ -109,10 +179,10 @@ class SklSVM(RelationExtractor):
 
         X = X.tocsr()
 
-        print_verbose("SVC, min & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+        print_verbose("SVC before preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
         if preprocess:
             X = __class__._preprocess(X)
-            print_verbose("SVC, min & max features after preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
+            print_verbose("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
         end = time.time()
         print_debug("SVC convert instances, running time: ", (end - start))

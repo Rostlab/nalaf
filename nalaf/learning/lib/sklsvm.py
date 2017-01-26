@@ -192,8 +192,8 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _preprocess(X):
-        X = __class__._assure_min_variance(X)
-        X = __class__._scale_logarithmically(X)
+        # X = __class__._assure_min_variance(X)
+        X = __class__._scale(X)
         return X
 
 
@@ -206,9 +206,9 @@ class SklSVM(RelationExtractor):
 
 
     @staticmethod
-    def _scale_logarithmically(X):
+    def _scale(X):
         # See http://stackoverflow.com/a/41601532/341320
         logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
-        X = logtran.transform(X)
+        # X = logtran.transform(X)
         X = maxabs_scale(X, copy=False)
         return X

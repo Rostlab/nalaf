@@ -1054,7 +1054,6 @@ class Part:
         # TODO this may be too relna-specific
 
         self.tokens = []
-        # TODO what's this? - this may be too relna-specific
 
 
     def get_sentence_string_array(self):
@@ -1466,14 +1465,16 @@ class Edge:
             The value is the feature's value in this edge
         """
 
-        # TODO we should much more carefully take care of its type, and whether it could even contain other values
-        # As of now, it seems to devependant on `svmlight.py`
+        self.features_vector = None
+        """
+        None if not set, otherwise spacy sparse vector with finally-encoded features
+        """
 
         self.real_target = None
         """real class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
 
         self.pred_target = None
-        """real class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
+        """predicted class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
 
 
     def __repr__(self):

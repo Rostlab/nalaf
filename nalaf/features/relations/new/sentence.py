@@ -17,8 +17,12 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
     def __init__(
         self,
-        f_counts,
-        f_counts_in_between,
+
+        f_counts_individual,
+        f_counts_total,
+        f_counts_in_between_individual,
+        f_counts_in_between_total,
+
         f_order,
         f_bow,
         f_pos,
@@ -27,8 +31,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         f_tokens_count_after
     ):
 
-        self.f_counts = f_counts
-        self.f_counts_in_between = f_counts_in_between
+        self.f_counts_individual = f_counts_individual
+        self.f_counts_total = f_counts_total
+        self.f_counts_in_between_individual = f_counts_in_between_individual
+        self.f_counts_in_between_total = f_counts_in_between_total
+
         self.f_order = f_order
         self.f_bow = f_bow
         self.f_pos = f_pos
@@ -41,16 +48,22 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         for edge in corpus.edges():
             sentence = edge.get_combined_sentence()
 
+            total_count = 0
             for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
-                count = -1  # start from -1, as one is already one of the edge's entities
-                count += len(entities)
-                assert count >= 0
-                self.add_with_value(f_set, is_train, edge, 'f_counts', count, 'int', e_class_id)
+                individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
+                assert individual_count >= 0
+                total_count += individual_count
+                self.add_with_value(f_set, is_train, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)
 
-            count = 0
+            self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
+
+            total_count = 0
             for e_class_id, entities in edge.get_any_entities_between_entities(predicted=False).items():
-                count += len(entities)
-            self.add_with_value(f_set, is_train, edge, 'f_counts_in_between', count, 'int', "all classes")
+                individual_count = len(entities)
+                total_count += individual_count
+                self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
+
+            self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_total', total_count, 'int', 'total (all classes)')
 
             order = edge.entity1.class_id < edge.entity2.class_id
             if order:

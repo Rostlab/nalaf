@@ -133,7 +133,6 @@ class SklSVM(RelationExtractor):
     def _convert_edges_features_reusing_computed_vector_instances(corpus):
         num_instances = sum(1 for _ in corpus.edges())
         num_features = next(corpus.edges()).features_vector.shape[1]
-        print("****", num_features)
 
         X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
         y = np.zeros(num_instances, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC

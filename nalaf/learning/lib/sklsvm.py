@@ -39,11 +39,11 @@ class SklSVM(RelationExtractor):
         self.final_allowed_key_mapping = None
 
     def train(self, training_corpus, feature_set):
-        self.global_feature_set = feature_set
+        self.global_feature_set = feature_set  # The total/global feature set is actually not used
         self.allowed_features_keys, self.final_allowed_key_mapping = \
             __class__._gen_allowed_and_final_mapping_features_keys(training_corpus)
 
-        X, y = __class__._convert_edges_to_SVC_instances(training_corpus, self.preprocess, self.final_allowed_key_mapping)
+        X, y = __class__._convert_edges_features_to_vector_instances(training_corpus, self.preprocess, self.final_allowed_key_mapping)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
         self.model.fit(X, y)
@@ -52,7 +52,7 @@ class SklSVM(RelationExtractor):
         return self
 
     def annotate(self, corpus):
-        X, y = __class__._convert_edges_to_SVC_instances(corpus, self.preprocess, self.final_allowed_key_mapping)
+        X, y = __class__._convert_edges_features_to_vector_instances(corpus, self.preprocess, self.final_allowed_key_mapping)
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -64,6 +64,9 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _gen_allowed_and_final_mapping_features_keys(corpus):
+        """
+        Generate the set and mapping of feature keys that are present in the given corpus (considered a training one).
+        """
         allowed_keys = {fkey for edge in corpus.edges() for fkey in edge.features.keys()}
         final_mapping_keys = {}
         num_feat = 0
@@ -74,7 +77,7 @@ class SklSVM(RelationExtractor):
         return (allowed_keys, final_mapping_keys)
 
     @staticmethod
-    def _convert_edges_to_SVC_instances(corpus, preprocess, final_allowed_key_mapping=None):
+    def _convert_edges_features_to_vector_instances(corpus, preprocess, final_allowed_key_mapping=None):
         """
         rtype: Tuple[scipy.sparse.csr_matrix, List[int]]
         """
@@ -106,11 +109,6 @@ class SklSVM(RelationExtractor):
 
         X = X.tocsr()
 
-        # # # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
-        # p = 0.99
-        # selector = VarianceThreshold(threshold=(p * (1 - p)))
-        # X = selector.fit_transform(X)
-
         print_verbose("SVC, min & max features before preprocessing:", sklearn.utils.sparsefuncs.min_max_axis(X, axis=0))
         if preprocess:
             X = __class__._preprocess(X)
@@ -124,15 +122,23 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _preprocess(X):
-        X = __class__._scale_logarithmically(X)  # inplace
+        X = __class__._assure_min_variance(X)
+        X = __class__._scale_logarithmically(X)
+        return X
+
+
+    @staticmethod
+    def _assure_min_variance(X, p=0.99):
+        # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
+        selector = VarianceThreshold(threshold=(p * (1 - p)))
+        X = selector.fit_transform(X)
         return X
 
 
     @staticmethod
     def _scale_logarithmically(X):
         # See http://stackoverflow.com/a/41601532/341320
-
         logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
-        # X = logtran.transform(X)
+        X = logtran.transform(X)
         X = maxabs_scale(X, copy=False)
         return X

@@ -1461,13 +1461,13 @@ class Edge:
         """
         a dictionary of features for the edge
         each feature is represented as a key value pair:
-            The key corresponds to a value in the dataset's assummed feature_set
+            The key corresponds to an integer value in the dataset's assummed feature_set
             The value is the feature's value in this edge
         """
 
         self.features_vector = None
         """
-        None if not set, otherwise spacy sparse vector with finally-encoded features
+        None if not set, otherwise scipy sparse vector-like array with finally-encoded features
         """
 
         self.real_target = None

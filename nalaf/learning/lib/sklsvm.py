@@ -68,7 +68,7 @@ class SklSVM(RelationExtractor):
         if self.final_allowed_feature_mapping is None:
             self.set_allowed_feature_keys_from_corpus(training_corpus)
 
-        X, y = __class__._convert_edges_features_to_vector_instances(training_corpus, self.preprocess, self.final_allowed_feature_mapping)
+        X, y = self.__convert_edges_features_to_vector_instances(training_corpus)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
         self.model.fit(X, y)
@@ -77,7 +77,7 @@ class SklSVM(RelationExtractor):
         return self
 
     def annotate(self, corpus):
-        X, y = __class__._convert_edges_features_to_vector_instances(corpus, self.preprocess, self.final_allowed_feature_mapping)
+        X, y = self.__convert_edges_features_to_vector_instances(corpus)
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -204,39 +204,11 @@ class SklSVM(RelationExtractor):
         return (X, y)
 
 
-    @staticmethod
-    def _convert_edges_features_anew(corpus, preprocess, final_allowed_feature_mapping):
-
-        if final_allowed_feature_mapping is None:
-            _, _, final_allowed_feature_mapping = __class__._gen_final_allowed_feature_mapping_from_corpus(corpus)
-
-        def fun(X, y, corpus):
-            for edge_index, edge in enumerate(corpus.edges()):
-                for f_key in edge.features.keys():
-                    if f_key in final_allowed_feature_mapping:
-                        f_index = final_allowed_feature_mapping[f_key]
-                        value = edge.features[f_key]
-                        X[edge_index, f_index] = value
-
-                y[edge_index] = edge.real_target
-
-            return X, y
-
-
-        return __class__._create_instances(
-            num_features=len(final_allowed_feature_mapping),
-            corpus=corpus,
-            preprocess=preprocess,
-            setting_function=fun
-        )
-
-
-    @staticmethod
-    def _convert_edges_features_to_vector_instances(corpus, preprocess, final_allowed_feature_mapping=None):
+    def __convert_edges_features_to_vector_instances(self, corpus):
         if __class__._vector_instances_already_computed(corpus):
             return __class__._convert_edges_features_reusing_computed_vector_instances(corpus)
         else:
-            return __class__._convert_edges_features_anew(corpus, preprocess, final_allowed_feature_mapping)
+            return self.__gen_vector_instances(corpus, len(self.final_allowed_feature_mapping))
 
 
     @staticmethod

@@ -253,7 +253,7 @@ class SklSVM(RelationExtractor):
     @staticmethod
     def _scale(X):
         # See http://stackoverflow.com/a/41601532/341320
-        logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
+        # logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
         # X = logtran.transform(X)
         X = maxabs_scale(X, copy=False)
         return X

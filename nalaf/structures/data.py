@@ -1461,7 +1461,7 @@ class Edge:
         """
         A dictionary of features for the edge.
         Each feature is represented as a key value pair:
-            The key is an integer that corresponds to a feature index in the dataset's feature_set (i.e. a value in this dictionary)
+            The key is an integer that corresponds to a feature key in the dataset's feature_set (i.e. a value in this dictionary)
             The value is the feature's value in this edge
         """
 

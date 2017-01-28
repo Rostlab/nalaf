@@ -165,7 +165,6 @@ class SklSVM(RelationExtractor):
 
             return X, y
 
-
         return __class__._create_instances(
             num_features=num_features,
             corpus=corpus,

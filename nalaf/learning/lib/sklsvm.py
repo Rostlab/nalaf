@@ -237,7 +237,7 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _preprocess(X):
-        # X = __class__._assure_min_variance(X)
+        X = __class__._assure_min_variance(X)
         X = __class__._scale(X)
         return X
 

@@ -6,13 +6,14 @@ from nalaf import print_verbose, print_debug
 from nalaf.utils.readers import StringReader
 from nalaf.preprocessing.parsers import Parser, SpacyParser
 from nalaf.features import get_spacy_nlp_english
-from nose.plugins.attrib import attr
+# from nose.plugins.attrib import attr
 
 
 STUB_ENTITY_CLASS_ID = 'e_x'
 
 
 class TestDataset(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         cls.dataset = Dataset()
@@ -107,38 +108,80 @@ class TestDocument(unittest.TestCase):
 
 
 class TestToken(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
-
-    def test_repr(self):
-        pass  # TODO
+    pass
 
 
 class TestFeatureDictionary(unittest.TestCase):
-    def test_setitem(self):
-        pass  # TODO
+    pass
 
 
 class TestEntity(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
 
-    def test_repr(self):
-        pass  # TODO
+    @classmethod
+    def setUpClass(cls):
+        cls.dataset = Dataset()
+        cls.doc = Document()
+        cls.dataset.documents['testid'] = cls.doc
 
-    def test_eq(self):
-        pass  # TODO
+        # TEXT = "123 45678"
+        # POS  = "012345678"
+        # ANN1 = " X       "
+        # ANN2 = "     XXX "
+        # PAR1 = "XXX      "
+        # PAR1 = "    XXXXX"
+
+        cls.part = Part('Here is a random sentence for the benefit of your mamma')
+        cls.entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=10, text='random sentence', confidence=0)
+        cls.part.annotations.append(cls.entity)
+        cls.doc.parts['s1h1'] = cls.part
+
+        # Apply through pipeline
+
+        NLTKSplitter().split(cls.dataset)
+        NLTK_TOKENIZER.tokenize(cls.dataset)
+
+        nlp = get_spacy_nlp_english(load_parser=True)
+        cls.parser = SpacyParser(nlp)
+        cls.parser.parse(cls.dataset)
+        # cls.part.percolate_tokens_to_entities()
+
+        cls.sentence = cls.part.sentences[0]
+
+    def as_string(self, tokens):
+        return ' '.join(t.word for t in tokens)
+
+
+    def test_prev_tokens(self):
+
+        self.assertEqual("a", self.as_string(self.entity.prev_tokens(self.sentence, n=1, include_ent_first_token=False)))
+        self.assertEqual("is a", self.as_string(self.entity.prev_tokens(self.sentence, n=2, include_ent_first_token=False)))
+        self.assertEqual("Here is a", self.as_string(self.entity.prev_tokens(self.sentence, n=3, include_ent_first_token=False)))
+        self.assertEqual("Here is a", self.as_string(self.entity.prev_tokens(self.sentence, n=10, include_ent_first_token=False)))
+
+        self.assertEqual("a random", self.as_string(self.entity.prev_tokens(self.sentence, n=1, include_ent_first_token=True)))
+        self.assertEqual("is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=2, include_ent_first_token=True)))
+        self.assertEqual("Here is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=3, include_ent_first_token=True)))
+        self.assertEqual("Here is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=10, include_ent_first_token=True)))
+
+
+    def test_next_tokens(self):
+
+        self.assertEqual("for", self.as_string(self.entity.next_tokens(self.sentence, n=1, include_ent_last_token=False)))
+        self.assertEqual("for the", self.as_string(self.entity.next_tokens(self.sentence, n=2, include_ent_last_token=False)))
+        self.assertEqual("for the benefit", self.as_string(self.entity.next_tokens(self.sentence, n=3, include_ent_last_token=False)))
+        self.assertEqual("for the benefit of your mamma", self.as_string(self.entity.next_tokens(self.sentence, n=10, include_ent_last_token=False)))
+
+        self.assertEqual("sentence for", self.as_string(self.entity.next_tokens(self.sentence, n=1, include_ent_last_token=True)))
+        self.assertEqual("sentence for the", self.as_string(self.entity.next_tokens(self.sentence, n=2, include_ent_last_token=True)))
+        self.assertEqual("sentence for the benefit", self.as_string(self.entity.next_tokens(self.sentence, n=3, include_ent_last_token=True)))
+        self.assertEqual("sentence for the benefit of your mamma", self.as_string(self.entity.next_tokens(self.sentence, n=10, include_ent_last_token=True)))
 
 
 class TestLabel(unittest.TestCase):
-    def test_repr(self):
-        pass  # TODO
-
-    def test_init(self):
-        pass  # TODO
+    pass
 
 
-@attr('slow')
+# @attr('slow')
 class TestPart(unittest.TestCase):
 
     @classmethod

@@ -1720,7 +1720,10 @@ class Entity:
         """the normalized text for the annotation if normalization was performed"""
         self.tokens = []
         """
-        the tokens in each entity
+        The tokens of the entity.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+
         TODO Note that tokens are already within sentences. You should use those by default.
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
@@ -1772,7 +1775,7 @@ class Entity:
     def prev_tokens(self, sentence, n, include_ent_first_token=False, mk_reversed=False):
         self_first = self.tokens[0].features['id']
         right_index = self_first + 1 if include_ent_first_token else self_first
-        left_index = self_first - n
+        left_index = max(0, self_first - n)
         ret = sentence[left_index:right_index]
         return list(reversed(ret)) if mk_reversed else ret
 

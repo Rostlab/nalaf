@@ -36,30 +36,93 @@ class SklSVM(RelationExtractor):
         self.model = svm.SVC(**svc_parameters)
 
         self.global_feature_set = None
+        """
+        Dict[String, Int] : Map of feature names to feature keys of an assumed global featured corpus
+        """
         self.allowed_features_names = None
         """
-        Set of allowed feature names, if given
+        Set[String] : Set of allowed feature names, if given
         """
-        self.allowed_features_indexes = None
+        self.allowed_features_keys = None
         """
-        Set of allowed feature names -- If None, the allowed indexes are exactly all indexes of the training data
+        Set[Int] : Set of allowed feature keys - If None, the allowed keys implictly equal the features' keys of the training data
         """
         self.final_allowed_feature_mapping = None
         """
-        A map (dictionary) of allowed (feature indexes) to (final index of the feature in the features vectors).
+        Dict[Int, Int] or more generally a Function[Int] -> Int.
 
-        The maximum value of the final index is equal or less than the maximum value of the original feature index
-        and only equal in case all feature indexes are allowed. The final indexes are enumerated from 0 to n-1.
+        A map of allowed (feature keys) to (final feature indexes as written in the instances).
 
-        That is, for example, say the corpus has features indexes = {0, 1, 2, 3, 4}, yet the allowed feature indexes
+        The maximum value of the final index is equal or less than the maximum value of the original feature keys
+        and only equal in case all feature keys are allowed. The final indexes are enumerated from 0 to n-1.
+
+        That is, for example, say the corpus has features keys = {0, 1, 2, 3, 4}, yet the allowed feature indexes
         are only = {1, 3, 4}. The resulting final_allowed_feature_mapping is = {1: 0, 3: 1, 4: 2}.
+        Note: the order is NOT respected nor checked.
+
+        When they are equal, there is a 1:1 correspondence between keys and indexes, e.g. {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
+        Note: The order IS respected.
         """
+
+
+    @staticmethod
+    def _gen_final_allowed_feature_mapping_from_corpus(corpus):
+        """
+        Generate the final mapping of features from the feature indexes that are present in the given corpus (considered a training one).
+
+        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
+        """
+        allowed_features_names = None
+        allowed_features_keys = {f_key for edge in corpus.edges() for f_key in edge.features.keys()}
+        final_allowed_feature_mapping = {}
+
+        for allowed_feat_key in allowed_features_keys:
+            final_allowed_feature_mapping[allowed_feat_key] = len(final_allowed_feature_mapping)
+
+        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
+
+
+    @staticmethod
+    def _gen_final_allowed_feature_mapping_allow_all():
+        """
+        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
+
+        rtype: Tuple[None, None, Function[Int] -> Int]
+        """
+        allowed_features_names = None
+        allowed_features_keys = None
+        final_allowed_feature_mapping = (lambda f_key: f_key)
+
+        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
+
+
+    @staticmethod
+    def _gen_final_allowed_feature_mapping_from_allowed_names(allowed_features_keys):
+        raise NotImplementedError
+
+
+    @staticmethod
+    def _gen_final_allowed_feature_mapping_from_allowed_keys(allowed_features_keys):
+        """
+        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
+
+        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
+        """
+        allowed_features_names = None
+        allowed_features_keys = allowed_features_keys
+        final_allowed_feature_mapping = {}
+
+        for allowed_feat_key in allowed_features_keys:
+            final_allowed_feature_mapping[allowed_feat_key] = len(final_allowed_feature_mapping)
+
+        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
+
 
 
     def train(self, training_corpus, global_feature_set):
         self.global_feature_set = global_feature_set  # The total/global feature set is actually not used, so far
-        self.allowed_features_indexes, self.final_allowed_feature_mapping = \
-            __class__._gen_allowed_and_final_mapping_features_keys(training_corpus)
+        self.allowed_features_names, self.allowed_features_keys, self.final_allowed_feature_mapping = \
+            __class__._gen_final_allowed_feature_mapping_from_corpus(training_corpus)
 
         X, y = __class__._convert_edges_features_to_vector_instances(training_corpus, self.preprocess, self.final_allowed_feature_mapping)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
@@ -151,25 +214,10 @@ class SklSVM(RelationExtractor):
 
 
     @staticmethod
-    def _gen_allowed_and_final_mapping_features_keys(corpus):
-        """
-        Generate the set and mapping of feature keys that are present in the given corpus (considered a training one).
-        """
-        allowed_keys = {fkey for edge in corpus.edges() for fkey in edge.features.keys()}
-        final_mapping_keys = {}
-        num_feat = 0
-        for allowed_feat_key in allowed_keys:
-            final_mapping_keys[allowed_feat_key] = num_feat
-            num_feat += 1
-
-        return (allowed_keys, final_mapping_keys)
-
-
-    @staticmethod
     def _convert_edges_features_anew(corpus, preprocess, final_allowed_feature_mapping):
 
         if final_allowed_feature_mapping is None:
-            _, final_allowed_feature_mapping = __class__._gen_allowed_and_final_mapping_features_keys(corpus)
+            _, _, final_allowed_feature_mapping = __class__._gen_final_allowed_feature_mapping_from_corpus(corpus)
 
         def fun(X, y, corpus):
             for edge_index, edge in enumerate(corpus.edges()):

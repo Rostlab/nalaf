@@ -1646,7 +1646,6 @@ class Token:
         return None
 
 
-    # TODO review this method. This was added for relna. It is now also used in LocText
     def masked_text(self, part):
         """
         if token is part of an entity, return the entity class id, otherwise
@@ -1655,6 +1654,8 @@ class Token:
         :type part: nalaf.structures.data.Part
         :return str
         """
+        warnings.warn('Use instead: `masked_text` from `nalaf.features.util`', DeprecationWarning)
+
         for entity in part.annotations:
             if self.start <= entity.offset < self.end:  # or \
                 # entity.offset <= self.start < entity.offset + len(entity.text):

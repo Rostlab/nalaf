@@ -3,4 +3,4 @@ def masked_text(token, part):
     if in_entity is None:
         return token.word
     else:
-        return token.word
+        return in_entity.class_id

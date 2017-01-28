@@ -14,6 +14,7 @@ The implementation consider 4 types of dependency types:
 from nalaf.features.relations import EdgeFeatureGenerator
 from nalaf.utils.graphs import compute_shortest_path, Path
 from nalaf.features.stemming import ENGLISH_STEMMER
+from nalaf.features.util import masked_text
 
 
 class DependencyFeatureGenerator(EdgeFeatureGenerator):
@@ -23,8 +24,6 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     Some feature additions, removals, or detail changes are also considered.
 
     """
-
-    # TODO do kinda constituency parsing http://www.clips.ua.ac.be/pages/mbsp-tags
 
     def __init__(
         self,
@@ -36,22 +35,22 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         h_ld_grams=[1, 2, 3, 4],
         h_pd_grams=[1, 2, 3, 4],
         # Feature keys/names
-        f_OW_lemma_N_gram=None,
+        f_OW_bow_N_gram=None,
         f_OW_pos_N_gram=None,
         f_OW_tokens_count=None,
         f_OW_tokens_count_without_punct=None,
         #
-        f_IW_lemma_N_gram=None,
+        f_IW_bow_N_gram=None,
         f_IW_pos_N_gram=None,
         f_IW_tokens_count=None,
         f_IW_tokens_count_without_punct=None,
         #
-        f_LD_lemma_N_gram=None,
+        f_LD_bow_N_gram=None,
         f_LD_pos_N_gram=None,
         f_LD_tokens_count=None,
         f_LD_tokens_count_without_punct=None,
         #
-        f_PD_lemma_N_gram=None,
+        f_PD_bow_N_gram=None,
         f_PD_pos_N_gram=None,
         f_PD_tokens_count=None,
         f_PD_tokens_count_without_punct=None,
@@ -69,17 +68,17 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.h_ld_grams = h_ld_grams
         self.h_pd_grams = h_pd_grams
         # Feature keys/names
-        self.f_OW_lemma_N_gram = f_OW_lemma_N_gram
+        self.f_OW_bow_N_gram = f_OW_bow_N_gram
         self.f_OW_pos_N_gram = f_OW_pos_N_gram
         self.f_OW_tokens_count = f_OW_tokens_count
         self.f_OW_tokens_count_without_punct = f_OW_tokens_count_without_punct
         #
-        self.f_IW_lemma_N_gram = f_IW_lemma_N_gram
+        self.f_IW_bow_N_gram = f_IW_bow_N_gram
         self.f_IW_pos_N_gram = f_IW_pos_N_gram
         self.f_IW_tokens_count = f_IW_tokens_count
         self.f_IW_tokens_count_without_punct = f_IW_tokens_count_without_punct
         #
-        self.f_LD_lemma_N_gram = f_LD_lemma_N_gram
+        self.f_LD_bow_N_gram = f_LD_bow_N_gram
         self.f_LD_pos_N_gram = f_LD_pos_N_gram
         self.f_LD_tokens_count = f_LD_tokens_count
         self.f_LD_tokens_count_without_punct = f_LD_tokens_count_without_punct
@@ -87,7 +86,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Parsing Dependencies got more features
         ####
         # Regular ones
-        self.f_PD_lemma_N_gram = f_PD_lemma_N_gram
+        self.f_PD_bow_N_gram = f_PD_bow_N_gram
         self.f_PD_pos_N_gram = f_PD_pos_N_gram
         self.f_PD_tokens_count = f_PD_tokens_count
         self.f_PD_tokens_count_without_punct = f_PD_tokens_count_without_punct
@@ -111,38 +110,43 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 Path(
                     name='OW1',
                     tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                    is_edge_type_constant=True
+                    is_edge_type_constant=True,
+                    default_n_grams=self.h_ow_grams,
                 ),
                 Path(
                     name='IW1',
                     tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                    is_edge_type_constant=True
+                    is_edge_type_constant=True,
+                    default_n_grams=self.h_iw_grams,
                 ),
 
                 Path(
                     name='IW2',
                     tokens=edge.entity2.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                    is_edge_type_constant=True
+                    is_edge_type_constant=True,
+                    default_n_grams=self.h_iw_grams,
                 ),
                 Path(
                     name='OW2',
                     tokens=edge.entity2.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                    is_edge_type_constant=True
+                    is_edge_type_constant=True,
+                    default_n_grams=self.h_ow_grams,
                 ),
 
                 Path(
                     name='LD',
                     tokens=sentence[_e1_last_token:_e2_first_token + 1],
-                    is_edge_type_constant=True
+                    is_edge_type_constant=True,
+                    default_n_grams=self.h_ld_grams,
                 ),
 
-                compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token).change_name('PD')
+                compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token).change_name('PD').change_default_n_grams(self.h_pd_grams)
             ]
 
             for dep_path in dependency_paths:
                 dep_type = dep_path.name
 
-                for n_gram in self.h_ow_grams:  # TODO
+                for n_gram in dep_path.default_n_grams:
                     self.add_n_grams(f_set, is_train, edge, dep_path, dep_type, n_gram)
 
                 count = len(dep_path.middle)
@@ -172,7 +176,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Regular features for all dependency paths types/names
         #
 
-        add_groups('f_XX_lemma_N_gram', path.strs_n_gram_token_only, token_feat('lemma'))
+        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: ENGLISH_STEMMER.stem(masked_text(token, edge.same_part)))  # token_feat('lemma'))
         add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('pos'))
 
         #

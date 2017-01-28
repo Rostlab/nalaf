@@ -193,11 +193,12 @@ class Path:
     __STR_SOURCE = "[SOURCE"
     __STR_TARGET = "TARGET]"
 
-    def __init__(self, tokens, name="", is_edge_type_constant=False):
+    def __init__(self, tokens, name="", is_edge_type_constant=False, default_n_grams=None):
         self.tokens = tokens
         self.nodes = []
         self.name = name
         self.is_edge_type_constant = is_edge_type_constant
+        self.default_n_grams = default_n_grams if default_n_grams is not None else []
 
         for u_token, v_token in zip(tokens, tokens[1:]):  # Note: the last one is not added yet, see below
             if is_edge_type_constant:
@@ -233,6 +234,10 @@ class Path:
 
     def change_name(self, new_name):
         self.name = new_name
+        return self
+
+    def change_default_n_grams(self, default_n_grams):
+        self.default_n_grams = default_n_grams
         return self
 
     def __str_join_nodes(self, nodes_strs):

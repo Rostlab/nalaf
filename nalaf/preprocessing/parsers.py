@@ -99,8 +99,6 @@ class SpacyParser(Parser):
                         'is_root': False,
                     }
 
-                    part.tokens.append(nalaf_token)
-
                 for spacy_token in spacy_doc:
                     self._dependency_path(spacy_token, sent_index, part)
 
@@ -194,7 +192,6 @@ class BllipParser(Parser):
                                         'dependency_to': [],
                                         'is_root': False,
                                         }
-                        part.tokens.append(tok)
 
                     for token in tokens:
                         tok = part.sentences[index][token.index-1]

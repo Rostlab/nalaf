@@ -39,17 +39,17 @@ class SklSVM(RelationExtractor):
         """
         Dict[String, Int] : Map of feature names to feature keys of an assumed global featured corpus
         """
-        self.allowed_features_names = None
+        self.allowed_feature_names = None
         """
         Set[String] : Set of allowed feature names, if given
         """
-        self.allowed_features_keys = None
+        self.allowed_feature_keys = None
         """
         Set[Int] : Set of allowed feature keys - If None, the allowed keys implictly equal the features' keys of the training data
         """
         self.final_allowed_feature_mapping = None
         """
-        Dict[Int, Int] or more generally a Function[Int] -> Int.
+        Dict[Int, Int] or Function[Int] -> Int.
 
         A map of allowed (feature keys) to (final feature indexes as written in the instances).
 
@@ -64,65 +64,9 @@ class SklSVM(RelationExtractor):
         Note: The order IS respected.
         """
 
-
-    @staticmethod
-    def _gen_final_allowed_feature_mapping_from_corpus(corpus):
-        """
-        Generate the final mapping of features from the feature indexes that are present in the given corpus (considered a training one).
-
-        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
-        """
-        allowed_features_names = None
-        allowed_features_keys = {f_key for edge in corpus.edges() for f_key in edge.features.keys()}
-        final_allowed_feature_mapping = {}
-
-        for allowed_feat_key in allowed_features_keys:
-            final_allowed_feature_mapping[allowed_feat_key] = len(final_allowed_feature_mapping)
-
-        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
-
-
-    @staticmethod
-    def _gen_final_allowed_feature_mapping_allow_all():
-        """
-        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
-
-        rtype: Tuple[None, None, Function[Int] -> Int]
-        """
-        allowed_features_names = None
-        allowed_features_keys = None
-        final_allowed_feature_mapping = (lambda f_key: f_key)
-
-        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
-
-
-    @staticmethod
-    def _gen_final_allowed_feature_mapping_from_allowed_names(allowed_features_keys):
-        raise NotImplementedError
-
-
-    @staticmethod
-    def _gen_final_allowed_feature_mapping_from_allowed_keys(allowed_features_keys):
-        """
-        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
-
-        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
-        """
-        allowed_features_names = None
-        allowed_features_keys = allowed_features_keys
-        final_allowed_feature_mapping = {}
-
-        for allowed_feat_key in allowed_features_keys:
-            final_allowed_feature_mapping[allowed_feat_key] = len(final_allowed_feature_mapping)
-
-        return (allowed_features_names, allowed_features_keys, final_allowed_feature_mapping)
-
-
-
-    def train(self, training_corpus, global_feature_set):
-        self.global_feature_set = global_feature_set  # The total/global feature set is actually not used, so far
-        self.allowed_features_names, self.allowed_features_keys, self.final_allowed_feature_mapping = \
-            __class__._gen_final_allowed_feature_mapping_from_corpus(training_corpus)
+    def train(self, training_corpus):
+        if self.final_allowed_feature_mapping is None:
+            self.set_allowed_feature_keys_from_corpus(training_corpus)
 
         X, y = __class__._convert_edges_features_to_vector_instances(training_corpus, self.preprocess, self.final_allowed_feature_mapping)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
@@ -131,7 +75,6 @@ class SklSVM(RelationExtractor):
         end = time.time()
         print_debug("SVC train, running time: ", (end - start))
         return self
-
 
     def annotate(self, corpus):
         X, y = __class__._convert_edges_features_to_vector_instances(corpus, self.preprocess, self.final_allowed_feature_mapping)
@@ -144,17 +87,91 @@ class SklSVM(RelationExtractor):
 
         return corpus.form_predicted_relations()
 
+    ##################################################################################################################
+
+    def set_allow_all_feature_keys(self):
+        """
+        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
+
+        rtype: Tuple[None, None, Function[Int] -> Int]
+        """
+        self.final_allowed_feature_mapping = (lambda f_key: f_key)
+
+        return self
+
+    def set_allowed_feature_names(self, global_feature_set, allowed_feature_names):
+        raise NotImplementedError
+
+    def set_allowed_feature_keys(self, allowed_feature_keys):
+        """
+        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
+
+        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
+        """
+        self.allowed_feature_keys = set(allowed_feature_keys)
+        self.final_allowed_feature_mapping = {}
+
+        for allowed_feat_key in allowed_feature_keys:
+            self.final_allowed_feature_mapping[allowed_feat_key] = len(self.final_allowed_feature_mapping)
+
+        return self
+
+    def set_allowed_feature_keys_from_corpus(self, corpus):
+        """
+        Generate the final mapping of features from the feature indexes that are present in the given corpus (considered a training one).
+
+        rtype: Tuple[None, None, Set[Int], Dict[Int, Int]]
+        """
+        self.allowed_feature_keys = {f_key for edge in corpus.edges() for f_key in edge.features.keys()}
+        self.final_allowed_feature_mapping = {}
+
+        for allowed_feat_key in allowed_feature_keys:
+            self.final_allowed_feature_mapping[allowed_feat_key] = len(self.final_allowed_feature_mapping)
+
+        return self
+
+    ##################################################################################################################
 
     def write_vector_instances(self, corpus, global_feature_set):
         self.global_feature_set = global_feature_set
+        if self.final_allowed_feature_mapping is None:
+            self.set_allow_all_feature_keys()
 
-        X, y = __class__._gen_vector_instances(corpus, global_feature_set, self.preprocess)
+        X, y = self.__gen_vector_instances(corpus, num_features=len(global_feature_set))
 
         for edge_index, edge in enumerate(corpus.edges()):
             edge.features_vector = X.getrow(edge_index)
 
         return X, y
 
+    def __gen_vector_instances(self, corpus, num_features):
+
+        if isinstance(self.final_allowed_feature_mapping, dict):
+            final_allowed_feature_mapping_fun = (lambda f_key: self.final_allowed_feature_mapping.get(f_key, None))
+        else:
+            final_allowed_feature_mapping_fun = self.final_allowed_feature_mapping
+
+        def fun(X, y, corpus):
+            for edge_index, edge in enumerate(corpus.edges()):
+                for f_key in edge.features.keys():
+
+                    f_index = final_allowed_feature_mapping_fun(f_key)
+
+                    if f_index is not None:
+                        value = edge.features[f_key]
+                        X[edge_index, f_index] = value
+
+                y[edge_index] = edge.real_target
+
+            return X, y
+
+
+        return __class__._create_instances(
+            num_features=num_features,
+            corpus=corpus,
+            preprocess=self.preprocess,
+            setting_function=fun
+        )
 
     @staticmethod
     def _create_instances(num_features, corpus, preprocess, setting_function):
@@ -185,32 +202,6 @@ class SklSVM(RelationExtractor):
         print_debug("SVC convert instances, running time: ", (end - start))
 
         return (X, y)
-
-
-    @staticmethod
-    def _gen_vector_instances(corpus, global_feature_set, preprocess):
-
-        allowed = [0, 1, 4, 5, 9, 11, 12, 13, 14, 15, 17, 18, 19, 22, 24, 26, 27, 30, 31, 32, 34, 38, 39, 40, 41, 45, 46, 49, 50, 51, 54, 56, 62, 65, 66, 71, 73, 77, 79, 80, 86, 87, 89, 90, 97, 98, 101, 104, 105, 108, 110, 112, 115, 117, 119, 120, 121, 122, 125, 126, 132, 136, 137, 141, 142, 143, 145, 148, 149, 151, 152, 153, 155, 157, 159, 160, 161, 162, 163, 164, 166, 168, 169, 170, 171, 172, 178, 182, 183, 185, 193, 196, 199, 208, 210, 211, 212, 213, 219, 225, 229, 230, 232, 233, 235, 236, 237, 238, 240, 241, 242, 244, 246, 248, 249, 254, 260, 261, 264, 265, 268, 276, 277, 283, 284, 286, 290, 294, 295, 298, 299, 301, 305, 311, 313, 319, 321, 326, 337, 338, 339, 340, 341, 343, 344, 345, 349, 354, 369, 370, 371, 377, 385, 386, 388, 389, 391, 392, 393, 395, 396, 405, 406, 407, 409, 410, 411, 412, 413, 415, 417, 418, 430, 432, 433, 434, 435, 440, 441, 444, 445, 446, 450, 451, 453, 460, 462, 463, 464, 465, 467, 468, 470, 471, 472, 473, 474, 475, 477, 479, 480, 482, 483, 484, 485, 486, 487, 497, 502, 504, 505, 506, 507, 508, 514, 515, 516, 517, 518, 519, 523, 527, 528, 532, 534, 544, 552, 553, 554, 555, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 570, 573, 578, 594, 596, 598, 599, 606, 607, 611, 617, 625, 630, 634, 635, 645, 647, 653, 654, 657, 658, 663, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 688, 695, 700, 705, 714, 716, 734, 735, 754, 756, 769, 770, 772, 774, 775, 776, 782, 785, 786, 795, 801, 802, 803, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814, 833, 840, 842, 843, 844, 845, 854, 858, 859, 861, 867, 874, 885, 888, 889, 891, 899, 908, 917, 920, 923, 935, 938, 971, 976, 977, 978, 979, 980, 981, 982, 996, 1002, 1003, 1006, 1007, 1008, 1014, 1015, 1016, 1024, 1028, 1035, 1036, 1046, 1048, 1051, 1055, 1056, 1057, 1058, 1059, 1063, 1064, 1065, 1066, 1067, 1070, 1071, 1075, 1078, 1079, 1080, 1081, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1100, 1104, 1111, 1125, 1127, 1128, 1131, 1140, 1141, 1143, 1153, 1160, 1166, 1168, 1170, 1171, 1172, 1175, 1178, 1180, 1181, 1182, 1183, 1186, 1187, 1189, 1190, 1191, 1192, 1194, 1195, 1197, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1214, 1215, 1219, 1220, 1221, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1234, 1239, 1241, 1242, 1243, 1244, 1245, 1261, 1262, 1264, 1265, 1266, 1267, 1268, 1273, 1278, 1285, 1288, 1289, 1302, 1303, 1306, 1307, 1308, 1312, 1313, 1316, 1317, 1318, 1319, 1320, 1321, 1322, 1326, 1327, 1328, 1330, 1331, 1332, 1334, 1338, 1341, 1342, 1344, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1352, 1353, 1361, 1363, 1366, 1369, 1375, 1376, 1377, 1379, 1380, 1381, 1382, 1383, 1384, 1398, 1399, 1400, 1401, 1402, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1428, 1429, 1431, 1432, 1436, 1437, 1438, 1464, 1465, 1466, 1467, 1470, 1472, 1476, 1477, 1478, 1479, 1480, 1481, 1482, 1483, 1485, 1488, 1490, 1492, 1495, 1498, 1499, 1500, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510]
-
-        def fun(X, y, corpus):
-            for edge_index, edge in enumerate(corpus.edges()):
-                for f_key in edge.features.keys():
-                    if f_key in allowed:
-                        f_index = f_key
-                        value = edge.features[f_key]
-                        X[edge_index, f_index] = value
-
-                y[edge_index] = edge.real_target
-
-            return X, y
-
-
-        return __class__._create_instances(
-            num_features=len(global_feature_set),
-            corpus=corpus,
-            preprocess=preprocess,
-            setting_function=fun
-        )
 
 
     @staticmethod
@@ -268,6 +259,9 @@ class SklSVM(RelationExtractor):
         X = X.tocsr()
 
         return (X, y)
+
+
+    ##################################################################################################################
 
 
     @staticmethod

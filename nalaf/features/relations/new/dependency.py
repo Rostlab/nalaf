@@ -159,11 +159,11 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
 
     def add_n_grams(self, f_set, is_train, edge, path, dep_type, n_gram):
 
-        def str_token(tok_f_key):
-            return (lambda t: t.features[tok_f_key]) if tok_f_key else (lambda t: t.word)
+        def token_feat(tok_f_key):
+            return (lambda t: t.features[tok_f_key])
 
-        def add_groups(gen_f_key, path_str_fun, tok_f_key=None):
-            groups = path_str_fun(n_gram, str_token(tok_f_key)) if tok_f_key else path_str_fun(n_gram)
+        def add_groups(gen_f_key, path_str_fun, token_fun=None):
+            groups = path_str_fun(n_gram, token_fun) if token_fun else path_str_fun(n_gram)
 
             for n_gram_group in groups:
                 self.add(f_set, is_train, edge, self.f(gen_f_key, dep_type), dep_type, n_gram, n_gram_group)
@@ -172,8 +172,8 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Regular features for all dependency paths types/names
         #
 
-        add_groups('f_XX_lemma_N_gram', path.strs_n_gram_token_only, 'lemma')
-        add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, 'pos')
+        add_groups('f_XX_lemma_N_gram', path.strs_n_gram_token_only, token_feat('lemma'))
+        add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('pos'))
 
         #
         #  Dedicated features for PD only

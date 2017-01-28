@@ -1,5 +1,6 @@
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
+from nltk.stem.snowball import SnowballStemmer
 from subprocess import Popen, PIPE
 import os
 import fcntl
@@ -101,6 +102,10 @@ class BioLemmatizer(FeatureGenerator):
             token.features['stem'] = self.generate_word(token.word, token.features['tag[0]'])
 
 
+PORTER_STEMMER = PorterStemmer()
+ENGLISH_STEMMER = SnowballStemmer("english")
+
+
 class PorterStemFeatureGenerator(FeatureGenerator):
     """
     Generates stem features based on the values of the tokens themselves.
@@ -113,7 +118,7 @@ class PorterStemFeatureGenerator(FeatureGenerator):
     """
 
     def __init__(self):
-        self.stemmer = PorterStemmer()
+        self.stemmer = PORTER_STEMMER
 
     def generate(self, dataset):
         """

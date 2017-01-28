@@ -4,6 +4,7 @@ https://github.com/juanmirocks/LocText-old-ShrikantThesis/files/474428/MasterThe
 """
 
 from nalaf.features.relations import EdgeFeatureGenerator
+from nalaf.features.stemming import ENGLISH_STEMMER
 
 
 class SentenceFeatureGenerator(EdgeFeatureGenerator):

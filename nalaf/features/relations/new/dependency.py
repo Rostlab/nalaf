@@ -181,7 +181,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         #
 
         add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, token_map=token_feat('lemma')))
-        add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('pos'))
+        add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('coarsed_pos'))
 
         #
         #  Dedicated features for PD only

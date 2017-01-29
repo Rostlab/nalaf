@@ -193,7 +193,7 @@ class Path:
     __STR_SOURCE = "[SOURCE"
     __STR_TARGET = "TARGET]"
 
-    def __init__(self, tokens, name="", is_edge_type_constant=False, default_n_grams=None):
+    def __init__(self, tokens, name="", is_edge_type_constant=False, there_is_target=True, default_n_grams=None):
         self.tokens = tokens
         self.nodes = []
         self.name = name
@@ -225,12 +225,17 @@ class Path:
         else:
             self.exists = True
 
-            self.nodes.append(PathNode(self.tokens[-1], edge_type="", is_forward=None, is_target=True))
+            self.nodes.append(PathNode(self.tokens[-1], edge_type="", is_forward=None, is_target=there_is_target))
             self.nodes[0].is_source = True
 
             self.source = [self.nodes[+0]]
-            self.middle = self.nodes[1:-1]
-            self.target = [self.nodes[-1]]
+
+            if there_is_target:
+                self.middle = self.nodes[1:-1]
+                self.target = [self.nodes[-1]]
+            else:
+                self.middle = self.nodes[1:]
+                self.target = []
 
     def change_name(self, new_name):
         self.name = new_name

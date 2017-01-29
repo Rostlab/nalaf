@@ -73,6 +73,20 @@ class TestGraphs(unittest.TestCase):
             cls.computed_sentences.append((dist, then, sentence))
 
 
+    def print_group(self, title, a_path_fun, n_grams=None):
+        if n_grams is None:
+            n_grams = range(1, 4+1)
+
+        print()
+        print(title)
+        for n_gram in n_grams:
+            print()
+            print(n_gram)
+            for group in a_path_fun(n_gram):
+                str_group = __empty__ if group is "" else group
+                print("\t", str_group)
+
+
     def test_print_an_example_path(self):
         # Sample: "GOLPH3L antagonizes GOLPH3 to determine Golgi morphology .",
         # See dependency graph: https://demos.explosion.ai/displacy/?text=GOLPH3L%20antagonizes%20GOLPH3%20to%20determine%20Golgi%20morphology%20.&model=en&cpu=0&cph=0
@@ -96,22 +110,44 @@ class TestGraphs(unittest.TestCase):
         print()
         print()
 
-        n_grams = range(1, 4+1)
+        self.print_group("undirected edges", a_path.strs_n_gram_undirected_edge_only)
+        self.print_group("directed edges", a_path.strs_n_gram_directed_edge_only)
+        self.print_group("tokens", a_path.strs_n_gram_token_only)
+        self.print_group("fully", a_path.strs_n_gram_full)
 
-        def print_group(title, a_path_fun):
+
+    def test_print_an_example_path_for_outer_window(self):
+        # Sample: "GOLPH3L antagonizes GOLPH3 to determine Golgi morphology .",
+
+        sample = next(filter(lambda x: x[2][0].word.startswith("GOLPH3L"), self.computed_sentences))
+        _, _, sentence = sample
+        pivot = 2  # GOLPH3 (without L)
+
+        window_size = 4
+
+        paths = [
+            Path(tokens=list(reversed(sentence[max(0, pivot - window_size):(pivot + 1)])), name="OW1", there_is_target=False, is_edge_type_constant=True),
+            Path(tokens=sentence[pivot:(pivot + window_size + 1)], name="OW2", there_is_target=False, is_edge_type_constant=True),
+        ]
+
+        for a_path in paths:
             print()
-            print(title)
-            for n_gram in n_grams:
-                print()
-                print(n_gram)
-                for group in a_path_fun(n_gram):
-                    str_group = __empty__ if group is "" else group
-                    print("\t", str_group)
+            print()
+            print()
+            print(a_path.name, "*****")
+            print()
+            print("REPR:  ", repr(a_path))
+            print()
+            print()
+            print("FULL:  ", str(a_path))
+            print()
+            print("U-EDGES ONLY:  ", a_path.str_undirected_edge_only())
+            print("D-EDGES ONLY:  ", a_path.str_directed_edge_only())
+            print("TOKENS ONLY:  ", a_path.str_token_only())
+            print()
+            print()
 
-        print_group("undirected edges", a_path.strs_n_gram_undirected_edge_only)
-        print_group("directed edges", a_path.strs_n_gram_directed_edge_only)
-        print_group("tokens", a_path.strs_n_gram_token_only)
-        print_group("fully", a_path.strs_n_gram_full)
+            self.print_group("tokens", a_path.strs_n_gram_token_only)
 
 
     def test_distance_u_u_is_0(self):

@@ -109,27 +109,31 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             dependency_paths = [
                 Path(
                     name='OW1',
-                    tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=False),
+                    tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
                     is_edge_type_constant=True,
+                    there_is_target=False,
                     default_n_grams=self.h_ow_grams,
                 ),
                 Path(
                     name='IW1',
                     tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
                     is_edge_type_constant=True,
+                    there_is_target=False,
                     default_n_grams=self.h_iw_grams,
                 ),
 
                 Path(
                     name='IW2',
-                    tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=False),
+                    tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=True),
                     is_edge_type_constant=True,
+                    there_is_target=False,
                     default_n_grams=self.h_iw_grams,
                 ),
                 Path(
                     name='OW2',
                     tokens=edge.entity2.next_tokens(sentence, n=self.h_ow_size, include_ent_last_token=True),
                     is_edge_type_constant=True,
+                    there_is_target=False,
                     default_n_grams=self.h_ow_grams,
                 ),
 

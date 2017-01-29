@@ -180,12 +180,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Regular features for all dependency paths types/names
         #
 
-        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, token_feat('lemma'))
-        # lambda token: token.get_entity(edge.same_part).class_id if token.get_entity(part) else t.features['lemma'])
-        # lambda token: ENGLISH_STEMMER.stem(token.word))
-        # lambda token: ENGLISH_STEMMER.stem(token.word))
-        # lambda token: ENGLISH_STEMMER.stem(masked_text(token, edge.same_part)))
-        # token_feat('lemma'))
+        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, token_map=token_feat('lemma')))
         add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('pos'))
 
         #

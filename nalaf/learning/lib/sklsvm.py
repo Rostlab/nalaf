@@ -136,8 +136,12 @@ class SklSVM(RelationExtractor):
         self.global_feature_set = global_feature_set
         if self.final_allowed_feature_mapping is None:
             self.set_allow_all_feature_keys()
+            num_features = len(global_feature_set)
+        else:
+            assert(isinstance(self.final_allowed_feature_mapping, dict))
+            num_features = len(self.final_allowed_feature_mapping)
 
-        X, y = self.__gen_vector_instances(corpus, num_features=len(global_feature_set))
+        X, y = self.__gen_vector_instances(corpus, num_features=num_features)
 
         for edge_index, edge in enumerate(corpus.edges()):
             edge.features_vector = X.getrow(edge_index)

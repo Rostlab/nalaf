@@ -400,7 +400,7 @@ class Dataset:
             for e in part.edges:
 
                 if e.pred_target == +1:
-                    r = Relation(e.relation_type, e.entity1, e.entity2)
+                    r = e.get_potential_relation()
                     part.predicted_relations.append(r)
 
         return self
@@ -1483,13 +1483,43 @@ class Edge:
         return self.e1_sentence_id == self.e2_sentence_id
 
 
+    def get_potential_relation(self):
+        """
+        Get the potential relation represented by this edge.
+        """
+        ret = Relation(self.relation_type, self.entity1, self.entity2)
+        assert ret.bidirectional, "Code tested only for bidirectional relations"
+        return ret
+
+
+    def get_relation_if_is_real(self):
+        """
+        If this edge represents a _real_ relation, return this -- Otherwise return None
+        """
+        if self.real_target == +1 or self.is_relation():
+            return self.get_potential_relation()
+        else:
+            return None
+
+
+    def get_relation_if_is_predicted(self):
+        """
+        If this edge is _predicted_ to be relation, return its representation -- Otherwise return None
+
+        Note: likely you do not need this -- Sugar function just for completeness.
+        """
+        if self.pred_target == +1:
+            return self.get_potential_relation()
+        else:
+            return None
+
+
     def is_relation(self):
         """
         check if the edge is present in part.relations.
         :rtype: bool
         """
-        potential_edge_relation = Relation(self.relation_type, self.entity1, self.entity2)
-        assert potential_edge_relation.bidirectional, "Code tested only for bidirectional relations"
+        potential_edge_relation = self.get_potential_relation()
 
         relations = self.same_part.relations if self.e1_part == self.e2_part else chain(self.e1_part.relations, self.e2_part.relations)
 

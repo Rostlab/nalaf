@@ -557,7 +557,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     }
 
 
-    def __init__(self, rel_type, entity_map_fun=None, relation_accept_fun=None):
+    def __init__(self, rel_type, entity_map_fun=None, relation_accept_fun=None, evaluate_only_on_edges_plausible_relations=False):
         self.rel_type = rel_type
         if entity_map_fun is None:
             self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
@@ -568,6 +568,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
             self.entity_map_fun = entity_map_fun
 
         self.relation_accept_fun = str.__eq__ if relation_accept_fun is None else relation_accept_fun
+
+        self.evaluate_only_on_edges_plausible_relations = evaluate_only_on_edges_plausible_relations
 
 
     def evaluate(self, dataset):
@@ -582,6 +584,11 @@ class DocumentLevelRelationEvaluator(Evaluator):
         print_verbose()
 
         for docid, doc in dataset.documents.items():
+            if self.evaluate_only_on_edges_plausible_relations:
+                relations_search_space = set(dataset.plausible_relations_from_generated_edges())
+            else:
+                relations_search_space = None
+
             gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 

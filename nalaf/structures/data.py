@@ -113,6 +113,16 @@ class Dataset:
                 yield relation
 
 
+    def plausible_relations_from_generated_edges(self):
+        """
+        Yield only the real relations that are obtainable from the corpus-generated edges.
+        """
+        for edge in self.edges():
+            relation = edge.get_relation_if_is_real()
+            if relation is not None:
+                yield relation
+
+
     def _remove_repetitions_with_relation_accept_fun(self, map_relations, relation_accept_fun):
         new_map_relations = {}
         discard = set()
@@ -1502,7 +1512,7 @@ class Edge:
             return None
 
 
-    def get_relation_if_is_predicted(self):
+    def get_potential_relation_if_is_predicted(self):
         """
         If this edge is _predicted_ to be relation, return its representation -- Otherwise return None
 

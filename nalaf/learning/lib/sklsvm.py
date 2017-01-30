@@ -100,7 +100,12 @@ class SklSVM(RelationExtractor):
         return self
 
     def set_allowed_feature_names(self, global_feature_set, allowed_feature_names):
-        raise NotImplementedError
+        self.global_feature_set = global_feature_set
+        self.allowed_feature_names = allowed_feature_names
+        allowed_feature_keys = {self.global_feature_set[f_name] for f_name in self.allowed_feature_names}
+        self.set_allowed_feature_keys(allowed_feature_keys)
+
+        return self
 
     def set_allowed_feature_keys(self, allowed_feature_keys):
         """

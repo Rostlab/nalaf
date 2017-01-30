@@ -123,26 +123,26 @@ class Dataset:
                 yield relation
 
 
-    def _remove_repetitions_with_relation_accept_fun(self, map_relations, relation_accept_fun):
-        new_map_relations = {}
+    def _remove_repetitions_with_relation_accept_fun(self, relations_map, relation_accept_fun):
+        new_relations_map = {}
         discard = set()
 
         def get(key):
-            return new_map_relations.get(key, map_relations.get(key))
+            return new_relations_map.get(key, relations_map.get(key))
 
-        for rel_key_1, rel_key_2 in combinations(map_relations.keys(), 2):
+        for rel_key_1, rel_key_2 in combinations(relations_map.keys(), 2):
 
             accept_1 = relation_accept_fun(rel_key_2, rel_key_1)  # Order matters, here, rel_key_1 is deemed "pred"
             accept_2 = relation_accept_fun(rel_key_1, rel_key_2)  # here, rel_key_2 is deemed "pred"
 
             if accept_1 is False and accept_2 is False:
-                new_map_relations[rel_key_1] = get(rel_key_1)
-                new_map_relations[rel_key_2] = get(rel_key_2)
+                new_relations_map[rel_key_1] = get(rel_key_1)
+                new_relations_map[rel_key_2] = get(rel_key_2)
             elif accept_1 is True and accept_2 is None:
-                new_map_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
+                new_relations_map[rel_key_1] = get(rel_key_1) + get(rel_key_2)
                 discard.update({rel_key_2})
             elif accept_1 is None and accept_2 is True:
-                new_map_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
+                new_relations_map[rel_key_2] = get(rel_key_2) + get(rel_key_1)
                 discard.update({rel_key_1})
             elif accept_1 is True and accept_2 is True:
                 # Should only happen in cases with either one contains more information
@@ -151,24 +151,24 @@ class Dataset:
 
                 # kinda hack: arbitrarily select they longest key
                 # if len(rel_key_1) > len(rel_key_2):
-                #     new_map_relations[rel_key_1] = get(rel_key_1) + get(rel_key_2)
+                #     new_relations_map[rel_key_1] = get(rel_key_1) + get(rel_key_2)
                 #     discard.update({rel_key_2})
                 # else:
-                #     new_map_relations[rel_key_2] = get(rel_key_2) + get(rel_key_1)
+                #     new_relations_map[rel_key_2] = get(rel_key_2) + get(rel_key_1)
                 #     discard.update({rel_key_1})
 
                 # For simplicity, we keep both
-                new_map_relations[rel_key_1] = get(rel_key_1)
-                new_map_relations[rel_key_2] = get(rel_key_2)
+                new_relations_map[rel_key_1] = get(rel_key_1)
+                new_relations_map[rel_key_2] = get(rel_key_2)
 
             else:
                 assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
 
         for rel_key in discard:
-            if rel_key in new_map_relations:
-                del new_map_relations[rel_key]
+            if rel_key in new_relations_map:
+                del new_relations_map[rel_key]
 
-        return new_map_relations
+        return new_relations_map
 
 
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
@@ -195,7 +195,7 @@ class Dataset:
         if entity_map_fun is None:
             entity_map_fun = Entity.__repr__
 
-        def map_relations(part, use_predicted):
+        def _map_relations(part, use_predicted):
             return part.map_relations(use_predicted=use_predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
         # ---
@@ -209,11 +209,11 @@ class Dataset:
 
             for part in doc:
 
-                part_dict_relations = part_dict_relations = map_relations(part, use_predicted=False)
+                part_dict_relations = part_dict_relations = _map_relations(part, use_predicted=False)
 
                 if predicted:
                     reals = part_dict_relations
-                    preds = map_relations(part, use_predicted=True)
+                    preds = _map_relations(part, use_predicted=True)
 
                     for real_rel_key, real_rels in reals.items():
                         pred_rels = preds[real_rel_key]

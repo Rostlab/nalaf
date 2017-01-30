@@ -862,7 +862,7 @@ class Document:
         return set(mentions)
 
 
-    def map_relations(self, use_predicted, relation_type, entity_map_fun, doc_mapped_relations=None):
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, doc_mapped_relations=None):
         """
         Map all Documents's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
 
@@ -876,7 +876,7 @@ class Document:
             doc_mapped_relations = {}
 
         for part in self:
-            doc_mapped_relations = part.map_relations(use_predicted, relation_type, entity_map_fun, doc_mapped_relations)
+            doc_mapped_relations = part.map_relations(use_predicted, relation_type, entity_map_fun, relations_search_space, doc_mapped_relations)
 
         return doc_mapped_relations
 
@@ -1345,12 +1345,15 @@ class Part:
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
 
-    def map_relations(self, use_predicted, relation_type, entity_map_fun, part_mapped_relations=None):
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, part_mapped_relations=None):
         """
         Map all Parts's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
 
         Create a set of the document's relations based on the map function of the relation themselves and the given map
         function for their entities. Relations end up being represented as strings in the set.
+
+        If relations_search_space is None, return the map of all parts' relations. Otherwise, return the map
+        of only those part's relations that are included in `relations_search_space` (a set or a list)
 
         Return: set of strings that represent unique relationsihps
         """
@@ -1361,7 +1364,7 @@ class Part:
         part_relations = self.predicted_relations if use_predicted else self.relations
 
         for r in part_relations:
-            if r.class_id == relation_type:
+            if r.class_id == relation_type and (relations_search_space is None or r in relations_search_space):
                 mapkey = r.map(entity_map_fun)
                 equivalent = part_mapped_relations.get(mapkey, [])
                 equivalent.append(r)

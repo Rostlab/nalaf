@@ -590,7 +590,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
             else:
                 relations_search_space = None
 
-            gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
+            gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun, relations_search_space=relations_search_space).keys()
             predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
             for r_pred in predicted:

@@ -585,7 +585,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
         for docid, doc in dataset.documents.items():
             if self.evaluate_only_on_edges_plausible_relations:
-                relations_search_space = set(dataset.plausible_relations_from_generated_edges())
+                # a set would be better, but so far Relation is unshable
+                relations_search_space = list(dataset.plausible_relations_from_generated_edges())
             else:
                 relations_search_space = None
 

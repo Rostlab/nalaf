@@ -164,6 +164,7 @@ class SklSVM(RelationExtractor):
             for edge_index, edge in enumerate(corpus.edges()):
                 for f_key in edge.features.keys():
 
+                    # TODO make it efficient with direct dictionary indexing or perhaps using a dok_matrix
                     f_index = final_allowed_feature_mapping_fun(f_key)
 
                     if f_index is not None:

@@ -1184,6 +1184,28 @@ class Part:
 
         return roots
 
+    @staticmethod
+    def get_main_verbs(sentence, include_linked_verbs=True, token_map=lambda t: t):
+
+        def search_first_verbs(tokens):
+            if len(tokens) == 0:
+                return []
+            else:
+                verbs = [t for t in tokens if t.is_POS_Verb()]
+
+                if len(verbs) > 0:
+                    return verbs
+                else:
+                    return search_first_verbs([dep_to for t in tokens for dep_to, _ in t.features["dependency_to"]])
+
+        roots = Part.get_sentence_roots(sentence)
+
+        verbs = search_first_verbs(roots)
+
+        if include_linked_verbs:
+            verbs += [dep_to for t in verbs for dep_to, _ in t.features["dependency_to"] if dep_to.is_POS_Verb()]
+
+        return [token_map(t) for t in verbs]
 
     _FEAT_DEPTH_KEY = 'depth'
 

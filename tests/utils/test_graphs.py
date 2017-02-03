@@ -29,6 +29,7 @@ TEST_SENTENCES_SINGLE_ROOT = [
     "YMR313c/TGL3 encodes a novel triacylglycerol lipase located in lipid particles of Saccharomyces cerevisiae .",
     "However , overexpression of ATG21 leads to CPY secretion .",
     "PP2A colocalizes with shugoshin at centromeres and is required for centromeric protection .",
+    "NO_VERB",
 ]
 
 TEST_SENTENCES_MULTI_ROOT = [
@@ -209,6 +210,15 @@ class TestGraphs(unittest.TestCase):
 
                     self.assertEqual(dist_fw[u, v], dist_di[v], (u, v, "\n", sentence, "\n", uv_path_fw, "\n", uv_path_di))
                     self.assertEqual(uv_path_fw, uv_path_di)
+
+
+    def test_main_verbs(self):
+
+        for _, _, sentence in self.computed_sentences:
+            print()
+            print(sentence)
+            verbs = set(Part.get_main_verbs(sentence, token_map=lambda t: t.features["lemma"]))
+            print("\t", verbs)
 
 
 if __name__ == '__main__':

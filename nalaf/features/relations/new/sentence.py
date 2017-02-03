@@ -72,7 +72,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
             for token in sentence:
                 self.add(f_set, is_train, edge, 'f_bow', ENGLISH_STEMMER.stem(token.word))
-                self.add(f_set, is_train, edge, 'f_pos', token.features['pos'])
+                self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
 
             self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
 

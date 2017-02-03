@@ -39,25 +39,31 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         f_OW_pos_N_gram=None,
         f_OW_tokens_count=None,
         f_OW_tokens_count_without_punct=None,
+        f_OW_is_negated=None,
         #
         f_IW_bow_N_gram=None,
         f_IW_pos_N_gram=None,
         f_IW_tokens_count=None,
         f_IW_tokens_count_without_punct=None,
+        f_IW_is_negated=None,
         #
         f_LD_bow_N_gram=None,
         f_LD_pos_N_gram=None,
         f_LD_tokens_count=None,
         f_LD_tokens_count_without_punct=None,
+        f_LD_is_negated=None,
         #
         f_PD_bow_N_gram=None,
         f_PD_pos_N_gram=None,
         f_PD_tokens_count=None,
         f_PD_tokens_count_without_punct=None,
-        # Dedicated ones
+        f_PD_is_negated=None,
+        # Specific ones for PD
         f_PD_undirected_edges_N_gram=None,
         f_PD_directed_edges_N_gram=None,
         f_PD_full_N_gram=None,
+        # Extra features
+        f_sentence_is_negated=None,
     ):
 
         # Hyper parameters
@@ -72,28 +78,37 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         self.f_OW_pos_N_gram = f_OW_pos_N_gram
         self.f_OW_tokens_count = f_OW_tokens_count
         self.f_OW_tokens_count_without_punct = f_OW_tokens_count_without_punct
+        self.f_OW_is_negated = f_OW_is_negated
         #
         self.f_IW_bow_N_gram = f_IW_bow_N_gram
         self.f_IW_pos_N_gram = f_IW_pos_N_gram
         self.f_IW_tokens_count = f_IW_tokens_count
         self.f_IW_tokens_count_without_punct = f_IW_tokens_count_without_punct
+        self.f_IW_is_negated = f_IW_is_negated
         #
         self.f_LD_bow_N_gram = f_LD_bow_N_gram
         self.f_LD_pos_N_gram = f_LD_pos_N_gram
         self.f_LD_tokens_count = f_LD_tokens_count
         self.f_LD_tokens_count_without_punct = f_LD_tokens_count_without_punct
+        self.f_LD_is_negated = f_LD_is_negated
         ####
-        # Parsing Dependencies got more features
+        # Parsing Dependencies has more features
         ####
         # Regular ones
         self.f_PD_bow_N_gram = f_PD_bow_N_gram
         self.f_PD_pos_N_gram = f_PD_pos_N_gram
         self.f_PD_tokens_count = f_PD_tokens_count
         self.f_PD_tokens_count_without_punct = f_PD_tokens_count_without_punct
-        # Dedicated ones
+        self.f_PD_is_negated = f_PD_is_negated
+        # Specific ones for PD
         self.f_PD_undirected_edges_N_gram = f_PD_undirected_edges_N_gram
         self.f_PD_directed_edges_N_gram = f_PD_directed_edges_N_gram
         self.f_PD_full_N_gram = f_PD_full_N_gram
+
+        ####
+        # Extra features
+        ####
+        self.f_sentence_is_negated = f_sentence_is_negated
 
 
     def generate(self, corpus, f_set, is_train):
@@ -157,12 +172,31 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
+                if self.is_negated(dep_path.tokens):
+                    self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
+
+                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
+
+            # Extra
+
+            if self.is_negated(sentence):
+                self.add(f_set, is_train, edge, "f_sentence_is_negated")
 
 
     def f(self, feat_key, dependency_XX, ngram_N=None):
         """Return the final real name of the feature"""
         dependency_XX = dependency_XX[:2]
         return feat_key.replace('XX', dependency_XX)
+
+
+    def is_negated(self, tokens_path):
+        """
+        Simple heuristic to derive if a sentence or more generally a path of tokens (e.g. parsing dependency)
+        is written affirmatively or negated, as in "Juanmi is awesome" vs. "Juanmi does not give up".
+
+        A path of tokens is negated if it contains an odd number of "neg" (negation) parsed dependencies.
+        """
+        return (sum(t.features["dep"] == "neg" for t in tokens_path) % 2) != 0
 
 
     def add_n_grams(self, f_set, is_train, edge, path, dep_type, n_gram):
@@ -180,7 +214,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Regular features for all dependency paths types/names
         #
 
-        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, token_map=token_feat('lemma')))
+        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, token_map=token_feat('lemma'), token_is_number_fun=lambda _: "NUM"))
         add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('coarsed_pos'))
 
         #

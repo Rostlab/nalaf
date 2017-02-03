@@ -1163,6 +1163,8 @@ class Part:
                     if entity.offset <= token.start < entity_end or \
                         token.start <= entity.offset < token.end:
                         entity.tokens.append(token)
+                        entity.sentence = sentence
+                        entity.part = self
 
 
     @staticmethod
@@ -1619,6 +1621,7 @@ class Token:
 
     :type word: str
     :type start: int
+    :type end: int
     :type original_labels: list[Label]
     :type predicted_labels: list[Label]
     :type features: FeatureDictionary
@@ -1703,9 +1706,9 @@ class Token:
         :return nalaf.structures.data.Entity or None
         """
         for entity in part.annotations:
-            if self.start <= entity.offset < self.end:
-                # entity.offset <= self.start < entity.offset + len(entity.text):
+            if entity.offset <= self.start < entity.end_offset() or entity.offset < self.end <= entity.end_offset():
                 return entity
+
         return None
 
 
@@ -1790,8 +1793,25 @@ class Entity:
         TODO Note that tokens are already within sentences. You should use those by default.
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
+        self.sentence = None
+        """
+        The whole sentence of tokens this entity belongs to, if set.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+        """
+        self.part = None
+        """
+        The whole part this entity belongs to, if set.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+        """
         self.head_token = None
         """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see parsers.py)"""
+
+        self.features = {}
+        """
+        User-defined object with dictionary of features (names to values)
+        """
 
 
     equality_operator = 'exact'

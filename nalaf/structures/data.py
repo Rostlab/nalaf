@@ -1209,6 +1209,17 @@ class Part:
 
         return [token_map(t) for t in verbs]
 
+    @staticmethod
+    def is_negated(tokens_path):
+        """
+        Simple heuristic to derive if a sentence or more generally a path of tokens (e.g. parsing dependency)
+        is written affirmatively or negated, as in "Juanmi is awesome" vs. "Juanmi does not give up".
+
+        A path of tokens is negated if it contains an odd number of "neg" (negation) parsed dependencies.
+        """
+        return (sum(t.features["dep"] == "neg" for t in tokens_path) % 2) != 0
+
+
     _FEAT_DEPTH_KEY = 'depth'
 
 

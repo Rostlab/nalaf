@@ -15,6 +15,7 @@ from nalaf.features.relations import EdgeFeatureGenerator
 from nalaf.utils.graphs import compute_shortest_path, Path
 from nalaf.features.stemming import ENGLISH_STEMMER
 from nalaf.features.util import masked_text
+from nalaf.structures.data import Part
 
 
 class DependencyFeatureGenerator(EdgeFeatureGenerator):
@@ -63,7 +64,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         f_PD_directed_edges_N_gram=None,
         f_PD_full_N_gram=None,
         # Extra features
-        f_sentence_is_negated=None,
+        # None now
     ):
 
         # Hyper parameters
@@ -108,7 +109,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         ####
         # Extra features
         ####
-        self.f_sentence_is_negated = f_sentence_is_negated
+        # None now
 
 
     def generate(self, corpus, f_set, is_train):
@@ -172,31 +173,18 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
-                if self.is_negated(dep_path.tokens):
+                if Part.is_negated(dep_path.tokens):
                     self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
 
             # Extra
 
-            if self.is_negated(sentence):
-                self.add(f_set, is_train, edge, "f_sentence_is_negated")
-
 
     def f(self, feat_key, dependency_XX, ngram_N=None):
         """Return the final real name of the feature"""
         dependency_XX = dependency_XX[:2]
         return feat_key.replace('XX', dependency_XX)
-
-
-    def is_negated(self, tokens_path):
-        """
-        Simple heuristic to derive if a sentence or more generally a path of tokens (e.g. parsing dependency)
-        is written affirmatively or negated, as in "Juanmi is awesome" vs. "Juanmi does not give up".
-
-        A path of tokens is negated if it contains an odd number of "neg" (negation) parsed dependencies.
-        """
-        return (sum(t.features["dep"] == "neg" for t in tokens_path) % 2) != 0
 
 
     def add_n_grams(self, f_set, is_train, edge, path, dep_type, n_gram):

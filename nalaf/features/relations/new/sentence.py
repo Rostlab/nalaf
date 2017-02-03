@@ -6,6 +6,7 @@ https://github.com/juanmirocks/LocText-old-ShrikantThesis/files/474428/MasterThe
 from nalaf.features.relations import EdgeFeatureGenerator
 from nalaf.features.stemming import ENGLISH_STEMMER
 from nalaf.features.util import masked_text
+from nalaf.structures.data import Part
 
 class SentenceFeatureGenerator(EdgeFeatureGenerator):
     """
@@ -25,11 +26,16 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         f_counts_in_between_total,
 
         f_order,
+
         f_bow,
         f_pos,
+
         f_tokens_count,
         f_tokens_count_before,
-        f_tokens_count_after
+        f_tokens_count_after,
+
+        f_sentence_is_negated,
+        f_main_verbs,
     ):
 
         self.f_counts_individual = f_counts_individual
@@ -38,11 +44,16 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         self.f_counts_in_between_total = f_counts_in_between_total
 
         self.f_order = f_order
+
         self.f_bow = f_bow
         self.f_pos = f_pos
+
         self.f_tokens_count = f_tokens_count
         self.f_tokens_count_before = f_tokens_count_before
         self.f_tokens_count_after = f_tokens_count_after
+
+        self.f_sentence_is_negated = f_sentence_is_negated
+        self.f_main_verbs = f_main_verbs
 
 
     def generate(self, corpus, f_set, is_train):
@@ -83,3 +94,18 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
             self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token]))
             self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token+1):]))
+
+            #
+
+            if Part.is_negated(sentence):
+                self.add(f_set, is_train, edge, "f_sentence_is_negated")
+
+            #
+
+            verbs = set(Part.get_main_verbs(sentence, token_map=lambda t: t.features["lemma"]))
+
+            if len(verbs) == 0:
+                self.add(f_set, is_train, edge, "f_main_verbs", "NO_MAIN_VERB")
+            else:
+                for v in verbs:
+                    self.add(f_set, is_train, edge, "f_main_verbs", v)

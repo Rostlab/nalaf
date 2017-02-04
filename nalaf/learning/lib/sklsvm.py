@@ -102,7 +102,7 @@ class SklSVM(RelationExtractor):
     def set_allowed_feature_names(self, global_feature_set, allowed_feature_names):
         self.global_feature_set = global_feature_set
         self.allowed_feature_names = allowed_feature_names
-        allowed_feature_keys = {self.global_feature_set[f_name] for f_name in self.allowed_feature_names}
+        allowed_feature_keys = {self.global_feature_set[f_name] for f_name in self.allowed_feature_names if self.global_feature_set.get(f_name, None)}
         self.set_allowed_feature_keys(allowed_feature_keys)
 
         return self

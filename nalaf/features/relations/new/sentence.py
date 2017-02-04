@@ -82,7 +82,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 self.add(f_set, is_train, edge, 'f_order')
 
             for token in sentence:
-                self.add(f_set, is_train, edge, 'f_bow', ENGLISH_STEMMER.stem(token.word))
+                self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
                 self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
 
             self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))

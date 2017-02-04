@@ -608,11 +608,23 @@ class Dataset:
 
         return (create_keys_set(training), create_keys_set(evaluation))
 
+
     @staticmethod
     def _cv_kfold_splits_randomize_keys(keys):
         random.seed(2727)
         random.shuffle(keys)
         return keys
+
+
+    @staticmethod
+    def _cv_kfold_splits_doc_keys_sets(doc_keys, k, validation_set):
+        doc_keys = list(sorted(doc_keys))
+        doc_keys = __class__._cv_kfold_splits_randomize_keys(doc_keys)
+
+        for fold in range(k):
+            training, evaluation = __class__._cv_kfold_split(doc_keys, k, fold, validation_set)
+            yield training, evaluation
+
 
     def cv_kfold_splits(self, k, validation_set=True):
 
@@ -622,11 +634,7 @@ class Dataset:
                 ret.documents[elem] = self.documents[elem]
             return ret
 
-        keys = list(sorted(self.documents.keys()))
-        keys = __class__._cv_kfold_splits_randomize_keys(keys)
-
-        for fold in range(k):
-            training, evaluation = __class__._cv_kfold_split(keys, k, fold, validation_set)
+        for training, evaluation in __class__._cv_kfold_splits_doc_keys_sets(self.documents.keys(), k, validation_set):
             yield (create_dataset(training), create_dataset(evaluation))
 
 

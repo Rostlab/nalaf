@@ -40,6 +40,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
         f_entity1_count,
         f_entity2_count,
+        f_diff_sents_together_count,
     ):
 
         self.f_counts_individual = f_counts_individual
@@ -61,6 +62,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
         self.f_entity1_count = f_entity1_count
         self.f_entity2_count = f_entity2_count
+        self.f_diff_sents_together_count = f_diff_sents_together_count
 
 
     def generate(self, corpus, f_set, is_train):
@@ -122,22 +124,37 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                         self.add(f_set, is_train, edge, "f_main_verbs", v)
 
                 counters = {}
-
-                for entity in document.entities():
-                    ent_type_counter = counters.get(entity.class_id, Counter())
-                    ent_key = __class__.entity2key(entity)
-                    ent_type_counter.update([ent_key])
-                    counters[entity.class_id] = ent_type_counter
+                for part in document:
+                    for entity in part.annotations:
+                        ent_type_counter = counters.get(entity.class_id, Counter())
+                        ent_key = __class__.entity2key(entity)
+                        ent_type_counter.update([ent_key])
+                        counters[entity.class_id] = ent_type_counter
 
                 e1_key = __class__.entity2key(edge.entity1)
                 e1_count = counters[edge.entity1.class_id][e1_key]
-                print("YOLO", e1_key, e1_count)
                 self.add_with_value(f_set, is_train, edge, 'f_entity1_count', e1_count)
 
                 e2_key = __class__.entity2key(edge.entity2)
                 e2_count = counters[edge.entity2.class_id][e2_key]
-                print("LOYO", e2_key, e2_count)
                 self.add_with_value(f_set, is_train, edge, 'f_entity2_count', e2_count)
+
+                together_counter = Counter()
+                diff_sentences = {}
+                for aux_edge in document.edges():
+                    if aux_edge.e1_sentence_id == aux_edge.e2_sentence_id:
+                        together_key = __class__.edge2key(aux_edge)
+
+                        sents = diff_sentences.get(together_key, [])
+                        if aux_edge.e1_sentence_id not in sents:
+                            sents.append(aux_edge.e1_sentence_id)
+                            diff_sentences[together_key] = sents
+                            together_counter.update([together_key])
+
+                together_key = __class__.edge2key(edge)
+                together_count = together_counter[together_key]
+                if together_count > 0:
+                    self.add_with_value(f_set, is_train, edge, 'f_diff_sents_together_count', together_count)
 
 
     @staticmethod
@@ -147,6 +164,18 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
             return ent_norms[0]
         else:
             return entity.text.lower()
+
+
+    @staticmethod
+    def edge2key(edge):
+        e1_key = __class__.entity2key(edge.entity1)
+        e2_key = __class__.entity2key(edge.entity2)
+
+        if edge.entity1.class_id < edge.entity2.class_id:
+            return e1_key + "|" + e2_key
+        else:
+            return e2_key + "|" + e1_key
+
 
     def extract_abbreviation_synonyms(self, corpus):
         """

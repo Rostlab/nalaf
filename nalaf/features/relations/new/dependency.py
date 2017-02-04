@@ -173,10 +173,9 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
-                if Part.is_negated(dep_path.tokens):
-                    self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
-                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
+                if Part.is_negated(dep_path.middle):
+                    self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
             # Extra
 

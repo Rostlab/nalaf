@@ -7,6 +7,7 @@ from nalaf.features.relations import EdgeFeatureGenerator
 from nalaf.features.stemming import ENGLISH_STEMMER
 from nalaf.features.util import masked_text
 from nalaf.structures.data import Part
+from collections import Counter
 
 class SentenceFeatureGenerator(EdgeFeatureGenerator):
     """
@@ -36,6 +37,9 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
         f_sentence_is_negated,
         f_main_verbs,
+
+        f_entity1_count,
+        f_entity2_count,
     ):
 
         self.f_counts_individual = f_counts_individual
@@ -55,63 +59,94 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         self.f_sentence_is_negated = f_sentence_is_negated
         self.f_main_verbs = f_main_verbs
 
+        self.f_entity1_count = f_entity1_count
+        self.f_entity2_count = f_entity2_count
+
 
     def generate(self, corpus, f_set, is_train):
         self.extract_abbreviation_synonyms(corpus)
 
-        for edge in corpus.edges():
-            sentence = edge.get_combined_sentence()
+        for document in corpus:
+            for edge in document.edges():
 
-            total_count = 0
-            for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
-                individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
-                assert individual_count >= 0
-                total_count += individual_count
-                self.add_with_value(f_set, is_train, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)
+                sentence = edge.get_combined_sentence()
 
-            self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
+                total_count = 0
+                for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
+                    individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
+                    assert individual_count >= 0
+                    total_count += individual_count
+                    self.add_with_value(f_set, is_train, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)
 
-            total_count = 0
-            for e_class_id, entities in edge.get_any_entities_between_entities(predicted=False).items():
-                individual_count = len(entities)
-                total_count += individual_count
-                self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
+                self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
 
-            self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_total', total_count, 'int', 'total (all classes)')
+                total_count = 0
+                for e_class_id, entities in edge.get_any_entities_between_entities(predicted=False).items():
+                    individual_count = len(entities)
+                    total_count += individual_count
+                    self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
 
-            order = edge.entity1.class_id < edge.entity2.class_id
-            if order:
-                self.add(f_set, is_train, edge, 'f_order')
+                self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_total', total_count, 'int', 'total (all classes)')
 
-            for token in sentence:
-                self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
-                self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
+                order = edge.entity1.class_id < edge.entity2.class_id
+                if order:
+                    self.add(f_set, is_train, edge, 'f_order')
 
-            self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
+                for token in sentence:
+                    self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
+                    self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
 
-            # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
-            _e1_first_token = edge.entity1.tokens[0].features['id']
-            _e2_last_token = edge.entity2.tokens[-1].features['id']
-            assert _e1_first_token < _e2_last_token
+                self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
 
-            self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token]))
-            self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token+1):]))
+                # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
+                _e1_first_token = edge.entity1.tokens[0].features['id']
+                _e2_last_token = edge.entity2.tokens[-1].features['id']
+                assert _e1_first_token < _e2_last_token
 
-            #
+                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token]))
+                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token+1):]))
 
-            if Part.is_negated(sentence):
-                self.add(f_set, is_train, edge, "f_sentence_is_negated")
+                #
 
-            #
+                if Part.is_negated(sentence):
+                    self.add(f_set, is_train, edge, "f_sentence_is_negated")
 
-            verbs = set(Part.get_main_verbs(sentence, token_map=lambda t: t.features["lemma"]))
+                #
 
-            if len(verbs) == 0:
-                self.add(f_set, is_train, edge, "f_main_verbs", "NO_MAIN_VERB")
-            else:
-                for v in verbs:
-                    self.add(f_set, is_train, edge, "f_main_verbs", v)
+                verbs = set(Part.get_main_verbs(sentence, token_map=lambda t: t.features["lemma"]))
 
+                if len(verbs) == 0:
+                    self.add(f_set, is_train, edge, "f_main_verbs", "NO_MAIN_VERB")
+                else:
+                    for v in verbs:
+                        self.add(f_set, is_train, edge, "f_main_verbs", v)
+
+                counters = {}
+
+                for entity in document.entities():
+                    ent_type_counter = counters.get(entity.class_id, Counter())
+                    ent_key = __class__.entity2key(entity)
+                    ent_type_counter.update([ent_key])
+                    counters[entity.class_id] = ent_type_counter
+
+                e1_key = __class__.entity2key(edge.entity1)
+                e1_count = counters[edge.entity1.class_id][e1_key]
+                print("YOLO", e1_key, e1_count)
+                self.add_with_value(f_set, is_train, edge, 'f_entity1_count', e1_count)
+
+                e2_key = __class__.entity2key(edge.entity2)
+                e2_count = counters[edge.entity2.class_id][e2_key]
+                print("LOYO", e2_key, e2_count)
+                self.add_with_value(f_set, is_train, edge, 'f_entity2_count', e2_count)
+
+
+    @staticmethod
+    def entity2key(entity):
+        ent_norms = list(entity.normalisation_dict.values())
+        if len(ent_norms) > 0 and ent_norms[0] is not None:
+            return ent_norms[0]
+        else:
+            return entity.text.lower()
 
     def extract_abbreviation_synonyms(self, corpus):
         """

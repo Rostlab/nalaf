@@ -270,8 +270,7 @@ class Dataset:
 
     def edges(self):
         """
-        helper function that iterations through all edges
-        that is, each edge of each sentence of each part of each document in the dataset
+        Yield all this Corpus's edges.
 
         :rtype: collections.Iterable[Edge]
         """
@@ -851,6 +850,16 @@ class Document:
             for rel in part.predicted_relations:
                 yield rel
 
+
+    def edges(self):
+        """
+        Yield all this Document's edges.
+
+        :rtype: collections.Iterable[Edge]
+        """
+        for part in self.parts():
+            for edge in part.edges:
+                yield edge
 
     def get_unique_mentions(self):
         """:return: set of all mentions (standard + natural language)"""

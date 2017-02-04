@@ -857,9 +857,10 @@ class Document:
 
         :rtype: collections.Iterable[Edge]
         """
-        for part in self.parts():
+        for part in self:
             for edge in part.edges:
                 yield edge
+
 
     def get_unique_mentions(self):
         """:return: set of all mentions (standard + natural language)"""
@@ -1530,6 +1531,9 @@ class Edge:
 
         self.pred_target = None
         """predicted class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
+
+        self.initial_instance_index = None
+        """row index of this edge in the matrix X of instances gathered initially for all data (training + test)"""
 
 
     def __repr__(self):

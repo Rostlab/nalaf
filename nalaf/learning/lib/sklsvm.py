@@ -146,12 +146,13 @@ class SklSVM(RelationExtractor):
             assert(isinstance(self.final_allowed_feature_mapping, dict))
             num_features = len(self.final_allowed_feature_mapping)
 
-        X, y = self.__gen_vector_instances(corpus, num_features=num_features)
+        X, y, groups = self.__gen_vector_instances(corpus, num_features=num_features)
 
-        for edge_index, edge in enumerate(corpus.edges()):
-            edge.features_vector = X.getrow(edge_index)
+        for edge in corpus.edges():
+            assert(edge.initial_instance_index is not None)
+            edge.features_vector = X.getrow(edge.initial_instance_index)
 
-        return X, y
+        return X, y, groups
 
     def __gen_vector_instances(self, corpus, num_features):
 
@@ -161,19 +162,26 @@ class SklSVM(RelationExtractor):
             final_allowed_feature_mapping_fun = self.final_allowed_feature_mapping
 
         def fun(X, y, corpus):
-            for edge_index, edge in enumerate(corpus.edges()):
-                for f_key in edge.features.keys():
+            groups = {}
+            instance_index = -1
+            for docid, document in corpus.documents.items():
+                for edge in document.edges():
+                    instance_index += 1
+                    edge.initial_instance_index = instance_index
+                    groups[docid] = groups.get(docid, []) + [instance_index]
 
-                    # TODO make it efficient with direct dictionary indexing or perhaps using a dok_matrix
-                    f_index = final_allowed_feature_mapping_fun(f_key)
+                    for f_key in edge.features.keys():
 
-                    if f_index is not None:
-                        value = edge.features[f_key]
-                        X[edge_index, f_index] = value
+                        # TODO make it efficient with direct dictionary indexing or perhaps using a dok_matrix
+                        f_index = final_allowed_feature_mapping_fun(f_key)
 
-                y[edge_index] = edge.real_target
+                        if f_index is not None:
+                            value = edge.features[f_key]
+                            X[instance_index, f_index] = value
 
-            return X, y
+                    y[instance_index] = edge.real_target
+
+            return X, y, groups
 
         return __class__._create_instances(
             num_features=num_features,
@@ -198,7 +206,7 @@ class SklSVM(RelationExtractor):
         X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
         y = np.zeros(num_instances, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC
 
-        X, y = setting_function(X, y, corpus)
+        X, y, groups = setting_function(X, y, corpus)
 
         X = X.tocsr()
 
@@ -210,7 +218,7 @@ class SklSVM(RelationExtractor):
         end = time.time()
         print_debug("SVC convert instances, running time: ", (end - start))
 
-        return (X, y)
+        return (X, y, groups)
 
 
     def __convert_edges_features_to_vector_instances(self, corpus):

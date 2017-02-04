@@ -174,7 +174,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
                 self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
 
-                if Part.is_negated(dep_path.middle):
+                if Part.is_negated([node.token for node in dep_path.middle]):
                     self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
             # Extra

@@ -165,6 +165,8 @@ class SklSVM(RelationExtractor):
             groups = {}
             instance_index = -1
             for docid, document in corpus.documents.items():
+                groups[docid] = []  # Note, some documents may not generate instances -- Define them with empty lists
+
                 for edge in document.edges():
                     instance_index += 1
                     edge.initial_instance_index = instance_index

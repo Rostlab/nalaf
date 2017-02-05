@@ -214,7 +214,7 @@ class SklSVM(RelationExtractor):
         print_verbose("SVC before preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
         if preprocess:
             X = __class__._preprocess(X)
-            print_verbose("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
+            print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
         end = time.time()
         print_debug("SVC convert instances, running time: ", (end - start))
@@ -256,8 +256,8 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _preprocess(X):
-        # X = __class__._assure_min_variance(X)
         X = __class__._scale(X)
+        # X = __class__._assure_min_variance(X)
         return X
 
 

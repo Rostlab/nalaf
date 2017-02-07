@@ -204,17 +204,17 @@ class Path:
                 edge_type = ""
                 is_forward = None
             else:
-                u_dep_from = u_token.features['dependency_from']
-                v_dep_from = v_token.features['dependency_from']
+                u_dep_froms = list(filter(None.__ne__, [u_token.features['dependency_from']]))
+                v_dep_froms = list(filter(None.__ne__, [v_token.features['dependency_from']]))
 
-                if v_dep_from is not None and v_dep_from[0] == u_token:
-                    edge_type = v_dep_from[1]
+                if v_dep_froms and v_dep_froms[0][0] == u_token:
+                    edge_type = v_dep_froms[0][1]
                     is_forward = True
-                elif u_dep_from is not None and u_dep_from[0] == v_token:
-                    edge_type = u_dep_from[1]
+                elif u_dep_froms and u_dep_froms[0][0] == v_token:
+                    edge_type = u_dep_froms[0][1]
                     is_forward = False
                 else:
-                    raise AssertionError(("One must be a dependency of the other", u_token, v_token, u_dep_from, v_dep_from, tokens))
+                    raise AssertionError(("One must be a dependency of the other", u_token, v_token, u_dep_froms, v_dep_froms, tokens))
 
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 

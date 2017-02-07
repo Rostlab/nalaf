@@ -1717,6 +1717,38 @@ class Edge:
 
 
     @staticmethod
+    def _addRootLinks(combined_sentence, sentence1, sentence2):
+        """
+        link roots of both the sentences
+
+        `addRootLinks` re-implementation of Shrikant's (java) into Python.
+
+
+        *IMPORTANT*:
+
+        * Shrikant/Java/CoreNLP code had one single root for every sentence
+        * Python/spaCy sentences can have more than 1 root
+        * --> Therefore, we create a product of links of all the roots
+        * --> see: (https://github.com/juanmirocks/LocText/issues/6#issue-177139892)
+
+
+        Dependency directions:
+
+        sentence1 -> sentence2
+        sentence2 <- sentence1
+        """
+        from itertools import product
+
+        for (s1_root, s2_root) in product(Part.get_sentence_roots(sentence1), Part.get_sentence_roots(sentence2)):
+
+            s1_root.features['user_dependency_to'].append((s2_root, "rootDepForward"))
+            s1_root.features['user_dependency_from'].append((s2_root, "rootDepBackward"))
+
+            s2_root.features['user_dependency_from'].append((s1_root, "rootDepForward"))
+            s2_root.features['user_dependency_to'].append((s1_root, "rootDepBackward"))
+
+
+    @staticmethod
     def _addWordSimilarityLinks(combined_sentence, sentence1, sentence2):
         """
         For now:
@@ -1761,38 +1793,6 @@ class Edge:
         # In combination: do both directions
         _do_one_direction(sentence1, sentence2)
         _do_one_direction(sentence2, sentence1)
-
-
-    @staticmethod
-    def _addRootLinks(combined_sentence, sentence1, sentence2):
-        """
-        link roots of both the sentences
-
-        `addRootLinks` re-implementation of Shrikant's (java) into Python.
-
-
-        *IMPORTANT*:
-
-        * Shrikant/Java/CoreNLP code had one single root for every sentence
-        * Python/spaCy sentences can have more than 1 root
-        * --> Therefore, we create a product of links of all the roots
-        * --> see: (https://github.com/juanmirocks/LocText/issues/6#issue-177139892)
-
-
-        Dependency directions:
-
-        sentence1 -> sentence2
-        sentence2 <- sentence1
-        """
-        from itertools import product
-
-        for (s1_root, s2_root) in product(Part.get_sentence_roots(sentence1), Part.get_sentence_roots(sentence2)):
-
-            s1_root.features['user_dependency_to'].append((s2_root, "rootDepForward"))
-            s1_root.features['user_dependency_from'].append((s2_root, "rootDepBackward"))
-
-            s2_root.features['user_dependency_from'].append((s1_root, "rootDepForward"))
-            s2_root.features['user_dependency_to'].append((s1_root, "rootDepBackward"))
 
 
 class Token:

@@ -1745,23 +1745,21 @@ class Edge:
 
         assert edge.same_part
 
+        def _do_one_direction(sent_a, sent_b):
 
-    @staticmethod
-    def _do_one_direction(sent_a, sent_b):
+            sent_a_contains_entity = edge.entity1.class_id == class_id
+            if not sent_a_contains_entity:
+                sent_a_tokens_that_match_key_words = (t for t in sent_a if any(kw in t.word.lower() for kw in key_words))
 
-        sent_a_contains_entity = edge.entity1.class_id == class_id
-        if not sent_a_contains_entity:
-            sent_a_tokens_that_match_key_words = (t for t in sent_a if any(kw in t.word.lower() for kw in key_words))
+                for sent_a_token in sent_a_tokens_that_match_key_words:
 
-            for sent_a_token in sent_a_tokens_that_match_key_words:
+                    for sent_b_token in sent_b:
 
-                for sent_b_token in sent_b:
+                        sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)
+                        if sent_b_token_in_entity is not None and sent_b_token_in_entity.class_id == class_id:
 
-                    sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)
-                    if sent_b_token_in_entity is not None and sent_b_token_in_entity.class_id == class_id:
-
-                        sent_a_token.features['user_dependency_to'].append((sent_b_token, dependency_type))
-                        sent_b_token.features['user_dependency_from'].append((sent_a_token, dependency_type))
+                            sent_a_token.features['user_dependency_to'].append((sent_b_token, dependency_type))
+                            sent_b_token.features['user_dependency_from'].append((sent_a_token, dependency_type))
 
         # In combination: do both directions
         _do_one_direction(sentence1, sentence2)

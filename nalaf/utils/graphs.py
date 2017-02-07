@@ -3,17 +3,16 @@ import numpy
 import itertools
 
 
-def compute_shortest_path(sentence, token_1, token_2):
+def compute_shortest_path(sentence, token_1_index, token_2_index):
     """
     Compute the shortest path between the given pair of tokens considering the sentence's dependency graph.
 
-    The method currently uses the Floyd Warshall algorithm to compute the shortest paths between all nodes in the graph
-    and runs in O(V^3) time. Efforts are under way to reduce this.
+    The method uses the Dijkstra algorithm internally.
 
     Returns Path
     """
-    source = token_1.features['id']
-    target = token_2.features['id']
+    source = token_1_index
+    target = token_2_index
     _, prev = dijkstra_original(source, target, sentence)
     return path_reversed(source, target, prev, sentence)
 

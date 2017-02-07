@@ -121,6 +121,9 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             _e1_last_token_index = edge.entity1.tokens[-1].features['id']
             _e2_first_token_index = edge.get_entity2_offset(edge.entity2.tokens[0].features['id'])
             assert _e1_last_token_index < _e2_first_token_index
+            _e1_head_token_index = edge.entity1.head_token.features['id']
+            _e2_head_token_index = edge.get_entity2_offset(edge.entity2.head_token.features['id'])
+            assert _e1_head_token_index < _e2_head_token_index
 
             dependency_paths = [
                 Path(
@@ -160,7 +163,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                     default_n_grams=self.h_ld_grams,
                 ),
 
-                compute_shortest_path(sentence, edge.entity1.head_token, edge.entity2.head_token).change_name('PD').change_default_n_grams(self.h_pd_grams)
+                compute_shortest_path(sentence, _e1_head_token_index, _e2_head_token_index).change_name('PD').change_default_n_grams(self.h_pd_grams)
             ]
 
             for dep_path in dependency_paths:

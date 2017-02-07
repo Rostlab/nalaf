@@ -1655,18 +1655,22 @@ class Edge:
 
 
     def get_combined_sentence(self):
-        if not self.__combined_sentence:
-            if self.has_same_sentences():
-                self.__combined_sentence = self.e1_part.sentences[self.e1_sentence_id]
-            else:
-                self.__combined_sentence = __class__._combine_sentences(self, *self.get_sentences_pair())
+        # Currently we do not reuse the internal field becaus e of caveats with the user dependencies and temporal ids
+
+        if self.has_same_sentences():
+            self.__combined_sentence = self.e1_part.sentences[self.e1_sentence_id]
+        else:
+            self.__combined_sentence = __class__._combine_sentences(self, *self.get_sentences_pair())
+
+        for index, t in enumerate(self.__combined_sentence):
+            t.features['tmp_id'] = index  # The tmp_id will be rewritten each time an edge calls this method; beware
 
         return self.__combined_sentence
 
 ###
 
     @staticmethod
-    def _combine_sentences(edge, sentence1, sentence2):
+    def _combine_sentences(edge, sentence1, sentence2, recreate_user_dependencies=True):
         """
         Combine two simple simple normal sentences into a "chained" sentence with
         dependecies and paths created as necessary for the DS model.
@@ -1680,6 +1684,12 @@ class Edge:
         """
 
         combined_sentence = sentence1 + sentence2
+
+        if recreate_user_dependencies:
+            for t in combined_sentence:
+                # Same as tmp_id, these features get recreated with each call
+                t.features['user_dependency_to'] = []
+                t.features['user_dependency_from'] = []
 
         combined_sentence = __class__._add_extra_links(edge, combined_sentence, sentence1, sentence2)
 

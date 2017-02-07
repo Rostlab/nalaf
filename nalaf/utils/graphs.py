@@ -1,6 +1,6 @@
-
 import numpy
 import itertools
+from nalaf import print_debug
 
 
 def compute_shortest_path(sentence, token_1_index, token_2_index):
@@ -11,6 +11,10 @@ def compute_shortest_path(sentence, token_1_index, token_2_index):
 
     Returns Path
     """
+    if sentence and not sentence[0].features.get("tmp_id"):
+        for index, t in enumerate(sentence):
+            t.features['tmp_id'] = index  # See Edge::get_combined_sentence
+
     source = token_1_index
     target = token_2_index
     _, prev = dijkstra_original(source, target, sentence)
@@ -174,8 +178,8 @@ def sentence_to_weight_matrix(sentence):
 
     for from_token in sentence:
         for to_token, _ in (from_token.features['dependency_to'] + from_token.features['user_dependency_to']):
-            u = from_token.features['id']  # TODO fix this
-            v = to_token.features['id']
+            u = from_token.features['tmp_id']
+            v = to_token.features['tmp_id']
 
             weight[u, v] = 1
             weight[v, u] = 1
@@ -203,6 +207,7 @@ class Path:
             if is_edge_type_constant:
                 edge_type = ""
                 is_forward = None
+
             else:
                 parser_defined = __class__._get_dep_edges(
                     u_token, v_token,
@@ -217,10 +222,10 @@ class Path:
                 all_dep_edges = parser_defined + user_defined
 
                 assert len(all_dep_edges) > 0, \
-                    ("One must be a dependency of the other", u_token, v_token, tokens, all_dep_edges)
+                    ("One must be a dependency of the other", u_token, v_token, tokens)
 
                 if len(all_dep_edges) > 1:
-                    print("We do not handle multiple dependencies yet; default to first. This should strictly only happen with user-defined dependencies")
+                    print_debug("Multiple dependencies are not handled yet; defaulted to first. This should strictly only happen with user-defined dependencies")
 
                 edge_type = all_dep_edges[0][0]
                 is_forward = all_dep_edges[0][1]

@@ -1719,22 +1719,19 @@ class Edge:
     @staticmethod
     def _addWordSimilarityLinks(combined_sentence, sentence1, sentence2):
         """
-        add links between words (nouns) that have same tokenText in prev & currSentence
+        For now:
+
+        * Add links between the product of tokens that are Noun and have same lemma.
         """
         from itertools import product
 
-        for (s1_token, s2_token) in product(sentence1, sentence2):
+        for s1_token, s2_token in product(sentence1, sentence2):
 
             if s1_token.is_POS_Noun() and s2_token.is_POS_Noun():
 
-                if s1_token.word == s2_token.word:
-                    s1_token.features['user_dependency_to'].append((s2_token, "wordSim"))
-                    s2_token.features['user_dependency_from'].append((s1_token, "wordSim"))
-
-                # TODO note, here I'm using the (spacy) lemma, not the (Porter) stem
                 if s1_token.features['lemma'] == s2_token.features['lemma']:
-                    s1_token.features['user_dependency_to'].append((s2_token, "stemSim"))
-                    s2_token.features['user_dependency_from'].append((s1_token, "stemSim"))
+                    s1_token.features['user_dependency_to'].append((s2_token, "same_lemma"))
+                    s2_token.features['user_dependency_from'].append((s1_token, "same_lemma"))
 
 
     @staticmethod

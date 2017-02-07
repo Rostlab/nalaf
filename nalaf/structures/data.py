@@ -1204,6 +1204,7 @@ class Part:
 
         return roots
 
+
     @staticmethod
     def get_main_verbs(sentence, include_linked_verbs=True, token_map=lambda t: t):
 
@@ -1521,6 +1522,11 @@ class Edge:
         if (self.e1_sentence_id == self.e2_sentence_id):
             self.same_sentence_id = self.e1_sentence_id
 
+        self.__combined_sentence = None
+        """
+        Private pre-computed field. See method `get_combined_sentence`
+        """
+
         self.features = {}
         """
         A dictionary of features for the edge.
@@ -1610,10 +1616,14 @@ class Edge:
 
 
     def get_combined_sentence(self):
-        if self.has_same_sentences:
-            return self.e1_part.sentences[self.e1_sentence_id]
-        else:
-            raise NotImplementedError
+        if not self.__combined_sentence:
+            if self.has_same_sentences():
+                return self.e1_part.sentences[self.e1_sentence_id]
+            else:
+                edge.combine_sentences(self, *self.get_sentences_pair())
+                raise NotImplementedError
+
+        return self.__combined_sentence
 
 
     def get_any_entities_in_sentences(self, predicted):

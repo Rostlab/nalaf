@@ -204,17 +204,26 @@ class Path:
                 edge_type = ""
                 is_forward = None
             else:
-                u_dep_froms = list(filter(None.__ne__, [u_token.features['dependency_from']]))
-                v_dep_froms = list(filter(None.__ne__, [v_token.features['dependency_from']]))
+                parser_defined = __class__._get_dep_edges(
+                    u_token, v_token,
+                    __class__.__mk_list_rm_None(u_token.features['dependency_from']),
+                    __class__.__mk_list_rm_None(v_token.features['dependency_from']))
 
-                if v_dep_froms and v_dep_froms[0][0] == u_token:
-                    edge_type = v_dep_froms[0][1]
-                    is_forward = True
-                elif u_dep_froms and u_dep_froms[0][0] == v_token:
-                    edge_type = u_dep_froms[0][1]
-                    is_forward = False
-                else:
-                    raise AssertionError(("One must be a dependency of the other", u_token, v_token, u_dep_froms, v_dep_froms, tokens))
+                user_defined = __class__._get_dep_edges(
+                    u_token, v_token,
+                    u_token.features['user_dependency_from'],
+                    v_token.features['user_dependency_from'])
+
+                all_dep_edges = parser_defined + user_defined
+
+                assert len(all_dep_edges) > 0, \
+                    ("One must be a dependency of the other", u_token, v_token, tokens, all_dep_edges)
+
+                if len(all_dep_edges) > 1:
+                    print("We do not handle multiple dependencies yet; default to first. This should strictly only happen with user-defined dependencies")
+
+                edge_type = all_dep_edges[0][0]
+                is_forward = all_dep_edges[0][1]
 
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 
@@ -235,6 +244,26 @@ class Path:
             else:
                 self.middle = self.nodes[1:]
                 self.target = []
+
+    @staticmethod
+    def __mk_list_rm_None(item):
+        return list(filter(None.__ne__, [item]))
+
+    @staticmethod
+    def _get_dep_edges(u_token, v_token, u_dep_froms, v_dep_froms):
+        edges = []  # list of tuples with (edge_type: str, is_forward: Bool)
+
+        for dep_token, edge_type in v_dep_froms:
+            if dep_token == u_token:
+                is_forward = True
+                edges.append((edge_type, is_forward))
+
+        for dep_token, edge_type in u_dep_froms:
+            if dep_token == v_token:
+                is_forward = False
+                edges.append((edge_type, is_forward))
+
+        return edges
 
     def change_name(self, new_name):
         self.name = new_name

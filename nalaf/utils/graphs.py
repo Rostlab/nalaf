@@ -173,8 +173,8 @@ def sentence_to_weight_matrix(sentence):
     weight = numpy.full([V, V], numpy.inf)
 
     for from_token in sentence:
-        for to_token, _ in from_token.features['dependency_to']:
-            u = from_token.features['id']
+        for to_token, _ in (from_token.features['dependency_to'] + from_token.features['user_dependency_to']):
+            u = from_token.features['id']  # TODO fix this
             v = to_token.features['id']
 
             weight[u, v] = 1

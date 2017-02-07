@@ -101,12 +101,12 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
 
                 # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
-                _e1_first_token = edge.entity1.tokens[0].features['id']
-                _e2_last_token = edge.entity2.tokens[-1].features['id']
-                assert _e1_first_token < _e2_last_token
+                _e1_first_token_index = edge.entity1.tokens[0].features['id']
+                _e2_last_token_index = edge.get_entity2_offset(edge.entity2.tokens[-1].features['id'])
+                assert _e1_last_token_index < _e2_first_token_index
 
-                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token]))
-                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token+1):]))
+                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token_index]))
+                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token_index+1):]))
 
                 #
 

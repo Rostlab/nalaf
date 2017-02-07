@@ -1558,6 +1558,36 @@ class Edge:
         return self.e1_sentence_id == self.e2_sentence_id
 
 
+    def get_any_entities_in_sentences(self, predicted):
+        assert self.same_part
+
+        s1 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
+
+        if not self.has_same_sentences():
+            s2 = self.same_part.get_any_entities_in_sentence(self.e2_sentence_id, predicted)
+
+            for key, vals in s2.items():
+                updated = s1.get(key, [])
+                updated += vals
+                s1[key] = updated
+
+        return s1
+
+
+    def get_any_entities_between_entities(self, predicted):
+        assert self.same_part
+
+        ret = {}
+        for e_class_id, entities in self.get_any_entities_in_sentences(predicted).items():
+            keep = []
+            for entity in entities:
+                if self.entity1.end_offset() <= entity.offset < self.entity2.offset:
+                    keep.append(entity)
+            ret[e_class_id] = keep
+
+        return ret
+
+
     def get_potential_relation(self):
         """
         Get the potential relation represented by this edge.
@@ -1615,45 +1645,159 @@ class Edge:
         return (sent1, sent2)
 
 
+    def get_entity2_offset(self, original_offset=0):
+        if self.has_same_sentences():
+            return 0 + original_offset
+        else:
+            # If they are not in the same sentence, the sentences are combined and we need to add the extra offset of sentence 1
+            sent1 = self.e1_part.sentences[self.e1_sentence_id]
+            return len(sent1) + original_offset
+
+
     def get_combined_sentence(self):
         if not self.__combined_sentence:
             if self.has_same_sentences():
-                return self.e1_part.sentences[self.e1_sentence_id]
+                self.__combined_sentence = self.e1_part.sentences[self.e1_sentence_id]
             else:
-                edge.combine_sentences(self, *self.get_sentences_pair())
-                raise NotImplementedError
+                self.__combined_sentence = __class__._combine_sentences(self, *self.get_sentences_pair())
 
         return self.__combined_sentence
 
+###
 
-    def get_any_entities_in_sentences(self, predicted):
-        assert self.same_part
+    @staticmethod
+    def _combine_sentences(edge, sentence1, sentence2):
+        """
+        Combine two simple simple normal sentences into a "chained" sentence with
+        dependecies and paths created as necessary for the DS model.
 
-        s1 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
+        `createCombinedSentence` re-implementation of Shrikant's (java) into Python.
 
-        if not self.has_same_sentences():
-            s2 = self.same_part.get_any_entities_in_sentence(self.e2_sentence_id, predicted)
+        Each sentence is a list of Tokens as defined in class Part (nalaf: data.py).
 
-            for key, vals in s2.items():
-                updated = s1.get(key, [])
-                updated += vals
-                s1[key] = updated
+        The sentences are assumed, but not asserted, to be different and sorted:
+        sentence1 must be before sentence2.
+        """
 
-        return s1
+        combined_sentence = sentence1 + sentence2
+
+        combined_sentence = __class__._add_extra_links(edge, combined_sentence, sentence1, sentence2)
+
+        return combined_sentence
 
 
-    def get_any_entities_between_entities(self, predicted):
-        assert self.same_part
+    @staticmethod
+    def _add_extra_links(edge, combined_sentence, sentence1, sentence2):
+        """
+        `addExtraLinks` re-implementation of Shrikant's (java) into Python.
 
-        ret = {}
-        for e_class_id, entities in self.get_any_entities_in_sentences(predicted).items():
-            keep = []
-            for entity in entities:
-                if self.entity1.end_offset() <= entity.offset < self.entity2.offset:
-                    keep.append(entity)
-            ret[e_class_id] = keep
+        Some comments and commented-out code exactly as original java code.
+        """
 
-        return ret
+        __class__._addWordSimilarityLinks(combined_sentence, sentence1, sentence2)
+
+        # TODO add ?
+        # TODO would be better to not use the constants PRO_ID (protRef) and LOC_ID (locRef) (below) here -- It's hardcoded
+        # _addEntityLinks(edge, combined_sentence, sentence1, sentence2, PRO_ID, ['protein'], "protRef")
+
+        # TODO add ?
+        # Just as we added the links from "protein" to actual protein entities
+        # add the links from "location"/"localization" to location entity
+        # _addEntityLinks(edge, combined_sentence, sentence1, sentence2, LOC_ID, ['location', 'localiz', 'com.ment'], "locRef")
+
+        # TODO
+        # addProteinFamilyLinks(combSentence, tokenOffset);
+
+        __class__._addRootLinks(combined_sentence, sentence1, sentence2)
+
+        # TODO
+        # addShortFormLinks(combSentence, prevSentence, currSentence)
+
+        return combined_sentence
+
+
+    @staticmethod
+    def _addWordSimilarityLinks(combined_sentence, sentence1, sentence2):
+        """
+        add links between words (nouns) that have same tokenText in prev & currSentence
+        """
+        from itertools import product
+
+        for (s1_token, s2_token) in product(sentence1, sentence2):
+
+            if s1_token.is_POS_Noun() and s2_token.is_POS_Noun():
+
+                if s1_token.word == s2_token.word:
+                    s1_token.features['user_dependency_to'].append((s2_token, "wordSim"))
+                    s2_token.features['user_dependency_from'].append((s1_token, "wordSim"))
+
+                # TODO note, here I'm using the (spacy) lemma, not the (Porter) stem
+                if s1_token.features['lemma'] == s2_token.features['lemma']:
+                    s1_token.features['user_dependency_to'].append((s2_token, "stemSim"))
+                    s2_token.features['user_dependency_from'].append((s1_token, "stemSim"))
+
+
+    @staticmethod
+    def _addEntityLinks(edge, combined_sentence, sentence1, sentence2, class_id, key_words, dependency_type):
+        """
+        `addProteinLinks` and `addLocationLinks` re-implementation of Shrikant's (java) into Python.
+        """
+
+        assert edge.same_part
+
+
+    @staticmethod
+    def _do_one_direction(sent_a, sent_b):
+
+        sent_a_contains_entity = edge.entity1.class_id == class_id
+        if not sent_a_contains_entity:
+            sent_a_tokens_that_match_key_words = (t for t in sent_a if any(kw in t.word.lower() for kw in key_words))
+
+            for sent_a_token in sent_a_tokens_that_match_key_words:
+
+                for sent_b_token in sent_b:
+
+                    sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)
+                    if sent_b_token_in_entity is not None and sent_b_token_in_entity.class_id == class_id:
+
+                        sent_a_token.features['user_dependency_to'].append((sent_b_token, dependency_type))
+                        sent_b_token.features['user_dependency_from'].append((sent_a_token, dependency_type))
+
+        # In combination: do both directions
+        _do_one_direction(sentence1, sentence2)
+        _do_one_direction(sentence2, sentence1)
+
+
+    @staticmethod
+    def _addRootLinks(combined_sentence, sentence1, sentence2):
+        """
+        link roots of both the sentences
+
+        `addRootLinks` re-implementation of Shrikant's (java) into Python.
+
+
+        *IMPORTANT*:
+
+        * Shrikant/Java/CoreNLP code had one single root for every sentence
+        * Python/spaCy sentences can have more than 1 root
+        * --> Therefore, we create a product of links of all the roots
+        * --> see: (https://github.com/juanmirocks/LocText/issues/6#issue-177139892)
+
+
+        Dependency directions:
+
+        sentence1 -> sentence2
+        sentence2 <- sentence1
+        """
+        from itertools import product
+
+        for (s1_root, s2_root) in product(Part.get_sentence_roots(sentence1), Part.get_sentence_roots(sentence2)):
+
+            s1_root.features['user_dependency_to'].append((s2_root, "rootDepForward"))
+            s1_root.features['user_dependency_from'].append((s2_root, "rootDepBackward"))
+
+            s2_root.features['user_dependency_from'].append((s1_root, "rootDepForward"))
+            s2_root.features['user_dependency_to'].append((s1_root, "rootDepBackward"))
 
 
 class Token:

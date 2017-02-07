@@ -1694,6 +1694,8 @@ class Edge:
         Some comments and commented-out code exactly as original java code.
         """
 
+        __class__._addRootLinks(combined_sentence, sentence1, sentence2)
+
         __class__._addWordSimilarityLinks(combined_sentence, sentence1, sentence2)
 
         # TODO add ?
@@ -1707,8 +1709,6 @@ class Edge:
 
         # TODO
         # addProteinFamilyLinks(combSentence, tokenOffset);
-
-        __class__._addRootLinks(combined_sentence, sentence1, sentence2)
 
         # TODO
         # addShortFormLinks(combSentence, prevSentence, currSentence)

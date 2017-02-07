@@ -215,7 +215,7 @@ class Path:
                     edge_type = u_dep_from[1]
                     is_forward = False
                 else:
-                    raise AssertionError(("One must be a dependency of each other", u_token, v_token, u_dep_from, v_dep_from, tokens))
+                    raise AssertionError(("One must be a dependency of the other", u_token, v_token, u_dep_from, v_dep_from, tokens))
 
             self.nodes.append(PathNode(u_token, edge_type, is_forward))
 

@@ -78,8 +78,10 @@ class RelationExtractionPipeline:
             self.splitter.split(dataset)
             self.tokenizer.tokenize(dataset)
             self.edge_generator.generate(dataset)
-            dataset.label_edges()
-            self.parser.parse(dataset)
+
+        # The labels are always re-generated
+        dataset.label_edges()
+        self.parser.parse(dataset)
 
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset, self.feature_set, train)

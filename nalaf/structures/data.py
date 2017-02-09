@@ -1654,11 +1654,16 @@ class Edge:
             return len(sent1) + original_offset
 
 
-    def get_combined_sentence(self):
+    def get_combined_sentence(self, recreate_user_dependencies=True):
         # Currently we do not reuse the internal field becaus e of caveats with the user dependencies and temporal ids
 
         if self.has_same_sentences():
             self.__combined_sentence = self.e1_part.sentences[self.e1_sentence_id]
+            if recreate_user_dependencies:
+                for t in self.__combined_sentence:
+                    # Same as tmp_id, these features get recreated with each call
+                    t.features['user_dependency_to'] = []
+                    t.features['user_dependency_from'] = []
         else:
             self.__combined_sentence = __class__._combine_sentences(self, *self.get_sentences_pair())
 

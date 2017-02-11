@@ -14,7 +14,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
     """
 
     @abc.abstractmethod
-    def generate(self, dataset, feature_set, is_training_mode):
+    def generate(self, dataset, feature_set, is_training_mode, use_gold=True, use_pred=False):
         """
         :type dataset: nalaf.structures.data.Dataset
         """

@@ -65,8 +65,10 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         self.f_diff_sents_together_count = f_diff_sents_together_count
 
 
-    def generate(self, corpus, f_set, is_train):
-        self.extract_abbreviation_synonyms(corpus)
+    def generate(self, corpus, f_set, is_train, use_gold, use_pred):
+        assert not (use_gold and use_pred), "No support for both"
+
+        self.extract_abbreviation_synonyms(corpus, use_gold, use_pred)
 
         for document in corpus:
             for edge in document.edges():
@@ -74,7 +76,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 sentence = edge.get_combined_sentence()
 
                 total_count = 0
-                for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=False).items():
+                for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=use_pred).items():
                     individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
                     assert individual_count >= 0
                     total_count += individual_count
@@ -83,7 +85,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
 
                 total_count = 0
-                for e_class_id, entities in edge.get_any_entities_between_entities(predicted=False).items():
+                for e_class_id, entities in edge.get_any_entities_between_entities(predicted=use_pred).items():
                     individual_count = len(entities)
                     total_count += individual_count
                     self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
@@ -125,7 +127,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
                 counters = {}
                 for part in document:
-                    for entity in part.annotations:
+                    for entity in (part.annotations if use_gold else part.predicted_annotations):
                         ent_type_counter = counters.get(entity.class_id, Counter())
                         ent_key = __class__.entity2key(entity)
                         ent_type_counter.update([ent_key])
@@ -177,14 +179,16 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
             return e2_key + "|" + e1_key
 
 
-    def extract_abbreviation_synonyms(self, corpus):
+    def extract_abbreviation_synonyms(self, corpus, use_gold, use_pred):
         """
         Apply simple heuristic to know if some entities are abbreviations of another one
         The protein x is abbreviation of protein y if they are written as: y (x)"
         In the end, more generically, we call it a "synonym" relationship
         """
+        assert not (use_gold and use_pred), "No support for both"
+        entities = corpus.entities() if use_gold else corpus.predicted_entities()
 
-        for entity in corpus.entities():
+        for entity in entities:
             prev2 = entity.prev_tokens(entity.sentence, 2)
             next1 = entity.next_tokens(entity.sentence, 1)
             in_parenthesis = len(prev2) == 2 and prev2[-1].word == "(" and len(next1) == 1 and next1[0].word == ")"

@@ -14,7 +14,7 @@ class NamedEntityCountFeatureGenerator(EdgeFeatureGenerator):
         self.prefix = prefix
 
 
-    def generate(self, dataset, feature_set, is_training_mode):
+    def generate(self, dataset, feature_set, is_training_mode, use_gold, use_pred):
 
         for edge in dataset.edges():
 

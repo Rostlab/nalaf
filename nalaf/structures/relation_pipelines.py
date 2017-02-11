@@ -84,7 +84,7 @@ class RelationExtractionPipeline:
         self.parser.parse(dataset)
 
         for feature_generator in self.feature_generators:
-            feature_generator.generate(dataset, self.feature_set, train)
+            feature_generator.generate(dataset, self.feature_set, train, use_gold=self.edge_generator.use_gold, use_pred=self.edge_generator.use_pred)
 
         end = time.time()
         print_debug("Relation pipeline (only_features: {}), running time: {}".format(only_features, str(end - start)))

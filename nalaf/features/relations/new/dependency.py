@@ -112,7 +112,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # None now
 
 
-    def generate(self, corpus, f_set, is_train):
+    def generate(self, corpus, f_set, is_train, use_gold, use_pred):
 
         for edge in corpus.edges():
             sentence = edge.get_combined_sentence()

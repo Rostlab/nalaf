@@ -36,13 +36,18 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
     consequently creating edges for all entities within a part (paragraph or what not).
     """
 
-    def __init__(self, entity1_class, entity2_class, relation_type, distance, use_gold=True, use_pred=True, rewrite_edges=True):
+    def __init__(self, entity1_class, entity2_class, relation_type, distance, use_gold=True, use_pred=False, rewrite_edges=True):
         # Note: would be nice to implement the word filter too here -- see below
 
         super().__init__(entity1_class, entity2_class, relation_type)
         self.distance = distance
+
         self.use_gold = use_gold
+        """Whether to generate the dataset's edges with gold annotations"""
+
         self.use_pred = use_pred
+        """Whether to generate the dataset's edges with (pred)icted annotations"""
+
         self.rewrite_edges = rewrite_edges
 
         def chain_entities(part):

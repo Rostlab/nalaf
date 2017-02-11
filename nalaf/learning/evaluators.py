@@ -499,11 +499,13 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
 
     if value is None:
         if penalize_unknown_normalizations == "hard":
-            value = "UNKNOWN:"+str(uuid.uuid4())
+            value = str(uuid.uuid4())
         elif penalize_unknown_normalizations == "soft":
             value = e.text.lower()
         else:  # softest
-            value = "UNKNOWN"
+            value = ""
+
+        value = "UNKNOWN:" + value
 
     return '|'.join([n_id, value])
 

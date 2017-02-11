@@ -37,7 +37,7 @@ class SentenceDistanceEdgeGenerator(EdgeGenerator):
     """
 
     def __init__(self, entity1_class, entity2_class, relation_type, distance, use_gold=True, use_pred=False, rewrite_edges=True):
-        # Note: would be nice to implement the word filter too here -- see below
+        # Note: we could also, for example, filter edges/sentences by a list of allowed words
 
         super().__init__(entity1_class, entity2_class, relation_type)
         self.distance = distance
@@ -98,43 +98,3 @@ class CombinatorEdgeGenerator(EdgeGenerator):
     def generate(self, dataset):
         for g in self.generators:
             g.generate(dataset)
-
-
-class WordFilterEdgeGenerator(EdgeGenerator):
-    """
-    Simple implementation of generating edges between the two entities
-    if they are contained in the same sentence AND the sentence
-    contains one of the trigger-like given words
-
-    **It only uses the _gold_ annotations**
-
-    """
-
-    def __init__(self, entity1_class, entity2_class, relation_type, words):
-        super().__init__(entity1_class, entity2_class, relation_type)
-        self.words = words
-
-
-    def generate(self, dataset):
-        from itertools import product
-
-        for part in dataset.parts():
-            part.edges = []
-
-            for ann_1, ann_2 in product(
-                    (ann for ann in part.annotations if ann.class_id == self.entity1_class),
-                    (ann for ann in part.annotations if ann.class_id == self.entity2_class)):
-
-                index_1 = part.get_sentence_index_for_annotation(ann_1)
-                index_2 = part.get_sentence_index_for_annotation(ann_2)
-
-                if index_1 == index_2 and index_1 is not None:
-
-                    for token in part.sentences[index_1]:
-
-                        if token.word in self.words:
-                            edge = Edge(self.relation_type, ann_1, ann_2, part, part, index_1, index_2)
-
-                            part.edges.append(edge)
-
-                            break

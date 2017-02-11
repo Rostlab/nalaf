@@ -97,7 +97,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                     self.add(f_set, is_train, edge, 'f_order')
 
                 for token in sentence:
-                    self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
+                    self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, use_pred, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
                     self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
 
                 self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
@@ -194,7 +194,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
             in_parenthesis = len(prev2) == 2 and prev2[-1].word == "(" and len(next1) == 1 and next1[0].word == ")"
 
             if (in_parenthesis):
-                prev_entity = prev2[0].get_entity(entity.part)
+                prev_entity = prev2[0].get_entity(entity.part, use_pred)
 
                 if prev_entity is not None and prev_entity.class_id == entity.class_id:
                     # We could combine features already -- Yet, give more freedom to final clients to use the synonym's features or not

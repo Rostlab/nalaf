@@ -113,6 +113,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
 
 
     def generate(self, corpus, f_set, is_train, use_gold, use_pred):
+        assert not (use_gold and use_pred), "No support for both"
 
         for edge in corpus.edges():
             sentence = edge.get_combined_sentence()
@@ -170,7 +171,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 dep_type = dep_path.name
 
                 for n_gram in dep_path.default_n_grams:
-                    self.add_n_grams(f_set, is_train, edge, dep_path, dep_type, n_gram)
+                    self.add_n_grams(f_set, is_train, use_pred, edge, dep_path, dep_type, n_gram)
 
                 count = len(dep_path.middle)
                 count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
@@ -189,7 +190,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         return feat_key.replace('XX', dependency_XX)
 
 
-    def add_n_grams(self, f_set, is_train, edge, path, dep_type, n_gram):
+    def add_n_grams(self, f_set, is_train, use_pred, edge, path, dep_type, n_gram):
 
         def token_feat(tok_f_key):
             return (lambda t: t.features[tok_f_key])
@@ -204,7 +205,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # Regular features for all dependency paths types/names
         #
 
-        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, token_map=token_feat('lemma'), token_is_number_fun=lambda _: "NUM"))
+        add_groups('f_XX_bow_N_gram', path.strs_n_gram_token_only, lambda token: masked_text(token, edge.same_part, use_pred, token_map=token_feat('lemma'), token_is_number_fun=lambda _: "NUM"))
         add_groups('f_XX_pos_N_gram', path.strs_n_gram_token_only, token_feat('coarsed_pos'))
 
         #

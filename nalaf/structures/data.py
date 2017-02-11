@@ -463,7 +463,7 @@ class Dataset:
         for doc_id, doc in self.documents.items():
             part_ids_to_del = []
             for part_id, part in doc.parts.items():
-                if len(part.annotations) == 0:
+                if len(part.annotations) == 0:  # or part.predict_entities ?
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
@@ -498,7 +498,7 @@ class Dataset:
         for part in self.parts():
             # find which sentences have at least one mention
             sentences_have_ann = [any(sentence[0].start <= ann.offset < ann.offset + len(ann.text) <= sentence[-1].end
-                                      for ann in part.annotations)
+                                      for ann in part.annotations)  # pred_annotations ?
                                   for sentence in part.sentences]
             if any(sentences_have_ann):
                 # choose a certain percentage of the ones that have no mention
@@ -1076,11 +1076,12 @@ class Part:
         assert False, ("The entity did not (and should) have an associated sentence. Ann: " + str(entity))
 
 
-    def get_entity(self, start_offset, raise_exception_on_incosistencies=True):
+    def get_entity(self, start_offset, use_pred, raise_exception_on_incosistencies=True):
         """
         Retrieves entity object from a list of annotations based on start_offset value.
         """
-        found_list = list(filter(lambda ann: ann.offset == start_offset, self.annotations))
+        entities = self.annotations if not use_pred else self.predicted_annotations
+        found_list = list(filter(lambda ann: ann.offset == start_offset, entities))
         length = len(found_list)
 
         if length == 0:
@@ -1763,7 +1764,7 @@ class Edge:
 
                     for sent_b_token in sent_b:
 
-                        sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)
+                        sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)  # TODO use_pred ?
                         if sent_b_token_in_entity is not None and sent_b_token_in_entity.class_id == class_id:
 
                             sent_a_token.features['user_dependency_to'].append((sent_b_token, dependency_type))
@@ -1847,16 +1848,15 @@ class Token:
         return "V" == self.features['pos'][0]
 
 
-
-
-    def get_entity(self, part):
+    def get_entity(self, part, use_pred):
         """
         if the token is part of an entity, return the entity else return None
         :param part: an object of type Part in which to search for the entity.
         :type part: nalaf.structures.data.Part
         :return nalaf.structures.data.Entity or None
         """
-        for entity in part.annotations:
+        entities = part.annotations if not use_pred else part.predicted_annotations
+        for entity in entities:
             if entity.offset <= self.start < entity.end_offset() or entity.offset < self.end <= entity.end_offset():
                 return entity
 

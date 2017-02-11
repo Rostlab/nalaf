@@ -121,8 +121,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                                 rel_id = relation['classId']
 
-                                e1 = part.get_entity(e1_start, self.raise_exception_on_incosistencies)
-                                e2 = part.get_entity(e2_start, self.raise_exception_on_incosistencies)
+                                e1 = part.get_entity(e1_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
+                                e2 = part.get_entity(e2_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
 
                                 if (not self.raise_exception_on_incosistencies and (e1 is None or e2 is None)):
                                     continue

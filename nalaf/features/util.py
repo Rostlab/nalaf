@@ -5,13 +5,14 @@ def is_number(string):
     except:
         return False
 
-def masked_text(token, part, token_map=None, token_is_number_fun=None):
+
+def masked_text(token, part, used_pred, token_map=None, token_is_number_fun=None):
     if token_map is None:
         token_map = (lambda t: t.word)
     if token_is_number_fun is None:
         token_is_number_fun = token_map
 
-    in_entity = token.get_entity(part)
+    in_entity = token.get_entity(part, used_pred)
 
     if in_entity is not None:
         return in_entity.class_id

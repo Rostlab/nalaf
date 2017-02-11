@@ -318,50 +318,6 @@ class Dataset:
                 yield part_id, part
 
 
-    def annotations_with_partids(self):
-        """
-        helper function that return annotation object with part id
-        to be able to find out abstract or full document
-
-        :rtype: collections.Iterable[(str, Entity)]
-        """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
-        for part_id, part in self.partids_with_parts():
-            for annotation in part.annotations:
-                yield part_id, annotation
-
-    def all_annotations_with_ids(self):
-        """
-        yields pubmedid, partid and ann through whole dataset
-
-        :rtype: collections.Iterable[(str, str, Entity)]
-        """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
-        for pubmedid, doc in self.documents.items():
-            for partid, part in doc.key_value_parts():
-                for ann in part.annotations:
-                    yield pubmedid, partid, ann
-
-
-    def all_annotations_with_ids_and_is_abstract(self):
-        """
-        yields pubmedid, partid, is_abstract and ann through whole dataset
-
-        :rtype: collections.Iterable[(str, str, bool, Entity)]
-        """
-        # TODO
-        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
-
-        for pubmedid, doc in self.documents.items():
-            for partid, part in doc.key_value_parts():
-                for ann in part.annotations:
-                    yield pubmedid, partid, part.is_abstract, ann
-
-
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
@@ -1891,15 +1847,6 @@ class Token:
         return "V" == self.features['pos'][0]
 
 
-    def is_entity_part(self, part):
-        """
-        check if the token is part of an entity
-        :return bool:
-        """
-        for entity in part.annotations:
-            if self.start <= entity.offset < self.end:
-                return True
-        return False
 
 
     def get_entity(self, part):
@@ -1914,23 +1861,6 @@ class Token:
                 return entity
 
         return None
-
-
-    def masked_text(self, part):
-        """
-        if token is part of an entity, return the entity class id, otherwise
-        return the token word itself.
-        :param part: an object of type Part in which to search for the entity.
-        :type part: nalaf.structures.data.Part
-        :return str
-        """
-        warnings.warn('Use instead: `masked_text` from `nalaf.features.util`', DeprecationWarning)
-
-        for entity in part.annotations:
-            if self.start <= entity.offset < self.end:  # or \
-                # entity.offset <= self.start < entity.offset + len(entity.text):
-                return entity.class_id
-        return self.word
 
 
 class FeatureDictionary(dict):

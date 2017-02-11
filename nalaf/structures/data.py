@@ -161,6 +161,14 @@ class Dataset:
                 new_relations_map[rel_key_1] = get(rel_key_1)
                 new_relations_map[rel_key_2] = get(rel_key_2)
 
+            elif {None, False} == {accept_1, accept_2}:
+                # "Gold" cannot be verified yet the prediction is incorrect or not validated
+                pass
+
+            # elif accept_1 is None and accept_2 is None:
+            #     # Both are neither accepted nor rejected, likely due to an UNKNOWN normalization
+            #     pass
+
             else:
                 assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
 

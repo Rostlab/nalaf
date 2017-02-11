@@ -31,6 +31,10 @@ def compute_shortest_paths(sentence):
 
     To get then the path of a sentence's pair of tokens, use the method `path`
     """
+    if sentence and not sentence[0].features.get("tmp_id"):
+        for index, t in enumerate(sentence):
+            t.features['tmp_id'] = index  # See Edge::get_combined_sentence
+
     return floyd_warshall_with_path_reconstruction(sentence_to_weight_matrix(sentence))
 
 

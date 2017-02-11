@@ -493,6 +493,21 @@ class MentionLevelEvaluator(Evaluator):
         return evaluations
 
 
+def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
+    n_id = map_entity_normalizations[e.class_id]
+    value = e.normalisation_dict.get(n_id, None)
+
+    if value is None:
+        if penalize_unknown_normalizations == "hard":
+            value = "UNKNOWN:"+str(uuid.uuid4())
+        elif penalize_unknown_normalizations == "soft":
+            value = e.text.lower()
+        else:  # softest
+            value = "UNKNOWN"
+
+    return '|'.join([n_id, value])
+
+
 def _normalized_first(e, penalize_unknown_normalizations="soft"):
     key = next(iter(e.normalisation_dict.keys()), "None")
     value = next(iter(e.normalisation_dict.values()), None)
@@ -553,7 +568,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
         # TODO test if there is no normalization
 
         # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
-        'normalized_fun': (lambda n_id: (lambda e: '|'.join([str(n_id), str(e.normalisation_dict.get(n_id, str(uuid.uuid4())))])))
+        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
     }
 
 

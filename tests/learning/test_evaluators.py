@@ -356,7 +356,10 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
     def test_DocumentLevelRelationEvaluator_normalized_entities(self):
 
-        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1, entity_map_fun=DocumentLevelRelationEvaluator.COMMON_ENTITY_MAP_FUNS['normalized_fun']('n_1'))
+        evaluator = DocumentLevelRelationEvaluator(
+            rel_type=STUB_R_ID_1,
+            entity_map_fun=DocumentLevelRelationEvaluator.COMMON_ENTITY_MAP_FUNS['normalized_fun']({STUB_E_ID_1: 'n_1', STUB_E_ID_2: 'n_1'}, penalize_unknown_normalizations="hard")
+        )
 
         dataset = Dataset()
         doc_1 = Document()
@@ -367,8 +370,8 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         part_1.relations = [
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": 1964}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": 1961})),
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
         ]
 
         # -
@@ -377,17 +380,17 @@ class TestMentionLevelEvaluator(unittest.TestCase):
             Relation(
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool"),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": 1961})),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
 
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": 666}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": 1961})),
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
 
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": 1964}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": 1961})),
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": "1961"})),
         ]
 
         evals = evaluator.evaluate(dataset)
@@ -403,8 +406,8 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         part_1.predicted_relations = [
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool band", norm={"n_1": 1964}),
-                Entity(STUB_E_ID_2, 0, "Maynard James Keenan", norm={"n_1": 1961})),
+                Entity(STUB_E_ID_1, 0, "Tool band", norm={"n_1": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard James Keenan", norm={"n_1": "1961"})),
         ]
 
         evals = evaluator.evaluate(dataset)

@@ -116,7 +116,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         assert not (use_gold and use_pred), "No support for both"
 
         for docid, document in corpus.documents.items():
-            for edge in corpus.edges():
+            for edge in document.edges():
                 sentence = edge.get_combined_sentence()
 
                 # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset

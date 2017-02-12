@@ -122,10 +122,10 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
                 _e1_last_token_index = edge.entity1.tokens[-1].features['id']
                 _e2_first_token_index = edge.get_entity2_offset(edge.entity2.tokens[0].features['id'])
-                assert _e1_last_token_index < _e2_first_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_first_token_index, _e2_last_token_index)
+                assert _e1_last_token_index < _e2_first_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_last_token_index, _e2_first_token_index)
                 _e1_head_token_index = edge.entity1.head_token.features['id']
                 _e2_head_token_index = edge.get_entity2_offset(edge.entity2.head_token.features['id'])
-                assert _e1_head_token_index < _e2_head_token_index
+                assert _e1_head_token_index < _e2_head_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_head_token_index, _e2_head_token_index)
 
                 dependency_paths = [
                     Path(

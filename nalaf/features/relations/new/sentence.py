@@ -70,7 +70,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
         self.extract_abbreviation_synonyms(corpus, use_gold, use_pred)
 
-        for document in corpus:
+        for docid, document in corpus.documents.items():
             for edge in document.edges():
 
                 sentence = edge.get_combined_sentence()
@@ -105,7 +105,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
                 _e1_first_token_index = edge.entity1.tokens[0].features['id']
                 _e2_last_token_index = edge.get_entity2_offset(edge.entity2.tokens[-1].features['id'])
-                assert _e1_first_token_index < _e2_last_token_index
+                assert _e1_first_token_index < _e2_last_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_first_token_index, _e2_last_token_index)
 
                 self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token_index]))
                 self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token_index+1):]))

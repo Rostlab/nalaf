@@ -115,73 +115,74 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
     def generate(self, corpus, f_set, is_train, use_gold, use_pred):
         assert not (use_gold and use_pred), "No support for both"
 
-        for edge in corpus.edges():
-            sentence = edge.get_combined_sentence()
+        for docid, document in corpus.documents.items():
+            for edge in corpus.edges():
+                sentence = edge.get_combined_sentence()
 
-            # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
-            _e1_last_token_index = edge.entity1.tokens[-1].features['id']
-            _e2_first_token_index = edge.get_entity2_offset(edge.entity2.tokens[0].features['id'])
-            assert _e1_last_token_index < _e2_first_token_index
-            _e1_head_token_index = edge.entity1.head_token.features['id']
-            _e2_head_token_index = edge.get_entity2_offset(edge.entity2.head_token.features['id'])
-            assert _e1_head_token_index < _e2_head_token_index
+                # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
+                _e1_last_token_index = edge.entity1.tokens[-1].features['id']
+                _e2_first_token_index = edge.get_entity2_offset(edge.entity2.tokens[0].features['id'])
+                assert _e1_last_token_index < _e2_first_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_first_token_index, _e2_last_token_index)
+                _e1_head_token_index = edge.entity1.head_token.features['id']
+                _e2_head_token_index = edge.get_entity2_offset(edge.entity2.head_token.features['id'])
+                assert _e1_head_token_index < _e2_head_token_index
 
-            dependency_paths = [
-                Path(
-                    name='OW1',
-                    tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                    is_edge_type_constant=True,
-                    there_is_target=False,
-                    default_n_grams=self.h_ow_grams,
-                ),
-                Path(
-                    name='IW1',
-                    tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                    is_edge_type_constant=True,
-                    there_is_target=False,
-                    default_n_grams=self.h_iw_grams,
-                ),
+                dependency_paths = [
+                    Path(
+                        name='OW1',
+                        tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
+                        is_edge_type_constant=True,
+                        there_is_target=False,
+                        default_n_grams=self.h_ow_grams,
+                    ),
+                    Path(
+                        name='IW1',
+                        tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
+                        is_edge_type_constant=True,
+                        there_is_target=False,
+                        default_n_grams=self.h_iw_grams,
+                    ),
 
-                Path(
-                    name='IW2',
-                    tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=True),
-                    is_edge_type_constant=True,
-                    there_is_target=False,
-                    default_n_grams=self.h_iw_grams,
-                ),
-                Path(
-                    name='OW2',
-                    tokens=edge.entity2.next_tokens(sentence, n=self.h_ow_size, include_ent_last_token=True),
-                    is_edge_type_constant=True,
-                    there_is_target=False,
-                    default_n_grams=self.h_ow_grams,
-                ),
+                    Path(
+                        name='IW2',
+                        tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=True),
+                        is_edge_type_constant=True,
+                        there_is_target=False,
+                        default_n_grams=self.h_iw_grams,
+                    ),
+                    Path(
+                        name='OW2',
+                        tokens=edge.entity2.next_tokens(sentence, n=self.h_ow_size, include_ent_last_token=True),
+                        is_edge_type_constant=True,
+                        there_is_target=False,
+                        default_n_grams=self.h_ow_grams,
+                    ),
 
-                Path(
-                    name='LD',
-                    tokens=sentence[_e1_last_token_index:_e2_first_token_index + 1],
-                    is_edge_type_constant=True,
-                    default_n_grams=self.h_ld_grams,
-                ),
+                    Path(
+                        name='LD',
+                        tokens=sentence[_e1_last_token_index:_e2_first_token_index + 1],
+                        is_edge_type_constant=True,
+                        default_n_grams=self.h_ld_grams,
+                    ),
 
-                compute_shortest_path(sentence, _e1_head_token_index, _e2_head_token_index).change_name('PD').change_default_n_grams(self.h_pd_grams)
-            ]
+                    compute_shortest_path(sentence, _e1_head_token_index, _e2_head_token_index).change_name('PD').change_default_n_grams(self.h_pd_grams)
+                ]
 
-            for dep_path in dependency_paths:
-                dep_type = dep_path.name
+                for dep_path in dependency_paths:
+                    dep_type = dep_path.name
 
-                for n_gram in dep_path.default_n_grams:
-                    self.add_n_grams(f_set, is_train, use_pred, edge, dep_path, dep_type, n_gram)
+                    for n_gram in dep_path.default_n_grams:
+                        self.add_n_grams(f_set, is_train, use_pred, edge, dep_path, dep_type, n_gram)
 
-                count = len(dep_path.middle)
-                count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
-                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
-                self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
+                    count = len(dep_path.middle)
+                    count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
+                    self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
+                    self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
 
-                if Part.is_negated([node.token for node in dep_path.middle]):
-                    self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
+                    if Part.is_negated([node.token for node in dep_path.middle]):
+                        self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
-            # Extra
+                # Extra
 
 
     def f(self, feat_key, dependency_XX, ngram_N=None):

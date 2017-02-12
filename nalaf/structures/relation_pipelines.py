@@ -77,11 +77,11 @@ class RelationExtractionPipeline:
         if not only_features:
             self.splitter.split(dataset)
             self.tokenizer.tokenize(dataset)
+            self.parser.parse(dataset)  # Note, the percolate_tokens_to_entities should go before the edge generator due to sentences adjustments
             self.edge_generator.generate(dataset)
 
         # The labels are always re-generated
         dataset.label_edges()
-        self.parser.parse(dataset)
 
         for feature_generator in self.feature_generators:
             feature_generator.generate(dataset, self.feature_set, train, use_gold=self.edge_generator.use_gold, use_pred=self.edge_generator.use_pred)

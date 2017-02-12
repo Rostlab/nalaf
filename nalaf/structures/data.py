@@ -1138,16 +1138,47 @@ class Part:
         store the nearest entity having index just before for the start of the
         entity and just after for the end of the entity
         """
+
+        sentences = self.sentences
+
         for entity in chain(self.annotations, self.predicted_annotations):
             entity.tokens = []
             entity_end = entity.offset + len(entity.text)
-            for sentence in self.sentences:
+            sentence_index = None
+
+            for index, sentence in enumerate(sentences):
+                sentence_adjuted = False
+
                 for token in sentence:
                     if entity.offset <= token.start < entity_end or \
                         token.start <= entity.offset < token.end:
+
+                        if sentence_index is not None and sentence_index != index:
+                            # entity spanning multiple sentences, --> adjust sentences as it's likely a sentence splitting error
+                            # Should happen very seldom
+                            # Example: In these cells, Kv8.1 expressed alone remains in intracellular compartments, but it can reach the plasma membrane when it associates with Kv2.2, and it then also forms new types of Kv8.1/Kv2. 2 channels
+                            if not sentence_adjuted:
+                                print()
+                                print("WARNING ADJUST", sentence)
+                                print("WARNING ADJUST", sentence_index, index, sentence_adjuted)
+                                print("WARNING ADJUST", entity.text, "---", entity)
+                                print("WARNING ADJUST", sentences)
+                                print("WARNING ADJUST", entity.sentence)
+                                sentences[index-1] += sentence
+                                del sentences[index]
+                                print("WARNING ADJUST", entity.sentence)
+                                print("WARNING ADJUST", sentences)
+                                print()
+
+                                self.sentences = sentences
+                                sentence_adjuted = True
+
                         entity.tokens.append(token)
-                        entity.sentence = sentence
-                        entity.part = self
+
+                        if sentence_index is None:
+                            sentence_index = index
+                            entity.sentence = sentence
+                            entity.part = self
 
 
     @staticmethod

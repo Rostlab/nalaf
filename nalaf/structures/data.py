@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from itertools import chain
 import json
 import random
 import re
@@ -1705,9 +1704,9 @@ class Edge:
         Some comments and commented-out code exactly as original java code.
         """
 
-        __class__._addRootLinks(combined_sentence, sentence1, sentence2)
+        __class__._addRootLinks(edge, combined_sentence, sentence1, sentence2)
 
-        __class__._addWordSimilarityLinks(combined_sentence, sentence1, sentence2)
+        __class__._addWordSimilarityLinks(edge, combined_sentence, sentence1, sentence2)
 
         # TODO add ?
         # TODO would be better to not use the constants PRO_ID (protRef) and LOC_ID (locRef) (below) here -- It's hardcoded
@@ -1728,7 +1727,7 @@ class Edge:
 
 
     @staticmethod
-    def _addRootLinks(combined_sentence, sentence1, sentence2):
+    def _addRootLinks(edge, combined_sentence, sentence1, sentence2):
         """
         link roots of both the sentences
 
@@ -1760,7 +1759,7 @@ class Edge:
 
 
     @staticmethod
-    def _addWordSimilarityLinks(combined_sentence, sentence1, sentence2):
+    def _addWordSimilarityLinks(edge, combined_sentence, sentence1, sentence2):
         """
         For now:
 
@@ -1770,7 +1769,7 @@ class Edge:
 
         for s1_token, s2_token in product(sentence1, sentence2):
 
-            if s1_token.is_POS_Noun() and s2_token.is_POS_Noun():
+            if s1_token.get_entity(edge.same_part, True, True) is not None and s2_token.get_entity(edge.same_part, True, True) is not None:
 
                 if s1_token.features['lemma'] == s2_token.features['lemma']:
                     s1_token.features['user_dependency_to'].append((s2_token, "same_lemma"))
@@ -1879,14 +1878,18 @@ class Token:
         return "V" == self.features['pos'][0]
 
 
-    def get_entity(self, part, use_pred):
+    def get_entity(self, part, use_gold, use_pred):
         """
         if the token is part of an entity, return the entity else return None
         :param part: an object of type Part in which to search for the entity.
         :type part: nalaf.structures.data.Part
         :return nalaf.structures.data.Entity or None
         """
-        entities = part.annotations if not use_pred else part.predicted_annotations
+        entities = chain(
+            part.annotations if use_gold else [],
+            part.predicted_annotations if use_pred else []
+        )
+
         for entity in entities:
             if entity.offset <= self.start < entity.end_offset() or entity.offset < self.end <= entity.end_offset():
                 return entity

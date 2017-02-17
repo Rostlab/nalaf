@@ -499,6 +499,7 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
 
     if value is None:
         if penalize_unknown_normalizations == "hard":
+            # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
             value = str(uuid.uuid4())
         elif penalize_unknown_normalizations == "soft":
             value = e.text.lower()
@@ -508,21 +509,6 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
         value = "UNKNOWN:" + value
 
     return '|'.join([n_id, value])
-
-
-def _normalized_first(e, penalize_unknown_normalizations="soft"):
-    key = next(iter(e.normalisation_dict.keys()), "None")
-    value = next(iter(e.normalisation_dict.values()), None)
-
-    if value is None:
-        if penalize_unknown_normalizations == "hard":
-            value = "UNKNOWN:"+str(uuid.uuid4())
-        elif penalize_unknown_normalizations == "soft":
-            value = e.text.lower()
-        else:
-            value = "None"
-
-    return '|'.join([key, value])
 
 
 class DocumentLevelRelationEvaluator(Evaluator):
@@ -562,14 +548,6 @@ class DocumentLevelRelationEvaluator(Evaluator):
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
-        # Take the first normalization only
-        # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
-
-        'normalized_first': _normalized_first,
-
-        # TODO test if there is no normalization
-
-        # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
         'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
     }
 
@@ -612,25 +590,33 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_pred in predicted:
 
-                accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
-                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
-                # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
+                if "UNKNOWN:" in r_pred:
+                    # Ignore, no normalization
+                    pass
 
-                if True in accept_decisions:
-                    # handle below while traversing gold to not create over repetitions, see test_evaluators
-                    # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
-                    # print_verbose("       ", docid, "(not counted yet) true match prediction", r_pred)
-                    pass
-                elif None in accept_decisions:
-                    # Ignore as documented
-                    pass
-                else:  # either False or the set is empty, meaning that there are no gold annotations
-                    print_verbose("    ", docid, ": FALSE POSITIV", r_pred)
-                    counts[docid]['fp'] += 1
+                else:
+                    accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
+                    assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+                    # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
+
+                    if True in accept_decisions:
+                        # handle below while traversing gold to not create over repetitions, see test_evaluators
+                        # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
+                        # print_verbose("       ", docid, "(not counted yet) true match prediction", r_pred)
+                        pass
+                    elif None in accept_decisions:
+                        # Ignore as documented
+                        pass
+                    else:  # either False or the set is empty, meaning that there are no gold annotations
+                        print_verbose("    ", docid, ": FALSE POSITIV", r_pred)
+                        counts[docid]['fp'] += 1
 
             for r_gold in gold:
 
-                if any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
+                if "UNKNOWN:" in r_gold:
+                    # Ignore, no normalization
+                    pass
+                elif any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
                 else:

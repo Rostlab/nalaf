@@ -71,6 +71,7 @@ class SklSVM(RelationExtractor):
         self.model.fit(X, y)
         end = time.time()
         print_debug("SVC train, running time: ", (end - start))
+
         return self
 
     def annotate(self, corpus):

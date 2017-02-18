@@ -10,8 +10,10 @@ import scipy
 import sklearn
 from sklearn import svm
 from sklearn.preprocessing import FunctionTransformer, maxabs_scale
+from sklearn.preprocessing import MaxAbsScaler
 from sklearn.feature_selection import VarianceThreshold
 import time
+from sklearn.pipeline import make_pipeline
 
 
 class SklSVM(RelationExtractor):
@@ -28,7 +30,20 @@ class SklSVM(RelationExtractor):
 
         self.version = "1.0.0"
 
-        self.preprocess = preprocess
+        if isinstance(preprocess, list):
+            self.preprocess = make_pipeline(*preprocess)
+        elif preprocess is True:
+            self.preprocess = make_pipeline(
+                # # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
+                # (lambda p: VarianceThreshold(threshold=(p * (1 - p))))(0.01),
+
+                # See http://stackoverflow.com/a/41601532/341320
+                # logtran = FunctionTransformer(snp.log1p, accept_sparse=True, validate=True)
+                # X = logtran.transform(X)
+                MaxAbsScaler(copy=False),
+            )
+        else:
+            self.preprocess = make_pipeline(None)
 
         self.model = svm.SVC(**svc_parameters)
 
@@ -211,7 +226,7 @@ class SklSVM(RelationExtractor):
 
         print_verbose("SVC before preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
         if preprocess:
-            X = __class__._preprocess(X)
+            X = preprocess.fit_transform(X)  # __class__._preprocess(X)
             print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
         end = time.time()
@@ -247,30 +262,3 @@ class SklSVM(RelationExtractor):
         X = X.tocsr()
 
         return (X, y)
-
-
-    ##################################################################################################################
-
-
-    @staticmethod
-    def _preprocess(X):
-        X = __class__._scale(X)
-        # X = __class__._assure_min_variance(X)
-        return X
-
-
-    @staticmethod
-    def _assure_min_variance(X, p=0.99):
-        # See: http://scikit-learn.org/stable/modules/feature_selection.html#removing-features-with-low-variance
-        selector = VarianceThreshold(threshold=(p * (1 - p)))
-        X = selector.fit_transform(X)
-        return X
-
-
-    @staticmethod
-    def _scale(X):
-        # See http://stackoverflow.com/a/41601532/341320
-        # logtran = FunctionTransformer(np.log1p, accept_sparse=True, validate=True)
-        # X = logtran.transform(X)
-        X = maxabs_scale(X, copy=False)
-        return X

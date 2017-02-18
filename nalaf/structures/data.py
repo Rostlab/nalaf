@@ -1912,6 +1912,7 @@ class FeatureDictionary(dict):
         if key in self:
             raise KeyError('feature name "{}" already exists'.format(key))
         else:
+            # TODO this would be better written in the (entities) FeatureGenerator
             if not re.search('\[-?[0-9]+\]$', key):
                 key += '[0]'
             dict.__setitem__(self, key, value)

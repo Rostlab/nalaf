@@ -24,15 +24,12 @@ class SklSVM(RelationExtractor):
 
     def __init__(self, model_path=None, classification_threshold=0.0, use_tree_kernel=False, preprocess=True, **svc_parameters):
         assert not use_tree_kernel, NotImplementedError
+        assert classification_threshold == 0, NotImplementedError
 
-        self.model_path = model_path if model_path is not None else tempfile.NamedTemporaryFile().name
-        """the model (path) to read from / write to"""
-        print_debug("SVM-Light model file path: " + self.model_path)
+        self.version = "1.0.0"
 
-        self.classification_threshold = classification_threshold
         self.preprocess = preprocess
 
-        self.svc_parameters = svc_parameters
         self.model = svm.SVC(**svc_parameters)
 
         self.global_feature_set = None

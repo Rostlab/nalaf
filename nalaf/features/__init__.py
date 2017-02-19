@@ -56,6 +56,15 @@ class FeatureGenerator:
         """
         return
 
+        # TODO the following is better written here, instead of the FeatureDictionary as originally written
+        # The code was removed there and as a consequence nala may not work now
+        #
+        # If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
+        # This is used to identify the position in the window for the feature.
+
+        # if not re.search('\[-?[0-9]+\]$', key):
+        #     key += '[0]'
+
 
 def eval_binary_feature(feature_dict, feature_name, evaluator, *args):
     """

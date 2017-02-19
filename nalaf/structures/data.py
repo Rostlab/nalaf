@@ -1904,9 +1904,6 @@ class FeatureDictionary(dict):
     Extension of the built in dictionary with the added constraint that
     keys (feature names) cannot be updated.
 
-    If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
-    This is used to identify the position in the window for the feature.
-
     Raises an exception when we try to add a key that exists already.
     """
 
@@ -1914,9 +1911,6 @@ class FeatureDictionary(dict):
         if key in self:
             raise KeyError('feature name "{}" already exists'.format(key))
         else:
-            # TODO this would be better written in the (entities) FeatureGenerator
-            if not re.search('\[-?[0-9]+\]$', key):
-                key += '[0]'
             dict.__setitem__(self, key, value)
 
 

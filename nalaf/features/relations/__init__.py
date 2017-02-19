@@ -50,7 +50,8 @@ class EdgeFeatureGenerator(FeatureGenerator):
 
     def __set_final_name(self, feature_name):
         if not re.search('\[-?[0-9]+\]$', feature_name):
-            feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
+            # Identify the window position --> TODO likely deletable from a edge feature generator
+            feature_name = feature_name + "_[0]"
 
         if not feature_name.startswith(self.__class__.__name__):
             feature_name = self.__class__.__name__ + "::" + feature_name

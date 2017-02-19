@@ -1901,10 +1901,10 @@ class Token:
 
 class FeatureDictionary(dict):
     """
-    Extension of the built in dictionary with the added constraint that
-    keys (feature names) cannot be updated.
+    Extension of the built in dictionary with:
 
-    Raises an exception when we try to add a key that exists already.
+    1) the added constraint that keys (feature names) cannot be updated.
+       It raises an exception if you try to add a key that exists already.
     """
 
     def __setitem__(self, key, value):

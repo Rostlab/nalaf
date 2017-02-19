@@ -47,39 +47,8 @@ class SklSVM(RelationExtractor):
 
         self.model = svm.SVC(**svc_parameters)
 
-        self.global_feature_set = None
-        """
-        Dict[String, Int] : Map of feature names to feature keys of an assumed global featured corpus
-        """
-        self.allowed_feature_names = None
-        """
-        Set[String] : Set of allowed feature names, if given
-        """
-        self.allowed_feature_keys = None
-        """
-        Set[Int] : Set of allowed feature keys - If None, the allowed keys implictly equal the features' keys of the training data
-        """
-        self.final_allowed_feature_mapping = None
-        """
-        Dict[Int, Int] or Function[Int] -> Int.
-
-        A map of allowed (feature keys) to (final feature indexes as written in the instances).
-
-        The maximum value of the final index is equal or less than the maximum value of the original feature keys
-        and only equal in case all feature keys are allowed. The final indexes are enumerated from 0 to n-1.
-
-        That is, for example, say the corpus has features keys = {0, 1, 2, 3, 4}, yet the allowed feature indexes
-        are only = {1, 3, 4}. The resulting final_allowed_feature_mapping is = {1: 0, 3: 1, 4: 2}.
-        Note: the order is NOT respected nor checked.
-
-        When they are equal, there is a 1:1 correspondence between keys and indexes, e.g. {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
-        Note: The order IS respected.
-        """
 
     def train(self, training_corpus):
-        if self.final_allowed_feature_mapping is None:
-            self.set_allowed_feature_keys_from_corpus(training_corpus)
-
         X, y = self.__convert_edges_features_to_vector_instances(training_corpus)
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
@@ -100,64 +69,10 @@ class SklSVM(RelationExtractor):
 
         return corpus.form_predicted_relations()
 
-    ##################################################################################################################
-
-    def set_allow_all_feature_keys(self):
-        """
-        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
-
-        rtype: Tuple[None, None, Function[Int] -> Int]
-        """
-        self.final_allowed_feature_mapping = (lambda f_key: f_key)
-
-        return self
-
-    def set_allowed_feature_names(self, global_feature_set, allowed_feature_names):
-        self.global_feature_set = global_feature_set
-        self.allowed_feature_names = allowed_feature_names
-        allowed_feature_keys = {self.global_feature_set[f_name] for f_name in self.allowed_feature_names if self.global_feature_set.get(f_name, None) is not None}
-        self.set_allowed_feature_keys(allowed_feature_keys)
-
-        return self
-
-    def set_allowed_feature_keys(self, allowed_feature_keys):
-        """
-        Generate a 1:1 feature key to final feature index mapping. The other IS respected.
-
-        rtype: Tuple[None, Set[Int], Dict[Int, Int]]
-        """
-        self.allowed_feature_keys = set(allowed_feature_keys)
-        self.final_allowed_feature_mapping = {}
-
-        for allowed_feat_key in allowed_feature_keys:
-            self.final_allowed_feature_mapping[allowed_feat_key] = len(self.final_allowed_feature_mapping)
-
-        return self
-
-    def set_allowed_feature_keys_from_corpus(self, corpus):
-        """
-        Generate the final mapping of features from the feature indexes that are present in the given corpus (considered a training one).
-
-        rtype: Tuple[None, None, Set[Int], Dict[Int, Int]]
-        """
-        self.allowed_feature_keys = {f_key for edge in corpus.edges() for f_key in edge.features.keys()}
-        self.final_allowed_feature_mapping = {}
-
-        for allowed_feat_key in allowed_feature_keys:
-            self.final_allowed_feature_mapping[allowed_feat_key] = len(self.final_allowed_feature_mapping)
-
-        return self
-
-    ##################################################################################################################
+    # ----------------------------------------------------------------------------------------------------
 
     def write_vector_instances(self, corpus, global_feature_set):
-        self.global_feature_set = global_feature_set
-        if self.final_allowed_feature_mapping is None:
-            self.set_allow_all_feature_keys()
-            num_features = len(global_feature_set)
-        else:
-            assert(isinstance(self.final_allowed_feature_mapping, dict))
-            num_features = len(self.final_allowed_feature_mapping)
+        num_features = len(global_feature_set)
 
         X, y, groups = self.__gen_vector_instances(corpus, num_features=num_features)
 
@@ -168,11 +83,6 @@ class SklSVM(RelationExtractor):
         return X, y, groups
 
     def __gen_vector_instances(self, corpus, num_features):
-
-        if isinstance(self.final_allowed_feature_mapping, dict):
-            final_allowed_feature_mapping_fun = (lambda f_key: self.final_allowed_feature_mapping.get(f_key, None))
-        else:
-            final_allowed_feature_mapping_fun = self.final_allowed_feature_mapping
 
         def fun(X, y, corpus):
             groups = {}
@@ -185,13 +95,8 @@ class SklSVM(RelationExtractor):
                     edge.initial_instance_index = instance_index
                     groups[docid] = groups.get(docid, []) + [instance_index]
 
-                    for f_key in edge.features.keys():
-
-                        f_index = final_allowed_feature_mapping_fun(f_key)
-
-                        if f_index is not None:
-                            value = edge.features[f_key]
-                            X[instance_index, f_index] = value
+                    for f_index, value in edge.features.items():
+                        X[instance_index, f_index] = value
 
                     y[instance_index] = edge.real_target
 
@@ -239,7 +144,8 @@ class SklSVM(RelationExtractor):
         if __class__._vector_instances_already_computed(corpus):
             return __class__._convert_edges_features_reusing_computed_vector_instances(corpus)
         else:
-            return self.__gen_vector_instances(corpus, len(self.final_allowed_feature_mapping))
+            # + 1 since the keys are 0-indexed, that is a sole feature indexed by 0 means having 1 feature
+            return self.__gen_vector_instances(corpus, max(next(corpus.edges()).features.keys()) + 1)
 
 
     @staticmethod

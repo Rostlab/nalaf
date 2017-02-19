@@ -34,16 +34,21 @@ class EdgeFeatureGenerator(FeatureGenerator):
             feature_name = self.__set_final_name(feature_name)
 
             if is_training_mode:
-                if feature_name not in feature_set:
-                    feature_key = len(feature_set)
-                    feature_set[feature_name] = feature_key
+                feature_index = feature_set.get(feature_name, None)
+
+                if feature_index is None:
+                    feature_index = len(feature_set)
+                    feature_set[feature_name] = feature_index
                     print_verbose("Feature map: {} == {} -- _1st_ value: {}".format(str(feature_key), feature_name, str(value)))
-                edge.features[feature_set[feature_name]] = value
+
+                edge.features[feature_index] = value
                 return True
 
             else:
-                if feature_name in feature_set:
-                    edge.features[feature_set[feature_name]] = value
+                feature_index = feature_set.get(feature_name, None)
+
+                if feature_index is not None:
+                    edge.features[feature_index] = value
                     return True
                 else:
                     return False

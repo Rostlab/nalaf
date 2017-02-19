@@ -31,11 +31,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
             return False
 
         else:
-            if not re.search('\[-?[0-9]+\]$', feature_name):
-                feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
-
-            if not feature_name.startswith(self.__class__.__name__):
-                feature_name = self.__class__.__name__ + "::" + feature_name
+            feature_name = self.__set_final_name(feature_name)
 
             if is_training_mode:
                 if feature_name not in feature_set:
@@ -44,12 +40,22 @@ class EdgeFeatureGenerator(FeatureGenerator):
                     print_verbose("Feature map: {} == {} -- _1st_ value: {}".format(str(feature_key), feature_name, str(value)))
                 edge.features[feature_set[feature_name]] = value
                 return True
+
             else:
-                if feature_name in feature_set.keys():
+                if feature_name in feature_set:
                     edge.features[feature_set[feature_name]] = value
                     return True
                 else:
                     return False
+
+    def __set_final_name(self, feature_name):
+        if not re.search('\[-?[0-9]+\]$', feature_name):
+            feature_name = feature_name + "_[0]"  # See logic of definition in: FeatureDictionary
+
+        if not feature_name.startswith(self.__class__.__name__):
+            feature_name = self.__class__.__name__ + "::" + feature_name
+
+        return feature_name
 
 
     def mk_feature_name(self, prefix, *args):

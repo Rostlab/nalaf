@@ -75,8 +75,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
                 sentence = edge.get_combined_sentence()
 
+                entities_in_sentences = edge.get_any_entities_in_sentences(predicted=use_pred)
                 total_count = 0
-                for e_class_id, entities in edge.get_any_entities_in_sentences(predicted=use_pred).items():
+                # We sort to have a deterministic order creation of the features
+                for e_class_id in sorted(entities_in_sentences):
+                    entities = entities_in_sentences[e_class_id]
                     individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
                     assert individual_count >= 0
                     total_count += individual_count
@@ -84,8 +87,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
                 self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
 
+                entities_between_entities = edge.get_any_entities_between_entities(predicted=use_pred)
                 total_count = 0
-                for e_class_id, entities in edge.get_any_entities_between_entities(predicted=use_pred).items():
+                # We sort to have a deterministic order creation of the features
+                for e_class_id in sorted(entities_between_entities):
+                    entities = entities_between_entities[e_class_id]
                     individual_count = len(entities)
                     total_count += individual_count
                     self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)

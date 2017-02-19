@@ -1769,7 +1769,9 @@ class Edge:
 
         for s1_token, s2_token in product(sentence1, sentence2):
 
-            if s1_token.get_entity(edge.same_part, True, True) is not None and s2_token.get_entity(edge.same_part, True, True) is not None:
+            # Maybe just Noun's conditions? maybe only entities condition? Both?
+            if (s1_token.is_POS_Noun() and s2_token.is_POS_Noun()) or \
+                (s1_token.get_entity(edge.same_part, True, True) is not None and s2_token.get_entity(edge.same_part, True, True) is not None):
 
                 if s1_token.features['lemma'] == s2_token.features['lemma']:
                     s1_token.features['user_dependency_to'].append((s2_token, "same_lemma"))

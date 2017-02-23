@@ -378,16 +378,25 @@ class TestMentionLevelEvaluator(unittest.TestCase):
 
         part_1.predicted_relations = [
             Relation(
+                # One without normalization, one with another normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool"),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
 
             Relation(
+                # One with normalization, one with another normalization
+                STUB_R_ID_1,
+                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
+
+            Relation(
+                # Both with the correct normalizations
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
 
             Relation(
+                # Both with another normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": "1964"}),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": "1961"})),
@@ -397,7 +406,7 @@ class TestMentionLevelEvaluator(unittest.TestCase):
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 0)
         self.assertEqual(evaluation.fn, 1)
-        self.assertEqual(evaluation.fp, 3)
+        self.assertEqual(evaluation.fp, 1)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 0.0)
 

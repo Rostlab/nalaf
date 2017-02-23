@@ -65,7 +65,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         self.f_diff_sents_together_count = f_diff_sents_together_count
 
 
-    def generate(self, corpus, f_set, is_train, use_gold, use_pred):
+    def generate(self, corpus, f_set, use_gold, use_pred):
         assert not (use_gold and use_pred), "No support for both"
 
         self.extract_abbreviation_synonyms(corpus, use_gold, use_pred)
@@ -83,9 +83,9 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                     individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
                     assert individual_count >= 0
                     total_count += individual_count
-                    self.add_with_value(f_set, is_train, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)
+                    self.add_with_value(f_set, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)
 
-                self.add_with_value(f_set, is_train, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
+                self.add_with_value(f_set, edge, 'f_counts_total', total_count, 'int', 'total (all classes)')
 
                 entities_between_entities = edge.get_any_entities_between_entities(predicted=use_pred)
                 total_count = 0
@@ -94,42 +94,42 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                     entities = entities_between_entities[e_class_id]
                     individual_count = len(entities)
                     total_count += individual_count
-                    self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
+                    self.add_with_value(f_set, edge, 'f_counts_in_between_individual', individual_count, 'int', 'individual', e_class_id)
 
-                self.add_with_value(f_set, is_train, edge, 'f_counts_in_between_total', total_count, 'int', 'total (all classes)')
+                self.add_with_value(f_set, edge, 'f_counts_in_between_total', total_count, 'int', 'total (all classes)')
 
                 order = edge.entity1.class_id < edge.entity2.class_id
                 if order:
-                    self.add(f_set, is_train, edge, 'f_order')
+                    self.add(f_set, edge, 'f_order')
 
                 for token in sentence:
-                    self.add(f_set, is_train, edge, 'f_bow', masked_text(token, edge.same_part, use_gold, use_pred, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
-                    self.add(f_set, is_train, edge, 'f_pos', token.features['coarsed_pos'])
+                    self.add(f_set, edge, 'f_bow', masked_text(token, edge.same_part, use_gold, use_pred, token_map=lambda t: t.features['lemma'], token_is_number_fun=lambda _: "NUM"))
+                    self.add(f_set, edge, 'f_pos', token.features['coarsed_pos'])
 
-                self.add_with_value(f_set, is_train, edge, 'f_tokens_count', len(sentence))
+                self.add_with_value(f_set, edge, 'f_tokens_count', len(sentence))
 
                 # Remember, the edge's entities are sorted, i.e. e1.offset < e2.offset
                 _e1_first_token_index = edge.entity1.tokens[0].features['tmp_id']
                 _e2_last_token_index = edge.entity2.tokens[-1].features['tmp_id']
                 assert _e1_first_token_index < _e2_last_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_first_token_index, _e2_last_token_index)
 
-                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token_index]))
-                self.add_with_value(f_set, is_train, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token_index+1):]))
+                self.add_with_value(f_set, edge, 'f_tokens_count_before', len(sentence[:_e1_first_token_index]))
+                self.add_with_value(f_set, edge, 'f_tokens_count_after', len(sentence[(_e2_last_token_index+1):]))
 
                 #
 
                 if Part.is_negated(sentence):
-                    self.add(f_set, is_train, edge, "f_sentence_is_negated")
+                    self.add(f_set, edge, "f_sentence_is_negated")
 
                 #
 
                 verbs = set(Part.get_main_verbs(sentence, token_map=lambda t: t.features["lemma"]))
 
                 if len(verbs) == 0:
-                    self.add(f_set, is_train, edge, "f_main_verbs", "NO_MAIN_VERB")
+                    self.add(f_set, edge, "f_main_verbs", "NO_MAIN_VERB")
                 else:
                     for v in verbs:
-                        self.add(f_set, is_train, edge, "f_main_verbs", v)
+                        self.add(f_set, edge, "f_main_verbs", v)
 
                 counters = {}
                 for part in document:
@@ -141,11 +141,11 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
                 e1_key = __class__.entity2key(edge.entity1)
                 e1_count = counters[edge.entity1.class_id][e1_key]
-                self.add_with_value(f_set, is_train, edge, 'f_entity1_count', e1_count)
+                self.add_with_value(f_set, edge, 'f_entity1_count', e1_count)
 
                 e2_key = __class__.entity2key(edge.entity2)
                 e2_count = counters[edge.entity2.class_id][e2_key]
-                self.add_with_value(f_set, is_train, edge, 'f_entity2_count', e2_count)
+                self.add_with_value(f_set, edge, 'f_entity2_count', e2_count)
 
                 together_counter = Counter()
                 diff_sentences = {}
@@ -162,7 +162,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 together_key = __class__.edge2key(edge)
                 together_count = together_counter[together_key]
                 if together_count > 0:
-                    self.add_with_value(f_set, is_train, edge, 'f_diff_sents_together_count', together_count)
+                    self.add_with_value(f_set, edge, 'f_diff_sents_together_count', together_count)
 
 
     @staticmethod

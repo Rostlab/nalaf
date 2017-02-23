@@ -14,14 +14,14 @@ class EdgeFeatureGenerator(FeatureGenerator):
     """
 
     @abc.abstractmethod
-    def generate(self, dataset, feature_set, is_training_mode, use_gold=True, use_pred=False):
+    def generate(self, dataset, feature_set, use_gold=True, use_pred=False):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
         pass
 
 
-    def add_to_feature_set(self, feature_set, is_training_mode, edge, feature_name, value=1):
+    def add_to_feature_set(self, feature_set, edge, feature_name, value=1):
         """
         Return True if feature was added to feature_set. False, otherwise
 
@@ -33,7 +33,7 @@ class EdgeFeatureGenerator(FeatureGenerator):
         else:
             feature_name = self.__set_final_name(feature_name)
 
-            if is_training_mode:
+            if not feature_set.is_locked:
                 feature_index = feature_set.get(feature_name, None)
 
                 if feature_index is None:
@@ -79,14 +79,14 @@ class EdgeFeatureGenerator(FeatureGenerator):
         # print_debug(feature_name, field_prefix_feature, args)
         return feature_name
 
-    def add(self, feature_set, is_training_mode, edge, field_prefix_feature, *args):
+    def add(self, feature_set, edge, field_prefix_feature, *args):
         feature_name = self.gen_prefix_feat_name(field_prefix_feature, *args)
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name)
+        self.add_to_feature_set(feature_set, edge, feature_name)
 
 
-    def add_with_value(self, feature_set, is_training_mode, edge, field_prefix_feature, value, *args):
+    def add_with_value(self, feature_set, edge, field_prefix_feature, value, *args):
         feature_name = self.gen_prefix_feat_name(field_prefix_feature, *args)
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name, value=value)
+        self.add_to_feature_set(feature_set, edge, feature_name, value=value)
 
 
 from nalaf.features.relations import EdgeFeatureGenerator
@@ -128,22 +128,22 @@ class TokenFeatureGenerator(EdgeFeatureGenerator):
 
     def token_features(self, token, addendum, edge, feature_set, is_training_mode):
         feature_name_1 = self.gen_prefix_feat_name("prefix_txt", addendum, token.word)
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_1)
+        self.add_to_feature_set(feature_set, edge, feature_name_1)
 
         feature_name_2 = self.gen_prefix_feat_name("prefix_pos", addendum, token.features['pos'])
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_2)
+        self.add_to_feature_set(feature_set, edge, feature_name_2)
 
         feature_name_3 = self.gen_prefix_feat_name("prefix_masked_txt", addendum, token.masked_text(edge.same_part))
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_3)
+        self.add_to_feature_set(feature_set, edge, feature_name_3)
 
         # TODO why stem of masked text? -- makes little sense -- See TODO in original loctext too
         feature_name_4 = self.gen_prefix_feat_name("prefix_stem_masked_txt", addendum, self.stemmer.stem(token.masked_text(edge.same_part)))
-        self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_4)
+        self.add_to_feature_set(feature_set, edge, feature_name_4)
 
         ann_types = self.annotated_types(token, edge)
         for ann in ann_types:
             feature_name_5 = self.gen_prefix_feat_name("prefix_ann_type", addendum, ann)
-            self.add_to_feature_set(feature_set, is_training_mode, edge, feature_name_5)
+            self.add_to_feature_set(feature_set, edge, feature_name_5)
 
 
     def annotated_types(self, token, edge):

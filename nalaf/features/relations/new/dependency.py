@@ -112,7 +112,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         # None now
 
 
-    def generate(self, corpus, f_set, is_train, use_gold, use_pred):
+    def generate(self, corpus, f_set, use_gold, use_pred):
         assert not (use_gold and use_pred), "No support for both"
 
         for docid, document in corpus.documents.items():
@@ -172,15 +172,15 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                     dep_type = dep_path.name
 
                     for n_gram in dep_path.default_n_grams:
-                        self.add_n_grams(f_set, is_train, use_gold, use_pred, edge, dep_path, dep_type, n_gram)
+                        self.add_n_grams(f_set, use_gold, use_pred, edge, dep_path, dep_type, n_gram)
 
                     count = len(dep_path.middle)
                     count_without_punct = len(list(filter(lambda node: not node.token.features['is_punct'], dep_path.middle)))
-                    self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
-                    self.add_with_value(f_set, is_train, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
+                    self.add_with_value(f_set, edge, self.f('f_XX_tokens_count', dep_type), count, dep_type)
+                    self.add_with_value(f_set, edge, self.f('f_XX_tokens_count_without_punct', dep_type), count_without_punct, dep_type)
 
                     if Part.is_negated([node.token for node in dep_path.middle]):
-                        self.add(f_set, is_train, edge, self.f('f_XX_is_negated', dep_type), dep_type)
+                        self.add(f_set, edge, self.f('f_XX_is_negated', dep_type), dep_type)
 
                 # Extra
 
@@ -191,7 +191,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
         return feat_key.replace('XX', dependency_XX)
 
 
-    def add_n_grams(self, f_set, is_train, use_gold, use_pred, edge, path, dep_type, n_gram):
+    def add_n_grams(self, f_set, use_gold, use_pred, edge, path, dep_type, n_gram):
 
         def token_feat(tok_f_key):
             return (lambda t: t.features[tok_f_key])
@@ -200,7 +200,7 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
             groups = path_str_fun(n_gram, token_fun) if token_fun else path_str_fun(n_gram)
 
             for n_gram_group in groups:
-                self.add(f_set, is_train, edge, self.f(gen_f_key, dep_type), dep_type, n_gram, n_gram_group)
+                self.add(f_set, edge, self.f(gen_f_key, dep_type), dep_type, n_gram, n_gram_group)
 
         #
         # Regular features for all dependency paths types/names

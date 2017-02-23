@@ -1906,10 +1906,15 @@ class FeatureDictionary(dict):
     1) the added constraint that keys (feature names) cannot be updated.
        It raises an exception if you try to add a key that exists already.
 
-    2) TODO MAY BE DISCARDED
+    2) Possibility to lock the dictionary to prohibit any change (i.e. make the object immutable)
+
+    3) TODO: MAY BE DISCARDED
        If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
        This is used to identify the position in the window for the feature.
     """
+
+    def __init__(self, is_locked=False):
+        self.is_locked = is_locked
 
     def __setitem__(self, key, value):
         if key in self:

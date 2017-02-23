@@ -50,6 +50,9 @@ class SklSVM(RelationExtractor):
 
     def train(self, training_corpus):
         X, y = self.__convert_edges_features_to_vector_instances(training_corpus)
+        X = self.preprocess.fit_transform(X)
+        print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
+
         print_debug("Train SVC with #samples {} - #features {} - params: {}".format(X.shape[0], X.shape[1], str(self.model.get_params())))
         start = time.time()
         self.model.fit(X, y)
@@ -60,6 +63,9 @@ class SklSVM(RelationExtractor):
 
     def annotate(self, corpus):
         X, y = self.__convert_edges_features_to_vector_instances(corpus)
+        X = self.preprocess.transform(X)
+        print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
+
         y_pred = self.model.predict(X)
         y_size = len(y)
         print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -105,12 +111,11 @@ class SklSVM(RelationExtractor):
         return __class__._create_instances(
             num_features=num_features,
             corpus=corpus,
-            preprocess=self.preprocess,
             setting_function=fun
         )
 
     @staticmethod
-    def _create_instances(num_features, corpus, preprocess, setting_function):
+    def _create_instances(num_features, corpus, setting_function):
         """
         rtype: Tuple[scipy.sparse.csr_matrix, List[int]]
         """
@@ -128,11 +133,6 @@ class SklSVM(RelationExtractor):
         X, y, groups = setting_function(X, y, corpus)
 
         X = X.tocsr()
-
-        print_verbose("SVC before preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
-        if preprocess:
-            X = preprocess.fit_transform(X)  # __class__._preprocess(X)
-            print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
         end = time.time()
         print_debug("SVC convert instances, running time: ", (end - start))

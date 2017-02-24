@@ -428,13 +428,6 @@ class MentionLevelEvaluator(Evaluator):
 
         for docid, doc in dataset.documents.items():
             for partid, part in doc.parts.items():
-                tests = ' || '.join(sorted(ann.text for ann in part.annotations))
-                preds = ' || '.join(sorted(ann.text for ann in part.predicted_annotations))
-                if tests != preds:
-                    print_debug("* docid={} part={}".format(docid, partid))
-                    print_debug("test: {}".format(tests))
-                    print_debug("pred: {}".format(preds))
-                    print_debug()
 
                 overlap_real = {label: [] for label in labels}
                 overlap_predicted = {label: [] for label in labels}
@@ -458,6 +451,7 @@ class MentionLevelEvaluator(Evaluator):
                 for ann in part.predicted_annotations:
                     if ann in part.annotations:
                         counts[TOTAL][docid]['tp'] += 1
+                        print_verbose("    ", docid, ": TRUE POSITVE", ann)
 
                         if self.subclass_analysis:
                             counts[labelize(ann)][docid]['tp'] += 1
@@ -467,6 +461,7 @@ class MentionLevelEvaluator(Evaluator):
 
                         if ann in overlap_predicted[TOTAL]:
                             counts[TOTAL][docid]['fp_ov'] += 1
+                            print_debug("    ", docid, ": FALSE POSITIV", ann)
 
                         if self.subclass_analysis:
                             counts[labelize(ann)][docid]['fp'] += 1
@@ -479,6 +474,7 @@ class MentionLevelEvaluator(Evaluator):
 
                         if ann in overlap_real[TOTAL]:
                             counts[TOTAL][docid]['fn_ov'] += 1
+                            print_debug("    ", docid, ": FALSE NEGATIV", ann)
 
                         if self.subclass_analysis:
                             counts[labelize(ann)][docid]['fn'] += 1

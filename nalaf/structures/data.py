@@ -1972,13 +1972,15 @@ class Entity:
 
 
     def __repr__(self):
-        norm_string = ''
+        subclass_str = " (" + self.subclass if self.subclass else ""
 
         if self.normalisation_dict:
-            norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
+            norm_str = ', norm: {}'.format(self.normalisation_dict)
+        else:
+            norm_str = ''
 
-        return 'Entity(id: {self.class_id}, offset: {self.offset}, ' \
-               'text: {self.text}, subclass: {self.subclass}{norm})'.format(self=self, norm=norm_string)
+        return 'Entity(id: {}{}, offset: {}, ' \
+               'text: {}{})'.format(self.class_id, subclass_str, self.offset, self.text, norm_str)
 
 
     def __eq__(self, that):

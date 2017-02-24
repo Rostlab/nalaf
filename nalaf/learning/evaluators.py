@@ -587,6 +587,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
             for r_pred in predicted:
 
                 if "UNKNOWN:" in r_pred:
+                    # TODO not sure about this
                     # Ignore, no normalization
                     pass
 
@@ -604,7 +605,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
                         # Ignore as documented
                         pass
                     else:  # either False or the set is empty, meaning that there are no gold annotations
-                        print_verbose("    ", docid, ": FALSE POSITIV", r_pred)
+                        print_debug("    ", docid, ": FALSE POSITIV", r_pred)
                         counts[docid]['fp'] += 1
 
             for r_gold in gold:
@@ -616,7 +617,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
                 else:
-                    print_verbose("    ", docid, ": FALSE NEGATIV", r_gold)
+                    print_debug("    ", docid, ": FALSE NEGATIV", r_gold)
                     counts[docid]['fn'] += 1
 
         print_verbose()

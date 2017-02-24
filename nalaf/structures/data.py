@@ -913,36 +913,6 @@ class Document:
         return text
 
 
-    def overlaps_with_mention2(self, start, end):
-        """
-        Checks for overlap with given 2 nrs that represent start and end position of any corresponding string.
-        :param start: index of first char (offset of first char in whole document)
-        :param end: index of last char (offset of last char in whole document)
-        """
-        print_verbose('Searching for overlap with a mention.')
-        Entity.equality_operator = 'exact_or_overlapping'
-        query_ann = Entity(class_id='', offset=start, text=(end - start + 1) * 'X')
-        print_debug(query_ann)
-        offset = 0
-        for part in self.parts.values():
-            print_debug('Query: Offset =', offset, 'start char =', query_ann.offset, 'start char + len(ann.text) =',
-                        query_ann.offset + len(query_ann.text), 'params(start, end) =',
-                        "({0}, {1})".format(start, end))
-            for ann in part.annotations:
-                offset_corrected_ann = Entity(class_id='', offset=ann.offset + offset, text=ann.text)
-                if offset_corrected_ann == query_ann:
-                    print_verbose('Found annotation:', ann)
-                    return True
-                else:
-                    print_debug(
-                        "Current(offset: {0}, offset+len(text): {1}, text: {2})".format(offset_corrected_ann.offset,
-                                                                                        offset_corrected_ann.offset + len(
-                                                                                            offset_corrected_ann.text),
-                                                                                        offset_corrected_ann.text))
-            offset += len(part.text)
-        return False
-
-
     def overlaps_with_mention(self, *span, annotated=True):
         """
         Checks for overlap at position charpos with another mention.

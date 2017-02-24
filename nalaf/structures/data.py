@@ -2086,7 +2086,7 @@ class Relation:
 
             if ann.offset == self.entity1.offset and ann.text == self.entity1.text:
                 first = True
-            if ann.offset == self.entity2.øffset and ann.text == self.entity2.text:
+            if ann.offset == self.entity2.offset and ann.text == self.entity2.text:
                 second = True
             if first and second:
                 return True

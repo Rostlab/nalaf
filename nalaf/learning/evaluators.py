@@ -461,6 +461,7 @@ class MentionLevelEvaluator(Evaluator):
 
                         if ann in overlap_predicted[TOTAL]:
                             counts[TOTAL][docid]['fp_ov'] += 1
+                        else:
                             print_debug("    ", docid, ": FALSE POSITIV", ann)
 
                         if self.subclass_analysis:
@@ -474,6 +475,7 @@ class MentionLevelEvaluator(Evaluator):
 
                         if ann in overlap_real[TOTAL]:
                             counts[TOTAL][docid]['fn_ov'] += 1
+                        else:
                             print_debug("    ", docid, ": FALSE NEGATIV", ann)
 
                         if self.subclass_analysis:

@@ -2016,7 +2016,7 @@ class Entity:
         # TODO implement test case for edge cases in overlap and exact
         if self.class_id == other.class_id:
             exact = self.offset == other.offset and self.text == other.text
-            overlap = self.offset < (other.offset + len(other.text)) and (self.offset + len(self.text)) > other.offset
+            overlap = self.offset < other.end_offset() and self.end_offset() > other.offset
 
             if self.equality_operator == 'exact':
                 return exact

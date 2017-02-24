@@ -177,6 +177,19 @@ class TestEntity(unittest.TestCase):
         self.assertEqual("sentence for the benefit of your mamma", self.as_string(self.entity.next_tokens(self.sentence, n=10, include_ent_last_token=True)))
 
 
+    def test_overlapping(self):
+
+        e1 = Entity(class_id="e_x", offset=987, text="PKB/Akt")
+        e2 = Entity(class_id="e_x", offset=987, text="PKB")
+
+        Entity.equality_operator = 'exact_or_overlapping'
+
+        print(e1.offset, e1.end_offset())
+        print(e2.offset, e2.end_offset())
+
+        self.assertEqual(e1, e2)
+
+
 class TestLabel(unittest.TestCase):
     pass
 

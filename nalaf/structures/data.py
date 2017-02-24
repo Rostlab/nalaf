@@ -1981,12 +1981,12 @@ class Entity:
                'text: {self.text}, subclass: {self.subclass}{norm})'.format(self=self, norm=norm_string)
 
 
-    def __eq__(self, other):
+    def __eq__(self, that):
         # consider them a match only if class_id matches
         # TODO implement test case for edge cases in overlap and exact
-        if self.class_id == other.class_id:
-            exact = self.offset == other.offset and self.text == other.text
-            overlap = self.offset < other.end_offset() and self.end_offset() > other.offset
+        if self.class_id == that.class_id:
+            exact = self.offset == that.offset and self.text == that.text
+            overlap = self.offset < that.end_offset() and self.end_offset() > that.offset
 
             if self.equality_operator == 'exact':
                 return exact
@@ -1997,7 +1997,7 @@ class Entity:
                 # overlap includes the exact case so just return that
                 return overlap
             else:
-                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
+                raise ValueError('that must be "exact" or "overlapping" or "exact_or_overlapping"')
         else:
             return False
 

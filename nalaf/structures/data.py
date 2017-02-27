@@ -1391,6 +1391,30 @@ class Part:
 
         return part_mapped_relations
 
+    def map_entities(self, use_predicted_first, entity_map_fun, entity_overlap_fun, mapped_entities=None):
+        """
+        Returns a list of strings that represent unique mapping of entities based on the entity_overlap_fun
+        """
+
+        if mapped_entities is None:
+            mapped_entities = []
+
+        e1_entities = self.predicted_annotations if use_predicted_first else self.annotations
+        e2_entities = self.annotations if use_predicted_first else self.predicted_annotations
+
+        for e1 in e1_entities:
+            entity2 = None
+            for e2 in e2_entities:
+                if e1.class_id == e2.class_id and entity_overlap_fun(e1, e2):
+                    entity2 = e2
+                    break
+
+            mapped_entity = '::'.join([entity_map_fun(e1), '|']) if entity2 is None \
+                else '::'.join([entity_map_fun(e1), entity_map_fun(entity2)])
+
+            mapped_entities.append(mapped_entity)
+
+        return mapped_entities
 
     def __iter__(self):
         """

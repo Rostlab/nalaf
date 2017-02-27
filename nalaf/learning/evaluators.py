@@ -7,6 +7,12 @@ import math
 import uuid
 from collections import Counter
 
+PRO_ID = 'e_1'
+LOC_ID = 'e_2'
+ORG_ID = 'e_3'
+UNIPROT_NORM_ID = 'n_7'
+GO_NORM_ID = 'n_8'
+TAXONOMY_NORM_ID = 'n_9'
 
 class Evaluation:
 
@@ -482,6 +488,114 @@ class MentionLevelEvaluator(Evaluator):
                             counts[labelize(ann)][docid]['fn'] += 1
                             if ann in overlap_real[labelize(ann)]:
                                 counts[labelize(ann)][docid]['fn_ov'] += 1
+
+        evaluations = Evaluations()
+
+        for label in labels:
+            evaluations.add(EvaluationWithStandardError(label, counts[label]))
+
+        return evaluations
+
+
+class EntityLevelEvaluator(Evaluator):
+
+    TOTAL_LABEL = "TOTAL"
+
+    COMMON_ENTITY_MAP_FUNS = {
+        'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+
+        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations:
+                           (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+    }
+
+    def __init__(self, subclass_analysis=False, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
+        self.subclass_analysis = subclass_analysis
+
+        if entity_map_fun is None:
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
+        elif isinstance(entity_map_fun, str):
+            assert not entity_map_fun.endswith('_fun'), "You cannot give function names that are complex functions such as 'normalized_fun'"
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
+        else:
+            self.entity_map_fun = entity_map_fun
+
+        self.entity_overlap_fun = str.__eq__ if entity_overlap_fun is None else entity_overlap_fun
+        self.entity_accept_fun = str.__eq__ if entity_accept_fun is None else entity_accept_fun
+
+
+    def evaluate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        :returns (tp, fp, fn, tp_overlapping, precision, recall, f_measure): (int, int, int, int, float, float, float)
+
+        Calculates precision, recall and subsequently F1 measure, defined as:
+            * precision: number of correctly predicted items as a percentage of the total number of predicted items
+                len(predicted items that are also real)/len(predicted)
+                or in other words tp / tp + fp
+            * recall: number of correctly predicted items as a percentage of the total number of correct items
+                len(real items that are also predicted)/len(real)
+                or in other words tp / tp + fn
+            * Considers overlapping matches
+        """
+        TOTAL = EntityLevelEvaluator.TOTAL_LABEL
+        labels = [TOTAL]
+
+        def labelize(e):
+            return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
+
+        def label_type(str):
+            return PRO_ID if UNIPROT_NORM_ID in str or PRO_ID in str else LOC_ID if GO_NORM_ID in str or LOC_ID in str else ORG_ID
+
+        if self.subclass_analysis:
+            # find all possible subclasses or otherwise full classes
+
+            subclasses = set(labelize(e) for e in dataset.entities())
+            subclasses.update(set(labelize(e) for e in dataset.predicted_entities()))
+
+            for x in subclasses:
+                labels.append(x)
+
+        docids = dataset.documents.keys()
+        subcounts = ['tp', 'fp', 'fn']
+        counts = {label: {docid: dict.fromkeys(subcounts, 0) for docid in docids} for label in labels}
+
+        for docid, doc in dataset.documents.items():
+            for partid, part in doc.parts.items():
+
+                gold_mapping = part.map_entities(use_predicted_first=False, entity_map_fun= self.entity_map_fun, entity_overlap_fun=self.entity_overlap_fun)
+                pred_mapping = part.map_entities(use_predicted_first=True, entity_map_fun= self.entity_map_fun, entity_overlap_fun=self.entity_overlap_fun)
+
+                for pred in pred_mapping:
+
+                    if "UNKNOWN:" in pred:
+                        pass
+
+                    else:
+                        p,g = pred.split('::')
+                        accept_decisions = self.entity_accept_fun(g,p)
+
+                        if accept_decisions is True:
+                            pass
+                        elif accept_decisions is None:
+                            pass
+                        else:  # either False or the set is empty, meaning that there are no gold annotations
+                            print_debug("    ", docid, ": FALSE POSITIV", pred)
+                            counts[TOTAL][docid]['fp'] += 1
+                            counts[label_type(pred)][docid]['fp'] += 1
+
+                for gold in gold_mapping:
+                    g,p = gold.split('::')
+                    if "UNKNOWN:" in gold:
+                        # Ignore, no normalization
+                        pass
+                    elif self.entity_accept_fun(g,p):
+                        print_verbose("    ", docid, ": TRUE POSITIVE", gold)
+                        counts[TOTAL][docid]['tp'] += 1
+                        counts[label_type(gold)][docid]['tp'] += 1
+                    else:
+                        print_debug("    ", docid, ": FALSE NEGATIV", gold)
+                        counts[TOTAL][docid]['fn'] += 1
+                        counts[label_type(gold)][docid]['fn'] += 1
 
         evaluations = Evaluations()
 

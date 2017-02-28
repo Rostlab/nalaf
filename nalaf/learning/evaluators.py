@@ -497,15 +497,14 @@ class MentionLevelEvaluator(Evaluator):
         return evaluations
 
 
-class EntityLevelEvaluator(Evaluator):
+class EntityEvaluator(Evaluator):
 
     TOTAL_LABEL = "TOTAL"
 
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
-        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations:
-                           (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
     }
 
     def __init__(self, subclass_analysis=False, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
@@ -526,7 +525,7 @@ class EntityLevelEvaluator(Evaluator):
     def evaluate(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
-        :returns (tp, fp, fn, tp_overlapping, precision, recall, f_measure): (int, int, int, int, float, float, float)
+        :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
 
         Calculates precision, recall and subsequently F1 measure, defined as:
             * precision: number of correctly predicted items as a percentage of the total number of predicted items
@@ -537,7 +536,7 @@ class EntityLevelEvaluator(Evaluator):
                 or in other words tp / tp + fn
             * Considers overlapping matches
         """
-        TOTAL = EntityLevelEvaluator.TOTAL_LABEL
+        TOTAL = EntityEvaluator.TOTAL_LABEL
         labels = [TOTAL]
 
         def labelize(e):

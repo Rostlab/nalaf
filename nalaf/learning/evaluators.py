@@ -535,8 +535,7 @@ class EntityEvaluator(Evaluator):
             return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
 
         def label(e):
-            class_id, offsets, norm_id, norm_val = e.split('|')
-            return class_id
+            return e.split('|')[0]
 
         if self.subclass_analysis:
             # find all possible subclasses or otherwise full classes

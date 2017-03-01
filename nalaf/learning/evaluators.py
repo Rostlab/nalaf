@@ -498,7 +498,8 @@ class EntityEvaluator(Evaluator):
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
-        'entity_normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+        'entity_normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations, normalization_required:
+                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e)))
     }
 
     def __init__(self, subclass_analysis=False, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
@@ -535,7 +536,7 @@ class EntityEvaluator(Evaluator):
             return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
 
         def label(e):
-            return e.split('|')[0]
+            return e.split('|')[0].strip() if len(e.split('|')) > 1 else e.split(':')[1].split(",")[0].strip()
 
         if self.subclass_analysis:
             # find all possible subclasses or otherwise full classes
@@ -596,8 +597,11 @@ class EntityEvaluator(Evaluator):
         return evaluations
 
 
-def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
-    entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e):
+    if normalization_required:
+        entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    else:
+        entity_norm_str = "|"
     offset_str = ','.join([str(e.offset), str(e.end_offset())])
     return '|'.join([e.class_id, offset_str, entity_norm_str])
 

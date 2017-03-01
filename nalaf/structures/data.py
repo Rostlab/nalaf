@@ -1403,16 +1403,17 @@ class Part:
         e2_entities = self.annotations if use_predicted_first else self.predicted_annotations
 
         for e1 in e1_entities:
-            entity2 = None
+            mapped_e2 = []
             for e2 in e2_entities:
                 if e1.class_id == e2.class_id and entity_overlap_fun(e1, e2):
-                    entity2 = e2
+                    mapped_e2.append(e2)
                     break
 
-            mapped_entity = '::'.join([entity_map_fun(e1), '|']) if entity2 is None \
-                else '::'.join([entity_map_fun(e1), entity_map_fun(entity2)])
-
-            mapped_entities.append(mapped_entity)
+            if not mapped_e2:
+                mapped_entities.append('::'.join([entity_map_fun(e1), '|']))
+            else:
+                for entity2 in mapped_e2:
+                    mapped_entities.append('::'.join([entity_map_fun(e1), entity_map_fun(entity2)]))
 
         return mapped_entities
 

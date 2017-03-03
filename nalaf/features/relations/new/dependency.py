@@ -128,35 +128,38 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
                 assert _e1_head_token_index < _e2_head_token_index, (docid, sentence, edge.entity1.text, edge.entity2.text, _e1_head_token_index, _e2_head_token_index)
 
                 dependency_paths = [
-                    Path(
-                        name='OW1',
-                        tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
-                        is_edge_type_constant=True,
-                        there_is_target=False,
-                        default_n_grams=self.h_ow_grams,
-                    ),
-                    Path(
-                        name='IW1',
-                        tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
-                        is_edge_type_constant=True,
-                        there_is_target=False,
-                        default_n_grams=self.h_iw_grams,
-                    ),
-
-                    Path(
-                        name='IW2',
-                        tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=True),
-                        is_edge_type_constant=True,
-                        there_is_target=False,
-                        default_n_grams=self.h_iw_grams,
-                    ),
-                    Path(
-                        name='OW2',
-                        tokens=edge.entity2.next_tokens(sentence, n=self.h_ow_size, include_ent_last_token=True),
-                        is_edge_type_constant=True,
-                        there_is_target=False,
-                        default_n_grams=self.h_ow_grams,
-                    ),
+                    #
+                    # Commented out as of now: they do not seem to provide any performance benefit yet cost running time
+                    #
+                    # Path(
+                    #     name='OW1',
+                    #     tokens=edge.entity1.prev_tokens(sentence, n=self.h_ow_size, include_ent_first_token=True, mk_reversed=True),
+                    #     is_edge_type_constant=True,
+                    #     there_is_target=False,
+                    #     default_n_grams=self.h_ow_grams,
+                    # ),
+                    # Path(
+                    #     name='IW1',
+                    #     tokens=edge.entity1.next_tokens(sentence, n=self.h_iw_size, include_ent_last_token=True),
+                    #     is_edge_type_constant=True,
+                    #     there_is_target=False,
+                    #     default_n_grams=self.h_iw_grams,
+                    # ),
+                    #
+                    # Path(
+                    #     name='IW2',
+                    #     tokens=edge.entity2.prev_tokens(sentence, n=self.h_iw_size, include_ent_first_token=True, mk_reversed=True),
+                    #     is_edge_type_constant=True,
+                    #     there_is_target=False,
+                    #     default_n_grams=self.h_iw_grams,
+                    # ),
+                    # Path(
+                    #     name='OW2',
+                    #     tokens=edge.entity2.next_tokens(sentence, n=self.h_ow_size, include_ent_last_token=True),
+                    #     is_edge_type_constant=True,
+                    #     there_is_target=False,
+                    #     default_n_grams=self.h_ow_grams,
+                    # ),
 
                     Path(
                         name='LD',
@@ -181,8 +184,6 @@ class DependencyFeatureGenerator(EdgeFeatureGenerator):
 
                     if Part.is_negated([node.token for node in dep_path.middle]):
                         self.add(f_set, edge, self.f('f_XX_is_negated', dep_type), dep_type)
-
-                # Extra
 
 
     def f(self, feat_key, dependency_XX, ngram_N=None):

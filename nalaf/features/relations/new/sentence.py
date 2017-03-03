@@ -9,13 +9,12 @@ from nalaf.features.util import masked_text
 from nalaf.structures.data import Part
 from collections import Counter
 
+
 class SentenceFeatureGenerator(EdgeFeatureGenerator):
     """
-    Generate sentence-based features as roughly defined in Master's Thesis pages 40-42.
+    General generator to extract features out of the instances' sentences.
 
-    Some feature additions, removals, or detail changes are also considered.
-
-    It strictly gets features that are based on the sentence: ONLY
+    Few document-based features are also generated. These will likely be moved soon to another class.
     """
 
     def __init__(
@@ -23,6 +22,8 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
         f_counts_individual,
         f_counts_total,
+
+        # Actually, LINEAR-DEPENDENCY BASED
         f_counts_in_between_individual,
         f_counts_in_between_total,
 
@@ -32,11 +33,15 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
         f_pos,
 
         f_tokens_count,
+
+        # Likely, to be deleted
         f_tokens_count_before,
         f_tokens_count_after,
 
         f_sentence_is_negated,
         f_main_verbs,
+
+        # The following are actually DOCUMENT-BASED features
 
         f_entity1_count,
         f_entity2_count,
@@ -80,7 +85,9 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
                 # We sort to have a deterministic order creation of the features
                 for e_class_id in sorted(entities_in_sentences):
                     entities = entities_in_sentences[e_class_id]
-                    individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities
+                    # TODO this is wrong for other entitiey types nor appearing in the edge
+                    # TODO also what about if the same entity type appears in both ends of the same edge? as in a protein-protein relation --> Just rest the counts of the edge
+                    individual_count = len(entities) - 1  # rest 1, as one is already one of the edge's entities --
                     assert individual_count >= 0
                     total_count += individual_count
                     self.add_with_value(f_set, edge, 'f_counts_individual', individual_count, 'int', 'individual', e_class_id)

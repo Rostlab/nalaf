@@ -381,10 +381,15 @@ class MentionLevelEvaluator(Evaluator):
     """
 
     def __init__(self, subclass_analysis=False):
+        # TODO
+        import warnings
+        warnings.warn('`MentionLevelEvaluator` is deprecated in favor of `EntityEvaluator`')
+
         self.subclass_analysis = subclass_analysis
         """
         Whether to report the performance for each subclass separately
         """
+
 
     def evaluate(self, dataset):
         """

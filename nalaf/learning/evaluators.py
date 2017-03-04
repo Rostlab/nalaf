@@ -606,6 +606,11 @@ class EntityEvaluator(Evaluator):
                         print_verbose("    ", docid, ": true positive", gold)
                         counts[TOTAL][docid]['tp'] += 1
                         counts[label(gold)][docid]['tp'] += 1
+
+                    elif "UNKNOWN:" in gold:
+                        # Ignore, no normalization
+                        pass
+
                     else:
                         print_debug("    ", docid, ": FALSE NEGATIV", gold)
                         counts[TOTAL][docid]['fn'] += 1
@@ -621,7 +626,11 @@ class EntityEvaluator(Evaluator):
 
 def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
     offset_str = ','.join([str(e.offset), str(e.end_offset())])
-    entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    if penalize_unknown_normalizations != "no":
+        entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    else:
+        entity_norm_str = "|"
+
     ret = '|'.join([e.class_id, offset_str, entity_norm_str])
     return ret
 

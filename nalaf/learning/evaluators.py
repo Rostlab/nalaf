@@ -7,12 +7,6 @@ import math
 import uuid
 from collections import Counter
 
-PRO_ID = 'e_1'
-LOC_ID = 'e_2'
-ORG_ID = 'e_3'
-UNIPROT_NORM_ID = 'n_7'
-GO_NORM_ID = 'n_8'
-TAXONOMY_NORM_ID = 'n_9'
 
 class Evaluation:
 
@@ -504,7 +498,8 @@ class EntityEvaluator(Evaluator):
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
-        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+        'entity_normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations, normalization_required:
+                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e)))
     }
 
     def __init__(self, subclass_analysis=False, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
@@ -518,7 +513,6 @@ class EntityEvaluator(Evaluator):
         else:
             self.entity_map_fun = entity_map_fun
 
-        self.entity_overlap_fun = str.__eq__ if entity_overlap_fun is None else entity_overlap_fun
         self.entity_accept_fun = str.__eq__ if entity_accept_fun is None else entity_accept_fun
 
 
@@ -534,7 +528,6 @@ class EntityEvaluator(Evaluator):
             * recall: number of correctly predicted items as a percentage of the total number of correct items
                 len(real items that are also predicted)/len(real)
                 or in other words tp / tp + fn
-            * Considers overlapping matches
         """
         TOTAL = EntityEvaluator.TOTAL_LABEL
         labels = [TOTAL]
@@ -542,8 +535,8 @@ class EntityEvaluator(Evaluator):
         def labelize(e):
             return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
 
-        def label_type(str):
-            return PRO_ID if UNIPROT_NORM_ID in str or PRO_ID in str else LOC_ID if GO_NORM_ID in str or LOC_ID in str else ORG_ID
+        def label(e):
+            return e.split('|')[0].strip() if len(e.split('|')) > 1 else e.split(':')[1].split(",")[0].strip()
 
         if self.subclass_analysis:
             # find all possible subclasses or otherwise full classes
@@ -561,40 +554,40 @@ class EntityEvaluator(Evaluator):
         for docid, doc in dataset.documents.items():
             for partid, part in doc.parts.items():
 
-                gold_mapping = part.map_entities(use_predicted_first=False, entity_map_fun= self.entity_map_fun, entity_overlap_fun=self.entity_overlap_fun)
-                pred_mapping = part.map_entities(use_predicted_first=True, entity_map_fun= self.entity_map_fun, entity_overlap_fun=self.entity_overlap_fun)
+                gold_anns = {self.entity_map_fun(e) for e in part.annotations}
+                pred_anns = {self.entity_map_fun(e) for e in part.predicted_annotations}
 
-                for pred in pred_mapping:
+                for pred in pred_anns:
 
                     if "UNKNOWN:" in pred:
+                        # Ignore, no normalization
                         pass
 
                     else:
-                        p,g = pred.split('::')
-                        accept_decisions = self.entity_accept_fun(g,p)
+                        accept_decisions = {self.entity_accept_fun(gold,pred) for gold in gold_anns}
 
-                        if accept_decisions is True:
+                        if True in accept_decisions:
                             pass
-                        elif accept_decisions is None:
+                        elif None in accept_decisions:
                             pass
                         else:  # either False or the set is empty, meaning that there are no gold annotations
                             print_debug("    ", docid, ": FALSE POSITIV", pred)
                             counts[TOTAL][docid]['fp'] += 1
-                            counts[label_type(pred)][docid]['fp'] += 1
+                            counts[label(pred)][docid]['fp'] += 1
 
-                for gold in gold_mapping:
-                    g,p = gold.split('::')
+                for gold in gold_anns:
+
                     if "UNKNOWN:" in gold:
                         # Ignore, no normalization
                         pass
-                    elif self.entity_accept_fun(g,p):
+                    elif any(self.entity_accept_fun(gold, pred) for pred in pred_anns):
                         print_verbose("    ", docid, ": TRUE POSITIVE", gold)
                         counts[TOTAL][docid]['tp'] += 1
-                        counts[label_type(gold)][docid]['tp'] += 1
+                        counts[label(gold)][docid]['tp'] += 1
                     else:
                         print_debug("    ", docid, ": FALSE NEGATIV", gold)
                         counts[TOTAL][docid]['fn'] += 1
-                        counts[label_type(gold)][docid]['fn'] += 1
+                        counts[label(gold)][docid]['fn'] += 1
 
         evaluations = Evaluations()
 
@@ -602,6 +595,15 @@ class EntityEvaluator(Evaluator):
             evaluations.add(EvaluationWithStandardError(label, counts[label]))
 
         return evaluations
+
+
+def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e):
+    if normalization_required:
+        entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    else:
+        entity_norm_str = "|"
+    offset_str = ','.join([str(e.offset), str(e.end_offset())])
+    return '|'.join([e.class_id, offset_str, entity_norm_str])
 
 
 def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):

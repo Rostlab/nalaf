@@ -1391,32 +1391,6 @@ class Part:
 
         return part_mapped_relations
 
-    def map_entities(self, use_predicted_first, entity_map_fun, entity_overlap_fun, mapped_entities=None):
-        """
-        Returns a list of strings that represent unique mapping of entities based on the entity_overlap_fun
-        """
-
-        if mapped_entities is None:
-            mapped_entities = []
-
-        e1_entities = self.predicted_annotations if use_predicted_first else self.annotations
-        e2_entities = self.annotations if use_predicted_first else self.predicted_annotations
-
-        for e1 in e1_entities:
-            mapped_e2 = []
-            for e2 in e2_entities:
-                if e1.class_id == e2.class_id and entity_overlap_fun(e1, e2):
-                    mapped_e2.append(e2)
-                    break
-
-            if not mapped_e2:
-                mapped_entities.append('::'.join([entity_map_fun(e1), '|']))
-            else:
-                for entity2 in mapped_e2:
-                    mapped_entities.append('::'.join([entity_map_fun(e1), entity_map_fun(entity2)]))
-
-        return mapped_entities
-
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
@@ -2042,7 +2016,6 @@ class Entity:
         left_index = self_last if include_ent_last_token else self_last + 1
         right_index = self_last + 1 + n
         return sentence[left_index:right_index]
-
 
 class Label:
     """

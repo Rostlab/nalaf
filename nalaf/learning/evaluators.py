@@ -635,7 +635,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
     How entities within the relations are compared against each other is decided
     by the user and given in the `entity_map_fun` parameter. The default for this
     is to compare entities by their class id and their text lowercased.
-    See other commong comparsisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
+    See other commong comparisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
     You can give this parameter as either a function or as a string name
     that matches one of `COMMON_ENTITY_MAP_FUNS`.
 

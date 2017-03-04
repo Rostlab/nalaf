@@ -496,10 +496,34 @@ class EntityEvaluator(Evaluator):
     TOTAL_LABEL = "TOTAL"
 
     COMMON_ENTITY_MAP_FUNS = {
-        'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
 
-        'entity_normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations, normalization_required:
-                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e)))
+        'entity_normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations:
+                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+    }
+
+    def _accept_entities_exact(e1, e2):
+        # e.g. e_1|1003,1009|n_7|Q9H4A6
+        e1 = e1.split("|")[0:2]
+        e2 = e2.split("|")[0:2]
+        return e1 == e2
+
+
+    def _accept_entities_overlapping(e1, e2):
+        # e.g. e_1|1003,1009|n_7|Q9H4A6
+        e1_class, e1_offsets, *_ = e1.split("|")
+        e2_class, e2_offsets, *_ = e2.split("|")
+
+        if e1_class != e2_class:
+            return False
+        else:
+            e1_start_offset, e1_end_offset = e1_offsets.split(',')
+            e2_start_offset, e2_end_offset = e2_offsets.split(',')
+
+            return int(e1_start_offset) < int(e2_end_offset) and int(e1_end_offset) > int(e2_start_offset)
+
+    COMMON_ENTITY_ACCEPT_FUNS = {
+        'exact': _accept_entities_exact,
+        'overlapping': _accept_entities_overlapping
     }
 
     def __init__(self, subclass_analysis=False, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
@@ -558,29 +582,20 @@ class EntityEvaluator(Evaluator):
                 pred_anns = {self.entity_map_fun(e) for e in part.predicted_annotations}
 
                 for pred in pred_anns:
+                    accept_decisions = {self.entity_accept_fun(gold,pred) for gold in gold_anns}
 
-                    if "UNKNOWN:" in pred:
-                        # Ignore, no normalization
+                    if True in accept_decisions:
                         pass
-
-                    else:
-                        accept_decisions = {self.entity_accept_fun(gold,pred) for gold in gold_anns}
-
-                        if True in accept_decisions:
-                            pass
-                        elif None in accept_decisions:
-                            pass
-                        else:  # either False or the set is empty, meaning that there are no gold annotations
-                            print_debug("    ", docid, ": FALSE POSITIV", pred)
-                            counts[TOTAL][docid]['fp'] += 1
-                            counts[label(pred)][docid]['fp'] += 1
+                    elif None in accept_decisions:
+                        pass
+                    else:  # either False or the set is empty, meaning that there are no gold annotations
+                        print_debug("    ", docid, ": FALSE POSITIV", pred)
+                        counts[TOTAL][docid]['fp'] += 1
+                        counts[label(pred)][docid]['fp'] += 1
 
                 for gold in gold_anns:
 
-                    if "UNKNOWN:" in gold:
-                        # Ignore, no normalization
-                        pass
-                    elif any(self.entity_accept_fun(gold, pred) for pred in pred_anns):
+                    if any(self.entity_accept_fun(gold, pred) for pred in pred_anns):
                         print_verbose("    ", docid, ": TRUE POSITIVE", gold)
                         counts[TOTAL][docid]['tp'] += 1
                         counts[label(gold)][docid]['tp'] += 1
@@ -597,13 +612,11 @@ class EntityEvaluator(Evaluator):
         return evaluations
 
 
-def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, normalization_required, e):
-    if normalization_required:
-        entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
-    else:
-        entity_norm_str = "|"
+def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
     offset_str = ','.join([str(e.offset), str(e.end_offset())])
-    return '|'.join([e.class_id, offset_str, entity_norm_str])
+    entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    ret = '|'.join([e.class_id, offset_str, entity_norm_str])
+    return ret
 
 
 def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):

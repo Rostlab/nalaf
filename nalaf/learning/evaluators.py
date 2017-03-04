@@ -585,10 +585,12 @@ class EntityEvaluator(Evaluator):
                     accept_decisions = {self.entity_accept_fun(gold, pred) for gold in gold_anns}
 
                     if True in accept_decisions:
+                        # either False or the set is empty, meaning that there are no gold annotations
                         pass
                     elif None in accept_decisions:
                         pass
-                    else:  # either False or the set is empty, meaning that there are no gold annotations
+                    else:
+                        # either False or the set is empty, meaning that there are no gold annotations
                         print_debug("    ", docid, ": FALSE POSITIV", pred)
                         counts[TOTAL][docid]['fp'] += 1
                         counts[label(pred)][docid]['fp'] += 1
@@ -596,7 +598,7 @@ class EntityEvaluator(Evaluator):
                 for gold in gold_anns:
 
                     if any(self.entity_accept_fun(gold, pred) for pred in pred_anns):
-                        print_verbose("    ", docid, ": TRUE POSITIVE", gold)
+                        print_verbose("    ", docid, ": true positive", gold)
                         counts[TOTAL][docid]['tp'] += 1
                         counts[label(gold)][docid]['tp'] += 1
                     else:
@@ -716,27 +718,20 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_pred in predicted:
 
-                if "UNKNOWN:" in r_pred:
-                    # TODO not sure about this
-                    # Ignore, no normalization
+                accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
+                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+                # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
+
+                if True in accept_decisions:
+                    # handle below while traversing gold to not create repetitions
                     pass
-
+                elif None in accept_decisions:
+                    # Ignore as documented
+                    pass
                 else:
-                    accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
-                    assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
-                    # wrong assumption: assert not (True in accept_decisions and None in accept_decisions)
-
-                    if True in accept_decisions:
-                        # handle below while traversing gold to not create over repetitions, see test_evaluators
-                        # ::test_DocumentLevelRelationEvaluator_arbitrary_relation_accept_fun_dont_count_multiple_same_hits
-                        # print_verbose("       ", docid, "(not counted yet) true match prediction", r_pred)
-                        pass
-                    elif None in accept_decisions:
-                        # Ignore as documented
-                        pass
-                    else:  # either False or the set is empty, meaning that there are no gold annotations
-                        print_debug("    ", docid, ": FALSE POSITIV", r_pred)
-                        counts[docid]['fp'] += 1
+                    # either False or the set is empty, meaning that there are no gold annotations
+                    print_debug("    ", docid, ": FALSE POSITIV", r_pred)
+                    counts[docid]['fp'] += 1
 
             for r_gold in gold:
 

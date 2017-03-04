@@ -582,7 +582,7 @@ class EntityEvaluator(Evaluator):
                 pred_anns = {self.entity_map_fun(e) for e in part.predicted_annotations}
 
                 for pred in pred_anns:
-                    accept_decisions = {self.entity_accept_fun(gold,pred) for gold in gold_anns}
+                    accept_decisions = {self.entity_accept_fun(gold, pred) for gold in gold_anns}
 
                     if True in accept_decisions:
                         pass

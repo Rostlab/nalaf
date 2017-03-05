@@ -176,8 +176,8 @@ class StubSameSentenceRelationExtractor(StubRelationExtractor):
 
 class StubSamePartRelationExtractor(StubRelationExtractor):
 
-    def __init__(self, entity1_class, entity2_class, relation_type):
-        edge_generator = SentenceDistanceEdgeGenerator(entity1_class, entity2_class, relation_type, distance=None)
+    def __init__(self, entity1_class, entity2_class, relation_type, use_gold=True, use_pred=True):
+        edge_generator = SentenceDistanceEdgeGenerator(entity1_class, entity2_class, relation_type, distance=None, use_gold=use_gold, use_pred=use_pred)
         super().__init__(edge_generator)
 
 

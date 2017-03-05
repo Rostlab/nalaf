@@ -122,62 +122,6 @@ class Dataset:
                 yield relation
 
 
-    def _remove_repetitions_with_relation_accept_fun(self, relations_map, relation_accept_fun):
-        new_relations_map = {}
-        discard = set()
-
-        def get(key):
-            return new_relations_map.get(key, relations_map.get(key))
-
-        for rel_key_1, rel_key_2 in combinations(relations_map.keys(), 2):
-
-            accept_1 = relation_accept_fun(rel_key_2, rel_key_1)  # Order matters, here, rel_key_1 is deemed "pred"
-            accept_2 = relation_accept_fun(rel_key_1, rel_key_2)  # here, rel_key_2 is deemed "pred"
-
-            if accept_1 is False and accept_2 is False:
-                new_relations_map[rel_key_1] = get(rel_key_1)
-                new_relations_map[rel_key_2] = get(rel_key_2)
-            elif accept_1 is True and accept_2 is None:
-                new_relations_map[rel_key_1] = get(rel_key_1) + get(rel_key_2)
-                discard.update({rel_key_2})
-            elif accept_1 is None and accept_2 is True:
-                new_relations_map[rel_key_2] = get(rel_key_2) + get(rel_key_1)
-                discard.update({rel_key_1})
-            elif accept_1 is True and accept_2 is True:
-                # Should only happen in cases with either one contains more information
-                # e.g. from LocText: r_5|n_7|Q95460|n_8|GO:0009986 (True) vs r_5|n_7|Q95460,Q8HWB0|n_8|GO:0009986 (True)
-                # The decision is more difficult
-
-                # kinda hack: arbitrarily select they longest key
-                # if len(rel_key_1) > len(rel_key_2):
-                #     new_relations_map[rel_key_1] = get(rel_key_1) + get(rel_key_2)
-                #     discard.update({rel_key_2})
-                # else:
-                #     new_relations_map[rel_key_2] = get(rel_key_2) + get(rel_key_1)
-                #     discard.update({rel_key_1})
-
-                # For simplicity, we keep both
-                new_relations_map[rel_key_1] = get(rel_key_1)
-                new_relations_map[rel_key_2] = get(rel_key_2)
-
-            elif {None, False} == {accept_1, accept_2}:
-                # "Gold" cannot be verified yet the prediction is incorrect or not validated
-                pass
-
-            # elif accept_1 is None and accept_2 is None:
-            #     # Both are neither accepted nor rejected, likely due to an UNKNOWN normalization
-            #     pass
-
-            else:
-                assert False, "Should not happen {} ({}) vs {} ({})".format(rel_key_1, accept_1, rel_key_2, accept_2)
-
-        for rel_key in discard:
-            if rel_key in new_relations_map:
-                del new_relations_map[rel_key]
-
-        return new_relations_map
-
-
     def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None):
         """
         Returns a counter of the relationships distances.
@@ -201,18 +145,24 @@ class Dataset:
 
             doc_relations = doc.map_relations(use_predicted=False, relation_type=relation_type, entity_map_fun=entity_map_fun)
             pred_doc_relations = doc.map_relations(use_predicted=True, relation_type=relation_type, entity_map_fun=entity_map_fun)
-            for rel_key, pred_rels_with_distances in pred_doc_relations.items():
-                rels_with_distances = doc_relations.get(rel_key, None)
-                if rels_with_distances is not None:
-                    rels_with_distances += pred_rels_with_distances
-                    doc_relations[rel_key] = rels_with_distances
+            for pred_key, pred_rels_with_distances in pred_doc_relations.items():
+                real_rels_with_distances = doc_relations.get(pred_key, None)
 
-            if relation_accept_fun is not None:
-                doc_relations = self._remove_repetitions_with_relation_accept_fun(doc_relations, relation_accept_fun)
+                if real_rels_with_distances is not None:
+                    doc_relations[pred_key] = real_rels_with_distances + pred_rels_with_distances
+
+                elif relation_accept_fun is not None:
+                    real_keys = \
+                        [real_key for real_key in doc_relations if relation_accept_fun(real_key, pred_key)]
+                    reals = \
+                        [r for real_key in real_keys for r in doc_relations[real_key]]
+
+                    doc_relations[pred_key] = pred_rels_with_distances + reals
 
             for rel_key, rels_with_distances in doc_relations.items():
-                rel, min_distance_for_unique_rel_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
-                counter_nums.update(['D'+str(min_distance_for_unique_rel_key)])
+                rel, min_distance_for_unique_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
+                print(min_distance_for_unique_key, rel_key)
+                counter_nums.update(['D'+str(min_distance_for_unique_key)])
 
         total = sum(counter_nums.values())
 

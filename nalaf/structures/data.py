@@ -178,69 +178,31 @@ class Dataset:
         return new_relations_map
 
 
-    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None, predicted=False):
+    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None):
         """
         Returns a counter of the relationships distances.
 
         The relationships are mapped to unique strings as determined by entity_map_fun (see `map_relations`).
 
         The minimal distance of the mapped relations with same map key is used.
-
-
-        If predicted is True, this method will consider all possible true relations from the predictions.
-        This is useful when corpora do not exhaustily have all relationships explicitly annotated but rather,
-        other relations that are considered "the same" by the annotators, are not really defined in the dataset.
-        In that case, those implicit relations can be extrapolated by an exhaustive relationship predictor.
-        A common choice is using a predictor that considers all possible edges between all annotated entities.
-        See SentenceDistanceEdgeGenerator (edges.py) and StubRelationExtractor (taggers.py).
-
-        If this is the case, then **only** the true relations are computed in the stats. That is, the predicted
-        relations are compared against the real relations and only those that are accepted will be computed over.
         """
 
         if entity_map_fun is None:
             entity_map_fun = Entity.__repr__
 
-        def _map_relations(part, use_predicted):
-            return part.map_relations(use_predicted=use_predicted, relation_type=relation_type, entity_map_fun=entity_map_fun)
-
-        # ---
-
         counter_nums = Counter()
 
         for doc in self:
-
             # Group relationships at the document level (not part level, not corpus level)
             doc_relations = {}
 
-            for part in doc:
-
-                part_dict_relations = _map_relations(part, use_predicted=False)
-
-                if predicted:
-                    reals = part_dict_relations
-                    preds = _map_relations(part, use_predicted=True)
-
-                    for real_rel_key, real_rels in reals.items():
-                        pred_rels = preds[real_rel_key]
-                        part_dict_relations[real_rel_key] = real_rels + [p for p in pred_rels if p not in real_rels]
-
-                for rel_key, rels in part_dict_relations.items():
-                    part_rels_with_dists = []
-
-                    for rel in rels:
-                        distance = rel.get_sentence_distance_between_entities(part)
-                        part_rels_with_dists.append((rel, distance))  # tuple, relation [0], distance [1]
-
-                    doc_tmp_rels = doc_relations.get(rel_key, [])
-                    doc_tmp_rels += part_rels_with_dists
-                    doc_relations[rel_key] = doc_tmp_rels
+            doc_relations = doc.map_relations(use_predicted=False, relation_type=relation_type, entity_map_fun=entity_map_fun)
 
             if relation_accept_fun is not None:
                 doc_relations = self._remove_repetitions_with_relation_accept_fun(doc_relations, relation_accept_fun)
 
-            for rel_key, rels in doc_relations.items():
-                _, min_distance_for_unique_rel_key = min(rels, key=lambda reldist_tuple: reldist_tuple[1])
+            for rel_key, rels_with_distances in doc_relations.items():
+                rel, min_distance_for_unique_rel_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
                 counter_nums.update(['D'+str(min_distance_for_unique_rel_key)])
 
         total = sum(counter_nums.values())
@@ -844,7 +806,8 @@ class Document:
 
     def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, doc_mapped_relations=None):
         """
-        Map all Documents's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
+        Map all Documents's relations to dictionary of:
+        {unique mapped strings --> (list of tuples: (relation with same map key, sentence distance between the related entities))}
 
         Create a set of the document's relations based on the map function of the relation themselves and the given map
         function for their entities. Relations end up being represented as strings in the set.
@@ -1365,7 +1328,8 @@ class Part:
 
     def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, part_mapped_relations=None):
         """
-        Map all Parts's relations to dictionary of {unique mapped strings --> list of relations with same map key}.
+        Map all Parts's relations to dictionary of:
+        {unique mapped strings --> (list of tuples: (relation with same map key, sentence distance between the related entities))}
 
         Create a set of the document's relations based on the map function of the relation themselves and the given map
         function for their entities. Relations end up being represented as strings in the set.
@@ -1385,7 +1349,8 @@ class Part:
             if r.class_id == relation_type and (relations_search_space is None or r in relations_search_space):
                 mapkey = r.map(entity_map_fun)
                 equivalent = part_mapped_relations.get(mapkey, [])
-                equivalent.append(r)
+                entities_sentence_distance = r.get_sentence_distance_between_entities(self)
+                equivalent.append((r, entities_sentence_distance))
                 part_mapped_relations[mapkey] = equivalent
 
         return part_mapped_relations

@@ -187,16 +187,15 @@ class Dataset:
         The minimal distance of the mapped relations with same map key is used.
 
 
-        if predicted is True, this method will consider all possible true relations from the predictions.
+        If predicted is True, this method will consider all possible true relations from the predictions.
         This is useful when corpora do not exhaustily have all relationships explicitly annotated but rather,
         other relations that are considered "the same" by the annotators, are not really defined in the dataset.
         In that case, those implicit relations can be extrapolated by an exhaustive relationship predictor.
-        A common choice is using a predictor that consider all possible edges between all annotated entities.
+        A common choice is using a predictor that considers all possible edges between all annotated entities.
         See SentenceDistanceEdgeGenerator (edges.py) and StubRelationExtractor (taggers.py).
 
         If this is the case, then **only** the true relations are computed in the stats. That is, the predicted
         relations are compared against the real relations and only those that are accepted will be computed over.
-
         """
 
         if entity_map_fun is None:

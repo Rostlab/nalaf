@@ -145,23 +145,19 @@ class Dataset:
 
             doc_relations = doc.map_relations(use_predicted=False, relation_type=relation_type, entity_map_fun=entity_map_fun)
             pred_doc_relations = doc.map_relations(use_predicted=True, relation_type=relation_type, entity_map_fun=entity_map_fun)
+
             for pred_key, pred_rels_with_distances in pred_doc_relations.items():
-                real_rels_with_distances = doc_relations.get(pred_key, None)
 
-                if real_rels_with_distances is not None:
-                    doc_relations[pred_key] = real_rels_with_distances + pred_rels_with_distances
+                if pred_key in doc_relations:
+                    doc_relations[pred_key] += pred_rels_with_distances
 
-                elif relation_accept_fun is not None:
-                    real_keys = \
-                        [real_key for real_key in doc_relations if relation_accept_fun(real_key, pred_key)]
-                    reals = \
-                        [r for real_key in real_keys for r in doc_relations[real_key]]
-
-                    doc_relations[pred_key] = pred_rels_with_distances + reals
+                if relation_accept_fun is not None:
+                    for real_key in doc_relations:
+                        if relation_accept_fun(real_key, pred_key):
+                            doc_relations[real_key] += pred_rels_with_distances
 
             for rel_key, rels_with_distances in doc_relations.items():
                 rel, min_distance_for_unique_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
-                print(min_distance_for_unique_key, rel_key)
                 counter_nums.update(['D'+str(min_distance_for_unique_key)])
 
         total = sum(counter_nums.values())

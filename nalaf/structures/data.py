@@ -187,6 +187,9 @@ class Dataset:
         The minimal distance of the mapped relations with same map key is used.
         """
 
+        if next(self.predicted_relations(), None) is None:
+            raise AssertionError("Relations for the corpus must have been predicted to fully exhaust the search")
+
         if entity_map_fun is None:
             entity_map_fun = Entity.__repr__
 
@@ -197,6 +200,12 @@ class Dataset:
             doc_relations = {}
 
             doc_relations = doc.map_relations(use_predicted=False, relation_type=relation_type, entity_map_fun=entity_map_fun)
+            pred_doc_relations = doc.map_relations(use_predicted=True, relation_type=relation_type, entity_map_fun=entity_map_fun)
+            for rel_key, pred_rels_with_distances in pred_doc_relations.items():
+                rels_with_distances = doc_relations.get(rel_key, None)
+                if rels_with_distances is not None:
+                    rels_with_distances += pred_rels_with_distances
+                    doc_relations[rel_key] = rels_with_distances
 
             if relation_accept_fun is not None:
                 doc_relations = self._remove_repetitions_with_relation_accept_fun(doc_relations, relation_accept_fun)

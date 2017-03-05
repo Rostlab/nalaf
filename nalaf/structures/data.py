@@ -1390,6 +1390,7 @@ class Part:
 
         return part_mapped_relations
 
+
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence

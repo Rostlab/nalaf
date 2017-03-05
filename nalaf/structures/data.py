@@ -215,7 +215,7 @@ class Dataset:
 
             for part in doc:
 
-                part_dict_relations = part_dict_relations = _map_relations(part, use_predicted=False)
+                part_dict_relations = _map_relations(part, use_predicted=False)
 
                 if predicted:
                     reals = part_dict_relations

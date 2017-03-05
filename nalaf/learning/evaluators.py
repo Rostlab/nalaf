@@ -746,7 +746,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_gold in gold:
 
-                if any(self.relation_accept_fun(r_gold, r_pred) for r_pred in predicted):
+                r_preds = [r_pred for r_pred in predicted if self.relation_accept_fun(r_gold, r_pred)]
+
+                if len(r_preds) > 0:  # we could also do any(...); we do this only for debugging
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
 

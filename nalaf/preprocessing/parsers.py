@@ -58,7 +58,7 @@ class SpacyParser(Parser):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        outer_bar = Bar('Processing [SpaCy]', max=len(dataset.documents))
+        outer_bar = Bar('Processing [spaCy]', max=len(dataset.documents))
 
         for docid, document in dataset.documents.items():
             for partid, part in document.parts.items():

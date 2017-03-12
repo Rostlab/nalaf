@@ -61,6 +61,7 @@ class SklSVM(RelationExtractor):
 
         return self
 
+
     def annotate(self, corpus):
         X, y = self.__convert_edges_features_to_vector_instances(corpus)
         X = self.preprocess.transform(X)

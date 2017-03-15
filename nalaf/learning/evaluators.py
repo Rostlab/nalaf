@@ -752,7 +752,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
 
-                elif "UNKNOWN:" in gold:
+                elif "UNKNOWN:" in r_gold:
                     # Ignore, no normalization
                     pass
 

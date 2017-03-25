@@ -588,7 +588,7 @@ class EntityEvaluator(Evaluator):
                     assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
 
                     if True in accept_decisions:
-                        # Count the true positives while iterating gold
+                        # Count the true positives while iterating on gold
                         pass
 
                     elif None in accept_decisions:
@@ -736,11 +736,13 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
 
                 if True in accept_decisions:
-                    # handle below while traversing gold to not create repetitions
+                    # Count the true positives while iterating on gold
                     pass
+
                 elif None in accept_decisions:
                     # Ignore as documented
                     pass
+
                 else:
                     # either False or the set is empty, meaning that there are no gold annotations
                     print_debug("    ", docid, ": FALSE POSITIV", r_pred)

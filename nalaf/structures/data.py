@@ -162,7 +162,7 @@ class Dataset:
 
         total = sum(counter_nums.values())
 
-        counter_percts = Counter({key: (count/total) for (key, count) in counter_nums.items()})
+        counter_percts = Counter({key: (count / total) for (key, count) in counter_nums.items()})
 
         return (counter_nums, counter_percts)
 

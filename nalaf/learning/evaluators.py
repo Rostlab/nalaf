@@ -580,12 +580,12 @@ class EntityEvaluator(Evaluator):
         for docid, doc in dataset.documents.items():
             for partid, part in doc.parts.items():
 
-                gold_anns = {self.entity_map_fun(e) for e in part.annotations}
-                pred_anns = {self.entity_map_fun(e) for e in part.predicted_annotations}
+                gold_anns = set(filter(None, (self.entity_map_fun(e) for e in part.annotations)))
+                pred_anns = set(filter(None, (self.entity_map_fun(e) for e in part.predicted_annotations)))
 
                 for pred in pred_anns:
                     accept_decisions = {self.entity_accept_fun(gold, pred) for gold in gold_anns}
-                    assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+                    assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: " + str(accept_decisions)
 
                     if True in accept_decisions:
                         # Count the true positives while iterating on gold
@@ -607,10 +607,6 @@ class EntityEvaluator(Evaluator):
                         counts[TOTAL][docid]['tp'] += 1
                         counts[__class__._labelize(gold)][docid]['tp'] += 1
 
-                    elif "UNKNOWN:" in gold:
-                        # Ignore, no normalization
-                        pass
-
                     else:
                         print_debug("    ", docid, ": FALSE NEGATIV", gold)
                         counts[TOTAL][docid]['fn'] += 1
@@ -625,11 +621,12 @@ class EntityEvaluator(Evaluator):
 
 
 def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
+
+    entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    if entity_norm_str is None:
+        return None
+
     offset_str = ','.join([str(e.offset), str(e.end_offset())])
-    if penalize_unknown_normalizations != "no":
-        entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
-    else:
-        entity_norm_str = "|"
 
     ret = '|'.join([e.class_id, offset_str, entity_norm_str])
     return ret

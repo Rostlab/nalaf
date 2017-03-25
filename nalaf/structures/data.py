@@ -300,10 +300,13 @@ class Dataset:
         Use it as a sanity check when writing or reading annotations external entities.
         """
 
-        for part in self.parts():
-            for e in chain(part.annotations, part.predicted_annotations):
-                if not e.text == part.text[e.offset:e.offset+len(e.text)]:
-                    warnings.warn('the offsets ({} != {}) do not match in: {}'.format(e.text, part.text[e.offset:e.offset+len(e.text)], e))
+        for docid, doc in self.documents.items():
+            for partid, part in doc.parts.items():
+                for e in chain(part.annotations, part.predicted_annotations):
+                    readable_text = part.text[e.offset:e.offset + len(e.text)]
+
+                    if not e.text == readable_text:
+                        warnings.warn('the offsets ({} != {}) do not match in: {}/{}/{}'.format(e.text, part.text[e.offset:e.offset + len(e.text)], docid, partid, e))
 
 
     def generate_top_stats_array(self, class_id, top_nr=10, is_alpha_only=False):

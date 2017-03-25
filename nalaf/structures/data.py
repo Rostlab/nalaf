@@ -158,7 +158,7 @@ class Dataset:
 
             for rel_key, rels_with_distances in doc_relations.items():
                 rel, min_distance_for_unique_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
-                counter_nums.update(['D'+str(min_distance_for_unique_key)])
+                counter_nums.update(["D" + str(min_distance_for_unique_key)])
 
         total = sum(counter_nums.values())
 
@@ -1979,17 +1979,21 @@ class Relation:
         e1_string = entity_map_fun(self.entity1)
         e2_string = entity_map_fun(self.entity2)
 
-        if (self.bidirectional and self.entity2.class_id <= self.entity1.class_id):
-            entities = [e2_string, e1_string]
-        else:
-            entities = [e1_string, e2_string]
+        if e1_string is None or e2_string is None:
+            return None
 
-        if prefix_with_rel_type:
-            items = [self.class_id, *entities]
         else:
-            items = entities
+            if (self.bidirectional and self.entity2.class_id <= self.entity1.class_id):
+                entities = [e2_string, e1_string]
+            else:
+                entities = [e1_string, e2_string]
 
-        return '|'.join(items)
+            if prefix_with_rel_type:
+                items = [self.class_id, *entities]
+            else:
+                items = entities
+
+            return '|'.join(items)
 
 
     def validate_itself(self, part):

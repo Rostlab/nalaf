@@ -645,8 +645,12 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
             value = str(uuid.uuid4())
         elif penalize_unknown_normalizations == "soft":
             value = e.text.lower()
-        else:  # softest
+        elif penalize_unknown_normalizations == "softest":
             value = ""
+        elif penalize_unknown_normalizations == "no":
+            return None
+        else:
+            raise AssertionError(("Do not expect: ", penalize_unknown_normalizations))
 
         value = "UNKNOWN:" + value
 
@@ -733,7 +737,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
             for r_pred in predicted:
 
                 accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
-                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
+                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: " + str(accept_decisions)
 
                 if True in accept_decisions:
                     # Count the true positives while iterating on gold
@@ -752,7 +756,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
                 r_preds = [r_pred for r_pred in predicted if self.relation_accept_fun(r_gold, r_pred)]
 
-                if len(r_preds) > 0:  # we could also do any(...); we do this only for debugging
+                if len(r_preds) > 0:  # we could also do any(...); we do this only for debugging purposes
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
 

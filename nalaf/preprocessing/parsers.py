@@ -5,6 +5,8 @@ from nltk.corpus import stopwords
 from progress.bar import Bar
 from spacy.en import English
 from nalaf.features import get_spacy_nlp_english
+from nalaf import print_verbose, print_debug
+import time
 
 
 class Parser:
@@ -58,6 +60,8 @@ class SpacyParser(Parser):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
+        start = time.time()
+
         outer_bar = Bar('Processing [spaCy]', max=len(dataset.documents))
 
         for docid, document in dataset.documents.items():
@@ -113,6 +117,9 @@ class SpacyParser(Parser):
 
         if self.constituency_parser is True:
             self.parser.parse(dataset)
+
+        end = time.time()
+        print("Time for parsing:", (end - start))
 
 
     def _dependency_path(self, spacy_token, sent_index, part):

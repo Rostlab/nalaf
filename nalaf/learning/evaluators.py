@@ -760,10 +760,6 @@ class DocumentLevelRelationEvaluator(Evaluator):
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
 
-                elif "UNKNOWN:" in r_gold:
-                    # Ignore, no normalization
-                    pass
-
                 else:
                     print_debug("    ", docid, ": FALSE NEGATIV", r_gold)
                     counts[docid]['fn'] += 1

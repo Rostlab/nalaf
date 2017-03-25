@@ -1303,10 +1303,12 @@ class Part:
         for r in part_relations:
             if r.class_id == relation_type and (relations_search_space is None or r in relations_search_space):
                 mapkey = r.map(entity_map_fun)
-                equivalent = part_mapped_relations.get(mapkey, [])
-                entities_sentence_distance = r.get_sentence_distance_between_entities(self)
-                equivalent.append((r, entities_sentence_distance))
-                part_mapped_relations[mapkey] = equivalent
+
+                if mapkey is not None:
+                    equivalent = part_mapped_relations.get(mapkey, [])
+                    entities_sentence_distance = r.get_sentence_distance_between_entities(self)
+                    equivalent.append((r, entities_sentence_distance))
+                    part_mapped_relations[mapkey] = equivalent
 
         return part_mapped_relations
 

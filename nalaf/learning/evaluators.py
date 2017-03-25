@@ -588,10 +588,12 @@ class EntityEvaluator(Evaluator):
                     assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: "+str(accept_decisions)
 
                     if True in accept_decisions:
-                        # either False or the set is empty, meaning that there are no gold annotations
+                        # Count the true positives while iterating gold
                         pass
+
                     elif None in accept_decisions:
                         pass
+
                     else:
                         # either False or the set is empty, meaning that there are no gold annotations
                         print_debug("    ", docid, ": FALSE POSITIV", pred)

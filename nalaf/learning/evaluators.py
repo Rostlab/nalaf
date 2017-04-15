@@ -502,11 +502,13 @@ class EntityEvaluator(Evaluator):
 
     COMMON_ENTITY_MAP_FUNS = {
 
-        "entity_normalized_fun": (lambda map_entity_normalizations, penalize_unknown_normalizations:
-                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+        "entity_normalized_fun": (lambda map_entity_normalizations, penalize_unknown_normalizations, add_entity_text:
+                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, add_entity_text, e)))
     }
 
     def _accept_entities_exact(e1, e2):
+        # ASSUME ENTITY TEXT NOT IN STRINGS
+
         # e.g. e_1|1003,1009|n_7|Q9H4A6
         e1 = e1.split("|")[0:2]
         e2 = e2.split("|")[0:2]
@@ -521,8 +523,8 @@ class EntityEvaluator(Evaluator):
         if e1_class != e2_class:
             return False
         else:
-            e1_start_offset, e1_end_offset = e1_offsets.split(',')
-            e2_start_offset, e2_end_offset = e2_offsets.split(',')
+            e1_start_offset, e1_end_offset, *e1_text = e1_offsets.split(',')
+            e2_start_offset, e2_end_offset, *e2_text = e2_offsets.split(',')
 
             return int(e1_start_offset) < int(e2_end_offset) and int(e1_end_offset) > int(e2_start_offset)
 
@@ -620,13 +622,17 @@ class EntityEvaluator(Evaluator):
         return evaluations
 
 
-def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
+def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, add_entity_text, e):
 
     entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
     if entity_norm_str is None:
         return None
 
-    offset_str = ','.join([str(e.offset), str(e.end_offset())])
+    offset_str = [str(e.offset), str(e.end_offset())]
+    if add_entity_text:
+        offset_str += [e.text]
+
+    offset_str = ','.join(offset_str)
 
     ret = '|'.join([e.class_id, offset_str, entity_norm_str])
     return ret

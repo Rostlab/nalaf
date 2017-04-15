@@ -650,21 +650,19 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
     if value is None:
         if penalize_unknown_normalizations == "hard":
             # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
-            value = str(uuid.uuid4())
+            value = "UNKNOWN:" + str(uuid.uuid4())
         elif penalize_unknown_normalizations == "soft":
-            value = e.text.lower()
+            value = "UNKNOWN:" + e.text.lower()
         elif penalize_unknown_normalizations == "softest":
-            value = ""
+            value = "UNKNOWN:" + ""
         elif penalize_unknown_normalizations == "agnostic":
             # returning None (as in "no") would reject the entity altogether, see _entity_normalized_fun
-            # returning "" simply ignores the case -- Useful when you don't care at all about the normalization (e.g. strict exact / overlapping evaluation)
-            return ""
+            # returning "" (without UNKNOWN:) simply ignores the case -- Useful when you don't care at all about the normalization (e.g. strict exact / overlapping evaluation)
+            value = ""
         elif penalize_unknown_normalizations == "no":
             return None
         else:
             raise AssertionError(("Do not expect: ", penalize_unknown_normalizations))
-
-        value = "UNKNOWN:" + value
 
     return '|'.join([n_id, value])
 

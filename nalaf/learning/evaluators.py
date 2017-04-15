@@ -6,6 +6,7 @@ import random
 import math
 import uuid
 from collections import Counter
+import re
 
 
 class Evaluation:
@@ -550,7 +551,11 @@ class EntityEvaluator(Evaluator):
     @staticmethod
     def _labelize(e):
         if isinstance(e, str):
-            return e.split("|")[0]
+            match = re.search('Entity\\(id: (\\S+), ', e)
+            if match:
+                return match.group(1)
+            else:
+                return e.split("|")[0]
         else:
             return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
 

@@ -655,6 +655,10 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
             value = e.text.lower()
         elif penalize_unknown_normalizations == "softest":
             value = ""
+        elif penalize_unknown_normalizations == "agnostic":
+            # returning None (as in "no") would reject the entity altogether, see _entity_normalized_fun
+            # returning "" simply ignores the case -- Useful when you don't care at all about the normalization (e.g. strict exact / overlapping evaluation)
+            return ""
         elif penalize_unknown_normalizations == "no":
             return None
         else:

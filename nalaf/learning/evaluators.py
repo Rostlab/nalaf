@@ -616,6 +616,9 @@ class EntityEvaluator(Evaluator):
                         counts[TOTAL][docid]['tp'] += 1
                         counts[__class__._labelize(gold)][docid]['tp'] += 1
 
+                    elif "UNKNOWN:" in gold:  # Pass when unknown normalization
+                        pass
+
                     else:
                         print_debug("    ", docid, ": FALSE NEGATIV", gold)
                         counts[TOTAL][docid]['fn'] += 1

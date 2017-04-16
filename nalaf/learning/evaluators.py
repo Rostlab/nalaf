@@ -205,7 +205,7 @@ class EvaluationWithStandardError:
 
         header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for strictness in strictnesses:
-            s = strictness[0].lower()+"|"  # first letter
+            s = strictness[0].lower() + "|"  # first letter
             header += [s + c for c in ['P', 'R', 'F', 'F_SE']]
         return '\t'.join(header)
 
@@ -656,7 +656,7 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
         elif penalize_unknown_normalizations == "softest":
             value = "UNKNOWN:" + ""
         elif penalize_unknown_normalizations == "agnostic":
-            # returning None (as in "no") would reject the entity altogether, see _entity_normalized_fun
+            # returning None (as when "no") would reject the entity altogether, see _entity_normalized_fun
             # returning "" (without UNKNOWN:) simply ignores the case -- Useful when you don't care at all about the normalization (e.g. strict exact / overlapping evaluation)
             value = ""
         elif penalize_unknown_normalizations == "no":
@@ -703,7 +703,6 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
     COMMON_ENTITY_MAP_FUNS = {
         'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
-
         'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
     }
 

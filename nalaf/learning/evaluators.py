@@ -698,7 +698,8 @@ class DocumentLevelRelationEvaluator(Evaluator):
     As for missing predictions, fn's are counted as usual: `fn` if False or None
 
     This arbitrary `accept` function is helpful when mere string equals comparison is not enough.
-    Example: when normalization ids must be compared in a hierarchical manner.
+    Example 1: when normalization ids must be compared in a hierarchical manner.
+    Example 2: when there are entities / relations without normalization.
     """
 
     COMMON_ENTITY_MAP_FUNS = {

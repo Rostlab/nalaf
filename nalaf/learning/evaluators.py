@@ -653,6 +653,7 @@ def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, 
     value = e.normalisation_dict.get(n_id, None)
 
     if value is None:
+
         if penalize_unknown_normalizations == "hard":
             # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
             value = "UNKNOWN:" + str(uuid.uuid4())

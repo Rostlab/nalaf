@@ -8,7 +8,8 @@ STUB_E_ID_2 = 'e_x_2'
 STUB_R_ID_1 = 'r_x_1'
 
 
-class TestMentionLevelEvaluator(unittest.TestCase):
+class TestEvaluators(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         # create a sample dataset1 (1) to test

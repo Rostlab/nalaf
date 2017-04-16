@@ -742,9 +742,9 @@ class DocumentLevelRelationEvaluator(Evaluator):
                 relations_search_space = None
 
             gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun, relations_search_space=relations_search_space).keys()
-            predicted = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
+            pred = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
-            for r_pred in predicted:
+            for r_pred in pred:
 
                 accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
                 assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: " + str(accept_decisions)
@@ -764,7 +764,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
             for r_gold in gold:
 
-                r_preds = [r_pred for r_pred in predicted if self.relation_accept_fun(r_gold, r_pred)]
+                r_preds = [r_pred for r_pred in pred if self.relation_accept_fun(r_gold, r_pred)]
 
                 if len(r_preds) > 0:  # we could also do any(...); we do this only for debugging purposes
                     print_verbose("    ", docid, ": true positive", r_gold)

@@ -592,7 +592,7 @@ class EntityEvaluator(Evaluator):
 
                 for pred in pred_anns:
                     accept_decisions = {self.entity_accept_fun(gold, pred) for gold in gold_anns}
-                    assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: " + str(accept_decisions)
+                    assert set.issubset(accept_decisions, {True, False, None}), "did not expect: " + str(accept_decisions)
 
                     if True in accept_decisions:
                         # Count the true positives while iterating on gold

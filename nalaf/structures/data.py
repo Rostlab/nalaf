@@ -1896,7 +1896,7 @@ class Entity:
 
 
     def __repr__(self):
-        subclass_str = " (" + self.subclass if self.subclass else ""
+        subclass_str = (" (" + str(self.subclass) + ")") if self.subclass else ""
 
         if self.normalisation_dict:
             norm_str = ', norm: {}'.format(self.normalisation_dict)

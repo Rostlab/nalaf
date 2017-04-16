@@ -83,6 +83,7 @@ class TestDataset(unittest.TestCase):
 
 
 class TestDocument(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         text1 = "Flowers in the Rain. Are absolutely marvellous. Though i would say this text is stupid. Cheers!"

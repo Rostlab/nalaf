@@ -609,7 +609,9 @@ class EntityEvaluator(Evaluator):
 
                 for gold in gold_anns:
 
-                    if any(self.entity_accept_fun(gold, pred) for pred in pred_anns):
+                    accept_decisions = {self.entity_accept_fun(gold, pred) for pred in pred_anns}
+
+                    if True in accept_decisions:
                         print_verbose("    ", docid, ": true positive", gold)
                         counts[TOTAL][docid]['tp'] += 1
                         counts[__class__._labelize(gold)][docid]['tp'] += 1
@@ -766,7 +768,7 @@ class DocumentLevelRelationEvaluator(Evaluator):
 
                 r_preds = [r_pred for r_pred in pred if self.relation_accept_fun(r_gold, r_pred)]
 
-                if len(r_preds) > 0:  # we could also do any(...); we do this only for debugging purposes
+                if len(r_preds) > 0:  # we could also do any(...); we have this in place only for debugging purposes
                     print_verbose("    ", docid, ": true positive", r_gold)
                     counts[docid]['tp'] += 1
 

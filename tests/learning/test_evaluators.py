@@ -392,7 +392,9 @@ class TestEvaluators(unittest.TestCase):
 
         evaluator = DocumentLevelRelationEvaluator(
             rel_type=STUB_R_ID_1,
-            entity_map_fun=DocumentLevelRelationEvaluator.COMMON_ENTITY_MAP_FUNS['normalized_fun']({STUB_E_ID_1: 'n_1', STUB_E_ID_2: 'n_1'}, penalize_unknown_normalizations="hard")
+            entity_map_fun=DocumentLevelRelationEvaluator.COMMON_ENTITY_MAP_FUNS['normalized_fun'](
+                {STUB_E_ID_1: 'n_1', STUB_E_ID_2: 'n_1'},
+                penalize_unknown_normalizations="no")
         )
 
         dataset = Dataset()
@@ -412,25 +414,25 @@ class TestEvaluators(unittest.TestCase):
 
         part_1.predicted_relations = [
             Relation(
-                # One without normalization, one with another normalization
+                # One without normalization, one with another different normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool"),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
 
             Relation(
-                # One with normalization, one with another normalization
+                # One with different normalization, one with another different normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
 
             Relation(
-                # Both with the correct normalizations
+                # Both with the correct normalization ids, but one has wrong normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
 
             Relation(
-                # Both with another normalization
+                # Both with another different normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": "1964"}),
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": "1961"})),

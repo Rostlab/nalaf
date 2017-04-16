@@ -1,6 +1,8 @@
 import unittest
 from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
 from nalaf.learning.evaluators import Evaluator, MentionLevelEvaluator, DocumentLevelRelationEvaluator
+from nalaf.preprocessing.spliters import NLTKSplitter
+from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 
 
 STUB_E_ID_1 = 'e_x_1'
@@ -138,6 +140,17 @@ class TestEvaluators(unittest.TestCase):
 
     # -------
 
+    def _apply_pipeline(self, dataset):
+        # Apply through pipeline
+
+        NLTKSplitter().split(dataset)
+        NLTK_TOKENIZER.tokenize(dataset)
+        # nlp = get_spacy_nlp_english(load_parser=False)
+        # cls.parser = SpacyParser(nlp)
+        # cls.parser.parse(cls.dataset)
+        return dataset
+
+
     def test_DocumentLevelRelationEvaluator_default_entities_case_irrelevant(self):
 
         evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
@@ -162,13 +175,17 @@ class TestEvaluators(unittest.TestCase):
             # empty
         ]
 
+        self._apply_pipeline(dataset)
+
+        # -
+
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 0)
         computation = evals(STUB_R_ID_1).compute(strictness="exact")
         self.assertEqual(computation.f_measure, 0.0)
 
-        # -
+        # ---
 
         part_1.predicted_relations = [
             Relation(
@@ -229,6 +246,10 @@ class TestEvaluators(unittest.TestCase):
             ),
         ]
 
+        self._apply_pipeline(dataset)
+
+        # ---
+
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 1)
@@ -261,6 +282,10 @@ class TestEvaluators(unittest.TestCase):
         part_2.predicted_relations = [
             Relation(STUB_R_ID_1, Entity(STUB_E_ID_2, 0, "TOOL"), Entity(STUB_E_ID_1, 0, "Snoop Dog")),
         ]
+
+        self._apply_pipeline(dataset)
+
+        # ---
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
@@ -295,6 +320,10 @@ class TestEvaluators(unittest.TestCase):
             Relation(STUB_R_ID_1, Entity(STUB_E_ID_2, 0, "maynard"), Entity(STUB_E_ID_1, 0, "TOOL")),
         ]
 
+        self._apply_pipeline(dataset)
+
+        # ---
+
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 1)
@@ -328,6 +357,10 @@ class TestEvaluators(unittest.TestCase):
             Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 0, "TOOL"), Entity(STUB_E_ID_2, 0, "maynard")),
             Relation(STUB_R_ID_1, Entity(STUB_E_ID_1, 1, "TOOL"), Entity(STUB_E_ID_2, 1, "maynard")),
         ]
+
+        self._apply_pipeline(dataset)
+
+        # ---
 
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
@@ -403,6 +436,10 @@ class TestEvaluators(unittest.TestCase):
                 Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": "1961"})),
         ]
 
+        self._apply_pipeline(dataset)
+
+        # ---
+
         evals = evaluator.evaluate(dataset)
         evaluation = evals(STUB_R_ID_1)
         self.assertEqual(evaluation.tp, 0)
@@ -435,6 +472,7 @@ class TestEvaluators(unittest.TestCase):
         part_1 = Part('_irrelevant_')
         dataset.documents['doc_1'] = doc_1
         doc_1.parts['part_1'] = part_1
+        self._apply_pipeline(dataset)
         return (dataset, part_1)
 
 

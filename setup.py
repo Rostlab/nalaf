@@ -29,9 +29,10 @@ setup(
     packages=find_packages(exclude=['tests']),
     install_requires=[
         'numpy>=1.11.2',
-        'spacy>=1.2.0',
+        'scipy>=0.18.1',
         'scikit-learn>=0.18.1',
         # 'gensim>= 0.13.3',  # Note: instally manually (it may cause problems on some environments, e.g. Travis CI)
+        'spacy>=1.2.0',
         'nltk>=3.2.1',
         'beautifulsoup4>=4.5.1',
         'requests>=2.8.1',

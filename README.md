@@ -18,8 +18,8 @@ Current maintainer: Juan Miguel Cejuela (@juanmirocks).
 
 ## Requirements
 
-* Requires Python 3 (>= 3.3)
-* Requires a working installation of [SVM-Light-TK](http://disi.unitn.it/moschitti/TK1.2-software/download.html) (you need to fill in a form; add the binary folder to your `$PATH`)
+* Requires Python 3 (>= 3.5)
+
 
 ## Install nalaf
 

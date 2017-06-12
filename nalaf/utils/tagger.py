@@ -5,6 +5,7 @@ import os
 from nalaf import print_debug
 from nalaf.structures.data import Dataset, Document, Part, Entity
 
+
 # todo major refactor to learning/taggers class
 class Tagger():
     """
@@ -12,6 +13,10 @@ class Tagger():
     """
     @abc.abstractmethod
     def generate(self, dataset):
+        raise Exception('DEPRECATED -- This shimply should not be here. Use Annotator definition in annotators.py')
+        # import warnings
+        # warnings.warn(...)
+
         """
         Generates annotations from an external method, like tmVar or SETH.
         :type nalaf.structures.Dataset:
@@ -25,6 +30,17 @@ class TmVarTagger(Tagger):
     """
     TmVar tagger using the RESTApi from "http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/".
     """
+
+    def __init__(self, mut_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+
+
     def generate(self, dataset):
         """
         :param dataset: TODO
@@ -40,6 +56,7 @@ class TmVarTagger(Tagger):
         # receive new pubtator object
 
         # parse to dataset object using TmVarReader
+
 
     def generate_abstracts(self, list_of_pmids):
         """
@@ -84,7 +101,7 @@ class TmVarTagger(Tagger):
                 denotations = tm_var[doc_id]['denotations']
                 annotations = []
                 for deno in denotations:
-                    ann = Entity(class_id='e_2', offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
+                    ann = Entity(class_id=self.mut_class_id, offset=int(deno['span']['begin']), text=text[deno['span']['begin']:deno['span']['end']])
                     annotations.append(ann)
                     # note should the annotations from tmvar go to predicted_annotations or annotations?
                 part.annotations = annotations

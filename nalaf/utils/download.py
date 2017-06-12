@@ -44,14 +44,16 @@ class DownloadArticle(Cacheable):
 
                 abstract_elem = xml.findall('.//AbstractText')
                 if abstract_elem is not None:
-                    abstract = []
+                    abstract_elems = []
                     for elem in abstract_elem:
                         if 'Label' in elem.attrib and elem.attrib['Label'] != 'UNLABELLED':
-                            abstract.append('{}: {}'.format(elem.attrib['Label'], elem.text))
+                            abstract_elems.append('{}: {}'.format(elem.attrib['Label'], elem.text))
                         else:
-                            abstract.append(elem.text)
+                            abstract_elems.append(elem.text)
 
-                    doc.parts['abstract'] = Part(' '.join(abstract))
+                    abstract_elems = filter(None, abstract_elems)
+
+                    doc.parts['abstract'] = Part(' '.join(abstract_elems))
 
             # yield the document but only if you found anything
             if len(doc.parts) > 0:

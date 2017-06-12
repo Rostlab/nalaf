@@ -1,52 +1,13 @@
-*.class
 *.log
+.tags*
 
-# sbt specific
-.cache
-.history
-.lib/
-.DS_Store
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-
-# Scala-IDE specific
-.scala_dependencies
-.worksheet
-
-# Sublime Text
-*.sublime-*
-
-# idp-4 resources
-IDP4_*/
-node_modules/
-/crfsuite/*
-bin_model
-*.zip
-*.tar.gz
-*.tar
-
-# crfsuite specific
-/predict
-/output.txt
-/train
-
-# Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
 .eggs/
 *.egg*
-
-# Setuptools distribution folder.
-/dist/
-
-# Compiled python modules.
+dist/
 *.pyc
-/build/
+build/
 
-# PyCharm related files
 .idea/
 __pycache__/
 /*.iml

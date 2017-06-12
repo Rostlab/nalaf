@@ -20,17 +20,30 @@ class Splitter:
         return
 
 
-class NLTKSplitter(Splitter):
-    """
-    Simple implementation using the function sent_tokenize
-    provided by NLTK.
+class GenericSplitter(Splitter):
 
-    Implements the abstract class FeatureGenerator.
-    """
+    def __init__(self, string_splitter_fun):
+        self.string_splitter_fun = string_splitter_fun
+        "A function that takes a string as input and returns a list/iterator of splitted string items"
+
 
     def split(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
         for part in dataset.parts():
-            part.sentences_ = sent_tokenize(part.text)
+            part.sentences_ = list(self.string_splitter_fun(part.text))
+
+
+NLTK_SPLITTER = GenericSplitter(sent_tokenize)
+"""
+Simple implementation using the function NLTK::sent_tokenize.
+"""
+
+
+class NLTKSplitter(Splitter):
+    import warnings
+    warnings.warn('Use `NLTK_SPLITTER` instead', DeprecationWarning)
+
+    def split(self, dataset):
+        NLTK_SPLITTER.split(dataset)

@@ -6,7 +6,7 @@ import time
 
 class Cacheable:
     """
-    Utility class that would allow subclasses to cache anything they would like to disk.
+    Utility class that allows subclasses to cache results to disk.
 
     They can add or remove anything from the cache by adding or removing elements
     from the self.cache dictionary.

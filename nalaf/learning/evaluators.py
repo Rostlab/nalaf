@@ -4,12 +4,20 @@ from nalaf import print_verbose, print_debug
 from collections import namedtuple
 import random
 import math
+import uuid
+from collections import Counter
+import re
+
 
 class Evaluation:
 
     Computation = namedtuple('Computation', ['precision', 'recall', 'f_measure'])
 
     def __init__(self, label, tp, fp, fn, fp_ov=0, fn_ov=0):
+        # TODO
+        import warnings
+        warnings.warn('`Evaluation` will be removed to only leave EvaluationWithStandardError (complete superset of functionality)')
+
         self.label = str(label)
         self.tp = tp
         self.fp = fp
@@ -58,7 +66,7 @@ class Evaluation:
         return Evaluation.Computation(precision, recall, f_measure)
 
     def __str__(self):
-        return self.format()
+        return '\n'.join([self.format_header(), self.format_row()])
 
     def format_header(self, strictnesses=None):
         strictnesses = ['exact', 'overlapping'] if strictnesses is None else strictnesses
@@ -165,7 +173,8 @@ class EvaluationWithStandardError:
 
 
     def __str__(self):
-        return self.format()
+        return '\n'.join([self.format_header(), self.format_row()])
+
 
     def format_header(self, strictnesses=None):
         return self.format_header_simple(strictnesses)
@@ -196,7 +205,7 @@ class EvaluationWithStandardError:
 
         header = ['# class', 'tp', 'fp', 'fn', 'fp_ov', 'fn_ov']
         for strictness in strictnesses:
-            s = strictness[0].lower()+"|"  # first letter
+            s = strictness[0].lower() + "|"  # first letter
             header += [s + c for c in ['P', 'R', 'F', 'F_SE']]
         return '\t'.join(header)
 
@@ -275,8 +284,9 @@ class Evaluations:
     def __iter__(self):
         return self.classes.__iter__()
 
+
     @staticmethod
-    def merge(evaluations_itr):
+    def merge(evaluations_itr, are_disjoint_evaluations=True):
         """
         Common use case: combine cross-validation evaluations
         The single evaluations are assumed to be of type EvaluationWithStandardError
@@ -287,13 +297,54 @@ class Evaluations:
         for evaluations in evaluations_itr:
             for evaluation_label, evaluation in evaluations.classes.items():
                 dic_counts = labels.get(evaluation.label, {})
-                dic_counts.update(evaluation.dic_counts)
+
+                if are_disjoint_evaluations:
+                    joint_size = len(set(dic_counts.keys()) & set(evaluation.dic_counts))
+                    assert joint_size == 0, "The evaluations are assumed to be disjoint, yet they are not. Joint size: " + str(joint_size)
+
+                    dic_counts.update(evaluation.dic_counts)
+
+                else:
+                    for docid, eval_docid_counts in evaluation.dic_counts.items():
+
+                        total_docid_counts = dic_counts.get(docid, None)
+
+                        if total_docid_counts:
+                            counter = Counter()
+                            for d in [total_docid_counts, eval_docid_counts]:
+                                counter.update(d)
+
+                            dic_counts[docid] = dict(counter)
+
+                        else:
+                            dic_counts[docid] = eval_docid_counts
+
                 labels[evaluation.label] = dic_counts
 
         ret = Evaluations()
 
         for label, dic_counts in labels.items():
             ret.add(EvaluationWithStandardError(label, dic_counts))
+
+        return ret
+
+
+    @staticmethod
+    def cross_validate(annotator_gen_fun, corpus, evaluator, k_num_folds, use_validation_set=True):
+        merged_evaluations = []
+
+        print_debug("Cross-Validation")
+        for training_set, evaluation_set in corpus.cv_kfold_splits(k_num_folds, validation_set=use_validation_set):
+
+            annotator_apply = annotator_gen_fun(training_set)
+            annotator_apply(evaluation_set)
+
+            r = evaluator.evaluate(evaluation_set)
+            print_debug(r)
+            merged_evaluations.append(r)
+
+        ret = Evaluations.merge(merged_evaluations)
+        print_debug("\n" + str(ret) + "\n")
 
         return ret
 
@@ -331,10 +382,15 @@ class MentionLevelEvaluator(Evaluator):
     """
 
     def __init__(self, subclass_analysis=False):
+        # TODO
+        import warnings
+        warnings.warn('`MentionLevelEvaluator` is deprecated in favor of `EntityEvaluator`')
+
         self.subclass_analysis = subclass_analysis
         """
         Whether to report the performance for each subclass separately
         """
+
 
     def evaluate(self, dataset):
         """
@@ -354,10 +410,21 @@ class MentionLevelEvaluator(Evaluator):
         TOTAL = MentionLevelEvaluator.TOTAL_LABEL
         labels = [TOTAL]
 
+        def labelize(e):
+            """
+            Use this to represent an entity subclass as string and, if this is None or False (but not 0!), represent the entity with its class_id
+
+            Convert to subclasses / classes ids to avoid the misstep of comparing possible subclass '0' with False, which in python breaks the universe
+            --> info: https://twitter.com/juanmirocks/status/802209750612054016
+            """
+            return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
+
         if self.subclass_analysis:
-            # find all possible subclasses
-            subclasses = set(ann.subclass for ann in dataset.annotations() if ann.subclass is not None)
-            subclasses.update(set(ann.subclass for ann in dataset.predicted_annotations() if ann.subclass is not None))
+            # find all possible subclasses or otherwise full classes
+
+            subclasses = set(labelize(e) for e in dataset.entities())
+            subclasses.update(set(labelize(e) for e in dataset.predicted_entities()))
+
             for x in subclasses:
                 labels.append(x)
 
@@ -367,13 +434,6 @@ class MentionLevelEvaluator(Evaluator):
 
         for docid, doc in dataset.documents.items():
             for partid, part in doc.parts.items():
-                tests = ' || '.join(sorted(ann.text for ann in part.annotations))
-                preds = ' || '.join(sorted(ann.text for ann in part.predicted_annotations))
-                if tests != preds:
-                    print_debug("* docid={} part={}".format(docid, partid))
-                    print_debug("test: {}".format(tests))
-                    print_debug("pred: {}".format(preds))
-                    print_debug()
 
                 overlap_real = {label: [] for label in labels}
                 overlap_predicted = {label: [] for label in labels}
@@ -386,37 +446,48 @@ class MentionLevelEvaluator(Evaluator):
                             overlap_predicted[TOTAL].append(ann_b)
 
                             if self.subclass_analysis:
-                                if ann_a.subclass != ann_b.subclass:
+                                if labelize(ann_a) != labelize(ann_b):
                                     print_debug('overlapping subclasses do not match', ann_a.subclass, ann_b.subclass)
                                     ann_b.subclass = ann_a.subclass
 
-                                overlap_real[ann_a.subclass].append(ann_a)
-                                overlap_predicted[ann_b.subclass].append(ann_b)
+                                overlap_real[labelize(ann_a)].append(ann_a)
+                                overlap_predicted[labelize(ann_b)].append(ann_b)
 
                 Entity.equality_operator = 'exact'
                 for ann in part.predicted_annotations:
                     if ann in part.annotations:
                         counts[TOTAL][docid]['tp'] += 1
+                        print_verbose("    ", docid, ": TRUE POSITVE", ann)
+
                         if self.subclass_analysis:
-                            counts[ann.subclass][docid]['tp'] += 1
+                            counts[labelize(ann)][docid]['tp'] += 1
+
                     else:
                         counts[TOTAL][docid]['fp'] += 1
+
                         if ann in overlap_predicted[TOTAL]:
                             counts[TOTAL][docid]['fp_ov'] += 1
+                        else:
+                            print_debug("    ", docid, ": FALSE POSITIV", ann)
+
                         if self.subclass_analysis:
-                            counts[ann.subclass][docid]['fp'] += 1
-                            if ann in overlap_predicted[ann.subclass]:
-                                counts[ann.subclass][docid]['fp_ov'] += 1
+                            counts[labelize(ann)][docid]['fp'] += 1
+                            if ann in overlap_predicted[labelize(ann)]:
+                                counts[labelize(ann)][docid]['fp_ov'] += 1
 
                 for ann in part.annotations:
                     if ann not in part.predicted_annotations:
                         counts[TOTAL][docid]['fn'] += 1
+
                         if ann in overlap_real[TOTAL]:
                             counts[TOTAL][docid]['fn_ov'] += 1
+                        else:
+                            print_debug("    ", docid, ": FALSE NEGATIV", ann)
+
                         if self.subclass_analysis:
-                            counts[ann.subclass][docid]['fn'] += 1
-                            if ann in overlap_real[ann.subclass]:
-                                counts[ann.subclass][docid]['fn_ov'] += 1
+                            counts[labelize(ann)][docid]['fn'] += 1
+                            if ann in overlap_real[labelize(ann)]:
+                                counts[labelize(ann)][docid]['fn_ov'] += 1
 
         evaluations = Evaluations()
 
@@ -426,33 +497,237 @@ class MentionLevelEvaluator(Evaluator):
         return evaluations
 
 
+class EntityEvaluator(Evaluator):
+
+    TOTAL_LABEL = "TOTAL"
+
+    COMMON_ENTITY_MAP_FUNS = {
+
+        "entity_normalized_fun": (lambda map_entity_normalizations, penalize_unknown_normalizations, add_entity_text:
+                                  (lambda e: _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, add_entity_text, e)))
+    }
+
+    def _accept_entities_exact(e1, e2):
+        # ASSUME ENTITY TEXT NOT IN STRINGS
+
+        # e.g. e_1|1003,1009|n_7|Q9H4A6
+        e1 = e1.split("|")[0:2]
+        e2 = e2.split("|")[0:2]
+        return e1 == e2
+
+
+    def _accept_entities_overlapping(e1, e2):
+        # e.g. e_1|1003,1009|n_7|Q9H4A6
+        e1_class, e1_offsets, *_ = e1.split("|")
+        e2_class, e2_offsets, *_ = e2.split("|")
+
+        if e1_class != e2_class:
+            return False
+        else:
+            e1_start_offset, e1_end_offset, *e1_text = e1_offsets.split(',')
+            e2_start_offset, e2_end_offset, *e2_text = e2_offsets.split(',')
+
+            return int(e1_start_offset) < int(e2_end_offset) and int(e1_end_offset) > int(e2_start_offset)
+
+    COMMON_ENTITY_ACCEPT_FUNS = {
+        'exact': _accept_entities_exact,
+        'overlapping': _accept_entities_overlapping
+    }
+
+
+    def __init__(self, entity_map_fun=None, entity_overlap_fun=None, entity_accept_fun=None):
+
+        if entity_map_fun is None:
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS["entity_normalized_fun"]({}, penalize_unknown_normalizations="no")
+        elif isinstance(entity_map_fun, str):
+            assert not entity_map_fun.endswith('_fun'), "You cannot give function names that are complex functions such as 'normalized_fun'"
+            self.entity_map_fun = __class__.COMMON_ENTITY_ACCEPT_FUNS["overlapping"]
+        else:
+            self.entity_map_fun = entity_map_fun
+
+        self.entity_accept_fun = str.__eq__ if entity_accept_fun is None else entity_accept_fun
+
+
+    @staticmethod
+    def _labelize(e):
+        if isinstance(e, str):
+            match = re.search('Entity\\(id: (\\S+), ', e)
+            if match:
+                return match.group(1)
+            else:
+                return e.split("|")[0]
+        else:
+            return str(e.subclass) if str(e.subclass) not in ['None', 'False'] else str(e.class_id)
+
+
+    def evaluate(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        :returns (tp, fp, fn, precision, recall, f_measure): (int, int, int, float, float, float)
+
+        Calculates precision, recall and subsequently F1 measure, defined as:
+            * precision: number of correctly predicted items as a percentage of the total number of predicted items
+                len(predicted items that are also real)/len(predicted)
+                or in other words tp / tp + fp
+            * recall: number of correctly predicted items as a percentage of the total number of correct items
+                len(real items that are also predicted)/len(real)
+                or in other words tp / tp + fn
+        """
+        TOTAL = EntityEvaluator.TOTAL_LABEL
+        labels = [TOTAL]
+
+        # find all possible subclasses or otherwise full classes
+        labels += list(set(__class__._labelize(e) for e in dataset.entities()))
+        labels += list(set(__class__._labelize(e) for e in dataset.predicted_entities()))
+
+        docids = dataset.documents.keys()
+        subcounts = ['tp', 'fp', 'fn']
+        counts = {label: {docid: dict.fromkeys(subcounts, 0) for docid in docids} for label in labels}
+
+        for docid, doc in dataset.documents.items():
+            for partid, part in doc.parts.items():
+
+                gold_anns = set(filter(None, (self.entity_map_fun(e) for e in part.annotations)))
+                pred_anns = set(filter(None, (self.entity_map_fun(e) for e in part.predicted_annotations)))
+
+                for pred in pred_anns:
+                    accept_decisions = {self.entity_accept_fun(gold, pred) for gold in gold_anns}
+                    assert set.issubset(accept_decisions, {True, False, None}), "did not expect: " + str(accept_decisions)
+
+                    if True in accept_decisions:
+                        # Count the true positives while iterating on gold
+                        pass
+
+                    elif None in accept_decisions:
+                        pass
+
+                    else:
+                        # either False or the set is empty, meaning that there are no gold annotations
+                        print_debug("    ", docid, ": FALSE POSITIV", pred)
+                        counts[TOTAL][docid]['fp'] += 1
+                        counts[__class__._labelize(pred)][docid]['fp'] += 1
+
+                for gold in gold_anns:
+
+                    accept_decisions = {self.entity_accept_fun(gold, pred) for pred in pred_anns}
+
+                    if True in accept_decisions:
+                        print_verbose("    ", docid, ": true positive", gold)
+                        counts[TOTAL][docid]['tp'] += 1
+                        counts[__class__._labelize(gold)][docid]['tp'] += 1
+
+                    elif "UNKNOWN:" in gold:  # Pass when unknown normalization
+                        pass
+
+                    else:
+                        print_debug("    ", docid, ": FALSE NEGATIV", gold)
+                        counts[TOTAL][docid]['fn'] += 1
+                        counts[__class__._labelize(gold)][docid]['fn'] += 1
+
+        evaluations = Evaluations()
+
+        for label in labels:
+            evaluations.add(EvaluationWithStandardError(label, counts[label]))
+
+        return evaluations
+
+
+def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, add_entity_text, e):
+
+    entity_norm_str = _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)
+    if entity_norm_str is None:
+        return None
+
+    offset_str = [str(e.offset), str(e.end_offset())]
+    if add_entity_text:
+        offset_str += [e.text]
+
+    offset_str = ','.join(offset_str)
+
+    ret = '|'.join([e.class_id, offset_str, entity_norm_str])
+    return ret
+
+
+def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
+    n_id = map_entity_normalizations[e.class_id]
+    value = e.normalisation_dict.get(n_id, None)
+
+    if value is None:
+
+        if penalize_unknown_normalizations == "hard":
+            # Note: generate random string if norm key is not found to have no dummy clashes out of none keys
+            value = "UNKNOWN:" + str(uuid.uuid4())
+        elif penalize_unknown_normalizations == "soft":
+            value = "UNKNOWN:" + e.text.lower()
+        elif penalize_unknown_normalizations == "softest":
+            value = "UNKNOWN:" + ""
+        elif penalize_unknown_normalizations == "agnostic":
+            # returning None (as when "no") would reject the entity altogether, see _entity_normalized_fun
+            # returning "" (without UNKNOWN:) simply ignores the case -- Useful when you don't care at all about the normalization (e.g. strict exact / overlapping evaluation)
+            value = ""
+        elif penalize_unknown_normalizations == "no":
+            return None
+        else:
+            raise AssertionError(("Do not expect: ", penalize_unknown_normalizations))
+
+    return '|'.join([n_id, value])
+
+
 class DocumentLevelRelationEvaluator(Evaluator):
     """
-    Implements document level performance evaluation for relations. That means
-    it extracts all unique relations from a document, and compares it with the
-    predicted relations.
+    Implements document level performance evaluation for relations. It extracts
+    and compares unique (gold) relations against the predicted relations.
 
-    The evaluator does not care about the order of entities in a relation and
-    assumes that all relations are undirected.
+    The evaluator assumes that all relations are undirected (bidirectional).
+    Beware: the assumption is not checked.
 
-    The comparision of unique relations can be done by the 'match_case'
-    argument. If the value of 'match_case' is True, then a predicted relation
-    will match only if the cases match. If set to False, both entities will be
-    converted to lower case. By default, match_case is set to True.
+    How entities within the relations are compared against each other is decided
+    by the user and given in the `entity_map_fun` parameter. The default for this
+    is to compare entities by their class id and their text lowercased.
+    See other commong comparisons in `__class__.COMMON_ENTITY_MAP_FUNS`.
+    You can give this parameter as either a function or as a string name
+    that matches one of `COMMON_ENTITY_MAP_FUNS`.
+
+    Furthermore, you can choose how to compare relations to each other.
+    First of all, relations are converted to unique strings (together with the
+    `entity_map_fun` parameter). Second of all, the default is to compare the
+    relation-strings with string's equals function (str.__eq__). However,
+    the user can decide with `relation_accept_fun` how to compare the relations' strings.
+
+    More than an equals function, `relation_accept_fun` means:
+    * Input: `gold` and `pred` relations in string form (*order matters* --> 1 < 2 but 2 <! 1)
+    * Output: decide for `pred` to either, accept (True), reject (False), ignore (None).
+
+    Outputs True and False lead to the expected counts: tp or fp, respectively.
+    The special None case is when a prediciton is simply ignored and not counted at all.
+    For example, the prediction may be actually correct, yet too vague to be tp, and correct enough to not be a fp.
+    As for missing predictions, fn's are counted as usual: `fn` if False or None
+
+    This arbitrary `accept` function is helpful when mere string equals comparison is not enough.
+    Example 1: when normalization ids must be compared in a hierarchical manner.
+    Example 2: when there are entities / relations without normalization.
     """
-    def __init__(self, rel_type, match_case=True):
+
+    COMMON_ENTITY_MAP_FUNS = {
+        'lowercased': (lambda e: '|'.join([str(e.class_id), e.text.lower()])),
+        'normalized_fun': (lambda map_entity_normalizations, penalize_unknown_normalizations: (lambda e: _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e)))
+    }
+
+
+    def __init__(self, rel_type, entity_map_fun=None, relation_accept_fun=None, evaluate_only_on_edges_plausible_relations=False):
         self.rel_type = rel_type
-        self.match_case = match_case
-        """
-        If set to True, two relations will match only if their entities have the
-        same case. For instance, (entityA, entityB) and (EntityA, EntityB) will
-        be considered different.
+        if entity_map_fun is None:
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS['lowercased']
+        elif isinstance(entity_map_fun, str):
+            assert not entity_map_fun.endswith('_fun'), "You cannot give function names that are complex functions such as 'normalized_fun'"
+            self.entity_map_fun = __class__.COMMON_ENTITY_MAP_FUNS[entity_map_fun]
+        else:
+            self.entity_map_fun = entity_map_fun
 
-        However, if set to False, (entityA, entityB) is the same as
-        (EntityA, EntityB).
+        self.relation_accept_fun = str.__eq__ if relation_accept_fun is None else relation_accept_fun
 
-        In general, (entityA, entityB) is also the same as (entityB, entityA)
-        """
+        self.evaluate_only_on_edges_plausible_relations = evaluate_only_on_edges_plausible_relations
+
 
     def evaluate(self, dataset):
         """
@@ -460,35 +735,52 @@ class DocumentLevelRelationEvaluator(Evaluator):
         :returns Evaluations
         """
 
-        docids = dataset.documents.keys()
         subcounts = ['tp', 'fp', 'fn']
-        counts = {docid: dict.fromkeys(subcounts, 0) for docid in docids}
+        counts = {docid: dict.fromkeys(subcounts, 0) for docid in dataset.documents.keys()}
 
-        true_relations = {}
+        print_verbose()
+
         for docid, doc in dataset.documents.items():
-            relations = list(doc.unique_relations(self.rel_type))
-            true_relations[docid] = relations
+            if self.evaluate_only_on_edges_plausible_relations:
+                # a set would be better, but so far Relation is unshable
+                relations_search_space = list(dataset.plausible_relations_from_generated_edges())
+            else:
+                relations_search_space = None
 
-        predicted_relations = {}
-        for docid, doc in dataset.documents.items():
-            relations = list(doc.unique_relations(self.rel_type, predicted=True))
-            predicted_relations[docid] = relations
+            gold = doc.map_relations(use_predicted=False, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun, relations_search_space=relations_search_space).keys()
+            pred = doc.map_relations(use_predicted=True, relation_type=self.rel_type, entity_map_fun=self.entity_map_fun).keys()
 
-        for docid in docids:
-            predicted = predicted_relations[docid]
-            actual = true_relations[docid]
+            for r_pred in pred:
 
-            if not self.match_case:
-                predicted = [x.lower() for x in predicted]
-                actual = [x.lower() for x in actual]
-            for relation in predicted:
-                if relation in actual:
-                    counts[docid]['tp'] += 1
+                accept_decisions = {self.relation_accept_fun(r_gold, r_pred) for r_gold in gold}
+                assert set.issubset(accept_decisions, {True, False, None}), "`relation_accept_fun` cannot return: " + str(accept_decisions)
+
+                if True in accept_decisions:
+                    # Count the true positives while iterating on gold
+                    pass
+
+                elif None in accept_decisions:
+                    # Ignore as documented
+                    pass
+
                 else:
+                    # either False or the set is empty, meaning that there are no gold annotations
+                    print_debug("    ", docid, ": FALSE POSITIV", r_pred)
                     counts[docid]['fp'] += 1
-            for relation in actual:
-                if relation not in predicted:
+
+            for r_gold in gold:
+
+                r_preds = [r_pred for r_pred in pred if self.relation_accept_fun(r_gold, r_pred)]
+
+                if len(r_preds) > 0:  # we could also do any(...); we have this in place only for debugging purposes
+                    print_verbose("    ", docid, ": true positive", r_gold)
+                    counts[docid]['tp'] += 1
+
+                else:
+                    print_debug("    ", docid, ": FALSE NEGATIV", r_gold)
                     counts[docid]['fn'] += 1
+
+        print_verbose()
 
         evaluations = Evaluations()
         evaluations.add(EvaluationWithStandardError(self.rel_type, counts))

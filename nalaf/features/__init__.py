@@ -2,20 +2,42 @@ import abc
 from nalaf import print_debug
 import time
 
-_SPACY_NLP_ENGLISH = None
+_SPACY_NLP_ENGLISH_WITHOUT_PARSER = None
+_SPACY_NLP_ENGLISH_WITH_PARSER = None
 
 
-def get_spacy_nlp_english():
-    global _SPACY_NLP_ENGLISH
+def _get_spacy_nlp_english(load_parser):
+    import spacy
 
-    if _SPACY_NLP_ENGLISH is None:
-        start = time.time()
-        print_debug("Spacy NLP English: INIT START")
-        from spacy.en import English
-        _SPACY_NLP_ENGLISH = English(parser=False, entity=False)
-        print_debug("Spacy NLP English: INIT END", (time.time() - start))
+    start = time.time()
+    print_debug("Spacy NLP English, Parser: {} -- INIT START".format(str(load_parser)))
 
-    return _SPACY_NLP_ENGLISH
+    if load_parser is True:
+        nlp = spacy.load('en', entity=False)
+    else:
+        nlp = spacy.load('en', parser=False, entity=False)
+
+    print_debug("Spacy NLP English, Parser: {} -- INIT END   : ".format(str(load_parser)), (time.time() - start))
+
+    return nlp
+
+
+def get_spacy_nlp_english(load_parser=False):
+
+    global _SPACY_NLP_ENGLISH_WITHOUT_PARSER
+    global _SPACY_NLP_ENGLISH_WITH_PARSER
+
+    if load_parser is True:
+        if _SPACY_NLP_ENGLISH_WITH_PARSER is None:
+            _SPACY_NLP_ENGLISH_WITH_PARSER = _get_spacy_nlp_english(load_parser)
+
+        return _SPACY_NLP_ENGLISH_WITH_PARSER
+
+    else:
+        if _SPACY_NLP_ENGLISH_WITHOUT_PARSER is None:
+            _SPACY_NLP_ENGLISH_WITHOUT_PARSER = _get_spacy_nlp_english(load_parser)
+
+        return _SPACY_NLP_ENGLISH_WITHOUT_PARSER
 
 
 class FeatureGenerator:
@@ -37,7 +59,7 @@ class FeatureGenerator:
 
 def eval_binary_feature(feature_dict, feature_name, evaluator, *args):
     """
-    Calls the provided callable with the provided arguments which evaluates to True or False.
+    Calls the provided callable, which evaluates to True or False, with the provided arguments.
     If the evaluation results in True add a new feature to the features dictionary with the provided feature name.
 
     :param feature_dict: the target feature dictionary where the feature should be added

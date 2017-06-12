@@ -1,5 +1,6 @@
 from nalaf.features import FeatureGenerator
 from nltk.stem import PorterStemmer
+from nltk.stem.snowball import SnowballStemmer
 from subprocess import Popen, PIPE
 import os
 import fcntl
@@ -28,7 +29,7 @@ class SpacyLemmatizer(FeatureGenerator):
                 text_tokens = list(map(lambda x: x.word, sentence))
                 spacy_doc = self.nlp.tokenizer.tokens_from_list(text_tokens)
 
-                self.nlp.tagger(spacy_doc)
+                self.nlp.tagger(spacy_doc)  # this we need, otherwise the lemma is empty
 
                 for token, spacy_token in zip(sentence, spacy_doc):
                     token.features['stem'] = spacy_token.lemma_  # already in lower case
@@ -101,6 +102,10 @@ class BioLemmatizer(FeatureGenerator):
             token.features['stem'] = self.generate_word(token.word, token.features['tag[0]'])
 
 
+PORTER_STEMMER = PorterStemmer()
+ENGLISH_STEMMER = SnowballStemmer("english")
+
+
 class PorterStemFeatureGenerator(FeatureGenerator):
     """
     Generates stem features based on the values of the tokens themselves.
@@ -113,7 +118,7 @@ class PorterStemFeatureGenerator(FeatureGenerator):
     """
 
     def __init__(self):
-        self.stemmer = PorterStemmer()
+        self.stemmer = PORTER_STEMMER
 
     def generate(self, dataset):
         """

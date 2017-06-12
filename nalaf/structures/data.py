@@ -1,12 +1,12 @@
 from collections import OrderedDict
-from itertools import chain
 import json
 import random
-from nalaf.utils import MUT_CLASS_ID
 import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
+from itertools import chain, product, combinations
+from collections import Counter
 
 
 class Dataset:
@@ -25,11 +25,13 @@ class Dataset:
         and the value is an instance of Document
         """
 
+
     def __len__(self):
         """
         the length (size) of a dataset equals to the number of documents it has
         """
         return len(self.documents)
+
 
     def __iter__(self):
         """
@@ -38,8 +40,10 @@ class Dataset:
         for doc_id, document in self.documents.items():
             yield document
 
+
     def __contains__(self, item):
         return item in self.documents
+
 
     def parts(self):
         """
@@ -52,21 +56,27 @@ class Dataset:
             for part in document:
                 yield part
 
-    def annotations(self):
+
+    def entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
+
         for part in self.parts():
             for annotation in part.annotations:
                 yield annotation
 
-    def predicted_annotations(self):
+
+    def annotations(self):
+        warnings.warn('Use `self.entities` instead', DeprecationWarning)
+        return self.entities()
+
+
+    def predicted_entities(self):
         """
-        helper functions that iterates through all parts
-        that is each part of each document in the dataset
+        Yield all predicted entities of the dataset.
 
         :rtype: collections.Iterable[Entity]
         """
@@ -74,23 +84,88 @@ class Dataset:
             for annotation in part.predicted_annotations:
                 yield annotation
 
+
+    def predicted_annotations(self):
+        warnings.warn('Use `self.predicted_entities` instead', DeprecationWarning)
+        return self.predicted_entities()
+
+
     def relations(self):
         """
-        helper function that iterates through all relations
+        Yield all relations of the Dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():
             for rel in part.relations:
                 yield rel
 
+
     def predicted_relations(self):
         """
-        helper function that iterates through all predicted relations
+        Yield all relations of the dataset.
+
         :rtype: collections.Iterable[Relation]
         """
         for part in self.parts():
             for relation in part.predicted_relations:
                 yield relation
+
+
+    def plausible_relations_from_generated_edges(self):
+        """
+        Yield only the real relations that are obtainable from the corpus-generated edges.
+        """
+        for edge in self.edges():
+            relation = edge.get_relation_if_is_real()
+            if relation is not None:
+                yield relation
+
+
+    def compute_stats_relations_distances(self, relation_type, entity_map_fun=None, relation_accept_fun=None):
+        """
+        Returns a counter of the relationships distances.
+
+        The relationships are mapped to unique strings as determined by entity_map_fun (see `map_relations`).
+
+        The minimal distance of the mapped relations with same map key is used.
+        """
+
+        if next(self.predicted_relations(), None) is None:
+            raise AssertionError("Relations for the corpus must have been predicted to fully exhaust the search")
+
+        if entity_map_fun is None:
+            entity_map_fun = Entity.__repr__
+
+        counter_nums = Counter()
+
+        for doc in self:
+            # Group relationships at the document level (not part level, not corpus level)
+            doc_relations = {}
+
+            doc_relations = doc.map_relations(use_predicted=False, relation_type=relation_type, entity_map_fun=entity_map_fun)
+            pred_doc_relations = doc.map_relations(use_predicted=True, relation_type=relation_type, entity_map_fun=entity_map_fun)
+
+            for pred_key, pred_rels_with_distances in pred_doc_relations.items():
+
+                if pred_key in doc_relations:
+                    doc_relations[pred_key] += pred_rels_with_distances
+
+                if relation_accept_fun is not None:
+                    for real_key in doc_relations:
+                        if relation_accept_fun(real_key, pred_key):
+                            doc_relations[real_key] += pred_rels_with_distances
+
+            for rel_key, rels_with_distances in doc_relations.items():
+                rel, min_distance_for_unique_key = min(rels_with_distances, key=lambda reldist_tuple: reldist_tuple[1])
+                counter_nums.update(["D" + str(min_distance_for_unique_key)])
+
+        total = sum(counter_nums.values())
+
+        counter_percts = Counter({key: (count / total) for (key, count) in counter_nums.items()})
+
+        return (counter_nums, counter_percts)
+
 
     def sentences(self):
         """
@@ -103,6 +178,7 @@ class Dataset:
             for sentence in part.sentences:
                 yield sentence
 
+
     def tokens(self):
         """
         helper functions that iterates through all tokens
@@ -114,16 +190,28 @@ class Dataset:
             for token in sentence:
                 yield token
 
+
     def edges(self):
         """
-        helper function that iterations through all edges
-        that is, each edge of each sentence of each part of each document in the dataset
+        Yield all this Corpus's edges.
 
         :rtype: collections.Iterable[Edge]
         """
         for part in self.parts():
             for edge in part.edges:
                 yield edge
+
+
+    def label_edges(self):
+        """
+        label each edge with its REAL target (no prediction) - whether it is indeed a relation or not
+        """
+        for edge in self.edges():
+            if edge.is_relation():
+                edge.real_target = +1
+            else:
+                edge.real_target = -1
+
 
     def purge_false_relationships(self):
         """
@@ -132,6 +220,7 @@ class Dataset:
         """
         for part in self.parts():
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
+
 
     def partids_with_parts(self):
         """
@@ -143,48 +232,6 @@ class Dataset:
             for part_id, part in document.key_value_parts():
                 yield part_id, part
 
-    def annotations_with_partids(self):
-        """
-        helper function that return annotation object with part id
-        to be able to find out abstract or full document
-
-        :rtype: collections.Iterable[(str, Entity)]
-        """
-        for part_id, part in self.partids_with_parts():
-            for annotation in part.annotations:
-                yield part_id, annotation
-
-    def all_annotations_with_ids(self):
-        """
-        yields pubmedid, partid and ann through whole dataset
-
-        :rtype: collections.Iterable[(str, str, Entity)]
-        """
-        for pubmedid, doc in self.documents.items():
-            for partid, part in doc.key_value_parts():
-                for ann in part.annotations:
-                    yield pubmedid, partid, ann
-
-    def all_annotations_with_ids_and_is_abstract(self):
-        """
-        yields pubmedid, partid, is_abstract and ann through whole dataset
-
-        :rtype: collections.Iterable[(str, str, bool, Entity)]
-        """
-        for pubmedid, doc in self.documents.items():
-            for partid, part in doc.key_value_parts():
-                for ann in part.annotations:
-                    yield pubmedid, partid, part.is_abstract, ann
-
-    def label_edges(self):
-        """
-        label each edge with its target - whether it is indeed a relation or not
-        """
-        for edge in self.edges():
-            if edge.is_relation():
-                edge.target = 1
-            else:
-                edge.target = -1
 
     def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
         """
@@ -201,6 +248,9 @@ class Dataset:
 
         Requires predicted_label[0].value for each token to be set.
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         for part_id, part in self.partids_with_parts():
             for sentence in part.sentences:
                 index = 0
@@ -220,36 +270,46 @@ class Dataset:
                         part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
                     index += 1
 
+        return self
+
+
     def form_predicted_relations(self):
         """
         Populates part.predicted_relations with a list of Relation objects
         based on the values of the field target for each edge.
 
-        Each Relation object denotes a relationship between two entities (usually)
-        of different classes. Each relation is given by a relation type.
+        Each Relation object denotes a relationship between two entities
+        of (usually) different classes. Each relation is given by a relation type.
 
-        Requires edge.target to be set for each edge.
+        Requires edge.pred_target to be set for each edge.
         """
+
         for part in self.parts():
-            for edge in part.edges:
-                if edge.target == 1:
-                    part.predicted_relations.append(Relation(edge.entity1.offset,
-                                                        edge.entity2.offset,
-                                                        edge.entity1.text,
-                                                        edge.entity2.text,
-                                                        edge.relation_type))
+            for e in part.edges:
 
-    def validate_annotation_offsets(self):
-        """
-        Helper function to validate that the annotation offsets match the annotation text.
-        Mostly used as a sanity check and to make sure GNormPlus works as intentded.
-        """
-        for part in self.parts():
-            for ann in part.predicted_annotations:
-                if not ann.text == part.text[ann.offset:ann.offset+len(ann.text)]:
-                    warnings.warn('the offsets do not match in {}'.format(ann))
+                if e.pred_target == +1:
+                    r = e.get_potential_relation()
+                    part.predicted_relations.append(r)
 
-    def generate_top_stats_array(self, top_nr=10, is_alpha_only=False, class_id="e_2"):
+        return self
+
+
+    def validate_entity_offsets(self):
+        """
+        Helper function to validate that the entities offsets match the entity text.
+        Use it as a sanity check when writing or reading annotations external entities.
+        """
+
+        for docid, doc in self.documents.items():
+            for partid, part in doc.parts.items():
+                for e in chain(part.annotations, part.predicted_annotations):
+                    readable_text = part.text[e.offset:e.offset + len(e.text)]
+
+                    if not e.text == readable_text:
+                        warnings.warn('the offsets ({} != {}) do not match in: {}/{}/{}'.format(e.text, part.text[e.offset:e.offset + len(e.text)], docid, partid, e))
+
+
+    def generate_top_stats_array(self, class_id, top_nr=10, is_alpha_only=False):
         """
         An array for most occuring words.
         :param top_nr: how many top words are shown
@@ -258,7 +318,7 @@ class Dataset:
 
         raw_dict = {}
 
-        for ann in self.annotations():
+        for ann in self.entities():
             for word in ann.text.split(" "):
                 lc_word = word.lower()
                 if lc_word.isalpha() and ann.class_id == class_id:
@@ -271,12 +331,14 @@ class Dataset:
         sort_dict = OrderedDict(sorted(raw_dict.items(), key=lambda x: x[1], reverse=True))
         print(json.dumps(sort_dict, indent=4))
 
-    def clean_nl_definitions(self):
+
+    def clean_subclasses(self):
         """
-        cleans all subclass = True to = False
+        cleans all subclass by setting them to = False
         """
-        for ann in self.annotations():
+        for ann in self.entities():
             ann.subclass = False
+
 
     def get_size_chars(self):
         """
@@ -284,9 +346,15 @@ class Dataset:
         """
         return sum(doc.get_size() for doc in self.documents.values())
 
+
     def __repr__(self):
-        return "Dataset({0} documents and {1} annotations)".format(len(self.documents),
-                                                                   sum(1 for _ in self.annotations()))
+        def class_repr(class_id):
+            return class_id + ": " + str(Counter(e.subclass for e in self.entities() if e.class_id == class_id))
+
+        classes_repr = [class_repr(class_id) for class_id in {e.class_id for e in self.entities()}]
+
+        return "Dataset({} documents and {} entities ({}))".format(len(self.documents), sum(1 for _ in self.entities()), classes_repr)
+
 
     def __str__(self):
         second_part = "\n".join(
@@ -294,147 +362,6 @@ class Dataset:
         return "----DATASET----\nNr of documents: " + str(len(self.documents)) + ', Nr of chars: ' + str(
             self.get_size_chars()) + '\n' + second_part
 
-    def stats(self):
-        """
-        Calculates stats on the dataset. Like amount of nl mentions, ....
-        """
-        import re
-
-        # main values
-        nl_mentions = []  # array of nl mentions each of the the whole ann.text saved
-        nl_nr = 0  # total nr of nl mentions
-        nl_token_nr = 0  # total nr of nl tokens
-        mentions_nr = 0  # total nr of all mentions (including st mentions)
-        mentions_token_nr = 0  # total nr of all tokens of all mentions (inc st mentions)
-        total_token_abstract = 0
-        total_token_full = 0
-
-        # abstract nr
-        abstract_mentions_nr = 0
-        abstract_token_nr = 0
-        abstract_nl_mentions = []
-
-        # full document nr
-        full_document_mentions_nr = 0
-        full_document_token_nr = 0
-        full_nl_mentions = []
-
-        # abstract and full document count
-        abstract_doc_nr = 0
-        full_doc_nr = 0
-
-        # helper lists with unique pubmed ids that were already found
-        abstract_unique_list = set([])
-        full_unique_list = set([])
-
-        # nl-docid set
-        nl_doc_id_set = { 'empty' }
-
-        # is abstract var
-        is_abstract = True
-
-        # precompile abstract match
-        regex_abstract_id = re.compile(r'^s[12][shp]')
-
-        for pubmedid, partid, is_abs, ann in self.all_annotations_with_ids_and_is_abstract():
-            # abstract?
-            if not is_abs:
-                is_abstract = False
-            else:
-                if regex_abstract_id.match(partid) or partid == 'abstract':
-                # NOTE added issue #80 for this
-                    is_abstract = True
-                else:
-                    is_abstract = False
-
-
-            if ann.class_id == MUT_CLASS_ID:
-                # preprocessing
-                token_nr = len(ann.text.split(" "))
-                mentions_nr += 1
-                mentions_token_nr += token_nr
-
-                # TODO make parameterisable to just check for pure nl mentions
-                if ann.subclass == 1 or ann.subclass == 2:
-                    # total nr increase
-                    nl_nr += 1
-                    nl_token_nr += token_nr
-
-                    # min doc attribute
-                    if pubmedid not in nl_doc_id_set:
-                        nl_doc_id_set.add(pubmedid)
-
-                    # abstract nr of tokens increase
-                    if is_abstract:
-                        abstract_mentions_nr += 1
-                        abstract_token_nr += token_nr
-                        abstract_nl_mentions.append(ann.text)
-                    else:
-                        # full document nr of tokens increase
-                        full_document_mentions_nr += 1
-                        full_document_token_nr += token_nr
-                        full_nl_mentions.append(ann.text)
-
-                    # nl text mention add to []
-                    nl_mentions.append(ann.text)
-
-        # post-processing for abstract vs full document tokens
-        for doc_id, doc in self.documents.items():
-            for partid, part in doc.parts.items():
-                if not part.is_abstract:
-                    is_abs = False
-                else:
-                    is_abs = True
-                    # if not regex_abstract_id.match(partid) and not 'abstract' in partid:
-                    # # if regex_abstract_id.match(partid) or partid == 'abstract' or (len(partid) > 7 and partid[:8] == 'abstract'):
-                    #     is_abs = False
-                    # else:
-                    #     is_abs = True
-
-                if len(part.sentences) > 0:
-                        tokens = sum(1 for sublist in part.sentences for _ in sublist)
-                        # print(tokens, len(part.text.split(" ")))
-                else:
-                    tokens = False
-
-                if not is_abs:
-                    full_unique_list.add(doc_id)
-
-                    if tokens:
-                        total_token_full += tokens
-                    else:
-                        total_token_full += len(part.text.split(" "))
-                else:
-                    abstract_unique_list.add(doc_id)
-
-                    if tokens:
-                        total_token_abstract += tokens
-                    else:
-                        total_token_abstract += len(part.text.split(" "))
-
-        abstract_unique_list = abstract_unique_list.difference(full_unique_list)
-        abstract_doc_nr = len(abstract_unique_list)
-        full_doc_nr = len(full_unique_list)
-
-        report_dict = {
-            'nl_mention_nr': nl_nr,
-            'tot_mention_nr': mentions_nr,
-            'nl_token_nr': nl_token_nr,
-            'tot_token_nr': mentions_token_nr,
-            'abstract_nl_mention_nr': abstract_mentions_nr,
-            'abstract_nl_token_nr': abstract_token_nr,
-            'abstract_tot_token_nr': total_token_abstract,
-            'full_nl_mention_nr': full_document_mentions_nr,
-            'full_nl_token_nr': full_document_token_nr,
-            'full_tot_token_nr': total_token_full,
-            'nl_mention_array': sorted(nl_mentions),
-            'abstract_nr': abstract_doc_nr,
-            'full_nr': full_doc_nr,
-            'abstract_nl_mention_array': sorted(abstract_nl_mentions),
-            'full_nl_mention_array': sorted(full_nl_mentions)
-        }
-
-        return report_dict
 
     def extend_dataset(self, other):
         """
@@ -446,17 +373,19 @@ class Dataset:
             if key not in self.documents:
                 self.documents[key] = other.documents[key]
 
+
     def prune_empty_parts(self):
         """
-        deletes all the parts that contain no annotations at all
+        deletes all the parts that contain no entities at all
         """
         for doc_id, doc in self.documents.items():
             part_ids_to_del = []
             for part_id, part in doc.parts.items():
-                if len(part.annotations) == 0:
+                if len(part.annotations) == 0:  # or part.predict_entities ?
                     part_ids_to_del.append(part_id)
             for part_id in part_ids_to_del:
                 del doc.parts[part_id]
+
 
     def prune_filtered_sentences(self, filterin=(lambda _: False), percent_to_keep=0):
         """
@@ -475,6 +404,7 @@ class Dataset:
             part.sentences = tmp
             part.sentences_ = tmp_
 
+
     def prune_sentences(self, percent_to_keep=0):
         """
         * keep all sentences that contain  at least one mention
@@ -486,7 +416,7 @@ class Dataset:
         for part in self.parts():
             # find which sentences have at least one mention
             sentences_have_ann = [any(sentence[0].start <= ann.offset < ann.offset + len(ann.text) <= sentence[-1].end
-                                      for ann in part.annotations)
+                                      for ann in part.annotations)  # pred_annotations ?
                                   for sentence in part.sentences]
             if any(sentences_have_ann):
                 # choose a certain percentage of the ones that have no mention
@@ -506,6 +436,9 @@ class Dataset:
         :param subclasses: one ore more subclasses to delete
         :param predicted: if False it will only consider Part.annotations array and not Part.pred_annotations
         """
+        # TODO
+        warnings.warn('annotations actually means entities. This method and related attributes will soon be renamed')
+
         # if it is not a list, create a list of 1 element
         if not hasattr(subclasses, '__iter__'):
             subclasses = [subclasses]
@@ -516,8 +449,20 @@ class Dataset:
                 part.predicted_annotations = [ann for ann in part.predicted_annotations
                                               if ann.subclass not in subclasses]
 
-    def _cv_kfold_split(l, k, fold, validation_set=True):
-        total_size = len(l)
+
+    @staticmethod
+    def _cv_kfold_split(keys, k, fold, validation_set=True):
+        """
+        Split keys (e.g. doc ids or indexes) into two groups: (training, evaluation)
+
+        if validation_set is True,
+            training = strictly training set
+            evaluation = validation set
+        otherwise
+            training = training set + validation set
+            evaluation = test set
+        """
+        total_size = len(keys)
         sub_size = round(total_size / k)
 
         def folds(k, fold):
@@ -527,35 +472,52 @@ class Dataset:
         training = subsamples[0:k-2]
         validation = subsamples[k-2:k-1]
         test = subsamples[k-1:k]
-        if not validation_set:
-            training += validation
-            validation = []
 
-        def create_set(subsample_indexes):
+        if validation_set:
+            training = training
+            evaluation = validation
+        else:
+            training = training + validation
+            evaluation = test
+
+        def create_keys_set(subsample_indexes):
             ret = []
             for sub in subsample_indexes:
                 start = sub_size * sub
-                end = start + sub_size if sub != (k-1) else total_size  # k-1 is the last subsample index
-                ret += l[start:end]
+                end = (start + sub_size) if sub != (k-1) else total_size  # k-1 is the last subsample index
+                ret += keys[start:end]
             return ret
 
-        return (create_set(training), create_set(validation), create_set(test))
+        return (create_keys_set(training), create_keys_set(evaluation))
 
 
-    def cv_kfold_split(self, k, fold, validation_set=True):
-        keys = list(sorted(self.documents.keys()))
+    @staticmethod
+    def _cv_kfold_splits_randomize_keys(keys):
         random.seed(2727)
         random.shuffle(keys)
+        return keys
 
-        def create_dataset(sett):
+
+    @staticmethod
+    def _cv_kfold_splits_doc_keys_sets(doc_keys, k, validation_set):
+        doc_keys = list(sorted(doc_keys))
+        doc_keys = __class__._cv_kfold_splits_randomize_keys(doc_keys)
+
+        for fold in range(k):
+            training, evaluation = __class__._cv_kfold_split(doc_keys, k, fold, validation_set)
+            yield training, evaluation
+
+
+    def cv_kfold_splits(self, k, validation_set=True):
+
+        def create_dataset(keys):
             ret = Dataset()
-            for elem in sett:
+            for elem in keys:
                 ret.documents[elem] = self.documents[elem]
             return ret
 
-        training, validation, test = Dataset._cv_kfold_split(keys, k, fold, validation_set)
-
-        return (create_dataset(training), create_dataset(validation), create_dataset(test))
+        for training, evaluation in __class__._cv_kfold_splits_doc_keys_sets(self.documents.keys(), k, validation_set):
+            yield (create_dataset(training), create_dataset(evaluation))
 
 
     def fold_nr_split(self, n, fold_nr):
@@ -563,6 +525,7 @@ class Dataset:
         Sugar syntax for next(self.cv_split(n, fold_nr), None)
         """
         return next(self.cv_split(n, fold_nr), None)
+
 
     def cv_split(self, n=5, fold_nr=None):
         """
@@ -642,6 +605,7 @@ class Dataset:
 
         return train, test
 
+
     def stratified_split(self, percentage=0.66):
         """
         Splits the dataset randomly into train and test dataset
@@ -656,7 +620,6 @@ class Dataset:
         :return train dataset, test dataset
         :rtype: (nalaf.structures.data.Dataset, nalaf.structures.data.Dataset)
         """
-        from collections import Counter
         from itertools import groupby
         train = Dataset()
         test = Dataset()
@@ -727,10 +690,67 @@ class Document:
         second_part = "\n".join(partslist)
         return 'Size: ' + str(self.get_size()) + ", Title: " + self.get_title() + '\n' + second_part
 
+
     def key_value_parts(self):
         """yields iterator for partids"""
         for part_id, part in self.parts.items():
             yield part_id, part
+
+
+    def entities(self):
+        """
+        Yield all entities of the Document.
+
+        :rtype: collections.Iterable[Entity]
+        """
+        for part in self.parts.values():
+            for e in part.annotations:
+                yield e
+
+
+    def predicted_entities(self):
+        """
+        Yield all predicted entities of the Document.
+
+        :rtype: collections.Iterable[Entity]
+        """
+        for part in self.parts.values():
+            for e in part.predicted_annotations:
+                yield e
+
+
+    def relations(self):
+        """
+        Yield all relations of the Document.
+
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts.values():
+            for rel in part.relations:
+                yield rel
+
+
+    def predicted_relations(self):
+        """
+        Yield all predicted relations of the Document.
+
+        :rtype: collections.Iterable[Relation]
+        """
+        for part in self.parts.values():
+            for rel in part.predicted_relations:
+                yield rel
+
+
+    def edges(self):
+        """
+        Yield all this Document's edges.
+
+        :rtype: collections.Iterable[Edge]
+        """
+        for part in self:
+            for edge in part.edges:
+                yield edge
+
 
     def get_unique_mentions(self):
         """:return: set of all mentions (standard + natural language)"""
@@ -741,34 +761,26 @@ class Document:
 
         return set(mentions)
 
-    def unique_relations(self, rel_type, predicted=False):
-        """
-        :param predicted: iterate through predicted relations or true relations
-        :type predicted: bool
-        :return: set of all relations (ignoring the text offset and
-        considering only the relation text)
-        """
-        relations = []
-        for part in self:
-            if predicted:
-                relation_list = part.predicted_relations
-            else:
-                relation_list = part.relations
-            for rel in relation_list:
-                entity1, relation_type, entity2 = rel.get_relation_without_offset()
-                if entity1 < entity2:
-                    relation_string = entity1+' '+relation_type+' '+entity2
-                else:
-                    relation_string = entity2+' '+relation_type+' '+entity1
-                if relation_string not in relations and relation_type == rel_type:
-                    relations.append(relation_string)
-        return set(relations)
 
-    def relations(self):
-        """  helper function for providing an iterator of relations on document level """
-        for part in self.parts.values():
-            for rel in part.relations:
-                yield rel
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, doc_mapped_relations=None):
+        """
+        Map all Documents's relations to dictionary of:
+        {unique mapped strings --> (list of tuples: (relation with same map key, sentence distance between the related entities))}
+
+        Create a set of the document's relations based on the map function of the relation themselves and the given map
+        function for their entities. Relations end up being represented as strings in the set.
+
+        Return: set of strings that represent unique relationsihps
+        """
+
+        if doc_mapped_relations is None:
+            doc_mapped_relations = {}
+
+        for part in self:
+            doc_mapped_relations = part.map_relations(use_predicted, relation_type, entity_map_fun, relations_search_space, doc_mapped_relations)
+
+        return doc_mapped_relations
+
 
     def purge_false_relationships(self):
         """
@@ -778,9 +790,11 @@ class Document:
         for part in self.parts:
             part.relations[:] = [x for x in part.relations if x.validate_itself(part)]
 
+
     def get_size(self):
         """returns nr of chars including spaces between parts"""
         return sum(len(x.text) + 1 for x in self.parts.values()) - 1
+
 
     def get_title(self):
         """:returns title of document as str"""
@@ -789,9 +803,10 @@ class Document:
         else:
             return list(self.parts.values())[0].text
 
-    def get_text(self):
+
+    def get_text(self, separation=" "):
         """
-        Gives the whole text concatenated with spaces in between.
+        Gives the whole text concatenated with `separation` parameter string in between (default: spaces).
         :return: string
         """
         text = ""
@@ -799,8 +814,9 @@ class Document:
         _length = self.get_size()
 
         for p in self.parts.values():
-            text += "{0} ".format(p.text)
+            text += "{}{}".format(p.text, separation)
         return text.strip()
+
 
     def get_body(self):
         """
@@ -816,34 +832,6 @@ class Document:
                     text += part.text.strip()
         return text
 
-    def overlaps_with_mention2(self, start, end):
-        """
-        Checks for overlap with given 2 nrs that represent start and end position of any corresponding string.
-        :param start: index of first char (offset of first char in whole document)
-        :param end: index of last char (offset of last char in whole document)
-        """
-        print_verbose('Searching for overlap with a mention.')
-        Entity.equality_operator = 'exact_or_overlapping'
-        query_ann = Entity(class_id='', offset=start, text=(end - start + 1) * 'X')
-        print_debug(query_ann)
-        offset = 0
-        for part in self.parts.values():
-            print_debug('Query: Offset =', offset, 'start char =', query_ann.offset, 'start char + len(ann.text) =',
-                        query_ann.offset + len(query_ann.text), 'params(start, end) =',
-                        "({0}, {1})".format(start, end))
-            for ann in part.annotations:
-                offset_corrected_ann = Entity(class_id='', offset=ann.offset + offset, text=ann.text)
-                if offset_corrected_ann == query_ann:
-                    print_verbose('Found annotation:', ann)
-                    return True
-                else:
-                    print_debug(
-                        "Current(offset: {0}, offset+len(text): {1}, text: {2})".format(offset_corrected_ann.offset,
-                                                                                        offset_corrected_ann.offset + len(
-                                                                                            offset_corrected_ann.text),
-                                                                                        offset_corrected_ann.text))
-            offset += len(part.text)
-        return False
 
     def overlaps_with_mention(self, *span, annotated=True):
         """
@@ -904,35 +892,48 @@ class Part:
 
     def __init__(self, text, is_abstract=True):
         self.text = text
+        """the original raw text that the part is consisted of"""
+
         self.sentences_ = []
         """the text sentences previous tokenization"""
-        """the original raw text that the part is consisted of"""
+
         self.sentences = [[]]
         """
         a list sentences where each sentence is a list of tokens
         derived from text by calling Splitter and Tokenizer
         """
+
         self.annotations = []
-        """the annotations of the chunk of text as populated by a call to Annotator"""
+        """the entity of the chunk of text as populated by a call to Annotator"""
+
         self.predicted_annotations = []
         """
-        a list of predicted annotations as populated by a call to form_predicted_annotations()
+        a list of predicted entities as populated by a call to form_predicted_annotations()
         this represent the prediction on a mention label rather then on a token level
         """
+
+        # TODO
+        warnings.warn('"annotations" (and "predicted_annotations") are meant to be "entities". This and related attributes will soon be renamed')
+
         self.relations = []
         """
         a list of relations that represent a connection between 2 annotations e.g. mutation mention and protein,
         where the mutation occurs inside
         """
+
         self.predicted_relations = []
         """a list of predicted relations as populated by a call to form_predicted_relations()"""
+
         self.edges = []
         """a list of possible relations between any two entities in the part"""
+
         self.is_abstract = is_abstract
         """whether the part is the abstract of the paper"""
+
+        # TODO this may be too relna-specific
         self.sentence_parse_trees = []
-        """the parse trees for each sentence stored as a string. TODO this may be too relna-specific"""
-        self.tokens = []
+        """the parse trees for each sentence stored as a string."""
+
 
     def get_sentence_string_array(self):
         """ :returns an array of string in which each index contains one sentence in type string with spaces between tokens """
@@ -949,13 +950,59 @@ class Part:
                 return_array.append(new_sentence.rstrip())  # to delete last space
             return return_array
 
-    def get_sentence_index_for_annotation(self, annotation):
-        start = annotation.offset
-        end = annotation.offset + len(annotation.text)
-        for index, sentence in enumerate(self.sentences):
-            for token in sentence:
-                if start <= token.start <= end:
-                    return index
+
+    def get_sentence_index_for_annotation(self, entity):
+
+        for sentence_index, sentence in enumerate(self.sentences):
+            assert sentence != [[]] and sentence != [], "The sentences have not been splitted/defined yet"
+
+            sentence_start = sentence[0].start
+            sentence_end = sentence[-1].end
+
+            if sentence_start <= entity.offset < sentence_end:
+                return sentence_index
+
+        assert False, ("The entity did not (and should) have an associated sentence. Ann: " + str(entity))
+
+
+    def get_entity(self, start_offset, use_pred, raise_exception_on_incosistencies=True):
+        """
+        Retrieves entity object from a list of annotations based on start_offset value.
+        """
+        entities = self.annotations if not use_pred else self.predicted_annotations
+        found_list = list(filter(lambda ann: ann.offset == start_offset, entities))
+        length = len(found_list)
+
+        if length == 0:
+            if (raise_exception_on_incosistencies):
+                raise Exception("Entity with offset {} was expected and yet was not found".format(str(start_offset)))
+            else:
+                return None
+
+        elif length == 1:
+            return found_list[0]
+
+        else:
+            if (raise_exception_on_incosistencies):
+                raise Exception("As of now, Part's should not have multiple entities with _same_ start_offset: {} -- found: {}, list: \n\t{}".format(str(start_offset), str(length), ("\n\t".join((str(e) for e in found_list)))))
+            else:
+                return found_list[0]
+
+
+    def get_any_entities_in_sentence(self, sentence_id, predicted):
+        sentence = self.sentences[sentence_id]
+        start = sentence[0].start
+        end = sentence[-1].end
+        entities = self.predicted_annotations if predicted else self.annotations
+
+        ret = {}
+        for entity in entities:
+            if start <= entity.offset < end:
+                updated = ret.get(entity.class_id, [])
+                updated.append(entity)
+                ret[entity.class_id] = updated
+        return ret
+
 
     def get_entities_in_sentence(self, sentence_id, entity_classId):
         """
@@ -966,14 +1013,11 @@ class Part:
         :param entity_classId: the classId of the entity
         :type entity_classId: str
         """
-        sentence = self.sentences[sentence_id]
-        start = sentence[0].start
-        end = sentence[-1].end
-        entities = []
-        for annotation in self.annotations:
-            if start <= annotation.offset < end and annotation.class_id == entity_classId:
-                entities.append(annotation)
-        return entities
+        import warnings
+        warnings.warn('Use rather the method: get_any_entities_in_sentence', DeprecationWarning)
+
+        return self.get_any_entities_in_sentence(sentence_id, predicted=False)[entity_classId]
+
 
     def percolate_tokens_to_entities(self, annotated=True):
         """
@@ -983,24 +1027,219 @@ class Part:
         store the nearest entity having index just before for the start of the
         entity and just after for the end of the entity
         """
+
+        sentences = self.sentences
+
         for entity in chain(self.annotations, self.predicted_annotations):
             entity.tokens = []
             entity_end = entity.offset + len(entity.text)
-            for sentence in self.sentences:
+            sentence_index = None
+
+            for index, sentence in enumerate(sentences):
+                sentence_adjuted = False
+
                 for token in sentence:
                     if entity.offset <= token.start < entity_end or \
                         token.start <= entity.offset < token.end:
+
+                        if sentence_index is not None and sentence_index != index:
+                            # entity spanning multiple sentences, --> adjust sentences as it's likely a sentence splitting error
+                            # Should happen very seldom
+                            # Example: In these cells, Kv8.1 expressed alone remains in intracellular compartments, but it can reach the plasma membrane when it associates with Kv2.2, and it then also forms new types of Kv8.1/Kv2. 2 channels
+                            if not sentence_adjuted:
+                                print()
+                                print("WARNING ADJUST", sentence)
+                                print("WARNING ADJUST", sentence_index, index, sentence_adjuted)
+                                print("WARNING ADJUST", entity.text, "---", entity)
+                                print("WARNING ADJUST", sentences)
+                                print("WARNING ADJUST", entity.sentence)
+                                sentences[index-1] += sentence
+                                del sentences[index]
+                                print("WARNING ADJUST", entity.sentence)
+                                print("WARNING ADJUST", sentences)
+                                print()
+
+                                self.sentences = sentences
+                                sentence_adjuted = True
+
                         entity.tokens.append(token)
 
-    # TODO move to edge features
+                        if sentence_index is None:
+                            sentence_index = index
+                            entity.sentence = sentence
+                            entity.part = self
+
+
+    @staticmethod
+    def get_sentence_roots(sentence, feature_key='is_root'):
+        """
+        **Depends on** parsers.py :: SpacyParser (dependency parser).
+
+        Gets the roots of a sentence list of tokens.
+
+        Note that the spaCy parser allows multiple roots.
+        In this view, a root is a token that does not have any incoming dependency,
+        that is, the dependency graph is a tree with multiple roots (more generally, a graph).
+
+        Note that many other parsers enforce to have a sole root by creating a dummy node
+        than then connects to the real root nodes (those without real incoming dependencies).
+        """
+        roots = [token for token in sentence if token.features[feature_key] is True]
+        assert len(roots) >= 1, "The sentence contains {} roots (?). Expected: >= 1 -- Sentence: {}".format(len(roots), ' '.join((t.word for t in sentence)))
+
+        return roots
+
+
+    @staticmethod
+    def get_main_verbs(sentence, include_linked_verbs=True, token_map=lambda t: t):
+
+        def search_first_verbs(tokens):
+            if len(tokens) == 0:
+                return []
+            else:
+                verbs = [t for t in tokens if t.is_POS_Verb()]
+
+                if len(verbs) > 0:
+                    return verbs
+                else:
+                    return search_first_verbs([dep_to for t in tokens for dep_to, _ in t.features["dependency_to"]])
+
+        roots = Part.get_sentence_roots(sentence)
+
+        verbs = search_first_verbs(roots)
+
+        if include_linked_verbs:
+            verbs += [dep_to for t in verbs for dep_to, _ in t.features["dependency_to"] if dep_to.is_POS_Verb()]
+
+        return [token_map(t) for t in verbs]
+
+    @staticmethod
+    def is_negated(tokens_path):
+        """
+        Simple heuristic to derive if a sentence or more generally a path of tokens (e.g. parsing dependency)
+        is written affirmatively or negated, as in "Juanmi is awesome" vs. "Juanmi does not give up".
+
+        A path of tokens is negated if it contains an odd number of "neg" (negation) parsed dependencies.
+        """
+        return (sum(t.features["dep"] == "neg" for t in tokens_path) % 2) != 0
+
+
+    _FEAT_DEPTH_KEY = 'depth'
+
+
+    def compute_tokens_depth(self):
+        """
+        **Depends on** parsers.py :: SpacyParser (dependency parser).
+
+
+        Computes the depth for every token of every sentence defined as:
+
+        * root tokens have depth == 0
+        * other tokens have depth == depth(parent_token) + 1
+
+        The depth of each token is finally saved in the tokens' features with key 'depth'
+        """
+
+        for sentence in self.sentences:
+            roots = Part.get_sentence_roots(sentence)
+
+            Part._recursive_compute_tokens_depth(current_depth=0, tokens=roots)
+
+
+    @staticmethod
+    def _recursive_compute_tokens_depth(current_depth, tokens):
+
+        if len(tokens) == 0:
+            return
+        else:
+            next_depth_tokens = []
+            for token in tokens:
+
+                if Part._FEAT_DEPTH_KEY in token.features:
+                    pass  # depth already defined by another and _shorter_ path (and for all its children too)
+                else:
+                    token.features[Part._FEAT_DEPTH_KEY] = current_depth
+                    token_children = [child for (child, _) in token.features['dependency_to']]
+                    next_depth_tokens += token_children
+
+            Part._recursive_compute_tokens_depth(current_depth + 1, next_depth_tokens)
+
+
+    def set_entities_head_tokens(self):
+        """
+        **Depends on** __class__::compute_tokens_depth
+
+        A head token of an entity is an arbitrary definition of ours.
+        It roughly means "the most important token of an entity's token list".
+
+        Shrikant, essentially, defined this heuristically setting the head as the "root"
+        of the entity. Meaning, the token that is closest to an actual root of the dependency graph.
+
+        Shrikant code (Sentence::calculateHeadScores) also considered "important" dependencies
+        as to only follow those to calculate "closedness" to the root (depth), and further,
+        also penalized punctuation tokens.
+
+        Ashish supposedly implemented the same idea in the deprecated `calculate_token_scores`.
+
+        YET, in my view, BOTH Shrikant's and Ashish's implementations and logics were wrong
+        (if we follow the idea of their methods' descriptions).
+
+
+        In this new implementation (author @juanmirocks), we calculate the "score" of tokens
+        with the new function `compute_tokens_depth` and we consider as head of an entity:
+
+        *   the token that has the least depth. That is, e.g., depth 2 "wins" over depth 3.
+        *   Further, all-punctuation tokens will never be selected as entity head tokens
+            (unless they are the sole token of the entity; this should never happen anyway
+            and we assert it appropriately; maybe special unicode characters can slip through, e.g. delta).
+        *   Further, upon tokens with same depth, the token that is a Noun wins (Token::is_POS_Noun)
+        *   Finally, if still multiple token candidates remain, the first is arbitrarily selected.
+
+        """
+
+        # The following code can be made more efficient by iterating only once over the tokens lists
+        # The code will become more verbose, thoughss
+
+        for e in chain(self.annotations, self.predicted_annotations):
+
+            tokens = e.tokens
+
+            # Filter out punctuation tokens
+            tokens = list(filter(lambda t: not t.features['is_punct'], tokens))
+            assert len(tokens) >= 1, (e, " --> ", tokens)
+
+            # Leave only minum depth tokens
+            minimum_depth = min((t.features[Part._FEAT_DEPTH_KEY] for t in tokens))
+            tokens = [t for t in tokens if t.features[Part._FEAT_DEPTH_KEY] == minimum_depth]
+
+            # Leave only nouns
+            nn_tokens = [t for t in tokens if t.is_POS_Noun()]
+
+            if len(nn_tokens) == 0:
+                # print_debug("No Noun in the entity tokens", (e, e.tokens))
+                e.head_token = tokens[0]
+
+            else:
+                e.head_token = nn_tokens[0]
+
+                # if len(nn_tokens) > 1:
+                #     print_debug("Same score for entity head tokens", (e.text, "head: ", e.head_token, "nn tokens: ", nn_tokens))
+
+
     def calculate_token_scores(self):
         """
         calculate score for each entity based on a simple heuristic of which
         token is closest to the root based on the dependency tree.
+
+        @
         """
+        warnings.warn('Use `compute_tokens_depth` instead', DeprecationWarning)
+
         not_tokens = []
-        important_dependencies = ['det', 'amod', 'appos', 'npadvmod', 'compound',
-                'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct']
+        important_dependencies = [
+            'det', 'amod', 'appos', 'npadvmod', 'compound',
+            'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct'
+        ]
         for sentence in self.sentences:
             for token in sentence:
                 if token.word not in not_tokens:
@@ -1018,18 +1257,22 @@ class Part:
                     dep_to = token
                     dep_type = token.features['dependency_from'][1]
 
-                    if dep_type in important_dependencies:
+                    # if dep_type in important_dependencies:
+                    if True:
                         if dep_from.features['score'] <= dep_to.features['score']:
                             dep_from.features['score'] = dep_to.features['score'] + 1
-                            done = True
+                            done = False
                 counter += 1
                 if counter > 20:
                     break
+
 
     def set_head_tokens(self):
         """
         set head token for each entity based on the scores for each token
         """
+        warnings.warn('Use `set_entities_head_tokens` instead', DeprecationWarning)
+
         for token in self.tokens:
             if token.features['score'] is None:
                 token.features['score'] = 1
@@ -1040,11 +1283,45 @@ class Part:
             else:
                 entity.head_token = max(entity.tokens, key=lambda token: token.features['score'])
 
+
+    def map_relations(self, use_predicted, relation_type, entity_map_fun, relations_search_space=None, part_mapped_relations=None):
+        """
+        Map all Parts's relations to dictionary of:
+        {unique mapped strings --> (list of tuples: (relation with same map key, sentence distance between the related entities))}
+
+        Create a set of the document's relations based on the map function of the relation themselves and the given map
+        function for their entities. Relations end up being represented as strings in the set.
+
+        If relations_search_space is None, return the map of all parts' relations. Otherwise, return the map
+        of only those part's relations that are included in `relations_search_space` (a set or a list)
+
+        Return: set of strings that represent unique relationsihps
+        """
+
+        if part_mapped_relations is None:
+            part_mapped_relations = {}
+
+        part_relations = self.predicted_relations if use_predicted else self.relations
+
+        for r in part_relations:
+            if r.class_id == relation_type and (relations_search_space is None or r in relations_search_space):
+                mapkey = r.map(entity_map_fun)
+
+                if mapkey is not None:
+                    equivalent = part_mapped_relations.get(mapkey, [])
+                    entities_sentence_distance = r.get_sentence_distance_between_entities(self)
+                    equivalent.append((r, entities_sentence_distance))
+                    part_mapped_relations[mapkey] = equivalent
+
+        return part_mapped_relations
+
+
     def __iter__(self):
         """
         when iterating through the part iterate through each sentence
         """
         return iter(self.sentences)
+
 
     def __repr__(self):
         return "Part(is abstract = {abs}, len(sentences) = {sl}, ' \
@@ -1056,30 +1333,32 @@ class Part:
             rl=len(self.relations), prl=len(self.predicted_relations),
             abs=self.is_abstract)
 
+
     def __str__(self):
-        annotations_string = "\n".join([str(x) for x in self.annotations])
-        pred_annotations_string = "\n".join([str(x) for x in self.predicted_annotations])
+        entities_string = "\n".join([str(x) for x in self.annotations])
+        pred_entities_string = "\n".join([str(x) for x in self.predicted_annotations])
         relations_string = "\n".join([str(x) for x in self.relations])
         pred_relations_string = "\n".join([str(x) for x in self.predicted_relations])
-        if not annotations_string:
-            annotations_string = "[]"
-        if not pred_annotations_string:
-            pred_annotations_string = "[]"
+        if not entities_string:
+            entities_string = "[]"
+        if not pred_entities_string:
+            pred_entities_string = "[]"
         if not relations_string:
             relations_string = "[]"
         if not pred_relations_string:
             pred_relations_string = "[]"
-        return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Annotations-\n{annotations}\n' \
-               '-Predicted annotations-\n{pred_annotations}\n' \
+        return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Entities-\n{annotations}\n' \
+               '-Predicted entities-\n{pred_annotations}\n' \
                '-Relations-\n{relations}\n' \
                '-Predicted relations-{pred_relations}'.format(
-                        text=self.text, annotations=annotations_string,
-                        pred_annotations=pred_annotations_string, relations=relations_string,
+                        text=self.text, annotations=entities_string,
+                        pred_annotations=pred_entities_string, relations=relations_string,
                         pred_relations=pred_relations_string, abstract=self.is_abstract)
+
 
     def get_size(self):
         """ just returns number of chars that this part contains """
-        # OPTIONAL might be updated in order to represent annotations and such as well
+        # OPTIONAL might be updated in order to represent entities and such as well
         return len(self.text)
 
 
@@ -1087,57 +1366,339 @@ class Edge:
     """
     Represent an edge - a possible relation between two named entities.
 
-    :type entity1: nalaf.structures.data.Entity
-    :type entity2: nalaf.structures.data.Entity
-    :type relation_type: str
-    :type sentence: list[nalaf.structures.data.Token]
-    :type sentence_id: int
-    :type part: nalaf.structures.data.Part
-    :type features: dict
+    Asserted:
+        The entities are assumed to be sorted, that is:
+            * their parts are sorted ( <= )  # can be same part
+            * (if same parts), their sentences are sorted ( <= )  # can be same sentence
+            * (if same parts), their start offsets are sorted ( < )  # < for they must be different entities/tokens
+
+    Note:
+        The same_ (part or sentence_id) are sugar fields for convenience.
+        Their use is discouraged and ideally the library would throw a warning when used.
+
+        The best best solution would be to be able to retrieve the part and sentence_id from the entities directly
     """
 
-    def __init__(self, entity1, entity2, relation_type, sentence, sentence_id, part):
-        self.entity1 = entity1
-        """The first entity in the edge"""
-        self.entity2 = entity2
-        """The second entity in the edge"""
+    def __init__(self, relation_type, entity1, entity2, e1_part, e2_part, e1_sentence_id, e2_sentence_id):
+        assert e1_part.sentences[0][0].start <= e2_part.sentences[0][0].start, ("Parts must be sorted", e1_part, e2_part)
+        assert e1_part != e2_part or e1_sentence_id <= e2_sentence_id, ("Sentences must be sorted", e1_sentence_id, e2_sentence_id)
+        assert e1_part != e2_part or entity1.offset < entity2.offset, ("Entities must be sorted", e1_sentence_id, e2_sentence_id, entity1, entity2)
+
+        #
+
         self.relation_type = relation_type
-        """The type of relationship between the two entities"""
-        self.sentence = sentence
-        """The sentence which contains the edge"""
-        # TODO Design decision, whether to retain sentence or retain part and sentence id
-        # Part and Sentence ID might make sense for double sentence relationships
-        self.sentence_id = sentence_id
-        """The index of the sentence mentioned in sentence"""
-        self.part = part
-        """The part in which the sentence is contained"""
+        self.entity1 = entity1
+        self.entity2 = entity2
+
+        self.e1_part = e1_part
+        """The part in which entity1 is contained"""
+
+        self.e2_part = e2_part
+        """The part in which entity2 is contained"""
+
+        assert self.e1_part == self.e2_part, "As of now, only relationships within a _same_ part are allowed"
+
+        self.same_part = self.e1_part
+
+        self.e1_sentence_id = e1_sentence_id
+        """The index of the sentence mentioning entity1 (contain in its corresponding part)"""
+
+        self.e2_sentence_id = e2_sentence_id
+        """The index of the sentence mentioning entity2 (contain in its corresponding part)"""
+
+        self.same_sentence_id = AssertionError("The assummed _same_ sentences, are actually different: {} vs {}".format(self.e1_sentence_id, self.e2_sentence_id))
+
+        if (self.e1_sentence_id == self.e2_sentence_id):
+            self.same_sentence_id = self.e1_sentence_id
+
+        self.__combined_sentence = None
+        """
+        Private pre-computed field. See method `get_combined_sentence`
+        """
+
         self.features = {}
         """
-        a dictionary of features for the edge
-        each feature is represented as a key value pair:
+        A dictionary of features for the edge.
+        Each feature is represented as a key value pair:
+            The key is an integer that corresponds to a feature key in the dataset's feature_set (i.e. a value in this dictionary)
+            The value is the feature's value in this edge
         """
-        self.target = None
-        """class of the edge - True or False or any other float value"""
+
+        self.features_vector = None
+        """
+        None if not set, otherwise scipy sparse vector-like array with finally-encoded features
+        """
+
+        self.real_target = None
+        """real class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
+
+        self.pred_target = None
+        """predicted class of the edge -- ASSUMED to be in {-1, +1} or None when not defined"""
+
+        self.initial_instance_index = None
+        """row index of this edge in the matrix X of instances gathered initially for all data (training + test)"""
+
+
+    def __repr__(self):
+        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
+
+
+    def has_same_sentences(self):
+        return self.e1_sentence_id == self.e2_sentence_id
+
+
+    def get_any_entities_in_sentences(self, predicted):
+        assert self.same_part
+
+        s1 = self.same_part.get_any_entities_in_sentence(self.e1_sentence_id, predicted)
+
+        if not self.has_same_sentences():
+            s2 = self.same_part.get_any_entities_in_sentence(self.e2_sentence_id, predicted)
+
+            for key, vals in s2.items():
+                updated = s1.get(key, [])
+                updated += vals
+                s1[key] = updated
+
+        return s1
+
+
+    def get_any_entities_between_entities(self, predicted):
+        assert self.same_part
+
+        ret = {}
+        for e_class_id, entities in self.get_any_entities_in_sentences(predicted).items():
+            keep = []
+            for entity in entities:
+                if self.entity1.end_offset() <= entity.offset < self.entity2.offset:
+                    keep.append(entity)
+            ret[e_class_id] = keep
+
+        return ret
+
+
+    def get_potential_relation(self):
+        """
+        Get the potential relation represented by this edge.
+        """
+        ret = Relation(self.relation_type, self.entity1, self.entity2)
+        assert ret.bidirectional, "Code tested only for bidirectional relations"
+        return ret
+
+
+    def get_relation_if_is_real(self):
+        """
+        If this edge represents a _real_ relation, return this -- Otherwise return None
+        """
+        if self.real_target == +1 or self.is_relation():
+            return self.get_potential_relation()
+        else:
+            return None
+
+
+    def get_potential_relation_if_is_predicted(self):
+        """
+        If this edge is _predicted_ to be relation, return its representation -- Otherwise return None
+
+        Note: likely you do not need this -- Sugar function just for completeness.
+        """
+        if self.pred_target == +1:
+            return self.get_potential_relation()
+        else:
+            return None
+
 
     def is_relation(self):
         """
         check if the edge is present in part.relations.
         :rtype: bool
         """
-        relation_1 = Relation(self.entity1.offset, self.entity2.offset, self.entity1.text, self.entity2.text, self.relation_type)
-        relation_2 = Relation(self.entity2.offset, self.entity1.offset, self.entity2.text, self.entity1.text, self.relation_type)
-        for relation in self.part.relations:
-            if relation_1 == relation:
-                return True
-            if relation_2 == relation:
-                return True
-        return False
+        potential_edge_relation = self.get_potential_relation()
 
-    def __repr__(self):
+        relations = self.same_part.relations if self.e1_part == self.e2_part else chain(self.e1_part.relations, self.e2_part.relations)
+
+        return potential_edge_relation in relations
+
+
+    def get_sentences_pair(self):
         """
-        print calls to the class Token will print out the string contents of the word
+        Get tuple of corresponding edge's two entities' sentences.
+        The sentences are represented as list of Token's.
         """
-        return 'Edge between "{0}" and "{1}" of the type "{2}".'.format(self.entity1.text, self.entity2.text, self.relation_type)
+
+        assert self.e1_sentence_id != self.e2_sentence_id or self.same_sentence_id
+
+        sent1 = self.e1_part.sentences[self.e1_sentence_id]
+        sent2 = self.e2_part.sentences[self.e2_sentence_id]
+
+        return (sent1, sent2)
+
+
+    def get_entity2_offset(self, original_offset=0):
+        if self.has_same_sentences():
+            return 0 + original_offset
+        else:
+            # If they are not in the same sentence, the sentences are combined and we need to add the extra offset of sentence 1
+            sent1 = self.e1_part.sentences[self.e1_sentence_id]
+            return len(sent1) + original_offset
+
+
+    def get_combined_sentence(self, recreate_user_dependencies=True):
+        # Currently we do not reuse the internal field becaus e of caveats with the user dependencies and temporal ids
+
+        if self.has_same_sentences():
+            self.__combined_sentence = self.e1_part.sentences[self.e1_sentence_id]
+            if recreate_user_dependencies:
+                for t in self.__combined_sentence:
+                    # Same as tmp_id, these features get recreated with each call
+                    t.features['user_dependency_to'] = []
+                    t.features['user_dependency_from'] = []
+        else:
+            self.__combined_sentence = __class__._combine_sentences(self, *self.get_sentences_pair())
+
+        for index, t in enumerate(self.__combined_sentence):
+            t.features['tmp_id'] = index  # The tmp_id will be rewritten each time an edge calls this method; beware
+
+        return self.__combined_sentence
+
+###
+
+    @staticmethod
+    def _combine_sentences(edge, sentence1, sentence2, recreate_user_dependencies=True):
+        """
+        Combine two simple simple normal sentences into a "chained" sentence with
+        dependecies and paths created as necessary for the DS model.
+
+        `createCombinedSentence` re-implementation of Shrikant's (java) into Python.
+
+        Each sentence is a list of Tokens as defined in class Part (nalaf: data.py).
+
+        The sentences are assumed, but not asserted, to be different and sorted:
+        sentence1 must be before sentence2.
+        """
+
+        combined_sentence = sentence1 + sentence2
+
+        if recreate_user_dependencies:
+            for t in combined_sentence:
+                # Same as tmp_id, these features get recreated with each call
+                t.features['user_dependency_to'] = []
+                t.features['user_dependency_from'] = []
+
+        combined_sentence = __class__._add_extra_links(edge, combined_sentence, sentence1, sentence2)
+
+        return combined_sentence
+
+
+    @staticmethod
+    def _add_extra_links(edge, combined_sentence, sentence1, sentence2):
+        """
+        `addExtraLinks` re-implementation of Shrikant's (java) into Python.
+
+        Some comments and commented-out code exactly as original java code.
+        """
+
+        __class__._addRootLinks(edge, combined_sentence, sentence1, sentence2)
+
+        __class__._addWordSimilarityLinks(edge, combined_sentence, sentence1, sentence2)
+
+        # TODO add ?
+        # TODO would be better to not use the constants PRO_ID (protRef) and LOC_ID (locRef) (below) here -- It's hardcoded
+        # _addEntityLinks(edge, combined_sentence, sentence1, sentence2, PRO_ID, ['protein'], "protRef")
+
+        # TODO add ?
+        # Just as we added the links from "protein" to actual protein entities
+        # add the links from "location"/"localization" to location entity
+        # _addEntityLinks(edge, combined_sentence, sentence1, sentence2, LOC_ID, ['location', 'localiz', 'com.ment'], "locRef")
+
+        # TODO
+        # addProteinFamilyLinks(combSentence, tokenOffset);
+
+        # TODO
+        # addShortFormLinks(combSentence, prevSentence, currSentence)
+
+        return combined_sentence
+
+
+    @staticmethod
+    def _addRootLinks(edge, combined_sentence, sentence1, sentence2):
+        """
+        link roots of both the sentences
+
+        `addRootLinks` re-implementation of Shrikant's (java) into Python.
+
+
+        *IMPORTANT*:
+
+        * Shrikant/Java/CoreNLP code had one single root for every sentence
+        * Python/spaCy sentences can have more than 1 root
+        * --> Therefore, we create a product of links of all the roots
+        * --> see: (https://github.com/juanmirocks/LocText/issues/6#issue-177139892)
+
+
+        Dependency directions:
+
+        sentence1 -> sentence2
+        sentence2 <- sentence1
+        """
+        from itertools import product
+
+        for (s1_root, s2_root) in product(Part.get_sentence_roots(sentence1), Part.get_sentence_roots(sentence2)):
+
+            s1_root.features['user_dependency_to'].append((s2_root, "rootDepForward"))
+            s1_root.features['user_dependency_from'].append((s2_root, "rootDepBackward"))
+
+            s2_root.features['user_dependency_from'].append((s1_root, "rootDepForward"))
+            s2_root.features['user_dependency_to'].append((s1_root, "rootDepBackward"))
+
+
+    @staticmethod
+    def _addWordSimilarityLinks(edge, combined_sentence, sentence1, sentence2):
+        """
+        For now:
+
+        * Add links between the product of tokens that are Noun and have same lemma.
+        """
+        from itertools import product
+
+        for s1_token, s2_token in product(sentence1, sentence2):
+
+            # Maybe just Noun's conditions? maybe only entities condition? Both?
+            if (s1_token.is_POS_Noun() and s2_token.is_POS_Noun()) or \
+                (s1_token.get_entity(edge.same_part, True, True) is not None and s2_token.get_entity(edge.same_part, True, True) is not None):
+
+                if s1_token.features['lemma'] == s2_token.features['lemma']:
+                    s1_token.features['user_dependency_to'].append((s2_token, "same_lemma"))
+                    s2_token.features['user_dependency_from'].append((s1_token, "same_lemma"))
+
+
+    @staticmethod
+    def _addEntityLinks(edge, combined_sentence, sentence1, sentence2, class_id, key_words, dependency_type):
+        """
+        `addProteinLinks` and `addLocationLinks` re-implementation of Shrikant's (java) into Python.
+        """
+
+        assert edge.same_part
+
+        def _do_one_direction(sent_a, sent_b):
+
+            sent_a_contains_entity = edge.entity1.class_id == class_id
+            if not sent_a_contains_entity:
+                sent_a_tokens_that_match_key_words = (t for t in sent_a if any(kw in t.word.lower() for kw in key_words))
+
+                for sent_a_token in sent_a_tokens_that_match_key_words:
+
+                    for sent_b_token in sent_b:
+
+                        sent_b_token_in_entity = sent_b_token.get_entity(edge.same_part)  # TODO use_pred ?
+                        if sent_b_token_in_entity is not None and sent_b_token_in_entity.class_id == class_id:
+
+                            sent_a_token.features['user_dependency_to'].append((sent_b_token, dependency_type))
+                            sent_b_token.features['user_dependency_from'].append((sent_a_token, dependency_type))
+
+        # In combination: do both directions
+        _do_one_direction(sentence1, sentence2)
+        _do_one_direction(sentence2, sentence1)
 
 
 class Token:
@@ -1146,6 +1707,8 @@ class Token:
     Usually one token represent one word from the document.
 
     :type word: str
+    :type start: int
+    :type end: int
     :type original_labels: list[Label]
     :type predicted_labels: list[Label]
     :type features: FeatureDictionary
@@ -1170,49 +1733,13 @@ class Token:
         * [string], [float] pair denotes the feature "[string]:[float] where the [float] is a weight"
         """
 
-    def is_entity_part(self, part):
-        """
-        check if the token is part of an entity
-        :return bool:
-        """
-        for entity in part.annotations:
-            if self.start <= entity.offset < self.end:
-                return True
-        return False
-
-    def get_entity(self, part):
-        """
-        if the token is part of an entity, return the entity else return None
-        :param part: an object of type Part in which to search for the entity.
-        :type part: nalaf.structures.data.Part
-        :return nalaf.structures.data.Entity or None
-        """
-        for entity in part.annotations:
-            if self.start <= entity.offset < self.end:
-                # entity.offset <= self.start < entity.offset + len(entity.text):
-                return entity
-        return None
-
-    # TODO review this method
-    def masked_text(self, part):
-        """
-        if token is part of an entity, return the entity class id, otherwise
-        return the token word itself.
-        :param part: an object of type Part in which to search for the entity.
-        :type part: nalaf.structures.data.Part
-        :return str
-        """
-        for entity in part.annotations:
-            if self.start <= entity.offset < self.end: # or \
-                # entity.offset <= self.start < entity.offset + len(entity.text):
-                return entity.class_id
-        return self.word
 
     def __repr__(self):
         """
         print calls to the class Token will print out the string contents of the word
         """
         return self.word
+
 
     def __eq__(self, other):
         """
@@ -1229,6 +1756,7 @@ class Token:
         else:
             return False
 
+
     def __ne__(self, other):
         """
         :type other: nalaf.structures.data.Token
@@ -1237,21 +1765,56 @@ class Token:
         return not self.__eq__(other)
 
 
+    def is_POS_Noun(self):
+        """ matches NN, NNS, NNP, NNPS : https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html"""
+        return "NN" == self.features['pos'][0:2]
+
+
+    def is_POS_Verb(self):
+        return "V" == self.features['pos'][0]
+
+
+    def get_entity(self, part, use_gold, use_pred):
+        """
+        if the token is part of an entity, return the entity else return None
+        :param part: an object of type Part in which to search for the entity.
+        :type part: nalaf.structures.data.Part
+        :return nalaf.structures.data.Entity or None
+        """
+        entities = chain(
+            part.annotations if use_gold else [],
+            part.predicted_annotations if use_pred else []
+        )
+
+        for entity in entities:
+            if entity.offset <= self.start < entity.end_offset() or entity.offset < self.end <= entity.end_offset():
+                return entity
+
+        return None
+
+
 class FeatureDictionary(dict):
     """
-    Extension of the built in dictionary with the added constraint that
-    keys (feature names) cannot be updated.
+    Extension of the built in dictionary with:
 
-    If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
-    This is used to identify the position in the window for the feature.
+    1) the added constraint that keys (feature names) cannot be updated.
+       It raises an exception if you try to add a key that exists already.
 
-    Raises an exception when we try to add a key that exists already.
+    2) Possibility to lock the dictionary to prohibit any change (i.e. make the object immutable)
+
+    3) TODO: MAY BE DISCARDED
+       If the key (feature name) doesn't end with "[number]" appends "[0]" to it.
+       This is used to identify the position in the window for the feature.
     """
+
+    def __init__(self, is_locked=False):
+        self.is_locked = is_locked
 
     def __setitem__(self, key, value):
         if key in self:
             raise KeyError('feature name "{}" already exists'.format(key))
         else:
+            # TODO this would be better written in the (entities) FeatureGenerator
             if not re.search('\[-?[0-9]+\]$', key):
                 key += '[0]'
             dict.__setitem__(self, key, value)
@@ -1271,7 +1834,8 @@ class Entity:
     :type tokens: list[nalaf.structures.data.Token]
     :type head_token: nalaf.structures.data.Token
     """
-    def __init__(self, class_id, offset, text, confidence=1):
+
+    def __init__(self, class_id, offset, text, confidence=1, norm=None):
         self.class_id = class_id
         """the id of the class or entity that is annotated"""
         self.offset = offset
@@ -1279,45 +1843,76 @@ class Entity:
         self.text = text
         """the text span of the annotation"""
         self.subclass = False
+        # TODO likely, we should not allow subclasses that are not string in the first place -- to the very least, the default should be None
+        # Explaination in commit: 3983e4c5449788e62e81b39b65fc7780b6c71852
         """
         int flag used to further subdivide classes based on some criteria
         for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
         """
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
-        self.normalisation_dict = {}
+        self.normalisation_dict = {} if norm is None else norm
         """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""
         self.tokens = []
         """
-        the tokens in each entity
+        The tokens of the entity.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+
         TODO Note that tokens are already within sentences. You should use those by default.
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
+        self.sentence = None
+        """
+        The whole sentence of tokens this entity belongs to, if set.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+        """
+        self.part = None
+        """
+        The whole part this entity belongs to, if set.
+
+        YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
+        """
         self.head_token = None
-        """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see relna)"""
+        """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see parsers.py)"""
+
+        self.features = {}
+        """
+        User-defined object with dictionary of features (names to values)
+        """
+
 
     equality_operator = 'exact'
     """
-    determines when we consider two annotations to be equal
+    determines when we consider two entities to be equal
     can be "exact" or "overlapping" or "exact_or_overlapping"
     """
 
-    def __repr__(self):
-        norm_string = ''
-        if self.normalisation_dict:
-            norm_string = ', Normalisation Dict: {0}, Normalised text: "{1}"'.format(self.normalisation_dict, self.normalized_text)
-        return 'Entity(ClassID: "{self.class_id}", Offset: {self.offset}, ' \
-               'Text: "{self.text}", SubClass: {self.subclass}, ' \
-               'Confidence: {self.confidence}{norm})'.format(self=self, norm=norm_string)
+    def end_offset(self):
+        return self.offset + len(self.text)
 
-    def __eq__(self, other):
+
+    def __repr__(self):
+        subclass_str = (" (" + str(self.subclass) + ")") if self.subclass else ""
+
+        if self.normalisation_dict:
+            norm_str = ', norm: {}'.format(self.normalisation_dict)
+        else:
+            norm_str = ''
+
+        return 'Entity(id: {}{}, offset: {}, ' \
+               'text: {}{})'.format(self.class_id, subclass_str, self.offset, self.text, norm_str)
+
+
+    def __eq__(self, that):
         # consider them a match only if class_id matches
         # TODO implement test case for edge cases in overlap and exact
-        if self.class_id == other.class_id:
-            exact = self.offset == other.offset and self.text == other.text
-            overlap = self.offset < (other.offset + len(other.text)) and (self.offset + len(self.text)) > other.offset
+        if self.class_id == that.class_id:
+            exact = self.offset == that.offset and self.text == that.text
+            overlap = self.offset < that.end_offset() and self.end_offset() > that.offset
 
             if self.equality_operator == 'exact':
                 return exact
@@ -1328,10 +1923,24 @@ class Entity:
                 # overlap includes the exact case so just return that
                 return overlap
             else:
-                raise ValueError('other must be "exact" or "overlapping" or "exact_or_overlapping"')
+                raise ValueError('that must be "exact" or "overlapping" or "exact_or_overlapping"')
         else:
             return False
 
+
+    def prev_tokens(self, sentence, n, include_ent_first_token=False, mk_reversed=False):
+        self_first = self.tokens[0].features['id']
+        right_index = self_first + 1 if include_ent_first_token else self_first
+        left_index = max(0, self_first - n)
+        ret = sentence[left_index:right_index]
+        return list(reversed(ret)) if mk_reversed else ret
+
+
+    def next_tokens(self, sentence, n, include_ent_last_token=False):
+        self_last = self.tokens[-1].features['id']
+        left_index = self_last if include_ent_last_token else self_last + 1
+        right_index = self_last + 1 + n
+        return sentence[left_index:right_index]
 
 class Label:
     """
@@ -1353,46 +1962,70 @@ class Label:
 
 class Relation:
     """
-    Represents a relationship between 2 annotations.
-    :type start1: int
-    :type start2: int
-    :type text1: str
-    :type text2: str
-    :type class_id: str
+    Represents a relationship between 2 entities.
     """
 
-    def __init__(self, start1, start2, text1, text2, type_of_relation):
-        self.start1 = start1
-        self.start2 = start2
-        self.text1 = text1
-        self.text2 = text2
-        self.class_id = type_of_relation
+    def __init__(self, relation_type, entity1, entity2, bidirectional=True):
+        self.class_id = relation_type
+
+        assert entity1 is not None and entity2 is not None, "Some of the entities are None"
+
+        self.entity1 = entity1
+        self.entity2 = entity2
+
+        self.bidirectional = bidirectional
+
 
     def __repr__(self):
-        return 'Relation(Class ID:"{self.class_id}", Start1:{self.start1}, Text1:"{self.text1}", ' \
-               'Start2:{self.start2}, Text2:"{self.text2}")'.format(self=self)
+        return 'Relation(id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
 
-    def get_relation_without_offset(self):
-        """:return string with entity1 and entity2 separated by relation type"""
-        return (self.text1, self.class_id, self.text2)
+
+    def map(self, entity_map_fun, prefix_with_rel_type=True):
+        e1_string = entity_map_fun(self.entity1)
+        e2_string = entity_map_fun(self.entity2)
+
+        if e1_string is None or e2_string is None:
+            return None
+
+        else:
+            if (self.bidirectional and self.entity2.class_id <= self.entity1.class_id):
+                entities = [e2_string, e1_string]
+            else:
+                entities = [e1_string, e2_string]
+
+            if prefix_with_rel_type:
+                items = [self.class_id, *entities]
+            else:
+                items = entities
+
+            return '|'.join(items)
+
 
     def validate_itself(self, part):
         """
-        validation of itself with annotations and the text
+        validation of itself with entities and the text
         :param part: the part where this relation is saved inside
         :type part: nalaf.structures.data.Part
         :return: bool
         """
         first = False
         second = False
+
         for ann in chain(part.annotations, part.predicted_annotations):
-            if ann.offset == self.start1 and ann.text == self.text1:
+
+            if ann.offset == self.entity1.offset and ann.text == self.entity1.text:
                 first = True
-            if ann.offset == self.start2 and ann.text == self.text2:
+            if ann.offset == self.entity2.offset and ann.text == self.entity2.text:
                 second = True
             if first and second:
                 return True
+
         return False
+
+    def get_relation_without_offset(self):
+        """:return string with entity1 and entity2 separated by relation type"""
+        return (self.entity1.text, self.class_id, self.entity2.text)
+
 
     def __eq__(self, other):
         """
@@ -1400,10 +2033,16 @@ class Relation:
         :type other: nalaf.structures.data.Relation
         :return bool:
         """
+
         if other is not None:
-            return self.__dict__ == other.__dict__
+            return (self.class_id == other.class_id and
+                    self.bidirectional == other.bidirectional and
+                    (self.entity1 == other.entity1 and self.entity2 == other.entity2 or
+                        self.bidirectional and self.entity1 == other.entity2 and self.entity2 == other.entity1))
+
         else:
             return False
+
 
     def __ne__(self, other):
         """
@@ -1414,3 +2053,10 @@ class Relation:
             return not self.__dict__ == other.__dict__
         else:
             return False
+
+
+    def get_sentence_distance_between_entities(self, same_part):
+        index1 = same_part.get_sentence_index_for_annotation(self.entity1)
+        index2 = same_part.get_sentence_index_for_annotation(self.entity2)
+        distance = abs(index1 - index2)
+        return distance

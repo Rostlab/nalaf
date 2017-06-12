@@ -1,6 +1,7 @@
 from nalaf.features import FeatureGenerator
 from nalaf.features import get_spacy_nlp_english
 
+
 class SpacyPosTagger(FeatureGenerator):
     """
     POS-tag a dataset using the Spacy Pos Tagger

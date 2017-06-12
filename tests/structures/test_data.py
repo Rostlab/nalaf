@@ -1,12 +1,19 @@
 import unittest
 from nalaf.structures.data import Dataset, Document, Part, Token, Label, Entity
-from nalaf.utils import MUT_CLASS_ID
 from nalaf.preprocessing.spliters import NLTKSplitter
-# from preprocessing.tokenizers import TmVarTokenizer
+from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER
 from nalaf import print_verbose, print_debug
+from nalaf.utils.readers import StringReader
+from nalaf.preprocessing.parsers import Parser, SpacyParser
+from nalaf.features import get_spacy_nlp_english
+# from nose.plugins.attrib import attr
+
+
+STUB_ENTITY_CLASS_ID = 'e_x'
 
 
 class TestDataset(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         cls.dataset = Dataset()
@@ -22,8 +29,8 @@ class TestDataset(unittest.TestCase):
 
         part1 = Part('123')
         part2 = Part('45678')
-        ann1 = Entity(class_id='e_2', offset=1, text='2', confidence=0)
-        ann2 = Entity(class_id='e_2', offset=1, text='567', confidence=1)
+        ann1 = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=1, text='2', confidence=0)
+        ann2 = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=1, text='567', confidence=1)
         ann1.subclass = 0
         ann2.subclass = 2
         part1.annotations.append(ann1)
@@ -76,6 +83,7 @@ class TestDataset(unittest.TestCase):
 
 
 class TestDocument(unittest.TestCase):
+
     @classmethod
     def setUpClass(cls):
         text1 = "Flowers in the Rain. Are absolutely marvellous. Though i would say this text is stupid. Cheers!"
@@ -101,43 +109,165 @@ class TestDocument(unittest.TestCase):
 
 
 class TestToken(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
-
-    def test_repr(self):
-        pass  # TODO
+    pass
 
 
 class TestFeatureDictionary(unittest.TestCase):
-    def test_setitem(self):
-        pass  # TODO
+    pass
 
 
 class TestEntity(unittest.TestCase):
-    def test_init(self):
-        pass  # TODO
 
-    def test_repr(self):
-        pass  # TODO
+    @classmethod
+    def setUpClass(cls):
+        cls.dataset = Dataset()
+        cls.doc = Document()
+        cls.dataset.documents['testid'] = cls.doc
 
-    def test_eq(self):
-        pass  # TODO
+        # TEXT = "123 45678"
+        # POS  = "012345678"
+        # ANN1 = " X       "
+        # ANN2 = "     XXX "
+        # PAR1 = "XXX      "
+        # PAR1 = "    XXXXX"
+
+        cls.part = Part('Here is a random sentence for the benefit of your mamma')
+        cls.entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=10, text='random sentence', confidence=0)
+        cls.part.annotations.append(cls.entity)
+        cls.doc.parts['s1h1'] = cls.part
+
+        # Apply through pipeline
+
+        NLTKSplitter().split(cls.dataset)
+        NLTK_TOKENIZER.tokenize(cls.dataset)
+
+        nlp = get_spacy_nlp_english(load_parser=True)
+        cls.parser = SpacyParser(nlp)
+        cls.parser.parse(cls.dataset)
+        # cls.part.percolate_tokens_to_entities()
+
+        cls.sentence = cls.part.sentences[0]
+
+    def as_string(self, tokens):
+        return ' '.join(t.word for t in tokens)
+
+
+    def test_prev_tokens(self):
+
+        self.assertEqual("a", self.as_string(self.entity.prev_tokens(self.sentence, n=1, include_ent_first_token=False)))
+        self.assertEqual("is a", self.as_string(self.entity.prev_tokens(self.sentence, n=2, include_ent_first_token=False)))
+        self.assertEqual("Here is a", self.as_string(self.entity.prev_tokens(self.sentence, n=3, include_ent_first_token=False)))
+        self.assertEqual("Here is a", self.as_string(self.entity.prev_tokens(self.sentence, n=10, include_ent_first_token=False)))
+
+        self.assertEqual("a random", self.as_string(self.entity.prev_tokens(self.sentence, n=1, include_ent_first_token=True)))
+        self.assertEqual("is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=2, include_ent_first_token=True)))
+        self.assertEqual("Here is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=3, include_ent_first_token=True)))
+        self.assertEqual("Here is a random", self.as_string(self.entity.prev_tokens(self.sentence, n=10, include_ent_first_token=True)))
+
+
+    def test_next_tokens(self):
+
+        self.assertEqual("for", self.as_string(self.entity.next_tokens(self.sentence, n=1, include_ent_last_token=False)))
+        self.assertEqual("for the", self.as_string(self.entity.next_tokens(self.sentence, n=2, include_ent_last_token=False)))
+        self.assertEqual("for the benefit", self.as_string(self.entity.next_tokens(self.sentence, n=3, include_ent_last_token=False)))
+        self.assertEqual("for the benefit of your mamma", self.as_string(self.entity.next_tokens(self.sentence, n=10, include_ent_last_token=False)))
+
+        self.assertEqual("sentence for", self.as_string(self.entity.next_tokens(self.sentence, n=1, include_ent_last_token=True)))
+        self.assertEqual("sentence for the", self.as_string(self.entity.next_tokens(self.sentence, n=2, include_ent_last_token=True)))
+        self.assertEqual("sentence for the benefit", self.as_string(self.entity.next_tokens(self.sentence, n=3, include_ent_last_token=True)))
+        self.assertEqual("sentence for the benefit of your mamma", self.as_string(self.entity.next_tokens(self.sentence, n=10, include_ent_last_token=True)))
+
+
+    def test_overlapping(self):
+
+        e1 = Entity(class_id="e_x", offset=987, text="PKB/Akt")
+        e2 = Entity(class_id="e_x", offset=987, text="PKB")
+
+        Entity.equality_operator = 'exact_or_overlapping'
+
+        print(e1.offset, e1.end_offset())
+        print(e2.offset, e2.end_offset())
+
+        self.assertEqual(e1, e2)
 
 
 class TestLabel(unittest.TestCase):
-    def test_repr(self):
-        pass  # TODO
-
-    def test_init(self):
-        pass  # TODO
+    pass
 
 
+# @attr('slow')
 class TestPart(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        nlp = get_spacy_nlp_english(load_parser=True)
+        cls.parser = SpacyParser(nlp)
+
     def test_init(self):
         pass  # TODO
 
     def test_iter(self):
         pass  # TODO
+
+
+    def _get_test_data(self, entity_sentence, assumed_tokens_words=None):
+        if assumed_tokens_words is None:
+            assumed_tokens_words = entity_sentence.split(' ')
+
+        # Create dataset
+
+        dataset = StringReader(entity_sentence).read()
+        part = next(dataset.parts())
+        entity = Entity(class_id=STUB_ENTITY_CLASS_ID, offset=0, text=entity_sentence)
+        part.annotations.append(entity)
+
+        # Apply through pipeline
+
+        NLTKSplitter().split(dataset)
+        NLTK_TOKENIZER.tokenize(dataset)
+        self.parser.parse(dataset)
+
+        # Rest
+
+        sentences = part.sentences
+        assert len(sentences) == 1
+        sentence = sentences[0]
+
+        assert len(assumed_tokens_words) == len(sentence)
+        for (assumed_token_word, actual_token) in zip(assumed_tokens_words, sentence):
+            assert assumed_token_word == actual_token.word
+
+        part.compute_tokens_depth()
+        roots = Part.get_sentence_roots(sentence)
+        for r in roots:
+            self._assert_depth_eq(r, 0)
+
+        part.set_entities_head_tokens()
+
+        return (dataset, sentence, entity, roots)
+
+
+    def _assert_depth_eq(self, token, depth):
+        assert token.features[Part._FEAT_DEPTH_KEY] == depth, (token, " : ", token.features[Part._FEAT_DEPTH_KEY], " != ", depth)
+
+
+    def assert_depth_eq(self, sentence, word, depth):
+        self._assert_depth_eq(next(filter(lambda t: t.word == word, sentence)), depth)
+
+
+    def test_depths_and_head_token__the_root(self):
+        # Deps graph: https://demos.explosion.ai/displacy/?text=ecto%20-%20nucleotide%20pyrophosphatase%20%2F%20phosphodiesterase%20I-1&model=en&cpu=0&cph=0
+        (d, s, e, rs) = self._get_test_data('ecto - nucleotide pyrophosphatase / phosphodiesterase I-1')
+        assert len(rs) == 1 and rs[0].word == 'phosphodiesterase'
+
+        self.assert_depth_eq(s, 'ecto', 2)
+        self.assert_depth_eq(s, '-', 2)
+        self.assert_depth_eq(s, 'nucleotide', 1)
+        self.assert_depth_eq(s, 'pyrophosphatase', 1)
+        self.assert_depth_eq(s, '/', 1)
+        self.assert_depth_eq(s, 'I-1', 1)
+
+        assert e.head_token.word == 'phosphodiesterase', e.head_token.word
 
 
 class TestMentionLevel(unittest.TestCase):
@@ -170,7 +300,7 @@ class TestMentionLevel(unittest.TestCase):
         cls.dataset.documents['doc_1'].parts['p2'] = part
 
     def test_form_predicted_annotations(self):
-        self.dataset.form_predicted_annotations(MUT_CLASS_ID)
+        self.dataset.form_predicted_annotations(STUB_ENTITY_CLASS_ID)
 
         part = self.dataset.documents['doc_1'].parts['p1']
 

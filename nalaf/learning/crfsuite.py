@@ -1,16 +1,17 @@
 import os
 import sys
 from nalaf.structures.data import Label
-from nalaf.utils import MUT_CLASS_ID
+from nalaf.learning.taggers import Tagger
 import warnings
 
 
 class PyCRFSuite:
+
     def __init__(self, ):
         pass
 
     @staticmethod
-    def train(data, model_file, params = None):
+    def train(data, model_file, params=None):
         """
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
@@ -26,8 +27,9 @@ class PyCRFSuite:
 
         trainer.train(model_file)
 
+
     @staticmethod
-    def tag(data, model_file, class_id = MUT_CLASS_ID):
+    def tag(data, model_file, class_id):
         """
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
@@ -50,10 +52,9 @@ class CRFSuite:
     """
     Basic class for interaction with CRFSuite
     """
-    #NOTE: Make the class a bit more generic or replace with an existing package such as python-crfsuite (as for the binding)
 
     def __init__(self, directory, minify=False):
-        warnings.warn('Depricated. Please use PyCRFSuite instead', DeprecationWarning)
+        warnings.warn('Deprecated. Please use PyCRFSuite instead', DeprecationWarning)
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'example_entity_model'
@@ -64,6 +65,7 @@ class CRFSuite:
             self.crf_suite_call = 'crfsuite'
         self.minify = minify
         """controls whether to replace feature names with an index in order to minimize input file length"""
+
 
     def create_input_file(self, dataset, mode):
         """
@@ -96,6 +98,7 @@ class CRFSuite:
                     file.write('{}\t{}\n'.format(label, features))
                 file.write('\n')
 
+
     def learn(self, options=''):
         """
         Train and save a CRF model with the latest train file.
@@ -105,6 +108,7 @@ class CRFSuite:
             os.system('{} learn {}'.format(self.crf_suite_call, options))
         else:
             os.system('{} learn -m {} train'.format(self.crf_suite_call, self.model_filename))
+
 
     def tag(self, options=''):
         """
@@ -116,7 +120,8 @@ class CRFSuite:
         else:
             os.system('{} tag -qt -m {} test'.format(self.crf_suite_call, self.model_filename))
 
-    def read_predictions(self, dataset, prediction_file='output.txt', class_id = MUT_CLASS_ID):
+
+    def read_predictions(self, dataset, class_id, prediction_file='output.txt'):
         """
         :type dataset: nalaf.structures.data.Dataset
 
@@ -151,3 +156,28 @@ class CRFSuite:
 
         # call form_predicted_annotations() to populate the mention level predictions
         dataset.form_predicted_annotations(class_id)
+
+
+class CRFSuiteTagger(Tagger):
+    """
+    Performs tagging with a binary model using CRFSuite
+
+    :type crf_suite: nalaf.learning.crfsuite.CRFSuite
+    """
+
+    def __init__(self, predicts_classes, crf_suite, model_file='example_entity_model'):
+        warnings.warn('Use PyCRFSuite', DeprecationWarning)
+
+        super().__init__(predicts_classes)
+        self.crf_suite = crf_suite
+        """an instance of CRFSuite used to actually generate predictions"""
+        self.model_file = model_file
+        """path to the binary model used for generating predictions"""
+
+    def tag(self, dataset):
+        """
+        :type dataset: nalaf.structures.data.Dataset
+        """
+        self.crf_suite.create_input_file(dataset, 'predict')
+        self.crf_suite.tag('-m {} -i predict > output.txt'.format(self.model_file))
+        self.crf_suite.read_predictions(dataset)

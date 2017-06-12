@@ -6,9 +6,8 @@ import re
 import glob
 import csv
 import os
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
-from nalaf import print_debug, print_verbose
 import xml.etree.ElementTree as ET
+import warnings
 
 
 class Reader:
@@ -78,244 +77,6 @@ class HTMLReader(Reader):
             return self.__read_directory()
         else:
             return self.__read_file_path(filename=self.path)
-
-
-class SETHReader(Reader):
-    """
-    Reader for the SETH-corpus (http://rockt.github.io/SETH/)
-    Format: PMID\tabstract (tab separated PMID and abstract)
-    """
-
-    def __init__(self, corpus_file):
-        self.corpus_file = corpus_file
-        """the directory containing the .txt files"""
-
-    def read(self):
-        """
-        read each .txt file in the directory, parse it and create and instance of Document
-        form a dataset consisting of every document parsed and return it
-
-        :returns structures.data.Dataset
-        """
-        dataset = Dataset()
-        with open(self.corpus_file, encoding='utf-8') as file:
-            reader = csv.reader(file, delimiter='\t')
-            for row in reader:
-                document = Document()
-                document.parts['abstract'] = Part(row[1])
-                dataset.documents[row[0]] = document
-
-        return dataset
-
-
-class MutationFinderReader(Reader):
-    """
-    Reader for the MutationFinder-corpus (http://mutationfinder.sourceforge.net/)
-    Format: PMID\tabstract (tab separated PMID and abstract) in 5 files
-    """
-
-    def __init__(self, corpus_folder):
-        self.corpus_folder = corpus_folder
-        """the directory containing the .txt files"""
-
-    def read(self):
-        """
-        read each .txt file in the directory, parse it and create and instance of Document
-        form a dataset consisting of every document parsed and return it
-
-        :returns structures.data.Dataset
-        """
-        dataset = Dataset()
-        with open(self.corpus_folder, encoding='utf-8') as file:
-            reader = csv.reader(file, delimiter='\t')
-            for row in reader:
-                docid, title, abstract = row
-                title = title.strip()
-                abstract = abstract.strip()
-
-                document = Document()
-                if title:
-                    document.parts['title'] = Part(title)
-                if abstract and abstract != 'null':
-                    document.parts['abstract'] = Part(abstract)
-
-                dataset.documents[docid] = document
-
-        return dataset
-
-
-class VerspoorReader(Reader):
-    """
-    Reader for the Variome / Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
-    Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
-    """
-
-    def __init__(self, directory):
-        self.directory = directory
-        """the directory containing the .html files"""
-
-    def read(self):
-        """
-        read each html file in the directory, parse it and create and instance of Document
-        form a dataset consisting of every document parsed and return it
-
-        Note that the text files may contain multiple paragraphs. The reader
-        converts these paragraphs into different parts. Because of necessary offset corrections,
-        the reader reads at the same time both the content and the annotations.
-
-        :returns structures.data.Dataset
-        """
-        dataset = Dataset()
-
-
-        ids_per_file_array = [1]
-
-        file_list = glob.glob(str(self.directory + "/*.txt"))
-
-        for file_path in file_list:
-            file_name = os.path.basename(file_path)
-
-            docid, partid_prefix, = file_name.replace('.txt', '').split('-', 1)
-            # partid_prefix not complete due to multiple part cration for a single .txt file
-
-            if 'Abstract' in partid_prefix:
-                is_abstract = True
-            else:
-                is_abstract = False
-
-            with open(file_path, encoding='utf-8') as file:
-                text_raw = file.read()
-
-            text = text_raw.replace('** IGNORE LINE **\n', '')
-            paragraph_list = text.split('\n\n')
-
-            # inital offset for raw_text
-            tot_offset = text_raw.count('** IGNORE LINE **\n') * 18
-            offsets = [tot_offset]
-
-            for i, text_part in enumerate(paragraph_list):
-                # if text is empty (usually last text due to splitting of "\n\n")
-                if text_part != "":
-                    partid = "{}-p{}".format(partid_prefix, i + 1)
-
-                    if docid in dataset:
-                        dataset.documents[docid].parts[partid] = Part(text_part, is_abstract=is_abstract)
-                    else:
-                        document = Document()
-                        document.parts[partid] = Part(text_part, is_abstract=is_abstract)
-                        dataset.documents[docid] = document
-
-                    # add offset for next paragraph
-                    tot_offset += len(text_part) + 2
-                    offsets.append(tot_offset)
-
-            # to delete last element
-            del offsets[-1]
-
-            # annotations
-            with open(file_path.replace('.txt', '.ann'), encoding='utf-8') as f:
-                reader = csv.reader(f, delimiter='\t')
-                for row in reader:
-                    if row[0].startswith('T'):
-                        entity_type, start, end = row[1].split()
-                        start = int(start)
-                        end = int(end)
-                        text = row[2]
-
-                        partid = None
-                        part_index = None
-
-                        for i in range(len(offsets) - 1):
-                            if offsets[i+1] > start:
-                                part_index = i
-                                break
-
-                        if part_index is None:
-                            part_index = len(offsets) - 1
-
-                        partid = "{}-p{}".format(partid_prefix, part_index + 1)
-                        real_start = start - offsets[part_index]
-                        real_end = end - offsets[part_index]
-                        calc_ann_text = document.parts[partid].text[real_start : real_end]
-
-                        if calc_ann_text != text:
-                            print("   ERROR", docid, part_index, partid, start, offsets, real_start, "\n\t", text, "\n\t", calc_ann_text, "\n\t", document.parts[partid].text)
-
-                        if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, real_start, text)
-                            dataset.documents[docid].parts[partid].annotations.append(ann)
-
-                        elif entity_type == 'gene':
-                            ann = Entity('e_1', real_start, text)
-                            dataset.documents[docid].parts[partid].annotations.append(ann)
-
-        return dataset
-
-
-class TmVarReader(Reader):
-    """
-    Reader for the tmVar-corpus (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
-
-    Note:
-        This reader is a bit of an exception as it not only reads the articles,
-        but the annotations as well in a single pass. This is due to how the tmVar corpus
-        is distributed.
-
-
-    Format:
-        [pmid]|t|[title]
-        [pmid]|a|[abstract]
-        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
-        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
-        ...
-
-        pmid|t|title
-        ...
-    """
-
-    def __init__(self, corpus_file):
-        self.corpus_file = corpus_file
-        """the directory containing the .html files"""
-
-    def read(self):
-        """
-        :returns: nalaf.structures.data.Dataset
-        """
-        dataset = Dataset()
-
-        with open(self.corpus_file, encoding='utf-8') as file:
-            documents = file.read().strip().split('\n\n')
-            for document_text in documents:
-                lines = document_text.strip().splitlines()
-
-                first_line = re.search('(\d+)\|t\|(.*)', lines[0])
-                doc_id = first_line.group(1)
-                tmvar_title = first_line.group(2)
-                tmvar_abstract = re.search('(\d+)\|a\|(.*)', lines[1]).group(2)
-
-                document = Document()
-                title = Part(tmvar_title)
-                abstract = Part(tmvar_abstract)
-                document.parts['title'] = title
-                document.parts['abstract'] = abstract
-
-                for line in lines[2:]:
-                    _, start, end, _, _, _ = line.split('\t')
-                    start = int(start)
-                    end = int(end)
-
-                    if 0 <= start < end <= len(tmvar_title):
-                        part = title
-                    else:
-                        part = abstract
-                        start -= len(tmvar_title) + 1
-                        end -= len(tmvar_title) + 1
-
-                    part.annotations.append(Entity(MUT_CLASS_ID, start, part.text[start:end]))
-
-                dataset.documents[doc_id] = document
-
-        return dataset
 
 
 class StringReader(Reader):
@@ -452,15 +213,281 @@ class MedlineReader(Reader):
         return dataset
 
 
+# TODO all following readers are deprecated and should be moved to nala
+
+
+class SETHReader(Reader):
+    """
+    Reader for the SETH-corpus (http://rockt.github.io/SETH/)
+    Format: PMID\tabstract (tab separated PMID and abstract)
+    """
+
+    def __init__(self, corpus_file):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+        self.corpus_file = corpus_file
+        """the directory containing the .txt files"""
+
+    def read(self):
+        """
+        read each .txt file in the directory, parse it and create and instance of Document
+        form a dataset consisting of every document parsed and return it
+
+        :returns structures.data.Dataset
+        """
+        dataset = Dataset()
+        with open(self.corpus_file, encoding='utf-8') as file:
+            reader = csv.reader(file, delimiter='\t')
+            for row in reader:
+                document = Document()
+                document.parts['abstract'] = Part(row[1])
+                dataset.documents[row[0]] = document
+
+        return dataset
+
+
+class MutationFinderReader(Reader):
+    """
+    Reader for the MutationFinder-corpus (http://mutationfinder.sourceforge.net/)
+    Format: PMID\tabstract (tab separated PMID and abstract) in 5 files
+    """
+
+    def __init__(self, corpus_folder):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+        self.corpus_folder = corpus_folder
+        """the directory containing the .txt files"""
+
+    def read(self):
+        """
+        read each .txt file in the directory, parse it and create and instance of Document
+        form a dataset consisting of every document parsed and return it
+
+        :returns structures.data.Dataset
+        """
+        dataset = Dataset()
+        with open(self.corpus_folder, encoding='utf-8') as file:
+            reader = csv.reader(file, delimiter='\t')
+            for row in reader:
+                docid, title, abstract = row
+                title = title.strip()
+                abstract = abstract.strip()
+
+                document = Document()
+                if title:
+                    document.parts['title'] = Part(title)
+                if abstract and abstract != 'null':
+                    document.parts['abstract'] = Part(abstract)
+
+                dataset.documents[docid] = document
+
+        return dataset
+
+
+class VerspoorReader(Reader):
+    """
+    Reader for the Variome / Verspoor-corpus (http://www.opennicta.com.au/home/health/variome)
+    Format: PMCID-serial-section-paragraph.txt: contains the text from a paragraph of the paper
+    """
+
+    def __init__(self, directory, mut_class_id, gene_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
+        self.directory = directory
+        """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+        self.gene_class_id = gene_class_id
+        """
+        class id that will be associated to the read (gene / GGP) entities.
+        """
+
+
+    def read(self):
+        """
+        read each html file in the directory, parse it and create and instance of Document
+        form a dataset consisting of every document parsed and return it
+
+        Note that the text files may contain multiple paragraphs. The reader
+        converts these paragraphs into different parts. Because of necessary offset corrections,
+        the reader reads at the same time both the content and the annotations.
+
+        :returns structures.data.Dataset
+        """
+        dataset = Dataset()
+
+        ids_per_file_array = [1]
+
+        file_list = glob.glob(str(self.directory + "/*.txt"))
+
+        for file_path in file_list:
+            file_name = os.path.basename(file_path)
+
+            docid, partid_prefix, = file_name.replace('.txt', '').split('-', 1)
+            # partid_prefix not complete due to multiple part cration for a single .txt file
+
+            if 'Abstract' in partid_prefix:
+                is_abstract = True
+            else:
+                is_abstract = False
+
+            with open(file_path, encoding='utf-8') as file:
+                text_raw = file.read()
+
+            text = text_raw.replace('** IGNORE LINE **\n', '')
+            paragraph_list = text.split('\n\n')
+
+            # inital offset for raw_text
+            tot_offset = text_raw.count('** IGNORE LINE **\n') * 18
+            offsets = [tot_offset]
+
+            for i, text_part in enumerate(paragraph_list):
+                # if text is empty (usually last text due to splitting of "\n\n")
+                if text_part != "":
+                    partid = "{}-p{}".format(partid_prefix, i + 1)
+
+                    if docid in dataset:
+                        dataset.documents[docid].parts[partid] = Part(text_part, is_abstract=is_abstract)
+                    else:
+                        document = Document()
+                        document.parts[partid] = Part(text_part, is_abstract=is_abstract)
+                        dataset.documents[docid] = document
+
+                    # add offset for next paragraph
+                    tot_offset += len(text_part) + 2
+                    offsets.append(tot_offset)
+
+            # to delete last element
+            del offsets[-1]
+
+            # annotations
+            with open(file_path.replace('.txt', '.ann'), encoding='utf-8') as f:
+                reader = csv.reader(f, delimiter='\t')
+                for row in reader:
+                    if row[0].startswith('T'):
+                        entity_type, start, end = row[1].split()
+                        start = int(start)
+                        end = int(end)
+                        text = row[2]
+
+                        partid = None
+                        part_index = None
+
+                        for i in range(len(offsets) - 1):
+                            if offsets[i+1] > start:
+                                part_index = i
+                                break
+
+                        if part_index is None:
+                            part_index = len(offsets) - 1
+
+                        partid = "{}-p{}".format(partid_prefix, part_index + 1)
+                        real_start = start - offsets[part_index]
+                        real_end = end - offsets[part_index]
+                        calc_ann_text = document.parts[partid].text[real_start : real_end]
+
+                        if calc_ann_text != text:
+                            print("   ERROR", docid, part_index, partid, start, offsets, real_start, "\n\t", text, "\n\t", calc_ann_text, "\n\t", document.parts[partid].text)
+
+                        if entity_type == 'mutation':
+                            ann = Entity(self.mut_class_id, real_start, text)
+                            dataset.documents[docid].parts[partid].annotations.append(ann)
+
+                        elif entity_type == 'gene':
+                            ann = Entity(self.gene_class_id, real_start, text)
+                            dataset.documents[docid].parts[partid].annotations.append(ann)
+
+        return dataset
+
+
+class TmVarReader(Reader):
+    """
+    Reader for the tmVar-corpus (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
+
+    Note:
+        This reader is a bit of an exception as it not only reads the articles,
+        but the annotations as well in a single pass. This is due to how the tmVar corpus
+        is distributed.
+
+    Format:
+        [pmid]|t|[title]
+        [pmid]|a|[abstract]
+        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
+        [pmid]\t[start]\t[end]\t[text]\t[type]\t[normalized]
+        ...
+
+        pmid|t|title
+        ...
+    """
+
+    def __init__(self, corpus_file, mut_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
+        self.corpus_file = corpus_file
+        """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+
+    def read(self):
+        """
+        :returns: nalaf.structures.data.Dataset
+        """
+        dataset = Dataset()
+
+        with open(self.corpus_file, encoding='utf-8') as file:
+            documents = file.read().strip().split('\n\n')
+            for document_text in documents:
+                lines = document_text.strip().splitlines()
+
+                first_line = re.search('(\d+)\|t\|(.*)', lines[0])
+                doc_id = first_line.group(1)
+                tmvar_title = first_line.group(2)
+                tmvar_abstract = re.search('(\d+)\|a\|(.*)', lines[1]).group(2)
+
+                document = Document()
+                title = Part(tmvar_title)
+                abstract = Part(tmvar_abstract)
+                document.parts['title'] = title
+                document.parts['abstract'] = abstract
+
+                for line in lines[2:]:
+                    _, start, end, _, _, _ = line.split('\t')
+                    start = int(start)
+                    end = int(end)
+
+                    if 0 <= start < end <= len(tmvar_title):
+                        part = title
+                    else:
+                        part = abstract
+                        start -= len(tmvar_title) + 1
+                        end -= len(tmvar_title) + 1
+
+                    part.annotations.append(Entity(self.mut_class_id, start, part.text[start:end]))
+
+                dataset.documents[doc_id] = document
+
+        return dataset
+
+
 class OSIRISReaderMachineLearningReady(Reader):
     """
     Reads in the OSIRIS corpus by using the Wordfreak format which is aimed at
     specific annotations for machine learning tasks and does not represent the same annotations as the XML-file.
+
     # TODO still WIP (some minor bugs)
     """
-    def __init__(self, path):
+    def __init__(self, path, mut_class_id):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
         self.path = os.path.abspath(path)
         """path to a folder containing files"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
 
     def read(self):
         """
@@ -528,14 +555,14 @@ class OSIRISReaderMachineLearningReady(Reader):
                                 current_annotation[2] += text
                         else:
                             if len(current_annotation) > 0:
-                                entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                                entity = Entity(self.mut_class_id, current_annotation[0], current_annotation[2])
                                 if current_annotation[3]:
                                     part_abstract.annotations.append(entity)
                                 else:
                                     part_title.annotations.append(entity)
                                 current_annotation = []
 
-                            entity = Entity(MUT_CLASS_ID, norm_start, text)
+                            entity = Entity(self.mut_class_id, norm_start, text)
                             if start >= body_offset:
                                 part_abstract.annotations.append(entity)
                             else:
@@ -555,7 +582,7 @@ class OSIRISReaderMachineLearningReady(Reader):
                             norm_start = start - title_offset
                             is_body = False
 
-                        entity = Entity(MUT_CLASS_ID, norm_start, text)
+                        entity = Entity(self.mut_class_id, norm_start, text)
 
                         if is_body:
                             part_abstract.annotations.append(entity)
@@ -564,7 +591,7 @@ class OSIRISReaderMachineLearningReady(Reader):
 
                     else:  # if already annotations contained there
                         current_annotation[2] += text
-                        entity = Entity(MUT_CLASS_ID, current_annotation[0], current_annotation[2])
+                        entity = Entity(self.mut_class_id, current_annotation[0], current_annotation[2])
                         if current_annotation[3]:
                             part_abstract.annotations.append(entity)
                         else:
@@ -584,9 +611,14 @@ class OSIRISReader(Reader):
     """
     Parses the OSIRIS corpus by using their supplied XML-file alone.
     """
-    def __init__(self, path):
+    def __init__(self, path, mut_class_id):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
         self.path = os.path.abspath(path)
         """path to xml file"""
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
 
     def read(self):
         """
@@ -611,7 +643,7 @@ class OSIRISReader(Reader):
                 title_annotations = []
                 for child in element[1]:
                     if child.tag == 'variant':
-                        entity = Entity(MUT_CLASS_ID, len(title), child.text)
+                        entity = Entity(self.mut_class_id, len(title), child.text)
                         title_annotations.append(entity)
                     # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
                     try:
@@ -632,7 +664,7 @@ class OSIRISReader(Reader):
                 abstract_annotations = []
                 for child in element[2]:
                     if child.tag == 'variant':
-                        entity = Entity(MUT_CLASS_ID, len(abstract), child.text)
+                        entity = Entity(self.mut_class_id, len(abstract), child.text)
                         abstract_annotations.append(entity)
                     # unforunately child.text or child.tail can be empty and return None, which cannot be written as ""
                     try:
@@ -650,4 +682,77 @@ class OSIRISReader(Reader):
                 doc.parts['title'] = part_title
                 doc.parts['abstract'] = part_abstract
                 dataset.documents[pmid] = doc  # save document to dataset
+        return dataset
+
+
+class ProteinResidueCorpusPartialReader(Reader):
+    """
+    Reader for the LEAP-FS / Protein Residue (Full Text) Corpus
+    http://bionlp-corpora.sourceforge.net/proteinresidue/
+
+    Note:
+        The reader practically actually only reads annotations.
+        The text of the referenced PMIDs are not directly given and users
+        should be get that directly from PubMed. This is not trivial since
+        we do not exactly know how the original authors parsed the texts.
+
+        Since the annotations contain start&end offsets and the entities texts,
+        for every entity we create a different part that so spans the whole entity.
+
+
+    Format:
+        9724744	Mutation	31035	31062	Asp	450	Ala	D450 is replaced by alanine
+        9724744	Mutation	38528	38541	Asp	450	Ala	Asp-450 → Ala
+        9724744	Mutation	38556	38564	Asp	483	Ala	D483A
+        9724744	Mutation	38566	38571	Arg	487	Ala	R487A
+        9724744	Mutation	38613	38625	Asp	483	Ala	Asp-483 →Ala
+        9724744	Mutation	38630	38643	Arg	487	Ala	Arg-487 → Ala
+        9724744	AminoacidResidue	30956	30960	Asp	450	NULL	D450
+    """
+
+    def __init__(self, corpus_file, mut_class_id, residue_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
+        self.corpus_file = corpus_file
+        """the directory containing the .html files"""
+        self.mut_class_id = mut_class_id
+        """class id that will be associated to the read mutation entities (Mutation)."""
+        self.residue_class_id = residue_class_id
+        """class id that will be associated to the read residue entities (AminoacidResidue)."""
+
+
+    def read(self):
+        """
+        :returns: nalaf.structures.data.Dataset
+        """
+        dataset = Dataset()
+
+        with open(self.corpus_file, encoding='utf-8') as file:
+
+            for row in file:
+                columns = row.split("\t")
+
+                docid = columns[0]
+                typ = columns[1]
+                start = columns[2]
+                end = columns[3]
+                entity_text = columns[7]
+
+                class_id = None
+                if typ == 'Mutation':
+                    class_id = self.mut_class_id
+                elif typ == 'AminoacidResidue':
+                    class_id = self.residue_class_id
+
+                if class_id:
+                    document = dataset.documents.get(docid, Document())
+
+                    part = Part(entity_text)
+                    document.parts[typ + '|' + start + '|' + end] = part
+
+                    part.annotations.append(Entity(class_id, int(start), entity_text))
+
+                    dataset.documents[docid] = document
+
         return dataset

@@ -8,9 +8,8 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
-from nalaf import print_verbose, print_debug
+from nalaf import print_verbose, print_debug, print_warning
 from nalaf.structures.data import Entity, Relation
-from nalaf.utils import MUT_CLASS_ID, PRO_CLASS_ID
 
 
 class AnnotationReader:
@@ -37,12 +36,15 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
-    def __init__(self, directory, read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False):
+    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False, raise_exception_on_incosistencies=True):
         self.directory = directory
         """the directory containing *.ann.json files"""
+
+        if read_only_class_id is not None and not isinstance(read_only_class_id, list):
+            read_only_class_id = [read_only_class_id]
         self.read_only_class_id = read_only_class_id
-        """whether to read in only entities with given class_id. Otherwise if None, read all entities"""
+        """whether to read in only entities with given class_id's (single id or list of). Otherwise if None, read all entities"""
+
         self.delete_incomplete_docs = delete_incomplete_docs
         """delete documents from the dataset that are not marked as 'anncomplete' provided the docs are not predicted"""
         self.is_predicted = is_predicted
@@ -50,6 +52,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         self.read_relations = read_relations
         """whether relations should be read as well"""
         self.whole_basename_as_docid = whole_basename_as_docid
+        self.raise_exception_on_incosistencies = raise_exception_on_incosistencies
+
 
     def annotate(self, dataset):
         """
@@ -69,34 +73,63 @@ class AnnJsonAnnotationReader(AnnotationReader):
                     if not self.whole_basename_as_docid and '-' in doc_id:
                         doc_id = doc_id.split('-')[-1]
 
-
                     read_docs.add(doc_id)
                     ann_json = json.load(file)
-                    document = dataset.documents[doc_id]
+                    try:
+                        document = dataset.documents[doc_id]
+                    except Exception as err:
+                        print_warning("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
+                        continue
 
                     if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
                         del dataset.documents[doc_id]
+
                     else:
-                        for entity in ann_json['entities']:
-                            if not self.read_only_class_id or entity['classId'] == self.read_only_class_id:
-                                ann = Entity(entity['classId'], entity['offsets'][0]['start'],
-                                             entity['offsets'][0]['text'], entity['confidence']['prob'])
+
+                        for e in ann_json['entities']:
+
+                            if self.read_only_class_id is None or e['classId'] in self.read_only_class_id:
+
+                                part = document.parts[e['part']]
+
+                                try:
+                                    normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
+                                except KeyError as err:
+                                    print_warning("The normalization is badly formatted: (docid={}) {}".format(doc_id, str(e['normalizations'])))
+                                    normalizations = None
+
+                                entity = Entity(
+                                    e['classId'],
+                                    e['offsets'][0]['start'],
+                                    e['offsets'][0]['text'],
+                                    e['confidence']['prob'],
+                                    norm=normalizations)
+
                                 if self.is_predicted:
-                                    document.parts[entity['part']].predicted_annotations.append(ann)
+                                    part.predicted_annotations.append(entity)
                                 else:
-                                    document.parts[entity['part']].annotations.append(ann)
+                                    part.annotations.append(entity)
 
                         if self.read_relations:
                             for relation in ann_json['relations']:
-                                # no distinction with predicted_relations yet
+                                # Note: no distinction with predicted_relations yet
+
                                 part = document.parts[relation['entities'][0].split('|')[0]]
+
                                 e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
                                 e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
-                                e1_end = int(relation['entities'][0].split('|')[1].split(',')[1])
-                                e2_end = int(relation['entities'][1].split('|')[1].split(',')[1])
-                                e1_text = part.text[e1_start:e1_end]
-                                e2_text = part.text[e2_start:e2_end]
-                                part.relations.append(Relation(e1_start, e2_start, e1_text, e2_text, relation['classId']))
+
+                                rel_id = relation['classId']
+
+                                e1 = part.get_entity(e1_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
+                                e2 = part.get_entity(e2_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
+
+                                if (not self.raise_exception_on_incosistencies and (e1 is None or e2 is None)):
+                                    continue
+
+                                rel = Relation(rel_id, e1, e2)
+
+                                part.relations.append(rel)
 
                         # delete parts that are not annotatable
                         annotatable_parts = set(ann_json['annotatable']['parts'])
@@ -107,8 +140,11 @@ class AnnJsonAnnotationReader(AnnotationReader):
                         for part_id in part_ids_to_del:
                             del document.parts[part_id]
 
-                except KeyError as e:
-                    pass
+                except Exception as err:
+                    if self.raise_exception_on_incosistencies:
+                        raise err
+                    else:
+                        pass
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs
@@ -116,8 +152,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
             del dataset.documents[doc_id]
 
         dataset.documents = OrderedDict((doc_id, doc) for doc_id, doc in dataset.documents.items())
-            # this was the old behavior
-            # if sum(len(part.annotations) for part in doc.parts.values()) > 0)
+
+        dataset.validate_entity_offsets()
 
         return dataset
 
@@ -135,10 +171,13 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
     2. Shortest entity, longest entity or priority
     """
 
-    # TODO MUT_CLASS_ID should not be part of nalaf and read_only_class_id should be None
     def __init__(self, directory, strategy='union', entity_strategy='shortest', priority=None,
-                 read_only_class_id=MUT_CLASS_ID, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
+                 read_only_class_id=None, delete_incomplete_docs=True, filter_below_iaa_threshold=False,
                  iaa_threshold=0.8, is_predicted=False):
+
+        # TODO
+        import warnings
+        warnings.warn('AnnJsonMergerAnnotationReader has not been thouroughly tested. The logic should be reduced to only merge given read annotations (i.e. not a reader)')
 
         self.directory = directory
         """
@@ -172,6 +211,7 @@ class AnnJsonMergerAnnotationReader(AnnotationReader):
         self.filter_below_iaa_threshold = filter_below_iaa_threshold
         self.iaa_threshold = iaa_threshold
         self.is_predicted = is_predicted
+
 
     def annotate(self, dataset):
         """
@@ -362,10 +402,14 @@ class BRATPartsAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, is_predicted=False):
+    def __init__(self, directory, entity_class_id, is_predicted=False):
         self.directory = directory
         """the directory containing *.ann files"""
         self.is_predicted = is_predicted
+        self.entity_class_id
+        """
+        class id that will be associated to the read entities.
+        """
 
     def annotate(self, dataset):
         """
@@ -384,7 +428,7 @@ class BRATPartsAnnotationReader(AnnotationReader):
                         text = row[2]
 
                         if entity_type == 'mutation':
-                            ann = Entity(MUT_CLASS_ID, int(start), text)
+                            ann = Entity(self.entity_class_id, int(start), text)
                             if self.is_predicted:
                                 dataset.documents[docid].parts[partid].predicted_annotations.append(ann)
                             else:
@@ -411,9 +455,17 @@ class SETHAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, gene_class_id):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.directory = directory
         """the directory containing *.ann files"""
+
+        self.gene_class_id = gene_class_id
+        """
+        class id that will be associated to the read (gene / GGP) entities.
+        """
 
     def annotate(self, dataset):
         """
@@ -433,8 +485,9 @@ class SETHAnnotationReader(AnnotationReader):
                         if entity_type == 'SNP' or entity_type == 'RS':
                             ann = Entity(MUT_CLASS_ID, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
+
                         elif entity_type == 'Gene':
-                            ann = Entity('e_1', start, row[2])
+                            ann = Entity(self.gene_class_id, start, row[2])
                             document.parts['abstract'].annotations.append(ann)
 
 
@@ -452,16 +505,23 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
 
     We map:
         SNP to e_2 (mutation entity)
-        Gene to e_1 (protein entity)
+        Gene to e_1 (gene/protein entity)
         RS to e_2 (mutation entity)
 
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_just_mutations=True):
+    def __init__(self, directory, mut_class_id, gene_class_id=None):
+        import warnings
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         self.directory = directory
-        self.read_just_mutations = read_just_mutations
         """the directory containing *.ann files"""
+        self.mut_class_id = mut_class_id
+        """class id that will be associated to the read mutation entities"""
+        self.gene_class_id = gene_class_id
+        """class id that will be associated to the read gene/protein entities. Optional. If False/None --> do not read"""
+
 
     def annotate(self, dataset):
         """
@@ -488,8 +548,9 @@ class DownloadedSETHAnnotationReader(AnnotationReader):
                             end -= title_len + 1
 
                         if entity_type == 'SNP' or entity_type == 'RS':
-                            ann = Entity(MUT_CLASS_ID, start, row[2])
+                            ann = Entity(self.mut_class_id, start, row[2])
                             part.annotations.append(ann)
-                        elif not self.read_just_mutations and entity_type == 'Gene':
-                            ann = Entity(PRO_CLASS_ID, start, row[2])
+
+                        elif self.gene_class_id is not None and entity_type == 'Gene':
+                            ann = Entity(self.gene_clas_id, start, row[2])
                             part.annotations.append(ann)

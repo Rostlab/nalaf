@@ -1,50 +1,132 @@
 import unittest
-from nose.plugins.attrib import attr
-from nalaf.learning.taggers import StubSameSentenceRelationExtractor
+from nalaf.learning.taggers import StubRelationExtractor, StubSameSentenceRelationExtractor, StubSamePartRelationExtractor
+from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator, CombinatorEdgeGenerator
 from nalaf.structures.data import *
-from nalaf.learning.taggers import GNormPlusGeneTagger
-from nalaf.preprocessing.spliters import NLTKSplitter
-from nalaf.preprocessing.tokenizers import TmVarTokenizer
-from nalaf.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
+from nalaf.learning.evaluators import DocumentLevelRelationEvaluator
 
 
-@attr('slow')
-class TestGNormPlusGeneTagger(unittest.TestCase):
+STUB_E_ID_1 = 'e_x_1'
+STUB_E_ID_2 = 'e_x_2'
+STUB_R_ID_1 = 'r_x_1'
+
+
+class TestTaggers(unittest.TestCase):
+
     @classmethod
-    def setUpClass(cls):
-        cls.data = Dataset()
-
+    def get_test_dataset(cls):
+        dataset = Dataset()
         doc = Document()
-        docid = '15878741'
+        dataset.documents['testid'] = doc
 
-        title = Part("Identification of novel mutations of the human N-acetylglutamate synthase gene and their functional investigation by expression studies.")
-        abstract = Part("The mitochondrial enzyme N-acetylglutamate synthase (NAGS) produces N-acetylglutamate serving as an allosteric activator of carbamylphosphate synthetase 1, the first enzyme of the urea cycle. Autosomal recessively inherited NAGS deficiency (NAGSD) leads to severe neonatal or late-onset hyperammonemia. To date few patients have been described and the gene involved was described only recently. In this study, another three families affected by NAGSD were analyzed for NAGS gene mutations resulting in the identification of three novel missense mutations (C200R [c.598T > C], S410P [c.1228T > C], A518T [c.1552G > A]). In order to investigate the effects of these three and two additional previously published missense mutations on enzyme activity, the mutated proteins were overexpressed in a bacterial expression system using the NAGS deficient E. coli strain NK5992. All mutated proteins showed a severe decrease in enzyme activity providing evidence for the disease-causing nature of the mutations. In addition, we expressed the full-length NAGS wild type protein including the mitochondrial leading sequence, the mature protein as well as a highly conserved core protein. NAGS activity was detected in all three recombinant proteins but varied regarding activity levels and response to stimulation by l-arginine. In conclusion, overexpression of wild type and mutated NAGS proteins in E. coli provides a suitable tool for functional analysis of NAGS deficiency.")
+        part1 = Part('Sentence 1: e_1_yolo may be related to e_2_tool plus hey, e_2_coco. Sentence 2: e_1_nin. Sentence 3: e_2_musk. Sentence 4: nothing')
 
-        ann_mut1 = Entity(class_id=MUT_CLASS_ID, offset=18, text='enzyme')
-        ann_mut2 = Entity(class_id=MUT_CLASS_ID, offset=192, text='Autosomal')
-        abstract.annotations += [ann_mut1, ann_mut2]
+        entities = [
+            # Sent 1
+            Entity(class_id=STUB_E_ID_1, offset=12, text='e_1_yolo', confidence=0),
+            Entity(class_id=STUB_E_ID_2, offset=39, text='e_2_tool', confidence=0),
+            Entity(class_id=STUB_E_ID_2, offset=58, text='e_2_coco', confidence=0),
+            # Sent 2
+            Entity(class_id=STUB_E_ID_1, offset=80, text='e_1_nin', confidence=0),
+            # Sent 3
+            Entity(class_id=STUB_E_ID_2, offset=101, text='e_2_musk', confidence=0),
+            # Sent 4
 
-        doc.parts['title'] = title
-        doc.parts['abstract'] = abstract
-        cls.data.documents[docid] = doc
+        ]
 
-    def test_tag(self):
-        # todo question is that the proper way? with predicts_classes
-        GNormPlusGeneTagger().tag(self.data, uniprot=True)
-        # crfsuite = CRFSuite('crfsuite')
-        # CRFSuiteMutationTagger(['Mutation'], crf_suite=crfsuite).tag(self.data)
-        NLTKSplitter().split(self.data)
-        TmVarTokenizer().tokenize(self.data)
-        StubSameSentenceRelationExtractor(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID).tag(self.data)
-        self.assertEqual(len([x for x in self.data.annotations() if x.class_id == PRO_CLASS_ID]), 0)
-        self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 2)
-        self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 0)
-        self.data.purge_false_relationships()
-        self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 0)
-        del self.data.documents['15878741'].parts['abstract'].annotations[0]
-        self.assertEqual(len([x for x in self.data.annotations() if x.class_id == MUT_CLASS_ID]), 1)
-        self.data.purge_false_relationships()
-        self.assertEqual(len([x for x in self.data.relations() if x.class_id == PRO_REL_MUT_CLASS_ID]), 0)
+        for e in entities:
+            part1.annotations.append(e)
+
+        relations = [
+            # Same sentence -- Internal edge generator will create 2 edges out of Sent 1 but only 1 Relation is real
+            Relation(STUB_R_ID_1, entities[0], entities[1]),
+            # Between different sentences
+            Relation(STUB_R_ID_1, entities[1], entities[3]),
+            Relation(STUB_R_ID_1, entities[3], entities[4]),
+        ]
+
+        for r in relations:
+            part1.relations.append(r)
+
+        doc.parts['s1h1'] = part1
+
+        return dataset
+
+
+    def test_StubSameSentenceRelationExtractor(self):
+
+        dataset = TestTaggers.get_test_dataset()
+
+        annotator = StubSameSentenceRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        print("actu_rels", list(dataset.relations()))
+        print("edges", list(dataset.edges()))
+        print("pred_rels", list(dataset.predicted_relations()))
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 1)
+        self.assertEqual(evaluation.fn, 2)
+        self.assertEqual(evaluation.fp, 1)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.4)
+
+
+    def test_Stub_D0_plus_D1_RelationExtractor(self):
+
+        dataset = TestTaggers.get_test_dataset()
+
+        edge_generator_1 = SentenceDistanceEdgeGenerator(STUB_E_ID_1, STUB_E_ID_2, STUB_R_ID_1, distance=0, rewrite_edges=False)
+        edge_generator_2 = SentenceDistanceEdgeGenerator(STUB_E_ID_1, STUB_E_ID_2, STUB_R_ID_1, distance=1, rewrite_edges=False)
+        edge_generator = CombinatorEdgeGenerator(edge_generator_1, edge_generator_2)
+        annotator = StubRelationExtractor(edge_generator)
+
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        # print("actu_rels", list(dataset.relations()))
+        # print("edges", list(dataset.edges()))
+        # print("pred_rels", list(dataset.predicted_relations()))
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 3)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 2)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.7499999999999999)
+
+
+    def test_StubSamePartRelationExtractor(self):
+
+        dataset = TestTaggers.get_test_dataset()
+
+        annotator = StubSamePartRelationExtractor(STUB_E_ID_1, STUB_E_ID_2, relation_type=STUB_R_ID_1)
+        annotator.annotate(dataset)
+        # Assert that indeed 4 sentences were considered
+        assert 4 == len(list(dataset.sentences())), str(list(dataset.sentences()))
+
+        print("actu_rels", list(dataset.relations()))
+        print("edges", list(dataset.edges()))
+        print("pred_rels", list(dataset.predicted_relations()))
+
+        evaluator = DocumentLevelRelationEvaluator(rel_type=STUB_R_ID_1)
+
+        evals = evaluator.evaluate(dataset)
+        evaluation = evals(STUB_R_ID_1)
+        self.assertEqual(evaluation.tp, 3)
+        self.assertEqual(evaluation.fn, 0)
+        self.assertEqual(evaluation.fp, 3)
+        computation = evals(STUB_R_ID_1).compute(strictness="exact")
+        self.assertEqual(computation.f_measure, 0.6666666666666666)
+
 
 if __name__ == '__main__':
     unittest.main()

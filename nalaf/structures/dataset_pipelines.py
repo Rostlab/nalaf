@@ -51,20 +51,24 @@ class PrepareDatasetPipeline:
         else:
             raise TypeError('not an instance or iterable of instances that implements FeatureGenerator')
 
+
     def execute(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset()
         """
+
         self.splitter.split(dataset)
         self.tokenizer.tokenize(dataset)
         for feature_generator in self.feature_generators:
             print_verbose('Apply feature generator:', type(feature_generator))
             feature_generator.generate(dataset)
 
+
     def serialize(self, dataset, to_file=None):
         """
         :type dataset: nalaf.structures.data.Dataset()
         """
+
         types = [(type(self.splitter), self.splitter.__dict__),
                  (type(self.tokenizer), self.tokenizer.__dict__)]
 

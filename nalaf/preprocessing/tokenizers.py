@@ -1,7 +1,7 @@
 import abc
-from nltk.tokenize import word_tokenize
 from nalaf.structures.data import Token
 import re
+from nltk.tokenize import word_tokenize
 
 
 class Tokenizer:
@@ -22,7 +22,13 @@ class Tokenizer:
         return
 
 
-class NLTKTokenizer(Tokenizer):
+class GenericTokenizer(Tokenizer):
+
+    def __init__(self, string_splitter_fun):
+        self.string_splitter_fun = string_splitter_fun
+        "A function that takes a string as input and returns a list/iterator of tokenized string items"
+
+
     def tokenize(self, dataset):
         """
         :type dataset: nalaf.structures.data.Dataset
@@ -32,10 +38,14 @@ class NLTKTokenizer(Tokenizer):
             part.sentences = []
             for index, sentence_ in enumerate(part.sentences_):
                 part.sentences.append([])
-                for token_word in word_tokenize(sentence_):
+
+                for token_word in self.string_splitter_fun(sentence_):
                     token_start = part.text.find(token_word, so_far)
                     so_far = token_start + len(token_word)
                     part.sentences[index].append(Token(token_word, token_start))
+
+
+NLTK_TOKENIZER = GenericTokenizer(word_tokenize)
 
 
 class TmVarTokenizer(Tokenizer):

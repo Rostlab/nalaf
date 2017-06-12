@@ -8,9 +8,16 @@ from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
-from nalaf.utils import PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID
-from nalaf.learning.taggers import GNormPlusGeneTagger
+from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
+
+
+ENT1_CLASS_ID = 'e_x'
+ENT2_CLASS_ID = 'e_y'
+REL_ENT1_ENT2_CLASS_ID = 'r_z'
+ENTREZ_GENE_ID = 'n_w'
+UNIPROT_ID = 'n_v'
+
 
 
 if __name__ == "__main__":
@@ -51,10 +58,10 @@ if __name__ == "__main__":
 
     # get the predictions
     crf = PyCRFSuite()
-    crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'example_entity_model'), class_id=MUT_CLASS_ID)
+    crf.tag(dataset, pkg_resources.resource_filename('nalaf.data', 'example_entity_model'), class_id=ENT2_CLASS_ID)
 
-    GNormPlusGeneTagger().tag(dataset, uniprot=True)
-    StubSameSentenceRelationExtractor(PRO_CLASS_ID, MUT_CLASS_ID, PRO_REL_MUT_CLASS_ID).tag(dataset)
+    GNormPlusGeneTagger(ENT1_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID).tag(dataset, uniprot=True)
+    StubSameSentenceRelationExtractor(ENT1_CLASS_ID, ENT2_CLASS_ID, REL_ENT1_ENT2_CLASS_ID).annotate(dataset)
 
     if args.output_dir:
         if not os.path.isdir(args.output_dir):
@@ -65,4 +72,4 @@ if __name__ == "__main__":
         elif args.file_format == 'pubtator':
             PubTatorFormat(dataset, location=os.path.join(args.output_dir, 'pubtator.txt')).export()
     else:
-        ConsoleWriter(args.color).write(dataset)
+        ConsoleWriter(ENT1_CLASS_ID, ENT2_CLASS_ID, args.color).write(dataset)

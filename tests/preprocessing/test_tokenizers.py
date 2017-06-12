@@ -1,12 +1,12 @@
 import unittest
 from nalaf.preprocessing.tokenizers import Tokenizer
-from nalaf.preprocessing.tokenizers import NLTKTokenizer, TmVarTokenizer
+from nalaf.preprocessing.tokenizers import NLTK_TOKENIZER, TmVarTokenizer
 from nalaf.structures.data import Dataset, Document, Part, Token
 
 
-class TestNLTKTokenizer(unittest.TestCase):
+class Test_NLTK_TOKENIZER(unittest.TestCase):
     """
-    Test the NLTKTokenizer class and it's main method tokenize()
+    Test the NLTK_TOKENIZER class and it's main method tokenize()
     """
 
     @classmethod
@@ -21,7 +21,7 @@ class TestNLTKTokenizer(unittest.TestCase):
 
         cls.dataset.documents['doc_id1'] = doc_id1
 
-        cls.tokenizer = NLTKTokenizer()
+        cls.tokenizer = NLTK_TOKENIZER
         cls.tokenizer.tokenize(cls.dataset)
 
     def test_implements_tokenizer_interface(self):

@@ -1,10 +1,10 @@
 import abc
 from nalaf.structures.data import Label
 import re
-from nalaf.utils import MUT_CLASS_ID
+import warnings
 
 
-class Labeler:
+class TokenLabeler:
     """
     Abstract class for generating labels for each token in the dataset.
     Subclasses that inherit this class should:
@@ -18,10 +18,18 @@ class Labeler:
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        return
+        pass
 
 
-class BIOLabeler(Labeler):
+class Labeler(TokenLabeler):
+
+    @abc.abstractmethod
+    def label(self, dataset):
+        warnings.warn('Deprecated. Instead, use: TokenLabeler', DeprecationWarning)
+        return super.label(dataset)
+
+
+class BIOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the BIO (beginning, inside, outside) format. Creates labels
@@ -54,7 +62,7 @@ class BIOLabeler(Labeler):
                             break
 
 
-class TmVarLabeler(Labeler):
+class TmVarLabeler(TokenLabeler):
     """
     Implements a labeler using the annotations of the dataset
     based on the labeling scheme used by tmVar (http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/tmTools/#tmVar)
@@ -78,7 +86,9 @@ class TmVarLabeler(Labeler):
     Implements the abstract class Labeler.
     """
 
-    def __init__(self):
+    def __init__(self, mut_class_id):
+        warnings.warn('This will be soon deleted and moved to _nala_', DeprecationWarning)
+
         # A
         self.label_reference_sequence = re.compile('(^[cgrmp]$)|(^(ivs|ex|orf)$)')
         # T
@@ -98,6 +108,12 @@ class TmVarLabeler(Labeler):
 
         # P or S (mutation_position or frameshift_position)
         self.position = re.compile('^[0-9]+$')
+
+        self.mut_class_id = mut_class_id
+        """
+        class id that will be associated to the read (mutation) entities.
+        """
+
 
     def _match_regex_label(self, previous_token, token):
         if self.label_reference_sequence.search(token.word):
@@ -135,7 +151,7 @@ class TmVarLabeler(Labeler):
                         start = ann.offset
                         end = ann.offset + len(ann.text)
                         if start == token.start or start < token.start < end:
-                            if ann.class_id == MUT_CLASS_ID:
+                            if ann.class_id == self.mut_class_id:
                                 self._match_regex_label(previous_token, token)
                                 previous_token = token
 
@@ -156,7 +172,7 @@ class TmVarLabeler(Labeler):
                             current.original_labels[0].value = 'P'
 
 
-class BIEOLabeler(Labeler):
+class BIEOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the BIEO (beginning, inside, ending, outside) format. Creates labels
@@ -193,7 +209,7 @@ class BIEOLabeler(Labeler):
                             break
 
 
-class IOLabeler(Labeler):
+class IOLabeler(TokenLabeler):
     """
     Implements a simple labeler using the annotations of the dataset
     using the IO (inside, outside) format. Creates labels

@@ -6,17 +6,18 @@ def readme():
     with open('README.md', encoding='utf-8') as file:
         return file.read()
 
+
 def license():
     with open('LICENSE.txt', encoding='utf-8') as file:
         return file.read()
 
+
 setup(
     name='nalaf',
-    version='0.2.0',
-    description='Pipeline for NER of natural language mutation mentions',
+    version='0.2.1',
+    description='Natural Language Framework, for NER and RE)',
     long_description=readme(),
     classifiers=[
-        'Development Status :: 3 - Alpha',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.5',
         'Topic :: Text Processing :: Linguistic'
@@ -31,7 +32,7 @@ setup(
         'numpy>=1.11.2',
         'scipy>=0.18.1',
         'scikit-learn>=0.18.1',
-        # 'gensim>= 0.13.3',  # Note: instally manually (it may cause problems on some environments, e.g. Travis CI)
+        'gensim>= 0.13.3',
         'spacy>=1.2.0',
         'nltk>=3.2.1',
         'beautifulsoup4>=4.5.1',

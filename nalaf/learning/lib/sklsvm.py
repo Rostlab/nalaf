@@ -146,7 +146,8 @@ class SklSVM(RelationExtractor):
             return __class__._convert_edges_features_reusing_computed_vector_instances(corpus)
         else:
             # + 1 since the keys are 0-indexed, that is a sole feature indexed by 0 means having 1 feature
-            return self.__gen_vector_instances(corpus, max(next(corpus.edges()).features.keys()) + 1)
+            X, y, _ = self.__gen_vector_instances(corpus, max(next(corpus.edges()).features.keys()) + 1)
+            return (X, y)
 
 
     @staticmethod

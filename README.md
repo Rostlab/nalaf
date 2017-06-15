@@ -9,7 +9,7 @@ Historically, the framework started from 2 joint theses at [Rostlab](https://ros
 
 As a result of the original BioNLP focus, some parts of the code are tailored to the biomedical domain. However, current efforts are underway to generalize all parts and this process is almost done. Development is active. Thus expect many changes in the time being.
 
-Current maintainer: Juan Miguel Cejuela (@juanmirocks).
+Current maintainer: [Juan Miguel Cejuela (@juanmirocks)](https://github.com/juanmirocks).
 
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
 (_[editable version on Lucidchart of the pipeline diagram](https://www.lucidchart.com/invitations/accept/9236d544-8b56-46c4-9f99-62fdf18e838a); requires log in_)

@@ -64,17 +64,23 @@ class SklSVM(RelationExtractor):
 
     def annotate(self, corpus):
         X, y = self.__convert_edges_features_to_vector_instances(corpus)
-        X = self.preprocess.transform(X)
-        print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
-        y_pred = self.model.predict(X)
-        y_size = len(y)
-        print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
+        if X.shape[0] == 0:
+            # no instances at all (corpus with no edges) --> nothing to do with the corpus
+            return corpus
 
-        for edge, target_pred in zip(corpus.edges(), y_pred):
-            edge.pred_target = target_pred
+        else:
+            X = self.preprocess.transform(X)
+            print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
-        return corpus.form_predicted_relations()
+            y_pred = self.model.predict(X)
+            y_size = len(y)
+            print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
+
+            for edge, target_pred in zip(corpus.edges(), y_pred):
+                edge.pred_target = target_pred
+
+            return corpus.form_predicted_relations()
 
     # ----------------------------------------------------------------------------------------------------
 
@@ -152,13 +158,21 @@ class SklSVM(RelationExtractor):
 
     @staticmethod
     def _are_vector_instances_already_computed(corpus):
-        return next(corpus.edges()).features_vector is not None
+        try:
+            return next(corpus.edges()).features_vector is not None
+        except StopIteration:
+            # No edges at all in the corpus --> the non-existing feature_vectors are "already computed" (empty)
+            return True
 
 
     @staticmethod
     def _convert_edges_features_reusing_computed_vector_instances(corpus):
         num_instances = sum(1 for _ in corpus.edges())
-        num_features = next(corpus.edges()).features_vector.shape[1]
+        try:
+            num_features = next(corpus.edges()).features_vector.shape[1]
+        except StopIteration:
+            # No edges at all in the corpus --> no features
+            num_features = 0
 
         X = scipy.sparse.lil_matrix((num_instances, num_features), dtype=np.float64)
         y = np.zeros(num_instances, order='C')  # -- see: http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC

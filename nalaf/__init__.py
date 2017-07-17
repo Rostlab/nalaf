@@ -12,8 +12,10 @@ if os.path.exists('config.ini'):
 else:
     config.read(pkg_resources.resource_filename('nalaf.data', 'default_config.ini'))
 
+
 def _print_err(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
+
 
 print_warning = _print_err
 

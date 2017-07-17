@@ -1822,7 +1822,7 @@ class FeatureDictionary(dict):
 
 class Entity:
     """
-    Represent a single annotation, that is denotes a span of text which represents some entity.
+    Represents a single entity, i.e. a text span, which names/refers to a defined concept.
 
     :type class_id: str
     :type offset: int

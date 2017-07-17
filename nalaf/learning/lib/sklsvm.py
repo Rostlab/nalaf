@@ -142,7 +142,7 @@ class SklSVM(RelationExtractor):
 
 
     def __convert_edges_features_to_vector_instances(self, corpus):
-        if __class__._vector_instances_already_computed(corpus):
+        if __class__._are_vector_instances_already_computed(corpus):
             return __class__._convert_edges_features_reusing_computed_vector_instances(corpus)
         else:
             # + 1 since the keys are 0-indexed, that is a sole feature indexed by 0 means having 1 feature
@@ -151,7 +151,7 @@ class SklSVM(RelationExtractor):
 
 
     @staticmethod
-    def _vector_instances_already_computed(corpus):
+    def _are_vector_instances_already_computed(corpus):
         return next(corpus.edges()).features_vector is not None
 
 

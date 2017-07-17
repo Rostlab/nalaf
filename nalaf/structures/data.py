@@ -1350,7 +1350,7 @@ class Part:
         return 'Is Abstract: {abstract}\n-Text-\n"{text}"\n-Entities-\n{annotations}\n' \
                '-Predicted entities-\n{pred_annotations}\n' \
                '-Relations-\n{relations}\n' \
-               '-Predicted relations-{pred_relations}'.format(
+               '-Predicted relations-\n{pred_relations}'.format(
                         text=self.text, annotations=entities_string,
                         pred_annotations=pred_entities_string, relations=relations_string,
                         pred_relations=pred_relations_string, abstract=self.is_abstract)

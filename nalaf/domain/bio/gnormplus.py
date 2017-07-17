@@ -75,7 +75,7 @@ class GNormPlusGeneTagger(Tagger):
                             norm_dict = {self.predicts_classes[1]: gene_id}
 
                         norm_string = ''  # todo normalized_text (stemming ... ?)
-                        ann.normalisation_dict = norm_dict
+                        ann.norms = norm_dict
                         ann.normalized_text = norm_string
                         if annotated:
                             part.annotations.append(ann)

@@ -174,7 +174,7 @@ class SentenceFeatureGenerator(EdgeFeatureGenerator):
 
     @staticmethod
     def entity2key(entity):
-        ent_norms = list(entity.normalisation_dict.values())
+        ent_norms = list(entity.norms.values())
         if len(ent_norms) > 0 and ent_norms[0] is not None:
             return ent_norms[0]
         else:

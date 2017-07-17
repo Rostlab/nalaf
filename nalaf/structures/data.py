@@ -1829,7 +1829,7 @@ class Entity:
     :type text: str
     :type subclass: int
     :type confidence: float
-    :type normalisation_dict: dict
+    :type norms: dict
     :type normalized_text: str
     :type tokens: list[nalaf.structures.data.Token]
     :type head_token: nalaf.structures.data.Token
@@ -1856,11 +1856,20 @@ class Entity:
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
 
-        self.normalisation_dict = {} if norms is None else norms
-        """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
+        self.norms = {} if norms is None else norms
+        """
+        Dictionary of normalization ids if normalization (i.e. entity disambiguation) was performed.
+
+        A same entity can be linked to different databases (through an unique id).
+        And even within the same database, the entity could have different ids (represented as a comma-separated string)
+
+        Example, an entity linked to database referred as `uac` could have the ids `Q9P2K8` and `P15442`:
+
+        {'n_7': 'Q9P2K8,P15442,Q9LX30,Q9FIB4'}
+        """
 
         self.normalized_text = ''
-        """the normalized text for the annotation if normalization was performed"""
+        """(OFTEN NOT USED) the normalized text for the annotation if normalization was performed"""
 
         self.tokens = []
         """
@@ -1908,8 +1917,8 @@ class Entity:
     def __repr__(self):
         subclass_str = (" (" + str(self.subclass) + ")") if self.subclass else ""
 
-        if self.normalisation_dict:
-            norm_str = ', norms: {}'.format(self.normalisation_dict)
+        if self.norms:
+            norm_str = ', norms: {}'.format(self.norms)
         else:
             norm_str = ''
 

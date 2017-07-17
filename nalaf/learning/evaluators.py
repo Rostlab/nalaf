@@ -650,7 +650,7 @@ def _entity_normalized_fun(map_entity_normalizations, penalize_unknown_normaliza
 
 def _normalized_fun(map_entity_normalizations, penalize_unknown_normalizations, e):
     n_id = map_entity_normalizations[e.class_id]
-    value = e.normalisation_dict.get(n_id, None)
+    value = e.norms.get(n_id, None)
 
     if value is None:
 

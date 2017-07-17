@@ -103,7 +103,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
                                     e['offsets'][0]['start'],
                                     e['offsets'][0]['text'],
                                     e['confidence']['prob'],
-                                    norm=normalizations)
+                                    norms=normalizations)
 
                                 if self.is_predicted:
                                     part.predicted_annotations.append(entity)

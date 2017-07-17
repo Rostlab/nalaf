@@ -406,8 +406,8 @@ class TestEvaluators(unittest.TestCase):
         part_1.relations = [
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "1964"}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
+                Entity(STUB_E_ID_1, 0, "Tool", norms={"n_1": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norms={"n_1": "1961"})),
         ]
 
         # -
@@ -417,25 +417,25 @@ class TestEvaluators(unittest.TestCase):
                 # One without normalization, one with another different normalization
                 STUB_R_ID_1,
                 Entity(STUB_E_ID_1, 0, "Tool"),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
+                Entity(STUB_E_ID_2, 0, "Maynard", norms={"n_x": "1961"})),
 
             Relation(
                 # One with different normalization, one with another different normalization
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_x": "1961"})),
+                Entity(STUB_E_ID_1, 0, "Tool", norms={"n_1": "666"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norms={"n_x": "1961"})),
 
             Relation(
                 # Both with the correct normalization ids, but one has wrong normalization
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_1": "666"}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_1": "1961"})),
+                Entity(STUB_E_ID_1, 0, "Tool", norms={"n_1": "666"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norms={"n_1": "1961"})),
 
             Relation(
                 # Both with another different normalization
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool", norm={"n_another_key": "1964"}),
-                Entity(STUB_E_ID_2, 0, "Maynard", norm={"n_another_key": "1961"})),
+                Entity(STUB_E_ID_1, 0, "Tool", norms={"n_another_key": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard", norms={"n_another_key": "1961"})),
         ]
 
         self._apply_pipeline(dataset)
@@ -455,8 +455,8 @@ class TestEvaluators(unittest.TestCase):
         part_1.predicted_relations = [
             Relation(
                 STUB_R_ID_1,
-                Entity(STUB_E_ID_1, 0, "Tool band", norm={"n_1": "1964"}),
-                Entity(STUB_E_ID_2, 0, "Maynard James Keenan", norm={"n_1": "1961"})),
+                Entity(STUB_E_ID_1, 0, "Tool band", norms={"n_1": "1964"}),
+                Entity(STUB_E_ID_2, 0, "Maynard James Keenan", norms={"n_1": "1961"})),
         ]
 
         evals = evaluator.evaluate(dataset)

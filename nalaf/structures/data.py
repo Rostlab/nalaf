@@ -1835,13 +1835,16 @@ class Entity:
     :type head_token: nalaf.structures.data.Token
     """
 
-    def __init__(self, class_id, offset, text, confidence=1, norm=None):
+    def __init__(self, class_id, offset, text, confidence=1, norms=None):
         self.class_id = class_id
-        """the id of the class or entity that is annotated"""
+        """the id of the class of entity (concept) that is annotated"""
+
         self.offset = offset
         """the offset marking the beginning of the annotation in regards to the Part this annotation is attached to."""
+
         self.text = text
         """the text span of the annotation"""
+
         self.subclass = False
         # TODO likely, we should not allow subclasses that are not string in the first place -- to the very least, the default should be None
         # Explaination in commit: 3983e4c5449788e62e81b39b65fc7780b6c71852
@@ -1849,12 +1852,16 @@ class Entity:
         int flag used to further subdivide classes based on some criteria
         for example for mutations (MUT_CLASS_ID): 0=standard, 1=natural language, 2=semi standard
         """
+
         self.confidence = confidence
         """aggregated mention level confidence from the confidence of the tokens based on some aggregation function"""
-        self.normalisation_dict = {} if norm is None else norm
+
+        self.normalisation_dict = {} if norms is None else norms
         """ID in some normalization database of the normalized text for the annotation if normalization was performed"""
+
         self.normalized_text = ''
         """the normalized text for the annotation if normalization was performed"""
+
         self.tokens = []
         """
         The tokens of the entity.
@@ -1865,17 +1872,20 @@ class Entity:
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
         self.sentence = None
+
         """
         The whole sentence of tokens this entity belongs to, if set.
 
         YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
         """
+
         self.part = None
         """
         The whole part this entity belongs to, if set.
 
         YOU MUST CALL BEFORE: the entity's part percolate_tokens_to_entities()
         """
+
         self.head_token = None
         """the head token for the entity. Note: this is not necessarily the first token, just the head of the entity as declared by parsing (see parsers.py)"""
 
@@ -1899,11 +1909,11 @@ class Entity:
         subclass_str = (" (" + str(self.subclass) + ")") if self.subclass else ""
 
         if self.normalisation_dict:
-            norm_str = ', norm: {}'.format(self.normalisation_dict)
+            norm_str = ', norms: {}'.format(self.normalisation_dict)
         else:
             norm_str = ''
 
-        return 'Entity(id: {}{}, offset: {}, ' \
+        return 'Entity(class_id: {}{}, offset: {}, ' \
                'text: {}{})'.format(self.class_id, subclass_str, self.offset, self.text, norm_str)
 
 
@@ -1942,6 +1952,7 @@ class Entity:
         right_index = self_last + 1 + n
         return sentence[left_index:right_index]
 
+
 class Label:
     """
     Represents the label associated with each Token.
@@ -1977,7 +1988,7 @@ class Relation:
 
 
     def __repr__(self):
-        return 'Relation(id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
+        return 'Relation(class_id:"{self.class_id}": e1:"{self.entity1}"   <--->   e2:"{self.entity2}")'.format(self=self)
 
 
     def map(self, entity_map_fun, prefix_with_rel_type=True):

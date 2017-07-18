@@ -103,7 +103,7 @@ class Dataset:
 
     def predicted_relations(self):
         """
-        Yield all relations of the dataset.
+        Yield all predicted relations of the dataset.
 
         :rtype: collections.Iterable[Relation]
         """

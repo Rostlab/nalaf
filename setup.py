@@ -14,7 +14,7 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.2.1',
+    version='0.2.2',
     description='Natural Language Framework, for NER and RE)',
     long_description=readme(),
     classifiers=[

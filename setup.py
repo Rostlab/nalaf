@@ -29,15 +29,17 @@ setup(
     license=license(),
     packages=find_packages(exclude=['tests']),
     install_requires=[
-        'numpy >= 1.13.1',
-        'scipy >= 0.19.1',
+        # ML
+        'numpy == 1.13.1',
+        'scipy == 0.18.1',  # or 0.19.0
         'scikit-learn == 0.18.1',
         'spacy == 1.7.5',
+        'nltk == 3.2.2',
         'gensim >= 0.13.3',
-        'nltk >= 3.2.1',
+        'python-crfsuite >= 0.8.4',
+        # Other
         'beautifulsoup4 >= 4.5.1',
         'requests >= 2.8.1',
-        'python-crfsuite >= 0.8.4',
         'progress >= 1.2',
     ],
     include_package_data=True,

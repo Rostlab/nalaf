@@ -37,6 +37,7 @@ setup(
         'nltk == 3.2.2',
         'gensim >= 0.13.3',
         'python-crfsuite >= 0.8.4',
+
         # Other
         'beautifulsoup4 >= 4.5.1',
         'requests >= 2.8.1',

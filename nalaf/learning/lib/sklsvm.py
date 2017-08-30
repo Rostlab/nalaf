@@ -63,7 +63,7 @@ class SklSVM(RelationExtractor):
         return self
 
 
-    def annotate(self, corpus):
+    def annotate(self, corpus, optional_mutable_list_of_pr_rates=None):
         X, y = self.__convert_edges_features_to_vector_instances(corpus)
 
         if X.shape[0] == 0:
@@ -74,6 +74,11 @@ class SklSVM(RelationExtractor):
             X = self.preprocess.transform(X)
             print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
+            if optional_mutable_list_of_pr_rates is not None:
+                y_pred_score = self.model.decision_function(X)
+                precision, recall, _ = precision_recall_curve(y, y_pred_score)
+                optional_mutable_list_of_pr_rates.append((precision, recall))
+
             y_pred = self.model.predict(X)
             y_size = len(y)
             print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
@@ -82,15 +87,6 @@ class SklSVM(RelationExtractor):
                 edge.pred_target = target_pred
 
             return corpus.form_predicted_relations()
-
-
-    def compute_precision_recall_rates(self):
-        X, y = self.__convert_edges_features_to_vector_instances(corpus)
-
-        y_pred_score = self.model.decision_function(X)
-        precision, recall, _ = precision_recall_curve(y, y_pred_score)
-
-        return (precision, recall)
 
 
     # ----------------------------------------------------------------------------------------------------

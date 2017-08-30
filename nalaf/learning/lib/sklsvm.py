@@ -14,6 +14,7 @@ from sklearn.preprocessing import MaxAbsScaler
 from sklearn.feature_selection import VarianceThreshold
 import time
 from sklearn.pipeline import make_pipeline
+from sklearn.metrics import precision_recall_curve, auc
 
 
 class SklSVM(RelationExtractor):
@@ -81,6 +82,16 @@ class SklSVM(RelationExtractor):
                 edge.pred_target = target_pred
 
             return corpus.form_predicted_relations()
+
+
+    def compute_precision_recall_rates(self):
+        X, y = self.__convert_edges_features_to_vector_instances(corpus)
+
+        y_pred_score = self.model.decision_function(X)
+        precision, recall, _ = precision_recall_curve(y, y_pred_score)
+
+        return (precision, recall)
+
 
     # ----------------------------------------------------------------------------------------------------
 

@@ -1880,8 +1880,8 @@ class Entity:
         TODO Note that tokens are already within sentences. You should use those by default.
         This list of tokens may be deleted. See: https://github.com/Rostlab/nalaf/issues/167
         """
-        self.sentence = None
 
+        self.sentence = None
         """
         The whole sentence of tokens this entity belongs to, if set.
 

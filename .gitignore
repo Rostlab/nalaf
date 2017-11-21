@@ -20,3 +20,5 @@ config.ini
 
 # Atom related files
 .remote-sync.json
+
+.env

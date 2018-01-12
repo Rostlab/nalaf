@@ -14,7 +14,6 @@ from sklearn.preprocessing import MaxAbsScaler
 from sklearn.feature_selection import VarianceThreshold
 import time
 from sklearn.pipeline import make_pipeline
-from sklearn.metrics import precision_recall_curve, average_precision_score, auc
 
 
 class SklSVM(RelationExtractor):
@@ -48,9 +47,6 @@ class SklSVM(RelationExtractor):
 
         self.model = svm.SVC(**svc_parameters)
 
-        "Mutable list of precision-recall (PR) rates and corresponding AUCs that are computed on every call on `annotate`"
-        self.pr_rates = []
-
 
     def train(self, training_corpus):
         X, y = self.__convert_edges_features_to_vector_instances(training_corpus)
@@ -76,12 +72,6 @@ class SklSVM(RelationExtractor):
         else:
             X = self.preprocess.transform(X)
             print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
-
-            # Compute PR rates (& AUC)
-            y_pred_score = self.model.decision_function(X)
-            precision, recall, _ = precision_recall_curve(y, y_pred_score)
-            pr_auc = average_precision_score(y, y_pred_score)
-            self.pr_rates.append((precision, recall, pr_auc))
 
             # Pure classification prediction
             y_pred = self.model.predict(X)

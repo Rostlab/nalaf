@@ -27,7 +27,7 @@ Current maintainer: [Juan Miguel Cejuela (@juanmirocks)](https://github.com/juan
 git clone https://github.com/Rostlab/nalaf.git
 cd nalaf
 python3 setup.py install
-python3 -m nalaf.download_corpora
+python3 -m nalaf.download_data
 ```
 
 If you want to run the unit tests (excluding the slow ones) do:

@@ -25,7 +25,7 @@ setup(
     keywords='nlp ner re natural langauge crf svm extraction entities relationships framework',
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
-    author_email='juanmi@tagtog.net',
+    author_email='i@juanmi.rocks',
     license=license(),
     packages=find_packages(exclude=['tests']),
     install_requires=[

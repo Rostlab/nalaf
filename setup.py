@@ -14,15 +14,15 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.2.2',
-    description='Natural Language Framework, for NER and RE)',
+    version='0.3.0',
+    description='Natural Language Framework, for NER and RE',
     long_description=readme(),
     classifiers=[
         'Natural Language :: English',
         'Programming Language :: Python :: 3.5',
         'Topic :: Text Processing :: Linguistic'
     ],
-    keywords='nlp ner natural langauge crf svm extraction entities relationships framework',
+    keywords='nlp ner re natural langauge crf svm extraction entities relationships framework',
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
     author_email='i@juanmi.rocks',

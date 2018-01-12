@@ -1,45 +1,20 @@
-*.class
 *.log
+.tags*
+.*
 
-# sbt specific
-.cache
-.history
-.lib/
-.DS_Store
-dist/*
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-
-# Scala-IDE specific
-.scala_dependencies
-.worksheet
-
-# Sublime Text
-*.sublime-*
-
-# idp-4 resources
-IDP4_*/
-node_modules/
-
-# Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
-
-# Setuptools distribution folder.
-/dist/
-
-# Compiled python modules.
+.eggs/
+*.egg*
+dist/
 *.pyc
-/build/
+build/
+.env/
 
-# PyCharm related files
-.idea/
 __pycache__/
+/*.iml
 
 # Config file with the paths
 config.ini
 
 # Cache files
-cache.json
+*cache.json

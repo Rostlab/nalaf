@@ -1,0 +1,6 @@
+This file contains example mutations, for example we have c.G1000A as a mutation.
+In this new line we have another mutation A230 > G which may or may not be recognized.
+Let's try one more where we use the word into like so Ala300 into Val.
+
+This is already a new paragraph. Here we have another mutation Val1038 to Ala. 
+The text goes on and on, here we have another G404 > A.

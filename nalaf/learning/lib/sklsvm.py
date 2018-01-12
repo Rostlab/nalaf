@@ -73,14 +73,15 @@ class SklSVM(RelationExtractor):
             X = self.preprocess.transform(X)
             print_debug("SVC after preprocessing, #features: {} && max value: {}".format(X.shape[1], max(sklearn.utils.sparsefuncs.min_max_axis(X, axis=0)[1])))
 
+            # Pure classification prediction
             y_pred = self.model.predict(X)
-            y_size = len(y)
-            print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / y_size))
+            print_debug("Mean accuracy: {}".format(sum(real == pred for real, pred in zip(y, y_pred)) / len(y)))  # same as == self.model.score(X, y))
 
             for edge, target_pred in zip(corpus.edges(), y_pred):
                 edge.pred_target = target_pred
 
             return corpus.form_predicted_relations()
+
 
     # ----------------------------------------------------------------------------------------------------
 

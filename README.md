@@ -24,6 +24,15 @@ Current maintainer: [Juan Miguel Cejuela (@juanmirocks)](https://github.com/juan
 
 ## Install nalaf
 
+### From PyPi
+
+```shell
+pip3 install nalaf
+python3 -m nalaf.download_data
+```
+
+### From source
+
 ```shell
 git clone https://github.com/Rostlab/nalaf.git
 cd nalaf
@@ -31,17 +40,13 @@ python3 setup.py install
 python3 -m nalaf.download_data
 ```
 
-If you want to run the unit tests (excluding the slow ones) do:
+
+## Test
 
 ```shell
-python3 setup.py nosetests -a '!slow'
+python3 setup.py nosetests -a '!slow' # Exclude the slow ones
 ```
 
-Note: eventually we will register the package on PyPi to just do:
-
-```
-pip3 install nalaf
-```
 
 # HOWTO Run, Examples
 

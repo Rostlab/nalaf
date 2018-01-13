@@ -3,7 +3,6 @@ import os
 
 import pkg_resources
 
-from nalaf.learning.lib.sklsvm import SklSVM
 from nalaf.utils.readers import TextFilesReader, PMIDReader
 from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat

@@ -1,6 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/nalaf.svg)](https://badge.fury.io/py/nalaf)
 [![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?branch=develop)](https://travis-ci.org/Rostlab/nalaf)
 [![codecov](https://codecov.io/gh/Rostlab/nalaf/branch/feature%2FExperimental/graph/badge.svg)](https://codecov.io/gh/Rostlab/nalaf)
-[![PyPI version](https://badge.fury.io/py/nalaf.svg)](https://badge.fury.io/py/nalaf)
 
 # nalaf - (Na)tural (La)nguage (F)ramework
 

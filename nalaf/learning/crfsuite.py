@@ -20,10 +20,10 @@ class PyCRFSuite:
             self.tagger.open(self.model_file)
 
 
-    def annotate(self, corpus, model_file, class_id):
+    def annotate(self, corpus, class_id):
         """
         :type corpus: nalaf.structures.data.Dataset
-        :type model_file: str
+        :type class_id: str ~ to annotate with
         """
 
         for sentence in corpus.sentences():

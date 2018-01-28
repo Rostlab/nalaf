@@ -1,8 +1,11 @@
 import os
 import sys
+import warnings
+
+from pycrfsuite import Trainer, ItemSequence
+
 from nalaf.structures.data import Label
 from nalaf.learning.taggers import Tagger
-import warnings
 
 
 class PyCRFSuite:
@@ -16,7 +19,7 @@ class PyCRFSuite:
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
         """
-        from pycrfsuite import Trainer, ItemSequence
+
         trainer = Trainer()
         if params is not None:
             trainer.set_params(params)
@@ -34,7 +37,7 @@ class PyCRFSuite:
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
         """
-        from pycrfsuite import Tagger, ItemSequence
+
         tagger = Tagger()
         tagger.open(model_file)
 
@@ -55,6 +58,7 @@ class CRFSuite:
 
     def __init__(self, directory, minify=False):
         warnings.warn('Deprecated. Please use PyCRFSuite instead', DeprecationWarning)
+
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'example_entity_model'

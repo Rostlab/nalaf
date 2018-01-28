@@ -1,45 +1,74 @@
 import os
 import sys
+import warnings
+
+import pycrfsuite
+
 from nalaf.structures.data import Label
 from nalaf.learning.taggers import Tagger
-import warnings
 
 
 class PyCRFSuite:
 
-    def __init__(self, ):
-        pass
+    def __init__(self, model_file=None):
+        self.model_file = model_file
+
+        if self.model_file is None:
+            self.tagger = None
+        else:
+            self.tagger = pycrfsuite.Tagger()
+            self.tagger.open(self.model_file)
+
+
+    def annotate(self, corpus, class_id):
+        """
+        :type corpus: nalaf.structures.data.Dataset
+        :type class_id: str ~ to annotate with
+        """
+
+        for sentence in corpus.sentences():
+            labels = self.tagger.tag(pycrfsuite.ItemSequence(token.features for token in sentence))
+
+            for token_index in range(len(sentence)):
+                label = labels[token_index]
+                sentence[token_index].predicted_labels = [Label(label, self.tagger.marginal(label, token_index))]
+
+        corpus.form_predicted_annotations(class_id)
+
 
     @staticmethod
     def train(data, model_file, params=None):
         """
         :type data: nalaf.structures.data.Dataset
-        :type model_file: str
+        :type model_file: str ~ filename (from local file system) to save trained model to. If None, no model is saved.
         """
-        from pycrfsuite import Trainer, ItemSequence
-        trainer = Trainer()
+
+        trainer = pycrfsuite.Trainer()
         if params is not None:
             trainer.set_params(params)
 
         for sentence in data.sentences():
-            trainer.append(ItemSequence([token.features for token in sentence]),
+            trainer.append(pycrfsuite.ItemSequence([token.features for token in sentence]),
                            [token.original_labels[0].value for token in sentence])
 
+        # The CRFSuite library handles the "pickling" of the file; saves the model here
         trainer.train(model_file)
 
 
     @staticmethod
     def tag(data, model_file, class_id):
+        warnings.warn('Use non-static `annotate` instead', DeprecationWarning)
+
         """
         :type data: nalaf.structures.data.Dataset
         :type model_file: str
         """
-        from pycrfsuite import Tagger, ItemSequence
-        tagger = Tagger()
+
+        tagger = pycrfsuite.Tagger()
         tagger.open(model_file)
 
         for sentence in data.sentences():
-            labels = tagger.tag(ItemSequence(token.features for token in sentence))
+            labels = tagger.tag(pycrfsuite.ItemSequence(token.features for token in sentence))
 
             for token_index in range(len(sentence)):
                 label = labels[token_index]
@@ -55,6 +84,7 @@ class CRFSuite:
 
     def __init__(self, directory, minify=False):
         warnings.warn('Deprecated. Please use PyCRFSuite instead', DeprecationWarning)
+
         self.directory = os.path.abspath(directory)
         """the directory where the CRFSuite executable is located"""
         self.model_filename = 'example_entity_model'

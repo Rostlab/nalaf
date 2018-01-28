@@ -17,7 +17,7 @@ class PyCRFSuite:
     def train(data, model_file, params=None):
         """
         :type data: nalaf.structures.data.Dataset
-        :type model_file: str
+        :type model_file: str ~ filename (from local file system) to save trained model to. If None, no model is saved.
         """
 
         trainer = Trainer()
@@ -28,6 +28,7 @@ class PyCRFSuite:
             trainer.append(ItemSequence([token.features for token in sentence]),
                            [token.original_labels[0].value for token in sentence])
 
+        # The CRFSuite library handles the "pickling" of the file; saves the model here
         trainer.train(model_file)
 
 

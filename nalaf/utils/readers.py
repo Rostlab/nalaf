@@ -8,6 +8,7 @@ import csv
 import os
 import xml.etree.ElementTree as ET
 import warnings
+from hdfs import InsecureClient
 
 
 class Reader:
@@ -28,39 +29,62 @@ class Reader:
 
 class HTMLReader(Reader):
     """
-    Reader for tagtog plain.html files
+    Reader for a local file system or hdfs of tagtog plain.html files.
 
     It reads either a single file or a directory (the contained .html's)
     """
 
-    def __init__(self, path, whole_basename_as_docid=False):
+    def __init__(self, path, whole_basename_as_docid=False, hdfs_url=None, hdfs_user=None):
         self.path = path
         """an html file or a directory containing .html files"""
         self.whole_basename_as_docid = whole_basename_as_docid
 
-    def __read_directory(self):
+        self.hdfs_client = None
+
+        if hdfs_url is not None:
+            assert hdfs_user is not None
+            self.hdfs_client = InsecureClient(hdfs_url, user=hdfs_user)
+
+    def __read_directory_local_fs(self):
         dataset = Dataset()
         filelist = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
         for filename in filelist:
-            dataset = self.__read_file_path(filename, dataset)
+            dataset = self.__read_file_path_local_fs(filename, dataset)
 
         return dataset
 
-    def __read_file_path(self, filename, dataset=None):
+    def __read_file_path_local_fs(self, filename, dataset=None):
         if dataset is None:
-            dataset = None
+            dataset = Dataset()
 
-        with open(filename, 'rb') as file:
-            HTMLReader.read_file(file, filename, dataset, self.whole_basename_as_docid)
+        with open(filename, 'rb') as a_file:
+            HTMLReader.read_file(a_file, filename, dataset, self.whole_basename_as_docid)
+
+        return dataset
+
+    def __read_directory_hdfs(self):
+        dataset = Dataset()
+        filelist = (os.path.join(dpath, fname) for dpath, _, fnames in self.hdfs_client.walk(self.path) for fname in fnames if fname.endswith(".html") or fname.endswith(".xml"))
+        for filename in filelist:
+            dataset = self.__read_file_path_hdfs(filename, dataset)
+
+        return dataset
+
+    def __read_file_path_hdfs(self, filename, dataset=None):
+        if dataset is None:
+            dataset = Dataset()
+
+        with self.hdfs_client.read(filename) as reader:
+            HTMLReader.read_file(reader, filename, dataset, self.whole_basename_as_docid)
 
         return dataset
 
     @staticmethod
-    def read_file(file, filename, dataset=None, whole_basename_as_docid=False):
+    def read_file(a_file, filename, dataset=None, whole_basename_as_docid=False):
         if dataset is None:
-            dataset = None
+            dataset = Dataset()
 
-        soup = BeautifulSoup(file, "html.parser")
+        soup = BeautifulSoup(a_file, "html.parser")
         document = Document()
 
         for part in soup.find_all(id=re.compile('^s')):
@@ -79,10 +103,19 @@ class HTMLReader(Reader):
         return dataset
 
     def read(self):
-        if os.path.isdir(self.path):
-            return self.__read_directory()
+        if self.hdfs_client is None:
+            if os.path.isdir(self.path):
+                return self.__read_directory_local_fs()
+            else:
+                return self.__read_file_path_local_fs(filename=self.path)
+
         else:
-            return self.__read_file_path(filename=self.path)
+            if self.hdfs_client.status(self.path)["type"] == "DIRECTORY":
+                return self.__read_directory_hdfs()
+            else:
+                return self.__read_file_path_hdfs(filename=self.path)
+
+            return
 
 
 class StringReader(Reader):

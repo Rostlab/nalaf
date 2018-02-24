@@ -46,14 +46,20 @@ class HTMLReader(Reader):
 
         return dataset
 
-    def __read_file_path(self, filename, dataset=Dataset()):
+    def __read_file_path(self, filename, dataset=None):
+        if dataset is None:
+            dataset = None
+
         with open(filename, 'rb') as file:
             HTMLReader.read_file(file, filename, dataset, self.whole_basename_as_docid)
 
         return dataset
 
     @staticmethod
-    def read_file(file, filename, dataset=Dataset(), whole_basename_as_docid=False):
+    def read_file(file, filename, dataset=None, whole_basename_as_docid=False):
+        if dataset is None:
+            dataset = None
+
         soup = BeautifulSoup(file, "html.parser")
         document = Document()
 

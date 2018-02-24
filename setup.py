@@ -42,6 +42,7 @@ setup(
         'beautifulsoup4 >= 4.5.1',
         'requests >= 2.8.1',
         'progress >= 1.2',
+        'hdfs == 2.1.0'
     ],
     include_package_data=True,
     zip_safe=False,

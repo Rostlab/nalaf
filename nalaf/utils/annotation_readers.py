@@ -71,83 +71,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as reader:
-                try:
-                    doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
-                    if not self.whole_basename_as_docid and '-' in doc_id:
-                        doc_id = doc_id.split('-')[-1]
-
-                    read_docs.add(doc_id)
-                    ann_json = json.load(reader)
-                    try:
-                        document = dataset.documents[doc_id]
-                    except Exception as err:
-                        print_warning("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
-                        continue
-
-                    if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
-                        del dataset.documents[doc_id]
-
-                    else:
-
-                        for e in ann_json['entities']:
-
-                            if self.read_only_class_id is None or e['classId'] in self.read_only_class_id:
-
-                                part = document.parts[e['part']]
-
-                                try:
-                                    normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
-                                except KeyError as err:
-                                    print_warning("The normalization is badly formatted: (docid={}) {}".format(doc_id, str(e['normalizations'])))
-                                    normalizations = None
-
-                                entity = Entity(
-                                    e['classId'],
-                                    e['offsets'][0]['start'],
-                                    e['offsets'][0]['text'],
-                                    e['confidence']['prob'],
-                                    norms=normalizations)
-
-                                if self.is_predicted:
-                                    part.predicted_annotations.append(entity)
-                                else:
-                                    part.annotations.append(entity)
-
-                        if self.read_relations:
-                            for relation in ann_json['relations']:
-                                # Note: no distinction with predicted_relations yet
-
-                                part = document.parts[relation['entities'][0].split('|')[0]]
-
-                                e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
-                                e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
-
-                                rel_id = relation['classId']
-
-                                e1 = part.get_entity(e1_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
-                                e2 = part.get_entity(e2_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
-
-                                if (not self.raise_exception_on_incosistencies and (e1 is None or e2 is None)):
-                                    continue
-
-                                rel = Relation(rel_id, e1, e2)
-
-                                part.relations.append(rel)
-
-                        # delete parts that are not annotatable
-                        annotatable_parts = set(ann_json['annotatable']['parts'])
-                        part_ids_to_del = []
-                        for part_id, part in document.parts.items():
-                            if part_id not in annotatable_parts:
-                                part_ids_to_del.append(part_id)
-                        for part_id in part_ids_to_del:
-                            del document.parts[part_id]
-
-                except Exception as err:
-                    if self.raise_exception_on_incosistencies:
-                        raise err
-                    else:
-                        pass
+                doc_id = self.read_annjson(reader, filename, dataset)
+                read_docs.add(doc_id)
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs
@@ -159,6 +84,88 @@ class AnnJsonAnnotationReader(AnnotationReader):
         dataset.validate_entity_offsets()
 
         return dataset
+
+
+    def read_annjson(self, reader, filename, dataset):
+        try:
+            doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
+            if not self.whole_basename_as_docid and '-' in doc_id:
+                doc_id = doc_id.split('-')[-1]
+
+            ann_json = json.load(reader)
+
+            try:
+                document = dataset.documents[doc_id]
+            except Exception as err:
+                print_warning("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
+                return doc_id
+
+            if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:
+                del dataset.documents[doc_id]
+
+            else:
+
+                for e in ann_json['entities']:
+
+                    if self.read_only_class_id is None or e['classId'] in self.read_only_class_id:
+
+                        part = document.parts[e['part']]
+
+                        try:
+                            normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
+                        except KeyError as err:
+                            print_warning("The normalization is badly formatted: (docid={}) {}".format(doc_id, str(e['normalizations'])))
+                            normalizations = None
+
+                        entity = Entity(
+                            e['classId'],
+                            e['offsets'][0]['start'],
+                            e['offsets'][0]['text'],
+                            e['confidence']['prob'],
+                            norms=normalizations)
+
+                        if self.is_predicted:
+                            part.predicted_annotations.append(entity)
+                        else:
+                            part.annotations.append(entity)
+
+                if self.read_relations:
+                    for relation in ann_json['relations']:
+                        # Note: no distinction with predicted_relations yet
+
+                        part = document.parts[relation['entities'][0].split('|')[0]]
+
+                        e1_start = int(relation['entities'][0].split('|')[1].split(',')[0])
+                        e2_start = int(relation['entities'][1].split('|')[1].split(',')[0])
+
+                        rel_id = relation['classId']
+
+                        e1 = part.get_entity(e1_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
+                        e2 = part.get_entity(e2_start, use_pred=False, raise_exception_on_incosistencies=self.raise_exception_on_incosistencies)
+
+                        if (not self.raise_exception_on_incosistencies and (e1 is None or e2 is None)):
+                            continue
+
+                        rel = Relation(rel_id, e1, e2)
+
+                        part.relations.append(rel)
+
+                # delete parts that are not annotatable
+                annotatable_parts = set(ann_json['annotatable']['parts'])
+                part_ids_to_del = []
+                for part_id, part in document.parts.items():
+                    if part_id not in annotatable_parts:
+                        part_ids_to_del.append(part_id)
+                for part_id in part_ids_to_del:
+                    del document.parts[part_id]
+
+            return doc_id
+
+        except Exception as err:
+            if self.raise_exception_on_incosistencies:
+                raise err
+            else:
+                pass
 
 
 class AnnJsonMergerAnnotationReader(AnnotationReader):

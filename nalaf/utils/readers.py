@@ -45,15 +45,15 @@ class HTMLReader(Reader):
             assert hdfs_user is not None
             self.hdfs_client = InsecureClient(hdfs_url, user=hdfs_user)
 
-    def __read_directory_local_fs(self):
+    def __read_directory_localfs(self):
         dataset = Dataset()
         filelist = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
         for filename in filelist:
-            dataset = self.__read_file_path_local_fs(filename, dataset)
+            dataset = self.__read_file_path_localfs(filename, dataset)
 
         return dataset
 
-    def __read_file_path_local_fs(self, filename, dataset=None):
+    def __read_file_path_localfs(self, filename, dataset=None):
         if dataset is None:
             dataset = Dataset()
 
@@ -105,9 +105,9 @@ class HTMLReader(Reader):
     def read(self):
         if self.hdfs_client is None:
             if os.path.isdir(self.path):
-                return self.__read_directory_local_fs()
+                return self.__read_directory_localfs()
             else:
-                return self.__read_file_path_local_fs(filename=self.path)
+                return self.__read_file_path_localfs(filename=self.path)
 
         else:
             if self.hdfs_client.status(self.path)["type"] == "DIRECTORY":

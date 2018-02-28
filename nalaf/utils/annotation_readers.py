@@ -64,7 +64,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         else:
             filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
 
-        read_docs = set({})
+        read_docs = set()
 
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as reader:

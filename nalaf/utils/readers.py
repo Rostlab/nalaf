@@ -1,14 +1,15 @@
 import abc
 from bs4 import BeautifulSoup
-from nalaf.utils.download import DownloadArticle
-from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
 import re
 import glob
 import csv
 import os
 import xml.etree.ElementTree as ET
 import warnings
-from hdfs import InsecureClient
+
+from nalaf.utils.download import DownloadArticle
+from nalaf.structures.data import Dataset, Document, Part, Entity
+from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory
 
 
 class Reader:
@@ -39,11 +40,7 @@ class HTMLReader(Reader):
         """an html file or a directory containing .html files"""
         self.whole_basename_as_docid = whole_basename_as_docid
 
-        self.hdfs_client = None
-
-        if hdfs_url is not None:
-            assert hdfs_user is not None
-            self.hdfs_client = InsecureClient(hdfs_url, user=hdfs_user)
+        self.hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 
     def __read_directory_localfs(self):
         dataset = Dataset()
@@ -110,7 +107,7 @@ class HTMLReader(Reader):
                 return self.__read_file_path_localfs(filename=self.path)
 
         else:
-            if self.hdfs_client.status(self.path)["type"] == "DIRECTORY":
+            if is_hdfs_directory(self.hdfs_client, self.path):
                 return self.__read_directory_hdfs()
             else:
                 return self.__read_file_path_hdfs(filename=self.path)

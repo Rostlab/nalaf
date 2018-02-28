@@ -10,7 +10,7 @@ from operator import lt, gt
 
 from nalaf import print_verbose, print_debug, print_warning
 from nalaf.structures.data import Entity, Relation
-from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory
+from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory, walk_hdfs_directory
 
 
 class AnnotationReader:
@@ -93,6 +93,24 @@ class AnnJsonAnnotationReader(AnnotationReader):
                 read_docs.add(doc_id)
 
         return read_docs
+
+
+    def read_files_hdfs(self, dataset, read_docs=None):
+        if read_docs is None:
+            read_docs = set()
+
+        if not is_hdfs_directory(self.hdfs_client, self.directory):
+            filenames = [self.directory]
+        else:
+            filenames = walk_hdfs_directory(self.hdfs_client, self.directory, lambda fname: fname.endswith(".ann.json"))
+
+        for filename in filenames:
+            with self.hdfs_client.read(filename, encoding="utf-8") as reader:
+                doc_id = self.read_annjson(reader, filename, dataset)
+                read_docs.add(doc_id)
+
+        return read_docs
+
 
 
     def read_annjson(self, reader, filename, dataset):

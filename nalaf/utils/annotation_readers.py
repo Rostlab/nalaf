@@ -10,6 +10,7 @@ from operator import lt, gt
 
 from nalaf import print_verbose, print_debug, print_warning
 from nalaf.structures.data import Entity, Relation
+from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory
 
 
 class AnnotationReader:
@@ -36,7 +37,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
     Implements the abstract class Annotator.
     """
 
-    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False, raise_exception_on_incosistencies=True):
+    def __init__(self, directory, read_only_class_id=None, delete_incomplete_docs=True, is_predicted=False, read_relations=False, whole_basename_as_docid=False, raise_exception_on_incosistencies=True, hdfs_url=None, hdfs_user=None):
         self.directory = directory
         """the directory containing *.ann.json files"""
 
@@ -53,6 +54,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """whether relations should be read as well"""
         self.whole_basename_as_docid = whole_basename_as_docid
         self.raise_exception_on_incosistencies = raise_exception_on_incosistencies
+
+        self.hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 
 
     def annotate(self, dataset):

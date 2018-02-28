@@ -64,7 +64,10 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         read_docs = set()
 
-        self.__read_files_localfs(dataset, read_docs)
+        if self.hdfs_client is None:
+            self.__read_files_localfs(dataset, read_docs)
+        else:
+            self.__read_files_hdfs(dataset, read_docs)
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs

@@ -64,7 +64,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         read_docs = set()
 
-        self.read_files_localfs(dataset, read_docs)
+        self.__read_files_localfs(dataset, read_docs)
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs
@@ -78,7 +78,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
         return dataset
 
 
-    def read_files_localfs(self, dataset, read_docs=None):
+    def __read_files_localfs(self, dataset, read_docs=None):
         if read_docs is None:
             read_docs = set()
 
@@ -89,13 +89,13 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as reader:
-                doc_id = self.read_annjson(reader, filename, dataset)
+                doc_id = self.__read_annjson(reader, filename, dataset)
                 read_docs.add(doc_id)
 
         return read_docs
 
 
-    def read_files_hdfs(self, dataset, read_docs=None):
+    def __read_files_hdfs(self, dataset, read_docs=None):
         if read_docs is None:
             read_docs = set()
 
@@ -106,14 +106,14 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
         for filename in filenames:
             with self.hdfs_client.read(filename, encoding="utf-8") as reader:
-                doc_id = self.read_annjson(reader, filename, dataset)
+                doc_id = self.__read_annjson(reader, filename, dataset)
                 read_docs.add(doc_id)
 
         return read_docs
 
 
 
-    def read_annjson(self, reader, filename, dataset):
+    def __read_annjson(self, reader, filename, dataset):
         try:
             doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
             if not self.whole_basename_as_docid and '-' in doc_id:

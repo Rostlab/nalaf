@@ -67,14 +67,14 @@ class AnnJsonAnnotationReader(AnnotationReader):
         read_docs = set({})
 
         for filename in filenames:
-            with open(filename, 'r', encoding="utf-8") as file:
+            with open(filename, 'r', encoding="utf-8") as reader:
                 try:
                     doc_id = os.path.basename(filename).replace('.ann.json', '').replace('.json', '')
                     if not self.whole_basename_as_docid and '-' in doc_id:
                         doc_id = doc_id.split('-')[-1]
 
                     read_docs.add(doc_id)
-                    ann_json = json.load(file)
+                    ann_json = json.load(reader)
                     try:
                         document = dataset.documents[doc_id]
                     except Exception as err:

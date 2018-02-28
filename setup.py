@@ -14,7 +14,7 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.3.4',
+    version='0.4.0',
     description='Natural Language Framework, for NER and RE',
     long_description=readme(),
     classifiers=[
@@ -42,6 +42,7 @@ setup(
         'beautifulsoup4 >= 4.5.1',
         'requests >= 2.8.1',
         'progress >= 1.2',
+        'hdfs == 2.1.0'
     ],
     include_package_data=True,
     zip_safe=False,

@@ -1,13 +1,15 @@
 import abc
 from bs4 import BeautifulSoup
-from nalaf.utils.download import DownloadArticle
-from nalaf.structures.data import Dataset, Document, Part, Entity, Relation
 import re
 import glob
 import csv
 import os
 import xml.etree.ElementTree as ET
 import warnings
+
+from nalaf.utils.download import DownloadArticle
+from nalaf.structures.data import Dataset, Document, Part, Entity
+from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory, walk_hdfs_directory
 
 
 class Reader:
@@ -28,33 +30,60 @@ class Reader:
 
 class HTMLReader(Reader):
     """
-    Reader for tagtog plain.html files
+    Reader for a local file system or hdfs of tagtog plain.html files.
 
     It reads either a single file or a directory (the contained .html's)
     """
 
-    def __init__(self, path, whole_basename_as_docid=False):
+    def __init__(self, path, whole_basename_as_docid=False, hdfs_url=None, hdfs_user=None):
         self.path = path
         """an html file or a directory containing .html files"""
         self.whole_basename_as_docid = whole_basename_as_docid
 
-    def __read_directory(self):
+        self.hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
+
+    def __read_directory_localfs(self):
         dataset = Dataset()
-        filelist = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
-        for filename in filelist:
-            dataset = self.__read_file_path(filename, dataset)
+
+        filenames = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
+        for filename in filenames:
+            dataset = self.__read_file_path_localfs(filename, dataset)
 
         return dataset
 
-    def __read_file_path(self, filename, dataset=Dataset()):
-        with open(filename, 'rb') as file:
-            HTMLReader.read_file(file, filename, dataset, self.whole_basename_as_docid)
+    def __read_file_path_localfs(self, filename, dataset=None):
+        if dataset is None:
+            dataset = Dataset()
+
+        with open(filename, 'rb') as a_file:
+            HTMLReader.read_file(a_file, filename, dataset, self.whole_basename_as_docid)
+
+        return dataset
+
+    def __read_directory_hdfs(self):
+        dataset = Dataset()
+
+        filenames = walk_hdfs_directory(self.hdfs_client, self.path, lambda fname: fname.endswith(".html") or fname.endswith(".xml"))
+        for filename in filenames:
+            dataset = self.__read_file_path_hdfs(filename, dataset)
+
+        return dataset
+
+    def __read_file_path_hdfs(self, filename, dataset=None):
+        if dataset is None:
+            dataset = Dataset()
+
+        with self.hdfs_client.read(filename) as reader:
+            HTMLReader.read_file(reader, filename, dataset, self.whole_basename_as_docid)
 
         return dataset
 
     @staticmethod
-    def read_file(file, filename, dataset=Dataset(), whole_basename_as_docid=False):
-        soup = BeautifulSoup(file, "html.parser")
+    def read_file(a_file, filename, dataset=None, whole_basename_as_docid=False):
+        if dataset is None:
+            dataset = Dataset()
+
+        soup = BeautifulSoup(a_file, "html.parser")
         document = Document()
 
         for part in soup.find_all(id=re.compile('^s')):
@@ -73,10 +102,19 @@ class HTMLReader(Reader):
         return dataset
 
     def read(self):
-        if os.path.isdir(self.path):
-            return self.__read_directory()
+        if self.hdfs_client is None:
+            if os.path.isdir(self.path):
+                return self.__read_directory_localfs()
+            else:
+                return self.__read_file_path_localfs(filename=self.path)
+
         else:
-            return self.__read_file_path(filename=self.path)
+            if is_hdfs_directory(self.hdfs_client, self.path):
+                return self.__read_directory_hdfs()
+            else:
+                return self.__read_file_path_hdfs(filename=self.path)
+
+            return
 
 
 class StringReader(Reader):

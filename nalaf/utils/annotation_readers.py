@@ -62,17 +62,9 @@ class AnnJsonAnnotationReader(AnnotationReader):
         """
         :type dataset: nalaf.structures.data.Dataset
         """
-        if not os.path.isdir(self.directory):
-            filenames = [self.directory]
-        else:
-            filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
-
         read_docs = set()
 
-        for filename in filenames:
-            with open(filename, 'r', encoding="utf-8") as reader:
-                doc_id = self.read_annjson(reader, filename, dataset)
-                read_docs.add(doc_id)
+        self.read_files_localfs(dataset, read_docs)
 
         # Delete docs with no ann.jsons
         docs_to_delete = set(dataset.documents.keys()) - read_docs
@@ -84,6 +76,23 @@ class AnnJsonAnnotationReader(AnnotationReader):
         dataset.validate_entity_offsets()
 
         return dataset
+
+
+    def read_files_localfs(self, dataset, read_docs=None):
+        if read_docs is None:
+            read_docs = set()
+
+        if not os.path.isdir(self.directory):
+            filenames = [self.directory]
+        else:
+            filenames = glob.glob(str(self.directory + "/**/*.ann.json"), recursive=True)
+
+        for filename in filenames:
+            with open(filename, 'r', encoding="utf-8") as reader:
+                doc_id = self.read_annjson(reader, filename, dataset)
+                read_docs.add(doc_id)
+
+        return read_docs
 
 
     def read_annjson(self, reader, filename, dataset):

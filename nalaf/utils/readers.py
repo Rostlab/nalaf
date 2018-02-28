@@ -9,7 +9,7 @@ import warnings
 
 from nalaf.utils.download import DownloadArticle
 from nalaf.structures.data import Dataset, Document, Part, Entity
-from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory
+from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory, walk_hdfs_directory
 
 
 class Reader:
@@ -44,8 +44,9 @@ class HTMLReader(Reader):
 
     def __read_directory_localfs(self):
         dataset = Dataset()
-        filelist = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
-        for filename in filelist:
+
+        filenames = glob.glob(str(self.path + "/**/*.html"), recursive=True) + glob.glob(str(self.path + "/**/*.xml"), recursive=True)
+        for filename in filenames:
             dataset = self.__read_file_path_localfs(filename, dataset)
 
         return dataset
@@ -61,8 +62,9 @@ class HTMLReader(Reader):
 
     def __read_directory_hdfs(self):
         dataset = Dataset()
-        filelist = (os.path.join(dpath, fname) for dpath, _, fnames in self.hdfs_client.walk(self.path) for fname in fnames if fname.endswith(".html") or fname.endswith(".xml"))
-        for filename in filelist:
+
+        filenames = walk_hdfs_directory(self.hdfs_client, self.path, lambda fname: fname.endswith(".html") or fname.endswith(".xml"))
+        for filename in filenames:
             dataset = self.__read_file_path_hdfs(filename, dataset)
 
         return dataset

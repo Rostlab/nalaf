@@ -19,20 +19,20 @@ class DictionaryFeatureGenerator(FeatureGenerator):
             token.features[self.key] = normalized_token in self.words_set
 
     @staticmethod
-    def construct_words_set(file_reader, tokenizer, case_sensitive):
+    def construct_words_set(file_reader, string_tokenizer, case_sensitive):
         """
         Note, the file_reader descriptor is not closed. The client is responsible for this.
         """
         ret = set()
         for name in file_reader:
-            tokens = tokenizer.tokenize_string(name)
+            tokens = string_tokenizer(name)
             normalized_tokens = tokens if case_sensitive else (x.lower() for x in tokens)
             ret.update(normalized_tokens)
 
         return ret
 
     @staticmethod
-    def construct_all_from_folder(tokenizer, case_sensitive, dictionaries_folder, hdfs_url, hdfs_user, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+    def construct_all_from_folder(string_tokenizer, case_sensitive, dictionaries_folder, hdfs_url=None, hdfs_user=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
 
         def accept_filename_fun(filename):
             return any(filename.endswith(accepted_extension) for accepted_extension in accepted_extensions)
@@ -47,7 +47,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
                 reader = read_function(dic_path)
                 try:
                     name = get_filename(dic_path)
-                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, tokenizer, case_sensitive)
+                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive)
                     generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
                     ret.append(generator)
                 finally:
@@ -66,8 +66,8 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
         else:
             # local file system
-            dic_paths = (path for path in glob.glob(str(dictionaries_folder), recursive=True) if accept_filename_fun(path))
-            read_function = lambda dic_path: open(dic_path, "f")
+            dic_paths = (path for path in glob.glob(os.path.join(dictionaries_folder, "*"), recursive=True) if accept_filename_fun(path))
+            read_function = lambda dic_path: open(dic_path, "r")
 
         #
 

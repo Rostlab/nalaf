@@ -15,7 +15,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     def generate(self, dataset):
         for token in dataset.tokens():
-            normalized_token = token if self.case_sensitive else token.lower()
+            normalized_token = token if self.case_sensitive else token.word.lower()
             token.features[self.key] = normalized_token in self.words_set
 
     @staticmethod

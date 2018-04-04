@@ -27,11 +27,15 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         for name in file_reader:
             tokens = string_tokenizer(name)
             normalized_tokens = tokens if case_sensitive else (x.lower() for x in tokens)
-            filtered_normalized_tokens = (x for x in normalized_tokens if x not in stop_words)
+            filtered_normalized_tokens = (x for x in normalized_tokens if ((x not in stop_words) and DictionaryFeatureGenerator.default_stop_rules(x)))
 
             ret.update(filtered_normalized_tokens)
 
         return ret
+
+    @staticmethod
+    def default_stop_rules(token):
+        return len(token) > 1
 
     @staticmethod
     def construct_all_from_folder(string_tokenizer, case_sensitive, dictionaries_folder, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):

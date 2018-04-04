@@ -1,6 +1,8 @@
+import os
+import glob
+
 from nalaf.features import FeatureGenerator
 from nalaf.utils.hdfs import maybe_get_hdfs_client, walk_hdfs_directory
-import os
 
 
 class DictionaryFeatureGenerator(FeatureGenerator):
@@ -64,7 +66,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
         else:
             # local file system
-            dic_paths = (for path in glob.glob(str(dictionaries_folder), recursive=True) if accept_filename_fun(path))
+            dic_paths = (path for path in glob.glob(str(dictionaries_folder), recursive=True) if accept_filename_fun(path))
             read_function = lambda dic_path: open(dic_path, "f")
 
         #

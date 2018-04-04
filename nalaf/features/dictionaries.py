@@ -19,7 +19,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
             token.features[self.key] = normalized_token in self.words_set
 
     @staticmethod
-    def construct_words_set(file_reader, string_tokenizer, case_sensitive):
+    def construct_words_set(file_reader, string_tokenizer, case_sensitive, stop_words):
         """
         Note, the file_reader descriptor is not closed. The client is responsible for this.
         """
@@ -27,12 +27,18 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         for name in file_reader:
             tokens = string_tokenizer(name)
             normalized_tokens = tokens if case_sensitive else (x.lower() for x in tokens)
-            ret.update(normalized_tokens)
+            filtered_normalized_tokens = (x for x in normalized_tokens if x not in stop_words)
+
+            ret.update(filtered_normalized_tokens)
 
         return ret
 
     @staticmethod
-    def construct_all_from_folder(string_tokenizer, case_sensitive, dictionaries_folder, hdfs_url=None, hdfs_user=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+    def construct_all_from_folder(string_tokenizer, case_sensitive, dictionaries_folder, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+        if stop_words is None:
+            stop_words = set()
+        if type(stop_words) is str:
+            stop_words = set(stop_words.split())
 
         def accept_filename_fun(filename):
             return any(filename.endswith(accepted_extension) for accepted_extension in accepted_extensions)
@@ -47,7 +53,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
                 reader = read_function(dic_path)
                 try:
                     name = get_filename(dic_path)
-                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive)
+                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
                     generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
                     ret.append(generator)
                 finally:

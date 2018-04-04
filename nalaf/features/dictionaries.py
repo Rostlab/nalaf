@@ -5,15 +5,16 @@ import os
 
 class DictionaryFeatureGenerator(FeatureGenerator):
 
-    def __init__(self, name, file_reader, tokenizer, case_sensitive=False):
+    def __init__(self, name, words_set, case_sensitive=False):
         self.name = name
-        self.dictionary_set = DictionaryFeatureGenerator.construct_words_set(file_reader, tokenizer, case_sensitive)
+        self.words_set = words_set
         self.key = "dics." + name
+        self.case_sensitive = case_sensitive
 
     def generate(self, dataset):
         for token in dataset.tokens():
             normalized_token = token if self.case_sensitive else token.lower()
-            token.features[self.key] = normalized_token in self.dictionary_set
+            token.features[self.key] = normalized_token in self.words_set
 
     @staticmethod
     def construct_words_set(file_reader, tokenizer, case_sensitive):
@@ -44,7 +45,8 @@ class DictionaryFeatureGenerator(FeatureGenerator):
                 reader = read_function(dic_path)
                 try:
                     name = get_filename(dic_path)
-                    generator = DictionaryFeatureGenerator(name, reader, tokenizer, case_sensitive)
+                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, tokenizer, case_sensitive)
+                    generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
                     ret.append(generator)
                 finally:
                     reader.close()

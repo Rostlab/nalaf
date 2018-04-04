@@ -38,47 +38,77 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         return len(token) > 1
 
     @staticmethod
-    def construct_all_from_folder(string_tokenizer, case_sensitive, dictionaries_folder, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+    def __normalize_stop_words(stop_words):
         if stop_words is None:
-            stop_words = set()
-        if type(stop_words) is str:
-            stop_words = set(stop_words.split())
+            return set()
+        elif type(stop_words) is str:
+            return set(stop_words.split())
+        else:
+            return stop_words
+
+    @staticmethod
+    def __get_filename(path):
+        return os.path.splitext(os.path.basename(path))[0]
+
+    @staticmethod
+    def __read_dictionaries(dic_paths, read_function, string_tokenizer, case_sensitive, stop_words):
+        stop_words = DictionaryFeatureGenerator.__normalize_stop_words(stop_words)
+
+        ret = []
+
+        for dic_path in dic_paths:
+            reader = read_function(dic_path)
+            try:
+                name = DictionaryFeatureGenerator.__get_filename(dic_path)
+                words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
+                generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
+                ret.append(generator)
+            finally:
+                reader.close()
+
+        return ret
+
+    @staticmethod
+    def __localfs_read_function(dic_path):
+        return open(dic_path, "r")
+
+    @staticmethod
+    def __hdfs_read_funciton(hdfs_client):
+        return lambda dic_path: hdfs_client.read(dic_path)
+
+    @staticmethod
+    def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+
+        hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
+
+        if hdfs_client:
+            read_function = DictionaryFeatureGenerator.__hdfs_read_funciton(hdfs_client)
+
+        else:
+            read_function = DictionaryFeatureGenerator.__localfs_read_function
+
+        #
+
+        return DictionaryFeatureGenerator.__read_dictionaries(dictionaries_paths, read_function, string_tokenizer, case_sensitive, stop_words)
+
+    @staticmethod
+    def construct_all_from_folder(dictionaries_folder, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
 
         def accept_filename_fun(filename):
             return any(filename.endswith(accepted_extension) for accepted_extension in accepted_extensions)
-
-        def get_filename(path):
-            return os.path.splitext(os.path.basename(path))[0]
-
-        def read_dictionaries(dic_paths, read_function):
-            ret = []
-
-            for dic_path in dic_paths:
-                reader = read_function(dic_path)
-                try:
-                    name = get_filename(dic_path)
-                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
-                    generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
-                    ret.append(generator)
-                finally:
-                    reader.close()
-
-            return ret
-
-        #
 
         hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 
         if hdfs_client:
             # hdfs
             dic_paths = walk_hdfs_directory(hdfs_client, dictionaries_folder, accept_filename_fun)
-            read_function = lambda dic_path: hdfs_client.read(dic_path)
+            read_function = DictionaryFeatureGenerator.__hdfs_read_funciton(hdfs_client)
 
         else:
             # local file system
             dic_paths = (path for path in glob.glob(os.path.join(dictionaries_folder, "*"), recursive=True) if accept_filename_fun(path))
-            read_function = lambda dic_path: open(dic_path, "r")
+            read_function = DictionaryFeatureGenerator.__localfs_read_function
 
         #
 
-        return read_dictionaries(dic_paths, read_function)
+        return DictionaryFeatureGenerator.__read_dictionaries(dic_paths, read_function, string_tokenizer, case_sensitive, stop_words)

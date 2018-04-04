@@ -78,6 +78,8 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     @staticmethod
     def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+        if type(dictionaries_paths) is str:
+            dictionaries_paths = dictionaries_paths.split()
 
         hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 

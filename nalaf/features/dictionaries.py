@@ -86,7 +86,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     @staticmethod
     def __hdfs_read_funciton(hdfs_client):
-        return lambda dic_path: hdfs_client.read(dic_path)
+        return lambda dic_path: hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
 
     @staticmethod
     def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):

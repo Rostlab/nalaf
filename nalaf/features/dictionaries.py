@@ -1,8 +1,10 @@
 import os
 import glob
+import traceback
 
 from nalaf.features import FeatureGenerator
 from nalaf.utils.hdfs import maybe_get_hdfs_client, walk_hdfs_directory
+from nalaf import print_verbose, print_debug
 
 
 class DictionaryFeatureGenerator(FeatureGenerator):
@@ -12,6 +14,9 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         self.words_set = words_set
         self.key = "dics." + name
         self.case_sensitive = case_sensitive
+
+    def __repr__(self):
+        return "{} (size: {})".format(self.name, len(self.words_set))
 
     def generate(self, dataset):
         for token in dataset.tokens():
@@ -57,14 +62,21 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         ret = []
 
         for dic_path in dic_paths:
-            reader = read_function(dic_path)
             try:
-                name = DictionaryFeatureGenerator.__get_filename(dic_path)
-                words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
-                generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
-                ret.append(generator)
-            finally:
-                reader.close()
+                reader = read_function(dic_path)
+                try:
+                    name = DictionaryFeatureGenerator.__get_filename(dic_path)
+                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
+                    generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
+                    ret.append(generator)
+                finally:
+                    reader.close()
+            except Exception as e:
+                traceback.print_exc()
+                print_debug("Could not read dictionary: {}".format(dic_path), e)
+                continue
+
+        print_verbose("Using dictionaries: {}".format(", ".join((repr(x) for x in ret))))
 
         return ret
 
@@ -74,10 +86,12 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     @staticmethod
     def __hdfs_read_funciton(hdfs_client):
-        return lambda dic_path: hdfs_client.read(dic_path)
+        return lambda dic_path: hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
 
     @staticmethod
     def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+        if type(dictionaries_paths) is str:
+            dictionaries_paths = dictionaries_paths.split()
 
         hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 

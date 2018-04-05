@@ -1,5 +1,6 @@
 import os
 import glob
+import traceback
 
 from nalaf.features import FeatureGenerator
 from nalaf.utils.hdfs import maybe_get_hdfs_client, walk_hdfs_directory
@@ -71,6 +72,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
                 finally:
                     reader.close()
             except Exception as e:
+                traceback.print_exc()
                 print_debug("Could not read dictionary: {}".format(dic_path), e)
                 continue
 

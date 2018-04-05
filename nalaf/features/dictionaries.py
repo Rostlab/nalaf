@@ -3,6 +3,7 @@ import glob
 
 from nalaf.features import FeatureGenerator
 from nalaf.utils.hdfs import maybe_get_hdfs_client, walk_hdfs_directory
+from nalaf import print_verbose, print_debug
 
 
 class DictionaryFeatureGenerator(FeatureGenerator):
@@ -12,6 +13,9 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         self.words_set = words_set
         self.key = "dics." + name
         self.case_sensitive = case_sensitive
+
+    def __repr__(self):
+        return "{} (size: {})".format(self.name, len(self.words_set))
 
     def generate(self, dataset):
         for token in dataset.tokens():
@@ -57,14 +61,20 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         ret = []
 
         for dic_path in dic_paths:
-            reader = read_function(dic_path)
             try:
-                name = DictionaryFeatureGenerator.__get_filename(dic_path)
-                words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
-                generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
-                ret.append(generator)
-            finally:
-                reader.close()
+                reader = read_function(dic_path)
+                try:
+                    name = DictionaryFeatureGenerator.__get_filename(dic_path)
+                    words_set = DictionaryFeatureGenerator.construct_words_set(reader, string_tokenizer, case_sensitive, stop_words)
+                    generator = DictionaryFeatureGenerator(name, words_set, case_sensitive)
+                    ret.append(generator)
+                finally:
+                    reader.close()
+            except Exception as e:
+                print_debug("Could not read dictionary: {}".format(dic_path), e)
+                continue
+
+        print_verbose("Using dictionaries: {}".format(", ".join((repr(x) for x in ret))))
 
         return ret
 

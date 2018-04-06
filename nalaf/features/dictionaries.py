@@ -1,6 +1,7 @@
 import os
 import glob
 import traceback
+import codecs
 
 from nalaf.features import FeatureGenerator
 from nalaf.utils.hdfs import maybe_get_hdfs_client, walk_hdfs_directory
@@ -82,11 +83,18 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     @staticmethod
     def __localfs_read_function(dic_path):
-        return open(dic_path, "r")
+        return open(dic_path, "r", encoding="utf-8")
 
     @staticmethod
     def __hdfs_read_funciton(hdfs_client):
-        return lambda dic_path: hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
+        def ret(dic_path):
+            res = hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
+            # res.encoding = "utf-8"
+            # return res
+            return codecs.getreader("utf-8")(res.raw)
+
+        return ret
+
 
     @staticmethod
     def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):

@@ -3,6 +3,7 @@ import glob
 import json
 import csv
 import os
+import logging
 from collections import OrderedDict
 from itertools import chain
 from functools import reduce
@@ -11,6 +12,7 @@ from operator import lt, gt
 from nalaf import print_verbose, print_debug, print_warning
 from nalaf.structures.data import Entity, Relation
 from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory, walk_hdfs_directory
+from json.decoder import JSONDecodeError
 
 
 class AnnotationReader:
@@ -93,7 +95,8 @@ class AnnJsonAnnotationReader(AnnotationReader):
         for filename in filenames:
             with open(filename, 'r', encoding="utf-8") as reader:
                 doc_id = self.__read_annjson(reader, filename, dataset)
-                read_docs.add(doc_id)
+                if doc_id:
+                    read_docs.add(doc_id)
 
         return read_docs
 
@@ -122,12 +125,16 @@ class AnnJsonAnnotationReader(AnnotationReader):
             if not self.whole_basename_as_docid and '-' in doc_id:
                 doc_id = doc_id.split('-')[-1]
 
-            ann_json = json.load(reader)
+            try:
+                ann_json = json.load(reader)
+            except JSONDecodeError as err:
+                logging.exception("The annjson with docid={} seems malformed.".format(doc_id))
+                return
 
             try:
                 document = dataset.documents[doc_id]
             except Exception as err:
-                print_warning("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
+                logging.exception("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
                 return doc_id
 
             if not (ann_json['anncomplete'] or self.is_predicted) and self.delete_incomplete_docs:

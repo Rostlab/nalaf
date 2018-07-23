@@ -19,3 +19,5 @@ config.ini
 
 # Cache files
 *cache.json
+
+coverage.xml

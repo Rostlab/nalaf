@@ -22,7 +22,7 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Topic :: Text Processing :: Linguistic'
     ],
-    keywords='nlp ner re natural langauge crf svm extraction entities relationships framework',
+    keywords='nlp nlu ner re natural langauge crf svm extraction entities relationships framework',
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
     author_email='i@juanmi.rocks',

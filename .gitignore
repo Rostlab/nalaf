@@ -1,6 +1,7 @@
 *.log
 .tags*
 .*
+!.gitignore
 
 /*.egg-info
 .eggs/

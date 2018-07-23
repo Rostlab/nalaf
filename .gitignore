@@ -2,6 +2,7 @@
 .tags*
 .*
 !.gitignore
+!.travis.yml
 
 /*.egg-info
 .eggs/

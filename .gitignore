@@ -1,6 +1,8 @@
 *.log
 .tags*
 .*
+!.gitignore
+!.travis.yml
 
 /*.egg-info
 .eggs/
@@ -18,3 +20,5 @@ config.ini
 
 # Cache files
 *cache.json
+
+coverage.xml

@@ -407,7 +407,7 @@ class Dataset:
 
     def prune_sentences(self, percent_to_keep=0):
         """
-        * keep all sentences that contain  at least one mention
+        * keep all sentences that contain at least one mention
         * keep a random selection of the rest of the sentences
 
         :param percent_to_keep: what percentage of the sentences with no mentions to keep

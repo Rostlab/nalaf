@@ -1,5 +1,6 @@
 import re
 from nalaf.features import FeatureGenerator
+from nalaf import print_debug
 
 
 class SimpleFeatureGenerator(FeatureGenerator):
@@ -36,7 +37,10 @@ class SentenceMarkerFeatureGenerator(FeatureGenerator):
                 sentence[0].features['BOS'] = 1
                 sentence[-1].features['EOS'] = 1
             except IndexError as e:
-                raise Exception("Could not index the following sentence; likely the sentence was not tokenized (type: {}): {}".format(type(sentence), sentence), e)
+                if isinstance(sentence, str):
+                    raise Exception("Could not index the following sentence; likely the sentence was not tokenized: {}".format(sentence), e)
+                else:
+                    print_debug("ERROR: {}. Ignoring this sentence (type: {}); it is either empty or not tokenized: {}".format(e, type(sentence), sentence))
 
 
 class NonAsciiFeatureGenerator(FeatureGenerator):

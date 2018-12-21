@@ -32,8 +32,11 @@ class SentenceMarkerFeatureGenerator(FeatureGenerator):
         :type dataset: nalaf.structures.data.Dataset
         """
         for sentence in dataset.sentences():
-            sentence[0].features['BOS'] = 1
-            sentence[-1].features['EOS'] = 1
+            try:
+                sentence[0].features['BOS'] = 1
+                sentence[-1].features['EOS'] = 1
+            except IndexError as e:
+                raise Exception("Could not index the following sentence; likely the sentence was not tokenized (type: {}): {}".format(type(sentence), sentence), e)
 
 
 class NonAsciiFeatureGenerator(FeatureGenerator):

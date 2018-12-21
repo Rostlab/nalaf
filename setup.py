@@ -40,7 +40,7 @@ setup(
 
         # Other
         'beautifulsoup4 >= 4.5.1',
-        'requests >= 2.8.1',
+        'requests >= 2.21.0',
         'progress >= 1.2',
         'hdfs == 2.1.0'
     ],

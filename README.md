@@ -1,3 +1,15 @@
+# ☝️ We moved
+
+This library is not maintained anymore, and is only ocassionally receiving bugfixes.
+
+We moved the functionality to train NER & Relation models to [the text annotation tool, tagtog](https://www.tagtog.net):
+
+[![tagtog, The Text Annotation Tool to Train AI](http://docs.tagtog.net/assets/img/circle_2leafstext.png)](https://www.tagtog.net)
+
+---
+---
+---
+
 [![PyPI version](https://badge.fury.io/py/nalaf.svg)](https://badge.fury.io/py/nalaf)
 [![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?branch=develop)](https://travis-ci.org/Rostlab/nalaf)
 [![codecov](https://codecov.io/gh/Rostlab/nalaf/branch/feature%2FExperimental/graph/badge.svg)](https://codecov.io/gh/Rostlab/nalaf)

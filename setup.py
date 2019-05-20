@@ -14,7 +14,7 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.5.5',
+    version='0.5.6-SNAPSHOT',
     description='Natural Language Framework, for NER and RE',
     long_description=readme(),
     classifiers=[
@@ -30,13 +30,13 @@ setup(
     packages=find_packages(exclude=['tests']),
     install_requires=[
         # ML
-        'numpy == 1.11.2',
-        'scipy == 0.18.1',  # or 0.19.0
-        'scikit-learn == 0.18.1',
+        'numpy >= 1.11.2',
+        'scipy >= 0.18.1, <= 0.19.1',
+        'scikit-learn >= 0.18.1, <= 0.18.2',
         'spacy == 1.2.0',
-        'nltk == 3.2.1',
-        'gensim == 0.13.3',
-        'python-crfsuite == 0.8.4',
+        'nltk >= 3.2.1',
+        'gensim >= 0.13.3, <= 0.13.4.1',
+        'python-crfsuite >= 0.9.3, <= 0.9.6',
 
         # Other
         'beautifulsoup4 >= 4.5.1',

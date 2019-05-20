@@ -11,6 +11,7 @@ dist/
 *.pyc
 build/
 .env/
+env/
 
 __pycache__/
 /*.iml

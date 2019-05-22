@@ -42,7 +42,8 @@ setup(
         'beautifulsoup4 >= 4.5.1',
         'requests >= 2.21.0',
         'progress >= 1.2',
-        'hdfs == 2.1.0'
+        'hdfs == 2.1.0',
+        'urllib3 <1.25, >=1.20'  # force, due to dependency problems with botocore
     ],
     include_package_data=True,
     zip_safe=False,

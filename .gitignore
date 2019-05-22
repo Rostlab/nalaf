@@ -3,6 +3,7 @@
 .*
 !.gitignore
 !.travis.yml
+!.flake8
 
 /*.egg-info
 .eggs/

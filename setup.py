@@ -31,7 +31,7 @@ setup(
     install_requires=[
         # ML
         'numpy >= 1.11.2',
-        'scipy >= 0.18.1, <= 0.19.1',
+        'scipy >= 0.18.1',
         'scikit-learn >= 0.18.1, <= 0.18.2',
         'spacy == 1.2.0',
         'nltk >= 3.2.1',

@@ -30,7 +30,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     install_requires=[
         # ML
-        'numpy >= 1.11.2, <= 1.13.3',
+        'numpy >= 1.11.2, <= 1.11.3',  # Tried with 1.13.3, but doesn't work with spacy 1.2.0
         'scipy >= 0.18.1, <= 0.19.1',  # In newer versions they remove scipy.maxentropy
         'scikit-learn >= 0.18.1, <= 0.18.2',
         'spacy == 1.2.0',

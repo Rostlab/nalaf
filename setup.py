@@ -31,11 +31,11 @@ setup(
     install_requires=[
         # ML
         'numpy >= 1.11.2',
-        'scipy >= 0.18.1',
+        'scipy >= 0.18.1, <= 0.19.1',  # In newer versions they remove scipy.maxentropy
         'scikit-learn >= 0.18.1, <= 0.18.2',
         'spacy == 1.2.0',
         'nltk >= 3.2.1',
-        'gensim >= 0.13.3, <= 0.13.4.1',
+        'gensim >= 0.13.3, <= 0.13.4.1',  # In 1.0.0 they move .vocab: https://github.com/RaRe-Technologies/gensim/blob/master/CHANGELOG.md#100-2017-02-24
         'python-crfsuite >= 0.9.3, <= 0.9.6',
 
         # Other

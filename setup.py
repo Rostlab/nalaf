@@ -14,12 +14,13 @@ def license():
 
 setup(
     name='nalaf',
-    version='0.5.6-SNAPSHOT',
+    version='0.5.6',
     description='Natural Language Framework, for NER and RE',
     long_description=readme(),
     classifiers=[
         'Natural Language :: English',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Text Processing :: Linguistic'
     ],
     keywords='nlp nlu ner re natural langauge crf svm extraction entities relationships framework',

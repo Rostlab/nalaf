@@ -20,6 +20,7 @@ setup(
     classifiers=[
         'Natural Language :: English',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Text Processing :: Linguistic'
     ],
     keywords='nlp nlu ner re natural langauge crf svm extraction entities relationships framework',

@@ -17,6 +17,7 @@ setup(
     version='0.5.6',
     description='Natural Language Framework, for NER and RE',
     long_description=readme(),
+    long_description_content_type="text/markdown",
     classifiers=[
         'Natural Language :: English',
         'Programming Language :: Python :: 3.5',

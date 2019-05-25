@@ -7,11 +7,6 @@ def readme():
         return file.read()
 
 
-def license():
-    with open('LICENSE.txt', encoding='utf-8') as file:
-        return file.read()
-
-
 setup(
     name='nalaf',
     version='0.5.8',
@@ -28,7 +23,7 @@ setup(
     url='https://github.com/Rostlab/nalaf',
     author='Aleksandar Bojchevski, Carsten Uhlig, Juan Miguel Cejuela',
     author_email='i@juanmi.rocks',
-    license=license(),
+    license="Apache License",
     packages=find_packages(exclude=['tests']),
     install_requires=[
         # ML

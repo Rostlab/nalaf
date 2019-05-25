@@ -31,7 +31,7 @@ Current maintainer: [Juan Miguel Cejuela (@juanmirocks)](https://github.com/juan
 
 ## Requirements
 
-* Requires Python 3 (>= 3.5)
+* Requires Python 3 (3.5, 3.6)
 
 
 ## Install nalaf

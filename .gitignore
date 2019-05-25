@@ -3,6 +3,7 @@
 .*
 !.gitignore
 !.travis.yml
+!.flake8
 
 /*.egg-info
 .eggs/
@@ -11,6 +12,7 @@ dist/
 *.pyc
 build/
 .env/
+env/
 
 __pycache__/
 /*.iml

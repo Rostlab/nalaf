@@ -31,7 +31,10 @@ class PyCRFSuite:
 
             for token_index in range(len(sentence)):
                 label = labels[token_index]
-                sentence[token_index].predicted_labels = [Label(label, self.tagger.marginal(label, token_index))]
+                try:
+                    sentence[token_index].predicted_labels = [Label(label, self.tagger.marginal(label, token_index))]
+                except Exception as e:
+                    raise Exception("Exception when assining the predicted labels; likely a Multi-Thread problem", e)
 
         corpus.form_predicted_annotations(class_id)
 

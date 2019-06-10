@@ -20,6 +20,19 @@ class PyCRFSuite:
             self.tagger.open(self.model_file)
 
 
+    def close(self):
+        if self.tagger is not None:
+            self.tagger.close()
+
+
+    def __del__(self):
+        self.close()
+
+
+    def __exit__(self):
+        self.close()
+
+
     def annotate(self, corpus, class_id):
         """
         :type corpus: nalaf.structures.data.Dataset

@@ -83,15 +83,15 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
     @staticmethod
     def __localfs_read_function(dic_path):
-        return open(dic_path, "r", encoding="utf-8")
+        return open(dic_path, "r", encoding="utf-8")  # closed later
 
     @staticmethod
-    def __hdfs_read_funciton(hdfs_client):
+    def __hdfs_read_function(hdfs_client):
         def ret(dic_path):
             res = hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
             # res.encoding = "utf-8"
             # return res
-            return codecs.getreader("utf-8")(res.raw)
+            return codecs.getreader("utf-8")(res.raw)  # closed later
 
         return ret
 
@@ -104,7 +104,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)
 
         if hdfs_client:
-            read_function = DictionaryFeatureGenerator.__hdfs_read_funciton(hdfs_client)
+            read_function = DictionaryFeatureGenerator.__hdfs_read_function(hdfs_client)
 
         else:
             read_function = DictionaryFeatureGenerator.__localfs_read_function
@@ -124,7 +124,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         if hdfs_client:
             # hdfs
             dic_paths = walk_hdfs_directory(hdfs_client, dictionaries_folder, accept_filename_fun)
-            read_function = DictionaryFeatureGenerator.__hdfs_read_funciton(hdfs_client)
+            read_function = DictionaryFeatureGenerator.__hdfs_read_function(hdfs_client)
 
         else:
             # local file system

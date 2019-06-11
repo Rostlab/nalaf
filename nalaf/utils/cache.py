@@ -49,7 +49,8 @@ class Cacheable:
                 self.cache = {}
             else:
                 print_verbose('reading from cache {}'.format(self.cache_filename))
-                self.cache = json.load(open(self.cache_filename))
+                with open(self.cache_filename) as f:
+                    self.cache = json.load(f)
         else:
             print_verbose('no cache found {}'.format(self.cache_filename))
             self.cache = {}

@@ -66,7 +66,8 @@ class TmVarTagger(Tagger):
         :return nalaf.structures.Dataset: dataset
         """
         # if os.path.isfile('cache.json'):
-        #     tm_var = json.load(open('cache.json'))
+        #     with open('cache.json') as f:
+        #           tm_var = json.load()
         # else:
         url_tmvar = 'http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/Mutation/{0}/JSON/'
         url_converter = 'http://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/'

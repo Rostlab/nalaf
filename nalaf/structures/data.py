@@ -811,8 +811,6 @@ class Document:
         """
         text = ""
 
-        _length = self.get_size()
-
         for p in self.parts.values():
             text += "{}{}".format(p.text, separation)
         return text.strip()

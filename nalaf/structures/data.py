@@ -806,14 +806,10 @@ class Document:
 
     def get_text(self, separation=" "):
         """
-        Gives the whole text concatenated with `separation` parameter string in between (default: spaces).
+        Gives the whole text concatenated with `separation` parameter string in between.
         :return: string
         """
-        text = ""
-
-        for p in self.parts.values():
-            text += "{}{}".format(p.text, separation)
-        return text.strip()
+        return separation.join((p.text for p in self.parts.values()))
 
 
     def get_body(self):

@@ -5,7 +5,6 @@ from nltk.corpus import stopwords
 from progress.bar import Bar
 from spacy.en import English
 from nalaf.features import get_spacy_nlp_english
-from nalaf import print_verbose, print_debug
 import time
 
 

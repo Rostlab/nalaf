@@ -529,7 +529,6 @@ class OSIRISReaderMachineLearningReady(Reader):
         """
         :returns: nalaf.structures.data.Dataset
         """
-        from functools import reduce
         dataset = Dataset()
         for filename in glob.glob(self.path + '/*.txt'):
             with open(filename, 'r') as f:
@@ -660,7 +659,6 @@ class OSIRISReader(Reader):
         """
         :returns: nalaf.structures.data.Dataset
         """
-        from functools import reduce
         dataset = Dataset()
         with open(self.path, 'r') as f:
 

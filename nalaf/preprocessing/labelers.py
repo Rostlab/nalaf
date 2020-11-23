@@ -122,7 +122,7 @@ class TmVarLabeler(TokenLabeler):
             token.original_labels[0].value = 'T'  # Mutation type
         elif self.label_frameshift.search(token.word):
             token.original_labels[0].value = 'F'  # Frame shift
-        elif previous_token is not None and previous_token.original_labels[0].value is 'F' and token.word is 'X':
+        elif previous_token is not None and previous_token.original_labels[0].value == 'F' and token.word == 'X':
             token.original_labels[0].value = 'F'  # Frame shift
         elif self.label_snip.search(token.word):
             token.original_labels[0].value = 'R'  # SNP

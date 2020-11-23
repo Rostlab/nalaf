@@ -1,5 +1,4 @@
 import abc
-from nalaf.structures.data import Relation
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.spliters import GenericSplitter, NLTK_SPLITTER
 from nalaf.preprocessing.tokenizers import GenericTokenizer, NLTK_TOKENIZER

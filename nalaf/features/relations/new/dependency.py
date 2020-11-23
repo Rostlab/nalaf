@@ -13,7 +13,6 @@ The implementation consider 4 types of dependency types:
 
 from nalaf.features.relations import EdgeFeatureGenerator
 from nalaf.utils.graphs import compute_shortest_path, Path
-from nalaf.features.stemming import ENGLISH_STEMMER
 from nalaf.features.util import masked_text
 from nalaf.structures.data import Part
 

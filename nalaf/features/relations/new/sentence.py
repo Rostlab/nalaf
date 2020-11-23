@@ -4,7 +4,6 @@ https://github.com/juanmirocks/LocText-old-ShrikantThesis/files/474428/MasterThe
 """
 
 from nalaf.features.relations import EdgeFeatureGenerator
-from nalaf.features.stemming import ENGLISH_STEMMER
 from nalaf.features.util import masked_text
 from nalaf.structures.data import Part
 from collections import Counter

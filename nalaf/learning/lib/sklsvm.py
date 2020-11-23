@@ -1,17 +1,10 @@
-import os
-import sys
-import subprocess
-from random import random
-import tempfile
 from nalaf.learning.taggers import RelationExtractor
-from nalaf import print_warning, print_verbose, print_debug, is_verbose_mode
+from nalaf import print_debug
 import numpy as np
 import scipy
 import sklearn
 from sklearn import svm
-from sklearn.preprocessing import FunctionTransformer, maxabs_scale
 from sklearn.preprocessing import MaxAbsScaler
-from sklearn.feature_selection import VarianceThreshold
 import time
 from sklearn.pipeline import make_pipeline
 

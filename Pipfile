@@ -7,7 +7,7 @@ verify_ssl = true
 pyflakes = "*"
 
 [packages]
-nalaf = {editable = true,path = "."}
+nalaf = {editable = true, path = "."}
 
 [requires]
 python_version = "3.6"

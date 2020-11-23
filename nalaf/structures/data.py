@@ -5,7 +5,7 @@ import re
 from nalaf.utils.qmath import arithmetic_mean
 from nalaf import print_debug, print_verbose
 import warnings
-from itertools import chain, product, combinations
+from itertools import chain
 from collections import Counter
 
 

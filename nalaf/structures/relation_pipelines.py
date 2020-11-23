@@ -2,7 +2,7 @@ from nalaf.features import FeatureGenerator
 from nalaf.structures.data import FeatureDictionary
 from nalaf.features import get_spacy_nlp_english
 from nalaf.preprocessing.parsers import SpacyParser
-from nalaf.preprocessing.spliters import GenericSplitter, NLTK_SPLITTER
+from nalaf.preprocessing.spliters import NLTK_SPLITTER
 from nalaf.preprocessing.tokenizers import GenericTokenizer, NLTK_TOKENIZER
 from nalaf.preprocessing.edges import SentenceDistanceEdgeGenerator
 from nalaf.features.relations.new.sentence import SentenceFeatureGenerator

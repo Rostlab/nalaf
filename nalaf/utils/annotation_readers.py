@@ -9,7 +9,7 @@ from itertools import chain
 from functools import reduce
 from operator import lt, gt
 
-from nalaf import print_verbose, print_debug, print_warning
+from nalaf import print_warning
 from nalaf.structures.data import Entity, Relation
 from nalaf.utils.hdfs import maybe_get_hdfs_client, is_hdfs_directory, walk_hdfs_directory
 from json.decoder import JSONDecodeError
@@ -127,13 +127,13 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
             try:
                 ann_json = json.load(reader)
-            except JSONDecodeError as err:
+            except JSONDecodeError:
                 logging.exception("The annjson with docid={} seems malformed.".format(doc_id))
                 return
 
             try:
                 document = dataset.documents[doc_id]
-            except Exception as err:
+            except Exception:
                 logging.exception("The annjson with docid={} was not in the whole plain dataset.".format(doc_id))
                 return doc_id
 
@@ -150,7 +150,7 @@ class AnnJsonAnnotationReader(AnnotationReader):
 
                         try:
                             normalizations = {key: obj['source']['id'] for key, obj in e['normalizations'].items()}
-                        except KeyError as err:
+                        except KeyError:
                             print_warning("The normalization is badly formatted: (docid={}) {}".format(doc_id, str(e['normalizations'])))
                             normalizations = None
 
@@ -467,7 +467,6 @@ class BRATPartsAnnotationReader(AnnotationReader):
                 reader = csv.reader(file, delimiter='\t')
 
                 docid, partid = os.path.basename(filename).replace('.ann', '').split('-', 1)
-                document = dataset.documents[docid].parts[partid]
 
                 for row in reader:
                     if row[0].startswith('T'):

@@ -2,7 +2,6 @@ import abc
 import json
 import requests
 import os
-from nalaf import print_debug
 from nalaf.structures.data import Dataset, Document, Part, Entity
 
 
@@ -49,7 +48,7 @@ class TmVarTagger(Tagger):
         # todo docset
         # todo textfile tagger @major
         # generate pubtator object using PubtatorWriter
-        _tmp_pubtator_send = "temp_pubtator_file.txt"
+        # _tmp_pubtator_send = "temp_pubtator_file.txt"
 
         # submit to tmtools
 
@@ -70,7 +69,7 @@ class TmVarTagger(Tagger):
         #           tm_var = json.load()
         # else:
         url_tmvar = 'http://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/Mutation/{0}/JSON/'
-        url_converter = 'http://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/'
+        # url_converter = 'http://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/'
 
         # load cache.json if exists
         if os.path.exists('cache.json'):

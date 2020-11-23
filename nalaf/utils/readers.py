@@ -355,8 +355,6 @@ class VerspoorReader(Reader):
         """
         dataset = Dataset()
 
-        ids_per_file_array = [1]
-
         file_list = glob.glob(str(self.directory + "/*.txt"))
 
         for file_path in file_list:

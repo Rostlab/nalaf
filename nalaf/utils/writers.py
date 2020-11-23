@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 import json
 import sys
 import os
-from nalaf import print_verbose, print_debug
+from nalaf import print_verbose
 
 
 class StatsWriter:
@@ -153,11 +153,11 @@ class StatsWriter:
             # full_token_ratio
             full_token_ratio_array.append(full_token_ratio)
 
-            # abstract_nl_nr / abstract_tot_token_nr
-            if row['abstract_tot_token_nr'] > 0:
-                simple_abstract_ratio = row['abstract_nl_mention_nr'] / float(row['abstract_tot_token_nr'])
-            else:
-                simple_abstract_ratio = 0
+            # # abstract_nl_nr / abstract_tot_token_nr
+            # if row['abstract_tot_token_nr'] > 0:
+            #     simple_abstract_ratio = row['abstract_nl_mention_nr'] / float(row['abstract_tot_token_nr'])
+            # else:
+            #     simple_abstract_ratio = 0
 
             # nl mention nr
             simple_array.append(row['nl_mention_nr'])

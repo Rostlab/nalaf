@@ -116,7 +116,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
     @staticmethod
     def construct_all_from_folder(dictionaries_folder, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
 
-        def accept_filename_fun(filename):
+        def accept_filename_fun(filename: str):
             return any(filename.endswith(accepted_extension) for accepted_extension in accepted_extensions)
 
         hdfs_client = maybe_get_hdfs_client(hdfs_url, hdfs_user)

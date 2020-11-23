@@ -1230,10 +1230,10 @@ class Part:
         warnings.warn('Use `compute_tokens_depth` instead', DeprecationWarning)
 
         not_tokens = []
-        important_dependencies = [
-            'det', 'amod', 'appos', 'npadvmod', 'compound',
-            'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct'
-        ]
+        # important_dependencies = [
+        #     'det', 'amod', 'appos', 'npadvmod', 'compound',
+        #     'dep', 'with', 'nsubjpass', 'nsubj', 'neg', 'prep', 'num', 'punct'
+        # ]
         for sentence in self.sentences:
             for token in sentence:
                 if token.word not in not_tokens:
@@ -1249,7 +1249,7 @@ class Part:
                 for token in sentence:
                     dep_from = token.features['dependency_from'][0]
                     dep_to = token
-                    dep_type = token.features['dependency_from'][1]
+                    # dep_type = token.features['dependency_from'][1]
 
                     # if dep_type in important_dependencies:
                     if True:

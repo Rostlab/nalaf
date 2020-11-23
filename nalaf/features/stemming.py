@@ -71,7 +71,7 @@ class BioLemmatizer(FeatureGenerator):
         while not out:
             try:
                 out = self.p.stdout.read()
-            except TypeError as e:
+            except TypeError:
                 continue
             else:
                 if ("Running BioLemmatizer in interactive mode" in out):
@@ -88,7 +88,7 @@ class BioLemmatizer(FeatureGenerator):
             try:
                 out = self.p.stdout.read()
                 out = out.strip().lower()
-            except TypeError as e:
+            except TypeError:
                 continue
             else:
                 if out:

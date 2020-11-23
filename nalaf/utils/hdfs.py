@@ -1,5 +1,5 @@
 from hdfs import InsecureClient, Client
-from collections.abc import Callable
+from typing import Callable
 
 import os
 

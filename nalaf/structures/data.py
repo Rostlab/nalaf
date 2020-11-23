@@ -257,7 +257,7 @@ class Dataset:
                 while index < len(sentence):
                     token = sentence[index]
                     confidence_values = []
-                    if token.predicted_labels[0].value is not 'O':
+                    if token.predicted_labels[0].value != 'O':
                         start = token.start
                         confidence_values.append(token.predicted_labels[0].confidence)
                         while index + 1 < len(sentence) \

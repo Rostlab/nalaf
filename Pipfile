@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pyflakes = "*"
+nose = ">=1.0"
 
 [packages]
 nalaf = {editable = true, path = "."}

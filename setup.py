@@ -43,7 +43,5 @@ setup(
         'urllib3 >=1.20, <1.25'  # force, due to dependency problems with botocore
     ],
     include_package_data=True,
-    zip_safe=False,
-    test_suite='nose.collector',
-    setup_requires=['nose>=1.0'],
+    zip_safe=False
 )

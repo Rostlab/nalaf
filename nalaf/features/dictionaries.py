@@ -97,7 +97,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
 
 
     @staticmethod
-    def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+    def construct_all_from_paths(dictionaries_paths, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".tsv", ".csv", ".dic", ".dict", ".txt"]):
         if type(dictionaries_paths) is str:
             dictionaries_paths = dictionaries_paths.split()
 
@@ -114,7 +114,7 @@ class DictionaryFeatureGenerator(FeatureGenerator):
         return DictionaryFeatureGenerator.__read_dictionaries(dictionaries_paths, read_function, string_tokenizer, case_sensitive, stop_words)
 
     @staticmethod
-    def construct_all_from_folder(dictionaries_folder, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".dic", "dict", ".txt", ".tsv", ".csv"]):
+    def construct_all_from_folder(dictionaries_folder, string_tokenizer=(lambda x: x.split()), case_sensitive=False, hdfs_url=None, hdfs_user=None, stop_words=None, accepted_extensions=[".tsv", ".csv", ".dic", ".dict", ".txt"]):
 
         def accept_filename_fun(filename: str):
             return any(filename.endswith(accepted_extension) for accepted_extension in accepted_extensions)

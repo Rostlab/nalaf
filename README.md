@@ -56,7 +56,7 @@ python3 -m nalaf.download_data
 ## Test
 
 ```shell
-nosetests -a '!slow' # Exclude the slow ones
+nosetests
 ```
 
 

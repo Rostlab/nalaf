@@ -9,7 +9,7 @@ def readme():
 
 setup(
     name='nalaf',
-    version='0.5.11',
+    version='0.5.11-SNAPSHOT',
     description='Natural Language Framework, for NER and RE',
     long_description=readme(),
     long_description_content_type="text/markdown",

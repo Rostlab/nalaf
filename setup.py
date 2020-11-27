@@ -32,7 +32,7 @@ setup(
         'scikit-learn >= 0.18.1, <= 0.20.3',
         'spacy == 1.2.0',
         'python-crfsuite >= 0.9.3, <= 0.9.6',
-        'nltk >= 3.2.1',
+        'nltk ~= 3.5',
 
         # Other
         'beautifulsoup4 >= 4.5.1',

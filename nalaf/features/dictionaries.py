@@ -88,7 +88,9 @@ class DictionaryFeatureGenerator(FeatureGenerator):
     @staticmethod
     def __hdfs_read_function(hdfs_client):
         def ret(dic_path):
-            res = hdfs_client._open(dic_path)  # if we use read(), the connection is closed immediately if not in a with context
+            # here, if we use read(), the connection is closed immediately if not in a "with" context
+            # Thus we use _open(), see: https://github.com/mtth/hdfs/blob/2.5.8/hdfs/client.py#L231
+            res = hdfs_client._open(dic_path)
             # res.encoding = "utf-8"
             # return res
             return codecs.getreader("utf-8")(res.raw)  # closed later

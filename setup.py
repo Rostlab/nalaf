@@ -31,7 +31,7 @@ setup(
         'gensim >= 0.13.3, <= 0.13.4.1',  # In 1.0.0 they move .vocab: https://github.com/RaRe-Technologies/gensim/blob/master/CHANGELOG.md#100-2017-02-24
         'scikit-learn >= 0.18.1, <= 0.20.3',
         'spacy == 1.2.0',
-        'python-crfsuite >= 0.9.3, <= 0.9.6',
+        'python-crfsuite >= 0.9.3, == 0.9.*',
         'nltk ~= 3.5',
 
         # Other

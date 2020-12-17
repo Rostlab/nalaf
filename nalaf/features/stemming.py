@@ -40,9 +40,9 @@ class BioLemmatizer(FeatureGenerator):
     Uses BioLemmatizer (http://biolemmatizer.sourceforge.net)
     to set the feature 'stem' (actually a lemma) for every token
 
-    NOTE: requires Java 6 installed on the system. The needed biolemmatizer jar is included in the nalaf distribution
+    NOTE: requires Java 6 installed on the system.
 
-    Implements the abstract class FeatureGenerator.
+    NOTE: the needed biolemmatizer jar is included in the src nalaf distribution, but not packaged into PyPi
     """
 
     @staticmethod

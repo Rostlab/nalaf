@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     PrepareDatasetPipeline().execute(dataset)
 
-    # get the predictions
+    # get the predictions -- "example_entity_model" is only available in the nalaf src distribution
     crf = PyCRFSuite(model_file=pkg_resources.resource_filename('nalaf.data', 'example_entity_model'))
     crf.annotate(dataset, class_id=ENT2_CLASS_ID)
 

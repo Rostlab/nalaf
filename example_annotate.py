@@ -19,7 +19,6 @@ ENTREZ_GENE_ID = 'n_w'
 UNIPROT_ID = 'n_v'
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A simple demo for using the nalaf pipeline for prediction')
 

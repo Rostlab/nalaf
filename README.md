@@ -14,7 +14,8 @@ We moved the functionality to train NER & Relation models to [the text annotatio
 [![Build Status](https://travis-ci.org/Rostlab/nalaf.svg?branch=develop)](https://travis-ci.org/Rostlab/nalaf)
 [![codecov](https://codecov.io/gh/Rostlab/nalaf/branch/feature%2FExperimental/graph/badge.svg)](https://codecov.io/gh/Rostlab/nalaf)
 
-# nalaf - (Na)tural (La)nguage (F)ramework
+
+## nalaf - (Na)tural (La)nguage (F)ramework
 
 nalaf is a NLP framework written in python. The goal is to be a general-purpose module-based and easy-to-use framework for common text mining tasks. At the moment two tasks are covered: named-entity recognition (NER) and relationship extraction. These modules support both training and annotating. Associated to these, helper components such as cross-validation training or reading and conversion from different corpora formats are given. At the moment, NER is implemented with Conditional Random Fields (CRFs) and relationship extraction with Support Vector Machines (SVMs) using either linear or tree kernels.
 
@@ -27,14 +28,11 @@ Current maintainer: [Juan Miguel Cejuela (@juanmirocks)](https://github.com/juan
 ![Pipeline diagram](https://www.lucidchart.com/publicSegments/view/558052b8-fcf0-4e3b-a6b4-05990a008f2c/image.png)
 (_[editable version on Lucidchart of the pipeline diagram](https://www.lucidchart.com/invitations/accept/9236d544-8b56-46c4-9f99-62fdf18e838a); requires log in_)
 
-# HOWTO Install
 
-## Requirements
+## Install
 
-* Requires Python 3 (3.5, 3.6)
+Requires Python ^3.6
 
-
-## Install nalaf
 
 ### From PyPi
 
@@ -48,27 +46,30 @@ python3 -m nalaf.download_data
 ```shell
 git clone https://github.com/Rostlab/nalaf.git
 cd nalaf
-python3 setup.py install
+poetry shell
+poetry update
 python3 -m nalaf.download_data
 ```
 
 
-## Test
+
+
+## Development
+
+[See wiki](https://github.com/Rostlab/nalaf/wiki/Developer-Info)
+
+
+### Test
 
 ```shell
 nosetests
 ```
 
 
-# HOWTO Run, Examples
+### Run Examples
 
 Run `example_annotate.py` for a simple example of annotation with a pre-trained NER model for protein names extraction:
 
 * `python3 example_annotate.py -p 15878741 12625412`
 * `python3 example_annotate.py -s "This is c.A1003G an example"` # see issue https://github.com/Rostlab/nalaf/issues/159
 * `python3 example_annotate.py -d resources/example.txt` # see issue https://github.com/Rostlab/nalaf/issues/159
-
-
-# Development
-
-* [See wiki](https://github.com/Rostlab/nalaf/wiki/Developer-Info)

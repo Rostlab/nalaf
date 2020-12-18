@@ -12,7 +12,7 @@ authors = [
 ]
 
 readme = "README.md"
-keywords=["NLP", "NLU", "NER", "RE", "natural langauge", "CRF", "SVM", "entity extraction", "relation extraction"]
+keywords=["NLP", "NLU", "NER", "RE", "natural language", "CRF", "SVM", "entity extraction", "relation extraction"]
 classifiers = [
  "Natural Language :: English",
  "Topic :: Text Processing :: Linguistic"

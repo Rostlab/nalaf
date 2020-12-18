@@ -54,7 +54,7 @@ python3 -m nalaf.download_data
 
 
 
-## Development
+## Developing
 
 [See wiki](https://github.com/Rostlab/nalaf/wiki/Developer-Info)
 

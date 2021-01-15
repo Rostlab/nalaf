@@ -12,14 +12,15 @@ cache:
   pip: true
 
 before_install:
+  - pip install poetry
   - pip install codecov
 
 install:
-  - pip install .
+  - poetry install
   - python -m nalaf.download_data
 
 script:
-  - nosetests -a \"!slow\" --with-coverage
+  - nosetests --with-coverage
 # - python example_annotate.py -p 2581245
 
 after_success:

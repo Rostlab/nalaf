@@ -12,24 +12,30 @@ cache:
   pip: true
 
 before_install:
+  - pip install poetry
   - pip install codecov
 
 install:
-  - pip install .
+  - poetry install
   - python -m nalaf.download_data
 
 script:
-  - nosetests -a \"!slow\" --with-coverage
+  - nosetests --with-coverage
 # - python example_annotate.py -p 2581245
 
 after_success:
   - codecov
 
+before_deploy:
+  poetry build
+
 deploy:
-  provider: pypi
+  provider: script
+  script: poetry publish
   user: "__token__"
   password:
     secure: "Ww4mDMw5Efd11pQIX1t59Z6V9p9TR0CvsPyPlyK8ug9BWX5r+Q5QSRcrIxMEJ8U7Doph16zNpPUtBUdWDe5PS5h2MRaqUQuwcOOeWaUGUlBUfKwr4w9kBxChaw5SLNbEJheszwPWm0ElOQXjO8MDwqmYi5x4kgk0VUvAHVp7qn/RrxTe0PTAI/MPilgRS3gh/VNS5AhXZ6zdF4+zfzJJu3egVxzIUpiqRo/NY3yJltGL+Xr1su7Q+8tEJ6YJQ31jZKY0bgAuqLvaESGOdK3RorOxLPCLuqehp8mMPI5aJtQyd8AfuzmhjnVM0JcqBcnH3zLWGbl84WDMe94ST3Jr/Hr31iymm+kKn9/tVmVnVdK1J4jSyTm3yYgDAEkxlQuIsHYR/gMJ0z5q/7u2LMjByzxBTI/akr0JYU0msO9g6OWhcC8i2UJtyRhLbEOdv3mDqXdPJASbZ5TDUgq6535jsMgJ739qa5T0/63cnsdd7Y0empW/j7KBnxwn7L9b7ovOupEEbNHS6yqzbaXVR6rsBgl8KNa4QPziMaizIsYaFLu5PoKgGYDwHY6AraeAkLBNNp5erqCzOWfYc7bs/GAPFX9EmQ5q06vdOCxkMDwQBL5e5TyM+JfQESz5nvbfg72unxMa5KJWTZZoJYxLi2syorkyOc4VKUj48HNG3O7YuSI="
   on:
     # tags: true
-    branch: master
+    # branch: master
+    all_branches: true

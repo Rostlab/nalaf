@@ -1,6 +1,7 @@
 import nltk
 from spacy.en import download as spacy_en_download
 import sys
+import ssl
 
 """
 Downloads the necessary data & corpora for nalaf.

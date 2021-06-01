@@ -38,6 +38,8 @@ if __name__ == '__main__':
 
         print("ERROR Could not save spacy English parser model. Download model: {} --> and extract it in: {}".format(model, spacy_data_path), file=sys.stderr)
 
+        # TODO (2021-06-01 JMC) download & fix error: ERROR Could not save spacy English parser model. Download model: en-1.1.0 --> and extract it in: /Users/juanmirocks/Library/Caches/pypoetry/virtualenvs/nalaf-dHMIkhB4-py3.6/lib/python3.6/site-packages/spacy/data
+
     # TODO download non-packaged [biolemmatizer-core-1.2-jar-with-dependencies.jar](https://github.com/Rostlab/nalaf/blob/develop/nalaf/data/biolemmatizer-core-1.2-jar-with-dependencies.jar)
 
     # TODO download non-packaged [example_entity_model](https://github.com/Rostlab/nalaf/blob/develop/nalaf/data/example_entity_model)

@@ -3,13 +3,15 @@ import os
 
 import pkg_resources
 
-from nalaf.utils.readers import TextFilesReader, PMIDReader
+from nalaf.utils.readers import TextFilesReader, PMIDReader, HTMLReader
 from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
 #from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
+from nalaf.structures.data import Dataset
+from nalaf.utils.annotation_readers import AnnJsonAnnotationReader
 
 
 ENT1_CLASS_ID = 'e_x'

@@ -1,7 +1,6 @@
 import nltk
 from spacy.en import download as spacy_en_download
 import sys
-import ssl
 
 """
 Downloads the necessary data & corpora for nalaf.
@@ -13,8 +12,11 @@ Usage: ::
 """
 if __name__ == '__main__':
 
-    # Download NLTK models   
-        
+    # If you get a an error like "NLTK download SSL: Certificate verify failed" or "ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:749)"
+    # ... take a look at this solution: https://stackoverflow.com/a/41692664/341320
+
+    # Download NLTK models
+
     NLTK_CORPORA = ['punkt']
 
     for corpus in NLTK_CORPORA:

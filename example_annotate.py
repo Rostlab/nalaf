@@ -3,13 +3,14 @@ import os
 
 import pkg_resources
 
-from nalaf.utils.readers import TextFilesReader, PMIDReader
+from nalaf.utils.readers import TextFilesReader, PMIDReader, HTMLReader
 from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
-from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
+from nalaf.structures.data import Dataset
+from nalaf.utils.annotation_readers import AnnJsonAnnotationReader
 
 
 ENT1_CLASS_ID = 'e_x'
@@ -41,15 +42,25 @@ if __name__ == "__main__":
     group.add_argument('-p', '--pmids', nargs='+', help='a single PMID or a list of PMIDs separated by space')
     args = parser.parse_args()
 
-    warning = 'Due to a dependence on GNormPlus, running nalaf with -s and -d switches might take a long time.'
     if args.string:
-        print(warning)
         dataset = StringReader(args.string).read()
+
     elif args.pmids:
         dataset = PMIDReader(args.pmids).read()
+
     elif os.path.exists(args.dir_or_file):
-        print(warning)
-        dataset = TextFilesReader(args.dir_or_file).read()
+        file = args.dir_or_file
+
+        file_extension = os.path.splitext(file)[1]
+
+        if file_extension == ".txt":
+            dataset = TextFilesReader(file).read()
+        elif file_extension == ".html":
+            dataset = HTMLReader(file, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).read()
+            # We assume there is a second file, for the ann.json
+            file_json=file.replace('.html', '.json')
+            AnnJsonAnnotationReader(file_json, read_only_class_id=None, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).annotate(dataset)
+
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))
 
@@ -59,7 +70,6 @@ if __name__ == "__main__":
     crf = PyCRFSuite(model_file=pkg_resources.resource_filename('nalaf.data', 'example_entity_model'))
     crf.annotate(dataset, class_id=ENT2_CLASS_ID)
 
-    GNormPlusGeneTagger(ENT1_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID).tag(dataset, uniprot=True)
     StubSameSentenceRelationExtractor(ENT1_CLASS_ID, ENT2_CLASS_ID, REL_ENT1_ENT2_CLASS_ID).annotate(dataset)
 
     if args.output_dir:

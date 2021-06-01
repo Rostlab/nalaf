@@ -45,7 +45,7 @@ beautifulsoup4 = "^4.5"
 requests = "^2.21"
 progress = "^1.2"
 hdfs = "2.5.*"
-urllib3 = ">=1.20, <1.25"  # limit, due to dependency problems with botocore
+urllib3 = ">=1.20,<1.27"  # limit, due to dependency problems with botocore
 
 [tool.poetry.dev-dependencies]
 pyflakes = "2.*"

@@ -8,7 +8,7 @@ from nalaf.utils.readers import StringReader
 from nalaf.utils.writers import ConsoleWriter, TagTogFormat, PubTatorFormat
 from nalaf.structures.dataset_pipelines import PrepareDatasetPipeline
 from nalaf.learning.crfsuite import PyCRFSuite
-from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
+#from nalaf.domain.bio.gnormplus import GNormPlusGeneTagger
 from nalaf.learning.taggers import StubSameSentenceRelationExtractor
 
 
@@ -49,7 +49,12 @@ if __name__ == "__main__":
         dataset = PMIDReader(args.pmids).read()
     elif os.path.exists(args.dir_or_file):
         print(warning)
-        dataset = TextFilesReader(args.dir_or_file).read()
+        #dataset = TextFilesReader(args.dir_or_file).read()
+        dataset = HTMLReader(args.dir_or_file, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).read()
+        file_html=args.dir_or_file
+        file_json=file_html.replace('.html','.json')
+        AnnJsonAnnotationReader(file_json, read_only_class_id=None, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).annotate(dataset)
+       
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))
 
@@ -59,7 +64,7 @@ if __name__ == "__main__":
     crf = PyCRFSuite(model_file=pkg_resources.resource_filename('nalaf.data', 'example_entity_model'))
     crf.annotate(dataset, class_id=ENT2_CLASS_ID)
 
-    GNormPlusGeneTagger(ENT1_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID).tag(dataset, uniprot=True)
+    #GNormPlusGeneTagger(ENT1_CLASS_ID, ENTREZ_GENE_ID, UNIPROT_ID).tag(dataset, uniprot=True)
     StubSameSentenceRelationExtractor(ENT1_CLASS_ID, ENT2_CLASS_ID, REL_ENT1_ENT2_CLASS_ID).annotate(dataset)
 
     if args.output_dir:

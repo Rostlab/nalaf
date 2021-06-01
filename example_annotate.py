@@ -42,22 +42,25 @@ if __name__ == "__main__":
     group.add_argument('-p', '--pmids', nargs='+', help='a single PMID or a list of PMIDs separated by space')
     args = parser.parse_args()
 
-    warning = 'Due to a dependence on GNormPlus, running nalaf with -s and -d switches might take a long time.'
     if args.string:
-        print(warning)
         dataset = StringReader(args.string).read()
+
     elif args.pmids:
         dataset = PMIDReader(args.pmids).read()
+
     elif os.path.exists(args.dir_or_file):
-        print(warning)
         file = args.dir_or_file
-        if os.path.splitext(file)[1] == ".txt":
-            dataset = TextFilesReader(args.dir_or_file).read()
-        elif os.path.splitext(file)[1] == ".html":
-            dataset = HTMLReader(args.dir_or_file, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).read()
-            file_json=file.replace('.html','.json')
+
+        file_extension = os.path.splitext(file)[1]
+
+        if file_extension == ".txt":
+            dataset = TextFilesReader(file).read()
+        elif file_extension == ".html":
+            dataset = HTMLReader(file, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).read()
+            # We assume there is a second file, for the ann.json
+            file_json=file.replace('.html', '.json')
             AnnJsonAnnotationReader(file_json, read_only_class_id=None, whole_basename_as_docid=True, hdfs_url=None, hdfs_user=None).annotate(dataset)
-       
+
     else:
         raise FileNotFoundError('directory or file "{}" does not exist'.format(args.dir_or_file))
 

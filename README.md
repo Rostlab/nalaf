@@ -47,7 +47,7 @@ python3 -m nalaf.download_data
 git clone https://github.com/Rostlab/nalaf.git
 cd nalaf
 poetry shell
-poetry update
+poetry install  # or run `poetry update` if you really want to update the dependencies' versions
 python3 -m nalaf.download_data
 ```
 

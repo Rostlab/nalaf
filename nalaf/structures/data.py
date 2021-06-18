@@ -233,7 +233,7 @@ class Dataset:
                 yield part_id, part
 
 
-    def form_predicted_annotations(self, class_id, aggregator_function=arithmetic_mean):
+    def form_predicted_annotations(self, aggregator_function=arithmetic_mean):
         """
         Populates part.predicted_annotations with a list of Annotation objects
         based on the values of the field predicted_label for each token.
@@ -258,6 +258,8 @@ class Dataset:
                     token = sentence[index]
                     confidence_values = []
                     if token.predicted_labels[0].value != 'O':
+                        crf_label=token.predicted_labels[0].value
+                        new_class_id=crf_label.split('-')[-1]
                         start = token.start
                         confidence_values.append(token.predicted_labels[0].confidence)
                         while index + 1 < len(sentence) \
@@ -267,7 +269,7 @@ class Dataset:
                             index += 1
                         end = token.start + len(token.word)
                         confidence = aggregator_function(confidence_values)
-                        part.predicted_annotations.append(Entity(class_id, start, part.text[start:end], confidence))
+                        part.predicted_annotations.append(Entity(new_class_id, start, part.text[start:end], confidence))
                     index += 1
 
         return self

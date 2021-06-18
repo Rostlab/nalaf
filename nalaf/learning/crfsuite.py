@@ -30,7 +30,7 @@ class PyCRFSuite:
         self.close()
 
 
-    def annotate(self, corpus, class_id):
+    def annotate(self, corpus):
         """
         :type corpus: nalaf.structures.data.Dataset
         :type class_id: str ~ to annotate with
@@ -46,7 +46,7 @@ class PyCRFSuite:
                 except Exception as e:
                     raise Exception("Exception when assining the predicted labels; likely a Multi-Thread problem", e)
 
-        corpus.form_predicted_annotations(class_id)
+        corpus.form_predicted_annotations()
 
 
     @staticmethod

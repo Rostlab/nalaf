@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nalaf"
-version = "0.6.0-dev.1"
+version = "0.7.0-dev.1"
 description = "Natural Language Framework, for NER and RE"
 homepage = "https://github.com/Rostlab/nalaf"
 license = "Apache License"

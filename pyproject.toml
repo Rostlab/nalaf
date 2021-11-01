@@ -8,7 +8,8 @@ license = "Apache License"
 authors = [
   "Juan Miguel Cejuela <juanmi@tagtog.net>",
   "Aleksandar Bojchevski <aleksandar.bojchevski@gmail.com>",
-  "Carsten Uhlig"
+  "Carsten Uhlig",
+  "Ashish Narwal <ashish@tagtog.net>"
 ]
 
 readme = "README.md"
